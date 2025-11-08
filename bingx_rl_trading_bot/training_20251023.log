@@ -1,0 +1,115 @@
+================================================================================
+COMPLETE 4-MODEL TRAINING: ENHANCED FEATURES
+================================================================================
+
+Configuration:
+  Phase: phase1
+  Entry Threshold (LONG/SHORT): 0.65/0.7
+  ML Exit Threshold (LONG/SHORT): 0.75/0.75
+  Stop Loss: -3.0%
+  Max Hold: 120 candles
+
+================================================================================
+STEP 1: Loading Data and Calculating Enhanced Features
+================================================================================
+
+✅ Loaded 31,488 candles
+   Date range: 2025-07-01 14:00:00 to 2025-10-18 21:55:00
+
+Calculating enhanced features (phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (31488 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 31,488 → 31,201 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 31,196 / 31,488 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+
+✅ Enhanced features calculated (including Exit-specific features)
+   Total columns: 193
+   Final rows: 31,196
+
+================================================================================
+STEP 2: Loading Production Entry Models
+================================================================================
+
+✅ Production Entry models loaded
+   LONG Entry features: 44
+   SHORT Entry features: 38
+
+================================================================================
+STEP 3: Preparing Enhanced Feature Sets
+================================================================================
+
+🔍 DEBUG: Exit Feature Filtering
+   Total candidates: 33
+   Filtered features: 29
+   ⚠️  Missing features (filtered out): 4
+      ['golden_cross_50_200', 'death_cross_50_200', 'price_above_ma200', 'price_vs_ma200_pct']...
+
+✅ Feature sets prepared:
+   LONG Entry: 104 features
+   SHORT Entry: 98 features
+   LONG Exit: 29 features
+   SHORT Exit: 29 features
+
+   Exit features: ['unrealized_pnl_pct', 'hold_time', 'mae', 'mfe', 'price_vs_entry', 'rsi', 'macd', 'macd_signal', 'volume', 'atr', 'close', 'high', 'low', 'open', 'vwap', 'vwap_distance_pct', 'vwap_above', 'vwap_band_position', 'vp_in_value_area', 'vp_distance_to_poc_pct', 'vwap_momentum', 'vwap_cross_up', 'vwap_cross_down', 'vp_vwap_bullish_confluence', 'vp_vwap_bearish_confluence', 'institutional_activity_zone', 'ma_200', 'ema_200', 'rsi_200']
+
+================================================================================
+STEP 4: Training EXIT Models (LONG + SHORT)
+================================================================================
+
+Why Exit first?
+  - Entry models need Trade-Outcome labels
+  - Trade-Outcome labels need Exit model for criterion 4 (efficient exit)
+  - So Exit models must be trained first
+
+--------------------------------------------------------------------------------
+4.1: Training LONG Exit Model
+--------------------------------------------------------------------------------
+
+Simulating LONG trades for exit labeling...
+✅ Simulated 4,126 LONG trades
+
+Creating LONG exit labels...

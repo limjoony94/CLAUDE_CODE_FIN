@@ -1,0 +1,61 @@
+================================================================================
+WALK-FORWARD VALIDATION REPORT
+================================================================================
+
+Date: 2025-10-11 16:33:13
+Configuration: LONG 90% / SHORT 10%
+Number of Folds: 5
+
+SUMMARY STATISTICS
+--------------------------------------------------------------------------------
+
+Monthly Return:
+  Mean: +24.67%
+  Std Dev: 10.05%
+  Min: +10.89%
+  Max: +36.19%
+
+Win Rate: 60.7%
+Sharpe Ratio: 4.21
+
+Consistency: 100.0% of folds profitable
+
+
+FOLD-BY-FOLD RESULTS
+--------------------------------------------------------------------------------
+
+Fold 1:
+  Period: 2025-08-07 to 2025-08-19
+  Monthly Return: +18.45%
+  Win Rate: 60.3%
+  Total Trades: 68
+  Sharpe Ratio: 3.72
+
+Fold 2:
+  Period: 2025-08-19 to 2025-08-31
+  Monthly Return: +27.10%
+  Win Rate: 53.3%
+  Total Trades: 75
+  Sharpe Ratio: 4.00
+
+Fold 3:
+  Period: 2025-08-31 to 2025-09-12
+  Monthly Return: +30.73%
+  Win Rate: 69.4%
+  Total Trades: 62
+  Sharpe Ratio: 5.17
+
+Fold 4:
+  Period: 2025-09-12 to 2025-09-24
+  Monthly Return: +10.89%
+  Win Rate: 60.9%
+  Total Trades: 46
+  Sharpe Ratio: 3.06
+
+Fold 5:
+  Period: 2025-09-24 to 2025-10-06
+  Monthly Return: +36.19%
+  Win Rate: 59.7%
+  Total Trades: 62
+  Sharpe Ratio: 5.08
+

@@ -1,0 +1,217 @@
+================================================================================
+COMPLETE 4-MODEL TRAINING: ENHANCED FEATURES
+================================================================================
+
+Configuration:
+  Phase: phase1
+  Entry Threshold (LONG/SHORT): 0.65/0.7
+  ML Exit Threshold (LONG/SHORT): 0.75/0.75
+  Stop Loss: -3.0%
+  Max Hold: 120 candles
+
+================================================================================
+STEP 1: Loading Data and Calculating Enhanced Features
+================================================================================
+
+✅ Loaded 31,488 candles
+   Date range: 2025-07-01 14:00:00 to 2025-10-18 21:55:00
+
+Calculating enhanced features (phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (31488 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 31,488 → 31,201 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 31,196 / 31,488 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+
+✅ Enhanced features calculated (including Exit-specific features)
+   Total columns: 193
+   Final rows: 31,196
+
+================================================================================
+STEP 2: Loading Production Entry Models
+================================================================================
+
+✅ Production Entry models loaded
+   LONG Entry features: 44
+   SHORT Entry features: 38
+
+================================================================================
+STEP 3: Preparing Enhanced Feature Sets
+================================================================================
+
+🔍 DEBUG: Exit Feature Filtering
+   Total candidates: 55
+   Filtered features: 51
+   ⚠️  Missing features (filtered out): 4
+      ['golden_cross_50_200', 'death_cross_50_200', 'price_above_ma200', 'price_vs_ma200_pct']...
+
+✅ Feature sets prepared:
+   LONG Entry: 104 features
+   SHORT Entry: 98 features
+   LONG Exit: 51 features
+   SHORT Exit: 51 features
+
+   Exit features: ['unrealized_pnl_pct', 'hold_time', 'mae', 'mfe', 'price_vs_entry', 'rsi', 'macd', 'macd_signal', 'volume', 'atr', 'close', 'high', 'low', 'open', 'ema_12', 'trend_strength', 'volatility_regime', 'volume_surge', 'price_acceleration', 'volume_ratio', 'price_vs_ma20', 'price_vs_ma50', 'volatility_20', 'rsi_slope', 'rsi_overbought', 'rsi_oversold', 'rsi_divergence', 'macd_histogram_slope', 'macd_crossover', 'macd_crossunder', 'higher_high', 'lower_low', 'near_resistance', 'near_support', 'bb_position', 'returns', 'vwap', 'vwap_distance_pct', 'vwap_above', 'vwap_band_position', 'vp_in_value_area', 'vp_distance_to_poc_pct', 'vwap_momentum', 'vwap_cross_up', 'vwap_cross_down', 'vp_vwap_bullish_confluence', 'vp_vwap_bearish_confluence', 'institutional_activity_zone', 'ma_200', 'ema_200', 'rsi_200']
+
+================================================================================
+STEP 4: Training EXIT Models (LONG + SHORT)
+================================================================================
+
+Why Exit first?
+  - Entry models need Trade-Outcome labels
+  - Trade-Outcome labels need Exit model for criterion 4 (efficient exit)
+  - So Exit models must be trained first
+
+--------------------------------------------------------------------------------
+4.1: Training LONG Exit Model
+--------------------------------------------------------------------------------
+
+Simulating LONG trades for exit labeling...
+✅ Simulated 4,126 LONG trades
+
+Creating LONG exit labels...
+✅ Created 490,994 LONG exit samples
+   Positive rate: 20.75%
+
+Train: 392,795 | Validation: 98,199
+
+Training LONG Exit model...
+
+✅ LONG Exit Model Performance:
+              precision    recall  f1-score   support
+
+         0.0     0.8552    0.9134    0.8834     83903
+         1.0     0.1541    0.0925    0.1156     14296
+
+    accuracy                         0.7939     98199
+   macro avg     0.5047    0.5030    0.4995     98199
+weighted avg     0.7532    0.7939    0.7716     98199
+
+ROC-AUC: 0.6420
+
+Top 10 Features (LONG Exit):
+  trend_strength                 0.0736
+  macd                           0.0634
+  unrealized_pnl_pct             0.0483
+  vwap                           0.0462
+  ma_200                         0.0424
+  hold_time                      0.0381
+  ema_200                        0.0352
+  rsi_200                        0.0303
+  price_vs_ma50                  0.0303
+  institutional_activity_zone    0.0300
+
+✅ LONG Exit model saved:
+   xgboost_long_exit_enhanced_20251023_200740.pkl
+
+--------------------------------------------------------------------------------
+4.2: Training SHORT Exit Model
+--------------------------------------------------------------------------------
+
+Simulating SHORT trades for exit labeling...
+✅ Simulated 5,006 SHORT trades
+
+Creating SHORT exit labels...
+✅ Created 595,714 SHORT exit samples
+   Positive rate: 17.19%
+
+Train: 476,571 | Validation: 119,143
+
+Training SHORT Exit model...
+
+✅ SHORT Exit Model Performance:
+              precision    recall  f1-score   support
+
+         0.0     0.8830    0.9422    0.9116    103757
+         1.0     0.2889    0.1585    0.2047     15386
+
+    accuracy                         0.8409    119143
+   macro avg     0.5860    0.5503    0.5581    119143
+weighted avg     0.8063    0.8409    0.8203    119143
+
+ROC-AUC: 0.7333
+
+Top 10 Features (SHORT Exit):
+  trend_strength                 0.2429
+  unrealized_pnl_pct             0.0615
+  hold_time                      0.0446
+  ma_200                         0.0420
+  ema_200                        0.0408
+  vwap                           0.0310
+  ema_12                         0.0304
+  vp_distance_to_poc_pct         0.0295
+  institutional_activity_zone    0.0241
+  volatility_20                  0.0240
+
+✅ SHORT Exit model saved:
+   xgboost_short_exit_enhanced_20251023_200740.pkl
+
+================================================================================
+STEP 5: Training ENTRY Models (LONG + SHORT)
+================================================================================
+
+Why Entry second?
+  - Entry labels use Trade-Outcome Labeling
+  - Trade-Outcome criterion 4 needs Exit model (efficient exit)
+  - So we use the newly trained Exit models above
+
+--------------------------------------------------------------------------------
+5.1: Training LONG Entry Model
+--------------------------------------------------------------------------------
+
+Creating LONG entry labels with Trade-Outcome...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\train_complete_4models_enhanced_correct.py", line 643, in <module>
+    y_entry_long = long_entry_labels
+                        ^^^^^^^^^^^^
+    
+    
+    # Split
+    ^
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\src\labeling\trade_outcome_labeling.py", line 118, in create_entry_labels
+    total = len(df) - simulator.emergency_max_hold - 10
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SimpleExitSimulator' object has no attribute 'emergency_max_hold'

@@ -1,0 +1,122 @@
+# Baseline Configuration: Pure Forecasting (No Random Masking)
+# Experiment: baseline_pure_forecasting
+# Purpose: Establish baseline performance to beat
+
+experiment:
+  name: "baseline_pure_forecasting"
+  description: "Pure forecasting without random masking curriculum"
+  seed: 42
+
+# Data Configuration
+data:
+  symbols: ["BTCUSDT", "ETHUSDT"]
+  interval: "1m"
+
+  # Data splits (time-based)
+  train_start: "2022-01-01"
+  train_end: "2023-06-30"      # 18 months for training
+  val_start: "2023-07-01"
+  val_end: "2023-12-31"        # 6 months for validation
+  test_start: "2024-01-01"
+  test_end: "2024-09-30"       # 9 months for testing
+
+  # Sequence parameters
+  seq_len: 100                  # Input sequence length
+  pred_len: 10                  # Prediction horizon
+
+  # Preprocessing
+  normalization: "rolling_zscore"
+  rolling_window: 1000
+  clip_threshold: 5.0
+
+  # DataLoader
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true
+
+# Model Architecture
+model:
+  input_dim: 15                 # OHLCV + volume features
+  hidden_dim: 256
+  n_layers: 6
+  n_heads: 8
+  ff_dim: 1024
+  dropout: 0.1
+
+  # Uncertainty quantification
+  uncertainty_head: true
+  mc_dropout_samples: 10
+
+# Masking Strategy (DISABLED for baseline)
+masking:
+  enabled: false
+  ratio_infill: 0.0
+  ratio_forecast: 1.0           # 100% forecasting
+  ratio_sparse: 0.0
+
+# Training Configuration
+training:
+  epochs: 100
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+
+  # Learning rate scheduler
+  scheduler: "cosine"
+  warmup_epochs: 5
+  min_lr: 0.00001
+
+  # Early stopping
+  patience: 15
+  min_delta: 0.0001
+
+  # Gradient clipping
+  grad_clip: 1.0
+
+  # Loss weights
+  loss_weights:
+    mse: 1.0
+    directional: 0.1
+    volatility: 0.05
+    uncertainty: 0.01
+
+# Evaluation Configuration
+evaluation:
+  # Prediction metrics
+  prediction_metrics:
+    - "mse"
+    - "mae"
+    - "rmse"
+    - "directional_accuracy"
+
+  # Backtesting configuration
+  backtest:
+    initial_capital: 10000.0
+    max_position_size: 0.10     # 10% of capital
+    leverage: 1.0
+
+    # Risk management
+    stop_loss_pct: 0.02         # 2%
+    take_profit_pct: 0.06       # 6%
+
+    # Trading parameters
+    slippage_pct: 0.001         # 0.1%
+    commission_pct: 0.001       # 0.1%
+
+    # Signal generation
+    min_confidence: 0.6         # 60%
+    max_uncertainty: 0.02       # 2%
+    min_price_move: 0.001       # 0.1%
+
+# Logging Configuration
+logging:
+  log_dir: "runs"
+  tensorboard: true
+  save_every_n_epochs: 10
+  log_predictions: true
+  log_attention_weights: false  # Too expensive for baseline
+
+# Hardware Configuration
+hardware:
+  device: "cuda"                # "cuda", "cpu", or "auto"
+  mixed_precision: true         # AMP for faster training
+  compile_model: false          # PyTorch 2.0 compile (experimental)

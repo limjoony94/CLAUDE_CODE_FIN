@@ -1,0 +1,20 @@
+{
+  "model_name": "xgboost_v4_long_exit",
+  "n_features": 44,
+  "base_features": 37,
+  "position_features": 8,
+  "scores": {
+    "accuracy": 0.8698466049272356,
+    "precision": 0.3515129552455155,
+    "recall": 0.9695152423788106,
+    "f1": 0.5159574468085106
+  },
+  "normalized": true,
+  "scaler": "MinMaxScaler",
+  "scaler_range": [
+    -1,
+    1
+  ],
+  "labeling_strategy": "near_peak_80pct_and_beats_holding_1h",
+  "timestamp": "2025-10-15T23:05:01.232107"
+}

@@ -1,0 +1,16 @@
+{
+  "best_params": {
+    "subsample": 0.8,
+    "n_estimators": 300,
+    "min_child_weight": 5,
+    "max_depth": 6,
+    "learning_rate": 0.03,
+    "gamma": 0.3,
+    "colsample_bytree": 0.5,
+    "colsample_bylevel": 0.7
+  },
+  "cv_f1_score": 0.07502718657759826,
+  "n_features": 185,
+  "has_lag_features": true,
+  "tuned": true
+}

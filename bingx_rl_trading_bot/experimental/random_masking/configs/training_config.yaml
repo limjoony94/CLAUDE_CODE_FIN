@@ -1,0 +1,88 @@
+# Training Configuration
+
+training:
+  # Basic settings
+  batch_size: 64
+  epochs: 200
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-5
+  patience: 20
+  gradient_clip: 1.0
+
+  # Optimizer
+  optimizer: 'AdamW'
+  optimizer_params:
+    betas: [0.9, 0.999]
+    eps: 1.0e-8
+
+  # Learning rate scheduler
+  scheduler: 'CosineAnnealing'
+  scheduler_params:
+    T_max: 200
+    eta_min: 1.0e-6
+    warmup_epochs: 10
+
+  # Loss function
+  loss_weights:
+    alpha: 0.4  # Infilling loss weight
+    beta: 0.5   # Forecasting loss weight
+    gamma: 0.1  # Auxiliary loss weight
+
+  loss_components:
+    use_mse: true
+    use_directional: true
+    directional_weight: 0.3
+    use_volatility: true
+    volatility_weight: 0.2
+
+  # Regularization
+  use_label_smoothing: false
+  label_smoothing: 0.1
+  use_mixup: false
+  mixup_alpha: 0.2
+
+  # Curriculum learning
+  curriculum:
+    type: "random"  # "random", "sequential", "adaptive"
+    start_easy: false
+
+  # Hardware
+  device: 'cuda'
+  num_workers: 4
+  pin_memory: true
+
+  # Checkpointing
+  save_freq: 10  # Save every N epochs
+  save_best_only: true
+  checkpoint_dir: 'checkpoints/'
+
+  # Logging
+  log_dir: 'logs/'
+  log_freq: 100  # Log every N batches
+  use_tensorboard: true
+  use_wandb: false
+
+  wandb:
+    project: "random-masking-candle-predictor"
+    entity: null
+    tags: ['transformer', 'random-masking', 'crypto']
+
+validation:
+  val_freq: 1  # Validate every N epochs
+  val_batch_size: 128
+  use_mc_dropout: true
+  mc_samples: 10  # For uncertainty estimation
+
+evaluation:
+  metrics:
+    - 'mse'
+    - 'mae'
+    - 'mape'
+    - 'directional_accuracy'
+    - 'sharpe_ratio'
+    - 'sortino_ratio'
+
+  # Uncertainty calibration
+  calibration:
+    n_bins: 10
+    confidence_levels: [0.5, 0.8, 0.9, 0.95, 0.99]

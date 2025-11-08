@@ -1,0 +1,221 @@
+================================================================================
+COMPLETE 4-MODEL TRAINING: ENHANCED FEATURES
+================================================================================
+
+Configuration:
+  Phase: phase1
+  Entry Threshold (LONG/SHORT): 0.65/0.7
+  ML Exit Threshold (LONG/SHORT): 0.75/0.75
+  Stop Loss: -3.0%
+  Max Hold: 120 candles
+
+================================================================================
+STEP 1: Loading Data and Calculating Enhanced Features
+================================================================================
+
+✅ Loaded 31,488 candles
+   Date range: 2025-07-01 14:00:00 to 2025-10-18 21:55:00
+
+Calculating enhanced features (phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (31488 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 31,488 → 31,201 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 31,196 / 31,488 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+
+✅ Enhanced features calculated (including Exit-specific features)
+   Total columns: 193
+   Final rows: 31,196
+
+================================================================================
+STEP 2: Loading Production Entry Models
+================================================================================
+
+✅ Production Entry models loaded
+   LONG Entry features: 44
+   SHORT Entry features: 38
+
+================================================================================
+STEP 3: Preparing Enhanced Feature Sets
+================================================================================
+
+🔍 DEBUG: Exit Feature Filtering
+   Total candidates: 47
+   Filtered features: 47
+
+✅ Feature sets prepared:
+   LONG Entry: 85 features
+   SHORT Entry: 79 features
+   Exit (filtered): 47 features (from 47 candidates)
+   SHORT Exit: 47 features
+
+================================================================================
+STEP 4: Training EXIT Models (LONG + SHORT)
+================================================================================
+
+Why Exit first?
+  - Entry models need Trade-Outcome labels
+  - Trade-Outcome labels need Exit model for criterion 4 (efficient exit)
+  - So Exit models must be trained first
+
+--------------------------------------------------------------------------------
+4.1: Training LONG Exit Model
+--------------------------------------------------------------------------------
+
+Simulating LONG trades for exit labeling...
+✅ Simulated 4,126 LONG trades
+
+Creating LONG exit labels...
+✅ Created 490,994 LONG exit samples
+   Positive rate: 20.75%
+
+Training LONG Exit model (full data + 5-fold CV)...
+Running 5-fold time series cross-validation...
+CV Precision: 0.3554 ± 0.1455
+Folds: 0.5806, 0.3718, 0.3930, 0.3008, 0.1307
+
+Training final model on all data...
+
+✅ LONG Exit Model Performance (training):
+              precision    recall  f1-score   support
+
+         0.0     0.9949    0.9363    0.9647    389102
+         1.0     0.8015    0.9817    0.8825    101892
+
+    accuracy                         0.9458    490994
+   macro avg     0.8982    0.9590    0.9236    490994
+weighted avg     0.9548    0.9458    0.9477    490994
+
+ROC-AUC: 0.9938
+
+Top 10 Features (LONG Exit):
+  macd                           0.0883
+  trend_strength                 0.0611
+  ma_200                         0.0536
+  vp_vwap_bearish_confluence     0.0388
+  vp_distance_to_poc_pct         0.0361
+  ema_200                        0.0358
+  vwap                           0.0347
+  macd_signal                    0.0339
+  atr_200                        0.0337
+  vp_in_value_area               0.0319
+
+✅ LONG Exit model saved:
+   xgboost_long_exit_enhanced_20251023_212712.pkl
+
+--------------------------------------------------------------------------------
+4.2: Training SHORT Exit Model
+--------------------------------------------------------------------------------
+
+Simulating SHORT trades for exit labeling...
+✅ Simulated 5,006 SHORT trades
+
+Creating SHORT exit labels...
+✅ Created 595,714 SHORT exit samples
+   Positive rate: 17.19%
+
+Training SHORT Exit model (full data + 5-fold CV)...
+Running 5-fold time series cross-validation...
+CV Precision: 0.2872 ± 0.0991
+Folds: 0.4585, 0.3044, 0.2933, 0.2057, 0.1740
+
+Training final model on all data...
+
+✅ SHORT Exit Model Performance (training):
+              precision    recall  f1-score   support
+
+         0.0     0.9969    0.9349    0.9649    493290
+         1.0     0.7587    0.9861    0.8576    102424
+
+    accuracy                         0.9437    595714
+   macro avg     0.8778    0.9605    0.9112    595714
+weighted avg     0.9560    0.9437    0.9465    595714
+
+ROC-AUC: 0.9942
+
+Top 10 Features (SHORT Exit):
+  trend_strength                 0.2170
+  vwap                           0.0392
+  ema_200                        0.0371
+  ma_200                         0.0366
+  ema_12                         0.0350
+  atr_200                        0.0325
+  institutional_activity_zone    0.0317
+  vwap_momentum                  0.0316
+  vp_distance_to_poc_pct         0.0313
+  vp_vwap_bullish_confluence     0.0303
+
+✅ SHORT Exit model saved:
+   xgboost_short_exit_enhanced_20251023_212712.pkl
+
+================================================================================
+STEP 5: Training ENTRY Models (LONG + SHORT)
+================================================================================
+
+Why Entry second?
+  - Entry labels use Trade-Outcome Labeling
+  - Trade-Outcome criterion 4 needs Exit model (efficient exit)
+  - So we use the newly trained Exit models above
+
+--------------------------------------------------------------------------------
+5.1: Training LONG Entry Model
+--------------------------------------------------------------------------------
+
+Creating LONG entry labels with Trade-Outcome...
+
+LONG Entry Labeling (Trade-Outcome Based)
+  Simulating 31,066 potential entries...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\train_complete_4models_enhanced_correct.py", line 618, in <module>
+    long_entry_labels = entry_labeler.create_entry_labels(
+        df, long_simulator, 'LONG', show_progress=True
+    )
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\src\labeling\trade_outcome_labeling.py", line 129, in create_entry_labels
+    trade_result = simulator.simulate_trade(df, i, side)
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\train_complete_4models_enhanced_correct.py", line 600, in simulate_trade
+    if np.isnan(exit_features_values).any():
+       ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''

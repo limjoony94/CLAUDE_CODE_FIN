@@ -1,0 +1,104 @@
+# BingX 트레이딩 봇 설정
+
+# 거래소 설정
+exchange:
+  name: "bingx"
+  testnet: true
+  symbol: "BTC-USDT"
+
+# 거래 설정
+trading:
+  leverage: 10
+  timeframe: "5m"
+  position_side: "both"  # long, short, both
+  max_position_size: 0.1  # BTC
+  min_position_size: 0.001  # BTC
+
+# 리스크 관리
+risk:
+  max_drawdown: 0.15  # 15%
+  max_daily_loss: 0.05  # 5%
+  max_position_risk: 0.02  # 2% per trade
+  use_stop_loss: true
+  use_take_profit: true
+
+# 기술적 지표
+indicators:
+  ema:
+    periods: [9, 21, 50]
+  rsi:
+    period: 14
+    overbought: 70
+    oversold: 30
+  bollinger_bands:
+    period: 20
+    std: 2
+  stochastic:
+    k_period: 14
+    d_period: 3
+  adx:
+    period: 14
+  atr:
+    period: 14
+  vwap:
+    enabled: true
+
+# 강화학습 설정
+rl:
+  algorithm: "PPO"
+  learning_rate: 0.0003
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  ent_coef: 0.01
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+
+# 환경 설정
+environment:
+  initial_balance: 10000  # USDT
+  transaction_fee: 0.0004  # 0.04%
+  slippage: 0.0001  # 0.01%
+  max_steps: 10000
+  reward_scaling: 1.0
+
+# 훈련 설정
+training:
+  total_timesteps: 1000000
+  eval_freq: 10000
+  save_freq: 50000
+  log_interval: 100
+  n_eval_episodes: 10
+
+# 백테스팅 설정
+backtesting:
+  start_date: "2023-01-01"
+  end_date: "2024-12-31"
+  initial_capital: 10000
+
+# 데이터 설정
+data:
+  historical_days: 365
+  update_interval: 300  # seconds (5 minutes)
+  cache_size: 1000
+
+# 로깅 설정
+logging:
+  level: "INFO"
+  save_logs: true
+  log_trades: true
+  log_metrics: true
+
+# 알림 설정
+notifications:
+  enabled: false
+  telegram:
+    enabled: false
+    bot_token: ""
+    chat_id: ""
+  discord:
+    enabled: false
+    webhook_url: ""

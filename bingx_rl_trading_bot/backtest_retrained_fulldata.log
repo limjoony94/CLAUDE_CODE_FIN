@@ -1,0 +1,95 @@
+================================================================================
+BACKTEST - FULL DATASET RETRAINED ENTRY MODELS
+================================================================================
+
+Models: 20251030_012702
+Entry Threshold: 0.75
+Exit Threshold: 0.75
+Period: Complete dataset (Jul 14 - Oct 26, 2025)
+
+Loading data...
+✅ Loaded 30,004 candles
+   Date range: 2025-07-14 14:20:00 to 2025-10-26 18:35:00
+
+Loading Entry models...
+
+  LONG Entry: 85 features
+  Fold scores: {2: np.float64(0.1408), 5: np.float64(0.1402), 3: np.float64(0.1342), 1: np.float64(0.121), 4: np.float64(0.1022)}
+
+  SHORT Entry: 79 features
+  Fold scores: {4: np.float64(0.1886), 3: np.float64(0.1646), 5: np.float64(0.1484), 2: np.float64(0.106), 1: np.float64(0.0722)}
+
+Loading Exit models...
+✅ LONG Exit: 21 features
+✅ SHORT Exit: 21 features
+
+================================================================================
+RUNNING BACKTESTS
+================================================================================
+
+================================================================================
+OPTION A: Best Fold Only
+================================================================================
+
+  Processing candle 0/30,004 (0.0%)
+  Processing candle 5,000/30,004 (16.7%)
+  Processing candle 10,000/30,004 (33.3%)
+  Processing candle 15,000/30,004 (50.0%)
+  Processing candle 20,000/30,004 (66.7%)
+  Processing candle 25,000/30,004 (83.3%)
+  Processing complete!
+
+RESULTS:
+  Final Balance: $0.87
+  Total Return: -99.99%
+  Total Trades: 3892
+    LONG: 3058 (78.6%)
+    SHORT: 834 (21.4%)
+  Win Rate: 51.59% (2008W / 1884L)
+  Average Trade: -0.2319%
+  Average Win: +0.5524%
+  Average Loss: -1.0678%
+  Average Hold: 37.6 candles (3.13 hours)
+  Average Position Size: 61.3%
+
+EXIT DISTRIBUTION:
+  ML Exit: 2717 (69.8%)
+  Stop Loss: 671 (17.2%)
+  Max Hold: 504 (12.9%)
+
+================================================================================
+OPTION B: Top-3 Weighted Ensemble
+================================================================================
+
+  Processing candle 0/30,004 (0.0%)
+  Processing candle 5,000/30,004 (16.7%)
+  Processing candle 10,000/30,004 (33.3%)
+  Processing candle 15,000/30,004 (50.0%)
+  Processing candle 20,000/30,004 (66.7%)
+  Processing candle 25,000/30,004 (83.3%)
+  Processing complete!
+
+RESULTS:
+  Final Balance: $32.37
+  Total Return: -99.68%
+  Total Trades: 3072
+    LONG: 2207 (71.8%)
+    SHORT: 865 (28.2%)
+  Win Rate: 52.08% (1600W / 1472L)
+  Average Trade: -0.1820%
+  Average Win: +0.3766%
+  Average Loss: -0.7892%
+  Average Hold: 31.9 candles (2.66 hours)
+  Average Position Size: 47.0%
+
+EXIT DISTRIBUTION:
+  ML Exit: 2241 (72.9%)
+  Stop Loss: 521 (17.0%)
+  Max Hold: 310 (10.1%)
+
+✅ Saved Option A trades to results/
+✅ Saved Option B trades to results/
+
+================================================================================
+BACKTEST COMPLETE
+================================================================================

@@ -1,0 +1,16 @@
+XGBoost SHORT Model - CORRECTED VERSION
+================================================================================
+
+CRITICAL FIXES:
+  1. Used ACTUAL feature names (not wrong names!)
+  2. Used ALL 64 available features
+  3. Used realistic TP (1.0%) instead of 3%
+  4. TP/SL-aligned labeling
+
+CONFIGURATION:
+  TP: 1.0% (price drops)
+  SL: 1.0% (price rises)
+  Max Hold: 24 candles (2.0 hours)
+  Features: 64
+  Model: XGBoost
+  Normalization: MinMaxScaler [-1, 1]

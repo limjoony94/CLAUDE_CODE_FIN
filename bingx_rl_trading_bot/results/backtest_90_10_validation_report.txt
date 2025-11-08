@@ -1,0 +1,52 @@
+================================================================================
+BACKTEST VALIDATION REPORT - 90/10 Allocation
+================================================================================
+
+Date: 2025-10-11 14:53:06
+Configuration: LONG 90% / SHORT 10%
+
+Configuration Details:
+  LONG Threshold: 0.7
+  LONG SL/TP: 1.0% / 3.0%
+  SHORT Threshold: 0.4
+  SHORT SL/TP: 1.5% / 6.0%
+
+================================================================================
+RESULTS
+================================================================================
+
+Initial Capital: $10,000.00
+Final Capital: $15,314.85
+Total Return: +53.15%
+Monthly Return (est): +26.65%
+
+Total Trades: 330
+  LONG: 137
+  SHORT: 193
+Win Rate: 59.4%
+
+Trades per Day: 5.52
+Estimated Trades per Month: 165.5
+
+Sharpe Ratio: 4.20
+Sortino Ratio: 7.63
+Max Drawdown: 2.02%
+
+================================================================================
+VALIDATION STATUS
+================================================================================
+
+✓ Monthly Return ≥ 18.0%: ✅ PASS (+26.65%)
+✓ Trades/Month ≥ 96: ✅ PASS (165.5)
+✓ Sharpe Ratio ≥ 2.0: ✅ PASS (4.20)
+✓ Max Drawdown ≤ 5%: ✅ PASS (2.02%)
+
+Overall Status: ✅ VALIDATED - Ready for Testnet
+
+================================================================================
+Next Steps:
+================================================================================
+
+1. Deploy to BingX Testnet
+2. Monitor for 1 week
+3. Validate real-time performance matches backtest

@@ -1,0 +1,642 @@
+====================================================================================================
+CLOSED ORDERS/TRADES (Last 10 from BingX API)
+====================================================================================================
+
+Found 16 closed orders
+
+====================================================================================================
+Order #1
+====================================================================================================
+Order ID:        1979082391000662016
+Timestamp:       2025-10-17 16:09:46
+Side:            buy
+Type:            market
+Price:           $106,354.20
+Amount:          0.010300 BTC
+Filled:          0.010300 BTC
+Cost:            $1,095.45
+Error fetching closed orders: Unknown format code 'f' for object of type 'str'
+
+====================================================================================================
+MY TRADES (Filled Orders with Details)
+====================================================================================================
+
+Found 20 trades
+
+====================================================================================================
+Trade #1
+====================================================================================================
+Trade ID:        None
+Order ID:        1977993918697127936
+Timestamp:       2025-10-15 00:04:34
+Side:            buy
+Price:           $111,730.60
+Amount:          0.045200 BTC
+Cost:            $5,050.22
+Fee:             $2.5251 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-14T15:04:34Z",
+    "volume": "452",
+    "price": "111730.6",
+    "amount": "5050.2242",
+    "commission": "-2.5251",
+    "currency": "USDT",
+    "orderId": "1977993918697127936",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-14T15:04:34.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760454274000,
+  "datetime": "2025-10-14T15:04:34.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1977993918697127936",
+  "type": null,
+  "side": "buy",
+  "takerOrMaker": null,
+  "price": 111730.6,
+  "amount": 0.0452,
+  "cost": 5050.22312,
+  "fee": {
+    "currency": "USDT",
+    "cost": 2.5251
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 2.5251
+    }
+  ]
+}
+
+====================================================================================================
+Trade #2
+====================================================================================================
+Trade ID:        None
+Order ID:        1978038632607596544
+Timestamp:       2025-10-15 03:02:15
+Side:            sell
+Price:           $111,206.30
+Amount:          0.095400 BTC
+Cost:            $10,609.08
+Fee:             $5.3045 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-14T18:02:15Z",
+    "volume": "954",
+    "price": "111206.3",
+    "amount": "10609.0810",
+    "commission": "-5.3045",
+    "currency": "USDT",
+    "orderId": "1978038632607596544",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-14T18:02:15.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "SELL",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760464935000,
+  "datetime": "2025-10-14T18:02:15.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1978038632607596544",
+  "type": null,
+  "side": "sell",
+  "takerOrMaker": null,
+  "price": 111206.3,
+  "amount": 0.0954,
+  "cost": 10609.08102,
+  "fee": {
+    "currency": "USDT",
+    "cost": 5.3045
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 5.3045
+    }
+  ]
+}
+
+====================================================================================================
+Trade #3
+====================================================================================================
+Trade ID:        None
+Order ID:        1979072106936352768
+Timestamp:       2025-10-17 23:28:54
+Side:            buy
+Price:           $107,814.70
+Amount:          0.010400 BTC
+Cost:            $1,121.27
+Fee:             $0.5606 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T14:28:54Z",
+    "volume": "104",
+    "price": "107814.7",
+    "amount": "1121.2725",
+    "commission": "-0.5606",
+    "currency": "USDT",
+    "orderId": "1979072106936352768",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T14:28:54.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760711334000,
+  "datetime": "2025-10-17T14:28:54.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979072106936352768",
+  "type": null,
+  "side": "buy",
+  "takerOrMaker": null,
+  "price": 107814.7,
+  "amount": 0.0104,
+  "cost": 1121.27288,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.5606
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.5606
+    }
+  ]
+}
+
+====================================================================================================
+Trade #4
+====================================================================================================
+Trade ID:        None
+Order ID:        1979082118735806464
+Timestamp:       2025-10-18 00:08:41
+Side:            sell
+Price:           $106,345.50
+Amount:          0.010400 BTC
+Cost:            $1,105.99
+Fee:             $0.5530 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T15:08:41Z",
+    "volume": "104",
+    "price": "106345.5",
+    "amount": "1105.9932",
+    "commission": "-0.5530",
+    "currency": "USDT",
+    "orderId": "1979082118735806464",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T15:08:41.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "SELL",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760713721000,
+  "datetime": "2025-10-17T15:08:41.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979082118735806464",
+  "type": null,
+  "side": "sell",
+  "takerOrMaker": null,
+  "price": 106345.5,
+  "amount": 0.0104,
+  "cost": 1105.9932,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.553
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.553
+    }
+  ]
+}
+
+====================================================================================================
+Trade #5
+====================================================================================================
+Trade ID:        None
+Order ID:        1979082391000662016
+Timestamp:       2025-10-18 00:09:46
+Side:            buy
+Price:           $106,354.20
+Amount:          0.010300 BTC
+Cost:            $1,095.45
+Fee:             $0.5477 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T15:09:46Z",
+    "volume": "103",
+    "price": "106354.2",
+    "amount": "1095.4483",
+    "commission": "-0.5477",
+    "currency": "USDT",
+    "orderId": "1979082391000662016",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T15:09:46.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760713786000,
+  "datetime": "2025-10-17T15:09:46.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979082391000662016",
+  "type": null,
+  "side": "buy",
+  "takerOrMaker": null,
+  "price": 106354.2,
+  "amount": 0.0103,
+  "cost": 1095.44826,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.5477
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.5477
+    }
+  ]
+}
+
+====================================================================================================
+Trade #6
+====================================================================================================
+Trade ID:        None
+Order ID:        1979091972481302528
+Timestamp:       2025-10-18 00:47:51
+Side:            buy
+Price:           $105,749.20
+Amount:          0.006000 BTC
+Cost:            $634.50
+Fee:             $0.3172 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T15:47:51Z",
+    "volume": "60",
+    "price": "105749.2",
+    "amount": "634.4952",
+    "commission": "-0.3172",
+    "currency": "USDT",
+    "orderId": "1979091972481302528",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T15:47:51.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760716071000,
+  "datetime": "2025-10-17T15:47:51.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979091972481302528",
+  "type": null,
+  "side": "buy",
+  "takerOrMaker": null,
+  "price": 105749.2,
+  "amount": 0.006,
+  "cost": 634.4952,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.3172
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.3172
+    }
+  ]
+}
+
+====================================================================================================
+Trade #7
+====================================================================================================
+Trade ID:        None
+Order ID:        1979094392703762432
+Timestamp:       2025-10-18 00:57:28
+Side:            sell
+Price:           $105,623.10
+Amount:          0.016300 BTC
+Cost:            $1,721.66
+Fee:             $0.8608 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T15:57:28Z",
+    "volume": "163",
+    "price": "105623.1",
+    "amount": "1721.6565",
+    "commission": "-0.8608",
+    "currency": "USDT",
+    "orderId": "1979094392703762432",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T15:57:28.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "SELL",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760716648000,
+  "datetime": "2025-10-17T15:57:28.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979094392703762432",
+  "type": null,
+  "side": "sell",
+  "takerOrMaker": null,
+  "price": 105623.1,
+  "amount": 0.0163,
+  "cost": 1721.65653,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.8608
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.8608
+    }
+  ]
+}
+
+====================================================================================================
+Trade #8
+====================================================================================================
+Trade ID:        None
+Order ID:        1979099782996770816
+Timestamp:       2025-10-18 01:18:53
+Side:            buy
+Price:           $104,712.60
+Amount:          0.008400 BTC
+Cost:            $879.59
+Fee:             $0.4398 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T16:18:53Z",
+    "volume": "84",
+    "price": "104712.6",
+    "amount": "879.5860",
+    "commission": "-0.4398",
+    "currency": "USDT",
+    "orderId": "1979099782996770816",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T16:18:53.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760717933000,
+  "datetime": "2025-10-17T16:18:53.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979099782996770816",
+  "type": null,
+  "side": "buy",
+  "takerOrMaker": null,
+  "price": 104712.6,
+  "amount": 0.0084,
+  "cost": 879.58584,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.4398
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.4398
+    }
+  ]
+}
+
+====================================================================================================
+Trade #9
+====================================================================================================
+Trade ID:        None
+Order ID:        1979131237114265600
+Timestamp:       2025-10-18 03:23:52
+Side:            sell
+Price:           $103,573.20
+Amount:          0.008400 BTC
+Cost:            $870.01
+Fee:             $0.4350 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T18:23:52Z",
+    "volume": "84",
+    "price": "103573.2",
+    "amount": "870.0149",
+    "commission": "-0.4350",
+    "currency": "USDT",
+    "orderId": "1979131237114265600",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T18:23:52.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "SELL",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760725432000,
+  "datetime": "2025-10-17T18:23:52.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979131237114265600",
+  "type": null,
+  "side": "sell",
+  "takerOrMaker": null,
+  "price": 103573.2,
+  "amount": 0.0084,
+  "cost": 870.01488,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.435
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.435
+    }
+  ]
+}
+
+====================================================================================================
+Trade #10
+====================================================================================================
+Trade ID:        None
+Order ID:        1979131508200521728
+Timestamp:       2025-10-18 03:24:57
+Side:            buy
+Price:           $103,666.80
+Amount:          0.008700 BTC
+Cost:            $901.90
+Fee:             $0.4510 USDT
+
+Additional Info:
+
+Raw Trade Data:
+{
+  "id": null,
+  "info": {
+    "filledTm": "2025-10-17T18:24:57Z",
+    "volume": "87",
+    "price": "103666.8",
+    "amount": "901.9012",
+    "commission": "-0.4510",
+    "currency": "USDT",
+    "orderId": "1979131508200521728",
+    "liquidatedPrice": "",
+    "liquidatedMarginRatio": "",
+    "filledTime": "2025-10-17T18:24:57.000+0800",
+    "clientOrderID": "",
+    "symbol": "BTC-USDT",
+    "onlyOnePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "type": "MARKET",
+    "triggerOrderId": "0"
+  },
+  "timestamp": 1760725497000,
+  "datetime": "2025-10-17T18:24:57.000Z",
+  "symbol": "BTC/USDT:USDT",
+  "order": "1979131508200521728",
+  "type": null,
+  "side": "buy",
+  "takerOrMaker": null,
+  "price": 103666.8,
+  "amount": 0.0087,
+  "cost": 901.90116,
+  "fee": {
+    "currency": "USDT",
+    "cost": 0.451
+  },
+  "fees": [
+    {
+      "currency": "USDT",
+      "cost": 0.451
+    }
+  ]
+}
+
+====================================================================================================
+STATE FILE COMPARISON
+====================================================================================================
+
+State file trades (last 5):
+
+#1 MANUAL   | $106,824.53 → $107,202.40 | +1.01% ($+11.71)
+   Position Value: $1,153.70
+   Total Fee: $4.61
+   Entry Fee: $2.30
+   Exit Fee: $2.31
+   *** MANUAL TRADE ***
+   Orders: 5 orders
+
+#2 LONG     | $108,298.90 → $108,350.20 | +0.19% ($-0.04)
+   Position Value: $384.77
+   Total Fee: $0.77
+   Entry Fee: $0.00
+   Exit Fee: $0.77
+
+#3 LONG     | $107,546.30 → $108,388.20 | +3.13% ($+6.16)
+   Position Value: $209.95
+   Total Fee: $0.42
+   Entry Fee: $0.00
+   Exit Fee: $0.42
+
+#4 LONG     | $103,683.20 → $106,733.90 | +11.77% ($+26.79)
+   Position Value: $227.62
+   Total Fee: $0.00
+   Entry Fee: $0.00
+   Exit Fee: $0.00
+
+#5 LONG     | $104,822.10 → $103,499.10 | -5.05% ($-11.12)
+   Position Value: $220.29
+   Total Fee: $0.00
+   Entry Fee: $0.00
+   Exit Fee: $0.00

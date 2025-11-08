@@ -1,0 +1,70 @@
+{
+  "signal_type": "LONG",
+  "timestamp": "20251031_151355",
+  "data_info": {
+    "total_candles": 30805,
+    "train_candles": 18708,
+    "val_candles": 4032,
+    "test_candles": 8065,
+    "test_period_weeks": 4
+  },
+  "optimization": {
+    "optimal_periods": {
+      "rsi": 14,
+      "macd_fast": 12,
+      "macd_slow": 26,
+      "macd_signal": 9,
+      "ma_short": 20,
+      "ma_long": 50,
+      "atr": 7,
+      "rolling_short": 10,
+      "rolling_long": 20
+    },
+    "selected_features": [
+      "rsi_raw",
+      "rsi_deviation",
+      "rsi_direction",
+      "rsi_extreme",
+      "macd_strength",
+      "macd_direction",
+      "macd_divergence_abs",
+      "price_distance_ma_short",
+      "price_direction_ma_short",
+      "price_distance_ma_long",
+      "price_direction_ma_long",
+      "atr",
+      "atr_pct",
+      "negative_momentum",
+      "down_candle_ratio",
+      "volume_ma_short",
+      "volume_surge",
+      "volatility",
+      "price_range",
+      "resistance",
+      "support",
+      "near_resistance",
+      "below_support"
+    ],
+    "num_features_original": 23,
+    "num_features_selected": 23
+  },
+  "performance": {
+    "validation": {
+      "accuracy": 0.8358134920634921,
+      "auc": 0.6028859078813815,
+      "f1": 0.11497326203208556,
+      "precision": 0.08829568788501027,
+      "recall": 0.16475095785440613
+    },
+    "test_backtest": {
+      "accuracy": 0.6493490390576565,
+      "auc": 0.5057817149552241,
+      "f1": 0.21575152523571825,
+      "precision": 0.1982670744138634,
+      "recall": 0.23661800486618004,
+      "prediction_rate": 0.24327340359578425
+    }
+  },
+  "model_file": "xgboost_long_optimized_20251031_151355.pkl",
+  "feature_file": "features_long_optimized_20251031_151355.txt"
+}

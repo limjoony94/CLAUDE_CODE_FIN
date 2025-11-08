@@ -1,0 +1,86 @@
+================================================================================
+FULL PERIOD BACKTEST: OPPORTUNITY GATING with 4x LEVERAGE
+================================================================================
+
+Testing with LEVERAGE and DYNAMIC SIZING
+
+Loading models...
+Loading Exit models (Opportunity Gating)...
+  ✅ Entry models loaded: LONG(44), SHORT(38)
+  ✅ Exit models loaded: LONG(25), SHORT(25)
+
+Loading FULL historical data...
+  ✅ Full data loaded: 30,517 candles (~105 days)
+
+Calculating ALL features (LONG + SHORT + EXIT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (30517 rows)
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+  ✅ All features calculated (156.8s)
+
+Pre-calculating signals...
+  ✅ Signals pre-calculated (0.1s)
+
+================================================================================
+RUNNING BACKTEST with 4x LEVERAGE + DYNAMIC SIZING
+================================================================================
+
+
+================================================================================
+FULL PERIOD BACKTEST RESULTS (4x LEVERAGE) - INDEPENDENT WINDOW TESTING
+================================================================================
+
+Performance (Each window starts with $10,000):
+  Avg Window Return: 11.08% per window
+  Win Rate: 61.8%
+  Trades: 24.6 per window (LONG 19.2 + SHORT 5.4)
+  Avg Position Size: 49.3%
+  Windows: 100
+  Test Time: 23.1s
+
+📊 Capital Summary:
+  Starting Capital (per window): $10,000.00
+  Avg Final Capital (per window): $11,107.87
+  Last Window Result: $18,511.83 (+85.12%)
+
+📈 Annualized Performance (from avg window return):
+  Annualized Return: 214216.1%
+  (Based on 100 windows over 500 days)
+
+💰 After Transaction Costs:
+  Cost per trade: 0.07%
+  Cost per window: 1.72%
+  Net window return: 9.36% per window
+
+📈 Leverage Impact:
+  With 4x Leverage: 11.08% per window
+  Without Leverage (est): 2.77% per window
+  Leverage Multiplier: 4.00x
+
+🚪 EXIT REASON ANALYSIS:
+  Total Trades: 2459
+    ML Exit (LONG)           : 1819 ( 74.0%)
+    ML Exit (SHORT)          :  541 ( 22.0%)
+    Emergency Stop Loss      :   56 (  2.3%)
+    Emergency Max Hold       :   43 (  1.7%)
+
+  Exit by Side:
+    LONG Exits (1918 trades):
+      ML Exit             : 1819 ( 94.8%)
+      Stop Loss           :   56 (  2.9%)
+      Max Hold            :   43 (  2.2%)
+    SHORT Exits (541 trades):
+      ML Exit             :  541 (100.0%)
+
+✅ Results saved to: C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\results\full_backtest_opportunity_gating_4x_20251018_214325.csv
+
+================================================================================
+BACKTEST COMPLETE
+================================================================================
+

@@ -1,0 +1,25 @@
+XGBoost REGRESSION Training Results
+================================================================================
+
+Configuration:
+Model Type: Regression
+lookahead: 48 (4 hours)
+thresholds: -1.5% / +1.5%
+SNR: 2.31
+
+Regression Metrics:
+Test RMSE: 0.685%
+Test MAE: 0.480%
+Test R²: -0.1503
+Direction Accuracy: 64.6%
+Signal Accuracy: 93.8%
+
+Backtest Results:
+Validation Return: 0.00%
+Test Return:       0.00%
+Validation Trades: 0
+Test Trades:       0
+Validation Win Rate: 0.0%
+Test Win Rate:       0.0%
+Validation Liquidated: False
+Test Liquidated:       False

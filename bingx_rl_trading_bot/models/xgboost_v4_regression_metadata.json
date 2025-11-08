@@ -1,0 +1,24 @@
+{
+  "model_name": "xgboost_v4_regression",
+  "model_type": "regression",
+  "n_features": 37,
+  "target_method": "simulated_trade_pnl",
+  "stop_loss": 0.01,
+  "take_profit": 0.03,
+  "max_hold_candles": 48,
+  "timestamp": "2025-10-14T17:51:31.253756",
+  "target_stats": {
+    "mean": 0.00031025231665459123,
+    "std": 0.005865157249609218,
+    "min": -0.01,
+    "max": 0.03,
+    "positive_pct": 50.261172373766684,
+    "negative_pct": 49.460243760882186,
+    "zero_pct": 0.2785838653511318
+  },
+  "scores": {
+    "rmse": 0.006927014754607277,
+    "mae": 0.0053266921204845295,
+    "r2": -0.5042653365654617
+  }
+}

@@ -1,0 +1,154 @@
+================================================================================
+PRODUCTION SETTINGS BACKTEST - 7 DAY TEST
+================================================================================
+
+Testing EXACT production configuration on recent 7 days
+
+Loading NEW Entry models (Enhanced with 5-fold CV - Oct 24)...
+  ✅ LONG Entry: 85 features
+  ✅ SHORT Entry: 79 features
+
+Loading Exit models (Enhanced - Oct 23)...
+  ✅ LONG Exit: 47 features
+  ✅ SHORT Exit: 47 features
+
+Loading historical data...
+  ✅ Data loaded: 32,841 candles
+
+Using last 7 days of data...
+  - 7 days = 2016 candles
+  - Buffer = 200 candles for feature calculation
+  - Total = 2216 candles
+
+  ✅ Selected 2,216 recent candles
+     Date range: 2025-10-15 22:05:00 to 2025-10-23 14:40:00
+
+Calculating features (Enhanced v2 + phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (2216 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 2,216 → 1,929 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 1,924 / 2,216 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+  ✅ Features calculated (11.0s)
+     1,924 candles after feature calculation
+
+  ✅ Final test period: 1,924 candles (7 days)
+     Test period: 2025-10-16 22:25:00 to 2025-10-23 14:40:00
+
+Pre-calculating signals...
+  ✅ Signals pre-calculated (0.0s)
+
+================================================================================
+RUNNING 7-DAY BACKTEST
+================================================================================
+
+  ✅ First exit signal detected at candle 31 (LONG: 0.762, SHORT: 0.007)
+     Entry signals now ENABLED from this point forward
+
+  ✅ Backtest complete (1.2s)
+
+================================================================================
+7-DAY BACKTEST RESULTS - PRODUCTION SETTINGS
+================================================================================
+
+📊 Overall Performance:
+   Test Period: 7 days (2016 candles)
+   Initial Capital: $10,000.00
+   Final Capital: $18,182.11
+   Total Return: 81.82%
+   Avg Daily Return: 8.30%
+   Daily Volatility: 5.66%
+
+📈 Trading Activity:
+   Total Trades: 21
+   Trades per Day: 3.0
+   Win Rate: 95.2% (20/21)
+   Avg P&L per Trade: $389.62
+   Avg Hold Time: 5.4 hours
+
+⚖️ Trade Distribution:
+   LONG: 12 (57.1%)
+   SHORT: 9 (42.9%)
+
+🚪 Exit Reasons:
+   ml_exit_long: 10 (47.6%)
+   emergency_max_hold: 6 (28.6%)
+   ml_exit_short: 5 (23.8%)
+
+💰 Position Sizing:
+   Average: 52.6%
+   Range: 34.6% - 71.6%
+
+🏆 Best Trade:
+   SHORT: $1424.47 (13.66%)
+   Exit: emergency_max_hold, Hold: 10.0 hours
+
+📉 Worst Trade:
+   LONG: $-18.44 (-0.40%)
+   Exit: ml_exit_long, Hold: 0.0 hours
+
+📅 Daily Performance:
+   Day 1: $11,809.17 (+18.09%)
+   Day 2: $11,989.78 (+1.53%)
+   Day 3: $12,592.04 (+5.02%)
+   Day 4: $13,441.15 (+6.74%)
+   Day 5: $15,889.92 (+18.22%)
+   Day 6: $17,473.66 (+9.97%)
+
+📊 Projections:
+   If this 7-day performance continues:
+   - Monthly Return: 1196.5%
+   - Annualized Return: 3,456,157,946,084,986% (theoretical)
+   ⚠️ Note: Past performance is not indicative of future results
+
+================================================================================
+7-DAY PRODUCTION VALIDATION COMPLETE
+================================================================================
+
+Total Execution Time: 12.2s
+Generated: 2025-10-24 04:02:00
+================================================================================
+

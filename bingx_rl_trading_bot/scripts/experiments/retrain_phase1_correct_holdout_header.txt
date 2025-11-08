@@ -1,0 +1,17 @@
+"""
+Retrain Phase 1 - Correct Method with Holdout Validation
+===========================================================
+
+Training Approach:
+  - Full Walk-Forward + Filtered + Decoupled methodology
+  - Feature reduction: LONG 85→80, SHORT 79 (Phase 1)
+  - Holdout validation: Last 30 days reserved for testing
+  - Exit threshold REMOVED from simulation (key fix!)
+
+Key Fix:
+  Original had NO threshold in simulation → Exit ANY candle
+  Phase 1 Simulation had threshold 0.75 → Only exit when prob >= 0.75
+  This version: Remove threshold, simulate ALL candles like Original
+
+Created: 2025-10-29
+"""

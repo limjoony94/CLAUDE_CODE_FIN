@@ -1,0 +1,46 @@
+2025-11-08 15:44:56.378 | INFO     | __main__:main:107 - ======================================================================
+2025-11-08 15:44:56.379 | INFO     | __main__:main:108 - Random Masking Candle Predictor - Complete Demo
+2025-11-08 15:44:56.379 | INFO     | __main__:main:109 - ======================================================================
+2025-11-08 15:44:56.379 | INFO     | __main__:main:117 - 
+Configuration:
+2025-11-08 15:44:56.379 | INFO     | __main__:main:118 -   Use real data: False
+2025-11-08 15:44:56.379 | INFO     | __main__:main:119 -   Symbol: BTC/USDT
+2025-11-08 15:44:56.380 | INFO     | __main__:main:120 -   Timeframe: 5m
+2025-11-08 15:44:56.380 | INFO     | __main__:main:121 -   Epochs: 1
+2025-11-08 15:44:56.380 | INFO     | __main__:main:122 -   Device: cuda
+2025-11-08 15:44:56.380 | INFO     | __main__:main:123 -   Save directory: ..\results\demo\20251108_154456
+2025-11-08 15:44:56.380 | INFO     | __main__:main:128 - 
+======================================================================
+2025-11-08 15:44:56.381 | INFO     | __main__:main:129 - STEP 1: DATA COLLECTION
+2025-11-08 15:44:56.381 | INFO     | __main__:main:130 - ======================================================================
+2025-11-08 15:44:56.381 | INFO     | __main__:main:141 - 
+Generating synthetic data...
+2025-11-08 15:44:56.384 | INFO     | __main__:main:163 - ✅ Collected 5000 candles
+2025-11-08 15:44:56.385 | INFO     | __main__:main:164 -    Date range: 2025-01-01 00:00:00 to 2025-01-18 08:35:00
+2025-11-08 15:44:56.385 | INFO     | __main__:main:165 -    Features: 9
+2025-11-08 15:44:56.385 | INFO     | __main__:main:166 -    Price range: $89.00 - $136.73
+2025-11-08 15:44:56.385 | INFO     | __main__:main:171 - 
+======================================================================
+2025-11-08 15:44:56.385 | INFO     | __main__:main:172 - STEP 2: PREPROCESSING
+2025-11-08 15:44:56.385 | INFO     | __main__:main:173 - ======================================================================
+2025-11-08 15:44:56.385 | INFO     | __main__:main:175 - 
+Normalizing data with rolling window...
+2025-11-08 15:44:56.385 | INFO     | random_masking.data.preprocessor:__init__:53 - Initialized CandlePreprocessor (method: rolling_zscore, window: 1000)
+2025-11-08 15:44:56.385 | INFO     | random_masking.data.preprocessor:fit:65 - Fitting preprocessor on 5000 samples...
+2025-11-08 15:44:56.388 | INFO     | random_masking.data.preprocessor:fit:86 - Fitted preprocessor on 9 features
+2025-11-08 15:44:56.388 | INFO     | random_masking.data.preprocessor:transform:104 - Transforming 5000 samples...
+2025-11-08 15:44:56.393 | INFO     | random_masking.data.preprocessor:transform:131 - Transformation complete. Shape: (5000, 9)
+2025-11-08 15:44:56.393 | INFO     | __main__:main:179 - ✅ Preprocessing complete
+2025-11-08 15:44:56.393 | INFO     | __main__:main:180 -    Shape: (5000, 9)
+2025-11-08 15:44:56.394 | INFO     | __main__:main:181 -    NaN values: 32
+2025-11-08 15:44:56.394 | INFO     | __main__:main:186 - 
+======================================================================
+2025-11-08 15:44:56.395 | INFO     | __main__:main:187 - STEP 3: DATASET CREATION
+2025-11-08 15:44:56.395 | INFO     | __main__:main:188 - ======================================================================
+2025-11-08 15:44:56.395 | INFO     | __main__:main:198 - 
+Data split:
+2025-11-08 15:44:56.395 | INFO     | __main__:main:199 -   Train: 3500 samples (70%)
+2025-11-08 15:44:56.395 | INFO     | __main__:main:200 -   Val: 750 samples (15%)
+2025-11-08 15:44:56.395 | INFO     | __main__:main:201 -   Test: 750 samples (15%)
+2025-11-08 15:44:56.396 | INFO     | __main__:main:204 - 
+Creating random masking strategy...

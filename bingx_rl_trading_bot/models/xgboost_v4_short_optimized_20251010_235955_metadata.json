@@ -1,0 +1,24 @@
+{
+  "model_name": "xgboost_v4_short_optimized_20251010_235955",
+  "model_type": "3-class optimized",
+  "optimization_method": "Optuna TPE",
+  "n_trials": 100,
+  "best_score": 0.22967801273358257,
+  "best_params": {
+    "n_estimators": 122,
+    "max_depth": 3,
+    "learning_rate": 0.001201766139641551,
+    "min_child_weight": 5,
+    "subsample": 0.9366710476788522,
+    "colsample_bytree": 0.9551702878354081,
+    "gamma": 1.9050749937284426,
+    "reg_alpha": 4.943080952770708,
+    "reg_lambda": 0.19222283212926403
+  },
+  "n_features": 31,
+  "short_win_rate": 0.32142857142857145,
+  "f1_neutral": 0.7468495039644539,
+  "f1_long": 0.1362098138747885,
+  "f1_short": 0.1489655172413793,
+  "timestamp": "2025-10-10T23:59:55.848384"
+}

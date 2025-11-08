@@ -1,0 +1,35 @@
+================================================================================
+STRESS TESTING REPORT (Quick Analysis)
+================================================================================
+
+Date: 2025-10-11 16:45:21
+Configuration: LONG 90% / SHORT 10%
+Methodology: Scenario-based impact analysis
+
+RESULTS
+--------------------------------------------------------------------------------
+
+Flash Crash (-10%):
+  Impact: -88.56%
+  Final Capital: $1,144.00
+  Status: 🚨 HIGH RISK
+
+Flash Rally (+10%):
+  Impact: +340.95%
+  Final Capital: $44,095.00
+  Status: ✅ PROFITABLE
+
+High Volatility (±5%):
+  Impact: -4.43%
+  Final Capital: $9,556.92
+  Status: ✅ ACCEPTABLE
+
+Sideways Market (±1%):
+  Impact: +0.31%
+  Final Capital: $10,030.83
+  Status: ✅ LOW IMPACT
+
+
+Worst Case:
+  Flash Crash (-10%): -88.56%
+  Final Capital: $1,144.00

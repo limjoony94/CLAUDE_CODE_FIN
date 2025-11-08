@@ -1,0 +1,77 @@
+# Model Architecture Configuration
+
+model:
+  name: "RandomMaskingTransformer"
+  input_dim: 15  # OHLCV + 10 technical indicators
+  hidden_dim: 256
+  n_layers: 6
+  n_heads: 8
+  ff_dim: 1024
+  dropout: 0.1
+  max_seq_len: 200
+
+  # Embedding
+  use_learnable_pos_encoding: true
+  use_time_features: true  # Hour, day of week, etc.
+
+  # Attention
+  attention_type: "dynamic"  # "dynamic" or "causal" or "bidirectional"
+
+  # Output
+  use_uncertainty_head: true
+  uncertainty_type: "heteroscedastic"  # "heteroscedastic" or "mc_dropout"
+
+data:
+  seq_len: 100
+  pred_len: 10
+  symbols: ['BTC-USDT']
+  interval: '5m'
+
+  # Features
+  ohlcv_features: ['open', 'high', 'low', 'close', 'volume']
+  technical_indicators:
+    - 'rsi_14'
+    - 'rsi_28'
+    - 'macd'
+    - 'macd_signal'
+    - 'bb_upper'
+    - 'bb_middle'
+    - 'bb_lower'
+    - 'atr_14'
+    - 'ema_9'
+    - 'ema_21'
+
+  # Train/Val/Test split
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+  # Rolling normalization
+  normalization: 'rolling_zscore'
+  rolling_window: 1000
+  clip_threshold: 5.0
+
+masking:
+  strategy: "random_curriculum"
+
+  # Task ratios
+  ratio_infill: 0.4
+  ratio_forecast: 0.4
+  ratio_sparse: 0.2
+
+  # Masking parameters
+  infill:
+    min_start: 20
+    max_start: 40
+    min_end: 60
+    max_end: 80
+
+  forecast:
+    min_cutoff: 70
+    max_cutoff: 90
+
+  sparse:
+    mask_ratio: 0.15
+
+  # Mask token value
+  mask_token_value: 0.0  # Will be replaced with learnable embedding

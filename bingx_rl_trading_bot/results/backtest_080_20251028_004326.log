@@ -1,0 +1,13 @@
+================================================================================
+FULL PERIOD BACKTEST: OPPORTUNITY GATING with 4x LEVERAGE
+================================================================================
+
+Testing with LEVERAGE and DYNAMIC SIZING
+
+Loading Entry models (Enhanced with 5-fold CV - 20251024_012445)...
+Loading Exit models (0.80 threshold - 20251028_001822/002003)...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\full_backtest_opportunity_gating_4x.py", line 95, in <module>
+    with open(long_exit_model_path, 'rb') as f:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\models\\xgboost_long_exit_oppgating_improved_20251028_001822.pkl'

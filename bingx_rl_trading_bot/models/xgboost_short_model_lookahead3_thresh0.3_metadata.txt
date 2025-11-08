@@ -1,0 +1,20 @@
+XGBoost SHORT Model - Metadata
+================================================================================
+
+CONFIG:
+  lookahead: 3
+  threshold: 0.003
+  feature_count: 44
+  model_type: SHORT
+  direction: DOWNWARD
+  normalized: True
+  scaler: MinMaxScaler
+  scaler_range: [-1, 1]
+
+METRICS:
+  f1_score: 0.601823708206687
+  recall: 0.6036585365853658
+  precision: 0.6
+  test_acc: 0.9785034460124713
+  mean_prob: 0.09006397426128387
+  prob_gt_0.7: 1.6901870692484409

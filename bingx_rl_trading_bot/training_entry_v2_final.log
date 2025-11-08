@@ -1,0 +1,161 @@
+================================================================================
+COMPLETE 4-MODEL TRAINING: ENHANCED FEATURES
+================================================================================
+
+Configuration:
+  Phase: phase1
+  Entry Threshold (LONG/SHORT): 0.65/0.7
+  ML Exit Threshold (LONG/SHORT): 0.75/0.75
+  Stop Loss: -3.0%
+  Max Hold: 120 candles
+
+================================================================================
+STEP 1: Loading Data and Calculating Enhanced Features
+================================================================================
+
+✅ Loaded 31,488 candles
+   Date range: 2025-07-01 14:00:00 to 2025-10-18 21:55:00
+
+Calculating enhanced features (phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (31488 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 31,488 → 31,201 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 31,196 / 31,488 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+
+✅ Enhanced features calculated (including Exit-specific features)
+   Total columns: 193
+   Final rows: 31,196
+
+================================================================================
+STEP 2: Loading Production Entry Models
+================================================================================
+
+✅ Production Entry models loaded
+   LONG Entry features: 44
+   SHORT Entry features: 38
+
+================================================================================
+STEP 3: Preparing Enhanced Feature Sets
+================================================================================
+
+🔍 DEBUG: Exit Feature Filtering
+   Total candidates: 47
+   Filtered features: 47
+
+✅ Feature sets prepared:
+   LONG Entry: 85 features
+   SHORT Entry: 79 features
+   Exit (filtered): 47 features (from 47 candidates)
+   SHORT Exit: 47 features
+
+================================================================================
+STEP 4: Training EXIT Models (LONG + SHORT)
+================================================================================
+
+Why Exit first?
+  - Entry models need Trade-Outcome labels
+  - Trade-Outcome labels need Exit model for criterion 4 (efficient exit)
+  - So Exit models must be trained first
+
+================================================================================
+STEP 4: Loading Pre-trained EXIT Models (timestamp: 20251023_212712)
+================================================================================
+✅ LONG Exit: 47 features
+✅ SHORT Exit: 47 features
+
+================================================================================
+STEP 5: Training ENTRY Models (LONG + SHORT)
+================================================================================
+
+Why Entry second?
+  - Entry labels use Trade-Outcome Labeling
+  - Trade-Outcome criterion 4 needs Exit model (efficient exit)
+  - So we use the newly trained Exit models above
+
+--------------------------------------------------------------------------------
+5.1: Training LONG Entry Model
+--------------------------------------------------------------------------------
+
+Creating LONG entry labels with Trade-Outcome...
+
+LONG Entry Labeling (Trade-Outcome Based)
+  Simulating 31,066 potential entries...
+  Progress: 5,000/31,066 (16.1%)
+  Progress: 10,000/31,066 (32.2%)
+  Progress: 15,000/31,066 (48.3%)
+  Progress: 20,000/31,066 (64.4%)
+  Progress: 25,000/31,066 (80.5%)
+  Progress: 30,000/31,066 (96.6%)
+
+  LONG Entry Label Statistics:
+  Total Candles Evaluated: 31,066
+
+  Criterion Met Rates:
+    1. Profitable (>=2.0%):  6,053 (19.5%)
+    2. Good Risk-Reward (MAE<2.0%, MFE>4.0%): 2,556 (8.2%)
+    3. Efficient Exit (ML Exit):     16,853 (54.2%)
+
+  Score Distribution:
+    Score 0 (0/3): 12,793 (41.2%)
+    Score 1 (1/3): 12,742 (41.0%)
+    Score 2 (2/3): 3,873 (12.5%) (labeled positive)
+    Score 3 (3/3): 1,658 (5.3%) (labeled positive)
+
+  Positive Label Rate: 5,531/31,196 (17.7%)
+  ✅ LONG Entry labels created
+
+✅ Created 31196 LONG entry labels
+   Positive rate: 17.73%
+
+Training LONG Entry model (full data + 5-fold CV)...
+  Total samples: 31,196
+Running 5-fold time series cross-validation...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\train_entry_only_enhanced_v2.py", line 743, in <module>
+    cv=tscv, scoring='precision', n_jobs=-1)
+    
+NameError: name 'cross_val_score' is not defined

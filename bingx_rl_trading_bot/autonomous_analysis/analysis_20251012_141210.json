@@ -1,0 +1,110 @@
+{
+  "timestamp": "2025-10-12 14:12:10",
+  "analysis": {
+    "runtime_hours": 2.8768835375,
+    "completed_trades": 0,
+    "current_position": {
+      "side": "SHORT",
+      "pnl": -0.91,
+      "duration": 2.9
+    }
+  },
+  "critical_analysis": {
+    "issues": [
+      {
+        "severity": "WARNING",
+        "issue": "SHORT position near SL (-0.91%)",
+        "impact": "Likely to hit SL soon"
+      }
+    ],
+    "recommendations": []
+  },
+  "recommendations": [],
+  "log": [
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "================================================================================"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "🤖 AUTONOMOUS ANALYSIS - V2 Bot Performance"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "================================================================================"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "📂 Analyzing: combined_v2_realistic_20251012_111934.log"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "⏱️  Runtime: 2.9 hours"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "📊 Completed Trades: 0"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "📍 Current Position: SHORT -0.91% (2.9h)"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": ""
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "🧠 CRITICAL ANALYSIS"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "--------------------------------------------------------------------------------"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "✅ No trades yet - Normal (runtime: 2.9h < 4h)"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "WARNING",
+      "message": "⚠️  Position -0.59% from Stop Loss!"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "📊 SHORT signals: max=0.484, avg=0.484, entered=1/1"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": ""
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "💡 RECOMMENDATIONS"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "--------------------------------------------------------------------------------"
+    },
+    {
+      "time": "2025-10-12 14:12:10",
+      "level": "INFO",
+      "message": "✅ No immediate actions required - System performing as expected"
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+================================================================================
+COMPLETE 4-MODEL TRAINING: ENHANCED FEATURES
+================================================================================
+
+Configuration:
+  Phase: phase1
+  Entry Threshold (LONG/SHORT): 0.65/0.7
+  ML Exit Threshold (LONG/SHORT): 0.75/0.75
+  Stop Loss: -3.0%
+  Max Hold: 120 candles
+
+================================================================================
+STEP 1: Loading Data and Calculating Enhanced Features
+================================================================================
+
+✅ Loaded 31,488 candles
+   Date range: 2025-07-01 14:00:00 to 2025-10-18 21:55:00
+
+Calculating enhanced features (phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (31488 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 31,488 → 31,201 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 31,196 / 31,488 rows
+   Lost 292 rows due to lookback periods
+
+
+✅ Enhanced features calculated
+   Total columns: 177
+   Final rows: 31,196
+
+================================================================================
+STEP 2: Loading Production Entry Models
+================================================================================
+
+✅ Production Entry models loaded
+   LONG Entry features: 44
+   SHORT Entry features: 38
+
+================================================================================
+STEP 3: Preparing Enhanced Feature Sets
+================================================================================
+
+✅ Feature sets prepared:
+   LONG Entry: 104 features
+   SHORT Entry: 98 features
+   LONG Exit: 50 features
+   SHORT Exit: 50 features
+
+================================================================================
+STEP 4: Training EXIT Models (LONG + SHORT)
+================================================================================
+
+Why Exit first?
+  - Entry models need Trade-Outcome labels
+  - Trade-Outcome labels need Exit model for criterion 4 (efficient exit)
+  - So Exit models must be trained first
+
+--------------------------------------------------------------------------------
+4.1: Training LONG Exit Model
+--------------------------------------------------------------------------------
+
+Simulating LONG trades for exit labeling...
+✅ Simulated 4,126 LONG trades
+
+Creating LONG exit labels...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\train_complete_4models_enhanced_correct.py", line 305, in <module>
+    X_exit_long_list.append(exit_row[long_exit_features].values)
+                            ~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\series.py", line 1165, in __getitem__
+    return self._get_with(key)
+           ~~~~~~~~~~~~~~^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\series.py", line 1206, in _get_with
+    return self.loc[key]
+           ~~~~~~~~^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexing.py", line 1192, in __getitem__
+    return self._getitem_axis(maybe_callable, axis=axis)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexing.py", line 1421, in _getitem_axis
+    return self._getitem_iterable(key, axis=axis)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexing.py", line 1361, in _getitem_iterable
+    keyarr, indexer = self._get_listlike_indexer(key, axis)
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexing.py", line 1559, in _get_listlike_indexer
+    keyarr, indexer = ax._get_indexer_strict(key, axis_name)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexes\base.py", line 6212, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\J\AppData\Roaming\Python\Python313\site-packages\pandas\core\indexes\base.py", line 6264, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['returns', 'bb_upper', 'bb_lower', 'adx', 'cci', 'willr', 'volume_surge', 'price_vs_ma20', 'volatility_20', 'rsi_slope', 'rsi_overbought', 'rsi_oversold', 'macd_histogram', 'bb_position', 'price_momentum_3', 'price_momentum_10', 'bb_upper_200', 'bb_lower_200', 'obv_200', 'vwap_200', 'golden_cross_50_200', 'death_cross_50_200'] not in index"

@@ -1,0 +1,23 @@
+================================================================================
+BACKTEST: RETRAINED MODELS (RECENT 30 DAYS)
+================================================================================
+
+Models: 20251030_003126
+Period: Recent 30 days (Sep 26 - Oct 26, 2025)
+
+Loading data...
+✅ Loaded 8,641 candles
+   Period: 2025-09-26 18:35:00 to 2025-10-26 18:35:00
+   Days: 30
+
+Loading Exit models...
+✅ Exit models loaded
+   LONG Exit: 21 features
+   SHORT Exit: 21 features
+
+Loading Entry models...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\backtest_retrained_recent30days_075.py", line 112, in <module>
+    long_entry_features = long_meta['features']
+                          ~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'features'

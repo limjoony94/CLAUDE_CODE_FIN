@@ -1,0 +1,67 @@
+================================================================================
+REALISTIC BACKTEST: CURRENT PRODUCTION MODELS
+================================================================================
+
+Configuration (TESTING 0.80 THRESHOLD):
+  Entry Threshold: 0.8
+  ML Exit Threshold: 0.8
+  Stop Loss: -0.03
+  Max Hold: 120 candles
+
+--------------------------------------------------------------------------------
+STEP 1: Loading Data
+--------------------------------------------------------------------------------
+✅ Loaded 30,004 candles
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+✅ Exit features added
+
+--------------------------------------------------------------------------------
+STEP 2: Loading PRODUCTION Models
+--------------------------------------------------------------------------------
+  ✅ LONG Entry: 85 features
+  ✅ SHORT Entry: 79 features
+
+--------------------------------------------------------------------------------
+STEP 3: Loading Exit Models
+--------------------------------------------------------------------------------
+  ✅ LONG Exit: 27 features
+  ✅ SHORT Exit: 27 features
+
+--------------------------------------------------------------------------------
+STEP 4: Running Realistic Backtest
+--------------------------------------------------------------------------------
+
+Total windows: 41
+
+  Window 20/41 complete...
+  Window 40/41 complete...
+
+✅ Backtest complete: 41 windows
+
+================================================================================
+BACKTEST RESULTS: CURRENT PRODUCTION MODELS
+================================================================================
+
+Total Windows: 41
+Total Trades: 353
+  LONG: 205 (58.1%)
+  SHORT: 148 (41.9%)
+
+Overall Win Rate: 82.84%
+Avg Trades per Window: 8.6
+Trades per Day: 1.7
+
+Capital Growth:
+  Initial: $10,000.00
+  Final: $3,742,110.52
+  Total Return: 37321.11%
+
+Exit Distribution:
+  ML Exit: 86.9%
+  Stop Loss: 2 (0.6%)
+  Max Hold: 28 (7.9%)
+
+✅ Results saved: backtest_production_realistic_20251028_211228.csv
+

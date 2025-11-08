@@ -1,0 +1,221 @@
+
+================================================================================
+PHASE 2 MODEL RETRAINING
+================================================================================
+Timestamp: 20251102_181218
+User Requirement: Use longest data, 28-day validation holdout
+================================================================================
+================================================================================
+LOADING AND SPLITTING DATA
+================================================================================
+
+Loaded Files:
+  Features: 30,004 candles
+  Entry Labels: 30,805 candles
+  Exit Labels: 30,004 candles
+
+Merged Dataset:
+  Period: 2025-07-14 14:20:00 to 2025-10-26 18:35:00
+  Candles: 30,004
+  Days: 104
+
+Training Data:
+  Period: 2025-07-14 14:20:00 to 2025-09-28 18:35:00
+  Candles: 21,940
+  Days: 76
+  LONG labels: 2,248.0 (10.25%)
+  SHORT labels: 2,679.0 (12.21%)
+
+Validation Data (28-day holdout):
+  Period: 2025-09-28 18:40:00 to 2025-10-26 18:35:00
+  Candles: 8,064
+  Days: 27
+  LONG labels: 1,701.0 (21.09%)
+  SHORT labels: 1,468.0 (18.20%)
+
+================================================================================
+TRAINING LONG ENTRY MODEL (Enhanced 5-Fold CV)
+================================================================================
+
+Dataset:
+  Samples: 21,940
+  Features: 171
+  Label Distribution: [19692  2248]
+  Positive Rate: 10.25%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 1/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 3,660 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9981
+  Val Accuracy: 0.7828
+  Prediction Rate: 16.36%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 2/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 7,316 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9933
+  Val Accuracy: 0.8843
+  Prediction Rate: 0.36%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 3/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 10,972 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9917
+  Val Accuracy: 0.8668
+  Prediction Rate: 2.05%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 4/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 14,628 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9861
+  Val Accuracy: 0.8717
+  Prediction Rate: 0.88%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 5/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 18,284 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9828
+  Val Accuracy: 0.9426
+  Prediction Rate: 1.07%
+
+================================================================================
+BEST FOLD: 5/5
+  Val Accuracy: 0.9426
+================================================================================
+
+Training final model on full training data...
+
+✅ Model saved:
+  Model: xgboost_long_entry_phase2_20251102_181218.pkl
+  Scaler: xgboost_long_entry_phase2_20251102_181218_scaler.pkl
+  Features: xgboost_long_entry_phase2_20251102_181218_features.txt (171 features)
+
+================================================================================
+TRAINING SHORT ENTRY MODEL (Enhanced 5-Fold CV)
+================================================================================
+
+Dataset:
+  Samples: 21,940
+  Features: 171
+  Label Distribution: [19261  2679]
+  Positive Rate: 12.21%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 1/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 3,660 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9975
+  Val Accuracy: 0.8282
+  Prediction Rate: 8.67%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 2/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 7,316 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9937
+  Val Accuracy: 0.7812
+  Prediction Rate: 13.32%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 3/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 10,972 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9914
+  Val Accuracy: 0.8312
+  Prediction Rate: 0.00%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 4/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 14,628 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9798
+  Val Accuracy: 0.9390
+  Prediction Rate: 1.75%
+
+────────────────────────────────────────────────────────────────────────────────
+Fold 5/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 18,284 samples
+  Val: 3,656 samples
+  Train Accuracy: 0.9771
+  Val Accuracy: 0.9371
+  Prediction Rate: 0.00%
+
+================================================================================
+BEST FOLD: 4/5
+  Val Accuracy: 0.9390
+================================================================================
+
+Training final model on full training data...
+
+✅ Model saved:
+  Model: xgboost_short_entry_phase2_20251102_181218.pkl
+  Scaler: xgboost_short_entry_phase2_20251102_181218_scaler.pkl
+  Features: xgboost_short_entry_phase2_20251102_181218_features.txt (171 features)
+
+================================================================================
+TRAINING LONG EXIT MODEL (oppgating_improved)
+================================================================================
+
+Dataset:
+  Samples: 21,940
+  Features: 27
+  Label Distribution: [13253  8687]
+  Positive Rate: 39.59%
+
+Training Results:
+  Accuracy: 0.8736
+  Prediction Rate: 35.43%
+
+✅ Model saved:
+  Model: xgboost_long_exit_phase2_20251102_181218.pkl
+  Scaler: xgboost_long_exit_phase2_20251102_181218_scaler.pkl
+  Features: xgboost_long_exit_phase2_20251102_181218_features.txt (27 features)
+
+================================================================================
+TRAINING SHORT EXIT MODEL (oppgating_improved)
+================================================================================
+
+Dataset:
+  Samples: 21,940
+  Features: 27
+  Label Distribution: [12866  9074]
+  Positive Rate: 41.36%
+
+Training Results:
+  Accuracy: 0.8633
+  Prediction Rate: 36.50%
+
+✅ Model saved:
+  Model: xgboost_short_exit_phase2_20251102_181218.pkl
+  Scaler: xgboost_short_exit_phase2_20251102_181218_scaler.pkl
+  Features: xgboost_short_exit_phase2_20251102_181218_features.txt (27 features)
+
+================================================================================
+TRAINING COMPLETE
+================================================================================
+
+Models Timestamp: 20251102_181218
+
+LONG Entry: 171 features
+SHORT Entry: 171 features
+LONG Exit: 27 features
+SHORT Exit: 27 features
+
+Next Step: Run validation backtest on 28-day holdout period
+  Validation Period: 2025-09-28 18:40:00 to 2025-10-26 18:35:00
+  Validation Candles: 8,064

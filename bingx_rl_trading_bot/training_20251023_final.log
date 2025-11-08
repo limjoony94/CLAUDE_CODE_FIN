@@ -1,0 +1,153 @@
+================================================================================
+COMPLETE 4-MODEL TRAINING: ENHANCED FEATURES
+================================================================================
+
+Configuration:
+  Phase: phase1
+  Entry Threshold (LONG/SHORT): 0.65/0.7
+  ML Exit Threshold (LONG/SHORT): 0.75/0.75
+  Stop Loss: -3.0%
+  Max Hold: 120 candles
+
+================================================================================
+STEP 1: Loading Data and Calculating Enhanced Features
+================================================================================
+
+✅ Loaded 31,488 candles
+   Date range: 2025-07-01 14:00:00 to 2025-10-18 21:55:00
+
+Calculating enhanced features (phase1)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (31488 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 31,488 → 31,201 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 31,196 / 31,488 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+
+✅ Enhanced features calculated (including Exit-specific features)
+   Total columns: 193
+   Final rows: 31,196
+
+================================================================================
+STEP 2: Loading Production Entry Models
+================================================================================
+
+✅ Production Entry models loaded
+   LONG Entry features: 44
+   SHORT Entry features: 38
+
+================================================================================
+STEP 3: Preparing Enhanced Feature Sets
+================================================================================
+
+🔍 DEBUG: Exit Feature Filtering
+   Total candidates: 52
+   Filtered features: 52
+
+✅ Feature sets prepared:
+   LONG Entry: 85 features
+   SHORT Entry: 79 features
+   Exit (filtered): 52 features (from 52 candidates)
+   SHORT Exit: 52 features
+
+================================================================================
+STEP 4: Training EXIT Models (LONG + SHORT)
+================================================================================
+
+Why Exit first?
+  - Entry models need Trade-Outcome labels
+  - Trade-Outcome labels need Exit model for criterion 4 (efficient exit)
+  - So Exit models must be trained first
+
+--------------------------------------------------------------------------------
+4.1: Training LONG Exit Model
+--------------------------------------------------------------------------------
+
+Simulating LONG trades for exit labeling...
+✅ Simulated 4,126 LONG trades
+
+Creating LONG exit labels...
+✅ Created 490,994 LONG exit samples
+   Positive rate: 20.75%
+
+Train: 392,795 | Validation: 98,199
+
+Training LONG Exit model...
+
+✅ LONG Exit Model Performance:
+              precision    recall  f1-score   support
+
+         0.0     0.8575    0.9477    0.9004     83903
+         1.0     0.1982    0.0759    0.1098     14296
+
+    accuracy                         0.8208     98199
+   macro avg     0.5279    0.5118    0.5051     98199
+weighted avg     0.7615    0.8208    0.7853     98199
+
+ROC-AUC: 0.6755
+
+Top 10 Features (LONG Exit):
+  macd                           0.0790
+  trend_strength                 0.0513
+  ma_200                         0.0502
+  vwap                           0.0415
+  ema_200                        0.0344
+  unrealized_pnl_pct             0.0333
+  vp_distance_to_poc_pct         0.0318
+  institutional_activity_zone    0.0315
+  hold_time                      0.0309
+  vp_in_value_area               0.0303
+
+✅ LONG Exit model saved:
+   xgboost_long_exit_enhanced_20251023_202401.pkl
+
+--------------------------------------------------------------------------------
+4.2: Training SHORT Exit Model
+--------------------------------------------------------------------------------
+
+Simulating SHORT trades for exit labeling...
+✅ Simulated 5,006 SHORT trades
+
+Creating SHORT exit labels...

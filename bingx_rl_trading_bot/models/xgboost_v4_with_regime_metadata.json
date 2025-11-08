@@ -1,0 +1,56 @@
+{
+  "model_name": "xgboost_v4_with_regime",
+  "n_features": 38,
+  "has_regime_feature": true,
+  "n_regimes": 4,
+  "regime_lookback": 20,
+  "timestamp": "2025-10-14T17:56:25.147416",
+  "regime_stats": {
+    "Regime 0": {
+      "count": 11017,
+      "pct": 63.94080092861289,
+      "returns_mean": -0.000505724368712683,
+      "returns_std": 0.05762986584616743,
+      "volatility": 0.05762986584616743,
+      "volume": 0.2327091452569627,
+      "trend_strength": 8.228110221841547e-05,
+      "interpretation": "High Vol + Sideways"
+    },
+    "Regime 1": {
+      "count": 5396,
+      "pct": 31.31746952988973,
+      "returns_mean": 0.001967547563586063,
+      "returns_std": 0.1138374934165742,
+      "volatility": 0.1138374934165742,
+      "volume": 0.1953995179081812,
+      "trend_strength": 0.0002010211888518423,
+      "interpretation": "High Vol + Sideways"
+    },
+    "Regime 2": {
+      "count": 564,
+      "pct": 3.2733604178757982,
+      "returns_mean": 0.00420626096318949,
+      "returns_std": 0.2346961463335232,
+      "volatility": 0.2346961463335232,
+      "volume": 0.21355988052791638,
+      "trend_strength": 0.0006549158099503425,
+      "interpretation": "High Vol + Sideways"
+    },
+    "Regime 3": {
+      "count": 253,
+      "pct": 1.4683691236215903,
+      "returns_mean": -0.000740543847890765,
+      "returns_std": 0.07889238219321365,
+      "volatility": 0.07889238219321365,
+      "volume": 9.294527008585042,
+      "trend_strength": 0.00014792477869049288,
+      "interpretation": "High Vol + Sideways"
+    }
+  },
+  "scores": {
+    "accuracy": 0.5156391501219088,
+    "precision": 0.5504025863790909,
+    "recall": 0.5780139661426568,
+    "f1": 0.5146568202982611
+  }
+}

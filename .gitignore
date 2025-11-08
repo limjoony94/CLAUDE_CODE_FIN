@@ -1,0 +1,8 @@
+nul
+**/nul
+
+# Large data files (>50MB)
+bingx_rl_trading_bot/data/features/*.csv
+bingx_rl_trading_bot/data/labels/*.csv
+# Keep smaller files
+!bingx_rl_trading_bot/data/features/*_raw_*.csv

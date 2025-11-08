@@ -1,0 +1,27 @@
+================================================================================
+HOLD-OUT VALIDATION REPORT
+================================================================================
+
+Date: 2025-10-11 15:14:52
+Configuration: LONG 90% / SHORT 10%
+
+RESULTS SUMMARY
+--------------------------------------------------------------------------------
+
+Train Period (80%):
+  Days: 47.9
+  Monthly Return: +22.68%
+  Win Rate: 59.8%
+  Total Trades: 264
+  Sharpe Ratio: 0.59
+
+Test Period (20% - Out-of-Sample):
+  Days: 12.0
+  Monthly Return: +33.35%
+  Win Rate: 59.7%
+  Total Trades: 62
+  Sharpe Ratio: 0.87
+
+Performance Degradation: +47.1%
+
+Status: ✅ PASSED (degradation < 20%)

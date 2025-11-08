@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Edit",
+      "MultiEdit",
+      "Write",
+      "Bash(python:*)",
+      "Bash(pip:*)",
+      "Bash(pytest:*)",
+      "Bash(black:*)",
+      "Bash(isort:*)",
+      "Bash(flake8:*)",
+      "Bash(mypy:*)",
+      "Bash(django-admin:*)",
+      "Bash(flask:*)",
+      "Bash(uvicorn:*)",
+      "Bash(gunicorn:*)",
+      "Bash(git:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run test:*)",
+      "Bash(npm run build)",
+      "Bash(npm start)"
+    ],
+    "deny": [
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "outputStyle": "default"
+}

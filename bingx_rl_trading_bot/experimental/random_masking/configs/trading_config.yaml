@@ -1,0 +1,83 @@
+# Trading Configuration
+
+trading:
+  # Capital management
+  initial_capital: 10000
+  max_position_size: 0.1  # 10% of capital per trade
+  min_position_size: 0.01  # 1% of capital
+
+  # Signal generation
+  signal_threshold:
+    min_return: 0.002  # 0.2% minimum predicted return
+    min_confidence: 0.6  # Minimum confidence score
+    max_uncertainty: 0.5  # Maximum uncertainty threshold
+
+  # Position sizing
+  sizing_method: 'kelly_fraction'  # 'fixed', 'kelly', 'kelly_fraction', 'volatility'
+  kelly_fraction: 0.25  # Conservative Kelly (1/4 of full Kelly)
+
+  # Risk management
+  stop_loss_pct: 0.02  # 2% stop loss
+  take_profit_pct: 0.06  # 6% take profit (3:1 R/R)
+  trailing_stop: false
+  trailing_stop_pct: 0.01
+
+  max_concurrent_positions: 3
+  max_daily_trades: 20
+  max_daily_loss: 0.05  # 5% of capital
+
+  # Transaction costs
+  transaction_cost: 0.001  # 0.1% (maker/taker average)
+  slippage: 0.0005  # 0.05% estimated slippage
+
+  # Time-based rules
+  max_hold_duration: 1440  # 24 hours (in minutes)
+  min_hold_duration: 5  # 5 minutes
+
+  # Market conditions
+  avoid_volatile_markets: true
+  volatility_threshold: 0.05  # 5% ATR threshold
+
+  # Backtesting
+  backtest:
+    initial_balance: 10000
+    leverage: 1.0  # No leverage for conservative backtest
+    allow_short: true
+
+backtesting:
+  # Evaluation periods
+  periods:
+    train: ['2022-01-01', '2023-12-31']
+    val: ['2024-01-01', '2024-06-30']
+    test: ['2024-07-01', '2025-01-01']
+
+  # Walk-forward validation
+  walk_forward:
+    enabled: true
+    train_size: 180  # days
+    test_size: 30  # days
+    step_size: 30  # days
+
+  # Performance metrics
+  metrics:
+    - 'total_return'
+    - 'sharpe_ratio'
+    - 'sortino_ratio'
+    - 'max_drawdown'
+    - 'win_rate'
+    - 'profit_factor'
+    - 'avg_win'
+    - 'avg_loss'
+    - 'expectancy'
+    - 'calmar_ratio'
+
+  # Visualization
+  plot_equity_curve: true
+  plot_drawdown: true
+  plot_trade_distribution: true
+  plot_monthly_returns: true
+
+  # Output
+  save_trades: true
+  save_metrics: true
+  output_dir: 'backtest_results/'

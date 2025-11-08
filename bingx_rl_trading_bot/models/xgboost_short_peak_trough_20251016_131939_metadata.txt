@@ -1,0 +1,22 @@
+XGBoost SHORT Entry - Peak/Trough Labeling
+================================================================================
+
+LABELING STRATEGY:
+  Method: near_trough_80pct_and_beats_holding_1h
+  Inspired by LONG Exit success (35.2% precision)
+
+CONCEPT:
+  - Detect future troughs (low points)
+  - Enter SHORT when price is within 80% of trough
+  - Only if entering now > waiting 1 hour
+
+FEATURES:
+  Total: 108
+  Base + Advanced: ~66
+  SELL-SPECIFIC: ~42
+
+PARAMETERS:
+  Lookforward: 48 candles (4 hours)
+  Peak window: 10
+  Near threshold: 80%
+  Holding comparison: 1 hour

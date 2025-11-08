@@ -1,0 +1,159 @@
+2025-11-08 16:24:24.265 | INFO     | __main__:main:107 - ======================================================================
+2025-11-08 16:24:24.265 | INFO     | __main__:main:108 - Random Masking Candle Predictor - Complete Demo
+2025-11-08 16:24:24.266 | INFO     | __main__:main:109 - ======================================================================
+2025-11-08 16:24:24.266 | INFO     | __main__:main:117 - 
+Configuration:
+2025-11-08 16:24:24.266 | INFO     | __main__:main:118 -   Use real data: False
+2025-11-08 16:24:24.266 | INFO     | __main__:main:119 -   Symbol: BTC/USDT
+2025-11-08 16:24:24.266 | INFO     | __main__:main:120 -   Timeframe: 5m
+2025-11-08 16:24:24.266 | INFO     | __main__:main:121 -   Epochs: 1
+2025-11-08 16:24:24.266 | INFO     | __main__:main:122 -   Device: cuda
+2025-11-08 16:24:24.267 | INFO     | __main__:main:123 -   Save directory: ..\results\demo\20251108_162424
+2025-11-08 16:24:24.267 | INFO     | __main__:main:128 - 
+======================================================================
+2025-11-08 16:24:24.267 | INFO     | __main__:main:129 - STEP 1: DATA COLLECTION
+2025-11-08 16:24:24.267 | INFO     | __main__:main:130 - ======================================================================
+2025-11-08 16:24:24.267 | INFO     | __main__:main:141 - 
+Generating synthetic data...
+2025-11-08 16:24:24.273 | INFO     | __main__:main:163 - ✅ Collected 5000 candles
+2025-11-08 16:24:24.273 | INFO     | __main__:main:164 -    Date range: 2025-01-01 00:00:00 to 2025-01-18 08:35:00
+2025-11-08 16:24:24.273 | INFO     | __main__:main:165 -    Features: 9
+2025-11-08 16:24:24.274 | INFO     | __main__:main:166 -    Price range: $94.16 - $147.85
+2025-11-08 16:24:24.274 | INFO     | __main__:main:171 - 
+======================================================================
+2025-11-08 16:24:24.274 | INFO     | __main__:main:172 - STEP 2: PREPROCESSING
+2025-11-08 16:24:24.274 | INFO     | __main__:main:173 - ======================================================================
+2025-11-08 16:24:24.274 | INFO     | __main__:main:175 - 
+Normalizing data with rolling window...
+2025-11-08 16:24:24.274 | INFO     | random_masking.data.preprocessor:__init__:53 - Initialized CandlePreprocessor (method: rolling_zscore, window: 1000)
+2025-11-08 16:24:24.274 | INFO     | random_masking.data.preprocessor:fit:65 - Fitting preprocessor on 5000 samples...
+2025-11-08 16:24:24.278 | INFO     | random_masking.data.preprocessor:fit:86 - Fitted preprocessor on 9 features
+2025-11-08 16:24:24.278 | INFO     | random_masking.data.preprocessor:transform:104 - Transforming 5000 samples...
+2025-11-08 16:24:24.283 | INFO     | random_masking.data.preprocessor:transform:131 - Transformation complete. Shape: (5000, 9)
+2025-11-08 16:24:24.283 | INFO     | __main__:main:179 - ✅ Preprocessing complete
+2025-11-08 16:24:24.283 | INFO     | __main__:main:180 -    Shape: (5000, 9)
+2025-11-08 16:24:24.283 | INFO     | __main__:main:181 -    NaN values: 32
+2025-11-08 16:24:24.284 | INFO     | __main__:main:186 - 
+======================================================================
+2025-11-08 16:24:24.284 | INFO     | __main__:main:187 - STEP 3: DATASET CREATION
+2025-11-08 16:24:24.284 | INFO     | __main__:main:188 - ======================================================================
+2025-11-08 16:24:24.284 | INFO     | __main__:main:198 - 
+Data split:
+2025-11-08 16:24:24.284 | INFO     | __main__:main:199 -   Train: 3500 samples (70%)
+2025-11-08 16:24:24.284 | INFO     | __main__:main:200 -   Val: 750 samples (15%)
+2025-11-08 16:24:24.285 | INFO     | __main__:main:201 -   Test: 750 samples (15%)
+2025-11-08 16:24:24.285 | INFO     | __main__:main:204 - 
+Creating random masking strategy...
+2025-11-08 16:24:24.285 | INFO     | random_masking.data.masking_strategy:__init__:75 - Initialized RandomMaskingStrategy:
+2025-11-08 16:24:24.285 | INFO     | random_masking.data.masking_strategy:__init__:76 -   - Seq length: 100
+2025-11-08 16:24:24.286 | INFO     | random_masking.data.masking_strategy:__init__:77 -   - Task ratios: {'infill': 0.4, 'forecast': 0.4, 'sparse': 0.2}
+2025-11-08 16:24:24.286 | INFO     | random_masking.data.masking_strategy:__init__:78 -   - Device: cpu
+2025-11-08 16:24:24.286 | INFO     | __main__:main:212 - ✅ Masking strategy created:
+2025-11-08 16:24:24.286 | INFO     | __main__:main:213 -    Infill ratio: 40%
+2025-11-08 16:24:24.287 | INFO     | __main__:main:214 -    Forecast ratio: 40%
+2025-11-08 16:24:24.287 | INFO     | __main__:main:215 -    Sparse ratio: 20%
+2025-11-08 16:24:24.287 | INFO     | random_masking.data.dataset:__init__:67 - Initialized CandleDataset:
+2025-11-08 16:24:24.287 | INFO     | random_masking.data.dataset:__init__:68 -   - Mode: train
+2025-11-08 16:24:24.287 | INFO     | random_masking.data.dataset:__init__:69 -   - Data shape: (3500, 9)
+2025-11-08 16:24:24.287 | INFO     | random_masking.data.dataset:__init__:70 -   - Seq length: 100
+2025-11-08 16:24:24.287 | INFO     | random_masking.data.dataset:__init__:71 -   - Pred length: 10
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:72 -   - Stride: 1
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:73 -   - Total samples: 3391
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:74 -   - Masking: Enabled
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:67 - Initialized CandleDataset:
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:68 -   - Mode: val
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:69 -   - Data shape: (750, 9)
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:70 -   - Seq length: 100
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:71 -   - Pred length: 10
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:72 -   - Stride: 1
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:73 -   - Total samples: 641
+2025-11-08 16:24:24.288 | INFO     | random_masking.data.dataset:__init__:74 -   - Masking: Disabled
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:67 - Initialized CandleDataset:
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:68 -   - Mode: test
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:69 -   - Data shape: (750, 9)
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:70 -   - Seq length: 100
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:71 -   - Pred length: 10
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:72 -   - Stride: 1
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:73 -   - Total samples: 641
+2025-11-08 16:24:24.289 | INFO     | random_masking.data.dataset:__init__:74 -   - Masking: Disabled
+2025-11-08 16:24:24.289 | INFO     | __main__:main:240 - ✅ Datasets created:
+2025-11-08 16:24:24.289 | INFO     | __main__:main:241 -    Train: 3391 sequences
+2025-11-08 16:24:24.290 | INFO     | __main__:main:242 -    Val: 641 sequences
+2025-11-08 16:24:24.290 | INFO     | __main__:main:243 -    Test: 641 sequences
+2025-11-08 16:24:24.290 | INFO     | __main__:main:261 -    Train batches: 106
+2025-11-08 16:24:24.290 | INFO     | __main__:main:262 -    Val batches: 11
+2025-11-08 16:24:24.290 | INFO     | __main__:main:267 - 
+======================================================================
+2025-11-08 16:24:24.291 | INFO     | __main__:main:268 - STEP 4: MODEL CREATION
+2025-11-08 16:24:24.291 | INFO     | __main__:main:269 - ======================================================================
+2025-11-08 16:24:24.291 | INFO     | __main__:main:271 - 
+Creating CandlePredictor model...
+2025-11-08 16:24:24.292 | INFO     | random_masking.models.embeddings:__init__:75 - Initialized TimeSeriesEmbedding:
+2025-11-08 16:24:24.293 | INFO     | random_masking.models.embeddings:__init__:76 -   - Input dim: 9
+2025-11-08 16:24:24.293 | INFO     | random_masking.models.embeddings:__init__:77 -   - Hidden dim: 256
+2025-11-08 16:24:24.293 | INFO     | random_masking.models.embeddings:__init__:78 -   - Max length: 200
+2025-11-08 16:24:24.293 | INFO     | random_masking.models.embeddings:__init__:79 -   - Position encoding: Learnable
+2025-11-08 16:24:24.294 | INFO     | random_masking.models.attention:__init__:66 - Initialized DynamicAttention:
+2025-11-08 16:24:24.294 | INFO     | random_masking.models.attention:__init__:67 -   - Hidden dim: 256
+2025-11-08 16:24:24.294 | INFO     | random_masking.models.attention:__init__:68 -   - Num heads: 8
+2025-11-08 16:24:24.295 | INFO     | random_masking.models.attention:__init__:69 -   - Head dim: 32
+2025-11-08 16:24:24.295 | INFO     | random_masking.models.attention:__init__:70 -   - Flash attention: False
+2025-11-08 16:24:24.298 | INFO     | random_masking.models.attention:__init__:66 - Initialized DynamicAttention:
+2025-11-08 16:24:24.299 | INFO     | random_masking.models.attention:__init__:67 -   - Hidden dim: 256
+2025-11-08 16:24:24.299 | INFO     | random_masking.models.attention:__init__:68 -   - Num heads: 8
+2025-11-08 16:24:24.299 | INFO     | random_masking.models.attention:__init__:69 -   - Head dim: 32
+2025-11-08 16:24:24.299 | INFO     | random_masking.models.attention:__init__:70 -   - Flash attention: False
+2025-11-08 16:24:24.302 | INFO     | random_masking.models.attention:__init__:66 - Initialized DynamicAttention:
+2025-11-08 16:24:24.302 | INFO     | random_masking.models.attention:__init__:67 -   - Hidden dim: 256
+2025-11-08 16:24:24.303 | INFO     | random_masking.models.attention:__init__:68 -   - Num heads: 8
+2025-11-08 16:24:24.303 | INFO     | random_masking.models.attention:__init__:69 -   - Head dim: 32
+2025-11-08 16:24:24.303 | INFO     | random_masking.models.attention:__init__:70 -   - Flash attention: False
+2025-11-08 16:24:24.308 | INFO     | random_masking.models.attention:__init__:66 - Initialized DynamicAttention:
+2025-11-08 16:24:24.308 | INFO     | random_masking.models.attention:__init__:67 -   - Hidden dim: 256
+2025-11-08 16:24:24.308 | INFO     | random_masking.models.attention:__init__:68 -   - Num heads: 8
+2025-11-08 16:24:24.308 | INFO     | random_masking.models.attention:__init__:69 -   - Head dim: 32
+2025-11-08 16:24:24.308 | INFO     | random_masking.models.attention:__init__:70 -   - Flash attention: False
+2025-11-08 16:24:24.312 | INFO     | random_masking.models.attention:__init__:66 - Initialized DynamicAttention:
+2025-11-08 16:24:24.313 | INFO     | random_masking.models.attention:__init__:67 -   - Hidden dim: 256
+2025-11-08 16:24:24.313 | INFO     | random_masking.models.attention:__init__:68 -   - Num heads: 8
+2025-11-08 16:24:24.313 | INFO     | random_masking.models.attention:__init__:69 -   - Head dim: 32
+2025-11-08 16:24:24.313 | INFO     | random_masking.models.attention:__init__:70 -   - Flash attention: False
+2025-11-08 16:24:24.316 | INFO     | random_masking.models.attention:__init__:66 - Initialized DynamicAttention:
+2025-11-08 16:24:24.317 | INFO     | random_masking.models.attention:__init__:67 -   - Hidden dim: 256
+2025-11-08 16:24:24.317 | INFO     | random_masking.models.attention:__init__:68 -   - Num heads: 8
+2025-11-08 16:24:24.317 | INFO     | random_masking.models.attention:__init__:69 -   - Head dim: 32
+2025-11-08 16:24:24.317 | INFO     | random_masking.models.attention:__init__:70 -   - Flash attention: False
+2025-11-08 16:24:24.328 | INFO     | random_masking.models.transformer:__init__:169 - Initialized CandleTransformer:
+2025-11-08 16:24:24.328 | INFO     | random_masking.models.transformer:__init__:170 -   - Input dim: 9
+2025-11-08 16:24:24.328 | INFO     | random_masking.models.transformer:__init__:171 -   - Hidden dim: 256
+2025-11-08 16:24:24.328 | INFO     | random_masking.models.transformer:__init__:172 -   - Num layers: 6
+2025-11-08 16:24:24.329 | INFO     | random_masking.models.transformer:__init__:173 -   - Num heads: 8
+2025-11-08 16:24:24.329 | INFO     | random_masking.models.transformer:__init__:174 -   - FF dim: 1024
+2025-11-08 16:24:24.329 | INFO     | random_masking.models.transformer:__init__:175 -   - Total params: 4,795,401
+2025-11-08 16:24:24.330 | INFO     | random_masking.models.predictor:__init__:81 - Initialized CandlePredictor:
+2025-11-08 16:24:24.331 | INFO     | random_masking.models.predictor:__init__:82 -   - Total parameters: 4,829,458
+2025-11-08 16:24:24.331 | INFO     | random_masking.models.predictor:__init__:83 -   - Uncertainty head: True
+2025-11-08 16:24:24.331 | INFO     | __main__:main:282 - ✅ Model created:
+2025-11-08 16:24:24.331 | INFO     | __main__:main:283 -    Parameters: 4,829,458
+2025-11-08 16:24:24.331 | INFO     | __main__:main:284 -    Input dim: 9
+2025-11-08 16:24:24.331 | INFO     | __main__:main:285 -    Hidden dim: 256
+2025-11-08 16:24:24.331 | INFO     | __main__:main:286 -    Layers: 6
+2025-11-08 16:24:24.331 | INFO     | __main__:main:287 -    Attention heads: 8
+2025-11-08 16:24:24.331 | INFO     | __main__:main:292 - 
+======================================================================
+2025-11-08 16:24:24.331 | INFO     | __main__:main:293 - STEP 5: TRAINING
+2025-11-08 16:24:24.332 | INFO     | __main__:main:294 - ======================================================================
+2025-11-08 16:24:24.332 | INFO     | __main__:main:307 - 
+Training configuration:
+2025-11-08 16:24:24.332 | INFO     | __main__:main:308 -   Epochs: 1
+2025-11-08 16:24:24.332 | INFO     | __main__:main:309 -   Learning rate: 0.0001
+2025-11-08 16:24:24.332 | INFO     | __main__:main:310 -   Patience: 10
+2025-11-08 16:24:27.208 | INFO     | random_masking.training.trainer:__init__:98 - Initialized Trainer:
+2025-11-08 16:24:27.209 | INFO     | random_masking.training.trainer:__init__:99 -   - Device: cuda
+2025-11-08 16:24:27.209 | INFO     | random_masking.training.trainer:__init__:100 -   - Optimizer: AdamW
+2025-11-08 16:24:27.209 | INFO     | random_masking.training.trainer:__init__:101 -   - Scheduler: CosineAnnealingLR
+2025-11-08 16:24:27.210 | INFO     | random_masking.training.trainer:__init__:102 -   - Epochs: 1
+2025-11-08 16:24:27.210 | INFO     | random_masking.training.trainer:__init__:103 -   - Patience: 10
+2025-11-08 16:24:27.210 | INFO     | __main__:main:320 - 
+Starting training...
+2025-11-08 16:24:27.210 | INFO     | random_masking.training.trainer:train:351 - Starting training for 1 epochs...

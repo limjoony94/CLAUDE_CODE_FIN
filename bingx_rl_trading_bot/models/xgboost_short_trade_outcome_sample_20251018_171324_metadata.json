@@ -1,0 +1,21 @@
+{
+  "labeling_method": "trade_outcome_2of3_SAMPLE",
+  "sample_size": 5000,
+  "labeling_criteria": {
+    "profit_threshold": 0.02,
+    "mae_threshold": -0.02,
+    "mfe_threshold": 0.04,
+    "scoring_threshold": 2
+  },
+  "num_features": 38,
+  "num_train_samples": 4000,
+  "num_test_samples": 1000,
+  "positive_rate_train": 0.15075,
+  "positive_rate_test": 0.213,
+  "scores": {
+    "accuracy": 0.607,
+    "precision": 0.2077922077922078,
+    "recall": 0.3004694835680751,
+    "f1": 0.2456813819577735
+  }
+}

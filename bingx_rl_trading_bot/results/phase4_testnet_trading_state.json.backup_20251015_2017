@@ -1,0 +1,58 @@
+{
+  "initial_balance": 102393.4774,
+  "current_balance": 101977.5702,
+  "trades": [
+    {
+      "entry_time": "2025-10-15T17:30:15.096827",
+      "order_id": null,
+      "side": "LONG",
+      "entry_price": 113189.5,
+      "quantity": 0.6478288628698776,
+      "position_size_pct": 0.7153713650107383,
+      "position_value": 73249.36169583419,
+      "regime": "Sideways",
+      "probability": 0.76568675,
+      "sizing_factors": {
+        "signal": 0.38734668,
+        "volatility": 0.5,
+        "regime": 0.6,
+        "streak": 1.0,
+        "combined": 0.6005713307857513
+      },
+      "status": "CLOSED",
+      "exit_time": "2025-10-15T17:40:13.871052",
+      "exit_price": 113229.4,
+      "exit_reason": "ML Exit (LONG model, prob=0.716)",
+      "close_order_id": "1978380395906863104",
+      "pnl_pct": 0.00035250619536259263,
+      "pnl_usd_gross": 25.848371628504346,
+      "transaction_cost": 88.0084191115491,
+      "pnl_usd_net": -62.16004748304476
+    },
+    {
+      "entry_time": "2025-10-15T18:00:13.636319",
+      "order_id": null,
+      "side": "LONG",
+      "entry_price": 112892.5,
+      "quantity": 0.5865966260083674,
+      "position_size_pct": 0.6474238377660513,
+      "position_value": 66224.41268984064,
+      "regime": "Sideways",
+      "probability": 0.6474256,
+      "sizing_factors": {
+        "signal": 0.16010478,
+        "volatility": 0.5,
+        "regime": 0.6,
+        "streak": 0.9,
+        "combined": 0.4960366734862327
+      },
+      "status": "OPEN"
+    }
+  ],
+  "trades_count": 2,
+  "closed_trades": 1,
+  "bh_btc_quantity": 0.910443446212394,
+  "bh_entry_price": 112465.5,
+  "session_start": "2025-10-15T16:58:25.158659",
+  "timestamp": "2025-10-15T20:15:10.407144"
+}

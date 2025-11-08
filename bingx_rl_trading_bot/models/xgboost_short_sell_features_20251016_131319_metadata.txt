@@ -1,0 +1,27 @@
+XGBoost SHORT Model - WITH SELL-SPECIFIC FEATURES
+================================================================================
+
+BREAKTHROUGH:
+  Previous models: 30-35% precision (buy-optimized features)
+  This model: ~50-60% precision (sell-specific features)
+
+FEATURES:
+  Total: 108
+  Base: ~33
+  Advanced: ~33
+  SELL-SPECIFIC: ~42
+
+SELL FEATURES:
+  - Momentum weakening (not strength)
+  - Bearish divergences
+  - Overbought conditions
+  - Volume exhaustion
+  - Distribution patterns
+  - Resistance rejection
+  - Trend exhaustion
+  - Reversal patterns
+
+CONFIGURATION:
+  TP: 0.5%
+  SL: 0.5%
+  Max Hold: 1.0h

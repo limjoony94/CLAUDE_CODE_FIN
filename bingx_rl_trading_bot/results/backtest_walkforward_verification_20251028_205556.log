@@ -1,0 +1,79 @@
+================================================================================
+BACKTEST: WALK-FORWARD DECOUPLED ENTRY MODELS (0.75/0.75)
+================================================================================
+
+Configuration:
+  Entry Threshold: 0.75
+  ML Exit Threshold: 0.75
+  Stop Loss: -0.03
+  Max Hold: 120 candles
+
+--------------------------------------------------------------------------------
+STEP 1: Loading Data
+--------------------------------------------------------------------------------
+✅ Loaded 30,004 candles
+   Date range: 2025-07-14 14:20:00 to 2025-10-26 18:35:00
+
+Preparing Exit features...
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+✅ Exit features added (193 total columns)
+
+--------------------------------------------------------------------------------
+STEP 2: Loading Entry Models (Walk-Forward Decoupled)
+--------------------------------------------------------------------------------
+  ✅ LONG Entry: 85 features
+  ✅ SHORT Entry: 79 features
+
+--------------------------------------------------------------------------------
+STEP 3: Loading Exit Models
+--------------------------------------------------------------------------------
+  ✅ LONG Exit: 21 features
+  ✅ SHORT Exit: 21 features
+
+--------------------------------------------------------------------------------
+STEP 4: Running 108-Window Backtest
+--------------------------------------------------------------------------------
+
+  Window 20/108 complete...
+
+✅ Backtest complete: 20 windows
+
+================================================================================
+BACKTEST RESULTS
+================================================================================
+
+Total Windows: 20
+Total Trades: 5,965
+  LONG: 2,994 (50.2%)
+  SHORT: 2,971 (49.8%)
+
+Overall Win Rate: 73.86%
+Avg Return per Trade: 0.13%
+Avg Trades per Window: 298.2
+
+Exit Distribution:
+  ML Exit: 77.0%
+  Stop Loss: 884 (14.8%)
+  Max Hold: 488 (8.2%)
+
+Per-Window Statistics:
+  Avg Win Rate: 73.94%
+  Median Win Rate: 73.84%
+  Avg Return: 38.04%
+  Median Return: 51.00%
+
+✅ Results saved: backtest_walkforward_models_075_20251028_205804.csv
+
+================================================================================
+EVALUATION
+================================================================================
+
+✅ SUCCESS: Win Rate 73.86% >= 50%
+
+Next Steps:
+  1. Deploy to production with 0.75/0.75 thresholds
+  2. Update bot with new Entry models (walkforward_decoupled_20251027_194313)
+  3. Monitor first week performance
+

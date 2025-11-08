@@ -1,0 +1,47 @@
+================================================================================
+BACKTEST COMPARISON: BEST FOLD vs TOP-3 WEIGHTED ENSEMBLE
+================================================================================
+
+Configuration:
+  Entry Threshold: 0.75
+  ML Exit Threshold: 0.75
+  Emergency Stop Loss: -0.03
+  Emergency Max Hold: 120 candles
+  Leverage: 4x
+  Initial Balance: $10,000
+
+--------------------------------------------------------------------------------
+Loading Data
+--------------------------------------------------------------------------------
+✅ Loaded 30,004 candles
+   Date range: 2025-07-14 14:20:00 to 2025-10-26 18:35:00
+
+--------------------------------------------------------------------------------
+OPTION A: Loading Best Fold Models
+--------------------------------------------------------------------------------
+✅ LONG Best Fold: 85 features
+✅ SHORT Best Fold: 79 features
+
+--------------------------------------------------------------------------------
+OPTION B: Loading Top-3 Weighted Ensemble
+--------------------------------------------------------------------------------
+✅ LONG Ensemble loaded (Top-3 folds)
+   Fold 2: score 0.1408, weight 0.3391
+   Fold 5: score 0.1402, weight 0.3377
+   Fold 3: score 0.1342, weight 0.3232
+✅ SHORT Ensemble loaded (Top-3 folds)
+   Fold 4: score 0.1886, weight 0.3760
+   Fold 3: score 0.1646, weight 0.3281
+   Fold 5: score 0.1484, weight 0.2959
+
+--------------------------------------------------------------------------------
+Loading Exit Models (Shared)
+--------------------------------------------------------------------------------
+✅ Exit models loaded
+   LONG Exit: 27 features
+   SHORT Exit: 27 features
+
+
+================================================================================
+Running Backtest: Option A: Best Fold
+================================================================================

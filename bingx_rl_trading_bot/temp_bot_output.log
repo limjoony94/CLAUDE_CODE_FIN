@@ -1,0 +1,123 @@
+2025-10-27 00:02:16,405 - INFO - ================================================================================
+2025-10-27 00:02:16,405 - INFO - OPPORTUNITY GATING BOT (4x LEVERAGE) - STARTING
+2025-10-27 00:02:16,405 - INFO - ================================================================================
+2025-10-27 00:02:16,405 - INFO - Loading models...
+2025-10-27 00:02:16,546 - INFO -   ✅ Models loaded
+2025-10-27 00:02:16,546 - INFO -      LONG Entry features: 85
+2025-10-27 00:02:16,546 - INFO -      SHORT Entry features: 79
+2025-10-27 00:02:16,547 - INFO -      LONG Exit features: 27
+2025-10-27 00:02:16,547 - INFO -      SHORT Exit features: 27
+2025-10-27 00:02:16,547 - INFO -   ✅ Dynamic Position Sizer initialized
+2025-10-27 00:02:16,547 - INFO - 🔍 Checking for duplicate bot instances...
+2025-10-27 00:02:16,547 - INFO -    Lock file found: C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\results\opportunity_gating_bot_4x.lock
+2025-10-27 00:02:16,555 - INFO -    Lock file PID: 35268 (age: 50.0s)
+2025-10-27 00:02:16,555 - INFO -    Checking if PID 35268 is running...
+2025-10-27 00:02:16,556 - INFO -    PID 35268 not running (stale lock file)
+2025-10-27 00:02:16,556 - INFO - ✅ Lock file created: PID 30132 at 2025-10-27 00:02:16
+2025-10-27 00:02:16,556 - INFO - 
+================================================================================
+2025-10-27 00:02:16,557 - INFO - BOT CONFIGURATION
+2025-10-27 00:02:16,557 - INFO - ================================================================================
+2025-10-27 00:02:16,557 - INFO - Strategy: Opportunity Gating + 4x Leverage + COMBINED Exit
+2025-10-27 00:02:16,557 - INFO - 
+2025-10-27 00:02:16,557 - INFO - Entry:
+2025-10-27 00:02:16,557 - INFO -   LONG Threshold: 0.8
+2025-10-27 00:02:16,557 - INFO -   SHORT Threshold: 0.8
+2025-10-27 00:02:16,557 - INFO -   Gate Threshold: 0.001
+2025-10-27 00:02:16,557 - INFO -   Leverage: 4x
+2025-10-27 00:02:16,558 - INFO -   Position Sizing: Dynamic (20-95%)
+2025-10-27 00:02:16,558 - INFO - 
+2025-10-27 00:02:16,558 - INFO - Exit Strategy (ML Exit + Max Hold + Exchange SL):
+2025-10-27 00:02:16,558 - INFO - 
+2025-10-27 00:02:16,558 - INFO -   Primary Exits (Program-Level):
+2025-10-27 00:02:16,558 - INFO -     1. ML Exit Model:
+2025-10-27 00:02:16,558 - INFO -        - LONG threshold: 0.80
+2025-10-27 00:02:16,558 - INFO -        - SHORT threshold: 0.80
+2025-10-27 00:02:16,558 - INFO -     2. Emergency Max Hold: 10.0h
+2025-10-27 00:02:16,558 - INFO - 
+2025-10-27 00:02:16,559 - INFO -   Emergency Protection (Exchange-Level):
+2025-10-27 00:02:16,559 - INFO -     3. Stop Loss: 3.0% total balance (Balance-Based STOP_MARKET)
+2025-10-27 00:02:16,559 - INFO -        - Dynamic Price SL: Varies by position size (6% / (size × leverage))
+2025-10-27 00:02:16,559 - INFO -        - Example: 50% position → 3.0% price SL, 95% → 1.6% price SL
+2025-10-27 00:02:16,559 - INFO -        - Monitoring: Exchange server 24/7
+2025-10-27 00:02:16,559 - INFO -        - Protection: Survives bot crashes & network failures
+2025-10-27 00:02:16,559 - INFO - 
+2025-10-27 00:02:16,559 - INFO -   Note: Fixed TP removed - ML Exit handles all profit-taking
+2025-10-27 00:02:16,560 - INFO - ================================================================================
+
+2025-10-27 00:02:16,560 - INFO - Initializing BingX client (Testnet: False)...
+[32m2025-10-27 00:02:16.748[0m | [1mINFO    [0m | [36msrc.api.bingx_client[0m:[36m_sync_server_time[0m:[36m72[0m - [1m✅ Server time synchronized (offset: -4249ms)[0m
+[32m2025-10-27 00:02:16.748[0m | [1mINFO    [0m | [36msrc.api.bingx_client[0m:[36m_sync_server_time[0m:[36m82[0m - [1m✅ Milliseconds method overridden (local time adjusted by 4249ms)[0m
+[32m2025-10-27 00:02:16.748[0m | [1mINFO    [0m | [36msrc.api.bingx_client[0m:[36m__init__[0m:[36m60[0m - [1mBingX Client (CCXT) initialized (Mainnet)[0m
+2025-10-27 00:02:16,748 - INFO - ✅ Client initialized
+
+2025-10-27 00:02:17,688 - INFO - ✅ Balance initialized: $4,450.59
+2025-10-27 00:02:17,688 - INFO -    Baseline: initial_balance=$4,590.67, initial_unrealized=$0.00
+2025-10-27 00:02:17,688 - INFO - 
+🔄 Reconciling state from exchange (V2 - Position History API)...
+2025-10-27 00:02:17,688 - INFO - ================================================================================
+2025-10-27 00:02:17,688 - INFO - 🔄 Reconciling State from Exchange (V2 - Position History API)
+2025-10-27 00:02:17,688 - INFO - ================================================================================
+2025-10-27 00:02:17,688 - WARNING - ⚠️  Reconciliation failed: 'str' object cannot be interpreted as an integer
+2025-10-27 00:02:17,688 - WARNING - ⚠️  Continuing without reconciliation...
+2025-10-27 00:02:17,688 - INFO - 💡 Using 4x internal leverage calculation (no exchange setting modification)
+2025-10-27 00:02:17,688 - INFO - 
+🔍 Checking for existing positions on exchange...
+2025-10-27 00:02:17,840 - INFO -    ✅ No existing positions on exchange
+2025-10-27 00:02:17,841 - INFO - 
+2025-10-27 00:02:17,841 - INFO - ⏰ Bot start time: 2025-10-27 00:02:17
+2025-10-27 00:02:17,841 - INFO - ⏸️  Warmup period: 5 minutes (entry signals will be ignored)
+2025-10-27 00:02:17,841 - INFO - 🕐 Timing: 정각 동기화 (5분 정각 +1초) - 완성된 캔들만 사용
+2025-10-27 00:02:17,841 - INFO - 💰 Balance reconciliation enabled (check interval: 1.0h, threshold: 0.005%)
+2025-10-27 00:02:17,841 - INFO - 💵 Fee reconciliation enabled (check interval: 30min, symbol: BTC/USDT:USDT)
+2025-10-27 00:02:17,841 - INFO - ⏰ 다음 캔들까지 대기:
+2025-10-27 00:02:17,841 - INFO -    현재 (KST): 00:02:17
+2025-10-27 00:02:17,842 - INFO -    정각 (KST): 00:05:00
+2025-10-27 00:02:17,842 - INFO -    요청 (KST): 00:05:01 (정각 +1초)
+2025-10-27 00:02:17,842 - INFO -    대기: 164초
+C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\production\opportunity_gating_bot_4x.py:2240: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  current_time = datetime.utcnow()  # UTC
+2025-10-27 00:05:01,865 - INFO - 
+================================================================================
+2025-10-27 00:05:01,865 - INFO - 📊 캔들 데이터 요청 (API 모드)
+2025-10-27 00:05:01,865 - INFO - ================================================================================
+2025-10-27 00:05:01,865 - INFO -    현재 시간: 00:05:01 KST (15:05:01 UTC)
+2025-10-27 00:05:01,865 - INFO -    예상 최신 캔들: 00:05:00 KST (15:05:00 UTC)
+2025-10-27 00:05:01,865 - INFO -    📡 Fetching from API...
+2025-10-27 00:05:01,866 - INFO - 🔍 DEBUG fetch_ohlcv: symbol=BTC/USDT:USDT, timeframe=5m, limit=1000, params={}
+2025-10-27 00:05:02,021 - INFO -    ✅ 예상 캔들 정확히 일치: 00:05:00 KST (15:05:00 UTC)
+2025-10-27 00:05:02,022 - INFO -    📊 캔들 필터링 결과:
+2025-10-27 00:05:02,023 - INFO -       전체 캔들: 1000 → 완성 캔들: 999
+2025-10-27 00:05:02,023 - INFO -       최신 완성 시작: 00:00:00 KST (15:00:00 UTC)
+2025-10-27 00:05:02,023 - INFO -       최신 완성 종료: 00:05:00 KST (15:05:00 UTC)
+2025-10-27 00:05:02,023 - INFO -       예상 최신: 00:00:00 KST (15:00:00 UTC)
+2025-10-27 00:05:02,023 - INFO -       데이터 나이 (완성 후): 0.0분
+2025-10-27 00:05:02,023 - INFO -    ✅ 최신 데이터 확인 (완성 후 0.0분)
+2025-10-27 00:05:02,023 - INFO -    ✅ 예상 캔들과 정확히 일치
+2025-10-27 00:05:02,023 - INFO - 
+================================================================================
+2025-10-27 00:05:02,024 - INFO - 🔍 최종 데이터 검증
+2025-10-27 00:05:02,024 - INFO - ================================================================================
+2025-10-27 00:05:02,024 - INFO -    총 캔들 수: 999
+2025-10-27 00:05:02,024 - INFO -    첫 캔들 (KST): 2025-10-23 03:50 | $108,370.0
+2025-10-27 00:05:02,024 - INFO -    마지막 캔들 (KST): 2025-10-26 15:00 | $113,429.1
+2025-10-27 00:05:02,024 - INFO -    시간순 정렬: True ✅
+2025-10-27 00:05:02,024 - INFO -    현재 가격: $113,429.1
+2025-10-27 00:05:02,024 - INFO -    ✅ 데이터 검증 완료
+
+2025-10-27 00:05:07,718 - INFO - 🔍 DEBUG - Feature DataFrame Order:
+2025-10-27 00:05:07,718 - INFO -    Feature rows: 707
+2025-10-27 00:05:07,719 - INFO -    FIRST feature timestamp: 2025-10-24 04:10:00
+2025-10-27 00:05:07,719 - INFO -    LAST feature timestamp: 2025-10-26 15:00:00
+2025-10-27 00:05:07,719 - INFO -    Feature timestamps ascending: True ✅
+2025-10-27 00:05:07,719 - INFO - 🔍 DEBUG - Latest Candle Selection:
+2025-10-27 00:05:07,719 - INFO -    Selected index: -1 (last row)
+2025-10-27 00:05:07,719 - INFO -    Selected candle timestamp: 2025-10-26 15:00:00
+2025-10-27 00:05:07,719 - INFO -    Selected candle close: $113,429.1
+2025-10-27 00:05:07,722 - INFO - [Candle 15:00:00 KST] Price: $113,429.1 | Balance: $4,450.59 | LONG: 0.1758 | SHORT: 0.2284
+2025-10-27 00:05:07,722 - INFO - ⏸️  Warmup period: 2.8/5 min - ignoring entry signals
+2025-10-27 00:05:07,723 - INFO - ⏰ 다음 캔들까지 대기:
+2025-10-27 00:05:07,723 - INFO -    현재 (KST): 00:05:07
+2025-10-27 00:05:07,723 - INFO -    정각 (KST): 00:10:00
+2025-10-27 00:05:07,723 - INFO -    요청 (KST): 00:10:01 (정각 +1초)
+2025-10-27 00:05:07,723 - INFO -    대기: 294초

@@ -1,0 +1,23 @@
+XGBoost IMPROVED Training Results
+================================================================================
+
+Configuration:
+lookahead: 288 (24 hours)
+threshold: 2.0%
+SMOTE: Enabled
+SNR: 1.26
+
+Model Performance:
+Train Accuracy: 0.9605
+Val Accuracy:   0.7127
+Test Accuracy:  0.4303
+
+Backtest Results:
+Validation Return: -5.94%
+Test Return:       -2.80%
+Validation Trades: 19
+Test Trades:       9
+Validation Win Rate: 52.6%
+Test Win Rate:       66.7%
+Validation Liquidated: False
+Test Liquidated:       False

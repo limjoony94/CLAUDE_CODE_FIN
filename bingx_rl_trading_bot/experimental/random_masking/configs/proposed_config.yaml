@@ -1,0 +1,115 @@
+# Proposed Configuration: Random Masking Curriculum (40-40-20)
+# Experiment: proposed_40_40_20
+# Purpose: Test if random masking curriculum improves forecasting
+
+experiment:
+  name: "proposed_40_40_20"
+  description: "Random masking curriculum: 40% infill, 40% forecast, 20% sparse"
+  seed: 42
+
+# Data Configuration (SAME as baseline for fair comparison)
+data:
+  symbols: ["BTCUSDT", "ETHUSDT"]
+  interval: "1m"
+
+  # Data splits (IDENTICAL to baseline)
+  train_start: "2022-01-01"
+  train_end: "2023-06-30"
+  val_start: "2023-07-01"
+  val_end: "2023-12-31"
+  test_start: "2024-01-01"
+  test_end: "2024-09-30"
+
+  seq_len: 100
+  pred_len: 10
+
+  normalization: "rolling_zscore"
+  rolling_window: 1000
+  clip_threshold: 5.0
+
+  batch_size: 64
+  num_workers: 4
+  pin_memory: true
+
+# Model Architecture (IDENTICAL to baseline)
+model:
+  input_dim: 15
+  hidden_dim: 256
+  n_layers: 6
+  n_heads: 8
+  ff_dim: 1024
+  dropout: 0.1
+
+  uncertainty_head: true
+  mc_dropout_samples: 10
+
+# Masking Strategy (THE ONLY DIFFERENCE!)
+masking:
+  enabled: true
+  ratio_infill: 0.4             # 40% - Middle masking (bidirectional)
+  ratio_forecast: 0.4           # 40% - Future masking (causal)
+  ratio_sparse: 0.2             # 20% - Random sparse masking
+
+  # Masking details
+  mask_token_value: 0.0
+  min_mask_length: 5
+  max_mask_length: 50
+
+# Training Configuration (IDENTICAL to baseline)
+training:
+  epochs: 100
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+
+  scheduler: "cosine"
+  warmup_epochs: 5
+  min_lr: 0.00001
+
+  patience: 15
+  min_delta: 0.0001
+
+  grad_clip: 1.0
+
+  # Loss weights (slightly adjusted for multi-task)
+  loss_weights:
+    mse: 1.0
+    directional: 0.1
+    volatility: 0.05
+    uncertainty: 0.01
+
+# Evaluation Configuration (IDENTICAL)
+evaluation:
+  prediction_metrics:
+    - "mse"
+    - "mae"
+    - "rmse"
+    - "directional_accuracy"
+
+  backtest:
+    initial_capital: 10000.0
+    max_position_size: 0.10
+    leverage: 1.0
+
+    stop_loss_pct: 0.02
+    take_profit_pct: 0.06
+
+    slippage_pct: 0.001
+    commission_pct: 0.001
+
+    min_confidence: 0.6
+    max_uncertainty: 0.02
+    min_price_move: 0.001
+
+# Logging Configuration
+logging:
+  log_dir: "runs"
+  tensorboard: true
+  save_every_n_epochs: 10
+  log_predictions: true
+  log_attention_weights: true   # Enable for proposed (analyze what it learns)
+
+# Hardware Configuration
+hardware:
+  device: "cuda"
+  mixed_precision: true
+  compile_model: false

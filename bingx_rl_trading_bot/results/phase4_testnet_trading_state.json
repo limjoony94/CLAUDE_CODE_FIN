@@ -1,0 +1,65 @@
+{
+  "initial_balance": 100625.8141,
+  "current_balance": 100496.3735,
+  "trades": [
+    {
+      "entry_time": "2025-10-16T21:10:18.812890",
+      "order_id": null,
+      "side": "SHORT",
+      "entry_price": 111577.2,
+      "quantity": 2.320237479825197,
+      "position_size_pct": 0.643375607304275,
+      "position_value": 64740.19425707458,
+      "regime": "Sideways",
+      "probability": 0.5856366753578186,
+      "sizing_factors": {
+        "signal": 0.07088179141283035,
+        "volatility": 0.5,
+        "regime": 0.6,
+        "streak": 1.0,
+        "combined": 0.48980862662196156
+      },
+      "status": "CLOSED",
+      "exit_time": "2025-10-16T22:10:10.618781",
+      "exit_price": 111189.3,
+      "exit_reason": "ML Exit ENHANCED (SHORT, prob=0.709>=0.7)",
+      "close_order_id": "1978810701331828736",
+      "pnl_pct": 0.0034765167077144272,
+      "pnl_usd_gross": 900.0201184241804,
+      "transaction_cost": 310.1227095296878,
+      "pnl_usd_net": 589.8974088944926
+    }
+  ],
+  "trades_count": 1,
+  "closed_trades": 1,
+  "bh_btc_quantity": 0.9045618683849532,
+  "bh_entry_price": 111242.6,
+  "session_start": "2025-10-16T20:57:51.923270",
+  "timestamp": "2025-10-16T22:10:10.638061",
+  "latest_signals": {
+    "entry": {
+      "long_prob": 0.31092527508735657,
+      "short_prob": 0.5856366753578186,
+      "long_threshold": 0.7,
+      "short_threshold": 0.55,
+      "timestamp": "2025-10-16T21:10:18.483178",
+      "threshold_context": {
+        "entry_rate": 0.0,
+        "entries_count": 0,
+        "adjustment": 0.0,
+        "adjustment_ratio": 0.0,
+        "base_long": 0.7,
+        "base_short": 0.55,
+        "target_rate": 0.010912698412698412,
+        "target_trades_per_week": 22.0
+      }
+    },
+    "exit": {
+      "long_prob": null,
+      "short_prob": null,
+      "threshold": 0.7,
+      "position_side": null,
+      "timestamp": null
+    }
+  }
+}

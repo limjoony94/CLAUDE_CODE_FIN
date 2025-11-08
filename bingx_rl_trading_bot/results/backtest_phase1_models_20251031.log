@@ -1,0 +1,36 @@
+================================================================================
+FULL PERIOD BACKTEST: OPPORTUNITY GATING with 4x LEVERAGE
+================================================================================
+
+Testing with LEVERAGE and DYNAMIC SIZING
+
+Loading Entry models (Enhanced with 5-fold CV - 20251024_012445)...
+✅ Entry models loaded (no scaling - trained on raw features)
+   LONG: 50 features (Phase 1 - Feature Selection)
+   SHORT: 50 features (Phase 1 - Feature Selection)
+Loading Exit models (0.75 threshold - 20251024_043527/044510)...
+  ✅ Exit models loaded: LONG(27), SHORT(27)
+
+Loading FULL historical data...
+  ✅ Full data loaded: 30,805 candles (~106 days)
+
+Calculating ALL features (Basic + EXIT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (30805 rows)
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+  ✅ All features calculated (82.3s)
+
+Pre-calculating signals...
+  ✅ Signals pre-calculated (0.0s)
+
+================================================================================
+RUNNING BACKTEST with 4x LEVERAGE + DYNAMIC SIZING
+================================================================================
+
+❌ No trades executed during backtest

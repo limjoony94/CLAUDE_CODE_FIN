@@ -1,0 +1,197 @@
+{
+  "timestamp": "2025-10-26T03:05:57.540565",
+  "tests": [
+    {
+      "test_name": "feature_calculation",
+      "passed": false,
+      "details": {
+        "backtest_count": 109,
+        "production_count": 171,
+        "common_count": 109,
+        "only_backtest": [],
+        "only_production": [
+          "price_vs_ma200",
+          "vp_poc_distance_normalized",
+          "vwap",
+          "vp_va_midpoint_momentum",
+          "death_cross",
+          "vwap_above",
+          "vwap_cross_up",
+          "momentum_200",
+          "institutional_activity_zone",
+          "vp_poc",
+          "vp_vwap_bullish_confluence",
+          "vwap_distance_pct",
+          "golden_cross",
+          "major_support_confluence",
+          "vwap_near_vp_resistance",
+          "vp_value_area_low",
+          "distance_to_resistance_200",
+          "ema_200",
+          "rsi_trend",
+          "vp_vwap_bearish_confluence",
+          "vwap_near_vp_support",
+          "volatility_regime",
+          "volume_regime",
+          "vp_vwap_trend_alignment",
+          "support_200",
+          "roc_200",
+          "vp_price_in_va_position",
+          "distance_to_support_200",
+          "vp_distance_to_poc_pct",
+          "vwap_oversold",
+          "vp_volume_imbalance",
+          "vp_below_va_breakout",
+          "atr_200",
+          "bb_squeeze",
+          "ma_cross_strength",
+          "bb_position_200",
+          "bb_width",
+          "ma_200",
+          "vp_strong_sell_pressure",
+          "bb_mid_200",
+          "ma_20",
+          "vwap_cross_down",
+          "vwap_overbought",
+          "vwap_bearish_divergence",
+          "vwap_momentum",
+          "vwap_band_position",
+          "vp_poc_momentum",
+          "vwap_vs_ma20",
+          "vp_in_value_area",
+          "vp_value_area_width_pct",
+          "vp_percentile",
+          "vp_strong_buy_pressure",
+          "vwap_distance_normalized",
+          "volume_ma_200",
+          "vp_above_va_breakout",
+          "resistance_200",
+          "bb_width_200",
+          "vp_value_area_high",
+          "rsi_200",
+          "vp_efficiency",
+          "vwap_bullish_divergence",
+          "vp_vwap_alignment"
+        ],
+        "value_comparison": {
+          "rows_compared": 1148,
+          "max_difference": 5909.0,
+          "mean_difference": 150.36240593529337,
+          "threshold": 1e-06
+        },
+        "values_match": false,
+        "worst_features": {
+          "nearest_resistance": 5909.0,
+          "bb_high": 5765.568522141184,
+          "ema_3": 5400.458414231005,
+          "ema_5": 5333.486476329053,
+          "sma_10": 5201.800000000003
+        }
+      }
+    },
+    {
+      "test_name": "model_prediction",
+      "passed": true,
+      "details": {
+        "long_entry": {
+          "predictions": 1148,
+          "mean_prob": 0.3846593201160431,
+          "std_prob": 0.29917481541633606,
+          "min_prob": 0.00956121925264597,
+          "max_prob": 0.9834128618240356,
+          "status": "success"
+        },
+        "short_entry": {
+          "predictions": 1148,
+          "mean_prob": 0.31984540820121765,
+          "std_prob": 0.2756462097167969,
+          "min_prob": 0.007618069648742676,
+          "max_prob": 0.9708046913146973,
+          "status": "success"
+        },
+        "long_exit": {
+          "predictions": 1148,
+          "mean_prob": 0.3233092725276947,
+          "status": "success"
+        },
+        "short_exit": {
+          "predictions": 1148,
+          "mean_prob": 0.23712894320487976,
+          "status": "success"
+        }
+      }
+    },
+    {
+      "test_name": "exit_logic",
+      "passed": true,
+      "details": {
+        "ml_exit_thresholds": {
+          "long": 0.8,
+          "short": 0.8,
+          "correct": true
+        },
+        "stop_loss": {
+          "value": 0.03,
+          "correct": true
+        },
+        "max_hold": {
+          "candles": 120,
+          "hours": 10.0,
+          "correct": true
+        },
+        "sl_calculations": [
+          {
+            "position_size": 0.2,
+            "price_sl_pct": 0.0375,
+            "stop_long": 96250.0,
+            "stop_short": 103750.00000000001
+          },
+          {
+            "position_size": 0.5,
+            "price_sl_pct": 0.015,
+            "stop_long": 98500.0,
+            "stop_short": 101499.99999999999
+          },
+          {
+            "position_size": 0.95,
+            "price_sl_pct": 0.007894736842105263,
+            "stop_long": 99210.52631578947,
+            "stop_short": 100789.47368421052
+          }
+        ]
+      }
+    },
+    {
+      "test_name": "position_sizing",
+      "passed": false,
+      "details": {},
+      "error": "DynamicPositionSizer.calculate_position_size() got an unexpected keyword argument 'signal_confidence'"
+    },
+    {
+      "test_name": "configuration",
+      "passed": true,
+      "details": {
+        "entry_thresholds": {
+          "long": 0.8,
+          "short": 0.8,
+          "correct": true
+        },
+        "leverage": {
+          "value": 4,
+          "correct": true
+        },
+        "expected_performance": {
+          "return_7d": 0.2902,
+          "win_rate": 0.472,
+          "trades_7d": 36
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total_tests": 5,
+    "passed": 3,
+    "failed": 2,
+    "pass_rate": 0.6
+  }
+}

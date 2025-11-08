@@ -1,0 +1,17 @@
+XGBoost SHORT Model - TP/SL-Aligned Labeling
+================================================================================
+
+LABELING METHOD:
+  Type: TP/SL-Aligned (Approach 1)
+  Take Profit: 3.0% (price drops)
+  Stop Loss: 1.0% (price rises)
+  Max Hold: 48 candles (4.0 hours)
+
+FEATURES:
+  Count: 21
+  Type: Same as current model (baseline + advanced)
+
+TRAINING:
+  Timestamp: 20251016_024057
+  Model: XGBoost
+  Normalization: MinMaxScaler [-1, 1]

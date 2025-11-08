@@ -1,0 +1,25 @@
+{
+  "model_name": "xgboost_long_improved_labeling_20251018_051817",
+  "training_date": "20251018_051817",
+  "labeling_method": "improved_entry_labeling_2of3",
+  "num_features": 43,
+  "num_train_samples": 24413,
+  "num_test_samples": 6104,
+  "positive_rate_train": 0.2908286568631467,
+  "positive_rate_test": 0.3073394495412844,
+  "scores": {
+    "accuracy": 0.6138597640891219,
+    "precision": 0.34433656957928804,
+    "recall": 0.2835820895522388,
+    "f1": 0.31102016954106987
+  },
+  "labeling_params": {
+    "profit_threshold": 0.004,
+    "lookforward_min": 6,
+    "lookforward_max": 48,
+    "lead_time_min": 6,
+    "lead_time_max": 24,
+    "relative_tolerance": 0.002,
+    "scoring_threshold": 2
+  }
+}

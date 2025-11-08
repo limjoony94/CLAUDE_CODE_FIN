@@ -1,0 +1,211 @@
+================================================================================
+ENTRY MODEL RETRAINING - FULL DATASET
+================================================================================
+
+Strategy: Comprehensive training on complete dataset
+  ✅ Using ALL available data (104 days, ~30K candles)
+  ✅ Walk-Forward 5-Fold Cross-Validation
+  ✅ Top-3 Weighted Ensemble output
+
+Configuration:
+  Entry Threshold: 0.75
+  ML Exit Threshold: 0.75
+  Emergency Stop Loss: -0.03
+  Emergency Max Hold: 120 candles
+
+--------------------------------------------------------------------------------
+STEP 1: Loading Complete Dataset
+--------------------------------------------------------------------------------
+✅ Dataset loaded: 30,004 candles
+   Date range: 2025-07-14 14:20:00 to 2025-10-26 18:35:00
+   Days: 104
+
+--------------------------------------------------------------------------------
+STEP 2: Loading Entry Feature Lists
+--------------------------------------------------------------------------------
+  ✅ LONG Entry: 85 features
+  ✅ SHORT Entry: 79 features
+
+--------------------------------------------------------------------------------
+STEP 3: Training LONG Entry Model (Walk-Forward Ensemble)
+--------------------------------------------------------------------------------
+
+================================================================================
+Walk-Forward Ensemble Training: LONG Entry Model
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 1/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 5,004 samples (index 0-5003)
+  Val: 5,000 samples (index 5004-10003)
+
+  Step 1: Training Exit model on Fold 1 data...
+
+  Step 2: Training LONG Entry model on Fold 1...
+  Validation prediction rate: 12.10%
+  ✅ Fold 1 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 2/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 10,004 samples (index 0-10003)
+  Val: 5,000 samples (index 10004-15003)
+
+  Step 1: Training Exit model on Fold 2 data...
+
+  Step 2: Training LONG Entry model on Fold 2...
+  Validation prediction rate: 14.08%
+  ✅ Fold 2 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 3/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 15,004 samples (index 0-15003)
+  Val: 5,000 samples (index 15004-20003)
+
+  Step 1: Training Exit model on Fold 3 data...
+
+  Step 2: Training LONG Entry model on Fold 3...
+  Validation prediction rate: 13.42%
+  ✅ Fold 3 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 4/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 20,004 samples (index 0-20003)
+  Val: 5,000 samples (index 20004-25003)
+
+  Step 1: Training Exit model on Fold 4 data...
+
+  Step 2: Training LONG Entry model on Fold 4...
+  Validation prediction rate: 10.22%
+  ✅ Fold 4 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 5/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 25,004 samples (index 0-25003)
+  Val: 5,000 samples (index 25004-30003)
+
+  Step 1: Training Exit model on Fold 5 data...
+
+  Step 2: Training LONG Entry model on Fold 5...
+  Validation prediction rate: 14.02%
+  ✅ Fold 5 complete
+
+================================================================================
+ALL FOLDS TRAINED - Scores:
+================================================================================
+  Fold 2: 14.08%
+  Fold 5: 14.02%
+  Fold 3: 13.42%
+  Fold 1: 12.10%
+  Fold 4: 10.22%
+
+--------------------------------------------------------------------------------
+STEP 4: Training SHORT Entry Model (Walk-Forward Ensemble)
+--------------------------------------------------------------------------------
+
+================================================================================
+Walk-Forward Ensemble Training: SHORT Entry Model
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 1/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 5,004 samples (index 0-5003)
+  Val: 5,000 samples (index 5004-10003)
+
+  Step 1: Training Exit model on Fold 1 data...
+
+  Step 2: Training SHORT Entry model on Fold 1...
+  Validation prediction rate: 7.22%
+  ✅ Fold 1 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 2/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 10,004 samples (index 0-10003)
+  Val: 5,000 samples (index 10004-15003)
+
+  Step 1: Training Exit model on Fold 2 data...
+
+  Step 2: Training SHORT Entry model on Fold 2...
+  Validation prediction rate: 10.60%
+  ✅ Fold 2 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 3/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 15,004 samples (index 0-15003)
+  Val: 5,000 samples (index 15004-20003)
+
+  Step 1: Training Exit model on Fold 3 data...
+
+  Step 2: Training SHORT Entry model on Fold 3...
+  Validation prediction rate: 16.46%
+  ✅ Fold 3 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 4/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 20,004 samples (index 0-20003)
+  Val: 5,000 samples (index 20004-25003)
+
+  Step 1: Training Exit model on Fold 4 data...
+
+  Step 2: Training SHORT Entry model on Fold 4...
+  Validation prediction rate: 18.86%
+  ✅ Fold 4 complete
+
+────────────────────────────────────────────────────────────────────────────────
+FOLD 5/5
+────────────────────────────────────────────────────────────────────────────────
+  Train: 25,004 samples (index 0-25003)
+  Val: 5,000 samples (index 25004-30003)
+
+  Step 1: Training Exit model on Fold 5 data...
+
+  Step 2: Training SHORT Entry model on Fold 5...
+  Validation prediction rate: 14.84%
+  ✅ Fold 5 complete
+
+================================================================================
+ALL FOLDS TRAINED - Scores:
+================================================================================
+  Fold 4: 18.86%
+  Fold 3: 16.46%
+  Fold 5: 14.84%
+  Fold 2: 10.60%
+  Fold 1: 7.22%
+
+================================================================================
+STEP 5: Saving ALL Fold Models
+================================================================================
+✅ LONG Entry Fold 2: xgboost_long_entry_ensemble_fold2_20251030_012702.pkl (score: 14.08%)
+✅ LONG Entry Fold 5: xgboost_long_entry_ensemble_fold5_20251030_012702.pkl (score: 14.02%)
+✅ LONG Entry Fold 3: xgboost_long_entry_ensemble_fold3_20251030_012702.pkl (score: 13.42%)
+✅ LONG Entry Fold 1: xgboost_long_entry_ensemble_fold1_20251030_012702.pkl (score: 12.10%)
+✅ LONG Entry Fold 4: xgboost_long_entry_ensemble_fold4_20251030_012702.pkl (score: 10.22%)
+✅ LONG Metadata: xgboost_long_entry_ensemble_meta_20251030_012702.pkl
+✅ SHORT Entry Fold 4: xgboost_short_entry_ensemble_fold4_20251030_012702.pkl (score: 18.86%)
+✅ SHORT Entry Fold 3: xgboost_short_entry_ensemble_fold3_20251030_012702.pkl (score: 16.46%)
+✅ SHORT Entry Fold 5: xgboost_short_entry_ensemble_fold5_20251030_012702.pkl (score: 14.84%)
+✅ SHORT Entry Fold 2: xgboost_short_entry_ensemble_fold2_20251030_012702.pkl (score: 10.60%)
+✅ SHORT Entry Fold 1: xgboost_short_entry_ensemble_fold1_20251030_012702.pkl (score: 7.22%)
+✅ SHORT Metadata: xgboost_short_entry_ensemble_meta_20251030_012702.pkl
+
+================================================================================
+ENSEMBLE TRAINING COMPLETE
+================================================================================
+
+Saved Files:
+  LONG: 5 fold models + metadata
+  SHORT: 5 fold models + metadata
+
+Next Steps:
+  1. Implement Top-3 Weighted Ensemble in production bot
+  2. Run backtest comparison (Best Fold vs Top-3 Ensemble)
+  3. Deploy if ensemble performance > Best Fold + 5%
+

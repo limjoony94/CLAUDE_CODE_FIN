@@ -1,0 +1,22 @@
+XGBoost V2 Model - Metadata
+================================================================================
+
+CONFIG:
+  lookahead: 5
+  lookahead_minutes: 25
+  threshold: 0.0015
+  threshold_pct: 0.15
+  class_1_ratio: 0.16559401635066967
+  smote_applied: True
+  feature_count: 18
+
+METRICS:
+  f1_score: 0.2907542579075426
+  recall: 0.38548387096774195
+  precision: 0.2333984375
+  test_acc: 0.6620289855072464
+  mean_prob: 0.379509299993515
+  std_prob: 0.19581271708011627
+  prob_gt_03: 0.6095652173913043
+  prob_gt_04: 0.45014492753623186
+  prob_gt_05: 0.29681159420289854

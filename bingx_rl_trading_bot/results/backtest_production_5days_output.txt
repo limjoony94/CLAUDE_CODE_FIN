@@ -1,0 +1,82 @@
+================================================================================
+BACKTEST: PRODUCTION SETTINGS - RECENT 5 DAYS
+================================================================================
+Date: 2025-10-24 10:02:25
+
+Configuration:
+  Entry: LONG=0.65, SHORT=0.7, Gate=0.001
+  Exit: ML=0.8, SL=-3.0%, MaxHold=10.0h
+  Leverage: 4x
+================================================================================
+
+Loading models...
+✅ All models loaded
+  LONG Entry features: 85
+  SHORT Entry features: 79
+  LONG Exit features: 27
+  SHORT Exit features: 27
+
+Loading data (recent 5 days)...
+  Date range: 2025-10-19 00:00:00 to 2025-10-23 14:40:00
+  Total candles: 1329
+
+Calculating features...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (1329 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 1,329 → 1,042 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 1,037 / 1,329 rows
+   Lost 292 rows due to lookback periods
+
+✅ Features calculated (1037 rows)
+
+Running backtest...
+Traceback (most recent call last):
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\backtest_production_recent_5days.py", line 290, in <module>
+    final_capital, trades = run_backtest()
+                            ~~~~~~~~~~~~^^
+  File "C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\scripts\experiments\backtest_production_recent_5days.py", line 196, in run_backtest
+    exit_data = prepare_exit_features(
+        df_features.iloc[:i+1].copy(),
+        position['entry_index'],
+        side
+    )
+TypeError: prepare_exit_features() takes 1 positional argument but 3 were given

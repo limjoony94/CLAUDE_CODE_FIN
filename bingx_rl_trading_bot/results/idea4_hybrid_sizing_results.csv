@@ -1,0 +1,5 @@
+config,reserve_ratio,switch_threshold,avg_return,avg_trades,avg_long,avg_short,win_rate,switches_executed
+Lower reserve (5%),0.05,0.15,1.6720440755578432,4.96,4.96,0.0,67.77833277833277,0
+"Standard (10% reserve, 15% switch)",0.1,0.15,1.5840417557916413,4.96,4.96,0.0,67.77833277833277,0
+Conservative switching,0.1,0.2,1.5840417557916413,4.96,4.96,0.0,67.77833277833277,0
+Higher reserve (15%),0.15,0.15,1.496039436025439,4.96,4.96,0.0,67.77833277833277,0

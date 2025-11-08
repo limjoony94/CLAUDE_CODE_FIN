@@ -1,0 +1,30 @@
+{
+  "model_name": "xgboost_v4_realistic_labels",
+  "n_features": 37,
+  "labeling_method": "realistic_pnl_simulation",
+  "stop_loss": 0.01,
+  "take_profit": 0.03,
+  "max_hold_candles": 48,
+  "timestamp": "2025-10-14T17:48:33.832569",
+  "label_stats": {
+    "total": 17230,
+    "positive": 8660,
+    "positive_pct": 50.261172373766684,
+    "negative": 8570,
+    "negative_pct": 49.738827626233316,
+    "avg_pnl_positive": 0.4529419159637844,
+    "avg_pnl_negative": -0.39532231629527576,
+    "exit_reasons": {
+      "MAX_HOLD": 15781,
+      "SL": 1360,
+      "INSUFFICIENT_DATA": 48,
+      "TP": 41
+    }
+  },
+  "scores": {
+    "accuracy": 0.5096482061999303,
+    "precision": 0.5392335566213935,
+    "recall": 0.5819719228075085,
+    "f1": 0.5127466897034295
+  }
+}

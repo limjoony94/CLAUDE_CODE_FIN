@@ -1,0 +1,46 @@
+# Core dependencies
+numpy>=1.24.0
+pandas>=2.0.0
+python-dateutil>=2.8.2
+
+# Machine Learning / Reinforcement Learning
+stable-baselines3>=2.0.0
+torch>=2.0.0
+gymnasium>=0.29.0
+
+# Technical Indicators
+ta>=0.11.0
+pandas-ta>=0.3.14b
+
+# API & Network
+requests>=2.31.0
+websockets>=11.0
+aiohttp>=3.8.0
+
+# Data Storage
+h5py>=3.9.0
+sqlalchemy>=2.0.0
+
+# Configuration
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Logging & Monitoring
+loguru>=0.7.0
+rich>=13.0.0
+
+# Plotting & Visualization
+matplotlib>=3.7.0
+plotly>=5.14.0
+mplfinance>=0.12.9b
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Utilities
+tqdm>=4.65.0
+ccxt>=4.0.0
+
+# Type hints
+typing-extensions>=4.7.0

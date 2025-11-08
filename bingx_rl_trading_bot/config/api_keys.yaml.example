@@ -1,0 +1,22 @@
+# BingX API 키 설정 예시
+# 이 파일을 'api_keys.yaml'로 복사하고 실제 키를 입력하세요
+
+bingx:
+  # 테스트넷 키
+  testnet:
+    api_key: "your_testnet_api_key_here"
+    secret_key: "your_testnet_secret_key_here"
+
+  # 실거래 키 (주의해서 사용!)
+  mainnet:
+    api_key: "your_mainnet_api_key_here"
+    secret_key: "your_mainnet_secret_key_here"
+
+# 텔레그램 알림 (선택사항)
+telegram:
+  bot_token: "your_telegram_bot_token"
+  chat_id: "your_telegram_chat_id"
+
+# 디스코드 알림 (선택사항)
+discord:
+  webhook_url: "your_discord_webhook_url"

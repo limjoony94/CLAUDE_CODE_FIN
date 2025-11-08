@@ -1,0 +1,19 @@
+{
+  "model_name": "xgboost_v4_phase4_lag_lookahead3_thresh3",
+  "n_features": 185,
+  "has_lag_features": true,
+  "lag_periods": [
+    1,
+    2
+  ],
+  "has_momentum_features": true,
+  "lookahead": 3,
+  "threshold": 0.003,
+  "timestamp": "2025-10-10T15:18:04.399269",
+  "scores": {
+    "accuracy": 0.9492859630790665,
+    "precision": 0.05835444225537105,
+    "recall": 0.03823701555351737,
+    "f1": 0.04599098990930968
+  }
+}

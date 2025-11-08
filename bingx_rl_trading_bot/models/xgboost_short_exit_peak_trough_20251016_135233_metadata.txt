@@ -1,0 +1,26 @@
+XGBoost SHORT Exit - Peak/Trough Labeling
+================================================================================
+
+LABELING STRATEGY:
+  Method: near_trough_80pct_and_beats_holding_1h
+  Same successful approach as LONG Exit (55.2%)
+
+CONCEPT:
+  - Detect future troughs (low points)
+  - Exit SHORT when price is within 80% of trough
+  - Only if exiting now > holding 1 more hour
+
+FEATURES:
+  Total: 108
+  Base + Advanced: ~66
+  SELL-SPECIFIC: ~42 (important for exit timing!)
+
+NORMALIZATION:
+  MinMaxScaler: Each feature independently scaled to [-1, 1]
+  This ensures all features contribute equally
+
+PARAMETERS:
+  Lookforward: 48 candles (4 hours)
+  Peak window: 10
+  Near threshold: 80%
+  Holding comparison: 1 hour

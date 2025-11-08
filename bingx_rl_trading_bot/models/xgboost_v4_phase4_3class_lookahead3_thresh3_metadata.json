@@ -1,0 +1,23 @@
+{
+  "model_name": "xgboost_v4_phase4_3class_lookahead3_thresh3",
+  "model_type": "3-class classification",
+  "classes": {
+    "0": "NEUTRAL (sideways)",
+    "1": "LONG (upward)",
+    "2": "SHORT (downward)"
+  },
+  "n_features": 31,
+  "lookahead": 3,
+  "threshold": 0.003,
+  "timestamp": "2025-10-11T07:47:31.985234",
+  "scores": {
+    "accuracy": 0.732985022640195,
+    "f1_neutral": 0.8488492881573242,
+    "f1_long": 0.11983595003330727,
+    "f1_short": 0.11203877050792636,
+    "precision_long": 0.07732020168046069,
+    "precision_short": 0.07241857803421624,
+    "recall_long": 0.30057568611490176,
+    "recall_short": 0.26047234791117707
+  }
+}

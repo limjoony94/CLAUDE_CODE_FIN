@@ -1,0 +1,124 @@
+================================================================================
+FULL PERIOD BACKTEST: OPPORTUNITY GATING with 4x LEVERAGE
+================================================================================
+
+Testing with LEVERAGE and DYNAMIC SIZING
+
+Loading Entry models (Enhanced with 5-fold CV - 20251024_012445)...
+Loading Exit models (Retrained - 20251024_043527/044510)...
+  ✅ Entry models loaded: LONG(85), SHORT(79)
+  ✅ Exit models loaded: LONG(27), SHORT(27)
+
+Loading FULL historical data...
+  ✅ Full data loaded: 30,296 candles (~105 days)
+
+Calculating ALL features (Enhanced v2 + EXIT)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (30296 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 30,296 → 30,009 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 30,004 / 30,296 rows
+   Lost 292 rows due to lookback periods
+
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+  ✅ All features calculated (294.1s)
+
+Pre-calculating signals...
+  ✅ Signals pre-calculated (0.1s)
+
+================================================================================
+RUNNING BACKTEST with 4x LEVERAGE + DYNAMIC SIZING
+================================================================================
+
+
+================================================================================
+FULL PERIOD BACKTEST RESULTS (4x LEVERAGE) - INDEPENDENT WINDOW TESTING
+================================================================================
+
+Performance (Each window starts with $10,000):
+  Avg Window Return: -54.85% per window
+  Win Rate: 0.0%
+  Trades: 382.2 per window (LONG 183.1 + SHORT 199.1)
+  Avg Position Size: 58.0%
+  Windows: 99
+  Test Time: 63.0s
+
+📊 Capital Summary:
+  Starting Capital (per window): $10,000.00
+  Avg Final Capital (per window): $4,514.65
+  Last Window Result: $3,603.58 (-63.96%)
+
+📈 Annualized Performance (from avg window return):
+  Annualized Return: -100.0%
+  (Based on 99 windows over 495 days)
+
+💰 After Transaction Costs:
+  Cost per trade: 0.07%
+  Cost per window: 26.76%
+  Net window return: -81.61% per window
+
+📈 Leverage Impact:
+  With 4x Leverage: -54.85% per window
+  Without Leverage (est): -13.71% per window
+  Leverage Multiplier: 4.00x
+
+🚪 EXIT REASON ANALYSIS:
+  Total Trades: 37840
+    Emergency Stop Loss      : 36784 ( 97.2%)
+    ML Exit (LONG)           :  698 (  1.8%)
+    ML Exit (SHORT)          :  358 (  0.9%)
+
+  Exit by Side:
+    LONG Exits (18129 trades):
+      Stop Loss           : 17431 ( 96.1%)
+      ML Exit             :  698 (  3.9%)
+    SHORT Exits (19711 trades):
+      Stop Loss           : 19353 ( 98.2%)
+      ML Exit             :  358 (  1.8%)
+
+✅ Results saved to: C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\results\full_backtest_opportunity_gating_4x_20251028_003939.csv
+
+================================================================================
+BACKTEST COMPLETE
+================================================================================
+

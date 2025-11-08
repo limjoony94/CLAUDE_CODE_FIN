@@ -1,0 +1,257 @@
+================================================================================
+Retrain EXIT Models with Opportunity Gating Strategy
+================================================================================
+
+Opportunity Gating Configuration:
+  LONG Entry Threshold: 0.8
+  SHORT Entry Threshold: 0.8
+  Gate Threshold: 0.001
+  LONG Expected Return: 0.41%
+  SHORT Expected Return: 0.47%
+
+Loading data...
+Calculating ALL features (LONG + SHORT)...
+================================================================================
+ENHANCED FEATURE CALCULATION V2
+================================================================================
+
+Step 1/4: Calculating baseline features (LONG + SHORT)...
+Calculating ALL features (LONG + SHORT)...
+  1/4 Calculating LONG basic features...
+  2/4 Calculating LONG advanced features...
+  3/4 Calculating SHORT features...
+  4/4 Cleaning NaN values...
+  ✅ All features calculated (30296 rows)
+  ✅ Baseline: 107 features
+
+Step 2/4: Calculating long-term features (200-period)...
+  ✅ Long-term: 23 features
+
+Step 3/4: Calculating advanced indicators (phase1)...
+  [1/3] Calculating Volume Profile (7 features)...
+  [2/3] Calculating VWAP (4 features)...
+
+✅ Advanced indicators calculated:
+   - Volume Profile: 7 features
+   - VWAP: 4 features
+   - Total: 11 features
+   - Rows: 30,296 → 30,009 (lost 287 due to lookback)
+  ✅ Advanced: 11 features (VP 7 + VWAP 4)
+
+Step 4/4: Calculating engineered ratio features...
+  ✅ Ratios: 24 features
+
+Cleaning NaN values...
+
+================================================================================
+FEATURE CALCULATION COMPLETE
+================================================================================
+
+✅ Total features: 165
+   - Baseline: 107
+   - Long-term: 23
+   - Advanced: 11 (VP + VWAP)
+   - Engineered ratios: 24
+
+✅ Data coverage: 30,004 / 30,296 rows
+   Lost 292 rows due to lookback periods
+
+✅ 30,004 candles loaded with all features
+
+Calculating enhanced market context features...
+✅ Enhanced features calculated
+Loading ENTRY models for trade simulation...
+✅ ENTRY models loaded (Threshold 0.80 - 2025-10-27)
+
+Improved Labeling Configuration (RELAXED):
+  Lead time: 3-24 candles (15min - 2h)
+  Profit threshold: 0.3%
+  Peak threshold: 0.2%
+  Relative tolerance: 0.10%
+  RSI thresholds: LONG>55.0, SHORT<45.0
+
+================================================================================
+Phase 1: LONG EXIT Model
+================================================================================
+
+Simulating LONG trades for labeling (threshold 0.8)...
+✅ Simulated 585 LONG trades (simple threshold)
+
+Creating improved LONG EXIT labels...
+
+LONG EXIT Label Statistics:
+  Total candles: 30,004
+  Positive labels: 847
+  Positive rate: 2.82%
+  Average spacing: 33.9 candles
+  Minimum spacing: 1 candles
+
+================================================================================
+Training LONG EXIT Model with Improved Labels
+================================================================================
+Using 27 features
+  Technical: 27
+  Position: 0
+
+Dataset:
+  Total samples: 30,004
+  Positive (exit): 847.0 (2.82%)
+  Negative (hold): 29,157.0 (97.18%)
+⚠️ WARNING: Positive rate very low (2.82%)
+   Labeling may be too strict
+
+Class weight: 34.42
+
+Training XGBoost model...
+Running 5-fold time series cross-validation...
+Cross-validation precision: 0.0130 ± 0.0133
+Folds: 0.0338, 0.0000, 0.0000, 0.0088, 0.0227
+
+Training final model on all data...
+
+================================================================================
+Training Metrics:
+================================================================================
+  Precision: 0.5898
+  Recall: 1.0000
+  F1 Score: 0.7420
+
+Probability Distribution:
+  Mean: 0.0799
+  Median: 0.0063
+  Std: 0.1908
+  Min: 0.0002
+  Max: 0.9968
+✅ Mean probability 0.0799 (not balanced)
+
+  Percentiles:
+    10th: 0.0008
+    25th: 0.0016
+    50th: 0.0063
+    75th: 0.0518
+    90th: 0.2187
+    95th: 0.4748
+    99th: 0.9724
+
+Signal Quality by Probability Range:
+  0.0-0.3: 27,691 samples, Precision: 0.00%
+  0.3-0.5:    877 samples, Precision: 0.00%
+  0.5-0.7:    377 samples, Precision: 1.33%
+  0.7-1.0:  1,059 samples, Precision: 79.51%
+
+🔍 Inversion Check:
+  Low prob (<0.5): Precision = 0.00%
+  High prob (>=0.5): Precision = 58.98%
+  ✅ Model NOT inverted (high prob >= low prob precision)
+
+✅ Model saved:
+   C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\models\xgboost_long_exit_oppgating_improved_20251028_001419.pkl
+   C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\models\xgboost_long_exit_oppgating_improved_20251028_001419_scaler.pkl
+   C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\models\xgboost_long_exit_oppgating_improved_20251028_001419_features.txt
+
+================================================================================
+Phase 2: SHORT EXIT Model
+================================================================================
+
+Simulating SHORT trades for labeling (threshold 0.8 + gating)...
+✅ Simulated 1,624 SHORT trades (with opportunity gating)
+
+Creating improved SHORT EXIT labels...
+
+SHORT EXIT Label Statistics:
+  Total candles: 30,004
+  Positive labels: 870
+  Positive rate: 2.90%
+  Average spacing: 33.8 candles
+  Minimum spacing: 1 candles
+
+================================================================================
+Training SHORT EXIT Model with Improved Labels
+================================================================================
+Using 27 features
+  Technical: 27
+  Position: 0
+
+Dataset:
+  Total samples: 30,004
+  Positive (exit): 870.0 (2.90%)
+  Negative (hold): 29,134.0 (97.10%)
+⚠️ WARNING: Positive rate very low (2.90%)
+   Labeling may be too strict
+
+Class weight: 33.49
+
+Training XGBoost model...
+Running 5-fold time series cross-validation...
+Cross-validation precision: 0.1591 ± 0.2213
+Folds: 0.0473, 0.6000, 0.0303, 0.0847, 0.0330
+
+Training final model on all data...
+
+================================================================================
+Training Metrics:
+================================================================================
+  Precision: 0.4807
+  Recall: 1.0000
+  F1 Score: 0.6493
+
+Probability Distribution:
+  Mean: 0.0860
+  Median: 0.0043
+  Std: 0.2049
+  Min: 0.0001
+  Max: 0.9907
+✅ Mean probability 0.0860 (not balanced)
+
+  Percentiles:
+    10th: 0.0005
+    25th: 0.0010
+    50th: 0.0043
+    75th: 0.0441
+    90th: 0.2618
+    95th: 0.6231
+    99th: 0.9596
+
+Signal Quality by Probability Range:
+  0.0-0.3: 27,275 samples, Precision: 0.00%
+  0.3-0.5:    919 samples, Precision: 0.00%
+  0.5-0.7:    486 samples, Precision: 0.82%
+  0.7-1.0:  1,324 samples, Precision: 65.41%
+
+🔍 Inversion Check:
+  Low prob (<0.5): Precision = 0.00%
+  High prob (>=0.5): Precision = 48.07%
+  ✅ Model NOT inverted (high prob >= low prob precision)
+
+✅ Model saved:
+   C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\models\xgboost_short_exit_oppgating_improved_20251028_002003.pkl
+   C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\models\xgboost_short_exit_oppgating_improved_20251028_002003_scaler.pkl
+   C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot\models\xgboost_short_exit_oppgating_improved_20251028_002003_features.txt
+
+================================================================================
+RETRAINING COMPLETE
+================================================================================
+
+LONG EXIT Model:
+  Precision: 0.5898
+  CV Precision: 0.0130 ± 0.0133
+  Prob Mean: 0.0799
+  Positive Rate: 2.82%
+  Inverted: NO ✅
+
+SHORT EXIT Model:
+  Precision: 0.4807
+  CV Precision: 0.1591 ± 0.2213
+  Prob Mean: 0.0860
+  Positive Rate: 2.90%
+  Inverted: NO ✅
+
+================================================================================
+Next Steps:
+================================================================================
+1. Backtest retrained models
+2. Compare performance to inverted logic (+11.60% target)
+3. If better: Deploy retrained models
+4. If not: Keep using inverted logic, iterate on labeling
+
+================================================================================

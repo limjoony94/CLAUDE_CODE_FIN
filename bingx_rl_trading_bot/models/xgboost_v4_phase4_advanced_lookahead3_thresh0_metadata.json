@@ -1,0 +1,19 @@
+{
+  "model_name": "xgboost_v4_phase4_advanced_lookahead3_thresh0",
+  "n_features": 44,
+  "lookahead": 3,
+  "threshold": 0.003,
+  "normalized": true,
+  "scaler": "MinMaxScaler",
+  "scaler_range": [
+    -1,
+    1
+  ],
+  "timestamp": "2025-10-15T22:02:54.502447",
+  "scores": {
+    "accuracy": 0.9050620445144771,
+    "precision": 0.13674198905552873,
+    "recall": 0.23078194192938034,
+    "f1": 0.16550988109109568
+  }
+}

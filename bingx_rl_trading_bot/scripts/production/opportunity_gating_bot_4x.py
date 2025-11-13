@@ -60,13 +60,14 @@ from src.utils.exchange_reconciliation_v2 import reconcile_state_from_exchange_v
 # =============================================================================
 
 # Strategy Parameters (validated in backtest)
-# UPDATED 2025-11-05: Increased LONG threshold to filter low-quality signals
-# Reason: Trade frequency too low (0.37/day → 9.46/day target achieved)
+# UPDATED 2025-11-13: Critical Fix for LONG Stop Loss issue (33% SL rate)
+# Issue: Production showed 5/15 LONG hitting SL (-$43 loss)
+# Solution: Increase LONG threshold 0.60→0.70 to filter low-quality entries
 # Models: 30% Entry + 30% Exit models (20251107) - High Frequency Configuration
 # Performance: Backtest +12.36% (28 days), 60.75% WR, 9.46 trades/day
-# Thresholds: Entry 0.60 (both LONG/SHORT), Exit 0.75 (both LONG/SHORT)
-LONG_THRESHOLD = 0.60  # Entry threshold for 30% rate models (High Frequency)
-SHORT_THRESHOLD = 0.60  # Entry threshold for 30% rate models (High Frequency)
+# Thresholds: Entry 0.70 (LONG), 0.55 (SHORT), Exit 0.75 (both)
+LONG_THRESHOLD = 0.70  # 🔴 CRITICAL FIX: Increased from 0.60 to filter low-quality LONG (reduce SL rate)
+SHORT_THRESHOLD = 0.55  # 🟡 OPTIONAL: Decreased from 0.60 to increase SHORT opportunities
 GATE_THRESHOLD = 0.001  # Opportunity cost gate
 
 # Leverage & Position Sizing
@@ -752,11 +753,19 @@ def save_state(state):
         state['trades'] = trades
 
         # 3. Recalculate stats from bot trades (excludes manual trades)
-        updated_stats = recalculate_stats(trades)
+        # 🔧 FIX 2025-11-13: Use trading_history instead of trades to include all closed positions
+        # trades array may have some positions removed during cleanup, but trading_history
+        # is the permanent record of all bot trades (including Stop Loss exits)
+        updated_stats = recalculate_stats(state.get('trading_history', []))
         state['stats'] = updated_stats
         logger.debug(f"📊 Stats auto-updated: {updated_stats['total_trades']} trades, "
                     f"{updated_stats['wins']}W/{updated_stats['losses']}L, "
                     f"P&L: ${updated_stats['total_pnl_usd']:.2f}")
+
+    # 🔧 FIX 2025-11-10: Ensure initial_wallet_balance is synced with initial_balance
+    # This prevents Monitor from showing incorrect withdrawal amounts
+    if 'initial_balance' in state:
+        state['initial_wallet_balance'] = state['initial_balance']
 
     # Add configuration section (Single Source of Truth for monitor)
     state['configuration'] = {
@@ -1938,13 +1947,42 @@ def main():
     try:
         balance_info = client.get_balance()
         current_balance = float(balance_info.get('balance', {}).get('balance', 0))
-        if state.get('session_start') == state.get('timestamp'):  # First run
+
+        # 🔧 FIX 2025-11-10: Improved new session detection
+        # Check if this is a new session by comparing session_start and timestamp
+        is_new_session = False
+
+        # Case 1: initial_balance is missing or default value (100000.0)
+        if 'initial_balance' not in state or state.get('initial_balance') == 100000.0:
+            is_new_session = True
+            logger.info(f"   🆕 New session detected (initial_balance missing or default)")
+        else:
+            # Case 2: session_start and timestamp are very close (within 5 seconds)
+            try:
+                session_start = datetime.fromisoformat(state.get('session_start'))
+                timestamp = datetime.fromisoformat(state.get('timestamp'))
+                time_diff = abs((timestamp - session_start).total_seconds())
+                if time_diff < 5:
+                    is_new_session = True
+                    logger.info(f"   🆕 New session detected (session just started, {time_diff:.1f}s ago)")
+            except:
+                pass
+
+        # Set initial_balance from exchange on new sessions
+        if is_new_session:
             state['initial_balance'] = current_balance
+            # 🔧 FIX 2025-11-10: Also update initial_wallet_balance on new sessions
+            state['initial_wallet_balance'] = current_balance
+            logger.info(f"   💰 initial_balance set from exchange: ${current_balance:,.2f}")
+            logger.info(f"   💰 initial_wallet_balance set from exchange: ${current_balance:,.2f}")
+        else:
+            logger.info(f"   ♻️  Existing session - preserving initial_balance: ${state.get('initial_balance', 0):,.2f}")
 
         # ✅ FIXED 2025-10-26: Ensure baseline values exist for reverse calculation
-        # If initial_wallet_balance or initial_unrealized_pnl are missing, preserve existing initial_balance
+        # If initial_wallet_balance or initial_unrealized_pnl are missing, set to initial_balance
         if 'initial_wallet_balance' not in state:
             state['initial_wallet_balance'] = state.get('initial_balance', current_balance)
+            logger.info(f"   💰 initial_wallet_balance initialized: ${state['initial_wallet_balance']:,.2f}")
         if 'initial_unrealized_pnl' not in state:
             state['initial_unrealized_pnl'] = 0  # Default to no position baseline
 
@@ -2206,7 +2244,10 @@ def main():
                     logger.warning(f"   ⚠️  No Stop Loss found - Setting up protection now...")
 
                     # Calculate Balance-Based Stop Loss
-                    price_sl_pct = abs(EMERGENCY_STOP_LOSS) / position_size_pct
+                    # 🔴 CRITICAL FIX 2025-11-13: Minimum 2.5% SL distance
+                    # Previous: 1.08-2.10% (too tight, 33% LONG hit SL)
+                    # Solution: max(2.5%, calculated) to prevent tight SLs on large positions
+                    price_sl_pct = max(0.025, abs(EMERGENCY_STOP_LOSS) / position_size_pct)
 
                     # Calculate stop price based on side
                     if side == "LONG":

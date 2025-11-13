@@ -1,12 +1,87 @@
 # CLAUDE_CODE_FIN - Workspace Overview
 
-**Last Updated**: 2025-11-07 18:15 KST
+**Last Updated**: 2025-11-13 20:30 KST
 **Active Projects**: 1
-**Bot Status**: ⏳ **READY TO RESTART - 30% MODELS DEPLOYED**
+**Bot Status**: ✅ **RUNNING - PHASE 1 FIXES DEPLOYED**
 
 ---
 
-## 🎉 LATEST: 30% Entry + Exit Models DEPLOYED - High Frequency Configuration (Nov 7, 18:15 KST)
+## 🎉 LATEST: Production Analysis Complete + Critical Fixes Deployed (Nov 13, 20:30 KST)
+
+### Comprehensive Performance Analysis Complete ✅
+**Status**: ✅ **ANALYSIS COMPLETE - PROBABILITY PARADOX DISCOVERED**
+
+**Period Analyzed**: Nov 7-13 (5.0 days, 17 trades)
+
+**Key Findings**:
+```yaml
+Overall Performance:
+  Total Trades: 17 (3.4/day vs 9.46/day backtest)
+  Win Rate: 64.7% (11 wins, 6 losses)
+  Total P&L: +$21.33
+  Direction: 88.2% LONG, 11.8% SHORT
+
+Exit Mechanisms:
+  ML Exit: 52.9% (100% win rate) ✅ PERFECT
+  Stop Loss: 29.4% (all losses, -$43) ❌ CRITICAL
+  Max Hold: 17.6% (66.7% win rate)
+
+Critical Issues:
+  1. LONG Stop Loss: 33.3% (5/15 trades, -$43 total)
+  2. LONG Bias: 88.2% (vs 58% backtest)
+  3. Probability Paradox: High prob (≥0.85) = 40% WR ❌
+```
+
+**🚨 CRITICAL DISCOVERY: Probability Paradox**
+```yaml
+Entry Probability vs Win Rate:
+  Low (<0.70): 66.7% WR, -$1.92
+  Medium (0.70-0.85): 87.5% WR, +$19.43 ✅ BEST
+  High (≥0.85): 40.0% WR, +$7.39 ❌ WORST
+
+Implication:
+  - Model overconfident when probability ≥0.85
+  - Sweet spot: 0.70-0.85 range
+  - High probability doesn't guarantee high win rate
+  - Calibration issue: 0.962 prob → Stop Loss -$9.66 ❌
+```
+
+**Phase 1 Fixes Deployed** (Nov 13, 17:10 KST):
+```yaml
+Fix #1: LONG Entry Threshold 0.60 → 0.70
+  Rationale: Target "sweet spot" range (0.70-0.85)
+  Expected: Reduce LONG SL rate 33% → 15-20%
+
+Fix #2: Stop Loss Distance Minimum 2.5%
+  Rationale: Prevent tight SLs (was 1.08-2.10%)
+  Expected: Reduce SL hit rate by 30-40%
+
+Fix #3: SHORT Entry Threshold 0.60 → 0.55
+  Rationale: Increase SHORT opportunities
+  Expected: Improve LONG/SHORT balance 88/12 → 70/30
+```
+
+**Expected Results** (Phase 1):
+```yaml
+LONG SL Rate: 33.3% → 15-20% (-40-50%)
+SL Total Loss: -$43 → -$20-26 (-40%)
+LONG/SHORT: 88/12 → 70/30 (+150% SHORT)
+Win Rate: 64.7% → 70-75% (+8%)
+Weekly Profit: $30 → $50-60 (+70%)
+```
+
+**Documentation**:
+- Comprehensive Analysis: `claudedocs/PRODUCTION_PERFORMANCE_ANALYSIS_20251113.md`
+- Analysis Script: `scripts/analysis/comprehensive_production_analysis.py`
+
+**Next Steps**:
+- Monitor Phase 1 fixes for 2 days (until Nov 15)
+- Validate LONG SL rate <20%, Win rate >70%
+- Plan Phase 2 adjustments if needed
+
+---
+
+## 🎉 PREVIOUS: 30% Entry + Exit Models DEPLOYED - High Frequency Configuration (Nov 7, 18:15 KST)
 
 ### Trade Frequency Optimization Complete ✅
 **Status**: ✅ **DEPLOYED - 30% rate models achieve 2-10 trades/day target**

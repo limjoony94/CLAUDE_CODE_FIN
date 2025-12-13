@@ -1,0 +1,142 @@
+# =============================================================================
+# ADX Trend + Supertrend Trail Bot Configuration
+# Version: 1.0.0
+# Created: 2025-12-13
+# Based on: Dynamic Stop-Loss Research (Validated with 100% WF positive)
+# =============================================================================
+
+# Strategy Parameters
+strategy:
+  # ADX Settings
+  adx_threshold: 20  # Minimum ADX for signal validity
+
+  # Supertrend Settings (for trailing SL)
+  supertrend_period: 14
+  supertrend_multiplier: 3.0
+
+  # Entry Signal:
+  # LONG: +DI crosses above -DI when ADX > threshold
+  # SHORT: -DI crosses above +DI when ADX > threshold
+  entry_method: "adx_di_crossover"
+
+# Exit Parameters (Optimal from Dynamic SL Research)
+exit:
+  # Take Profit (fixed 2.0%)
+  take_profit_pct: 2.0
+
+  # Stop Loss: Dynamic Supertrend trailing
+  # SL follows Supertrend line, trails in favorable direction only
+  sl_method: "supertrend_trail"
+
+  # SL Distance Limits (skip signals outside this range)
+  min_sl_distance_pct: 0.3
+  max_sl_distance_pct: 5.0
+
+  # Cooldown (6 candles = 1.5 hours on 15m timeframe)
+  cooldown_candles: 6
+
+  # Max Hold (192 candles = 48 hours)
+  max_hold_candles: 192
+
+# Leverage and Position Sizing
+leverage:
+  exchange_leverage: 20
+  effective_leverage: 4
+  max_positions: 1
+  position_size_pct: 0.95
+  position_mode: "one-way"  # "hedge" or "one-way"
+
+# Trading Parameters
+trading:
+  symbol: "BTC-USDT"
+  timeframe: "15m"
+  entry_order_type: "MARKET"
+  tp_order_type: "TAKE_PROFIT_MARKET"
+  sl_order_type: "STOP_MARKET"
+  check_interval_seconds: 60
+  taker_fee_rate: 0.05  # %
+
+# Backup Settings
+backup:
+  enabled: true
+  max_backups: 20
+  backup_on_trade: true
+  backup_interval_minutes: 30
+
+# Sync Settings
+sync:
+  enabled: true
+  deep_sync_interval_minutes: 5
+  quick_sync_on_loop: true
+  verify_orders_on_sync: true
+  auto_recreate_orders: true
+
+# API Retry Settings
+api_retry:
+  max_retries: 3
+  base_delay_seconds: 1.0
+  max_delay_seconds: 30.0
+  exponential_base: 2.0
+
+# Health Check Settings
+health_check:
+  enabled: true
+  interval_minutes: 10
+  max_consecutive_failures: 5
+
+# Error Handling
+error_handling:
+  on_critical_error: "pause"  # "pause", "stop", "alert_only"
+  pause_duration_minutes: 5
+  recoverable_errors:
+    - "TIMEOUT"
+    - "CONNECTION_RESET"
+    - "TEMPORARY_UNAVAILABLE"
+    - "RATE_LIMIT_EXCEEDED"
+  critical_errors:
+    - "INVALID_API_KEY"
+    - "INSUFFICIENT_BALANCE"
+    - "ORDER_REJECTED"
+
+# Logging
+logging:
+  level: "INFO"
+  log_to_console: true
+
+# =============================================================================
+# Research Results Summary (for reference)
+# =============================================================================
+#
+# Full Period (314 days):
+#   - Return: +1276.6%
+#   - Max Drawdown: 21.6%
+#   - Win Rate: 70.3%
+#   - Risk-Adjusted Return: 59.06
+#   - Trades: 622 (1.98/day)
+#
+# Walk-Forward Validation (60d train / 30d test):
+#   - Positive Windows: 8/8 (100%)
+#   - Average Train Return: +221.3%
+#   - Average Test Return: +96.0%
+#
+# Monthly Performance:
+#   - Positive Months: 11/11 (100%)
+#   - Range: +59.9% to +296.5% per month
+#
+# Monte Carlo (1000 iterations):
+#   - Median Return: +1275.5%
+#   - 5th Percentile: +1082.0%
+#   - 95th Percentile: +1459.0%
+#   - Probability of Profit: 100%
+#
+# Trade Statistics:
+#   - Average Win: +4.19%
+#   - Average Loss: -2.99%
+#   - Risk/Reward Ratio: 1.40
+#
+# Key Innovation: Dynamic Supertrend Trailing Stop-Loss
+#   - Trails in favorable direction only
+#   - Adapts to market volatility
+#   - Protects profits while allowing trends to run
+#
+# =============================================================================

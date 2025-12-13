@@ -494,6 +494,10 @@ def calculate_indicators(df: pd.DataFrame) -> pd.DataFrame:
     df['supertrend'] = supertrend
     df['st_direction'] = direction
 
+    # Store upper and lower bands for correct SL direction
+    df['st_upper_band'] = upper
+    df['st_lower_band'] = lower
+
     return df
 
 # =============================================================================
@@ -535,26 +539,48 @@ def check_entry_signal(df: pd.DataFrame, state: Dict) -> tuple:
     prev_plus_di = prev_row['plus_di']
     prev_minus_di = prev_row['minus_di']
     price = row['close']
-    supertrend = row['supertrend']
 
-    # Calculate SL distance
-    sl_distance_pct = abs(price - supertrend) / price * 100
-
-    # Skip if SL distance is out of range
-    if sl_distance_pct < MIN_SL_DISTANCE_PCT or sl_distance_pct > MAX_SL_DISTANCE_PCT:
-        return 0, f"SL distance {sl_distance_pct:.2f}% out of range [{MIN_SL_DISTANCE_PCT}-{MAX_SL_DISTANCE_PCT}%]", None
+    # Get correct SL band based on signal direction
+    # LONG: SL should be BELOW entry → use lower band
+    # SHORT: SL should be ABOVE entry → use upper band
+    lower_band = row['st_lower_band']
+    upper_band = row['st_upper_band']
 
     # ADX Trend signals
     if adx > ADX_THRESHOLD:
         # +DI crosses above -DI = LONG
         if prev_plus_di < prev_minus_di and plus_di > minus_di:
-            reason = f"LONG: +DI crosses above -DI (ADX={adx:.1f}), Price={price:.1f}, ST_SL={supertrend:.1f} ({sl_distance_pct:.2f}%)"
-            return 1, reason, supertrend
+            # For LONG, SL must be BELOW entry price
+            sl_price = lower_band
+            sl_distance_pct = (price - sl_price) / price * 100
+
+            # Validate SL is below price
+            if sl_price >= price:
+                return 0, f"Invalid LONG SL: {sl_price:.1f} >= price {price:.1f}", None
+
+            # Skip if SL distance is out of range
+            if sl_distance_pct < MIN_SL_DISTANCE_PCT or sl_distance_pct > MAX_SL_DISTANCE_PCT:
+                return 0, f"SL distance {sl_distance_pct:.2f}% out of range [{MIN_SL_DISTANCE_PCT}-{MAX_SL_DISTANCE_PCT}%]", None
+
+            reason = f"LONG: +DI crosses above -DI (ADX={adx:.1f}), Price={price:.1f}, SL={sl_price:.1f} ({sl_distance_pct:.2f}%)"
+            return 1, reason, sl_price
 
         # -DI crosses above +DI = SHORT
         elif prev_minus_di < prev_plus_di and minus_di > plus_di:
-            reason = f"SHORT: -DI crosses above +DI (ADX={adx:.1f}), Price={price:.1f}, ST_SL={supertrend:.1f} ({sl_distance_pct:.2f}%)"
-            return -1, reason, supertrend
+            # For SHORT, SL must be ABOVE entry price
+            sl_price = upper_band
+            sl_distance_pct = (sl_price - price) / price * 100
+
+            # Validate SL is above price
+            if sl_price <= price:
+                return 0, f"Invalid SHORT SL: {sl_price:.1f} <= price {price:.1f}", None
+
+            # Skip if SL distance is out of range
+            if sl_distance_pct < MIN_SL_DISTANCE_PCT or sl_distance_pct > MAX_SL_DISTANCE_PCT:
+                return 0, f"SL distance {sl_distance_pct:.2f}% out of range [{MIN_SL_DISTANCE_PCT}-{MAX_SL_DISTANCE_PCT}%]", None
+
+            reason = f"SHORT: -DI crosses above +DI (ADX={adx:.1f}), Price={price:.1f}, SL={sl_price:.1f} ({sl_distance_pct:.2f}%)"
+            return -1, reason, sl_price
 
     return 0, f"No signal: ADX={adx:.1f}, +DI={plus_di:.1f}, -DI={minus_di:.1f}, Price={price:.1f}", None
 
@@ -578,19 +604,73 @@ def get_account_balance(exchange) -> Dict:
         'used': usdt_balance.get('used', 0)
     }
 
+def normalize_symbol(symbol: str) -> str:
+    """Normalize symbol for comparison (BTC-USDT -> BTCUSDT)"""
+    return symbol.replace('-', '').replace('/', '').replace(':', '').upper()
+
 @api_retry
-def get_current_position(exchange, symbol: str) -> Optional[Dict]:
+def get_current_position(exchange, symbol: str, direction: str = None) -> Optional[Dict]:
+    """
+    Get current position for symbol.
+
+    In Hedge Mode, there can be both LONG and SHORT positions.
+    If direction is specified, return only that direction's position.
+    If direction is None, return any position (first found).
+    """
     positions = exchange.fetch_positions([symbol])
+    normalized_symbol = normalize_symbol(symbol)
+
     for pos in positions:
-        if pos['symbol'] == symbol and abs(pos['contracts']) > 0:
-            return {
-                'side': pos['side'],
-                'size': abs(pos['contracts']),
-                'entry_price': pos['entryPrice'],
-                'unrealized_pnl': pos.get('unrealizedPnl', 0),
-                'mark_price': pos.get('markPrice', 0)
-            }
+        # Normalize symbol for comparison (handles BTC-USDT vs BTC/USDT:USDT)
+        if normalize_symbol(pos['symbol']) != normalized_symbol:
+            continue
+
+        if abs(pos['contracts']) <= 0:
+            continue
+
+        pos_direction = 'LONG' if pos['side'] == 'long' else 'SHORT'
+
+        # If direction specified, only return matching direction
+        if direction and pos_direction != direction:
+            continue
+
+        return {
+            'side': pos['side'],
+            'direction': pos_direction,
+            'size': abs(pos['contracts']),
+            'entry_price': pos['entryPrice'],
+            'unrealized_pnl': pos.get('unrealizedPnl', 0),
+            'mark_price': pos.get('markPrice', 0)
+        }
     return None
+
+@api_retry
+def get_all_positions(exchange, symbol: str) -> List[Dict]:
+    """
+    Get ALL positions for symbol (both LONG and SHORT in Hedge Mode).
+    Returns list of positions.
+    """
+    positions = exchange.fetch_positions([symbol])
+    normalized_symbol = normalize_symbol(symbol)
+    result = []
+
+    for pos in positions:
+        if normalize_symbol(pos['symbol']) != normalized_symbol:
+            continue
+
+        if abs(pos['contracts']) <= 0:
+            continue
+
+        result.append({
+            'side': pos['side'],
+            'direction': 'LONG' if pos['side'] == 'long' else 'SHORT',
+            'size': abs(pos['contracts']),
+            'entry_price': pos['entryPrice'],
+            'unrealized_pnl': pos.get('unrealizedPnl', 0),
+            'mark_price': pos.get('markPrice', 0)
+        })
+
+    return result
 
 @api_retry
 def open_position(exchange, state: Dict, direction: str, balance: Dict, entry_price: float, sl_price: float) -> bool:
@@ -816,23 +896,41 @@ def quick_sync_with_exchange(exchange, state: Dict) -> Dict:
     if not QUICK_SYNC_ON_LOOP:
         return state
     try:
-        exchange_pos = get_current_position(exchange, SYMBOL)
+        # Get ALL positions (both LONG and SHORT in Hedge Mode)
+        all_positions = get_all_positions(exchange, SYMBOL)
         state_pos = state.get('position')
-        if exchange_pos and not state_pos:
-            logger.warning("Found orphaned exchange position, syncing...")
-            state['position'] = {
-                'direction': 'LONG' if exchange_pos['side'] == 'long' else 'SHORT',
-                'entry_price': exchange_pos['entry_price'],
-                'quantity': exchange_pos['size'],
-                'entry_time': datetime.now().isoformat(),
-                'entry_candle': state.get('candle_count', 0),
-                'synced_from_exchange': True
-            }
-            save_state(state)
-        elif state_pos and not exchange_pos:
-            logger.warning("State position not found on exchange, clearing...")
-            state['position'] = None
-            save_state(state)
+
+        # Log if multiple positions exist (should not happen - bug indicator)
+        if len(all_positions) > 1:
+            logger.warning(f"MULTIPLE POSITIONS DETECTED: {len(all_positions)} - This should not happen!")
+            for pos in all_positions:
+                logger.warning(f"  {pos['direction']}: {pos['size']} @ {pos['entry_price']:.1f}")
+
+        # If state has a position, look for matching direction on exchange
+        if state_pos:
+            expected_direction = state_pos.get('direction')
+            exchange_pos = get_current_position(exchange, SYMBOL, direction=expected_direction)
+
+            if not exchange_pos:
+                # Position in state but not on exchange (for expected direction)
+                logger.warning(f"State {expected_direction} position not found on exchange, clearing...")
+                state['position'] = None
+                save_state(state)
+        else:
+            # No state position, check if any orphaned position exists
+            if all_positions:
+                exchange_pos = all_positions[0]  # Take the first one
+                logger.warning(f"Found orphaned exchange position: {exchange_pos['direction']}, syncing...")
+                state['position'] = {
+                    'direction': exchange_pos['direction'],
+                    'entry_price': exchange_pos['entry_price'],
+                    'quantity': exchange_pos['size'],
+                    'entry_time': datetime.now().isoformat(),
+                    'entry_candle': state.get('candle_count', 0),
+                    'synced_from_exchange': True
+                }
+                save_state(state)
+
         return state
     except Exception as e:
         logger.error(f"Quick sync error: {e}")
@@ -931,6 +1029,23 @@ def run_bot():
 
             # If not in position: check for entry
             if not state.get('position'):
+                # Double-check: verify no position exists on exchange before opening
+                existing_positions = get_all_positions(exchange, SYMBOL)
+                if existing_positions:
+                    logger.warning(f"State shows no position but exchange has {len(existing_positions)} position(s). Syncing...")
+                    # Sync with first position found
+                    exchange_pos = existing_positions[0]
+                    state['position'] = {
+                        'direction': exchange_pos['direction'],
+                        'entry_price': exchange_pos['entry_price'],
+                        'quantity': exchange_pos['size'],
+                        'entry_time': datetime.now().isoformat(),
+                        'entry_candle': state.get('candle_count', 0),
+                        'synced_from_exchange': True
+                    }
+                    save_state(state)
+                    continue  # Skip entry check this loop
+
                 signal, reason, sl_price = check_entry_signal(df, state)
 
                 if signal != 0:

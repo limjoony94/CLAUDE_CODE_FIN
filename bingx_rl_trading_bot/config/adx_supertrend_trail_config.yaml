@@ -44,7 +44,7 @@ leverage:
   effective_leverage: 4
   max_positions: 1
   position_size_pct: 0.95
-  position_mode: "one-way"  # "hedge" or "one-way"
+  position_mode: "hedge"  # "hedge" or "one-way" - BingX is in Hedge Mode
 
 # Trading Parameters
 trading:

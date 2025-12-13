@@ -886,9 +886,11 @@ def run_bot():
         exchange.set_sandbox_mode(True)
         logger.info("Using TESTNET")
 
+    # Set leverage for both sides (required for Hedge Mode)
     try:
-        exchange.set_leverage(EXCHANGE_LEVERAGE, SYMBOL)
-        logger.info(f"Leverage set to {EXCHANGE_LEVERAGE}x")
+        exchange.set_leverage(EXCHANGE_LEVERAGE, SYMBOL, params={'side': 'LONG'})
+        exchange.set_leverage(EXCHANGE_LEVERAGE, SYMBOL, params={'side': 'SHORT'})
+        logger.info(f"Leverage set to {EXCHANGE_LEVERAGE}x for LONG and SHORT")
     except Exception as e:
         logger.warning(f"Could not set leverage: {e}")
 

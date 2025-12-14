@@ -820,16 +820,30 @@ def update_trailing_sl(exchange, state: Dict, df: pd.DataFrame) -> bool:
     direction = position['direction']
     current_sl = position.get('sl_price', 0)
     current_supertrend = df['supertrend'].iloc[-1]
+    current_price = df['close'].iloc[-1]
+    entry_price = position.get('entry_price', 0)
 
-    # Only trail in favorable direction
+    # Check if Supertrend has crossed price (exit signal)
+    # For LONG: Supertrend above price means trend reversed, exit
+    # For SHORT: Supertrend below price means trend reversed, exit
+    if direction == 'LONG' and current_supertrend > current_price:
+        pnl_pct = (current_price - entry_price) / entry_price * 100
+        logger.info(f"Supertrend crossed above price: {current_supertrend:.1f} > {current_price:.1f}, exiting LONG")
+        return close_position(exchange, state, f"Supertrend exit ({pnl_pct:.2f}%)", current_price)
+    elif direction == 'SHORT' and current_supertrend < current_price:
+        pnl_pct = (entry_price - current_price) / entry_price * 100
+        logger.info(f"Supertrend crossed below price: {current_supertrend:.1f} < {current_price:.1f}, exiting SHORT")
+        return close_position(exchange, state, f"Supertrend exit ({pnl_pct:.2f}%)", current_price)
+
+    # Only trail in favorable direction (Supertrend moving in profit direction)
     new_sl = None
     if direction == 'LONG':
-        # For LONG, only trail up
-        if current_supertrend > current_sl:
+        # For LONG, only trail up (and must be below current price)
+        if current_supertrend > current_sl and current_supertrend < current_price:
             new_sl = round(current_supertrend, 1)
     else:
-        # For SHORT, only trail down
-        if current_supertrend < current_sl:
+        # For SHORT, only trail down (and must be above current price)
+        if current_supertrend < current_sl and current_supertrend > current_price:
             new_sl = round(current_supertrend, 1)
 
     if new_sl and new_sl != current_sl:

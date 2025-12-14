@@ -605,8 +605,16 @@ def get_account_balance(exchange) -> Dict:
     }
 
 def normalize_symbol(symbol: str) -> str:
-    """Normalize symbol for comparison (BTC-USDT -> BTCUSDT)"""
-    return symbol.replace('-', '').replace('/', '').replace(':', '').upper()
+    """
+    Normalize symbol for comparison.
+    Handles: BTC-USDT, BTC/USDT, BTC/USDT:USDT (perpetual marker)
+    All become: BTCUSDT
+    """
+    # Remove perpetual contract suffix (e.g., :USDT)
+    if ':' in symbol:
+        symbol = symbol.split(':')[0]
+    # Remove remaining separators
+    return symbol.replace('-', '').replace('/', '').upper()
 
 @api_retry
 def get_current_position(exchange, symbol: str, direction: str = None) -> Optional[Dict]:

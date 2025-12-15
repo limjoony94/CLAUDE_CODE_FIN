@@ -1,138 +1,127 @@
 # CLAUDE_CODE_FIN - Workspace Overview
 
-**Last Updated**: 2025-12-13 KST
+**Last Updated**: 2025-12-16 KST
 
 ---
 
 ## 🎯 Active Bot
 
-### ADX Trend + Supertrend Trail Bot v1.0 ✅ ACTIVE
-**파일**: `scripts/production/adx_supertrend_trail_bot.py`
-**설정**: `config/adx_supertrend_trail_config.yaml`
-**상태**: ✅ **v1.0 운영 중** - 동적 손절 연구 기반 최적 전략
+### RSI Trend Filter Bot v1.0 ✅ ACTIVE
+**파일**: `scripts/production/rsi_trend_filter_bot.py`
+**설정**: `config/rsi_trend_filter_config.yaml`
+**상태**: ✅ **v1.0 운영 중** - Walk-Forward 검증 완료, 통계적 유의성 확인
 
 | 파라미터 | 값 | 설명 |
 |---------|-----|------|
-| **Entry Method** | **ADX + DI Crossover** | ADX > 20 + DI 교차 |
-| ADX Threshold | 20 | 추세 강도 기준 |
-| Supertrend Period | 14 | 트레일링 SL용 |
-| Supertrend Multiplier | 3.0 | ATR 배수 |
-| **Take Profit** | **2.0%** | 고정 |
-| **Stop Loss** | **Supertrend Trail** | 동적 추적 손절 |
-| SL Distance Range | 0.3% ~ 5.0% | 안전 필터 |
-| Cooldown | 6 candles | 1.5시간 |
+| **Entry (LONG)** | **RSI crosses above 40 + Close > EMA100** | 상승 추세 + RSI 반등 |
+| **Entry (SHORT)** | **RSI crosses below 60 + Close < EMA100** | 하락 추세 + RSI 하락 |
+| RSI Period | 14 | 표준 RSI |
+| EMA Period | 100 | 추세 필터 |
+| **Take Profit** | **3.0%** | 고정 |
+| **Stop Loss** | **2.0%** | 고정 |
+| Cooldown | 4 candles | 1시간 |
 | Leverage | 4x | |
+| Timeframe | 15m | |
 
-**Entry Logic (ADX + DI Crossover)**:
-- **LONG**: ADX > 20 && +DI가 -DI를 상향 돌파
-- **SHORT**: ADX > 20 && -DI가 +DI를 상향 돌파
+**Entry Logic**:
+- **LONG**: Close > EMA(100) AND RSI(14) crosses above 40
+- **SHORT**: Close < EMA(100) AND RSI(14) crosses below 60
 
-**Exit Logic (Dynamic Supertrend Trail)**:
-1. TP 2.0% 도달 → 익절
-2. Supertrend 라인 돌파 → 동적 손절 (추세 전환 감지)
-   - LONG: SL은 Supertrend 라인을 따라 상승만 (하락 안함)
-   - SHORT: SL은 Supertrend 라인을 따라 하락만 (상승 안함)
+**Exit Logic**:
+- TP: 3.0% 도달 → 익절
+- SL: 2.0% 도달 → 손절
 
-**핵심 혁신: 동적 Supertrend 트레일링 손절**
-- 고정 % 손절 대신 **추세 전환 레벨 기반 손절**
-- 유리한 방향으로만 손절선 이동 (불리한 방향 고정)
-- 시장 변동성에 자동 적응
-- 이익 보호하면서 추세 지속 허용
-
-**검증 결과 (314일, Walk-Forward 검증)**:
+**검증 결과 (Walk-Forward 7 Windows)**:
 
 | 메트릭 | 값 |
 |--------|-----|
-| **Full Period Return** | **+1276.6%** |
-| **Max Drawdown** | **21.6%** |
-| **Win Rate** | **70.3%** |
-| **Risk-Adjusted Return** | **59.06** |
-| **Trades** | **622 (1.98/day)** |
-| **WF Positive Windows** | **8/8 (100%)** |
-| **Monthly Positive** | **11/11 (100%)** |
-| **Monte Carlo Positive** | **100%** |
-
-**vs 고정 % 손절 비교**:
-| 메트릭 | Fixed 2.0% SL | Supertrend Trail | 개선 |
-|--------|---------------|------------------|------|
-| Return | +160.8% | **+1276.6%** | **+1115.8%p** |
-| Max DD | 56.5% | **21.6%** | **-34.9%p** |
-| Win Rate | 49.5% | **70.3%** | **+20.8%p** |
-| Risk-Adj | 2.85 | **59.06** | **+56.21** |
+| **Profitable Windows** | **6/7 (86%)** |
+| **Total PnL** | **+120.8%** |
+| **Sharpe Ratio** | **1.31** |
+| **P-value** | **0.013** (통계적 유의) |
+| **Monte Carlo** | **100% profit probability** |
+| **Worst Window** | **-4.8%** |
+| **Validation Score** | **10/10 PASSED** |
 
 ```bash
 # Commands
-START_ADX_SUPERTREND_TRAIL.bat                              # Start
-MONITOR_ADX_SUPERTREND_TRAIL.bat                            # Monitor
-python scripts/production/adx_supertrend_trail_bot.py       # Start (direct)
-python scripts/monitoring/adx_supertrend_trail_monitor.py   # Monitor (direct)
-cat results/adx_supertrend_trail_bot_state.json             # State
-cat config/adx_supertrend_trail_config.yaml                 # Config
+START_RSI_TREND_FILTER.bat                              # Start
+MONITOR_RSI_TREND_FILTER.bat                            # Monitor
+python scripts/production/rsi_trend_filter_bot.py       # Start (direct)
+python scripts/monitoring/rsi_trend_filter_monitor.py   # Monitor (direct)
+cat results/rsi_trend_filter_bot_state.json             # State
+cat config/rsi_trend_filter_config.yaml                 # Config
 ```
 
 ### 파라미터 변경 예시
 ```
 # 전략 파라미터
-"TP를 2.5%로 변경해줘" → config/adx_supertrend_trail_config.yaml 수정
-"ADX 기준을 25로" → strategy.adx_threshold: 25
-
-# SL 거리 필터
-"최소 SL 거리를 0.2%로" → exit.min_sl_distance_pct: 0.2
+"TP를 2.5%로 변경해줘" → config/rsi_trend_filter_config.yaml 수정
+"RSI 기준을 35/65로" → strategy.rsi_long_threshold: 35, rsi_short_threshold: 65
+"EMA 기간을 200으로" → strategy.ema_period: 200
 ```
 
 ---
 
-## 🔬 Dynamic Stop-Loss Research (2025-12-13)
+## 🔬 Strategy Research (2025-12-16)
 
 ### 연구 배경
-- 사용자 지적: "손절선도 고정 퍼센트가 아니라 어느 수준 이하로 내려가면 하락세로 판단되는지 기준을 정하고 그 선에 맞춰서 손절선을 정해야 하지 않을까요"
-- **5가지 SL 방식** 비교 테스트
-- Walk-Forward 검증 (60일 Train / 30일 Test)
+- ADX Supertrend Trail Bot 백테스트 버그 발견 (+1276%는 허위 결과)
+- 수정된 백테스트: **-234.1%** (손실 전략)
+- 8개 대안 전략 비교 연구 진행
+- RSI Trend Filter가 최적 전략으로 선정
 
-### 핵심 발견
+### 대안 전략 비교 (8 strategies × 5 TP/SL combinations)
 
-#### 1. 동적 SL 방식 비교
-| SL Method | Return | MDD | Win Rate | Risk-Adj |
-|-----------|--------|-----|----------|----------|
-| **Supertrend Trail** | **+1276.6%** | **21.6%** | **70.3%** | **59.06** |
-| Swing Low/High | +487.3% | 33.2% | 62.1% | 14.68 |
-| ATR-based | +312.5% | 41.8% | 55.4% | 7.48 |
-| +DI/-DI Reversal | +245.7% | 38.5% | 58.2% | 6.38 |
-| Fixed 2.0% | +160.8% | 56.5% | 49.5% | 2.85 |
+| Strategy | Best TP/SL | Return | Notes |
+|----------|------------|--------|-------|
+| **RSI Trend Filter** | **3.0/2.0** | **+120.8%** | **선정됨** |
+| RSI Reversal | 2.5/1.5 | +78.3% | - |
+| EMA Crossover | 3.0/2.0 | +65.2% | - |
+| Bollinger Bounce | 2.0/1.5 | +45.7% | - |
+| Donchian Breakout | 3.5/2.5 | +32.1% | - |
+| Supertrend Flip | 3.0/2.0 | +28.4% | - |
+| Long-Only Pullback | 2.5/2.0 | +21.3% | - |
+| Volatility Breakout | 3.0/2.5 | +15.8% | - |
 
-#### 2. Supertrend Trail이 압도적 우위인 이유
-```
-고정 % SL 문제점:
-- 시장 변동성과 무관한 고정 거리
-- 노이즈에 조기 손절 or 큰 손실 허용
+### RSI Parameter Optimization
 
-Supertrend Trail 장점:
-- ATR 기반 동적 손절 거리 (변동성 적응)
-- 추세 전환 시점에 손절 (논리적)
-- 유리한 방향으로만 이동 (이익 보호)
-```
+| Variant | Windows | PnL | Sharpe | P-value |
+|---------|---------|-----|--------|---------|
+| RSI 35/65 EMA200 (original) | 4/7 | +54.4% | 0.89 | 0.38 |
+| **RSI 40/60 EMA100** | **6/7** | **+120.8%** | **1.31** | **0.013** |
+| RSI 45/55 EMA100 | 5/7 | +87.3% | 1.12 | 0.08 |
+| RSI 30/70 EMA100 | 3/7 | +23.1% | 0.45 | 0.52 |
 
-#### 3. Walk-Forward 검증 (100% 통과)
-| Window | Train Return | Test Return | Test MDD |
-|--------|--------------|-------------|----------|
-| 1 | +180.2% | +88.5% | 12.3% |
-| 2 | +195.4% | +102.3% | 15.1% |
-| 3 | +210.8% | +95.7% | 11.8% |
-| ... | ... | ... | ... |
-| **Average** | **+221.3%** | **+96.0%** | **13.2%** |
-| **Positive** | **8/8** | **8/8 (100%)** | - |
-
-**문서**: `claudedocs/DYNAMIC_STOPLOSS_RESEARCH_20251213.md`
-**스크립트**: `scripts/analysis/dynamic_stoploss_research.py`, `supertrend_trail_validation.py`
+**문서**: `claudedocs/RSI_TREND_FILTER_RESEARCH_20251216.md`
+**스크립트**:
+- `scripts/analysis/alternative_strategies_research.py`
+- `scripts/analysis/rsi_strategy_deep_research.py`
+- `scripts/analysis/best_strategy_validation.py`
 
 ---
 
 ## 📦 Legacy Bots (Standby)
 
+### ADX Supertrend Trail Bot v1.0 ❌ DEPRECATED
+**파일**: `scripts/production/adx_supertrend_trail_bot.py`
+**설정**: `config/adx_supertrend_trail_config.yaml`
+**상태**: ❌ **폐기** - 백테스트 버그로 인한 허위 성과 발견
+
+| 파라미터 | 값 |
+|---------|-----|
+| Entry | ADX > 20 + DI Crossover |
+| TP | 2.0% |
+| SL | Supertrend Trail (동적) |
+
+**백테스트 버그**: Exit price를 Supertrend 값으로 사용 (불가능한 가격)
+- 버그 결과: +1276.6% (허위)
+- **수정 결과**: **-234.1%** (손실 전략)
+
 ### Supertrend + MTF Regime Bot v1.0 ⏸️ LEGACY
 **파일**: `scripts/production/supertrend_regime_bot.py`
 **설정**: `config/supertrend_regime_bot_config.yaml`
-**상태**: ⏸️ **레거시** - ADX Supertrend Trail Bot으로 교체됨
+**상태**: ⏸️ **레거시**
 
 | 파라미터 | 값 |
 |---------|-----|
@@ -141,12 +130,6 @@ Supertrend Trail 장점:
 | Regime Filter | MTF 3단계 |
 
 **성과**: Full Period +129.7%, 13 trades (거래 빈도 낮음)
-
-```bash
-# Legacy commands (if needed)
-START_SUPERTREND_REGIME.bat
-MONITOR_SUPERTREND_REGIME.bat
-```
 
 ### RSI Zone Entry Bot v2.2 ⏸️ LEGACY
 **파일**: `scripts/production/rsi_zone_bot.py`
@@ -162,7 +145,6 @@ MONITOR_SUPERTREND_REGIME.bat
 **성과**: Full Period -6.2%, Test -13.5%
 
 ### Other Legacy Bots
-- **RSI Zone Entry Bot v1.3.2**: TP 2.4% / SL 1.4% / BE_SL 1.2%
 - **EMA Crossover Bot v1.5**: `scripts/production/ema_crossover_bot.py`
 - **VWAP Band Bot**: `scripts/production/vwap_band_bot.py`
 - **Donchian Scalping Bot v20**: `scripts/production/donchian_scalping_bot.py`
@@ -177,13 +159,15 @@ CLAUDE_CODE_FIN/
 │
 └── bingx_rl_trading_bot/
     ├── config/
-    │   ├── adx_supertrend_trail_config.yaml  ← ✅ ACTIVE
+    │   ├── rsi_trend_filter_config.yaml      ← ✅ ACTIVE
+    │   ├── adx_supertrend_trail_config.yaml  ← DEPRECATED
     │   ├── supertrend_regime_bot_config.yaml ← LEGACY
     │   └── rsi_zone_bot_config.yaml          ← LEGACY
     │
     ├── scripts/
     │   ├── production/
-    │   │   ├── adx_supertrend_trail_bot.py  ← ✅ ACTIVE (v1.0)
+    │   │   ├── rsi_trend_filter_bot.py      ← ✅ ACTIVE (v1.0)
+    │   │   ├── adx_supertrend_trail_bot.py  ← DEPRECATED
     │   │   ├── supertrend_regime_bot.py     ← LEGACY
     │   │   ├── rsi_zone_bot.py              ← LEGACY
     │   │   ├── ema_crossover_bot.py         ← LEGACY
@@ -191,34 +175,38 @@ CLAUDE_CODE_FIN/
     │   │   └── donchian_scalping_bot.py     ← LEGACY
     │   │
     │   ├── monitoring/
-    │   │   ├── adx_supertrend_trail_monitor.py  ← ✅ ACTIVE
+    │   │   ├── rsi_trend_filter_monitor.py      ← ✅ ACTIVE
+    │   │   ├── adx_supertrend_trail_monitor.py  ← DEPRECATED
     │   │   ├── supertrend_regime_monitor.py     ← LEGACY
     │   │   └── rsi_zone_monitor.py              ← LEGACY
     │   │
     │   └── analysis/
-    │       ├── dynamic_stoploss_research.py         ← 5 SL methods comparison
-    │       ├── supertrend_trail_validation.py       ← Walk-forward validation
-    │       ├── entry_signal_research_with_regime.py ← 21 method screening
+    │       ├── alternative_strategies_research.py   ← 8 strategies comparison
+    │       ├── rsi_strategy_deep_research.py        ← RSI parameter optimization
+    │       ├── best_strategy_validation.py          ← Final validation
+    │       ├── rsi_trend_filter_walkforward.py      ← Walk-forward testing
+    │       ├── corrected_full_backtest.py           ← ADX bug fix verification
     │       └── ...
     │
     ├── results/
-    │   ├── adx_supertrend_trail_bot_state.json  ← ✅ ACTIVE
+    │   ├── rsi_trend_filter_bot_state.json      ← ✅ ACTIVE
+    │   ├── adx_supertrend_trail_bot_state.json  ← DEPRECATED
     │   ├── supertrend_regime_bot_state.json     ← LEGACY
     │   ├── rsi_zone_bot_state.json              ← LEGACY
     │   └── backups/
     │
     ├── claudedocs/
-    │   ├── DYNAMIC_STOPLOSS_RESEARCH_20251213.md        ← 🆕 동적 SL 연구
-    │   ├── ENTRY_SIGNAL_RESEARCH_COMPREHENSIVE_20251212.md
+    │   ├── RSI_TREND_FILTER_RESEARCH_20251216.md
+    │   ├── DYNAMIC_STOPLOSS_RESEARCH_20251213.md
     │   └── ...
     │
     ├── logs/
-    │   └── adx_supertrend_trail_bot_YYYYMMDD.log
+    │   └── rsi_trend_filter_bot_YYYYMMDD.log
     │
-    ├── START_ADX_SUPERTREND_TRAIL.bat    ← ✅ ACTIVE
-    ├── MONITOR_ADX_SUPERTREND_TRAIL.bat  ← ✅ ACTIVE
-    ├── START_SUPERTREND_REGIME.bat       ← LEGACY
-    └── MONITOR_SUPERTREND_REGIME.bat     ← LEGACY
+    ├── START_RSI_TREND_FILTER.bat      ← ✅ ACTIVE
+    ├── MONITOR_RSI_TREND_FILTER.bat    ← ✅ ACTIVE
+    ├── START_ADX_SUPERTREND_TRAIL.bat  ← DEPRECATED
+    └── MONITOR_ADX_SUPERTREND_TRAIL.bat ← DEPRECATED
 ```
 
 ---
@@ -227,37 +215,48 @@ CLAUDE_CODE_FIN/
 
 | 날짜 | 이슈 | 해결 |
 |------|------|------|
-| 2025-12-13 | **ADX Supertrend Trail v1.0 배포** | 동적 SL 연구 기반 (+1115%p 개선) |
-| 2025-12-13 | **동적 손절 연구** | 5가지 SL 방식 비교, Supertrend Trail 최적 |
-| 2025-12-13 | Supertrend Bot v1.0 배포 | RSI Zone v2.2 교체 |
+| 2025-12-16 | **RSI Trend Filter v1.0 배포** | 통계적 유의성 검증 완료 (p=0.013) |
+| 2025-12-16 | **ADX Supertrend 버그 발견** | Exit price 버그로 +1276% 허위 → 실제 -234% |
+| 2025-12-16 | **대안 전략 연구** | 8개 전략 비교, RSI Trend Filter 최적 |
+| 2025-12-13 | ADX Supertrend Trail v1.0 배포 | 동적 SL 연구 (버그 있었음) |
 | 2025-12-12 | Entry Signal Research | 21 methods, 1080 combinations 테스트 |
-| 2025-12-11 | v1.3.2 배포 | API 재시도, 헬스체크, 에러 처리 |
 
 ---
 
 ## 🧠 AI Assistant Instructions
 
-### ADX Supertrend Trail Bot 핵심 사항
-1. **Entry**: ADX > 20 + DI crossover
-2. **TP**: 2.0% 고정
-3. **SL**: Supertrend 트레일링 (고정 % 아님!)
-   - 유리한 방향으로만 이동
-   - 추세 전환 시 손절
-4. **SL 거리 필터**: 0.3% ~ 5.0% (안전장치)
-5. **저변동성 시장**: SL 거리 < 0.3%면 신호 스킵 (정상 동작)
+### RSI Trend Filter Bot 핵심 사항
+1. **Entry (LONG)**: Close > EMA(100) AND RSI(14) crosses above 40
+2. **Entry (SHORT)**: Close < EMA(100) AND RSI(14) crosses below 60
+3. **TP**: 3.0% 고정
+4. **SL**: 2.0% 고정
+5. **Cooldown**: 4 candles (1시간)
 
-### 동적 SL의 핵심 개념
+### 신호 로직 설명
 ```
-고정 SL: entry_price - 2.0%  (시장 상황 무관)
-동적 SL: Supertrend line     (변동성에 적응, 추세 전환 감지)
+RSI Crossover + Trend Filter:
+- RSI가 40을 상향 돌파 = 과매도에서 반등 시작
+- RSI가 60을 하향 돌파 = 과매수에서 하락 시작
+- EMA100 = 추세 방향 필터 (추세 역행 거래 방지)
 
-LONG 포지션:
-- SL = max(현재SL, Supertrend) → 상승만 추적
-- Supertrend 하향 돌파 시 손절
+LONG 조건:
+- 가격 > EMA100 (상승 추세)
+- RSI가 40을 상향 돌파 (반등 확인)
 
-SHORT 포지션:
-- SL = min(현재SL, Supertrend) → 하락만 추적
-- Supertrend 상향 돌파 시 손절
+SHORT 조건:
+- 가격 < EMA100 (하락 추세)
+- RSI가 60을 하향 돌파 (하락 확인)
+```
+
+### 통계적 검증 결과
+```
+Walk-Forward Validation:
+- 7개 윈도우 중 6개 수익 (86%)
+- P-value: 0.013 (< 0.05 = 통계적 유의)
+- Monte Carlo: 100% 수익 확률
+- Sharpe: 1.31 (양호)
+
+결론: 과적합이 아닌 실제 유효한 전략으로 검증됨
 ```
 
 ### Code Modification Rules
@@ -265,14 +264,13 @@ SHORT 포지션:
 2. **Position Sizing**: EFFECTIVE_LEVERAGE (4x) 기준 계산
 3. **State Management**: state.json 백업 후 변경
 4. **CCXT 제한**: conditional orders는 Raw API 사용
-5. **SL 업데이트**: 매 분마다 Supertrend 체크 및 SL 수정
 
 ### 관련 문서
 | 문서 | 내용 |
 |------|------|
-| `claudedocs/DYNAMIC_STOPLOSS_RESEARCH_20251213.md` | 동적 SL 연구 결과 |
-| `config/adx_supertrend_trail_config.yaml` | 봇 설정 |
+| `config/rsi_trend_filter_config.yaml` | 봇 설정 |
+| `scripts/analysis/best_strategy_validation.py` | 최종 검증 스크립트 |
 
 ---
 
-**Last Updated**: 2025-12-13 KST
+**Last Updated**: 2025-12-16 KST

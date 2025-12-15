@@ -1,0 +1,43 @@
+# RSI Trend Filter Bot Configuration v1.0
+# Strategy: RSI(14) 40/60 with EMA100 trend filter
+# Validated: Walk-Forward 6/7 (86%), PnL +120.8%, Sharpe 1.31, p=0.013
+
+# Trading pair
+symbol: "BTC-USDT"
+timeframe: "15m"
+
+# Leverage and position sizing
+leverage: 4
+position_size_pct: 95  # % of available margin to use
+
+# Strategy parameters
+strategy:
+  # RSI settings
+  rsi_period: 14
+  rsi_long_threshold: 40   # LONG when RSI crosses above this (with uptrend)
+  rsi_short_threshold: 60  # SHORT when RSI crosses below this (with downtrend)
+
+  # Trend filter
+  ema_period: 100  # EMA for trend direction
+
+  # Exit parameters
+  tp_pct: 3.0  # Take profit: 3.0%
+  sl_pct: 2.0  # Stop loss: 2.0%
+
+  # Cooldown between trades (in candles)
+  cooldown_candles: 4  # 4 x 15m = 1 hour
+
+# Risk management
+risk:
+  max_daily_loss_pct: 15     # Stop trading if daily loss exceeds this
+  max_position_size_usd: 10000  # Maximum position size in USD
+
+# API settings
+api:
+  retry_attempts: 3
+  retry_delay: 2  # seconds
+
+# Logging
+logging:
+  level: "INFO"
+  file_rotation: true

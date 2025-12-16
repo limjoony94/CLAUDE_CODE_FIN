@@ -37,7 +37,7 @@ from pathlib import Path
 # ============================================================
 
 BOT_NAME = "rsi_trend_filter_bot"
-BOT_VERSION = "1.1"
+BOT_VERSION = "1.2"  # Fixed: cooldown now applies after position close
 CONFIG_FILE = "config/rsi_trend_filter_config.yaml"
 STATE_FILE = "results/rsi_trend_filter_bot_state.json"
 LOG_DIR = "logs"
@@ -374,6 +374,9 @@ def record_closed_position(state, config, exit_price, exit_reason):
         'exit_reason': exit_reason,
         'closed_at': datetime.now().isoformat(),
     }
+
+    # Update last_signal_time on close to enforce cooldown after exit
+    state['last_signal_time'] = datetime.now().isoformat()
 
     state['position'] = None
     save_state(state)

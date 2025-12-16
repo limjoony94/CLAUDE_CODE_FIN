@@ -68,6 +68,8 @@ def add_indicators(df):
 
     df['supertrend'] = supertrend
     df['st_direction'] = direction
+    df['st_upper'] = upper  # Added for correct SL band selection
+    df['st_lower'] = lower  # Added for correct SL band selection
 
     return df
 
@@ -288,7 +290,7 @@ def backtest_swing_sl(df, signals, tp_pct, swing_buffer_pct=0.1, cooldown=6, lev
     return trades
 
 def backtest_supertrend_sl(df, signals, tp_pct, cooldown=6, leverage=4, fee_pct=0.05):
-    """Backtest with Supertrend line as stop-loss"""
+    """Backtest with Supertrend line as stop-loss (FIXED: uses correct bands)"""
     trades = []
     position = None
     last_trade_idx = -cooldown - 1
@@ -301,8 +303,18 @@ def backtest_supertrend_sl(df, signals, tp_pct, cooldown=6, leverage=4, fee_pct=
             direction = signals[i]
             entry_price = df['close'].iloc[i]
 
-            # SL at Supertrend line
-            sl_price = df['supertrend'].iloc[i]
+            # FIXED: Use correct bands based on direction
+            if direction == 1:  # LONG: SL at lower band
+                sl_price = df['st_lower'].iloc[i]
+                # Validate SL is below entry
+                if sl_price >= entry_price:
+                    continue  # Invalid SL direction - skip
+            else:  # SHORT: SL at upper band
+                sl_price = df['st_upper'].iloc[i]
+                # Validate SL is above entry
+                if sl_price <= entry_price:
+                    continue  # Invalid SL direction - skip
+
             sl_distance = abs(entry_price - sl_price) / entry_price * 100
 
             # Skip if SL distance is too large (>5%) or too small (<0.3%)
@@ -322,13 +334,19 @@ def backtest_supertrend_sl(df, signals, tp_pct, cooldown=6, leverage=4, fee_pct=
         if position is not None:
             high = df['high'].iloc[i]
             low = df['low'].iloc[i]
+            close = df['close'].iloc[i]
 
-            # Update trailing SL with Supertrend
-            current_st = df['supertrend'].iloc[i]
-            if position['direction'] == 1:  # LONG: trail up
-                position['sl_price'] = max(position['sl_price'], current_st)
-            else:  # SHORT: trail down
-                position['sl_price'] = min(position['sl_price'], current_st)
+            # FIXED: Update trailing SL with correct bands and price validation
+            if position['direction'] == 1:  # LONG: trail up with st_lower
+                new_sl = df['st_lower'].iloc[i]
+                # Only trail if new SL is higher AND still below current price
+                if new_sl > position['sl_price'] and new_sl < close:
+                    position['sl_price'] = new_sl
+            else:  # SHORT: trail down with st_upper
+                new_sl = df['st_upper'].iloc[i]
+                # Only trail if new SL is lower AND still above current price
+                if new_sl < position['sl_price'] and new_sl > close:
+                    position['sl_price'] = new_sl
 
             hit_tp = (position['direction'] == 1 and high >= position['tp_price']) or \
                      (position['direction'] == -1 and low <= position['tp_price'])

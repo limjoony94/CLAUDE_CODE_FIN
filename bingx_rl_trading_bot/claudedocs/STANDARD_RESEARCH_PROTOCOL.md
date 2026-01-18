@@ -249,8 +249,14 @@ def apply_slippage(price, direction, is_entry=True):
 
 **목적**: 신호 자체의 예측력 검증 (포지션 상태 무시)
 
+**max_bars 설정 가이드**:
+- `max_bars`는 TP/SL에 도달하기까지 충분한 시간을 허용해야 함
+- 일반적 권장: `max_bars = 500` (5m 기준 약 42시간)
+- 계산 기준: TP% / 평균 변동성(bar당) × 2 (여유 배수)
+- 예: TP 2.5%, 변동성 0.1%/bar → 25 × 2 = 50 bars (최소)
+
 ```python
-def type1_validation(df, signal_func, tp_pct, sl_pct, max_bars=100):
+def type1_validation(df, signal_func, tp_pct, sl_pct, max_bars=500):
     """
     Type 1: 모든 신호에 대해 독립 평가
     - Entry: 신호 다음 봉 Open

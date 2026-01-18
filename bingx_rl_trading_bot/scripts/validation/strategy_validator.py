@@ -41,6 +41,7 @@ class ValidationThresholds:
     min_signals: int = 100
     min_win_rate: float = 50.0
     min_expected_value: float = 0.0
+    max_bars: int = 500  # Max bars to wait for exit in Type 1 validation
 
     # Type 2: Actual Trading
     min_total_pnl: float = 0.0
@@ -252,21 +253,24 @@ class StrategyValidator:
         self.strategy_name = strategy_name
         self.thresholds = thresholds or ValidationThresholds()
 
-    def validate(self, df: pd.DataFrame, max_bars: int = 100) -> ValidationReport:
+    def validate(self, df: pd.DataFrame, max_bars: Optional[int] = None) -> ValidationReport:
         """
         Run complete validation suite.
 
         Args:
             df: OHLCV DataFrame with columns: open, high, low, close, volume
-            max_bars: Maximum bars to wait for TP/SL
+            max_bars: Maximum bars to wait for TP/SL (uses thresholds.max_bars if not provided)
 
         Returns:
             ValidationReport with all results
         """
         logger.info(f"Starting validation for {self.strategy_name}")
 
+        # Use threshold max_bars if not explicitly provided
+        effective_max_bars = max_bars if max_bars is not None else self.thresholds.max_bars
+
         # Run all validations
-        type1 = self._validate_type1(df, max_bars)
+        type1 = self._validate_type1(df, effective_max_bars)
         type2 = self._validate_type2(df)
         walk_forward = self._validate_walk_forward(df)
         monte_carlo = self._validate_monte_carlo(type2.trades)

@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - Trading Bot Workspace
 
-**Last Updated**: 2026-01-18 KST | **Active Bot**: Engulf 5m v2.3 (Quality)
+**Last Updated**: 2026-01-19 KST | **Active Bot**: Engulf 5m v2.3 (Modular)
 
 ---
 
@@ -109,21 +109,52 @@ bingx_rl_trading_bot/
 
 ---
 
-## Critical Guidelines
+## Standard Research Protocol
 
-### Backtest Methodology
-- **Position Sizing**: `size = balance * position_pct * leverage`
-- **복리 반영**: 수익/손실이 다음 거래에 반영
-- **수수료**: Entry/Exit 0.05% × 2
-- **Entry 타이밍**: 신호 다음 봉 Open
+> **📋 Full Documentation**: [STANDARD_RESEARCH_PROTOCOL.md](bingx_rl_trading_bot/claudedocs/STANDARD_RESEARCH_PROTOCOL.md)
+
+모든 전략 연구는 아래 프로토콜을 준수해야 합니다.
+
+### Validation Framework (Two-Tier)
+
+| Type | 목적 | 필수 조건 |
+|------|------|----------|
+| **Type 1** | 신호 품질 검증 | 신호 ≥100, 승률 ≥50%, 기대값 >0 |
+| **Type 2** | 실제 거래 시뮬레이션 | PnL >0%, WF ≥50%, DD <50% |
+
+### Validation Script
+
+```python
+from scripts.validation import StrategyValidator
+
+validator = StrategyValidator(
+    signal_func=my_signal_function,
+    tp_pct=2.5, sl_pct=2.0,
+    leverage=3, strategy_name="My Strategy"
+)
+report = validator.validate(df)
+print(report)
+```
+
+### Backtest Rules
+
+| 항목 | 표준 |
+|------|------|
+| **Entry 타이밍** | 신호 다음 봉 Open |
+| **Exit 타이밍** | Intrabar High/Low |
+| **Position Sizing** | Compound (복리) |
+| **수수료** | 0.05% × 2 = 0.10% |
+| **슬리피지** | 0.02% 버퍼 |
 
 ### Look-Ahead Bias Prevention
+
 ```python
 # ❌ 금지: df['col'].shift(-1), df.rolling(n, center=True)
 # ✅ 허용: df['col'].shift(1), df.rolling(n).xxx()
 ```
 
 ### Position Mode
+
 ```python
 params={'positionSide': 'BOTH'}  # One-Way mode
 ```

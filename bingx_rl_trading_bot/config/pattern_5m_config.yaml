@@ -1,0 +1,35 @@
+api:
+  max_retry_delay: 30
+  retry_attempts: 3
+  retry_delay: 2
+debug_mode: true
+exchange_leverage: 10
+health_check_interval: 50
+json_logging: false
+leverage: 3
+margin_mode: crossed
+position_mode: one-way
+position_size_pct: 95
+risk:
+  max_daily_loss_pct: 10
+  max_position_size_usd: 10000
+rotation:
+  enabled: false
+strategy:
+  cooldown_candles: 0
+  # v1.14: Updated patterns from context research
+  long_patterns:
+  - U-BU-U
+  - ST-BD-DN
+  short_patterns:
+  - BD-BD-BD
+  - DN-DN-BD
+  - MU-ST-DN
+  - IH-DN-DN
+  - BD-ST-DN
+  - BU-U-DN
+  - D-DN-BD
+  sl_pct: 3.0
+  tp_pct: 1.5
+symbol: BTC-USDT
+timeframe: 5m

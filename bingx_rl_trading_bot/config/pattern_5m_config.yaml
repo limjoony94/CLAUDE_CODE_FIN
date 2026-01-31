@@ -17,8 +17,8 @@ rotation:
   enabled: false
 strategy:
   cooldown_candles: 0
-  # v1.20.0: 13 patterns, uniform 1.0/1.0 TP/SL (7 LONG + 6 SHORT)
-  # Re-discovered with production-consistent classification (avg_body_20)
+  # v1.21.0: 13 patterns, conservative per-pattern TP/SL (7 LONG + 6 SHORT)
+  # Per-pattern TP/SL in constants.py PATTERN_OPTIMAL_TPSL (tp_pct/sl_pct are fallback defaults)
   long_patterns:
   - U-MU-H
   - MD-ST-MD

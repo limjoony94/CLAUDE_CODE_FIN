@@ -10,8 +10,8 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.20.1"  # v1.20.1: Improved early-bar classification (default avg_body_20=1.0)
-# 13 patterns (7L+6S), 226t, WR 73.5%, MDD 14.6%, PF 2.59, WF 5/5, MC=0.0000
+BOT_VERSION = "1.21.0"  # v1.21.0: Conservative per-pattern TP/SL optimization
+# 13 patterns (7L+6S), 312t, WR 78.5%, MDD 20.6%, PF 3.19, WF 5/5
 
 # ============================================================
 # FILE PATHS (relative to bot root)
@@ -154,27 +154,27 @@ CONFIDENCE_LOG_FILE = "results/pattern_5m_confidence_log.csv"
 
 
 # ============================================================
-# Pattern TP/SL (v1.20.0 Uniform)
-# Research: unified_pattern_discovery.py (production-consistent classification)
-# v1.20.0: Uniform 1.0/1.0 TP/SL, 13 patterns (7L+6S)
-# Validated: 353t, WR 73.7%, MDD 14.8%, PF 2.62, WF 5/5, MC=0.0000
+# Pattern TP/SL (v1.21.0 Conservative Per-Pattern)
+# Research: per_pattern_tpsl_optimization.py, portfolio_tpsl_comparison.py
+# v1.21.0: Conservative per-pattern TP/SL (MC<0.01 optimized, others uniform)
+# Validated: 312t, WR 78.5%, MDD 20.6%, PF 3.19, WF 5/5
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
     # LONG patterns (7)
-    'U-MU-H':   (1.0, 1.0),
-    'MD-ST-MD': (1.0, 1.0),
-    'GS-U-BD':  (1.0, 1.0),
-    'MD-MD-ST': (1.0, 1.0),
-    'BU-IH-DN': (1.0, 1.0),
-    'MD-H-MD':  (1.0, 1.0),
-    'IH-MD-MD': (1.0, 1.0),
+    'U-MU-H':   (1.5, 1.5),  # MC=0.0000, optimized
+    'MD-ST-MD': (2.0, 2.0),  # MC=0.0078, optimized
+    'GS-U-BD':  (1.0, 1.0),  # MC=0.0372, keep uniform (conservative)
+    'MD-MD-ST': (1.5, 2.0),  # MC=0.0002, optimized
+    'BU-IH-DN': (1.5, 2.0),  # MC=0.0022, optimized
+    'MD-H-MD':  (1.0, 1.0),  # MC=0.0014, uniform best
+    'IH-MD-MD': (1.5, 2.0),  # MC=0.0020, optimized
     # SHORT patterns (6)
-    'DN-D-BD':  (1.0, 1.0),
-    'BD-U-GS':  (1.0, 1.0),
-    'DN-GS-H':  (1.0, 1.0),
-    'U-DF-BU':  (1.0, 1.0),
-    'BD-GS-BD': (1.0, 1.0),
-    'DN-IH-IH': (1.0, 1.0),
+    'DN-D-BD':  (1.0, 1.0),  # MC=0.2390, keep uniform (MC fail)
+    'BD-U-GS':  (1.5, 2.0),  # MC=0.0042, optimized
+    'DN-GS-H':  (1.0, 1.0),  # MC=0.0176, keep uniform (conservative)
+    'U-DF-BU':  (1.0, 1.5),  # MC=0.0010, optimized
+    'BD-GS-BD': (1.0, 1.0),  # MC=0.0120, keep uniform (conservative)
+    'DN-IH-IH': (1.0, 1.5),  # MC=0.0000, optimized
 }
 
 

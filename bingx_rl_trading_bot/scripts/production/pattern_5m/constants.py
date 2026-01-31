@@ -10,8 +10,8 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.20.0"  # v1.20.0: Unified classification re-discovery (production-consistent avg_body_20)
-# 13 patterns (7L+6S), 353t, WR 73.7%, MDD 14.8%, PF 2.62, WF 5/5, MC=0.0000
+BOT_VERSION = "1.20.1"  # v1.20.1: Improved early-bar classification (default avg_body_20=1.0)
+# 13 patterns (7L+6S), 226t, WR 73.5%, MDD 14.6%, PF 2.59, WF 5/5, MC=0.0000
 
 # ============================================================
 # FILE PATHS (relative to bot root)
@@ -101,25 +101,25 @@ DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # LONG patterns - v1.19.1: 10 total (tight TP/SL, regime-independent)
 VALIDATED_LONG_PATTERNS: List[str] = [
-    # v1.20.0: Re-discovered with production-consistent classification (avg_body_20)
+    # v1.20.1: Validated with improved classification (default avg_body_20=1.0 for early bars)
     # Tier 1: WF>=4, MC<0.01, excess>15, uniform 1.0/1.0 TP/SL
-    "U-MU-H",     # WR 68.4%, 57t, excess +16.7%, MC=0.0033, WF 4/5, PP 3/3
-    "MD-ST-MD",   # WR 70.8%, 48t, excess +19.1%, MC=0.0023, WF 4/5, PP 3/3
-    "GS-U-BD",    # WR 76.0%, 25t, excess +24.3%, MC=0.0069, WF 4/5, PP 2/3
-    "MD-MD-ST",   # WR 71.1%, 38t, excess +19.3%, MC=0.0062, WF 5/5, PP 3/3
-    "BU-IH-DN",   # WR 76.0%, 25t, excess +24.3%, MC=0.0083, WF 4/5, PP 3/3
-    "MD-H-MD",    # WR 83.3%, 18t, excess +31.6%, MC=0.0045, WF 5/5, PP 3/3
-    "IH-MD-MD",   # WR 86.7%, 15t, excess +34.9%, MC=0.0033, WF 4/5, PP 2/3
+    "U-MU-H",     # WR 68.4%, 57t, excess +16.7%, MC=0.0036, WF 4/5, PP 3/3
+    "MD-ST-MD",   # WR 70.8%, 48t, excess +19.1%, MC=0.0020, WF 4/5, PP 3/3
+    "GS-U-BD",    # WR 76.0%, 25t, excess +24.3%, MC=0.0073, WF 4/5, PP 2/3
+    "MD-MD-ST",   # WR 71.1%, 38t, excess +19.3%, MC=0.0055, WF 5/5, PP 3/3
+    "BU-IH-DN",   # WR 76.0%, 25t, excess +24.3%, MC=0.0065, WF 4/5, PP 3/3
+    "MD-H-MD",    # WR 83.3%, 18t, excess +31.6%, MC=0.0038, WF 5/5, PP 3/3
+    "IH-MD-MD",   # WR 86.7%, 15t, excess +34.9%, MC=0.0043, WF 4/5, PP 2/3
 ]
 
 # SHORT patterns - v1.20.0: Tier 1.5 (WF>=4, MC<0.03, excess>15)
 VALIDATED_SHORT_PATTERNS: List[str] = [
-    "DN-D-BD",    # WR 67.4%, 46t, excess +19.1%, MC=0.0120, WF 5/5, PP 3/3
-    "BD-U-GS",    # WR 76.5%, 17t, excess +28.2%, MC=0.0238, WF 4/5, PP 3/3
-    "DN-GS-H",    # WR 80.0%, 15t, excess +31.7%, MC=0.0141, WF 4/5, PP 2/3
-    "U-DF-BU",    # WR 76.5%, 17t, excess +28.2%, MC=0.0208, WF 4/5, PP 2/3
-    "BD-GS-BD",   # WR 76.5%, 17t, excess +28.2%, MC=0.0265, WF 4/5, PP 3/3
-    "DN-IH-IH",   # WR 80.0%, 15t, excess +31.7%, MC=0.0162, WF 5/5, PP 3/3
+    "DN-D-BD",    # WR 67.4%, 46t, excess +19.1%, MC=0.0131, WF 5/5, PP 3/3
+    "BD-U-GS",    # WR 76.5%, 17t, excess +28.2%, MC=0.0259, WF 4/5, PP 3/3
+    "DN-GS-H",    # WR 80.0%, 15t, excess +31.7%, MC=0.0165, WF 4/5, PP 2/3
+    "U-DF-BU",    # WR 76.5%, 17t, excess +28.2%, MC=0.0258, WF 4/5, PP 2/3
+    "BD-GS-BD",   # WR 76.5%, 17t, excess +28.2%, MC=0.0269, WF 4/5, PP 3/3
+    "DN-IH-IH",   # WR 80.0%, 15t, excess +31.7%, MC=0.0164, WF 5/5, PP 3/3
 ]
 
 # ============================================================

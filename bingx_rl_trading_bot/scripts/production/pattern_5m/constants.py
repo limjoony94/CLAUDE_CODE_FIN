@@ -10,7 +10,8 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.17.0"  # v1.17: Remove D-DN-BD (only 6 trades, p=1.0 - statistically invalid)
+BOT_VERSION = "1.20.0"  # v1.20.0: Unified classification re-discovery (production-consistent avg_body_20)
+# 13 patterns (7L+6S), 353t, WR 73.7%, MDD 14.8%, PF 2.62, WF 5/5, MC=0.0000
 
 # ============================================================
 # FILE PATHS (relative to bot root)
@@ -43,70 +44,104 @@ class CandleType(Enum):
 
 
 # ============================================================
-# Validated Patterns (v1.17 Statistical Validation)
-# v1.17: production_pattern_validation.py (2026-01-26)
-# Changes: Removed D-DN-BD (only 6 trades, p=1.0 - statistically invalid)
-# Criteria: WR >= 60%, WF >= 4/5, Trades >= 10, p < 0.10 or Edge > 0
-# Report: claudedocs/PRODUCTION_VALIDATION_REPORT_20260126.md
+# Market Regime Detection (v1.18)
+# Research: regime_adaptive_research.py, regime_adaptive_validation.py
+# WF 5/5 (vs v1.17: 0/5), Total PnL: +415% (vs v1.17: -1081%)
 # ============================================================
 
-# LONG patterns - v1.16: 8 total (2 existing + 6 new)
+class MarketRegime(Enum):
+    """Market regime classification."""
+    BULL = "BULL"
+    BEAR = "BEAR"
+    SIDEWAYS = "SIDEWAYS"
+    UNKNOWN = "UNKNOWN"
+
+# Regime detection parameters
+REGIME_DETECTION_ENABLED = False  # v1.19.0: Disabled - tight TP/SL is regime-independent
+REGIME_LOOKBACK_BARS = 100          # 100 bars = ~8.3 hours
+REGIME_TREND_THRESHOLD = 1.5        # % price change for BULL/BEAR (optimized from 2.0)
+REGIME_VOL_THRESHOLD = 0.15         # ATR% threshold for HIGH/LOW volatility
+
+# Regime-specific patterns and TP/SL (v1.18)
+# Each regime has its own optimal patterns based on backtest validation
+REGIME_PATTERNS = {
+    "BULL": {
+        # Counter-trend SHORT patterns work best in BULL market
+        "MU-ST-DN": ("SHORT", 3.0, 1.5),   # EV=+5.25%, WR=100%
+        "IH-DN-DN": ("SHORT", 2.5, 1.5),   # EV=+5.08%, WR=83.3%
+        "BU-U-DN": ("SHORT", 1.5, 2.0),    # EV=+1.86%, WR=87.5%
+    },
+    "BEAR": {
+        # Mix of trend-following SHORT and counter-trend LONG
+        "BD-ST-DN": ("SHORT", 1.5, 1.5),   # EV=+2.41%, WR=75.0%
+        "BU-U-DN": ("SHORT", 3.0, 1.5),    # EV=+1.97%, WR=55.6%
+        "U-ST-U": ("LONG", 1.5, 3.0),      # EV=+1.80%, WR=75.0% (bounce)
+        "DN-DN-BD": ("SHORT", 2.0, 2.5),   # EV=+1.93%, WR=53.3%
+    },
+    "SIDEWAYS": {
+        # Range-bound patterns (most common regime: 85.8% of time)
+        "BD-BD-BD": ("SHORT", 3.0, 2.5),   # EV=+1.84%, WR=61.3%
+        "ST-BD-DN": ("LONG", 3.0, 3.0),    # EV=+1.53%, WR=62.2%
+        "MU-ST-DN": ("SHORT", 3.0, 2.0),   # EV=+1.52%, WR=57.1%
+        "DN-DN-BD": ("SHORT", 1.5, 2.0),   # EV=+0.42%, WR=50.0%
+    },
+}
+
+# Default regime to use when detection fails
+DEFAULT_REGIME = MarketRegime.SIDEWAYS
+
+# ============================================================
+# Validated Patterns (v1.19.1 Tight TP/SL)
+# Research: tight_tpsl_validation.py (2026-01-30)
+# 270-day validation: 66 validated → 21 selected (10 LONG + 11 SHORT)
+# Criteria: excess_wr > 20%, MC < 0.05, WF >= 3/5, trades >= 15, 3/3 periods profitable
+# Key insight: Tight TP/SL (0.3-1.0%) eliminates regime dependency, enables genuine SHORT edge
+# v1.19.1: +6 Tier 1 patterns (3/3 periods, excess>27%) → +290% PnL, PnL/MDD 80→105
+# ============================================================
+
+# LONG patterns - v1.19.1: 10 total (tight TP/SL, regime-independent)
 VALIDATED_LONG_PATTERNS: List[str] = [
-    # Existing v1.15
-    "U-BU-U",     # WR 93.8%, 32 trades, WF 4/5
-    "ST-BD-DN",   # WR 70.6%, 34 trades, WF 3/5
-    # NEW v1.16 - Pattern Discovery
-    "DN-DN-DN",   # WR 87.4%, 87 trades, WF 5/5 - Mean Reversion
-    "DN-U-U",     # WR 87.3%, 79 trades, WF 5/5 - Trend Confirmation
-    "DN-DN-U",    # WR 83.1%, 89 trades, WF 4/5 - Reversal
-    "DN-ST-U",    # WR 93.6%, 47 trades, WF 5/5 - Support Bounce
-    "U-ST-U",     # WR 89.8%, 49 trades, WF 5/5 - Consolidation Break
-    "U-U-U",      # WR 92.1%, 38 trades, WF 5/5 - Momentum
+    # v1.20.0: Re-discovered with production-consistent classification (avg_body_20)
+    # Tier 1: WF>=4, MC<0.01, excess>15, uniform 1.0/1.0 TP/SL
+    "U-MU-H",     # WR 68.4%, 57t, excess +16.7%, MC=0.0033, WF 4/5, PP 3/3
+    "MD-ST-MD",   # WR 70.8%, 48t, excess +19.1%, MC=0.0023, WF 4/5, PP 3/3
+    "GS-U-BD",    # WR 76.0%, 25t, excess +24.3%, MC=0.0069, WF 4/5, PP 2/3
+    "MD-MD-ST",   # WR 71.1%, 38t, excess +19.3%, MC=0.0062, WF 5/5, PP 3/3
+    "BU-IH-DN",   # WR 76.0%, 25t, excess +24.3%, MC=0.0083, WF 4/5, PP 3/3
+    "MD-H-MD",    # WR 83.3%, 18t, excess +31.6%, MC=0.0045, WF 5/5, PP 3/3
+    "IH-MD-MD",   # WR 86.7%, 15t, excess +34.9%, MC=0.0033, WF 4/5, PP 2/3
 ]
 
-# SHORT patterns - v1.17: 10 total (removed D-DN-BD)
+# SHORT patterns - v1.20.0: Tier 1.5 (WF>=4, MC<0.03, excess>15)
 VALIDATED_SHORT_PATTERNS: List[str] = [
-    # Existing v1.15
-    "BD-BD-BD",   # WR 84.6%, 13 trades, WF 5/5, p=0.002
-    "DN-DN-BD",   # WR 89.5%, 38 trades, WF 4/5, p<0.001
-    "MU-ST-DN",   # WR 93.9%, 33 trades, WF 5/5, p<0.001
-    "IH-DN-DN",   # WR 88.2%, 17 trades, WF 4/5, p=0.072
-    "BD-ST-DN",   # WR 92.9%, 14 trades, WF 5/5, p=0.002
-    "BU-U-DN",    # WR 83.3%, 36 trades, WF 4/5, p=0.002
-    # REMOVED v1.17: "D-DN-BD" - only 6 trades, p=1.0 (statistically invalid)
-    # NEW v1.16 - Pattern Discovery
-    "U-DN-DN",    # WR 90.1%, 172 trades, WF 4/5, p<0.001 - Reversal Confirmation
-    "DN-U-DN",    # WR 75.8%, 66 trades, WF 4/5, p=0.003 - Lower High
-    "DN-DN-ST",   # WR 83.0%, 53 trades, WF 5/5, p=0.002 - Continuation
-    "U-U-DN",     # WR 74.0%, 77 trades, WF 4/5, p=0.005 - Exhaustion
+    "DN-D-BD",    # WR 67.4%, 46t, excess +19.1%, MC=0.0120, WF 5/5, PP 3/3
+    "BD-U-GS",    # WR 76.5%, 17t, excess +28.2%, MC=0.0238, WF 4/5, PP 3/3
+    "DN-GS-H",    # WR 80.0%, 15t, excess +31.7%, MC=0.0141, WF 4/5, PP 2/3
+    "U-DF-BU",    # WR 76.5%, 17t, excess +28.2%, MC=0.0208, WF 4/5, PP 2/3
+    "BD-GS-BD",   # WR 76.5%, 17t, excess +28.2%, MC=0.0265, WF 4/5, PP 3/3
+    "DN-IH-IH",   # WR 80.0%, 15t, excess +31.7%, MC=0.0162, WF 5/5, PP 3/3
 ]
 
 # ============================================================
 # Pattern Historical Statistics (for confidence calculation)
-# Source: v1.17 production validation (2026-01-26)
+# Source: v1.20.0 unified_pattern_discovery.py (production classification)
 # ============================================================
 PATTERN_STATS = {
-    # LONG patterns (8)
-    "U-BU-U": {"wr": 0.704, "count": 27, "avg_conf": 0.700},
-    "ST-BD-DN": {"wr": 0.909, "count": 11, "avg_conf": 0.850},
-    "DN-DN-DN": {"wr": 0.878, "count": 148, "avg_conf": 0.850},
-    "DN-U-U": {"wr": 0.800, "count": 145, "avg_conf": 0.800},
-    "DN-DN-U": {"wr": 0.834, "count": 145, "avg_conf": 0.820},
-    "DN-ST-U": {"wr": 0.851, "count": 94, "avg_conf": 0.830},
-    "U-ST-U": {"wr": 0.847, "count": 85, "avg_conf": 0.830},
-    "U-U-U": {"wr": 0.719, "count": 89, "avg_conf": 0.720},
-    # SHORT patterns (10) - D-DN-BD REMOVED v1.17
-    "BD-BD-BD": {"wr": 0.846, "count": 13, "avg_conf": 0.820},
-    "DN-DN-BD": {"wr": 0.895, "count": 38, "avg_conf": 0.860},
-    "MU-ST-DN": {"wr": 0.939, "count": 33, "avg_conf": 0.900},
-    "IH-DN-DN": {"wr": 0.882, "count": 17, "avg_conf": 0.850},
-    "BD-ST-DN": {"wr": 0.929, "count": 14, "avg_conf": 0.890},
-    "BU-U-DN": {"wr": 0.833, "count": 36, "avg_conf": 0.810},
-    # REMOVED v1.17: "D-DN-BD" - only 6 trades, p=1.0
-    "U-DN-DN": {"wr": 0.901, "count": 172, "avg_conf": 0.870},
-    "DN-U-DN": {"wr": 0.758, "count": 66, "avg_conf": 0.760},
-    "DN-DN-ST": {"wr": 0.830, "count": 53, "avg_conf": 0.810},
-    "U-U-DN": {"wr": 0.740, "count": 77, "avg_conf": 0.750},
+    # LONG patterns (7) - Tier 1 (WF>=4, MC<0.01, excess>15)
+    "U-MU-H":   {"wr": 0.684, "count": 57, "avg_conf": 0.680},
+    "MD-ST-MD": {"wr": 0.708, "count": 48, "avg_conf": 0.710},
+    "GS-U-BD":  {"wr": 0.760, "count": 25, "avg_conf": 0.760},
+    "MD-MD-ST": {"wr": 0.711, "count": 38, "avg_conf": 0.710},
+    "BU-IH-DN": {"wr": 0.760, "count": 25, "avg_conf": 0.760},
+    "MD-H-MD":  {"wr": 0.833, "count": 18, "avg_conf": 0.830},
+    "IH-MD-MD": {"wr": 0.867, "count": 15, "avg_conf": 0.870},
+    # SHORT patterns (6) - Tier 1.5 (WF>=4, MC<0.03, excess>15)
+    "DN-D-BD":  {"wr": 0.674, "count": 46, "avg_conf": 0.670},
+    "BD-U-GS":  {"wr": 0.765, "count": 17, "avg_conf": 0.770},
+    "DN-GS-H":  {"wr": 0.800, "count": 15, "avg_conf": 0.800},
+    "U-DF-BU":  {"wr": 0.765, "count": 17, "avg_conf": 0.770},
+    "BD-GS-BD": {"wr": 0.765, "count": 17, "avg_conf": 0.770},
+    "DN-IH-IH": {"wr": 0.800, "count": 15, "avg_conf": 0.800},
 }
 
 # Confidence calculation weights
@@ -119,66 +154,38 @@ CONFIDENCE_LOG_FILE = "results/pattern_5m_confidence_log.csv"
 
 
 # ============================================================
-# Pattern-Specific Optimal TP/SL (v1.17)
-# v1.17: Removed D-DN-BD (statistically invalid - only 6 trades, p=1.0)
-# Research: production_pattern_validation.py (2026-01-26)
-# Methodology: Grid search + WF 5-fold validation + statistical significance testing
+# Pattern TP/SL (v1.20.0 Uniform)
+# Research: unified_pattern_discovery.py (production-consistent classification)
+# v1.20.0: Uniform 1.0/1.0 TP/SL, 13 patterns (7L+6S)
+# Validated: 353t, WR 73.7%, MDD 14.8%, PF 2.62, WF 5/5, MC=0.0000
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
-    # LONG patterns (8)
-    'U-BU-U': (1.5, 2.0),     # WR 70.4%, 27 trades, WF 4/5, p=0.091
-    'ST-BD-DN': (2.0, 3.0),   # WR 90.9%, 11 trades, WF 4/5, p=0.004
-    'DN-DN-DN': (1.0, 3.0),   # WR 87.8%, 148 trades, WF 5/5, p<0.001 ⭐
-    'DN-U-U': (1.0, 3.0),     # WR 80.0%, 145 trades, WF 5/5, p=0.107
-    'DN-DN-U': (1.0, 3.0),    # WR 83.4%, 145 trades, WF 4/5, p=0.008
-    'DN-ST-U': (1.0, 3.0),    # WR 85.1%, 94 trades, WF 5/5, p=0.007
-    'U-ST-U': (1.0, 3.0),     # WR 84.7%, 85 trades, WF 5/5, p=0.013
-    'U-U-U': (1.5, 3.0),      # WR 71.9%, 89 trades, WF 4/5, p=0.175
-
-    # SHORT patterns (10) - D-DN-BD REMOVED v1.17
-    'BD-BD-BD': (3.0, 2.5),   # WR 84.6%, 13 trades, WF 5/5, p=0.002
-    'DN-DN-BD': (1.5, 3.0),   # WR 89.5%, 38 trades, WF 4/5, p<0.001 ⭐
-    'MU-ST-DN': (1.0, 2.5),   # WR 93.9%, 33 trades, WF 5/5, p<0.001 ⭐
-    'IH-DN-DN': (1.0, 3.0),   # WR 88.2%, 17 trades, WF 4/5, p=0.072
-    'BD-ST-DN': (1.5, 3.0),   # WR 92.9%, 14 trades, WF 5/5, p=0.002
-    'BU-U-DN': (1.5, 2.5),    # WR 83.3%, 36 trades, WF 4/5, p=0.002
-    # REMOVED v1.17: 'D-DN-BD': (2.5, 2.0), - only 6 trades, p=1.0 (statistically invalid)
-    'U-DN-DN': (1.0, 3.0),    # WR 90.1%, 172 trades, WF 4/5, p<0.001 ⭐
-    'DN-U-DN': (2.0, 3.0),    # WR 75.8%, 66 trades, WF 4/5, p=0.003
-    'DN-DN-ST': (1.5, 3.0),   # WR 83.0%, 53 trades, WF 5/5, p=0.002
-    'U-U-DN': (2.0, 3.0),     # WR 74.0%, 77 trades, WF 4/5, p=0.005
+    # LONG patterns (7)
+    'U-MU-H':   (1.0, 1.0),
+    'MD-ST-MD': (1.0, 1.0),
+    'GS-U-BD':  (1.0, 1.0),
+    'MD-MD-ST': (1.0, 1.0),
+    'BU-IH-DN': (1.0, 1.0),
+    'MD-H-MD':  (1.0, 1.0),
+    'IH-MD-MD': (1.0, 1.0),
+    # SHORT patterns (6)
+    'DN-D-BD':  (1.0, 1.0),
+    'BD-U-GS':  (1.0, 1.0),
+    'DN-GS-H':  (1.0, 1.0),
+    'U-DF-BU':  (1.0, 1.0),
+    'BD-GS-BD': (1.0, 1.0),
+    'DN-IH-IH': (1.0, 1.0),
 }
 
 
 # ============================================================
-# Pattern Context Filters (v1.14)
-# v1.14: Added MU-ST-DN and BD-BD-BD filters from context research
-# Research: pattern_context_comprehensive_research.py (2026-01-26)
+# Pattern Context Filters (v1.19.0)
+# v1.19.0: All old filters removed (old patterns replaced with tight TP/SL patterns)
+# New patterns don't have context filter research yet
 # ============================================================
 
-# Context filter configuration (v1.17)
-# 'required': Must match to take signal (strict filter)
-# 'preferred': Adds confidence bonus if matched (soft filter)
-# 'excluded': Must NOT match to take signal (exclusion filter)
-PATTERN_CONTEXT_FILTERS = {
-    # v1.14 filters
-    'DN-DN-BD': {
-        'required': {'rsi_zone': ['OS']},  # RSI_OS filter, WR +43%
-    },
-    'U-BU-U': {
-        'preferred': {'trend': ['DN']},  # Bonus if downtrend
-    },
-    'IH-DN-DN': {
-        'excluded': {'vol': ['H']},  # Avoid high volatility, WR +23%
-    },
-    'MU-ST-DN': {
-        'preferred': {'position_zone': ['L']},  # +36.2% WR improvement at low position
-    },
-    'BD-BD-BD': {
-        'preferred': {'session': ['ASIA']},  # +29.8% WR improvement in Asia session
-    },
-    # REMOVED v1.17: 'D-DN-BD' filter (pattern itself removed due to insufficient trades)
-}
+# Context filter configuration
+PATTERN_CONTEXT_FILTERS = {}
 
 # Context filter settings
 CONTEXT_FILTER_ENABLED = True  # Master switch for context filters
@@ -229,9 +236,9 @@ AVG_BODY_WINDOW = 20
 # Research: claudedocs/PATTERN_V14_COMPREHENSIVE_RESEARCH_20260124.md
 # ============================================================
 
-# TP/SL (v1.5 optimized: WR 64.7% → 87.6%)
-DEFAULT_TP_PCT = 1.5  # Changed from 2.5 (smaller TP = more frequent hits)
-DEFAULT_SL_PCT = 3.0  # Changed from 2.0 (wider SL = noise filtering)
+# TP/SL (v1.19.0: tight TP/SL for regime-independent edge)
+DEFAULT_TP_PCT = 1.0  # v1.19.0: Tight TP (was 1.5)
+DEFAULT_SL_PCT = 1.0  # v1.19.0: Tight SL (was 3.0)
 
 # Double Exit (scale-out)
 TP1_RATIO = 0.8   # First TP at 80% of full TP
@@ -341,7 +348,7 @@ MAX_EXIT_PRICE_RETRIES = 3
 TP_SL_CHECK_INTERVAL = 20
 DEFAULT_HEALTH_CHECK_INTERVAL = 50
 LOG_STATUS_INTERVAL = 10
-MAX_OHLCV_CANDLES = 100
+MAX_OHLCV_CANDLES = 150  # v1.18.2: Increased from 100 for regime detection (needs 114+)
 METRICS_SAVE_INTERVAL = 10
 CACHE_TTL_SECONDS = 5
 
@@ -368,10 +375,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 88.0  # From v1.15 validation (tighter TP, wider SL)
-EXPECTED_AVG_WIN = 1.5    # Smaller TP targets hit more frequently
-EXPECTED_AVG_LOSS = 2.8   # Wider SL prevents premature stop-outs
-EXPECTED_EDGE = 85.0      # Conservative estimate based on regime-adjusted PnL
+EXPECTED_WIN_RATE = 76.0  # v1.19.0: Average across 15 tight TP/SL patterns
+EXPECTED_AVG_WIN = 1.0    # Tight TP targets (0.3-1.0%)
+EXPECTED_AVG_LOSS = 1.0   # Tight SL (0.3-1.0%)
+EXPECTED_EDGE = 50.0      # Conservative estimate for tight TP/SL
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 
@@ -401,8 +408,8 @@ DEFAULT_CONFIG = {
     'margin_mode': 'crossed',
     'position_size_pct': 95,
     'strategy': {
-        'tp_pct': 1.5,  # v1.15: Tighter TP for higher WR
-        'sl_pct': 3.0,  # v1.15: Wider SL to filter market noise
+        'tp_pct': 1.0,  # v1.19.0: Tight TP (was 1.5)
+        'sl_pct': 1.0,  # v1.19.0: Tight SL (was 3.0)
         'cooldown_candles': 0,
         'long_patterns': VALIDATED_LONG_PATTERNS,
         'short_patterns': VALIDATED_SHORT_PATTERNS,

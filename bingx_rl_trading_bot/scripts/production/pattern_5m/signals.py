@@ -9,6 +9,7 @@ from typing import Dict, Any, Optional, Tuple
 
 import numpy as np
 
+from .indicators import classify_candle
 from .constants import (
     CandleType,
     VALIDATED_LONG_PATTERNS,
@@ -41,79 +42,17 @@ from .constants import (
     VOL_LOW_QUANTILE,
     VOL_HIGH_QUANTILE,
     TREND_LOOKBACK_BARS,
+    # v1.18 Regime Detection
+    MarketRegime,
+    REGIME_DETECTION_ENABLED,
+    REGIME_LOOKBACK_BARS,
+    REGIME_TREND_THRESHOLD,
+    REGIME_VOL_THRESHOLD,
+    REGIME_PATTERNS,
+    DEFAULT_REGIME,
 )
 
 logger = logging.getLogger('pattern_5m')
-
-
-def classify_candle(row: pd.Series, avg_body_20: float) -> CandleType:
-    """
-    Classify a single candle into one of 12 types.
-
-    Classification priority:
-    1. Range == 0 → DOJI
-    2. body_ratio < 0.10 → DOJI/DRAGONFLY/GRAVESTONE
-    3. total_wick_ratio < 0.15 → MARUBOZU_UP/DOWN
-    4. Hammer pattern → HAMMER/INV_HAMMER
-    5. Spinning top → SPINNING_TOP
-    6. Otherwise → BIG/MED based on normalized body
-
-    Args:
-        row: OHLCV row from DataFrame
-        avg_body_20: 20-period average absolute body size
-
-    Returns:
-        CandleType enum value
-    """
-    o, h, l, c = row['open'], row['high'], row['low'], row['close']
-    body = c - o
-    body_abs = abs(body)
-    range_hl = h - l
-
-    # Handle zero range
-    if range_hl == 0:
-        return CandleType.DOJI
-
-    upper_wick = h - max(o, c)
-    lower_wick = min(o, c) - l
-    body_ratio = body_abs / range_hl
-
-    # 1. Doji family (tiny body)
-    if body_ratio < DOJI_BODY_RATIO_THRESHOLD:
-        lower_ratio = lower_wick / range_hl
-        upper_ratio = upper_wick / range_hl
-        if lower_ratio > WICK_DOMINANCE_THRESHOLD:
-            return CandleType.DRAGONFLY
-        elif upper_ratio > WICK_DOMINANCE_THRESHOLD:
-            return CandleType.GRAVESTONE
-        else:
-            return CandleType.DOJI
-
-    # 2. Marubozu (no wicks)
-    total_wick_ratio = (upper_wick + lower_wick) / range_hl
-    if total_wick_ratio < MARUBOZU_WICK_RATIO_THRESHOLD:
-        return CandleType.MARUBOZU_UP if body > 0 else CandleType.MARUBOZU_DOWN
-
-    # 3. Hammer / Inverted Hammer
-    if body_abs > 0:
-        lower_to_body = lower_wick / body_abs
-        upper_to_body = upper_wick / body_abs
-        if lower_to_body > HAMMER_WICK_TO_BODY_RATIO and upper_to_body < HAMMER_OPPOSITE_WICK_RATIO:
-            return CandleType.HAMMER
-        if upper_to_body > HAMMER_WICK_TO_BODY_RATIO and lower_to_body < HAMMER_OPPOSITE_WICK_RATIO:
-            return CandleType.INV_HAMMER
-
-    # 4. Spinning Top
-    norm_body = body_abs / avg_body_20 if avg_body_20 > 0 else 1.0
-    if norm_body < SPINNING_TOP_BODY_NORM and body_abs > 0:
-        if lower_wick > SPINNING_TOP_WICK_RATIO * body_abs and upper_wick > SPINNING_TOP_WICK_RATIO * body_abs:
-            return CandleType.SPINNING_TOP
-
-    # 5. Big or Medium based on normalized body
-    if norm_body > BIG_CANDLE_NORM_THRESHOLD:
-        return CandleType.BIG_UP if body > 0 else CandleType.BIG_DOWN
-    else:
-        return CandleType.MED_UP if body > 0 else CandleType.MED_DOWN
 
 
 def add_candle_classification(df: pd.DataFrame) -> pd.DataFrame:
@@ -165,6 +104,62 @@ def add_candle_classification(df: pd.DataFrame) -> pd.DataFrame:
     df['pattern_3'] = patterns
 
     return df
+
+
+def detect_market_regime(df: pd.DataFrame) -> MarketRegime:
+    """
+    Detect current market regime (v1.18).
+
+    Uses:
+    - Price change over lookback period for trend detection
+    - ATR% for volatility detection
+
+    Regimes:
+    - BULL: price_change > 2%
+    - BEAR: price_change < -2%
+    - SIDEWAYS: -2% <= price_change <= 2%
+
+    Research: regime_adaptive_research.py
+    Distribution: SIDEWAYS 85.8%, BEAR 8.5%, BULL 5.4%
+
+    Args:
+        df: DataFrame with OHLCV data (needs at least REGIME_LOOKBACK_BARS + 14 bars)
+
+    Returns:
+        MarketRegime enum value
+    """
+    if not REGIME_DETECTION_ENABLED:
+        return DEFAULT_REGIME
+
+    min_bars = REGIME_LOOKBACK_BARS + 14  # Need lookback + ATR period
+    if len(df) < min_bars:
+        logger.debug(f"Not enough data for regime detection ({len(df)} < {min_bars}), using {DEFAULT_REGIME.value}")
+        return DEFAULT_REGIME
+
+    try:
+        # Calculate price change over lookback period
+        current_close = df.iloc[-2]['close']  # Last complete candle
+        past_close = df.iloc[-2 - REGIME_LOOKBACK_BARS]['close']
+        price_change = (current_close - past_close) / past_close * 100
+
+        # Determine regime based on price change
+        if price_change > REGIME_TREND_THRESHOLD:
+            regime = MarketRegime.BULL
+        elif price_change < -REGIME_TREND_THRESHOLD:
+            regime = MarketRegime.BEAR
+        else:
+            regime = MarketRegime.SIDEWAYS
+
+        logger.debug(
+            f"📊 Regime detected: {regime.value} | "
+            f"Price change ({REGIME_LOOKBACK_BARS} bars): {price_change:+.2f}%"
+        )
+
+        return regime
+
+    except Exception as e:
+        logger.warning(f"Regime detection error: {e}, using {DEFAULT_REGIME.value}")
+        return DEFAULT_REGIME
 
 
 def calculate_context(df: pd.DataFrame) -> Dict[str, Any]:
@@ -418,6 +413,7 @@ def check_entry_signal(
     """
     Check for entry signals based on 3-candle patterns.
 
+    v1.18: Regime-Adaptive strategy - use regime-specific patterns
     v1.7: Added context filter support (RSI/Vol/Trend)
 
     Args:
@@ -449,18 +445,41 @@ def check_entry_signal(
 
     signal = None
     reason = None
+    regime_tp_sl = None  # v1.18: Regime-specific TP/SL
 
-    # Check LONG patterns
-    long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
-    if pattern in long_patterns:
-        signal = 'LONG'
-        reason = f"Pattern: {pattern} (LONG)"
+    # v1.18: Detect market regime and use regime-specific patterns
+    if REGIME_DETECTION_ENABLED:
+        regime = detect_market_regime(df)
+        regime_name = regime.value
 
-    # Check SHORT patterns
-    short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
-    if pattern in short_patterns:
-        signal = 'SHORT'
-        reason = f"Pattern: {pattern} (SHORT)"
+        # Get patterns for current regime
+        regime_patterns = REGIME_PATTERNS.get(regime_name, {})
+
+        if pattern in regime_patterns:
+            direction, tp, sl = regime_patterns[pattern]
+            signal = direction
+            reason = f"Pattern: {pattern} ({direction}) | Regime: {regime_name}"
+            regime_tp_sl = (tp, sl)  # Store for later use
+            state['current_regime'] = regime_name
+            state['regime_tp_sl'] = regime_tp_sl
+
+            logger.info(
+                f"📊 Regime-Adaptive Signal: {pattern} → {direction} | "
+                f"Regime: {regime_name} | TP={tp}%, SL={sl}%"
+            )
+    else:
+        # Fallback to v1.17 behavior (non-regime-adaptive)
+        # Check LONG patterns
+        long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
+        if pattern in long_patterns:
+            signal = 'LONG'
+            reason = f"Pattern: {pattern} (LONG)"
+
+        # Check SHORT patterns
+        short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
+        if pattern in short_patterns:
+            signal = 'SHORT'
+            reason = f"Pattern: {pattern} (SHORT)"
 
     if signal:
         # v1.7: Context filter check

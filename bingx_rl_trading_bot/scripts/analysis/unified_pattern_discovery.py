@@ -109,15 +109,12 @@ def classify_candle(o, h, l, c, avg_body_20):
 
 print("Classifying candles...")
 body_abs_arr = np.abs(closes - opens)
-avg_body_20_arr = pd.Series(body_abs_arr).rolling(20).mean().values  # NaN for bars 0-19, matching production
-AVG_BODY_WINDOW = 20
-types = []
-for i in range(n_bars):
-    if i < AVG_BODY_WINDOW or pd.isna(avg_body_20_arr[i]):
-        # Match production: force MED_UP/MED_DOWN for early bars
-        types.append('U' if (closes[i] - opens[i]) >= 0 else 'DN')
-    else:
-        types.append(classify_candle(opens[i], highs[i], lows[i], closes[i], avg_body_20_arr[i]))
+avg_body_20_arr = pd.Series(body_abs_arr).rolling(20).mean().values  # NaN for bars 0-19
+# For early bars: use default avg_body_20=1.0 to preserve range-based classification
+# (DOJI, HAMMER, DRAGONFLY, GRAVESTONE, MARUBOZU) while norm_body defaults conservatively
+types = [classify_candle(opens[i], highs[i], lows[i], closes[i],
+                         avg_body_20_arr[i] if not pd.isna(avg_body_20_arr[i]) else 1.0)
+         for i in range(n_bars)]
 
 # Count type distribution
 from collections import Counter

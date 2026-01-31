@@ -38,7 +38,7 @@ df['body_abs'] = df['body'].abs()
 df['range'] = df['high'] - df['low']
 df['upper_wick'] = df['high'] - df[['open', 'close']].max(axis=1)
 df['lower_wick'] = df[['open', 'close']].min(axis=1) - df['low']
-df['avg_body'] = df['body_abs'].rolling(20).mean()  # NaN for bars 0-19, matching production
+df['avg_body'] = df['body_abs'].rolling(20).mean().fillna(1.0)  # default 1.0 for early bars: preserves range-based classification
 df['norm_body'] = df['body_abs'] / df['avg_body'].replace(0, 1)
 df['body_ratio'] = df['body_abs'] / df['range'].replace(0, 1)
 df['upper_ratio'] = df['upper_wick'] / df['range'].replace(0, 1)

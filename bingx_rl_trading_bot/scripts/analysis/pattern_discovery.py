@@ -56,7 +56,7 @@ def classify_candles(df: pd.DataFrame) -> pd.DataFrame:
     df['lower_wick'] = df[['open', 'close']].min(axis=1) - df['low']
 
     # Rolling average for normalization
-    df['avg_body'] = df['body_abs'].rolling(20).mean()  # NaN for bars 0-19, matching production
+    df['avg_body'] = df['body_abs'].rolling(20).mean().fillna(1.0)  # default 1.0 for early bars: preserves range-based classification
     df['norm_body'] = df['body_abs'] / df['avg_body'].replace(0, 1)
 
     # Ratios

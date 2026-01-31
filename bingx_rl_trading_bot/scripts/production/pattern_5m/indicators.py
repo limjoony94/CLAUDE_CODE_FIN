@@ -113,16 +113,15 @@ def calculate_indicators(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFra
     df['avg_body_20'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
 
     # Classify each candle
+    # For bars 0-19: avg_body_20 is NaN, so use default=1.0
+    # This preserves range-based types (DOJI, HAMMER, DRAGONFLY, GRAVESTONE, MARUBOZU)
+    # while norm_body-dependent types (SPINNING_TOP, BIG) default conservatively
     candle_types = []
     for i in range(len(df)):
-        if i < AVG_BODY_WINDOW or pd.isna(df.iloc[i]['avg_body_20']):
-            candle_types.append(
-                CandleType.MED_UP if df.iloc[i]['body'] >= 0 else CandleType.MED_DOWN
-            )
-        else:
-            candle_types.append(
-                classify_candle(df.iloc[i], df.iloc[i]['avg_body_20'])
-            )
+        avg_b = df.iloc[i]['avg_body_20']
+        if pd.isna(avg_b):
+            avg_b = 1.0  # default: preserves range-based classification
+        candle_types.append(classify_candle(df.iloc[i], avg_b))
 
     df['candle_type'] = candle_types
     df['type_code'] = [ct.value for ct in candle_types]

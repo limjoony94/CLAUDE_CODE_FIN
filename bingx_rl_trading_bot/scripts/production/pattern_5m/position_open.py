@@ -162,12 +162,19 @@ def open_position(
         if reason and 'Pattern:' in reason:
             pattern = reason.split('Pattern:')[-1].strip().split()[0]
 
+        # v1.18: Get regime-specific TP/SL from state (set by check_entry_signal)
+        regime_tp_sl = state.get('regime_tp_sl')
+        current_regime = state.get('current_regime', 'UNKNOWN')
+
         tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = _calculate_tp_sl(
-            actual_entry_price, direction, strategy, vol_mult, pattern
+            actual_entry_price, direction, strategy, vol_mult, pattern, regime_tp_sl
         )
 
-        # v1.6: Log pattern-specific TP/SL usage
-        if pattern and pattern in PATTERN_OPTIMAL_TPSL:
+        # v1.18: Log regime-specific TP/SL usage
+        if regime_tp_sl:
+            logger.info(f"[v1.18] Regime-specific TP/SL: {current_regime} | {pattern} → TP={regime_tp_sl[0]}%, SL={regime_tp_sl[1]}%")
+        # v1.6: Log pattern-specific TP/SL usage (fallback)
+        elif pattern and pattern in PATTERN_OPTIMAL_TPSL:
             opt_tp, opt_sl = PATTERN_OPTIMAL_TPSL[pattern]
             logger.info(f"[v1.6] Pattern-specific TP/SL: {pattern} → TP={opt_tp}%, SL={opt_sl}%")
         logger.info(f"TP: ${tp_price:.1f} ({tp_pct_adjusted:.2f}%) | SL: ${sl_price:.1f} ({sl_pct_adjusted:.2f}%)")
@@ -198,6 +205,9 @@ def open_position(
             'avg_entry_price': actual_entry_price,
             'total_entries': 1,
             'refill_entries': [],
+            # v1.18: Regime-adaptive fields
+            'market_regime': current_regime,
+            'regime_tp_sl': regime_tp_sl,
         }
         state['last_signal_time'] = datetime.now().isoformat()
 
@@ -265,7 +275,7 @@ def _verify_no_existing_position(
 def _set_leverage(exchange: ccxt.bingx, symbol: str, leverage: int) -> None:
     """Set leverage for the symbol."""
     try:
-        exchange.set_leverage(leverage, symbol)
+        exchange.set_leverage(leverage, symbol, params={'side': 'BOTH'})
     except ccxt.ExchangeError as e:
         if 'No need to change' in str(e) or 'same' in str(e).lower():
             pass  # Already set
@@ -322,13 +332,19 @@ def _calculate_tp_sl(
     strategy: Dict[str, Any],
     vol_mult: float,
     pattern: Optional[str] = None,
+    regime_tp_sl: Optional[tuple] = None,
 ) -> tuple:
     """Calculate TP and SL prices.
 
+    v1.18: Priority: regime_tp_sl > PATTERN_OPTIMAL_TPSL > strategy defaults
     v1.6: Uses pattern-specific TP/SL from PATTERN_OPTIMAL_TPSL if available.
     """
+    # v1.18: Check for regime-specific TP/SL first (highest priority)
+    if regime_tp_sl:
+        base_tp_pct, base_sl_pct = regime_tp_sl
+        logger.debug(f"Using regime-specific TP/SL: TP={base_tp_pct}%, SL={base_sl_pct}%")
     # v1.6: Check for pattern-specific optimal TP/SL
-    if pattern and pattern in PATTERN_OPTIMAL_TPSL:
+    elif pattern and pattern in PATTERN_OPTIMAL_TPSL:
         base_tp_pct, base_sl_pct = PATTERN_OPTIMAL_TPSL[pattern]
         logger.debug(f"Using pattern-specific TP/SL for {pattern}: TP={base_tp_pct}%, SL={base_sl_pct}%")
     else:

@@ -10,7 +10,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.22.0"  # v1.22.0: Remove DN-D-BD (overfitting diagnosis: MC=0.2390, Holm fail)
+BOT_VERSION = "1.23.0"  # v1.23.0: Stability hardening (atomic state, circuit breaker backoff, ghost detection)
 # 12 patterns (7L+5S), WR 80.3%, MDD 23.7%, PF 3.36, WF 5/5
 
 # ============================================================

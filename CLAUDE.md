@@ -198,7 +198,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.22.0** | 02-01 | DN-D-BD 제거 (과적합), WR 80.3%, PF 3.36 ← **현재** |
+| **v1.23.0** | 02-02 | 안정성 강화: Atomic state save, CB exponential backoff, ghost detection ← **현재** |
+| **v1.22.0** | 02-01 | DN-D-BD 제거 (과적합), WR 80.3%, PF 3.36 |
 | v1.21.1 | 02-01 | Leverage side fix + state cleanup |
 | v1.21.0 | 02-01 | Conservative Per-Pattern TP/SL |
 | v1.20.1 | 02-01 | Improved early-bar classification |

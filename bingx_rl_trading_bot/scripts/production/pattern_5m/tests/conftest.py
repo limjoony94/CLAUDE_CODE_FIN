@@ -1,41 +1,16 @@
-"""Shared fixtures for pattern_5m tests."""
+"""Pytest configuration for pattern_5m tests.
 
+Sets up sys.path to allow imports from bingx_rl_trading_bot package.
+"""
 import sys
-import os
-import pytest
-import pandas as pd
-import numpy as np
+from pathlib import Path
 
-# Add parent package to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', '..'))
-
-
-@pytest.fixture
-def make_candle():
-    """Factory fixture to create a single candle row."""
-    def _make(open_: float, high: float, low: float, close: float):
-        return pd.Series({
-            'open': open_, 'high': high, 'low': low, 'close': close,
-        })
-    return _make
-
-
-@pytest.fixture
-def make_df():
-    """Factory fixture to create a DataFrame with OHLCV data."""
-    def _make(rows: list[tuple], columns=('open', 'high', 'low', 'close')):
-        df = pd.DataFrame(rows, columns=list(columns))
-        return df
-    return _make
-
-
-@pytest.fixture
-def avg_body_default():
-    """Default avg_body_20 value used for early bars."""
-    return 1.0
-
-
-@pytest.fixture
-def avg_body_typical():
-    """Typical avg_body_20 for BTC 5m candles (~50-100 USD)."""
-    return 80.0
+# Add CLAUDE_CODE_FIN to sys.path to enable:
+# from bingx_rl_trading_bot.scripts.production.pattern_5m import ...
+#
+# Path resolution:
+# __file__ = .../CLAUDE_CODE_FIN/bingx_rl_trading_bot/scripts/production/pattern_5m/tests/conftest.py
+# .parents[4] = bingx_rl_trading_bot/
+# .parents[5] = CLAUDE_CODE_FIN/
+PROJECT_ROOT = Path(__file__).resolve().parents[5]
+sys.path.insert(0, str(PROJECT_ROOT))

@@ -11,3 +11,21 @@ bingx_rl_trading_bot/data/labels/*.csv
 bingx_rl_trading_bot/models/*.pkl
 bingx_rl_trading_bot/data/trained_models/**/*.pkl
 *.bat
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Logs
+*.log
+bingx_rl_trading_bot/logs/
+
+# IDE
+.vscode/
+.idea/

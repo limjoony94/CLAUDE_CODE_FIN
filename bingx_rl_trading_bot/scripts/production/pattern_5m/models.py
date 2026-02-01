@@ -12,6 +12,9 @@ from .constants import (
     CACHE_TTL_SECONDS,
     CB_FAILURE_THRESHOLD,
     CB_RESET_TIMEOUT,
+    CB_INITIAL_TIMEOUT,
+    CB_MAX_TIMEOUT,
+    CB_BACKOFF_MULTIPLIER,
     EXPECTED_WIN_RATE,
     EXPECTED_AVG_WIN,
     EXPECTED_AVG_LOSS,
@@ -74,34 +77,48 @@ class APICache:
 
 @dataclass
 class CircuitBreaker:
-    """Circuit breaker for API error handling."""
+    """Circuit breaker for API error handling with exponential backoff."""
 
     failure_count: int = 0
     failure_threshold: int = CB_FAILURE_THRESHOLD
     reset_timeout: float = CB_RESET_TIMEOUT
     last_failure_time: float = 0
     is_open: bool = False
+    backoff_level: int = 0  # Exponential backoff level (0, 1, 2, ...)
 
     def record_failure(self) -> None:
-        """Record an API failure."""
+        """Record an API failure and increment backoff level."""
         self.failure_count += 1
         self.last_failure_time = time.time()
         if self.failure_count >= self.failure_threshold:
-            self.is_open = True
+            if not self.is_open:
+                # First time opening circuit breaker
+                self.is_open = True
+            else:
+                # Already open, increment backoff level
+                self.backoff_level += 1
 
     def record_success(self) -> None:
-        """Record a successful API call."""
+        """Record a successful API call and reset backoff."""
         self.failure_count = 0
         self.is_open = False
+        self.backoff_level = 0  # Reset backoff on success
+
+    def _get_current_timeout(self) -> float:
+        """Calculate current timeout based on backoff level."""
+        timeout = CB_INITIAL_TIMEOUT * (CB_BACKOFF_MULTIPLIER ** self.backoff_level)
+        return min(timeout, CB_MAX_TIMEOUT)
 
     def can_execute(self) -> bool:
         """Check if API calls are allowed."""
         if not self.is_open:
             return True
-        # Check if reset timeout has passed
-        if (time.time() - self.last_failure_time) >= self.reset_timeout:
+        # Check if reset timeout has passed (with exponential backoff)
+        current_timeout = self._get_current_timeout()
+        if (time.time() - self.last_failure_time) >= current_timeout:
             self.is_open = False
             self.failure_count = 0
+            # Keep backoff_level for next failure (only reset on success)
             return True
         return False
 
@@ -109,7 +126,8 @@ class CircuitBreaker:
         """Get remaining wait time before circuit breaker resets."""
         if not self.is_open:
             return 0
-        remaining = self.reset_timeout - (time.time() - self.last_failure_time)
+        current_timeout = self._get_current_timeout()
+        remaining = current_timeout - (time.time() - self.last_failure_time)
         return max(0, remaining)
 
 

@@ -367,6 +367,11 @@ POSITION_SYNC_INTERVAL_MINUTES = 5
 CB_FAILURE_THRESHOLD = 5
 CB_RESET_TIMEOUT = 60.0
 
+# Exponential backoff parameters
+CB_INITIAL_TIMEOUT = 60.0      # 1st open: 60 seconds
+CB_MAX_TIMEOUT = 600.0         # Max timeout: 600 seconds (10 min)
+CB_BACKOFF_MULTIPLIER = 2.0    # 2x each failure
+
 # ============================================================
 # API RETRY DEFAULTS
 # ============================================================

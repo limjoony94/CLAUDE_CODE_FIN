@@ -1,10 +1,10 @@
 # CLAUDE_CODE_FIN - Trading Bot Workspace
 
-**Last Updated**: 2026-01-31 KST | **Active Bot**: Pattern 5m v1.20.0 (Unified Classification Re-discovery)
+**Last Updated**: 2026-02-01 KST | **Active Bot**: Pattern 5m v1.21.0 (Conservative Per-Pattern TP/SL)
 
 ---
 
-## Active Bot: Pattern 5m v1.20.0 (Unified Classification)
+## Active Bot: Pattern 5m v1.21.0 (Conservative Per-Pattern TP/SL)
 
 | 항목 | 값 |
 |------|-----|
@@ -14,55 +14,54 @@
 | **상태** | `results/pattern_5m_bot_state.json` |
 | **메트릭** | `results/pattern_5m_metrics.json` |
 
-### Unified Classification Re-discovery (v1.20.0)
+### Conservative Per-Pattern TP/SL (v1.21.0)
 
-> **Research**: [unified_pattern_discovery.py](bingx_rl_trading_bot/scripts/analysis/unified_pattern_discovery.py)
+> **Research**: [per_pattern_tpsl_optimization.py](bingx_rl_trading_bot/scripts/analysis/per_pattern_tpsl_optimization.py), [portfolio_tpsl_comparison.py](bingx_rl_trading_bot/scripts/analysis/portfolio_tpsl_comparison.py)
 
-**핵심**: v1.19.2까지 연구 스크립트와 프로덕션의 캔들 분류가 불일치 (연구: body/range, 프로덕션: avg_body_20 정규화). v1.20.0에서 프로덕션 분류체계로 1,728패턴 재발굴.
+**핵심**: 개별 패턴 MC<0.01만 per-pattern TP/SL 적용, 나머지는 uniform 1.0/1.0 유지 (Conservative 전략)
 
-**v1.20.0 변경** (v1.19.2 → v1.20.0):
-- 프로덕션 분류체계(avg_body_20)로 전체 재발굴
-- 21패턴(10L+11S) → **13패턴(7L+6S)** (LONG Tier1: MC<0.01, SHORT Tier1.5: MC<0.03)
-- MDD 32.9% → **14.8%**, PF 1.52 → **2.62**, WF 4/5 → **5/5**
+**v1.21.0 변경** (v1.20.1 → v1.21.0):
+- 균일 1.0/1.0 → **Conservative per-pattern TP/SL** (8/13 optimized, 5/13 uniform)
+- Portfolio 검증: WR 73.7→**78.5%**, PF 2.59→**3.19**, MDD 14.6→20.6%
+- 13 패턴 유지 (7L+6S), 레짐 비활성화 유지
 
-### 270-Day Validation (v1.20.0)
+### 270-Day Validation (v1.21.0)
 
 > **Data**: 2025-05-05 ~ 2026-01-30 (77,760 bars, H1: +22.6%, H2: -5.3%, H3: -24.2%)
 
-| 지표 | v1.20.0 (Unified Classification) |
-|------|----------------------------------|
-| **Patterns** | **13 (7L+6S)** |
-| **TP / SL** | **1.0% / 1.0% (전 패턴 균일)** |
-| **Trades** | **353** |
-| **WR** | **73.7%** |
-| **WF** | **5/5** |
-| **MC p-value** | **0.0000** |
-| **Max DD** | **14.8%** |
-| **PF** | **2.62** |
-| **3/3 Period Profit** | ✅ |
+| 지표 | v1.21.0 (Conservative) | v1.20.1 (Uniform) |
+|------|------------------------|-------------------|
+| **Patterns** | 13 (7L+6S) | 13 (7L+6S) |
+| **TP / SL** | **Per-pattern (아래 표)** | 1.0% / 1.0% 균일 |
+| **Trades** | **312** | 353 |
+| **WR** | **78.5%** | 73.7% |
+| **WF** | **5/5** | 5/5 |
+| **Max DD** | 20.6% | 14.8% |
+| **PF** | **3.19** | 2.59 |
+| **3/3 Period Profit** | ✅ | ✅ |
 
-**LONG Patterns (7)** — Tier 1 (WF≥4, MC<0.01, excess>15), 균일 TP 1.0% / SL 1.0%:
+**LONG Patterns (7)**:
 
-| Pattern | Trades | WR | Excess | MC | WF | PP |
-|---------|--------|-----|--------|--------|-----|-----|
-| U-MU-H | 57 | 68.4% | +16.7% | 0.0033 | 4/5 | 3/3 |
-| MD-ST-MD | 48 | 70.8% | +19.1% | 0.0023 | 4/5 | 3/3 |
-| GS-U-BD | 25 | 76.0% | +24.3% | 0.0069 | 4/5 | 2/3 |
-| MD-MD-ST | 38 | 71.1% | +19.3% | 0.0062 | 5/5 | 3/3 |
-| BU-IH-DN | 25 | 76.0% | +24.3% | 0.0083 | 4/5 | 3/3 |
-| MD-H-MD | 18 | 83.3% | +31.6% | 0.0045 | 5/5 | 3/3 |
-| IH-MD-MD | 15 | 86.7% | +34.9% | 0.0033 | 4/5 | 2/3 |
+| Pattern | TP/SL | Trades | WR | MC | WF | Note |
+|---------|-------|--------|-----|--------|-----|------|
+| U-MU-H | **1.5/1.5** | 57 | 68.4% | 0.0000 | 4/5 | optimized |
+| MD-ST-MD | **2.0/2.0** | 48 | 70.8% | 0.0078 | 4/5 | optimized |
+| GS-U-BD | 1.0/1.0 | 25 | 76.0% | 0.0372 | 4/5 | uniform (MC>0.01) |
+| MD-MD-ST | **1.5/2.0** | 38 | 71.1% | 0.0002 | 5/5 | optimized |
+| BU-IH-DN | **1.5/2.0** | 25 | 76.0% | 0.0022 | 4/5 | optimized |
+| MD-H-MD | 1.0/1.0 | 18 | 83.3% | 0.0014 | 5/5 | uniform best |
+| IH-MD-MD | **1.5/2.0** | 15 | 86.7% | 0.0020 | 4/5 | optimized |
 
-**SHORT Patterns (6)** — Tier 1.5 (WF≥4, MC<0.03, excess>15), 균일 TP 1.0% / SL 1.0%:
+**SHORT Patterns (6)**:
 
-| Pattern | Trades | WR | Excess | MC | WF | PP |
-|---------|--------|-----|--------|--------|-----|-----|
-| DN-D-BD | 46 | 67.4% | +19.1% | 0.0120 | 5/5 | 3/3 |
-| BD-U-GS | 17 | 76.5% | +28.2% | 0.0238 | 4/5 | 3/3 |
-| DN-GS-H | 15 | 80.0% | +31.7% | 0.0141 | 4/5 | 2/3 |
-| U-DF-BU | 17 | 76.5% | +28.2% | 0.0208 | 4/5 | 2/3 |
-| BD-GS-BD | 17 | 76.5% | +28.2% | 0.0265 | 4/5 | 3/3 |
-| DN-IH-IH | 15 | 80.0% | +31.7% | 0.0162 | 5/5 | 3/3 |
+| Pattern | TP/SL | Trades | WR | MC | WF | Note |
+|---------|-------|--------|-----|--------|-----|------|
+| DN-D-BD | 1.0/1.0 | 46 | 67.4% | 0.2390 | 5/5 | uniform (MC fail) |
+| BD-U-GS | **1.5/2.0** | 17 | 76.5% | 0.0042 | 4/5 | optimized |
+| DN-GS-H | 1.0/1.0 | 15 | 80.0% | 0.0176 | 4/5 | uniform (MC>0.01) |
+| U-DF-BU | **1.0/1.5** | 17 | 76.5% | 0.0010 | 4/5 | optimized |
+| BD-GS-BD | 1.0/1.0 | 17 | 76.5% | 0.0120 | 4/5 | uniform (MC>0.01) |
+| DN-IH-IH | **1.0/1.5** | 15 | 80.0% | 0.0000 | 5/5 | optimized |
 
 ### Strategy Overview
 
@@ -87,7 +86,7 @@
 | 파라미터 | 값 | 비고 |
 |---------|-----|------|
 | Entry | 3-candle pattern match | 12-type classification |
-| **TP / SL** | **1.0% / 1.0% (균일)** | **v1.20.0: 전 패턴 동일** |
+| **TP / SL** | **Per-pattern (1.0-2.0%)** | **v1.21.0: MC<0.01 optimized** |
 | **Regime** | **비활성화** | **v1.19.0~: tight TP/SL은 레짐 독립적** |
 | Double Exit | 50%@0.8x + 50%@1.0x | Scale-out strategy |
 | Leverage | 3x (effective) | Position sizing 기준 |
@@ -120,8 +119,7 @@
 | **Early Exit (v1.13)** | 3x BD/BU 연속 출현 + 0.3% 이익 시 조기청산 |
 | **TP/SL Auto-Adjust (v1.17)** | 봇 시작 시 기존 포지션의 TP/SL을 config에 맞게 자동 조정 |
 | **Context Filters (v1.14)** | RSI/Vol/Trend/Position/Session 기반 필터링 |
-| **Regime-Adaptive (v1.18)** | BULL/BEAR/SIDEWAYS 레짐별 패턴 + TP/SL 자동 선택 |
-| **Unified Classification (v1.20.0)** | 프로덕션 분류체계 재발굴, 13패턴 (7L+6S), MDD 14.8%, PF 2.62 |
+| **Per-Pattern TP/SL (v1.21.0)** | MC<0.01 패턴 개별 최적화, 나머지 uniform 유지 |
 
 ### Commands
 
@@ -135,18 +133,20 @@ MONITOR_PATTERN_5M.bat  # 모니터링
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.20.0** | 01-31 | **Unified Classification Re-discovery** - 연구/프로덕션 분류 불일치 수정, avg_body_20 기반 1,728패턴 재발굴, 21→13패턴(7L+6S), MDD 14.8%, PF 2.62, WF 5/5, MC=0.0000 ← **현재 운영** |
-| v1.19.2 | 01-30 | Uniform 1.0/1.0 TP/SL (분류 불일치 상태) |
-| v1.19.1 | 01-30 | 21-Pattern Expansion - Tier 1 패턴 6개 추가, 15→21 패턴 |
-| v1.19.0 | 01-30 | Tight TP/SL Regime-Independent - Wide TP/SL 비대칭 편향 발견, 0.3-1.0% tight TP/SL로 전환, 8L+7S, regime 비활성화, 270일 66개 검증 → 15개 선정 |
-| v1.18.2 | 01-30 | Regime Threshold 최적화 - ±2.0% → ±1.5% (270일 검증) |
+| **v1.21.0** | 02-01 | **Conservative Per-Pattern TP/SL** - MC<0.01 패턴 개별 최적화 (8/13), 나머지 uniform, WR 78.5%, PF 3.19, WF 5/5 ← **현재 운영** |
+| v1.20.1 | 02-01 | Improved early-bar classification (default avg_body_20=1.0) |
+| v1.20.0 | 01-31 | Unified Classification Re-discovery - 연구/프로덕션 분류 불일치 수정, 21→13패턴(7L+6S), MDD 14.8%, PF 2.62 |
+| v1.19.2 | 01-30 | Uniform 1.0/1.0 TP/SL |
+| v1.19.1 | 01-30 | 21-Pattern Expansion |
+| v1.19.0 | 01-30 | Tight TP/SL Regime-Independent |
+| v1.18.2 | 01-30 | Regime Threshold 최적화 |
 | v1.18.1 | 01-27 | Regime-Aware TP/SL Auto-Adjust Fix |
-| v1.18 | 01-27 | Regime-Adaptive Strategy - BULL/BEAR/SIDEWAYS 레짐별 패턴 + TP/SL, WF 5/5 |
-| v1.17 | 01-26 | Statistical Validation + TP/SL Auto-Adjustment - D-DN-BD 제거, 18개 패턴 검증 |
-| v1.16 | 01-26 | Pattern Discovery Expansion - 1,728 패턴 전수검사 |
+| v1.18 | 01-27 | Regime-Adaptive Strategy |
+| v1.17 | 01-26 | Statistical Validation + TP/SL Auto-Adjustment |
+| v1.16 | 01-26 | Pattern Discovery Expansion |
 | v1.15 | 01-26 | Regime-Validated TP/SL |
 | v1.14 | 01-26 | Context Research Optimization |
-| v1.13 | 01-25 | Early Exit Optimization - confirm_candles 2→3 |
+| v1.13 | 01-25 | Early Exit Optimization |
 | v1.12 | 01-25 | Statistical Validity Optimization |
 | v1.11 | 01-25 | DN-BD-BD Pattern Added |
 | v1.10 | 01-25 | WF-Validated TP/SL + RSI Filter |
@@ -175,7 +175,7 @@ bingx_rl_trading_bot/
 │   │   ├── __init__.py
 │   │   ├── bot.py              ← 메인 루프 + Early Exit + TP/SL 자동 조정 호출
 │   │   ├── config.py           ← 설정 관리
-│   │   ├── constants.py        ← 상수 + v1.20.0 패턴/TP/SL ★
+│   │   ├── constants.py        ← 상수 + v1.21.0 per-pattern TP/SL ★
 │   │   ├── exchange.py         ← API 인터페이스
 │   │   ├── indicators.py       ← 기술 지표
 │   │   ├── models.py           ← 데이터클래스
@@ -191,7 +191,9 @@ bingx_rl_trading_bot/
 │   │       └── logging_config.py
 │   └── engulf_5m/              ← (Archived) Engulf bot
 ├── scripts/analysis/           ← 연구 스크립트
-│   ├── unified_pattern_discovery.py                  ← v1.20.0 통합 재발굴 ★
+│   ├── per_pattern_tpsl_optimization.py             ← v1.21.0 패턴별 TP/SL 최적화 ★
+│   ├── portfolio_tpsl_comparison.py                 ← v1.21.0 포트폴리오 비교 ★
+│   ├── unified_pattern_discovery.py                 ← v1.20.0 통합 재발굴
 │   ├── deploy_comparison.py                         ← 배포 비교 검증
 │   ├── tpsl_sensitivity_corrected.py                ← TP/SL 민감도 분석
 │   ├── tight_tpsl_validation.py                     ← v1.19.0 tight TP/SL 검증
@@ -202,7 +204,7 @@ bingx_rl_trading_bot/
 │   ├── pattern_discovery_optimized.py               ← v1.16 패턴 발굴
 │   └── early_exit_deep_analysis.py                  ← Early Exit 연구
 ├── data/
-│   ├── btc_5m_270days.csv      ← 270일 데이터 (Binance, 2025-05~2026-01) ★
+│   ├── btc_5m_270days.csv      ← 270일 데이터 (Binance, 2025-05~2026-01)
 │   ├── btc_5m_extended.csv     ← 105일 데이터 (BingX)
 │   └── btc_5m_90days_*.csv
 ├── claudedocs/
@@ -218,7 +220,7 @@ bingx_rl_trading_bot/
 └── *.bat (START, STOP, MONITOR)
 ```
 
-★ = v1.20.0에서 수정/추가된 파일
+★ = v1.21.0에서 수정/추가된 파일
 
 ---
 

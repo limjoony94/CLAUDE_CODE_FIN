@@ -6,3 +6,8 @@ bingx_rl_trading_bot/data/features/*.csv
 bingx_rl_trading_bot/data/labels/*.csv
 # Keep smaller files
 !bingx_rl_trading_bot/data/features/*_raw_*.csv
+
+# Legacy cleanup
+bingx_rl_trading_bot/models/*.pkl
+bingx_rl_trading_bot/data/trained_models/**/*.pkl
+*.bat

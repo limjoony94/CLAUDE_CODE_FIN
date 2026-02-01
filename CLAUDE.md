@@ -277,6 +277,24 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 ---
 
+## OpenClaw 멀티 에이전트 환경
+
+> **문서**: [docs/agent-guides.md](docs/agent-guides.md), [docs/restructure-plan.md](docs/restructure-plan.md)
+
+| 에이전트 | 채널 | 역할 |
+|---------|------|------|
+| **dev** | #dev | 코드 수정, 전략 연구, 백테스트, CLAUDE.md 관리 |
+| **automation** | #automation | 봇 프로세스 관리 (tmux), 크래시 복구 |
+| **monitor** | #monitor | 성과 모니터링, MDD/WR 알림, 일일 리포트 |
+
+**메트릭 접근 경로**:
+- 봇 상태: `results/pattern_5m_bot_state.json`
+- 성과 메트릭: `results/pattern_5m_metrics.json`
+- 운영 로그: `logs/pattern_5m_bot_*.log`
+- 전략 설정: `config/pattern_5m_config.yaml`
+
+---
+
 ## MCP Quick Reference
 
 | 작업 | MCP | 예시 |

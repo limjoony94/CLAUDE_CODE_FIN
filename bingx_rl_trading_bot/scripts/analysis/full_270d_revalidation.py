@@ -11,6 +11,9 @@ import json, os, sys, time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
+# Import canonical classification
+from scripts.production.pattern_5m.indicators import classify_candle
+
 print('=' * 70)
 print('FULL 270-DAY REVALIDATION PIPELINE v4')
 print(f'Started: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
@@ -50,49 +53,22 @@ data_path = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'btc_5m_
 df = pd.read_csv(data_path)
 print(f'Loaded: {len(df)} bars, {df["timestamp"].iloc[0]} ~ {df["timestamp"].iloc[-1]}')
 
-# Candle classification
-# TODO: Replace this inline vectorized classification with the canonical
-# classify_candle() from bingx_rl_trading_bot.scripts.production.pattern_5m.indicators
-# to eliminate classification logic duplication. See docs/classification-unification.md
-df['body'] = df['close'] - df['open']
-df['body_abs'] = df['body'].abs()
-df['range'] = df['high'] - df['low']
-df['upper_wick'] = df['high'] - df[['open', 'close']].max(axis=1)
-df['lower_wick'] = df[['open', 'close']].min(axis=1) - df['low']
-df['avg_body'] = df['body_abs'].rolling(20).mean().fillna(1.0)  # default 1.0 for early bars: preserves range-based classification
-df['norm_body'] = df['body_abs'] / df['avg_body'].replace(0, 1)
-df['body_ratio'] = df['body_abs'] / df['range'].replace(0, 1)
-df['upper_ratio'] = df['upper_wick'] / df['range'].replace(0, 1)
-df['lower_ratio'] = df['lower_wick'] / df['range'].replace(0, 1)
-df['wick_ratio'] = (df['upper_wick'] + df['lower_wick']) / df['range'].replace(0, 1)
+# Candle classification using canonical classify_candle
+# Calculate avg_body for context (classify_candle uses it for normalization)
+df['body_abs'] = (df['close'] - df['open']).abs()
+df['avg_body'] = df['body_abs'].rolling(20).mean().fillna(1.0)
 
-is_bullish = df['body'] > 0
-small_range = df['range'] < 1e-10
-df['candle_type'] = np.where(is_bullish, 'U', 'DN')
-
-doji_mask = df['body_ratio'] < 0.10
-df.loc[doji_mask & (df['lower_ratio'] > 0.70), 'candle_type'] = 'DF'
-df.loc[doji_mask & (df['upper_ratio'] > 0.70) & (df['lower_ratio'] <= 0.70), 'candle_type'] = 'GS'
-df.loc[doji_mask & (df['lower_ratio'] <= 0.70) & (df['upper_ratio'] <= 0.70), 'candle_type'] = 'D'
-
-marubozu_mask = (~doji_mask) & (df['wick_ratio'] < 0.15)
-df.loc[marubozu_mask & is_bullish, 'candle_type'] = 'MU'
-df.loc[marubozu_mask & ~is_bullish, 'candle_type'] = 'MD'
-
-hammer_mask = (~doji_mask) & (~marubozu_mask) & (df['body_abs'] > 0)
-h_mask = hammer_mask & (df['lower_wick'] > 2.0 * df['body_abs']) & (df['upper_wick'] < 0.3 * df['body_abs'])
-ih_mask = hammer_mask & (df['upper_wick'] > 2.0 * df['body_abs']) & (df['lower_wick'] < 0.3 * df['body_abs'])
-df.loc[h_mask, 'candle_type'] = 'H'
-df.loc[ih_mask, 'candle_type'] = 'IH'
-
-st_mask = (~doji_mask) & (~marubozu_mask) & (~h_mask) & (~ih_mask) & (df['norm_body'] < 0.5)
-st_mask = st_mask & (df['upper_wick'] > 0.5 * df['body_abs']) & (df['lower_wick'] > 0.5 * df['body_abs'])
-df.loc[st_mask, 'candle_type'] = 'ST'
-
-big_mask = (~doji_mask) & (~marubozu_mask) & (~h_mask) & (~ih_mask) & (~st_mask) & (df['norm_body'] > 1.5)
-df.loc[big_mask & is_bullish, 'candle_type'] = 'BU'
-df.loc[big_mask & ~is_bullish, 'candle_type'] = 'BD'
-df.loc[small_range, 'candle_type'] = 'D'
+# Apply canonical classify_candle row-by-row
+df['candle_type'] = [
+    classify_candle(
+        df.iloc[i]['open'],
+        df.iloc[i]['high'],
+        df.iloc[i]['low'],
+        df.iloc[i]['close'],
+        avg_body_20=df.iloc[i]['avg_body']
+    )
+    for i in range(len(df))
+]
 
 df['pattern'] = df['candle_type'].shift(2) + '-' + df['candle_type'].shift(1) + '-' + df['candle_type']
 

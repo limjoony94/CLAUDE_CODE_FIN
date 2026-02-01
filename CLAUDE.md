@@ -1,10 +1,10 @@
 # CLAUDE_CODE_FIN - Trading Bot Workspace
 
-**Last Updated**: 2026-02-01 KST | **Active Bot**: Pattern 5m v1.21.0 (Conservative Per-Pattern TP/SL)
+**Last Updated**: 2026-02-01 KST | **Active Bot**: Pattern 5m v1.21.1 (Conservative Per-Pattern TP/SL)
 
 ---
 
-## Active Bot: Pattern 5m v1.21.0 (Conservative Per-Pattern TP/SL)
+## Active Bot: Pattern 5m v1.21.1 (Conservative Per-Pattern TP/SL)
 
 | 항목 | 값 |
 |------|-----|
@@ -120,6 +120,7 @@
 | **TP/SL Auto-Adjust (v1.17)** | 봇 시작 시 기존 포지션의 TP/SL을 config에 맞게 자동 조정 |
 | **Context Filters (v1.14)** | RSI/Vol/Trend/Position/Session 기반 필터링 |
 | **Per-Pattern TP/SL (v1.21.0)** | MC<0.01 패턴 개별 최적화, 나머지 uniform 유지 |
+| **Leverage Side Fix (v1.21.1)** | BingX setLeverage `side='BOTH'` 파라미터 추가 |
 
 ### Commands
 
@@ -133,7 +134,8 @@ MONITOR_PATTERN_5M.bat  # 모니터링
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.21.0** | 02-01 | **Conservative Per-Pattern TP/SL** - MC<0.01 패턴 개별 최적화 (8/13), 나머지 uniform, WR 78.5%, PF 3.19, WF 5/5 ← **현재 운영** |
+| **v1.21.1** | 02-01 | **Leverage side fix** + state cleanup - BingX setLeverage `side='BOTH'` 추가, stale regime 데이터 제거 ← **현재 운영** |
+| v1.21.0 | 02-01 | Conservative Per-Pattern TP/SL - MC<0.01 패턴 개별 최적화 (8/13), 나머지 uniform, WR 78.5%, PF 3.19, WF 5/5 |
 | v1.20.1 | 02-01 | Improved early-bar classification (default avg_body_20=1.0) |
 | v1.20.0 | 01-31 | Unified Classification Re-discovery - 연구/프로덕션 분류 불일치 수정, 21→13패턴(7L+6S), MDD 14.8%, PF 2.62 |
 | v1.19.2 | 01-30 | Uniform 1.0/1.0 TP/SL |
@@ -181,7 +183,7 @@ bingx_rl_trading_bot/
 │   │   ├── models.py           ← 데이터클래스
 │   │   ├── orders.py           ← 주문 관리 + TP/SL 자동 조정
 │   │   ├── position.py         ← 포지션 관리 (facade)
-│   │   ├── position_open.py    ← 포지션 진입
+│   │   ├── position_open.py    ← 포지션 진입 + leverage side fix ★
 │   │   ├── position_monitor.py ← 포지션 모니터링
 │   │   ├── position_close.py   ← 포지션 청산
 │   │   ├── signals.py          ← 패턴 탐지 + Context Filter + Regime 감지
@@ -220,7 +222,7 @@ bingx_rl_trading_bot/
 └── *.bat (START, STOP, MONITOR)
 ```
 
-★ = v1.21.0에서 수정/추가된 파일
+★ = v1.21.0~v1.21.1에서 수정/추가된 파일
 
 ---
 

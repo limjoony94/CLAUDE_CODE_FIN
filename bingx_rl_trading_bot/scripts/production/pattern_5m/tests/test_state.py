@@ -105,6 +105,61 @@ class TestStateSaveLoad:
         assert loaded['position'] is None
         assert loaded['total_trades'] == 0
 
+    def test_bak_file_created_on_save(self, temp_state_file, sample_state):
+        """save_state() should create .bak file when saving over existing state."""
+        # First save
+        save_state(sample_state, temp_state_file, create_backup=False)
+        assert os.path.exists(temp_state_file)
+
+        # Second save should create .bak backup
+        sample_state['total_trades'] = 10
+        save_state(sample_state, temp_state_file, create_backup=False)
+
+        bak_file = temp_state_file + '.bak'
+        assert os.path.exists(bak_file), f".bak file should exist at {bak_file}"
+
+        # .bak should contain first save (5 trades)
+        with open(bak_file, 'r') as f:
+            bak_data = json.load(f)
+        assert bak_data['total_trades'] == 5
+
+    def test_bak_recovery_on_corrupted_main(self, temp_state_file, sample_state):
+        """load_state() should recover from .bak if main file is corrupted."""
+        # First save (creates main file)
+        save_state(sample_state, temp_state_file, create_backup=False)
+
+        # Second save (creates .bak from first save)
+        sample_state['total_trades'] = 10
+        save_state(sample_state, temp_state_file, create_backup=False)
+
+        # Corrupt main file
+        with open(temp_state_file, 'w') as f:
+            f.write("{ corrupted json }")
+
+        # Load should recover from .bak (which has total_trades=5)
+        loaded = load_state(temp_state_file)
+
+        # Should recover original state from .bak (first save with 5 trades)
+        assert loaded['total_trades'] == 5  # Original sample_state value
+        assert loaded['total_pnl'] == sample_state['total_pnl']
+
+    def test_bak_recovery_fails_gracefully(self, temp_state_file):
+        """load_state() should return default if both main and .bak are corrupted."""
+        # Create corrupted main file
+        with open(temp_state_file, 'w') as f:
+            f.write("{ bad json }")
+
+        # Create corrupted .bak file
+        bak_file = temp_state_file + '.bak'
+        with open(bak_file, 'w') as f:
+            f.write("{ also bad }")
+
+        # Should fall back to default state
+        loaded = load_state(temp_state_file)
+
+        assert loaded['position'] is None
+        assert loaded['total_trades'] == 0
+
     def test_save_updates_timestamp(self, temp_state_file, sample_state):
         """save_state() should update updated_at timestamp."""
         old_timestamp = sample_state['updated_at']

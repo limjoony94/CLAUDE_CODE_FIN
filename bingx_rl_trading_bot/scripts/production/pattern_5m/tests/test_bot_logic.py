@@ -253,8 +253,12 @@ class TestMainLoopIntegration:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.create_exchange')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_position_status')
+    @patch('time.sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._wait_for_candle_settle')
     def test_process_position_calls_early_exit(
         self,
+        mock_settle,
+        mock_sleep,
         mock_check_position,
         mock_fetch_ohlcv,
         mock_create_exchange,

@@ -5,8 +5,10 @@ import json
 import sys
 from pathlib import Path
 from datetime import datetime
+import platform
 
-BOT_DIR = Path("/home/sp/.openclaw/workspace/CLAUDE_CODE_FIN/bingx_rl_trading_bot")
+# Cross-platform path detection
+BOT_DIR = Path(__file__).parent.parent.parent  # scripts/monitor/ -> bingx_rl_trading_bot/
 METRICS_FILE = BOT_DIR / "results" / "pattern_5m_metrics.json"
 STATE_FILE = BOT_DIR / "results" / "pattern_5m_bot_state.json"
 CONFIG_FILE = BOT_DIR / "config" / "pattern_5m_config.yaml"
@@ -67,11 +69,18 @@ def check_alerts():
             if total >= 10 and wr_val < THRESHOLDS["min_win_rate"]:
                 alerts.append(f"🟡 WARNING: Win rate={wr_val:.1f}% below threshold={THRESHOLDS['min_win_rate']}% ({total} trades)")
 
-    # 3. Check tmux session
-    import subprocess
-    result = subprocess.run(["tmux", "has-session", "-t", "pattern_5m"], capture_output=True)
-    if result.returncode != 0:
-        alerts.append("🔴 CRITICAL: tmux session 'pattern_5m' not running")
+    # 3. Check process status (platform-specific)
+    if platform.system() != "Windows":
+        # Unix-like: Check tmux session
+        import subprocess
+        try:
+            result = subprocess.run(["tmux", "has-session", "-t", "pattern_5m"],
+                                  capture_output=True, timeout=5)
+            if result.returncode != 0:
+                alerts.append("🔴 CRITICAL: tmux session 'pattern_5m' not running")
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            alerts.append("🟡 WARNING: tmux not available for process check")
+    # Windows: Rely on state file freshness check (already done above)
 
     # Output
     print(f"🔍 Alert Check — {now.strftime('%Y-%m-%d %H:%M:%S')}")

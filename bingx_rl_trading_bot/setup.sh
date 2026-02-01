@@ -31,15 +31,15 @@ echo ""
 
 # Install dependencies
 echo "Installing dependencies..."
-if [ -f "requirements.txt" ]; then
+if [ -f "requirements/dev.txt" ]; then
     .venv/bin/pip install --upgrade pip
-    .venv/bin/pip install -r requirements.txt
-    echo "✓ Dependencies installed"
+    .venv/bin/pip install -r requirements/dev.txt
+    echo "✓ Dependencies installed (development + runtime)"
     echo ""
     echo "Installed packages:"
     .venv/bin/pip list | grep -E "ccxt|pandas|numpy|pyyaml|pytest"
 else
-    echo "Error: requirements.txt not found"
+    echo "Error: requirements/dev.txt not found"
     exit 1
 fi
 echo ""

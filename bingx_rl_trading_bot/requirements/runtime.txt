@@ -1,0 +1,25 @@
+# Runtime Dependencies - Pattern 5m Bot Production
+# Essential packages for bot operation
+
+# Core dependencies
+numpy>=1.24.0
+pandas>=2.0.0
+python-dateutil>=2.8.2
+
+# Scientific Computing
+scipy>=1.11.0
+
+# Technical Indicators
+ta>=0.11.0
+pandas-ta>=0.3.14b
+
+# API & Network
+requests>=2.31.0
+ccxt>=4.0.0
+
+# Configuration
+pyyaml>=6.0
+python-dotenv>=1.0.0
+
+# Type hints
+typing-extensions>=4.7.0

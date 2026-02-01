@@ -1,0 +1,20 @@
+# Development Dependencies - Testing & Analysis
+# Includes runtime dependencies + development tools
+
+-r runtime.txt
+
+# Logging & Monitoring
+loguru>=0.7.0
+rich>=13.0.0
+
+# Plotting & Visualization
+matplotlib>=3.7.0
+plotly>=5.14.0
+mplfinance>=0.12.9b
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Utilities
+tqdm>=4.65.0

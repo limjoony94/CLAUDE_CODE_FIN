@@ -693,6 +693,10 @@ def check_early_exit_signal(
     if 'type_code' not in df.columns or len(df) < 2:
         return False, position.get('reversal_count', 0), None, position.get('last_counted_candle_ts')
 
+    # Ensure we have a valid current price
+    if current_price is None or current_price <= 0:
+        return False, position.get('reversal_count', 0), None, position.get('last_counted_candle_ts')
+
     # Get current candle's type code (last completed candle)
     current_candle = df.iloc[-2]
     type_code = current_candle.get('type_code', '')

@@ -1,10 +1,10 @@
 # CLAUDE_CODE_FIN - Trading Bot Workspace
 
-**Last Updated**: 2026-02-01 KST | **Active Bot**: Pattern 5m v1.21.1 (Conservative Per-Pattern TP/SL)
+**Last Updated**: 2026-02-01 KST | **Active Bot**: Pattern 5m v1.22.0 (DN-D-BD Removed)
 
 ---
 
-## Active Bot: Pattern 5m v1.21.1 (Conservative Per-Pattern TP/SL)
+## Active Bot: Pattern 5m v1.22.0 (12 Patterns, 7L+5S)
 
 | 항목 | 값 |
 |------|-----|
@@ -134,7 +134,8 @@ MONITOR_PATTERN_5M.bat  # 모니터링
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.21.1** | 02-01 | **Leverage side fix** + state cleanup - BingX setLeverage `side='BOTH'` 추가, stale regime 데이터 제거 ← **현재 운영** |
+| **v1.22.0** | 02-01 | **DN-D-BD 제거** - 과적합 진단(4-test): MC=0.2390 Holm fail, WR 67.4%(최저). 제거 후 WR 80.3%, PF 3.36, WF 5/5 ← **현재 운영** |
+| v1.21.1 | 02-01 | Leverage side fix + state cleanup - BingX setLeverage `side='BOTH'` 추가, stale regime 데이터 제거 |
 | v1.21.0 | 02-01 | Conservative Per-Pattern TP/SL - MC<0.01 패턴 개별 최적화 (8/13), 나머지 uniform, WR 78.5%, PF 3.19, WF 5/5 |
 | v1.20.1 | 02-01 | Improved early-bar classification (default avg_body_20=1.0) |
 | v1.20.0 | 01-31 | Unified Classification Re-discovery - 연구/프로덕션 분류 불일치 수정, 21→13패턴(7L+6S), MDD 14.8%, PF 2.62 |
@@ -193,8 +194,9 @@ bingx_rl_trading_bot/
 │   │       └── logging_config.py
 │   └── engulf_5m/              ← (Archived) Engulf bot
 ├── scripts/analysis/           ← 연구 스크립트
-│   ├── per_pattern_tpsl_optimization.py             ← v1.21.0 패턴별 TP/SL 최적화 ★
-│   ├── portfolio_tpsl_comparison.py                 ← v1.21.0 포트폴리오 비교 ★
+│   ├── overfitting_diagnosis.py                     ← v1.22.0 과적합 진단 (4-test) ★
+│   ├── per_pattern_tpsl_optimization.py             ← v1.21.0 패턴별 TP/SL 최적화
+│   ├── portfolio_tpsl_comparison.py                 ← v1.21.0 포트폴리오 비교
 │   ├── unified_pattern_discovery.py                 ← v1.20.0 통합 재발굴
 │   ├── deploy_comparison.py                         ← 배포 비교 검증
 │   ├── tpsl_sensitivity_corrected.py                ← TP/SL 민감도 분석
@@ -222,7 +224,7 @@ bingx_rl_trading_bot/
 └── *.bat (START, STOP, MONITOR)
 ```
 
-★ = v1.21.0~v1.21.1에서 수정/추가된 파일
+★ = v1.22.0에서 수정/추가된 파일
 
 ---
 

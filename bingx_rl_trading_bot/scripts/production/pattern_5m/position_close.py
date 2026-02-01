@@ -26,6 +26,62 @@ from .orders import place_tp_sl_orders, cancel_remaining_orders
 logger = logging.getLogger('pattern_5m')
 
 
+def detect_ghost_positions(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    cache: APICache,
+    circuit_breaker: Optional[CircuitBreaker] = None,
+    metrics: Optional[PerformanceMetrics] = None,
+) -> None:
+    """
+    Ghost position detection - warn if exchange position not tracked locally.
+
+    Ghost positions는 거래소에 있지만 local state에 없는 포지션입니다.
+    이는 봇 재시작, crash, 또는 manual trading으로 발생할 수 있습니다.
+
+    Args:
+        exchange: Exchange instance
+        state: Bot state dictionary
+        config: Bot configuration
+        cache: APICache instance
+        circuit_breaker: Optional CircuitBreaker
+        metrics: Optional PerformanceMetrics
+    """
+    symbol = config['symbol']
+
+    try:
+        positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
+                                           circuit_breaker=circuit_breaker, metrics=metrics)
+
+        exchange_position = None
+        for pos in positions:
+            contracts = float(pos.get('contracts', 0))
+            if contracts > 0:
+                exchange_position = pos
+                break
+
+        local_position = state.get('position')
+
+        # Ghost position: exchange has position but local state doesn't
+        if exchange_position and not local_position:
+            direction = 'LONG' if exchange_position.get('side') == 'long' else 'SHORT'
+            qty = float(exchange_position.get('contracts', 0))
+            entry_price = float(exchange_position.get('entryPrice', 0))
+
+            logger.warning(
+                f"👻 GHOST POSITION DETECTED on exchange:\n"
+                f"   Symbol: {symbol}\n"
+                f"   Direction: {direction}\n"
+                f"   Quantity: {qty}\n"
+                f"   Entry Price: {entry_price}\n"
+                f"   → This position is not tracked in local state\n"
+                f"   → Crash recovery will attempt to reconcile"
+            )
+    except Exception as e:
+        logger.error(f"❌ Ghost position detection failed: {e}")
+
+
 def record_closed_position(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -396,6 +452,9 @@ def recover_from_crash(
 
     symbol = config['symbol']
     logger.info("🔄 Running crash recovery check...")
+
+    # Phase 3: Ghost position detection (log warnings, don't block)
+    detect_ghost_positions(exchange, state, config, cache, circuit_breaker, metrics)
 
     try:
         positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,

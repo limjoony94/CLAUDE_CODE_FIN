@@ -6,6 +6,8 @@ Load, save, and manage bot state with backup functionality.
 import os
 import json
 import logging
+import shutil
+import tempfile
 from datetime import datetime
 from typing import Dict, Any, Optional
 
@@ -17,7 +19,7 @@ logger = logging.getLogger('pattern_5m')
 
 def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
     """
-    Load bot state from JSON file.
+    Load bot state from JSON file with .bak recovery on corruption.
 
     Args:
         state_file: Path to state JSON file
@@ -36,11 +38,26 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
                 return state
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse state JSON: {e}")
+            # Try to recover from .bak file
+            bak_file = state_file + '.bak'
+            if os.path.exists(bak_file):
+                logger.warning(f"⚠️ Attempting recovery from {bak_file}")
+                try:
+                    with open(bak_file, 'r') as f:
+                        state = json.load(f)
+                        logger.info(f"✅ Successfully recovered state from backup")
+                        state = _check_daily_reset(state)
+                        return state
+                except Exception as bak_error:
+                    logger.error(f"❌ Backup recovery failed: {bak_error}")
+            else:
+                logger.warning(f"⚠️ No backup file found at {bak_file}")
         except (IOError, OSError) as e:
             logger.error(f"Failed to read state file: {e}")
         except Exception as e:
             logger.error(f"Failed to load state: {e}")
 
+    logger.warning(f"⚠️ Returning default state (no valid state file found)")
     return default_state
 
 
@@ -83,7 +100,7 @@ def save_state(
     is_trade_close: bool = False
 ) -> None:
     """
-    Save bot state to JSON file with optional backup.
+    Save bot state to JSON file with .bak backup and atomic write.
 
     Args:
         state: State dictionary to save
@@ -99,11 +116,44 @@ def save_state(
 
     os.makedirs(os.path.dirname(state_file), exist_ok=True)
 
+    # 1. Create .bak backup of existing state
+    if os.path.exists(state_file):
+        try:
+            shutil.copy2(state_file, state_file + '.bak')
+        except Exception as e:
+            logger.warning(f"Failed to create .bak backup: {e}")
+
+    # 2. Create timestamped backup (legacy behavior)
     if create_backup and os.path.exists(state_file):
         _create_backup(state_file)
 
-    with open(state_file, 'w') as f:
-        json.dump(state, f, indent=2, default=str)
+    # 3. Atomic write: write to temp file, then rename
+    try:
+        # Write to temporary file in same directory (for atomic rename on same filesystem)
+        fd, tmp_path = tempfile.mkstemp(
+            dir=os.path.dirname(state_file),
+            prefix='.tmp_state_',
+            suffix='.json'
+        )
+        try:
+            with os.fdopen(fd, 'w') as f:
+                json.dump(state, f, indent=2, default=str)
+            # Atomic rename
+            os.replace(tmp_path, state_file)
+        except Exception:
+            # Clean up temp file if something goes wrong
+            try:
+                os.close(fd)
+            except Exception:
+                pass
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+            raise
+    except Exception as e:
+        logger.error(f"Failed to save state atomically: {e}")
+        # Fallback to non-atomic write
+        with open(state_file, 'w') as f:
+            json.dump(state, f, indent=2, default=str)
 
 
 def _create_backup(state_file: str) -> None:

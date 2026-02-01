@@ -19,14 +19,25 @@ PYTHON_VERSION=$(python --version 2>&1 | awk '{print $2}')
 echo "✓ Python $PYTHON_VERSION detected"
 echo ""
 
+# Create virtual environment
+if [ ! -d ".venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv .venv
+    echo "✓ Virtual environment created at .venv/"
+else
+    echo "✓ Virtual environment already exists"
+fi
+echo ""
+
 # Install dependencies
 echo "Installing dependencies..."
 if [ -f "requirements.txt" ]; then
-    pip install -r requirements.txt
+    .venv/bin/pip install --upgrade pip
+    .venv/bin/pip install -r requirements.txt
     echo "✓ Dependencies installed"
     echo ""
     echo "Installed packages:"
-    pip list | grep -E "ccxt|pandas|numpy|pyyaml|pytest"
+    .venv/bin/pip list | grep -E "ccxt|pandas|numpy|pyyaml|pytest"
 else
     echo "Error: requirements.txt not found"
     exit 1
@@ -85,8 +96,8 @@ echo ""
 
 # Run tests to verify installation
 echo "Running test suite..."
-if command -v pytest &> /dev/null; then
-    pytest scripts/production/pattern_5m/tests/ -v --tb=short
+if [ -f ".venv/bin/pytest" ]; then
+    .venv/bin/pytest scripts/production/pattern_5m/tests/ -v --tb=short
     echo ""
     echo "✓ All tests passed"
 else
@@ -105,12 +116,13 @@ echo "  Win Rate: 73.9% (270-day backtest)"
 echo "  Leverage: 3x"
 echo ""
 echo "Next Steps:"
-echo "1. Edit .env with your BingX API credentials"
-echo "2. Verify config/pattern_5m_config.yaml settings"
-echo "3. Start bot: make start-pattern (or run START_PATTERN_5M.bat)"
-echo "4. Monitor logs: make monitor (or run MONITOR_PATTERN_5M.bat)"
+echo "1. Activate virtual environment: source .venv/bin/activate"
+echo "2. Edit .env with your BingX API credentials"
+echo "3. Verify config/pattern_5m_config.yaml settings"
+echo "4. Start bot: make start-pattern (or run START_PATTERN_5M.bat)"
+echo "5. Monitor logs: make monitor (or run MONITOR_PATTERN_5M.bat)"
 echo ""
-echo "Available Commands:"
+echo "Available Commands (within venv):"
 echo "  make help          - Show all available commands"
 echo "  make test          - Run test suite"
 echo "  make backtest      - Run validation backtest"

@@ -24,7 +24,7 @@ help:
 # Production Commands
 start-pattern:
 	@echo "Starting Pattern 5m bot..."
-	@nohup pythonw scripts/production/pattern_5m_bot.py > /dev/null 2>&1 &
+	@nohup python3 scripts/production/pattern_5m_bot.py > /dev/null 2>&1 &
 	@echo "Bot started. Use 'make monitor' to view logs."
 
 stop-pattern:
@@ -62,17 +62,17 @@ test-coverage:
 
 backtest:
 	@echo "Running v1.23.0 validation backtest..."
-	@python scripts/analysis/v1230_validation_backtest.py
+	@python3 scripts/analysis/v1230_validation_backtest.py
 
 # Data Commands
 download-data:
 	@echo "Downloading latest market data..."
-	@python scripts/analysis/download_extended_data.py
+	@python3 scripts/analysis/download_extended_data.py
 	@echo "Data download complete."
 
 analyze-patterns:
 	@echo "Analyzing pattern performance..."
-	@python scripts/analysis/pattern_correlation_analysis.py
+	@python3 scripts/analysis/pattern_correlation_analysis.py
 
 # Cleanup
 clean:
@@ -90,11 +90,11 @@ clean:
 # Research Commands
 discover-patterns:
 	@echo "Running pattern discovery..."
-	@python scripts/analysis/pattern_discovery_optimized.py
+	@python3 scripts/analysis/pattern_discovery_optimized.py
 
 validate-patterns:
 	@echo "Running pattern validation..."
-	@python scripts/analysis/production_pattern_validation.py
+	@python3 scripts/analysis/production_pattern_validation.py
 
 # Utilities
 format:

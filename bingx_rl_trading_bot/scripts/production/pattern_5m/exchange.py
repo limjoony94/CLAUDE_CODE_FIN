@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Exchange Interface
+Pattern 5m Bot - Exchange Interface
 Exchange setup, API calls, and caching logic.
 """
 

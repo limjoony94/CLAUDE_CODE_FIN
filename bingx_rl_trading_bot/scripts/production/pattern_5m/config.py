@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Configuration Management
+Pattern 5m Bot - Configuration Management
 Load, validate, and manage bot configuration.
 """
 

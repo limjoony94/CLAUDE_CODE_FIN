@@ -22,10 +22,21 @@ echo ""
 # Navigate to bot directory
 cd bingx_rl_trading_bot
 
+# Create virtual environment
+if [ ! -d ".venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv .venv
+    echo "✓ Virtual environment created at .venv/"
+else
+    echo "✓ Virtual environment already exists"
+fi
+echo ""
+
 # Install dependencies
 echo "Installing dependencies..."
 if [ -f "requirements.txt" ]; then
-    pip install -r requirements.txt
+    .venv/bin/pip install --upgrade pip
+    .venv/bin/pip install -r requirements.txt
     echo "✓ Dependencies installed"
 else
     echo "Warning: requirements.txt not found"
@@ -70,10 +81,11 @@ echo "Setup Complete!"
 echo "=========================================="
 echo ""
 echo "Next Steps:"
-echo "1. Edit bingx_rl_trading_bot/.env with your API keys"
-echo "2. Configure config/api_keys.yaml if using YAML config"
-echo "3. Run: make start-pattern (to start Pattern 5m bot)"
-echo "4. Run: make monitor (to view logs)"
+echo "1. Activate virtual environment: source bingx_rl_trading_bot/.venv/bin/activate"
+echo "2. Edit bingx_rl_trading_bot/.env with your API keys"
+echo "3. Configure config/api_keys.yaml if using YAML config"
+echo "4. Run: make start-pattern (to start Pattern 5m bot)"
+echo "5. Run: make monitor (to view logs)"
 echo ""
 echo "For more commands: make help"
 echo ""

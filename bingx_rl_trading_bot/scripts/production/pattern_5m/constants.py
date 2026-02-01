@@ -57,12 +57,14 @@ class MarketRegime(Enum):
     UNKNOWN = "UNKNOWN"
 
 # Regime detection parameters
+# DEPRECATED: Regime disabled since v1.19.0 (tight TP/SL proved regime-independent)
 REGIME_DETECTION_ENABLED = False  # v1.19.0: Disabled - tight TP/SL is regime-independent
 REGIME_LOOKBACK_BARS = 100          # 100 bars = ~8.3 hours
 REGIME_TREND_THRESHOLD = 1.5        # % price change for BULL/BEAR (optimized from 2.0)
 REGIME_VOL_THRESHOLD = 0.15         # ATR% threshold for HIGH/LOW volatility
 
 # Regime-specific patterns and TP/SL (v1.18)
+# DEPRECATED: Regime disabled since v1.19.0 - kept for reference only
 # Each regime has its own optimal patterns based on backtest validation
 REGIME_PATTERNS = {
     "BULL": {
@@ -88,6 +90,7 @@ REGIME_PATTERNS = {
 }
 
 # Default regime to use when detection fails
+# DEPRECATED: Regime disabled since v1.19.0 - kept for reference only
 DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # ============================================================
@@ -147,7 +150,7 @@ PATTERN_STATS = {
 # Confidence calculation weights
 CONFIDENCE_WEIGHT_CLARITY = 0.40      # Candle classification clarity
 CONFIDENCE_WEIGHT_HISTORICAL = 0.30   # Historical pattern win rate
-CONFIDENCE_WEIGHT_REGIME = 0.30       # Regime alignment (placeholder)
+CONFIDENCE_WEIGHT_REGIME = 0.30       # DEPRECATED: Regime disabled since v1.19.0 (placeholder)
 
 # Confidence logging file
 CONFIDENCE_LOG_FILE = "results/pattern_5m_confidence_log.csv"

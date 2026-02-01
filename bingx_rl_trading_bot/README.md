@@ -1,84 +1,28 @@
-# BingX RL Trading Bot
+# bingx_rl_trading_bot — 메인 프로젝트 패키지
 
-**Current System**: Pattern 5m Bot v1.17 (3-Candle Pattern Strategy)
+BingX 거래소 BTC-USDT 선물 자동 매매 봇. 5분봉 캔들 패턴 기반.
 
-## Documentation
+## 핵심 디렉토리
 
-For complete, up-to-date documentation, see the root **[CLAUDE.md](../CLAUDE.md)** file.
+| 경로 | 설명 |
+|------|------|
+| `scripts/production/pattern_5m/` | **운영 코드** (14개 모듈) |
+| `scripts/analysis/` | 연구/백테스트 스크립트 |
+| `scripts/monitoring/` | 모니터링 스크립트 |
+| `config/` | 설정 파일 (전략, API) |
+| `data/` | 시장 데이터 CSV |
+| `results/` | 봇 상태/메트릭 JSON |
+| `logs/` | 운영 로그 |
+| `claudedocs/` | 연구 리포트 |
+| `archive/` | 레거시 아카이브 |
 
-## Quick Start
+## 현재 전략
 
-```bash
-# Start Bot
-START_PATTERN_5M.bat
-# or: python -m scripts.production.pattern_5m_bot
+- **v1.22.0**: 12 패턴 (7L+5S), Per-pattern TP/SL
+- **WR**: 80.3%, **PF**: 3.36, **WF**: 5/5
+- 상세: [CLAUDE.md](../CLAUDE.md)
 
-# Stop Bot
-STOP_PATTERN_5M.bat
+## 의존성
 
-# Monitor
-MONITOR_PATTERN_5M.bat
-```
-
-## Strategy Overview
-
-**Pattern 5m** uses a 3-candle pattern recognition system with 12 candle types:
-
-| Code | Type | Description |
-|------|------|-------------|
-| D | DOJI | body < 10% of range |
-| ST | SPINNING_TOP | small body, balanced wicks |
-| H | HAMMER | lower wick > 2x body |
-| IH | INV_HAMMER | upper wick > 2x body |
-| MU | MARUBOZU_UP | bullish, wicks < 15% |
-| MD | MARUBOZU_DOWN | bearish, wicks < 15% |
-| BU | BIG_UP | normalized body > 1.5 |
-| BD | BIG_DOWN | normalized body > 1.5 |
-| U | MED_UP | medium bullish |
-| DN | MED_DOWN | medium bearish |
-
-**v1.17 Stats**: 18 validated patterns (8 LONG + 10 SHORT), 83.9% avg WR, 14/18 statistically significant
-
-## Key Files
-
-| Purpose | Location |
-|---------|----------|
-| Entry Point | `scripts/production/pattern_5m_bot.py` |
-| Bot Package | `scripts/production/pattern_5m/` |
-| Config | `config/pattern_5m_config.yaml` |
-| State | `results/pattern_5m_bot_state.json` |
-| Metrics | `results/pattern_5m_metrics.json` |
-| Logs | `logs/pattern_5m_bot_*.log` |
-| API Client | `src/api/bingx_client.py` |
-
-## Directory Structure
-
-```
-bingx_rl_trading_bot/
-├── scripts/
-│   ├── production/
-│   │   ├── pattern_5m_bot.py    # Entry point
-│   │   └── pattern_5m/          # Bot package (14 modules)
-│   ├── analysis/                # Research scripts
-│   └── utils/                   # Utility scripts
-├── src/api/                     # BingX API client
-├── config/                      # Configuration files
-├── results/                     # State & results
-├── logs/                        # Log files
-├── claudedocs/                  # Analysis documentation
-└── archive/                     # Deprecated bots
-```
-
-## Key Features (v1.17)
-
-- **18 Validated Patterns**: Statistically validated with WF ≥4/5
-- **Pattern-Specific TP/SL**: Optimized per pattern
-- **TP/SL Auto-Adjustment**: On bot startup, adjusts existing position's TP/SL to match config
-- **Early Exit Signal**: 3x consecutive BD/BU reversal detection
-- **Context Filters**: RSI/Vol/Trend-based pattern filtering
-- **Crash Recovery**: Orphan position detection and recovery
-- **API Caching**: 5s TTL for ticker/balance/positions
-- **Circuit Breaker**: 5 failures → 60s block
-
----
-**Last Updated**: 2026-01-26 | **Version**: v1.17
+- Python 3.12 (WSL2 Ubuntu)
+- ccxt, pandas, numpy, pyyaml

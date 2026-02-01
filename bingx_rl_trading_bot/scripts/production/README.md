@@ -1,19 +1,30 @@
-# Production Scripts
+# scripts/production/ — 프로덕션 스크립트
 
-**Status**: Production-ready, actively maintained
+## 활성 봇
 
-These scripts are the final, production-ready versions used for:
-- Training models (Phase 2+)
-- Backtesting strategies
-- Strategy optimization
+| 파일 | 설명 |
+|------|------|
+| `pattern_5m_bot.py` | **현재 운영** — Pattern 5m 봇 엔트리포인트 |
+| `pattern_5m/` | 14개 모듈 패키지 ([상세](pattern_5m/README.md)) |
 
-## Key Scripts
+## 실행
 
-- `train_xgboost_improved_v3_phase2.py`: Latest XGBoost training (Phase 2)
-- `backtest_hybrid_v4.py`: Hybrid strategy backtesting
-- `technical_strategy.py`: Technical indicators strategy module
-- `optimize_hybrid_thresholds.py`: Threshold optimization
+```bash
+# 직접 실행
+python3 scripts/production/pattern_5m_bot.py
 
-## Usage
+# tmux 세션으로 실행
+tmux new-session -d -s pattern_5m "python3 scripts/production/pattern_5m_bot.py"
+```
 
-See individual script docstrings for detailed usage.
+## 레거시 (미사용)
+
+이 디렉토리에는 과거 실험/개발 과정의 스크립트가 다수 존재.
+현재 운영과 관련된 것은 `pattern_5m_bot.py`와 `pattern_5m/` 패키지만 해당.
+
+주요 레거시:
+- `engulf_5m/` — Archived Engulf bot
+- `opportunity_gating_bot_4x.py` — 구 전략
+- `rsi_trend_filter_bot.py` — 구 전략
+- `adx_supertrend_trail_bot.py` — 구 전략
+- `train_*.py`, `optimize_*.py` — 구 ML 학습/최적화

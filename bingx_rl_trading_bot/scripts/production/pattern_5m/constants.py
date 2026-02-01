@@ -10,8 +10,8 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.21.0"  # v1.21.0: Conservative per-pattern TP/SL optimization
-# 13 patterns (7L+6S), 312t, WR 78.5%, MDD 20.6%, PF 3.19, WF 5/5
+BOT_VERSION = "1.22.0"  # v1.22.0: Remove DN-D-BD (overfitting diagnosis: MC=0.2390, Holm fail)
+# 12 patterns (7L+5S), WR 80.3%, MDD 23.7%, PF 3.36, WF 5/5
 
 # ============================================================
 # FILE PATHS (relative to bot root)
@@ -114,7 +114,7 @@ VALIDATED_LONG_PATTERNS: List[str] = [
 
 # SHORT patterns - v1.20.0: Tier 1.5 (WF>=4, MC<0.03, excess>15)
 VALIDATED_SHORT_PATTERNS: List[str] = [
-    "DN-D-BD",    # WR 67.4%, 46t, excess +19.1%, MC=0.0131, WF 5/5, PP 3/3
+    # DN-D-BD removed in v1.22.0 (MC=0.2390, Holm correction fail, lowest WR 67.4%)
     "BD-U-GS",    # WR 76.5%, 17t, excess +28.2%, MC=0.0259, WF 4/5, PP 3/3
     "DN-GS-H",    # WR 80.0%, 15t, excess +31.7%, MC=0.0165, WF 4/5, PP 2/3
     "U-DF-BU",    # WR 76.5%, 17t, excess +28.2%, MC=0.0258, WF 4/5, PP 2/3
@@ -135,8 +135,8 @@ PATTERN_STATS = {
     "BU-IH-DN": {"wr": 0.760, "count": 25, "avg_conf": 0.760},
     "MD-H-MD":  {"wr": 0.833, "count": 18, "avg_conf": 0.830},
     "IH-MD-MD": {"wr": 0.867, "count": 15, "avg_conf": 0.870},
-    # SHORT patterns (6) - Tier 1.5 (WF>=4, MC<0.03, excess>15)
-    "DN-D-BD":  {"wr": 0.674, "count": 46, "avg_conf": 0.670},
+    # SHORT patterns (5) - Tier 1.5 (WF>=4, MC<0.03, excess>15)
+    # DN-D-BD removed in v1.22.0 (MC=0.2390, Holm correction fail)
     "BD-U-GS":  {"wr": 0.765, "count": 17, "avg_conf": 0.770},
     "DN-GS-H":  {"wr": 0.800, "count": 15, "avg_conf": 0.800},
     "U-DF-BU":  {"wr": 0.765, "count": 17, "avg_conf": 0.770},
@@ -168,8 +168,7 @@ PATTERN_OPTIMAL_TPSL = {
     'BU-IH-DN': (1.5, 2.0),  # MC=0.0022, optimized
     'MD-H-MD':  (1.0, 1.0),  # MC=0.0014, uniform best
     'IH-MD-MD': (1.5, 2.0),  # MC=0.0020, optimized
-    # SHORT patterns (6)
-    'DN-D-BD':  (1.0, 1.0),  # MC=0.2390, keep uniform (MC fail)
+    # SHORT patterns (5) - DN-D-BD removed in v1.22.0
     'BD-U-GS':  (1.5, 2.0),  # MC=0.0042, optimized
     'DN-GS-H':  (1.0, 1.0),  # MC=0.0176, keep uniform (conservative)
     'U-DF-BU':  (1.0, 1.5),  # MC=0.0010, optimized

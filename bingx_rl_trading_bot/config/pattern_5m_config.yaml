@@ -17,7 +17,7 @@ rotation:
   enabled: false
 strategy:
   cooldown_candles: 0
-  # v1.21.0: 13 patterns, conservative per-pattern TP/SL (7 LONG + 6 SHORT)
+  # v1.22.0: 12 patterns (7 LONG + 5 SHORT), DN-D-BD removed (overfitting diagnosis)
   # Per-pattern TP/SL in constants.py PATTERN_OPTIMAL_TPSL (tp_pct/sl_pct are fallback defaults)
   long_patterns:
   - U-MU-H
@@ -28,7 +28,6 @@ strategy:
   - MD-H-MD
   - IH-MD-MD
   short_patterns:
-  - DN-D-BD
   - BD-U-GS
   - DN-GS-H
   - U-DF-BU

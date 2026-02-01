@@ -78,17 +78,17 @@ def add_candle_classification(df: pd.DataFrame) -> pd.DataFrame:
     df['body_abs'] = df['body'].abs()
     df['avg_body_20'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
 
+    # Use the canonical classify_candle() from indicators.py for ALL bars.
+    # For bars 0-19 where avg_body_20 is NaN, default to 1.0
+    # (preserves range-based types like DOJI, HAMMER, DRAGONFLY, GRAVESTONE).
+    # Previously this forced MED_UP/MED_DOWN for early bars — a divergence
+    # from indicators.py's calculate_indicators() which uses avg_b=1.0.
     candle_types = []
     for i in range(len(df)):
-        if i < AVG_BODY_WINDOW:
-            # Default to MED_UP/MED_DOWN before enough data
-            candle_types.append(
-                CandleType.MED_UP if df.iloc[i]['body'] >= 0 else CandleType.MED_DOWN
-            )
-        else:
-            candle_types.append(
-                classify_candle(df.iloc[i], df.iloc[i]['avg_body_20'])
-            )
+        avg_b = df.iloc[i]['avg_body_20']
+        if pd.isna(avg_b):
+            avg_b = 1.0
+        candle_types.append(classify_candle(df.iloc[i], avg_b))
 
     df['candle_type'] = candle_types
     df['type_code'] = [ct.value for ct in candle_types]

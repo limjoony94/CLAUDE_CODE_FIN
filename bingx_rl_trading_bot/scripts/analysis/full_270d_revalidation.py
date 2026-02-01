@@ -51,6 +51,9 @@ df = pd.read_csv(data_path)
 print(f'Loaded: {len(df)} bars, {df["timestamp"].iloc[0]} ~ {df["timestamp"].iloc[-1]}')
 
 # Candle classification
+# TODO: Replace this inline vectorized classification with the canonical
+# classify_candle() from bingx_rl_trading_bot.scripts.production.pattern_5m.indicators
+# to eliminate classification logic duplication. See docs/classification-unification.md
 df['body'] = df['close'] - df['open']
 df['body_abs'] = df['body'].abs()
 df['range'] = df['high'] - df['low']

@@ -6,8 +6,15 @@ Uses numpy global arrays for speed. Timeout trades excluded from PnL (standard).
 import pandas as pd
 import numpy as np
 from datetime import datetime
-from scipy import stats
 import json, os, sys, time
+
+# scipy는 optional - MC test용
+try:
+    from scipy import stats
+    SCIPY_AVAILABLE = True
+except ImportError:
+    SCIPY_AVAILABLE = False
+    print("⚠️ scipy not available - statistical tests will be skipped")
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -155,6 +162,10 @@ def mc_test(pnls, n_sim=N_MC):
 
 
 def stat_tests(pnls):
+    """Statistical tests - requires scipy."""
+    if not SCIPY_AVAILABLE:
+        return 1.0, 1.0  # Skip tests if scipy not available
+
     if len(pnls) < 5:
         return 1.0, 1.0
     if np.std(pnls) > 0:

@@ -12,6 +12,13 @@ from itertools import product
 from datetime import datetime
 from typing import List, Dict, Tuple, Optional
 import warnings
+import sys
+from pathlib import Path
+
+# Import canonical classify_candle from production
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from scripts.production.pattern_5m.indicators import classify_candle
+
 warnings.filterwarnings('ignore')
 
 # ============================================================
@@ -45,69 +52,24 @@ FEE_PCT = 0.10  # Round-trip
 # ============================================================
 
 def classify_candles(df: pd.DataFrame) -> pd.DataFrame:
-    """Classify candles into 12 types."""
+    """Classify candles into 12 types using production canonical source."""
     df = df.copy()
 
-    # Basic calculations
-    df['body'] = df['close'] - df['open']
-    df['body_abs'] = df['body'].abs()
-    df['range'] = df['high'] - df['low']
-    df['upper_wick'] = df['high'] - df[['open', 'close']].max(axis=1)
-    df['lower_wick'] = df[['open', 'close']].min(axis=1) - df['low']
+    # Compute avg_body_20 for normalization
+    body_abs = (df['close'] - df['open']).abs()
+    avg_body_20 = body_abs.rolling(20).mean().fillna(1.0)  # default 1.0 for early bars
 
-    # Rolling average for normalization
-    df['avg_body'] = df['body_abs'].rolling(20).mean().fillna(1.0)  # default 1.0 for early bars: preserves range-based classification
-    df['norm_body'] = df['body_abs'] / df['avg_body'].replace(0, 1)
-
-    # Ratios
-    df['body_ratio'] = df['body_abs'] / df['range'].replace(0, 1)
-    df['upper_ratio'] = df['upper_wick'] / df['range'].replace(0, 1)
-    df['lower_ratio'] = df['lower_wick'] / df['range'].replace(0, 1)
-    df['wick_ratio'] = (df['upper_wick'] + df['lower_wick']) / df['range'].replace(0, 1)
-
-    def classify_row(row):
-        if row['range'] < 1e-10:
-            return 'D'
-
-        body_ratio = row['body_ratio']
-        upper_ratio = row['upper_ratio']
-        lower_ratio = row['lower_ratio']
-        wick_ratio = row['wick_ratio']
-        norm_body = row['norm_body']
-        is_bullish = row['body'] > 0
-
-        # Doji
-        if body_ratio < 0.10:
-            if lower_ratio > 0.70:
-                return 'DF'
-            elif upper_ratio > 0.70:
-                return 'GS'
-            return 'D'
-
-        # Marubozu
-        if wick_ratio < 0.15:
-            return 'MU' if is_bullish else 'MD'
-
-        # Hammer patterns
-        body_abs = row['body_abs']
-        if body_abs > 0:
-            if row['lower_wick'] > 2.0 * body_abs and row['upper_wick'] < 0.3 * body_abs:
-                return 'H'
-            if row['upper_wick'] > 2.0 * body_abs and row['lower_wick'] < 0.3 * body_abs:
-                return 'IH'
-
-        # Spinning Top
-        if norm_body < 0.5 and row['upper_wick'] > 0.5 * body_abs and row['lower_wick'] > 0.5 * body_abs:
-            return 'ST'
-
-        # Big candles
-        if norm_body > 1.5:
-            return 'BU' if is_bullish else 'BD'
-
-        # Medium candles
-        return 'U' if is_bullish else 'DN'
-
-    df['candle_type'] = df.apply(classify_row, axis=1)
+    # Use production classify_candle for each row
+    df['candle_type'] = [
+        classify_candle(
+            df['open'].iloc[i],
+            df['high'].iloc[i],
+            df['low'].iloc[i],
+            df['close'].iloc[i],
+            avg_body_20.iloc[i]
+        )
+        for i in range(len(df))
+    ]
 
     # Create pattern string (last 3 candles)
     df['pattern'] = df['candle_type'].shift(2) + '-' + df['candle_type'].shift(1) + '-' + df['candle_type']

@@ -20,6 +20,11 @@ from collections import defaultdict
 import json
 from datetime import datetime
 import time
+import sys
+
+# Import canonical classify_candle from production
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from scripts.production.pattern_5m.indicators import classify_candle
 
 # ============================================================
 # Parameters
@@ -66,46 +71,6 @@ period_masks = {
 #   BIG_CANDLE_NORM_THRESHOLD = 1.5
 #   AVG_BODY_WINDOW = 20
 # ============================================================
-
-def classify_candle(o, h, l, c, avg_body_20):
-    """Classify candle - identical to production indicators.py."""
-    body = c - o
-    body_abs = abs(body)
-    rng = h - l
-    if rng == 0:
-        return 'D'
-    upper_wick = h - max(o, c)
-    lower_wick = min(o, c) - l
-    body_ratio = body_abs / rng
-    # 1. Doji family
-    if body_ratio < 0.10:
-        if lower_wick / rng > 0.70:
-            return 'DF'
-        elif upper_wick / rng > 0.70:
-            return 'GS'
-        return 'D'
-    # 2. Marubozu
-    total_wick_ratio = (upper_wick + lower_wick) / rng
-    if total_wick_ratio < 0.15:
-        return 'MU' if body > 0 else 'MD'
-    # 3. Hammer / Inverted Hammer
-    if body_abs > 0:
-        lower_to_body = lower_wick / body_abs
-        upper_to_body = upper_wick / body_abs
-        if lower_to_body > 2.0 and upper_to_body < 0.3:
-            return 'H'
-        if upper_to_body > 2.0 and lower_to_body < 0.3:
-            return 'IH'
-    # 4. Spinning Top
-    norm_body = body_abs / avg_body_20 if avg_body_20 > 0 else 1.0
-    if norm_body < 0.5 and body_abs > 0:
-        if lower_wick > 0.5 * body_abs and upper_wick > 0.5 * body_abs:
-            return 'ST'
-    # 5. Big or Medium
-    if norm_body > 1.5:
-        return 'BU' if body > 0 else 'BD'
-    return 'U' if body > 0 else 'DN'
-
 
 print("Classifying candles...")
 body_abs_arr = np.abs(closes - opens)

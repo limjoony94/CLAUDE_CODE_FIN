@@ -6,6 +6,12 @@ Compound equity, Standard Research Protocol.
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import sys
+from pathlib import Path
+
+# Import canonical classify_candle from production
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from scripts.production.pattern_5m.indicators import classify_candle
 
 print("=" * 70)
 print("Portfolio Backtest: Per-Pattern vs Uniform TP/SL")
@@ -71,33 +77,6 @@ range_ = highs - lows
 upper_wick = highs - np.maximum(opens, closes)
 lower_wick = np.minimum(opens, closes) - lows
 avg_body_20 = pd.Series(body_abs).rolling(20).mean().values
-
-def classify_candle(o, h, l, c, avg_b20):
-    b = c - o
-    b_abs = abs(b)
-    r = h - l
-    if r < 1e-10:
-        return "D"
-    uw = h - max(o, c)
-    lw = min(o, c) - l
-    body_ratio = b_abs / r
-    upper_ratio = uw / r
-    lower_ratio = lw / r
-    wick_ratio = (uw + lw) / r
-    norm_body = b_abs / avg_b20 if avg_b20 > 0 else 1.0
-    if body_ratio < 0.10:
-        if lower_ratio > 0.70: return "DF"
-        elif upper_ratio > 0.70: return "GS"
-        return "D"
-    if wick_ratio < 0.15:
-        return "MU" if b > 0 else "MD"
-    if b_abs > 0:
-        if lw > 2.0 * b_abs and uw < 0.3 * b_abs: return "H"
-        if uw > 2.0 * b_abs and lw < 0.3 * b_abs: return "IH"
-    if norm_body < 0.5 and uw > 0.5 * b_abs and lw > 0.5 * b_abs: return "ST"
-    if norm_body > 1.5: return "BU" if b > 0 else "BD"
-    return "U" if b > 0 else "DN"
-
 types = [classify_candle(opens[i], highs[i], lows[i], closes[i],
                          avg_body_20[i] if not np.isnan(avg_body_20[i]) else 1.0)
          for i in range(n_bars)]

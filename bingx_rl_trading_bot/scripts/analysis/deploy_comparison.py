@@ -18,6 +18,11 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 from collections import defaultdict, Counter
+import sys
+
+# Import canonical classify_candle from production
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from scripts.production.pattern_5m.indicators import classify_candle
 
 MAX_BARS = 500
 FEE_PCT = 0.10
@@ -43,40 +48,6 @@ period_masks = {
     'H2_Aug_Oct': (dates >= np.datetime64('2025-08-01')) & (dates < np.datetime64('2025-11-01')),
     'H3_Nov_Jan': (dates >= np.datetime64('2025-11-01')) & (dates < np.datetime64('2026-02-01')),
 }
-
-def classify_candle(o, h, l, c, avg_body_20):
-    """Classify candle - matches production (constants.py thresholds)."""
-    body = c - o
-    body_abs = abs(body)
-    rng = h - l
-    if rng == 0: return 'D'
-    upper_wick = h - max(o, c)
-    lower_wick = min(o, c) - l
-    body_ratio = body_abs / rng
-    # 1. Doji family
-    if body_ratio < 0.10:
-        if lower_wick / rng > 0.70: return 'DF'
-        elif upper_wick / rng > 0.70: return 'GS'
-        return 'D'
-    # 2. Marubozu
-    total_wick_ratio = (upper_wick + lower_wick) / rng
-    if total_wick_ratio < 0.15:
-        return 'MU' if body > 0 else 'MD'
-    # 3. Hammer / Inverted Hammer
-    if body_abs > 0:
-        lower_to_body = lower_wick / body_abs
-        upper_to_body = upper_wick / body_abs
-        if lower_to_body > 2.0 and upper_to_body < 0.3: return 'H'
-        if upper_to_body > 2.0 and lower_to_body < 0.3: return 'IH'
-    # 4. Spinning Top
-    norm_body = body_abs / avg_body_20 if avg_body_20 > 0 else 1.0
-    if norm_body < 0.5 and body_abs > 0:
-        if lower_wick > 0.5 * body_abs and upper_wick > 0.5 * body_abs:
-            return 'ST'
-    # 5. Big or Medium
-    if norm_body > 1.5:
-        return 'BU' if body > 0 else 'BD'
-    return 'U' if body > 0 else 'DN'
 
 print("Classifying candles...")
 # Pre-compute avg_body_20 (rolling 20-period average of abs body)

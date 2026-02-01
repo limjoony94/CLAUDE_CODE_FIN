@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.22.0 | **Bot**: Pattern 5m (12패턴, 7L+5S) | **Updated**: 2026-02-01
+> **Version**: v1.23.0 | **Bot**: Pattern 5m (12패턴, 7L+5S) | **Updated**: 2026-02-02
 
 ---
 

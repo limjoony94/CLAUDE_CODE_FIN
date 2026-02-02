@@ -4,9 +4,10 @@ BingX 거래소 BTC-USDT 선물 자동 매매 봇. 5분봉 캔들 패턴 기반 
 
 ## 현재 운영
 
-- **전략**: Pattern 5m v1.22.0
+- **전략**: Pattern 5m v1.23.0
 - **패턴**: 12개 (7 Long + 5 Short), 3-캔들 조합
 - **성과**: WR 80.3%, PF 3.36, WF 5/5 (270일 백테스트)
+- **안정성**: Atomic state save, Circuit breaker exponential backoff, Ghost position detection
 
 ## 빠른 시작
 
@@ -16,8 +17,16 @@ BingX 거래소 BTC-USDT 선물 자동 매매 봇. 5분봉 캔들 패턴 기반 
 
 ### 설치
 ```bash
-cd bingx_rl_trading_bot
+# 의존성 설치
+pip install -r requirements.txt
+
+# 또는 최소 요구사항만
 pip install ccxt pandas numpy pyyaml
+
+# 데이터 다운로드 (백테스트/분석 시 필요)
+cd bingx_rl_trading_bot
+python3 scripts/analysis/download_extended_data.py
+# → data/btc_5m_270days.csv 생성됨 (270일 5분봉 데이터)
 ```
 
 ### 실행

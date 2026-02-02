@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Data Models
+Pattern 5m Bot - Data Models
 Dataclasses for type-safe data structures.
 """
 

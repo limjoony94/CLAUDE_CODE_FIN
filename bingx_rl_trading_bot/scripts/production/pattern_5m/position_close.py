@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Position Closing and Recovery
+Pattern 5m Bot - Position Closing and Recovery
 Functions for closing positions and crash recovery.
 """
 

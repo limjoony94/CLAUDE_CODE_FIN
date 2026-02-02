@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - State Management
+Pattern 5m Bot - State Management
 Load, save, and manage bot state with backup functionality.
 """
 

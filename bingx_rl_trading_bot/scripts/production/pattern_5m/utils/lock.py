@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - File Lock Utilities
+Pattern 5m Bot - File Lock Utilities
 Cross-platform file locking for single instance enforcement.
 """
 

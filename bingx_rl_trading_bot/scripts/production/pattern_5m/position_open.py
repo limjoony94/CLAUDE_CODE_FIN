@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Position Opening
+Pattern 5m Bot - Position Opening
 Functions for opening new trading positions.
 """
 

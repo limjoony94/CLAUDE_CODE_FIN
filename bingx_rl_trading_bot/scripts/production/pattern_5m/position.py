@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Position Management
+Pattern 5m Bot - Position Management
 Open, close, and manage trading positions.
 
 This module re-exports functions from the split modules for backward compatibility.

@@ -24,9 +24,8 @@ pip install -r requirements.txt
 pip install ccxt pandas numpy pyyaml
 
 # 데이터 다운로드 (백테스트/분석 시 필요)
-cd bingx_rl_trading_bot
-python3 scripts/analysis/download_extended_data.py
-# → data/btc_5m_270days.csv 생성됨 (270일 5분봉 데이터)
+python3 scripts/data/fetch_historical.py
+# → data/btc_5m_270days.csv 생성됨 (270일 5분봉, Binance public API)
 ```
 
 ### 실행
@@ -53,13 +52,23 @@ tail -f logs/pattern_5m_bot_*.log
 ```
 bingx_rl_trading_bot/
 ├── config/                    # 설정 (API 키, 전략 파라미터)
-├── scripts/production/        # 운영 코드
-│   ├── pattern_5m_bot.py      # 엔트리포인트
-│   └── pattern_5m/            # 14개 모듈 패키지
-├── scripts/analysis/          # 연구/백테스트 스크립트
-├── data/                      # 시장 데이터
+├── scripts/
+│   ├── production/            # 운영 코드
+│   │   ├── pattern_5m_bot.py  #   엔트리포인트
+│   │   └── pattern_5m/        #   14개 모듈 패키지 + 124 테스트
+│   ├── analysis/              # 연구/백테스트 (24개)
+│   ├── data/                  # 데이터 수집/변환
+│   ├── monitor/               # 알림, 일일 리포트
+│   ├── ops/                   # 시작/중지/헬스체크
+│   ├── utils/                 # 운영 유틸리티 (12개)
+│   ├── validation/            # Walk-forward, 스트레스 테스트
+│   └── tests/                 # API 테스트
+├── data/                      # 시장 데이터 (CSV, gitignored)
 ├── results/                   # 상태/메트릭 JSON
 └── logs/                      # 운영 로그
+
+scripts/data/fetch_historical.py   # 270일 데이터 다운로드 (루트)
+archive/                           # 레거시 코드 전체 보관
 ```
 
 ## 문서

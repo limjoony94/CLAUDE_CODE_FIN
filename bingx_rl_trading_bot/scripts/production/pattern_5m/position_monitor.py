@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Position Monitoring
+Pattern 5m Bot - Position Monitoring
 Functions for monitoring and syncing trading positions.
 """
 

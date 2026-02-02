@@ -1,5 +1,5 @@
 """
-Engulf 5m Bot - Logging Configuration
+Pattern 5m Bot - Logging Configuration
 Enhanced logging setup with JSON format support and debug mode filtering.
 """
 

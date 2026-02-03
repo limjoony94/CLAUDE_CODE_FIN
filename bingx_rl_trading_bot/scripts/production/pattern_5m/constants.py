@@ -10,8 +10,8 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.23.0"  # v1.23.0: Stability hardening (atomic state, circuit breaker backoff, ghost detection)
-# 12 patterns (7L+5S), WR 80.3%, MDD 23.7%, PF 3.36, WF 5/5
+BOT_VERSION = "1.25.0"  # v1.25.0: Moderate-B-20 Portfolio (Deep Analysis Optimized)
+# 20 patterns (10L+10S), WR 82.1%, PnL 289.2%, MDD 8.2%, WF 5/5
 
 # ============================================================
 # FILE PATHS (relative to bot root)
@@ -94,57 +94,70 @@ REGIME_PATTERNS = {
 DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # ============================================================
-# Validated Patterns (v1.19.1 Tight TP/SL)
-# Research: tight_tpsl_validation.py (2026-01-30)
-# 270-day validation: 66 validated → 21 selected (10 LONG + 11 SHORT)
-# Criteria: excess_wr > 20%, MC < 0.05, WF >= 3/5, trades >= 15, 3/3 periods profitable
-# Key insight: Tight TP/SL (0.3-1.0%) eliminates regime dependency, enables genuine SHORT edge
-# v1.19.1: +6 Tier 1 patterns (3/3 periods, excess>27%) → +290% PnL, PnL/MDD 80→105
+# Validated Patterns (v1.25.0 Moderate-B-20 Portfolio)
+# Research: deep_portfolio_analysis.py (2026-02-04)
+# Selection: Overall Score optimization (Quality × Risk-Adjusted × Stability)
+# Criteria: MC < 0.02, WF >= 4/5, WR >= 55%/50%, Trades >= 40
+# Portfolio: WR 82.1%, PnL 289.2%, MDD 8.2%, PF 2.08, WF 5/5
+# Monthly Consistency: 100% (9/9 months profitable)
+# Edge Decay: -7.7% WR (Early 86.0% → Late 78.3%)
 # ============================================================
 
-# LONG patterns - v1.19.1: 10 total (tight TP/SL, regime-independent)
+# LONG patterns - v1.25.0: 10 total (Moderate-B selection)
 VALIDATED_LONG_PATTERNS: List[str] = [
-    # v1.20.1: Validated with improved classification (default avg_body_20=1.0 for early bars)
-    # Tier 1: WF>=4, MC<0.01, excess>15, uniform 1.0/1.0 TP/SL
-    "U-MU-H",     # WR 68.4%, 57t, excess +16.7%, MC=0.0036, WF 4/5, PP 3/3
-    "MD-ST-MD",   # WR 70.8%, 48t, excess +19.1%, MC=0.0020, WF 4/5, PP 3/3
-    "GS-U-BD",    # WR 76.0%, 25t, excess +24.3%, MC=0.0073, WF 4/5, PP 2/3
-    "MD-MD-ST",   # WR 71.1%, 38t, excess +19.3%, MC=0.0055, WF 5/5, PP 3/3
-    "BU-IH-DN",   # WR 76.0%, 25t, excess +24.3%, MC=0.0065, WF 4/5, PP 3/3
-    "MD-H-MD",    # WR 83.3%, 18t, excess +31.6%, MC=0.0038, WF 5/5, PP 3/3
-    "IH-MD-MD",   # WR 86.7%, 15t, excess +34.9%, MC=0.0043, WF 4/5, PP 2/3
+    "MD-BU-U",     # WR 94.4%, 54t, MC=0.0005, WF 5/5, PnL +14.1%
+    "MU-MU-U",     # WR 90.3%, 31t, MC=0.0050, WF 4/5, PnL +12.0%
+    "MU-U-MU",     # WR 89.5%, 19t, MC=0.0140, WF 4/5, PnL +19.6%
+    "BU-BU-BD",    # WR 84.4%, 45t, MC=0.0123, WF 5/5, PnL +11.6%
+    "ST-H-DN",     # WR 82.6%, 69t, MC=0.0172, WF 5/5, PnL +1.8%
+    "ST-MU-U",     # WR 76.9%, 121t, MC=0.0026, WF 4/5, PnL +6.4%
+    "DN-IH-ST",    # WR 76.3%, 59t, MC=0.0118, WF 5/5, PnL +6.8%
+    "IH-DN-DN",    # WR 71.6%, 67t, MC=0.0045, WF 4/5, PnL +7.9%
+    "MD-DN-MU",    # WR 59.2%, 49t, MC=0.0069, WF 4/5, PnL +4.1%
+    "BD-ST-U",     # WR 57.6%, 59t, MC=0.0030, WF 5/5, PnL +7.6%
 ]
 
-# SHORT patterns - v1.20.0: Tier 1.5 (WF>=4, MC<0.03, excess>15)
+# SHORT patterns - v1.25.0: 10 total (Moderate-B selection)
 VALIDATED_SHORT_PATTERNS: List[str] = [
-    # DN-D-BD removed in v1.22.0 (MC=0.2390, Holm correction fail, lowest WR 67.4%)
-    "BD-U-GS",    # WR 76.5%, 17t, excess +28.2%, MC=0.0259, WF 4/5, PP 3/3
-    "DN-GS-H",    # WR 80.0%, 15t, excess +31.7%, MC=0.0165, WF 4/5, PP 2/3
-    "U-DF-BU",    # WR 76.5%, 17t, excess +28.2%, MC=0.0258, WF 4/5, PP 2/3
-    "BD-GS-BD",   # WR 76.5%, 17t, excess +28.2%, MC=0.0269, WF 4/5, PP 3/3
-    "DN-IH-IH",   # WR 80.0%, 15t, excess +31.7%, MC=0.0164, WF 5/5, PP 3/3
+    "MD-ST-ST",    # WR 98.5%, 65t, MC=0.0012, WF 5/5, PnL +23.5%
+    "U-MU-BU",     # WR 98.1%, 53t, MC=0.0020, WF 5/5, PnL +18.7%
+    "MU-BU-DN",    # WR 97.7%, 44t, MC=0.0002, WF 5/5, PnL +23.7%
+    "ST-H-U",      # WR 97.1%, 34t, MC=0.0048, WF 5/5, PnL +11.1%
+    "ST-DN-H",     # WR 93.6%, 47t, MC=0.0079, WF 5/5, PnL +20.1%
+    "MD-MU-U",     # WR 90.5%, 42t, MC=0.0020, WF 5/5, PnL +25.8%
+    "BU-U-ST",     # WR 90.2%, 92t, MC=0.0001, WF 5/5, PnL +18.8%
+    "H-DN-ST",     # WR 88.2%, 51t, MC=0.0176, WF 4/5, PnL +8.4%
+    "DN-BD-BU",    # WR 85.9%, 78t, MC=0.0068, WF 4/5, PnL +28.1%
+    "DN-BU-U",     # WR 63.0%, 119t, MC=0.0180, WF 4/5, PnL +19.1%
 ]
 
 # ============================================================
 # Pattern Historical Statistics (for confidence calculation)
-# Source: v1.20.0 unified_pattern_discovery.py (production classification)
+# Source: v1.25.0 deep_portfolio_analysis.py (Moderate-B-20)
 # ============================================================
 PATTERN_STATS = {
-    # LONG patterns (7) - Tier 1 (WF>=4, MC<0.01, excess>15)
-    "U-MU-H":   {"wr": 0.684, "count": 57, "avg_conf": 0.680},
-    "MD-ST-MD": {"wr": 0.708, "count": 48, "avg_conf": 0.710},
-    "GS-U-BD":  {"wr": 0.760, "count": 25, "avg_conf": 0.760},
-    "MD-MD-ST": {"wr": 0.711, "count": 38, "avg_conf": 0.710},
-    "BU-IH-DN": {"wr": 0.760, "count": 25, "avg_conf": 0.760},
-    "MD-H-MD":  {"wr": 0.833, "count": 18, "avg_conf": 0.830},
-    "IH-MD-MD": {"wr": 0.867, "count": 15, "avg_conf": 0.870},
-    # SHORT patterns (5) - Tier 1.5 (WF>=4, MC<0.03, excess>15)
-    # DN-D-BD removed in v1.22.0 (MC=0.2390, Holm correction fail)
-    "BD-U-GS":  {"wr": 0.765, "count": 17, "avg_conf": 0.770},
-    "DN-GS-H":  {"wr": 0.800, "count": 15, "avg_conf": 0.800},
-    "U-DF-BU":  {"wr": 0.765, "count": 17, "avg_conf": 0.770},
-    "BD-GS-BD": {"wr": 0.765, "count": 17, "avg_conf": 0.770},
-    "DN-IH-IH": {"wr": 0.800, "count": 15, "avg_conf": 0.800},
+    # LONG patterns (10)
+    "MD-BU-U": {"direction": "LONG", "trades": 54, "wr": 94.4, "mc": 0.0005, "wf": 5, "periods": 3},
+    "MU-MU-U": {"direction": "LONG", "trades": 31, "wr": 90.3, "mc": 0.0050, "wf": 4, "periods": 3},
+    "MU-U-MU": {"direction": "LONG", "trades": 19, "wr": 89.5, "mc": 0.0140, "wf": 4, "periods": 3},
+    "BU-BU-BD": {"direction": "LONG", "trades": 45, "wr": 84.4, "mc": 0.0123, "wf": 5, "periods": 3},
+    "ST-H-DN": {"direction": "LONG", "trades": 69, "wr": 82.6, "mc": 0.0172, "wf": 5, "periods": 3},
+    "ST-MU-U": {"direction": "LONG", "trades": 121, "wr": 76.9, "mc": 0.0026, "wf": 4, "periods": 3},
+    "DN-IH-ST": {"direction": "LONG", "trades": 59, "wr": 76.3, "mc": 0.0118, "wf": 5, "periods": 3},
+    "IH-DN-DN": {"direction": "LONG", "trades": 67, "wr": 71.6, "mc": 0.0045, "wf": 4, "periods": 3},
+    "MD-DN-MU": {"direction": "LONG", "trades": 49, "wr": 59.2, "mc": 0.0069, "wf": 4, "periods": 3},
+    "BD-ST-U": {"direction": "LONG", "trades": 59, "wr": 57.6, "mc": 0.0030, "wf": 5, "periods": 3},
+    # SHORT patterns (10)
+    "MD-ST-ST": {"direction": "SHORT", "trades": 65, "wr": 98.5, "mc": 0.0012, "wf": 5, "periods": 3},
+    "U-MU-BU": {"direction": "SHORT", "trades": 53, "wr": 98.1, "mc": 0.0020, "wf": 5, "periods": 3},
+    "MU-BU-DN": {"direction": "SHORT", "trades": 44, "wr": 97.7, "mc": 0.0002, "wf": 5, "periods": 3},
+    "ST-H-U": {"direction": "SHORT", "trades": 34, "wr": 97.1, "mc": 0.0048, "wf": 5, "periods": 3},
+    "ST-DN-H": {"direction": "SHORT", "trades": 47, "wr": 93.6, "mc": 0.0079, "wf": 5, "periods": 3},
+    "MD-MU-U": {"direction": "SHORT", "trades": 42, "wr": 90.5, "mc": 0.0020, "wf": 5, "periods": 3},
+    "BU-U-ST": {"direction": "SHORT", "trades": 92, "wr": 90.2, "mc": 0.0001, "wf": 5, "periods": 3},
+    "H-DN-ST": {"direction": "SHORT", "trades": 51, "wr": 88.2, "mc": 0.0176, "wf": 4, "periods": 3},
+    "DN-BD-BU": {"direction": "SHORT", "trades": 78, "wr": 85.9, "mc": 0.0068, "wf": 4, "periods": 3},
+    "DN-BU-U": {"direction": "SHORT", "trades": 119, "wr": 63.0, "mc": 0.0180, "wf": 4, "periods": 3},
 }
 
 # Confidence calculation weights
@@ -157,28 +170,34 @@ CONFIDENCE_LOG_FILE = "results/pattern_5m_confidence_log.csv"
 
 
 # ============================================================
-# Pattern TP/SL (v1.21.0 Conservative Per-Pattern)
-# Research: per_pattern_tpsl_optimization.py, portfolio_tpsl_comparison.py
-# v1.21.0: Conservative per-pattern TP/SL (MC<0.01 optimized, others uniform)
-# Validated: 312t, WR 78.5%, MDD 20.6%, PF 3.19, WF 5/5
+# Pattern TP/SL (v1.25.0 Per-Pattern Optimized)
+# Research: deep_portfolio_analysis.py (2026-02-04)
+# Individually optimized TP/SL for each pattern
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
-    # LONG patterns (7)
-    'U-MU-H':   (1.5, 1.5),  # MC=0.0000, optimized
-    'MD-ST-MD': (2.0, 2.0),  # MC=0.0078, optimized
-    'GS-U-BD':  (1.0, 1.0),  # MC=0.0372, keep uniform (conservative)
-    'MD-MD-ST': (1.5, 2.0),  # MC=0.0002, optimized
-    'BU-IH-DN': (1.5, 2.0),  # MC=0.0022, optimized
-    'MD-H-MD':  (1.0, 1.0),  # MC=0.0014, uniform best
-    'IH-MD-MD': (1.5, 2.0),  # MC=0.0020, optimized
-    # SHORT patterns (5) - DN-D-BD removed in v1.22.0
-    'BD-U-GS':  (1.5, 2.0),  # MC=0.0042, optimized
-    'DN-GS-H':  (1.0, 1.0),  # MC=0.0176, keep uniform (conservative)
-    'U-DF-BU':  (1.0, 1.5),  # MC=0.0010, optimized
-    'BD-GS-BD': (1.0, 1.0),  # MC=0.0120, keep uniform (conservative)
-    'DN-IH-IH': (1.0, 1.5),  # MC=0.0000, optimized
+    # LONG patterns (10)
+    "MD-BU-U": {"tp": 0.5, "sl": 2.0},
+    "MU-MU-U": {"tp": 0.7, "sl": 1.5},
+    "MU-U-MU": {"tp": 1.5, "sl": 2.0},
+    "BU-BU-BD": {"tp": 0.7, "sl": 1.5},
+    "ST-H-DN": {"tp": 0.3, "sl": 0.7},
+    "ST-MU-U": {"tp": 0.5, "sl": 1.0},
+    "DN-IH-ST": {"tp": 0.5, "sl": 0.7},
+    "IH-DN-DN": {"tp": 0.7, "sl": 1.0},
+    "MD-DN-MU": {"tp": 1.0, "sl": 1.0},
+    "BD-ST-U": {"tp": 1.5, "sl": 1.5},
+    # SHORT patterns (10)
+    "MD-ST-ST": {"tp": 0.5, "sl": 2.0},
+    "U-MU-BU": {"tp": 0.5, "sl": 2.0},
+    "MU-BU-DN": {"tp": 0.7, "sl": 2.0},
+    "ST-H-U": {"tp": 0.5, "sl": 2.0},
+    "ST-DN-H": {"tp": 0.7, "sl": 2.0},
+    "MD-MU-U": {"tp": 1.0, "sl": 2.0},
+    "BU-U-ST": {"tp": 0.5, "sl": 1.5},
+    "H-DN-ST": {"tp": 0.5, "sl": 1.5},
+    "DN-BD-BU": {"tp": 0.7, "sl": 1.0},
+    "DN-BU-U": {"tp": 1.0, "sl": 1.0},
 }
-
 
 # ============================================================
 # Pattern Context Filters (v1.19.0)

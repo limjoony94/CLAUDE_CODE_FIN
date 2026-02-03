@@ -1,0 +1,35 @@
+{
+  "version": "v1.25.0",
+  "portfolio": "Moderate-B-20",
+  "baseline": {
+    "trades": 1936,
+    "wr": 77.1694214876033,
+    "total_pnl": 1345.9999999999998,
+    "pf": 1.7680894772882902
+  },
+  "bootstrap": {
+    "wr_ci": [
+      75.25826446280992,
+      79.02892561983471
+    ],
+    "pnl_ci": [
+      1106.8925000000002,
+      1581.7999999999997
+    ],
+    "passed": true
+  },
+  "walk_forward": {
+    "score": "5/5",
+    "passed": true
+  },
+  "stress_test": {
+    "passed": true
+  },
+  "oos": {
+    "test_wr": 76.19047619047619,
+    "test_pnl": 327.29999999999995,
+    "degradation": -1.267717789456924,
+    "passed": true
+  },
+  "all_passed": true
+}

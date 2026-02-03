@@ -15,6 +15,7 @@
 | 문서 | 설명 |
 |------|------|
 | [agent-guides.md](agent-guides.md) | dev/automation/monitor 에이전트별 상세 가이드 |
+| [v1.25.0-review.md](v1.25.0-review.md) | **v1.25.0 Moderate-B-20 포트폴리오 리뷰** ← 최신 |
 | [v1.23.0-review.md](v1.23.0-review.md) | v1.23.0 정밀 검증 리포트 |
 | [CODING_CONVENTIONS.md](CODING_CONVENTIONS.md) | 코딩 컨벤션 |
 | [GIT_WORKFLOW.md](GIT_WORKFLOW.md) | Git 워크플로 |

@@ -171,8 +171,8 @@ def _run_bot_main(
 
     # Main loop counters
     iteration = 0
-    last_sync_time = time.time()
-    health_check_interval = config.get('health_check_interval', DEFAULT_HEALTH_CHECK_INTERVAL)
+    last_sync_time = 0  # First run will trigger sync
+    last_health_check_time = 0  # First run will trigger health check
 
     logger.info("✅ Bot initialized, starting main loop...")
 
@@ -186,24 +186,29 @@ def _run_bot_main(
                 time.sleep(DAILY_LOSS_PAUSE_SECONDS)
                 continue
 
-            # Periodic position sync
-            last_sync_time = _maybe_sync_position(
-                exchange, state, config, cache, circuit_breaker, metrics, last_sync_time
-            )
-
-            # Process position or look for signals
+            # === Priority 1: Trading decision (highest priority) ===
+            has_trading_action = False
             if state.get('position'):
-                _process_existing_position(
+                has_trading_action = _process_existing_position(
                     exchange, state, config, cache, circuit_breaker, metrics, iteration
                 )
             else:
-                _process_no_position(
+                has_trading_action = _process_no_position(
                     exchange, state, config, cache, circuit_breaker, metrics, iteration
                 )
 
-            # Periodic health check
-            if iteration % health_check_interval == 0:
-                _run_health_check(exchange, config, cache, circuit_breaker, metrics, state_path)
+            # === Priority 2: Maintenance tasks (only when no trading action) ===
+            if not has_trading_action:
+                # Position sync at 5-min intervals (00, 05, 10, ...)
+                last_sync_time = _maybe_sync_position(
+                    exchange, state, config, cache, circuit_breaker, metrics, last_sync_time
+                )
+
+                # Health check at 30-min intervals (00, 30)
+                last_health_check_time = _maybe_run_health_check(
+                    exchange, config, cache, circuit_breaker, metrics, state_path,
+                    last_health_check_time
+                )
 
             # Periodic metrics save
             if iteration % METRICS_SAVE_INTERVAL == 0:
@@ -236,6 +241,36 @@ def _verify_exchange_settings(exchange: ccxt.bingx, config: Dict[str, Any]) -> N
     set_margin_mode(exchange, config)
 
 
+def _should_sync_now(last_sync_time: float, interval_minutes: int) -> bool:
+    """
+    Check if sync should run at clock-aligned intervals.
+
+    Args:
+        last_sync_time: Timestamp of last sync (0 for first run)
+        interval_minutes: Sync interval in minutes (e.g., 5 for every 5 minutes)
+
+    Returns:
+        True if should sync now
+    """
+    current_dt = datetime.now()
+    current_minute = current_dt.minute
+
+    # First run: always sync
+    if last_sync_time == 0:
+        return True
+
+    # Check if current minute is at sync interval (00, 05, 10, ...)
+    if current_minute % interval_minutes != 0:
+        return False
+
+    # Prevent duplicate sync in same minute
+    last_sync_dt = datetime.fromtimestamp(last_sync_time)
+    if last_sync_dt.hour == current_dt.hour and last_sync_dt.minute == current_minute:
+        return False
+
+    return True
+
+
 def _maybe_sync_position(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -246,17 +281,16 @@ def _maybe_sync_position(
     last_sync_time: float,
 ) -> float:
     """
-    Periodic position synchronization.
+    Clock-aligned position synchronization.
+
+    Runs immediately on first call, then at 5-minute intervals (00, 05, 10, ...).
 
     Returns:
         Updated last_sync_time
     """
-    current_time = time.time()
-    sync_interval = POSITION_SYNC_INTERVAL_MINUTES * 60
-
-    if (current_time - last_sync_time) >= sync_interval:
+    if _should_sync_now(last_sync_time, POSITION_SYNC_INTERVAL_MINUTES):
         sync_position_with_exchange(exchange, state, config, cache, circuit_breaker, metrics)
-        return current_time
+        return time.time()
 
     return last_sync_time
 
@@ -269,8 +303,13 @@ def _process_existing_position(
     circuit_breaker: CircuitBreaker,
     metrics: PerformanceMetrics,
     iteration: int,
-) -> None:
-    """Process when a position exists."""
+) -> bool:
+    """
+    Process when a position exists.
+
+    Returns:
+        True if trading action occurred (close/exit), False otherwise
+    """
     from .state import save_state
 
     position = state['position']
@@ -282,7 +321,7 @@ def _process_existing_position(
 
     if position_closed:
         logger.info("📤 Position closed")
-        return
+        return True  # Trading action occurred
 
     # === EARLY EXIT CHECK (v1.3) ===
     # Check for reversal signals that should trigger early exit
@@ -320,7 +359,8 @@ def _process_existing_position(
                 )
                 if success:
                     logger.info(f"✅ Early exit completed: {exit_reason}")
-                return
+                    return True  # Trading action occurred
+                return True  # Attempted to exit
 
         except Exception as e:
             logger.warning(f"Early exit check failed: {e}")
@@ -338,6 +378,7 @@ def _process_existing_position(
         verify_tp_sl_orders(exchange, state, config)
 
     time.sleep(POSITION_CHECK_SLEEP)
+    return False  # No trading action
 
 
 def _process_no_position(
@@ -348,12 +389,17 @@ def _process_no_position(
     circuit_breaker: CircuitBreaker,
     metrics: PerformanceMetrics,
     iteration: int,
-) -> None:
-    """Process when no position exists - look for entry signals."""
+) -> bool:
+    """
+    Process when no position exists - look for entry signals.
+
+    Returns:
+        True if trading action occurred (opened position), False otherwise
+    """
     # Check cooldown
     if not check_cooldown(state, config):
         time.sleep(DEFAULT_SLEEP_INTERVAL)
-        return
+        return False
 
     # Wait for candle to settle
     _wait_for_candle_settle(config)
@@ -362,7 +408,7 @@ def _process_no_position(
     df = _fetch_and_calculate_indicators(exchange, config)
     if df is None:
         time.sleep(DEFAULT_SLEEP_INTERVAL)
-        return
+        return False
 
     # Check for entry signal
     signal, reason = check_entry_signal(df, state, config)
@@ -375,12 +421,15 @@ def _process_no_position(
         )
         if success:
             logger.info(f"✅ Position opened: {signal}")
+            return True  # Trading action occurred
+        return False  # Failed to open position
     else:
         # Log status periodically
         if iteration % LOG_STATUS_INTERVAL == 0:
             _log_waiting_status(state, metrics, cache, exchange, config)
 
     time.sleep(DEFAULT_SLEEP_INTERVAL)
+    return False  # No trading action
 
 
 def _wait_for_candle_settle(config: Dict[str, Any]) -> None:
@@ -480,6 +529,31 @@ def _log_waiting_status(
         logger.debug(f"Could not log waiting status (network error): {e}")
     except Exception as e:
         logger.debug(f"Could not log waiting status: {e}")
+
+
+def _maybe_run_health_check(
+    exchange: ccxt.bingx,
+    config: Dict[str, Any],
+    cache: APICache,
+    circuit_breaker: CircuitBreaker,
+    metrics: PerformanceMetrics,
+    state_file: str,
+    last_health_check_time: float,
+    interval_minutes: int = 30,
+) -> float:
+    """
+    Clock-aligned health check.
+
+    Runs immediately on first call, then at specified intervals (default 30 min: 00, 30).
+
+    Returns:
+        Updated last_health_check_time
+    """
+    if _should_sync_now(last_health_check_time, interval_minutes):
+        _run_health_check(exchange, config, cache, circuit_breaker, metrics, state_file)
+        return time.time()
+
+    return last_health_check_time
 
 
 def _run_health_check(

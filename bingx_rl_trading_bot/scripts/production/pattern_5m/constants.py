@@ -175,28 +175,28 @@ CONFIDENCE_LOG_FILE = "results/pattern_5m_confidence_log.csv"
 # Individually optimized TP/SL for each pattern
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
-    # LONG patterns (10)
-    "MD-BU-U": {"tp": 0.5, "sl": 2.0},
-    "MU-MU-U": {"tp": 0.7, "sl": 1.5},
-    "MU-U-MU": {"tp": 1.5, "sl": 2.0},
-    "BU-BU-BD": {"tp": 0.7, "sl": 1.5},
-    "ST-H-DN": {"tp": 0.3, "sl": 0.7},
-    "ST-MU-U": {"tp": 0.5, "sl": 1.0},
-    "DN-IH-ST": {"tp": 0.5, "sl": 0.7},
-    "IH-DN-DN": {"tp": 0.7, "sl": 1.0},
-    "MD-DN-MU": {"tp": 1.0, "sl": 1.0},
-    "BD-ST-U": {"tp": 1.5, "sl": 1.5},
+    # LONG patterns (10) - format: (tp_pct, sl_pct)
+    "MD-BU-U": (0.5, 2.0),
+    "MU-MU-U": (0.7, 1.5),
+    "MU-U-MU": (1.5, 2.0),
+    "BU-BU-BD": (0.7, 1.5),
+    "ST-H-DN": (0.3, 0.7),
+    "ST-MU-U": (0.5, 1.0),
+    "DN-IH-ST": (0.5, 0.7),
+    "IH-DN-DN": (0.7, 1.0),
+    "MD-DN-MU": (1.0, 1.0),
+    "BD-ST-U": (1.5, 1.5),
     # SHORT patterns (10)
-    "MD-ST-ST": {"tp": 0.5, "sl": 2.0},
-    "U-MU-BU": {"tp": 0.5, "sl": 2.0},
-    "MU-BU-DN": {"tp": 0.7, "sl": 2.0},
-    "ST-H-U": {"tp": 0.5, "sl": 2.0},
-    "ST-DN-H": {"tp": 0.7, "sl": 2.0},
-    "MD-MU-U": {"tp": 1.0, "sl": 2.0},
-    "BU-U-ST": {"tp": 0.5, "sl": 1.5},
-    "H-DN-ST": {"tp": 0.5, "sl": 1.5},
-    "DN-BD-BU": {"tp": 0.7, "sl": 1.0},
-    "DN-BU-U": {"tp": 1.0, "sl": 1.0},
+    "MD-ST-ST": (0.5, 2.0),
+    "U-MU-BU": (0.5, 2.0),
+    "MU-BU-DN": (0.7, 2.0),
+    "ST-H-U": (0.5, 2.0),
+    "ST-DN-H": (0.7, 2.0),
+    "MD-MU-U": (1.0, 2.0),
+    "BU-U-ST": (0.5, 1.5),
+    "H-DN-ST": (0.5, 1.5),
+    "DN-BD-BU": (0.7, 1.0),
+    "DN-BU-U": (1.0, 1.0),
 }
 
 # ============================================================

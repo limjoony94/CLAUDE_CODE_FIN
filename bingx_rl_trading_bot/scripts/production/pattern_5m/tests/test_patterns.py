@@ -73,7 +73,8 @@ class TestPatternMatching:
 
     def test_tpsl_values_reasonable(self):
         """TP/SL values should be between 0.1% and 10%."""
-        for pattern, (tp, sl) in PATTERN_OPTIMAL_TPSL.items():
+        for pattern, tpsl in PATTERN_OPTIMAL_TPSL.items():
+            tp, sl = tpsl
             assert 0.1 <= tp <= 10.0, f"{pattern} TP={tp} out of range"
             assert 0.1 <= sl <= 10.0, f"{pattern} SL={sl} out of range"
 
@@ -81,4 +82,4 @@ class TestPatternMatching:
         """Historical win rates should be between 50% and 100%."""
         for pattern, stats in PATTERN_STATS.items():
             wr = stats['wr']
-            assert 0.5 <= wr <= 1.0, f"{pattern} WR={wr} out of range"
+            assert 50.0 <= wr <= 100.0, f"{pattern} WR={wr} out of range"

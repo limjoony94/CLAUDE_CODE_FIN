@@ -23,8 +23,8 @@ import time
 import sys
 
 # Import canonical classify_candle from production
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from scripts.production.pattern_5m.indicators import classify_candle
+sys.path.insert(0, str(Path(__file__).parent.parent / 'production'))
+from pattern_5m.indicators import classify_candle
 
 # ============================================================
 # Parameters
@@ -77,9 +77,19 @@ body_abs_arr = np.abs(closes - opens)
 avg_body_20_arr = pd.Series(body_abs_arr).rolling(20).mean().values  # NaN for bars 0-19
 # For early bars: use default avg_body_20=1.0 to preserve range-based classification
 # (DOJI, HAMMER, DRAGONFLY, GRAVESTONE, MARUBOZU) while norm_body defaults conservatively
-types = [classify_candle(opens[i], highs[i], lows[i], closes[i],
-                         avg_body_20_arr[i] if not pd.isna(avg_body_20_arr[i]) else 1.0)
-         for i in range(n_bars)]
+
+# Classify using production function with correct signature
+types = []
+for i in range(n_bars):
+    row = pd.Series({
+        'open': opens[i],
+        'high': highs[i],
+        'low': lows[i],
+        'close': closes[i]
+    })
+    avg_b = avg_body_20_arr[i] if not pd.isna(avg_body_20_arr[i]) else 1.0
+    candle_type = classify_candle(row, avg_b)
+    types.append(candle_type.name)  # Convert enum to string abbreviation
 
 # Count type distribution
 from collections import Counter

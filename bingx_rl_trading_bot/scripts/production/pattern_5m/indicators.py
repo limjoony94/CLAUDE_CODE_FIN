@@ -47,23 +47,13 @@ def classify_candle(row: pd.Series, avg_body_20: float) -> CandleType:
     lower_wick = min(o, c) - l
     body_ratio = body_abs / range_hl
 
-    # Doji family
-    if body_ratio < DOJI_BODY_RATIO_THRESHOLD:
-        lower_ratio = lower_wick / range_hl
-        upper_ratio = upper_wick / range_hl
-        if lower_ratio > WICK_DOMINANCE_THRESHOLD:
-            return CandleType.DRAGONFLY
-        elif upper_ratio > WICK_DOMINANCE_THRESHOLD:
-            return CandleType.GRAVESTONE
-        else:
-            return CandleType.DOJI
-
-    # Marubozu
+    # Marubozu (checked first - very small wicks)
     total_wick_ratio = (upper_wick + lower_wick) / range_hl
     if total_wick_ratio < MARUBOZU_WICK_RATIO_THRESHOLD:
         return CandleType.MARUBOZU_UP if body > 0 else CandleType.MARUBOZU_DOWN
 
-    # Hammer / Inverted Hammer
+    # Hammer / Inverted Hammer (checked before DOJI family)
+    # These have extreme wick-to-body ratios and should take priority
     if body_abs > 0:
         lower_to_body = lower_wick / body_abs
         upper_to_body = upper_wick / body_abs
@@ -72,10 +62,20 @@ def classify_candle(row: pd.Series, avg_body_20: float) -> CandleType:
         if upper_to_body > HAMMER_WICK_TO_BODY_RATIO and lower_to_body < HAMMER_OPPOSITE_WICK_RATIO:
             return CandleType.INV_HAMMER
 
+    # Doji family (checked after HAMMER to avoid misclassification)
+    if body_ratio < DOJI_BODY_RATIO_THRESHOLD:
+        lower_ratio = lower_wick / range_hl
+        upper_ratio = upper_wick / range_hl
+        if lower_ratio > WICK_DOMINANCE_THRESHOLD:
+            return CandleType.DRAGONFLY
+        elif upper_ratio > WICK_DOMINANCE_THRESHOLD:
+            return CandleType.GRAVESTONE
+        return CandleType.DOJI
+
     # Spinning Top
     norm_body = body_abs / avg_body_20 if avg_body_20 > 0 else 1.0
     if norm_body < SPINNING_TOP_BODY_NORM and body_abs > 0:
-        if lower_wick > SPINNING_TOP_WICK_RATIO * body_abs and upper_wick > SPINNING_TOP_WICK_RATIO * body_abs:
+        if lower_wick >= SPINNING_TOP_WICK_RATIO * body_abs and upper_wick >= SPINNING_TOP_WICK_RATIO * body_abs:
             return CandleType.SPINNING_TOP
 
     # Big or Medium

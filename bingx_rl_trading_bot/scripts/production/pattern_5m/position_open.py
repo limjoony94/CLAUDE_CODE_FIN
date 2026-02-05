@@ -490,8 +490,15 @@ def refill_position(
         direction = 1 if position['direction'] == 'LONG' else -1
         vol_mult = position.get('vol_mult', 1.0)
 
+        # Extract pattern from position reason for per-pattern TP/SL
+        pattern = None
+        pos_reason = position.get('reason', '')
+        if pos_reason and 'Pattern:' in pos_reason:
+            pattern = pos_reason.split('Pattern:')[-1].strip().split()[0]
+        regime_tp_sl = position.get('regime_tp_sl')
+
         tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = _calculate_tp_sl(
-            new_avg_entry, direction, strategy, vol_mult
+            new_avg_entry, direction, strategy, vol_mult, pattern, regime_tp_sl
         )
 
         logger.info(f"New TP: ${tp_price:.1f} | New SL: ${sl_price:.1f}")

@@ -355,20 +355,28 @@ def fetch_ohlcv(
     symbol: str,
     timeframe: str,
     limit: int = 100,
+    circuit_breaker: Optional[CircuitBreaker] = None,
+    metrics: Optional[PerformanceMetrics] = None,
 ) -> List[List[Any]]:
     """
-    Fetch OHLCV candlestick data.
+    Fetch OHLCV candlestick data with retry logic.
 
     Args:
         exchange: Exchange instance
         symbol: Trading symbol
         timeframe: Candle timeframe (e.g., '5m')
         limit: Number of candles to fetch
+        circuit_breaker: Optional CircuitBreaker
+        metrics: Optional PerformanceMetrics
 
     Returns:
         List of OHLCV data (each item: [timestamp, open, high, low, close, volume])
     """
-    return exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
+    @api_retry(circuit_breaker=circuit_breaker, metrics=metrics)
+    def _fetch() -> List[List[Any]]:
+        return exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
+
+    return _fetch()
 
 
 # ============================================================

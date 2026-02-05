@@ -381,9 +381,10 @@ def calculate_pattern_confidence(
     clarity = sum(clarity_scores) / 3
 
     # Component 2: Historical win rate (normalized: 50%=0, 70%=1)
+    # PATTERN_STATS WR is in percentage (57-98), convert to ratio for normalization
     pattern_stats = PATTERN_STATS.get(pattern, {})
-    hist_wr = pattern_stats.get("wr", 0.5)
-    historical = min(1.0, max(0.0, (hist_wr - 0.50) / 0.20))
+    hist_wr = pattern_stats.get("wr", 50.0)
+    historical = min(1.0, max(0.0, (hist_wr / 100.0 - 0.50) / 0.20))
 
     # Component 3: Regime alignment (placeholder - use neutral 0.6 for now)
     # Future: integrate with MTF trend analysis

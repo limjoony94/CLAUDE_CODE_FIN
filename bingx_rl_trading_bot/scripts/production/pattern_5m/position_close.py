@@ -9,6 +9,8 @@ from typing import Dict, Any, Optional, List
 
 import ccxt
 
+import re
+
 from .constants import (
     SLIPPAGE_BUFFER_PCT,
     FEE_PCT,
@@ -17,6 +19,7 @@ from .constants import (
     QUANTITY_ROUND_DECIMALS,
     ROTATION_ENABLED,
     CONFIDENCE_LOG_FILE,
+    PATTERN_OPTIMAL_TPSL,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_positions_cached
@@ -296,9 +299,17 @@ def recalculate_position_orders(
     position['quantity'] = new_quantity
     position['remaining_quantity'] = new_quantity
 
-    # Recalculate TP/SL
-    base_tp_pct = strategy['tp_pct']
-    base_sl_pct = strategy['sl_pct']
+    # Recalculate TP/SL — use per-pattern values if available
+    reason = position.get('reason', '')
+    pattern_match = re.search(r'Pattern:\s*(\S+)', reason)
+    pattern_name = pattern_match.group(1) if pattern_match else None
+
+    if pattern_name and pattern_name in PATTERN_OPTIMAL_TPSL:
+        base_tp_pct, base_sl_pct = PATTERN_OPTIMAL_TPSL[pattern_name]
+        logger.info(f"Using pattern-specific TP/SL for recalc: {pattern_name} → TP={base_tp_pct}%, SL={base_sl_pct}%")
+    else:
+        base_tp_pct = strategy['tp_pct']
+        base_sl_pct = strategy['sl_pct']
     tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
     sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
 

@@ -118,8 +118,9 @@ def validate_config(config: Dict[str, Any]) -> bool:
 
 
 def get_strategy_config(config: Dict[str, Any]) -> Dict[str, Any]:
-    """Extract strategy configuration with defaults."""
-    return config.get('strategy', DEFAULT_CONFIG['strategy'])
+    """Extract strategy configuration with defaults (returns a copy)."""
+    strategy = config.get('strategy', DEFAULT_CONFIG['strategy'])
+    return _deep_copy_config(strategy)
 
 
 def get_risk_config(config: Dict[str, Any]) -> Dict[str, Any]:

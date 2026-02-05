@@ -167,15 +167,28 @@ def get_pattern_description(pattern: str) -> str:
         Description string
     """
     descriptions = {
-        "MU-U-DN": "Strong Up → Continue → Pullback (LONG momentum pullback)",
-        "DN-MD-BD": "Down → Strong Down → Big Down (SHORT reversal)",
-        "DF-U-U": "Dragonfly → Up → Up (LONG continuation)",
-        "BU-ST-ST": "Big Up → Spinning → Spinning (LONG indecision breakout)",
-        "MU-DN-MU": "Strong Up → Pullback → Strong Up (LONG double momentum)",
-        "MU-ST-ST": "Strong Up → Spinning → Spinning (SHORT exhaustion)",
-        "U-MU-ST": "Up → Strong Up → Spinning (SHORT momentum exhaustion)",
-        "IH-DN-DN": "Inv Hammer → Down → Down (SHORT continuation)",
-        "D-ST-U": "Doji → Spinning → Up (SHORT reversal)",
+        # LONG patterns (10) - v1.25.0
+        "MD-BU-U": "Marubozu Down → Big Up → Up (LONG reversal momentum)",
+        "MU-MU-U": "Marubozu Up → Marubozu Up → Up (LONG triple momentum)",
+        "MU-U-MU": "Marubozu Up → Up → Marubozu Up (LONG momentum continuation)",
+        "BU-BU-BD": "Big Up → Big Up → Big Down (LONG pullback entry)",
+        "ST-H-DN": "Spinning → Hammer → Down (LONG hammer reversal)",
+        "ST-MU-U": "Spinning → Marubozu Up → Up (LONG breakout)",
+        "DN-IH-ST": "Down → Inv Hammer → Spinning (LONG indecision reversal)",
+        "IH-DN-DN": "Inv Hammer → Down → Down (LONG oversold bounce)",
+        "MD-DN-MU": "Marubozu Down → Down → Marubozu Up (LONG V-reversal)",
+        "BD-ST-U": "Big Down → Spinning → Up (LONG bottom reversal)",
+        # SHORT patterns (10) - v1.25.0
+        "MD-ST-ST": "Marubozu Down → Spinning → Spinning (SHORT continuation)",
+        "U-MU-BU": "Up → Marubozu Up → Big Up (SHORT exhaustion top)",
+        "MU-BU-DN": "Marubozu Up → Big Up → Down (SHORT reversal)",
+        "ST-H-U": "Spinning → Hammer → Up (SHORT trap setup)",
+        "ST-DN-H": "Spinning → Down → Hammer (SHORT continuation)",
+        "MD-MU-U": "Marubozu Down → Marubozu Up → Up (SHORT failed bounce)",
+        "BU-U-ST": "Big Up → Up → Spinning (SHORT momentum exhaustion)",
+        "H-DN-ST": "Hammer → Down → Spinning (SHORT breakdown)",
+        "DN-BD-BU": "Down → Big Down → Big Up (SHORT bounce trap)",
+        "DN-BU-U": "Down → Big Up → Up (SHORT dead cat bounce)",
     }
     return descriptions.get(pattern, pattern)
 

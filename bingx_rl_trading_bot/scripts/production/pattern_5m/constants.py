@@ -353,9 +353,14 @@ QTY_REDUCTION_THRESHOLD = 0.99
 # TIMING CONSTANTS
 # ============================================================
 CANDLE_DURATION_MS = 300000  # 5 minutes
-CANDLE_SETTLE_SECONDS = 15
-DEFAULT_SLEEP_INTERVAL = 30
-POSITION_CHECK_SLEEP = 30
+CANDLE_SETTLE_SECONDS = 5  # v1.25.1: Reduced from 15 (BingX delivers BTC 5m in 2-3s)
+DEFAULT_SLEEP_INTERVAL = 10  # v1.25.1: Error fallback only (candle-aligned loop replaces polling)
+POSITION_CHECK_SLEEP = 30  # Deprecated: kept for backward compat
+
+# Candle-aligned loop timing (v1.25.1)
+TRADING_WINDOW_SECONDS = 30     # First 30s after candle close = trading window
+POSITION_MONITOR_INTERVAL = 15  # Check position status every 15s during maintenance
+MAX_MAINTENANCE_SLEEP = 120     # Max sleep when no position (maintenance window)
 DAILY_LOSS_PAUSE_SECONDS = 300
 ENTRY_PRICE_FETCH_DELAY = 0.5
 EXIT_PRICE_FETCH_DELAY = 0.5
@@ -366,12 +371,18 @@ MAX_EXIT_PRICE_RETRIES = 3
 # ============================================================
 # INTERVAL CONSTANTS
 # ============================================================
+# Iteration-based intervals (deprecated: kept for backward compat in tests)
 TP_SL_CHECK_INTERVAL = 20
 DEFAULT_HEALTH_CHECK_INTERVAL = 50
 LOG_STATUS_INTERVAL = 10
 MAX_OHLCV_CANDLES = 150  # v1.18.2: Increased from 100 for regime detection (needs 114+)
 METRICS_SAVE_INTERVAL = 10
 CACHE_TTL_SECONDS = 5
+
+# Time-based intervals (v1.25.1: replaces iteration-based in main loop)
+TP_SL_VERIFY_INTERVAL_SECONDS = 600   # Every 10 minutes
+LOG_STATUS_INTERVAL_SECONDS = 300     # Every 5 minutes
+METRICS_SAVE_INTERVAL_SECONDS = 300   # Every 5 minutes
 
 # ============================================================
 # BACKUP & STATE

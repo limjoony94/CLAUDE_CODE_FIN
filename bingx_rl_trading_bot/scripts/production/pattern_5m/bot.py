@@ -1,6 +1,11 @@
 """
 Pattern 5m Bot - Main Bot Logic
 The main trading loop and bot orchestration.
+
+v1.25.1: Candle-aligned smart sleep replaces fixed-interval polling.
+- Trading Window (first 30s after candle close): signal/exit check
+- Maintenance Window (rest of candle): monitoring, sync, health, metrics
+- Signal latency: ~5-8s after candle close (was 17-50s)
 """
 
 import os
@@ -9,6 +14,7 @@ import time
 import signal
 import logging
 import pandas as pd
+from collections import namedtuple
 from datetime import datetime
 from typing import Dict, Any, Optional
 
@@ -22,15 +28,16 @@ from .constants import (
     METRICS_FILE,
     MAX_OHLCV_CANDLES,
     DEFAULT_SLEEP_INTERVAL,
-    POSITION_CHECK_SLEEP,
     DAILY_LOSS_PAUSE_SECONDS,
     CANDLE_SETTLE_SECONDS,
     CANDLE_DURATION_MS,
-    TP_SL_CHECK_INTERVAL,
-    LOG_STATUS_INTERVAL,
-    METRICS_SAVE_INTERVAL,
     POSITION_SYNC_INTERVAL_MINUTES,
-    DEFAULT_HEALTH_CHECK_INTERVAL,
+    TRADING_WINDOW_SECONDS,
+    POSITION_MONITOR_INTERVAL,
+    MAX_MAINTENANCE_SLEEP,
+    TP_SL_VERIFY_INTERVAL_SECONDS,
+    LOG_STATUS_INTERVAL_SECONDS,
+    METRICS_SAVE_INTERVAL_SECONDS,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .config import load_config, validate_config
@@ -67,12 +74,80 @@ logger = logging.getLogger('pattern_5m')
 # Global shutdown flag
 shutdown_requested = False
 
+# Candle timing helper
+CandleTiming = namedtuple('CandleTiming', [
+    'seconds_into_candle', 'seconds_until_close', 'candle_id', 'in_trading_window'
+])
+
 
 def signal_handler(signum, frame):
     """Handle shutdown signals gracefully."""
     global shutdown_requested
     logger.info(f"\n🛑 Received signal {signum}, initiating graceful shutdown...")
     shutdown_requested = True
+
+
+def _get_candle_timing():
+    """
+    Calculate current position within the 5-minute candle cycle.
+
+    Returns:
+        CandleTiming namedtuple with seconds_into_candle, seconds_until_close,
+        candle_id (unique per candle), and in_trading_window flag.
+    """
+    now_ms = int(time.time() * 1000)
+    candle_progress_ms = now_ms % CANDLE_DURATION_MS
+    seconds_into_candle = candle_progress_ms / 1000
+    seconds_until_close = (CANDLE_DURATION_MS - candle_progress_ms) / 1000
+    candle_id = now_ms // CANDLE_DURATION_MS
+    in_trading_window = seconds_into_candle < TRADING_WINDOW_SECONDS
+
+    return CandleTiming(
+        seconds_into_candle=seconds_into_candle,
+        seconds_until_close=seconds_until_close,
+        candle_id=candle_id,
+        in_trading_window=in_trading_window,
+    )
+
+
+def _interruptible_sleep(duration):
+    """
+    Sleep that checks shutdown_requested every 1s for fast shutdown.
+
+    Args:
+        duration: Total sleep duration in seconds
+    """
+    global shutdown_requested
+    end_time = time.time() + duration
+    while time.time() < end_time and not shutdown_requested:
+        remaining = end_time - time.time()
+        time.sleep(min(1.0, max(0.0, remaining)))
+
+
+def _calculate_sleep_duration(has_position, last_processed_candle_id):
+    """
+    Calculate smart sleep duration based on candle timing and position state.
+
+    Args:
+        has_position: Whether bot currently has an open position
+        last_processed_candle_id: ID of the last candle that was processed
+
+    Returns:
+        Sleep duration in seconds
+    """
+    timing = _get_candle_timing()
+
+    # In trading window with unprocessed candle → wake immediately
+    if timing.in_trading_window and timing.candle_id != last_processed_candle_id:
+        return 0
+
+    # Time until next candle's trading window
+    next_trading_start = timing.seconds_until_close + CANDLE_SETTLE_SECONDS
+
+    if has_position:
+        return min(POSITION_MONITOR_INTERVAL, next_trading_start)
+    else:
+        return min(MAX_MAINTENANCE_SLEEP, next_trading_start)
 
 
 def run_bot(config_file: str = CONFIG_FILE) -> None:
@@ -135,13 +210,16 @@ def _run_bot_main(
     metrics_path: str,
 ) -> None:
     """
-    Main bot loop implementation.
+    Main bot loop with candle-aligned timing.
 
-    Args:
-        config: Bot configuration dictionary
-        state_path: Path to state JSON file
-        metrics_path: Path to metrics JSON file
+    Two-phase loop per candle:
+    - Trading Window (first 30s after candle close): signal/exit check
+    - Maintenance Window (rest of candle): monitoring, sync, health, metrics
+
+    Signal latency: ~5-8s after candle close (was 17-50s with fixed polling).
     """
+    global shutdown_requested
+
     # Initialize components
     exchange = create_exchange()
     cache = APICache()
@@ -169,61 +247,100 @@ def _run_bot_main(
     if state.get('position'):
         adjust_tpsl_to_config(exchange, state, config)
 
-    # Main loop counters
-    iteration = 0
-    last_sync_time = 0  # First run will trigger sync
-    last_health_check_time = 0  # First run will trigger health check
+    # Candle-aligned loop state
+    last_processed_candle_id = -1
+    last_sync_time = 0
+    last_health_check_time = 0
+    last_tp_sl_verify_time = 0.0
+    last_log_status_time = 0.0
+    last_metrics_save_time = 0.0
 
-    logger.info("✅ Bot initialized, starting main loop...")
+    logger.info("✅ Bot initialized (candle-aligned loop), starting main loop...")
 
     while not shutdown_requested:
         try:
-            iteration += 1
-
             # Check daily loss limit
             if check_daily_loss_limit(state, config):
                 logger.warning(f"⚠️ Daily loss limit reached, pausing {DAILY_LOSS_PAUSE_SECONDS}s")
-                time.sleep(DAILY_LOSS_PAUSE_SECONDS)
+                _interruptible_sleep(DAILY_LOSS_PAUSE_SECONDS)
                 continue
 
-            # === Priority 1: Trading decision (highest priority) ===
-            has_trading_action = False
-            if state.get('position'):
-                has_trading_action = _process_existing_position(
-                    exchange, state, config, cache, circuit_breaker, metrics, iteration
-                )
-            else:
-                has_trading_action = _process_no_position(
-                    exchange, state, config, cache, circuit_breaker, metrics, iteration
-                )
+            timing = _get_candle_timing()
+            has_position = bool(state.get('position'))
+            now = time.time()
 
-            # === Priority 2: Maintenance tasks (only when no trading action) ===
-            if not has_trading_action:
-                # Position sync at 5-min intervals (00, 05, 10, ...)
+            # === TRADING WINDOW: First 30s after candle close ===
+            if timing.in_trading_window and timing.candle_id != last_processed_candle_id:
+                _wait_for_candle_settle(config)
+
+                if has_position:
+                    # Check if position was closed (TP/SL hit) first
+                    position_closed = check_position_status(
+                        exchange, state, config, cache, circuit_breaker, metrics
+                    )
+                    if not position_closed:
+                        _process_existing_position(
+                            exchange, state, config, cache, circuit_breaker, metrics
+                        )
+                else:
+                    _process_no_position(
+                        exchange, state, config, cache, circuit_breaker, metrics
+                    )
+
+                last_processed_candle_id = timing.candle_id
+
+            else:
+                # === MAINTENANCE WINDOW ===
+                if has_position:
+                    check_position_status(
+                        exchange, state, config, cache, circuit_breaker, metrics
+                    )
+
+                # Position sync (clock-aligned, every 5 min)
                 last_sync_time = _maybe_sync_position(
                     exchange, state, config, cache, circuit_breaker, metrics, last_sync_time
                 )
 
-                # Health check at 30-min intervals (00, 30)
+                # Health check (clock-aligned, every 30 min)
                 last_health_check_time = _maybe_run_health_check(
                     exchange, config, cache, circuit_breaker, metrics, state_path,
                     last_health_check_time
                 )
 
-            # Periodic metrics save
-            if iteration % METRICS_SAVE_INTERVAL == 0:
-                save_metrics(metrics, metrics_path)
+                # Time-based maintenance tasks
+                has_position = bool(state.get('position'))
+                if has_position:
+                    if now - last_tp_sl_verify_time >= TP_SL_VERIFY_INTERVAL_SECONDS:
+                        verify_tp_sl_orders(exchange, state, config)
+                        last_tp_sl_verify_time = now
+
+                    if now - last_log_status_time >= LOG_STATUS_INTERVAL_SECONDS:
+                        _log_position_status(state['position'], config, cache, exchange)
+                        last_log_status_time = now
+                else:
+                    if now - last_log_status_time >= LOG_STATUS_INTERVAL_SECONDS:
+                        _log_waiting_status(state, metrics, cache, exchange, config)
+                        last_log_status_time = now
+
+                if now - last_metrics_save_time >= METRICS_SAVE_INTERVAL_SECONDS:
+                    save_metrics(metrics, metrics_path)
+                    last_metrics_save_time = now
+
+            # Smart sleep
+            has_position = bool(state.get('position'))
+            sleep_duration = _calculate_sleep_duration(has_position, last_processed_candle_id)
+            _interruptible_sleep(sleep_duration)
 
         except ccxt.NetworkError as e:
             logger.warning(f"⚠️ Network error: {e}")
             circuit_breaker.record_failure()
-            time.sleep(DEFAULT_SLEEP_INTERVAL)
+            _interruptible_sleep(DEFAULT_SLEEP_INTERVAL)
         except ccxt.ExchangeError as e:
             logger.error(f"❌ Exchange error: {e}")
-            time.sleep(DEFAULT_SLEEP_INTERVAL)
+            _interruptible_sleep(DEFAULT_SLEEP_INTERVAL)
         except Exception as e:
             logger.exception(f"❌ Unexpected error: {e}")
-            time.sleep(DEFAULT_SLEEP_INTERVAL)
+            _interruptible_sleep(DEFAULT_SLEEP_INTERVAL)
 
     # Graceful shutdown
     logger.info("Performing graceful shutdown...")
@@ -302,40 +419,29 @@ def _process_existing_position(
     cache: APICache,
     circuit_breaker: CircuitBreaker,
     metrics: PerformanceMetrics,
-    iteration: int,
 ) -> bool:
     """
-    Process when a position exists.
+    Check for early exit signals on an existing position.
+
+    Called during trading window after candle settle.
+    Position status check (TP/SL hit) is handled by caller.
 
     Returns:
-        True if trading action occurred (close/exit), False otherwise
+        True if trading action occurred (early exit), False otherwise
     """
     from .state import save_state
 
     position = state['position']
 
-    # Check if position is still open
-    position_closed = check_position_status(
-        exchange, state, config, cache, circuit_breaker, metrics
-    )
-
-    if position_closed:
-        logger.info("📤 Position closed")
-        return True  # Trading action occurred
-
-    # === EARLY EXIT CHECK (v1.3) ===
-    # Check for reversal signals that should trigger early exit
-    # This runs before refill logic to ensure early exit takes priority
-    _wait_for_candle_settle(config)
+    # Fetch indicators for early exit analysis
     df = _fetch_and_calculate_indicators(exchange, config)
 
     if df is not None:
-        # Get current price for PnL calculation
         try:
             ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
             current_price = ticker['last']
 
-            # Check early exit signal (v1.14.1: now returns last_counted_candle_ts)
+            # Check early exit signal (v1.14.1: returns last_counted_candle_ts)
             should_exit, new_reversal_count, exit_reason, last_counted_ts = check_early_exit_signal(
                 position, df, current_price, config
             )
@@ -359,26 +465,13 @@ def _process_existing_position(
                 )
                 if success:
                     logger.info(f"✅ Early exit completed: {exit_reason}")
-                    return True  # Trading action occurred
+                    return True
                 return True  # Attempted to exit
 
         except Exception as e:
             logger.warning(f"Early exit check failed: {e}")
 
-    # Note: Rotation/refill feature disabled for pattern_5m bot
-    # The check_refill_signal function is not implemented in this module
-    # If rotation is needed, implement check_refill_signal in signals.py
-
-    # Log position status periodically
-    if iteration % LOG_STATUS_INTERVAL == 0:
-        _log_position_status(position, config, cache, exchange)
-
-    # Verify TP/SL orders exist
-    if iteration % TP_SL_CHECK_INTERVAL == 0:
-        verify_tp_sl_orders(exchange, state, config)
-
-    time.sleep(POSITION_CHECK_SLEEP)
-    return False  # No trading action
+    return False
 
 
 def _process_no_position(
@@ -388,48 +481,39 @@ def _process_no_position(
     cache: APICache,
     circuit_breaker: CircuitBreaker,
     metrics: PerformanceMetrics,
-    iteration: int,
 ) -> bool:
     """
-    Process when no position exists - look for entry signals.
+    Check for entry signals when no position exists.
+
+    Called during trading window after candle settle.
 
     Returns:
-        True if trading action occurred (opened position), False otherwise
+        True if trading action occurred (position opened), False otherwise
     """
     # Check cooldown
     if not check_cooldown(state, config):
-        time.sleep(DEFAULT_SLEEP_INTERVAL)
         return False
-
-    # Wait for candle to settle
-    _wait_for_candle_settle(config)
 
     # Fetch and calculate indicators
     df = _fetch_and_calculate_indicators(exchange, config)
     if df is None:
-        time.sleep(DEFAULT_SLEEP_INTERVAL)
         return False
 
     # Check for entry signal
-    signal, reason = check_entry_signal(df, state, config)
+    signal_result, reason = check_entry_signal(df, state, config)
 
-    if signal:
-        logger.info(f"🎯 Signal detected: {signal} | {reason}")
+    if signal_result:
+        logger.info(f"🎯 Signal detected: {signal_result} | {reason}")
         success = open_position(
-            exchange, state, config, signal, reason,
+            exchange, state, config, signal_result, reason,
             cache, circuit_breaker, metrics, df
         )
         if success:
-            logger.info(f"✅ Position opened: {signal}")
-            return True  # Trading action occurred
-        return False  # Failed to open position
-    else:
-        # Log status periodically
-        if iteration % LOG_STATUS_INTERVAL == 0:
-            _log_waiting_status(state, metrics, cache, exchange, config)
+            logger.info(f"✅ Position opened: {signal_result}")
+            return True
+        return False
 
-    time.sleep(DEFAULT_SLEEP_INTERVAL)
-    return False  # No trading action
+    return False
 
 
 def _wait_for_candle_settle(config: Dict[str, Any]) -> None:

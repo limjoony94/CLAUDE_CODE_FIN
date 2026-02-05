@@ -1,14 +1,28 @@
 """Tests for bot.py — Early Exit triggers, main loop logic with exchange mock."""
 
 import pytest
+import time
 import pandas as pd
 import numpy as np
 from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 
 from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import check_early_exit_signal
-from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import CandleType
+from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
+    CandleType,
+    CANDLE_DURATION_MS,
+    TRADING_WINDOW_SECONDS,
+    CANDLE_SETTLE_SECONDS,
+    POSITION_MONITOR_INTERVAL,
+    MAX_MAINTENANCE_SLEEP,
+)
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import PerformanceMetrics
+from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import (
+    _get_candle_timing,
+    _interruptible_sleep,
+    _calculate_sleep_duration,
+    CandleTiming,
+)
 
 
 # ── Helper Fixtures ───────────────────────────────────────────
@@ -251,16 +265,12 @@ class TestMainLoopIntegration:
     """Test main loop logic with mocked exchange."""
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.create_exchange')
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_position_status')
-    @patch('time.sleep')
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._wait_for_candle_settle')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
     def test_process_position_calls_early_exit(
         self,
-        mock_settle,
-        mock_sleep,
-        mock_check_position,
-        mock_fetch_ohlcv,
+        mock_fetch_ticker,
+        mock_fetch_indicators,
         mock_create_exchange,
         make_df_with_types,
         long_position,
@@ -273,14 +283,13 @@ class TestMainLoopIntegration:
         # Setup mocks
         mock_exchange = Mock()
         mock_create_exchange.return_value = mock_exchange
-        mock_check_position.return_value = False  # position still open
 
-        # Mock OHLCV to return 3 BIG_DOWN candles
+        # Mock indicators to return 3 BIG_DOWN candles
         df = make_df_with_types([CandleType.BIG_DOWN, CandleType.BIG_DOWN, CandleType.BIG_DOWN], n_bars=50)
-        mock_fetch_ohlcv.return_value = df
+        mock_fetch_indicators.return_value = df
 
         # Mock ticker for current price
-        mock_exchange.fetch_ticker.return_value = {'last': 50200.0}
+        mock_fetch_ticker.return_value = {'last': 50200.0}
 
         state = {'position': long_position}
         cache = APICache()
@@ -289,11 +298,11 @@ class TestMainLoopIntegration:
 
         # Run the function (should trigger early exit logic)
         _process_existing_position(
-            mock_exchange, state, default_config, cache, circuit_breaker, metrics, iteration=1
+            mock_exchange, state, default_config, cache, circuit_breaker, metrics
         )
 
-        # Verify early exit was evaluated (check_position_status called)
-        assert mock_check_position.called
+        # Verify OHLCV was fetched (early exit path evaluated)
+        assert mock_fetch_indicators.called
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.health_check')
     def test_health_check_called_periodically(self, mock_health_check, default_config):
@@ -322,11 +331,18 @@ class TestMainLoopIntegration:
 class TestPositionSync:
     """Test periodic position synchronization logic."""
 
-    def test_position_sync_interval_timing(self):
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.datetime')
+    def test_position_sync_interval_timing(self, mock_datetime):
         """Position sync should only trigger after sync_interval seconds."""
         from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import _maybe_sync_position
         from bingx_rl_trading_bot.scripts.production.pattern_5m.models import APICache, CircuitBreaker
         import time
+
+        # Force current time to be at a 5-minute boundary (minute=10)
+        fake_now = datetime(2026, 2, 5, 12, 10, 0)
+        mock_datetime.now.return_value = fake_now
+        mock_datetime.fromtimestamp.return_value = datetime(2026, 2, 5, 11, 0, 0)
+        mock_datetime.side_effect = lambda *a, **kw: datetime(*a, **kw)
 
         mock_exchange = Mock()
         state = {'position': None}
@@ -335,10 +351,10 @@ class TestPositionSync:
         circuit_breaker = CircuitBreaker()
         metrics = PerformanceMetrics(session_start=datetime.now().isoformat())
 
-        # First sync
-        last_sync_time = time.time() - 3600  # 1 hour ago
+        # Last sync was 1 hour ago
+        last_sync_time = time.time() - 3600
 
-        # Should sync (interval passed)
+        # Should sync (interval passed + at 5-min boundary)
         new_sync_time = _maybe_sync_position(
             mock_exchange, state, config, cache, circuit_breaker, metrics, last_sync_time
         )
@@ -396,3 +412,161 @@ class TestDailyLossLimit:
         limit_reached = check_daily_loss_limit(state, config)
 
         assert limit_reached is True
+
+
+# ── Candle-Aligned Timing Tests ──────────────────────────────
+
+class TestCandleAlignedTiming:
+    """Test candle-aligned timing helpers (v1.25.1)."""
+
+    def test_get_candle_timing_returns_namedtuple(self):
+        """_get_candle_timing should return CandleTiming with all fields."""
+        timing = _get_candle_timing()
+
+        assert isinstance(timing, CandleTiming)
+        assert hasattr(timing, 'seconds_into_candle')
+        assert hasattr(timing, 'seconds_until_close')
+        assert hasattr(timing, 'candle_id')
+        assert hasattr(timing, 'in_trading_window')
+
+    def test_get_candle_timing_values_consistent(self):
+        """seconds_into_candle + seconds_until_close should equal 300 (5 min)."""
+        timing = _get_candle_timing()
+
+        total = timing.seconds_into_candle + timing.seconds_until_close
+        assert abs(total - 300.0) < 1.0  # within 1s tolerance
+
+    def test_get_candle_timing_trading_window_flag(self):
+        """in_trading_window should be True when seconds_into_candle < TRADING_WINDOW_SECONDS."""
+        timing = _get_candle_timing()
+
+        if timing.seconds_into_candle < TRADING_WINDOW_SECONDS:
+            assert timing.in_trading_window is True
+        else:
+            assert timing.in_trading_window is False
+
+    def test_get_candle_timing_candle_id_is_int(self):
+        """candle_id should be a positive integer."""
+        timing = _get_candle_timing()
+
+        assert isinstance(timing.candle_id, int)
+        assert timing.candle_id > 0
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time')
+    def test_get_candle_timing_at_candle_start(self, mock_time):
+        """At exact candle boundary: seconds_into=0, in_trading_window=True."""
+        # Simulate exact candle boundary (1699999800 * 1000 % 300000 == 0)
+        mock_time.time.return_value = 1699999800.0
+        timing = _get_candle_timing()
+
+        assert timing.seconds_into_candle == 0.0
+        assert timing.seconds_until_close == 300.0
+        assert timing.in_trading_window is True
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time')
+    def test_get_candle_timing_mid_candle(self, mock_time):
+        """At 150s into candle: in_trading_window=False."""
+        mock_time.time.return_value = 1699999800.0 + 150.0
+        timing = _get_candle_timing()
+
+        assert abs(timing.seconds_into_candle - 150.0) < 1.0
+        assert timing.in_trading_window is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.shutdown_requested', False)
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time')
+    def test_interruptible_sleep_completes_normally(self, mock_time):
+        """_interruptible_sleep should complete after duration when not interrupted."""
+        # Make time.time() advance on each call
+        start = 1699999800.0
+        call_count = [0]
+
+        def advancing_time():
+            call_count[0] += 1
+            return start + call_count[0] * 0.5
+
+        mock_time.time.side_effect = advancing_time
+        mock_time.sleep = Mock()
+
+        _interruptible_sleep(2.0)
+
+        # Should have called time.sleep at least once
+        assert mock_time.sleep.called
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time')
+    def test_interruptible_sleep_respects_shutdown(self, mock_time):
+        """_interruptible_sleep should exit early when shutdown_requested."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_module
+
+        original = bot_module.shutdown_requested
+        try:
+            bot_module.shutdown_requested = True
+            mock_time.time.return_value = 1699999800.0
+            mock_time.sleep = Mock()
+
+            _interruptible_sleep(10.0)
+
+            # Should NOT have slept because shutdown was already requested
+            assert not mock_time.sleep.called
+        finally:
+            bot_module.shutdown_requested = original
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._get_candle_timing')
+    def test_calculate_sleep_no_position_maintenance(self, mock_timing):
+        """No position + outside trading window → sleep up to MAX_MAINTENANCE_SLEEP."""
+        mock_timing.return_value = CandleTiming(
+            seconds_into_candle=100.0,
+            seconds_until_close=200.0,
+            candle_id=1000,
+            in_trading_window=False,
+        )
+
+        duration = _calculate_sleep_duration(has_position=False, last_processed_candle_id=1000)
+
+        # Should be min(MAX_MAINTENANCE_SLEEP, seconds_until_close + settle)
+        expected = min(MAX_MAINTENANCE_SLEEP, 200.0 + CANDLE_SETTLE_SECONDS)
+        assert duration == expected
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._get_candle_timing')
+    def test_calculate_sleep_with_position_monitoring(self, mock_timing):
+        """Has position + outside trading window → sleep POSITION_MONITOR_INTERVAL."""
+        mock_timing.return_value = CandleTiming(
+            seconds_into_candle=100.0,
+            seconds_until_close=200.0,
+            candle_id=1000,
+            in_trading_window=False,
+        )
+
+        duration = _calculate_sleep_duration(has_position=True, last_processed_candle_id=1000)
+
+        expected = min(POSITION_MONITOR_INTERVAL, 200.0 + CANDLE_SETTLE_SECONDS)
+        assert duration == expected
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._get_candle_timing')
+    def test_calculate_sleep_unprocessed_candle_in_window(self, mock_timing):
+        """Unprocessed candle + in trading window → return 0 (process immediately)."""
+        mock_timing.return_value = CandleTiming(
+            seconds_into_candle=10.0,
+            seconds_until_close=290.0,
+            candle_id=1001,
+            in_trading_window=True,
+        )
+
+        # last_processed is 1000, current candle is 1001 → unprocessed
+        duration = _calculate_sleep_duration(has_position=False, last_processed_candle_id=1000)
+
+        assert duration == 0
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._get_candle_timing')
+    def test_calculate_sleep_already_processed_candle(self, mock_timing):
+        """Already processed candle + in trading window → sleep until next candle."""
+        mock_timing.return_value = CandleTiming(
+            seconds_into_candle=10.0,
+            seconds_until_close=290.0,
+            candle_id=1000,
+            in_trading_window=True,
+        )
+
+        # Same candle_id → already processed, should sleep
+        duration = _calculate_sleep_duration(has_position=False, last_processed_candle_id=1000)
+
+        assert duration > 0

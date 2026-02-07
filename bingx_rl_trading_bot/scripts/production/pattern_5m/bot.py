@@ -23,6 +23,7 @@ import ccxt
 from .constants import (
     BOT_NAME,
     BOT_VERSION,
+    PROJECT_ROOT,
     CONFIG_FILE,
     STATE_FILE,
     METRICS_FILE,
@@ -155,17 +156,16 @@ def run_bot(config_file: str = CONFIG_FILE) -> None:
     Main entry point for the Pattern 5m trading bot.
 
     Args:
-        config_file: Path to configuration YAML file
+        config_file: Path to configuration YAML file (absolute path from constants.py)
     """
-    # Resolve paths
-    script_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__)
-    ))))
-    os.chdir(script_dir)
+    # v1.25.5: Use absolute paths from constants.py (CWD-independent)
+    # Change to project root for any relative path operations in dependencies
+    os.chdir(PROJECT_ROOT)
 
-    config_path = os.path.join(script_dir, config_file)
-    state_path = os.path.join(script_dir, STATE_FILE)
-    metrics_path = os.path.join(script_dir, METRICS_FILE)
+    # All paths are now absolute from constants.py
+    config_path = config_file
+    state_path = STATE_FILE
+    metrics_path = METRICS_FILE
 
     # Load configuration
     config = load_config(config_path)

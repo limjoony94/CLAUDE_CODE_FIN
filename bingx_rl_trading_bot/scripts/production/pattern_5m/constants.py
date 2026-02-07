@@ -3,6 +3,7 @@ Pattern 5m Bot - Constants and Magic Numbers
 All configurable values and pattern definitions.
 """
 
+import os
 from enum import Enum
 from typing import List
 
@@ -10,18 +11,29 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.25.0"  # v1.25.0: Moderate-B-20 Portfolio (Deep Analysis Optimized)
-# 20 patterns (10L+10S), WR 82.1%, PnL 289.2%, MDD 8.2%, WF 5/5
+BOT_VERSION = "1.25.5"  # v1.25.5: Fix CWD-dependent path bug (absolute paths)
+# 23 patterns (6L+17S), validated via quality pruning analysis (2026-02-07)
 
 # ============================================================
-# FILE PATHS (relative to bot root)
+# PROJECT ROOT (absolute path, CWD-independent)
 # ============================================================
-CONFIG_FILE = "config/pattern_5m_config.yaml"
-STATE_FILE = "results/pattern_5m_bot_state.json"
-LOCK_FILE = "results/pattern_5m_bot.lock"
-METRICS_FILE = "results/pattern_5m_metrics.json"
-LOG_DIR = "logs"
-API_KEYS_FILE = "config/api_keys.yaml"
+# __file__ = .../bingx_rl_trading_bot/scripts/production/pattern_5m/constants.py
+# _THIS_DIR = .../bingx_rl_trading_bot/scripts/production/pattern_5m/
+# parent(1) = .../bingx_rl_trading_bot/scripts/production/
+# parent(2) = .../bingx_rl_trading_bot/scripts/
+# parent(3) = .../bingx_rl_trading_bot/  ← PROJECT_ROOT
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_THIS_DIR)))
+
+# ============================================================
+# FILE PATHS (absolute, CWD-independent)
+# ============================================================
+CONFIG_FILE = os.path.join(PROJECT_ROOT, "config", "pattern_5m_config.yaml")
+STATE_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot_state.json")
+LOCK_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot.lock")
+METRICS_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_metrics.json")
+LOG_DIR = os.path.join(PROJECT_ROOT, "logs")
+API_KEYS_FILE = os.path.join(PROJECT_ROOT, "config", "api_keys.yaml")
 
 # ============================================================
 # Candle Type Classification
@@ -94,70 +106,77 @@ REGIME_PATTERNS = {
 DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # ============================================================
-# Validated Patterns (v1.25.0 Moderate-B-20 Portfolio)
-# Research: deep_portfolio_analysis.py (2026-02-04)
-# Selection: Overall Score optimization (Quality × Risk-Adjusted × Stability)
-# Criteria: MC < 0.02, WF >= 4/5, WR >= 55%/50%, Trades >= 40
-# Portfolio: WR 82.1%, PnL 289.2%, MDD 8.2%, PF 2.08, WF 5/5
-# Monthly Consistency: 100% (9/9 months profitable)
-# Edge Decay: -7.7% WR (Early 86.0% → Late 78.3%)
+# Validated Patterns (v1.25.4 Quality-Filtered Portfolio)
+# Research: comprehensive_pattern_evaluation.py (2026-02-07)
+# Validation: MC < 0.05, WF >= 4/5, WR >= 85% (quality filter)
+# Removed v1.25.4: DN-IH-ST (76.3%), U-U-DN (84.1%), U-U-U (84.2%) - WR < 85%
 # ============================================================
 
-# LONG patterns - v1.25.0: 10 total (Moderate-B selection)
+# LONG patterns - v1.25.4: 6 total (WR >= 85% only)
 VALIDATED_LONG_PATTERNS: List[str] = [
-    "MD-BU-U",     # WR 94.4%, 54t, MC=0.0005, WF 5/5, PnL +14.1%
-    "MU-MU-U",     # WR 90.3%, 31t, MC=0.0050, WF 4/5, PnL +12.0%
-    "MU-U-MU",     # WR 89.5%, 19t, MC=0.0140, WF 4/5, PnL +19.6%
-    "BU-BU-BD",    # WR 84.4%, 45t, MC=0.0123, WF 5/5, PnL +11.6%
-    "ST-H-DN",     # WR 82.6%, 69t, MC=0.0172, WF 5/5, PnL +1.8%
-    "ST-MU-U",     # WR 76.9%, 121t, MC=0.0026, WF 4/5, PnL +6.4%
-    "DN-IH-ST",    # WR 76.3%, 59t, MC=0.0118, WF 5/5, PnL +6.8%
-    "IH-DN-DN",    # WR 71.6%, 67t, MC=0.0045, WF 4/5, PnL +7.9%
-    "MD-DN-MU",    # WR 59.2%, 49t, MC=0.0069, WF 4/5, PnL +4.1%
-    "BD-ST-U",     # WR 57.6%, 59t, MC=0.0030, WF 5/5, PnL +7.6%
+    "MD-BU-U",     # WR 94.4%, 54t, MC=0.0004, WF 5/5, PnL +14.1%
+    "MU-MU-U",     # WR 93.3%, 30t, MC=0.0011, WF 5/5, PnL +12.6%
+    "MU-U-MU",     # WR 96.3%, 54t, MC=0.0000, WF 4/5, PnL +16.6%
+    "BU-BU-BD",    # WR 90.5%, 42t, MC=0.0038, WF 5/5, PnL +14.4%
+    "ST-MU-U",     # WR 91.4%, 81t, MC=0.0000, WF 5/5, PnL +29.7%
+    "IH-DN-DN",    # WR 87.5%, 56t, MC=0.0179, WF 4/5, PnL +14.7%
+    # REMOVED v1.25.4: "DN-IH-ST" (WR 76.3% < 85%)
+    # REMOVED v1.25.4: "U-U-DN" (WR 84.1% < 85%)
+    # REMOVED v1.25.4: "U-U-U" (WR 84.2% < 85%)
 ]
 
-# SHORT patterns - v1.25.0: 10 total (Moderate-B selection)
+# SHORT patterns - v1.25.4: 17 total (WR >= 85% only)
 VALIDATED_SHORT_PATTERNS: List[str] = [
-    "MD-ST-ST",    # WR 98.5%, 65t, MC=0.0012, WF 5/5, PnL +23.5%
-    "U-MU-BU",     # WR 98.1%, 53t, MC=0.0020, WF 5/5, PnL +18.7%
-    "MU-BU-DN",    # WR 97.7%, 44t, MC=0.0002, WF 5/5, PnL +23.7%
-    "ST-H-U",      # WR 97.1%, 34t, MC=0.0048, WF 5/5, PnL +11.1%
-    "ST-DN-H",     # WR 93.6%, 47t, MC=0.0079, WF 5/5, PnL +20.1%
-    "MD-MU-U",     # WR 90.5%, 42t, MC=0.0020, WF 5/5, PnL +25.8%
-    "BU-U-ST",     # WR 90.2%, 92t, MC=0.0001, WF 5/5, PnL +18.8%
-    "H-DN-ST",     # WR 88.2%, 51t, MC=0.0176, WF 4/5, PnL +8.4%
-    "DN-BD-BU",    # WR 85.9%, 78t, MC=0.0068, WF 4/5, PnL +28.1%
-    "DN-BU-U",     # WR 63.0%, 119t, MC=0.0180, WF 4/5, PnL +19.1%
+    "MD-ST-ST",    # WR 98.5%, 65t, MC=0.0000, WF 5/5, PnL +23.5%
+    "U-MU-BU",     # WR 98.1%, 54t, MC=0.0000, WF 5/5, PnL +19.1%
+    "MU-BU-DN",    # WR 97.8%, 45t, MC=0.0000, WF 5/5, PnL +24.3%
+    "ST-H-U",      # WR 97.1%, 34t, MC=0.0000, WF 5/5, PnL +11.1%
+    "ST-DN-H",     # WR 93.6%, 47t, MC=0.0000, WF 5/5, PnL +20.1%
+    "MD-MU-U",     # WR 90.5%, 42t, MC=0.0000, WF 5/5, PnL +25.8%
+    "BU-U-ST",     # WR 91.7%, 72t, MC=0.0001, WF 5/5, PnL +27.0%
+    "H-DN-ST",     # WR 97.3%, 37t, MC=0.0000, WF 5/5, PnL +19.5%
+    "DN-BD-BU",    # WR 94.4%, 71t, MC=0.0000, WF 5/5, PnL +31.8%
+    "DN-BU-U",     # WR 88.9%, 90t, MC=0.0000, WF 5/5, PnL +51.0%
+    "DN-U-U",      # WR 91.1%, 644t, MC=0.0000, WF 5/5, PnL +115.1% ★★ TOP
+    "ST-DN-U",     # WR 88.1%, 286t, MC=0.0000, WF 5/5, PnL +79.8%
+    "ST-DN-DN",    # WR 88.1%, 269t, MC=0.0000, WF 5/5, PnL +75.0%
+    "U-ST-DN",     # WR 87.8%, 270t, MC=0.0000, WF 5/5, PnL +72.9%
+    "U-U-ST",      # WR 87.6%, 266t, MC=0.0000, WF 5/5, PnL +70.5%
+    "ST-U-DN",     # WR 87.7%, 260t, MC=0.0000, WF 5/5, PnL +69.6%
+    "ST-ST-U",     # WR 91.8%, 159t, MC=0.0000, WF 5/5, PnL +60.3%
+    # REMOVED v1.25.4: "DN-DN-DN" (WR 80.6% < 85%)
 ]
 
 # ============================================================
 # Pattern Historical Statistics (for confidence calculation)
-# Source: v1.25.0 deep_portfolio_analysis.py (Moderate-B-20)
+# Source: v1.25.4 quality-filtered portfolio (2026-02-07)
 # ============================================================
 PATTERN_STATS = {
-    # LONG patterns (10)
-    "MD-BU-U": {"direction": "LONG", "trades": 54, "wr": 94.4, "mc": 0.0005, "wf": 5, "periods": 3},
-    "MU-MU-U": {"direction": "LONG", "trades": 31, "wr": 90.3, "mc": 0.0050, "wf": 4, "periods": 3},
-    "MU-U-MU": {"direction": "LONG", "trades": 19, "wr": 89.5, "mc": 0.0140, "wf": 4, "periods": 3},
-    "BU-BU-BD": {"direction": "LONG", "trades": 45, "wr": 84.4, "mc": 0.0123, "wf": 5, "periods": 3},
-    "ST-H-DN": {"direction": "LONG", "trades": 69, "wr": 82.6, "mc": 0.0172, "wf": 5, "periods": 3},
-    "ST-MU-U": {"direction": "LONG", "trades": 121, "wr": 76.9, "mc": 0.0026, "wf": 4, "periods": 3},
-    "DN-IH-ST": {"direction": "LONG", "trades": 59, "wr": 76.3, "mc": 0.0118, "wf": 5, "periods": 3},
-    "IH-DN-DN": {"direction": "LONG", "trades": 67, "wr": 71.6, "mc": 0.0045, "wf": 4, "periods": 3},
-    "MD-DN-MU": {"direction": "LONG", "trades": 49, "wr": 59.2, "mc": 0.0069, "wf": 4, "periods": 3},
-    "BD-ST-U": {"direction": "LONG", "trades": 59, "wr": 57.6, "mc": 0.0030, "wf": 5, "periods": 3},
-    # SHORT patterns (10)
-    "MD-ST-ST": {"direction": "SHORT", "trades": 65, "wr": 98.5, "mc": 0.0012, "wf": 5, "periods": 3},
-    "U-MU-BU": {"direction": "SHORT", "trades": 53, "wr": 98.1, "mc": 0.0020, "wf": 5, "periods": 3},
-    "MU-BU-DN": {"direction": "SHORT", "trades": 44, "wr": 97.7, "mc": 0.0002, "wf": 5, "periods": 3},
-    "ST-H-U": {"direction": "SHORT", "trades": 34, "wr": 97.1, "mc": 0.0048, "wf": 5, "periods": 3},
-    "ST-DN-H": {"direction": "SHORT", "trades": 47, "wr": 93.6, "mc": 0.0079, "wf": 5, "periods": 3},
-    "MD-MU-U": {"direction": "SHORT", "trades": 42, "wr": 90.5, "mc": 0.0020, "wf": 5, "periods": 3},
-    "BU-U-ST": {"direction": "SHORT", "trades": 92, "wr": 90.2, "mc": 0.0001, "wf": 5, "periods": 3},
-    "H-DN-ST": {"direction": "SHORT", "trades": 51, "wr": 88.2, "mc": 0.0176, "wf": 4, "periods": 3},
-    "DN-BD-BU": {"direction": "SHORT", "trades": 78, "wr": 85.9, "mc": 0.0068, "wf": 4, "periods": 3},
-    "DN-BU-U": {"direction": "SHORT", "trades": 119, "wr": 63.0, "mc": 0.0180, "wf": 4, "periods": 3},
+    # LONG patterns (6) - v1.25.4: WR >= 85% only
+    "MD-BU-U": {"direction": "LONG", "trades": 54, "wr": 94.4, "mc": 0.0004, "wf": 5, "periods": 3},
+    "MU-MU-U": {"direction": "LONG", "trades": 30, "wr": 93.3, "mc": 0.0011, "wf": 5, "periods": 3},
+    "MU-U-MU": {"direction": "LONG", "trades": 54, "wr": 96.3, "mc": 0.0000, "wf": 4, "periods": 3},
+    "BU-BU-BD": {"direction": "LONG", "trades": 42, "wr": 90.5, "mc": 0.0038, "wf": 5, "periods": 3},
+    "ST-MU-U": {"direction": "LONG", "trades": 81, "wr": 91.4, "mc": 0.0000, "wf": 5, "periods": 3},
+    "IH-DN-DN": {"direction": "LONG", "trades": 56, "wr": 87.5, "mc": 0.0179, "wf": 4, "periods": 3},
+    # SHORT patterns (17) - v1.25.4: WR >= 85% only
+    "MD-ST-ST": {"direction": "SHORT", "trades": 65, "wr": 98.5, "mc": 0.0000, "wf": 5, "periods": 3},
+    "U-MU-BU": {"direction": "SHORT", "trades": 54, "wr": 98.1, "mc": 0.0000, "wf": 5, "periods": 3},
+    "MU-BU-DN": {"direction": "SHORT", "trades": 45, "wr": 97.8, "mc": 0.0000, "wf": 5, "periods": 3},
+    "ST-H-U": {"direction": "SHORT", "trades": 34, "wr": 97.1, "mc": 0.0000, "wf": 5, "periods": 3},
+    "ST-DN-H": {"direction": "SHORT", "trades": 47, "wr": 93.6, "mc": 0.0000, "wf": 5, "periods": 3},
+    "MD-MU-U": {"direction": "SHORT", "trades": 42, "wr": 90.5, "mc": 0.0000, "wf": 5, "periods": 3},
+    "BU-U-ST": {"direction": "SHORT", "trades": 72, "wr": 91.7, "mc": 0.0001, "wf": 5, "periods": 3},
+    "H-DN-ST": {"direction": "SHORT", "trades": 37, "wr": 97.3, "mc": 0.0000, "wf": 5, "periods": 3},
+    "DN-BD-BU": {"direction": "SHORT", "trades": 71, "wr": 94.4, "mc": 0.0000, "wf": 5, "periods": 3},
+    "DN-BU-U": {"direction": "SHORT", "trades": 90, "wr": 88.9, "mc": 0.0000, "wf": 5, "periods": 3},
+    "DN-U-U": {"direction": "SHORT", "trades": 644, "wr": 91.1, "mc": 0.0000, "wf": 5, "periods": 3},
+    "ST-DN-U": {"direction": "SHORT", "trades": 286, "wr": 88.1, "mc": 0.0000, "wf": 5, "periods": 3},
+    "ST-DN-DN": {"direction": "SHORT", "trades": 269, "wr": 88.1, "mc": 0.0000, "wf": 5, "periods": 3},
+    "U-ST-DN": {"direction": "SHORT", "trades": 270, "wr": 87.8, "mc": 0.0000, "wf": 5, "periods": 3},
+    "U-U-ST": {"direction": "SHORT", "trades": 266, "wr": 87.6, "mc": 0.0000, "wf": 5, "periods": 3},
+    "ST-U-DN": {"direction": "SHORT", "trades": 260, "wr": 87.7, "mc": 0.0000, "wf": 5, "periods": 3},
+    "ST-ST-U": {"direction": "SHORT", "trades": 159, "wr": 91.8, "mc": 0.0000, "wf": 5, "periods": 3},
 }
 
 # Confidence calculation weights
@@ -166,37 +185,40 @@ CONFIDENCE_WEIGHT_HISTORICAL = 0.30   # Historical pattern win rate
 CONFIDENCE_WEIGHT_REGIME = 0.30       # DEPRECATED: Regime disabled since v1.19.0 (placeholder)
 
 # Confidence logging file
-CONFIDENCE_LOG_FILE = "results/pattern_5m_confidence_log.csv"
+CONFIDENCE_LOG_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_confidence_log.csv")
 
 
 # ============================================================
-# Pattern TP/SL (v1.25.0 Per-Pattern Optimized)
-# Research: deep_portfolio_analysis.py (2026-02-04)
+# Pattern TP/SL (v1.25.4 Per-Pattern Optimized)
+# Research: quality-filtered portfolio (2026-02-07)
 # Individually optimized TP/SL for each pattern
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
-    # LONG patterns (10) - format: (tp_pct, sl_pct)
+    # LONG patterns (6) - format: (tp_pct, sl_pct)
     "MD-BU-U": (0.5, 2.0),
-    "MU-MU-U": (0.7, 1.5),
-    "MU-U-MU": (1.5, 2.0),
-    "BU-BU-BD": (0.7, 1.5),
-    "ST-H-DN": (0.3, 0.7),
-    "ST-MU-U": (0.5, 1.0),
-    "DN-IH-ST": (0.5, 0.7),
-    "IH-DN-DN": (0.7, 1.0),
-    "MD-DN-MU": (1.0, 1.0),
-    "BD-ST-U": (1.5, 1.5),
-    # SHORT patterns (10)
+    "MU-MU-U": (0.7, 2.0),
+    "MU-U-MU": (0.5, 2.0),
+    "BU-BU-BD": (0.7, 2.0),
+    "ST-MU-U": (0.7, 2.0),
+    "IH-DN-DN": (0.7, 2.0),
+    # SHORT patterns (17)
     "MD-ST-ST": (0.5, 2.0),
     "U-MU-BU": (0.5, 2.0),
     "MU-BU-DN": (0.7, 2.0),
     "ST-H-U": (0.5, 2.0),
     "ST-DN-H": (0.7, 2.0),
     "MD-MU-U": (1.0, 2.0),
-    "BU-U-ST": (0.5, 1.5),
-    "H-DN-ST": (0.5, 1.5),
-    "DN-BD-BU": (0.7, 1.0),
-    "DN-BU-U": (1.0, 1.0),
+    "BU-U-ST": (0.7, 2.0),
+    "H-DN-ST": (0.7, 2.0),
+    "DN-BD-BU": (0.7, 2.0),
+    "DN-BU-U": (1.0, 2.0),
+    "DN-U-U": (0.5, 2.0),   # WR 91.1%, PnL +115.1% ★★ TOP
+    "ST-DN-U": (0.7, 2.0),
+    "ST-DN-DN": (0.7, 2.0),
+    "U-ST-DN": (0.7, 2.0),
+    "U-U-ST": (0.7, 2.0),
+    "ST-U-DN": (0.7, 2.0),
+    "ST-ST-U": (0.7, 2.0),
 }
 
 # ============================================================

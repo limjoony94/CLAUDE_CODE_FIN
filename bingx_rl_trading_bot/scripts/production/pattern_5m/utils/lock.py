@@ -182,6 +182,7 @@ def _check_windows_process(pid: int) -> bool:
         result = subprocess.run(
             ['tasklist', '/FI', f'PID eq {pid}', '/FO', 'CSV', '/NH'],
             capture_output=True, text=True, timeout=5,
+            encoding='cp949', errors='replace',
             creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)
         )
         output = result.stdout.strip().lower()
@@ -218,6 +219,7 @@ def check_duplicate_instances() -> List[int]:
                     ['wmic', 'process', 'where', f"name='{process_name}'",
                      'get', 'processid,commandline', '/format:csv'],
                     capture_output=True, text=True, timeout=10,
+                    encoding='cp949', errors='replace',
                     creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)
                 )
                 for line in result.stdout.strip().split('\n'):

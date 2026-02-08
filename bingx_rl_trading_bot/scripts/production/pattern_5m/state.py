@@ -114,7 +114,9 @@ def save_state(
     if is_trade_close:
         state['last_trade_date'] = datetime.now().strftime('%Y-%m-%d')
 
-    os.makedirs(os.path.dirname(state_file), exist_ok=True)
+    state_dir = os.path.dirname(state_file)
+    if state_dir:
+        os.makedirs(state_dir, exist_ok=True)
 
     # 1. Create .bak backup of existing state
     if os.path.exists(state_file):
@@ -130,22 +132,19 @@ def save_state(
     # 3. Atomic write: write to temp file, then rename
     try:
         # Write to temporary file in same directory (for atomic rename on same filesystem)
+        tmp_dir = os.path.dirname(state_file) or '.'
         fd, tmp_path = tempfile.mkstemp(
-            dir=os.path.dirname(state_file),
+            dir=tmp_dir,
             prefix='.tmp_state_',
             suffix='.json'
         )
         try:
             with os.fdopen(fd, 'w') as f:
                 json.dump(state, f, indent=2, default=str)
-            # Atomic rename
+            # fd is now closed by os.fdopen — do NOT close again
             os.replace(tmp_path, state_file)
         except Exception:
-            # Clean up temp file if something goes wrong
-            try:
-                os.close(fd)
-            except Exception:
-                pass
+            # fd already closed by os.fdopen's with block
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
             raise
@@ -242,7 +241,9 @@ def save_metrics(metrics: PerformanceMetrics, metrics_file: str = METRICS_FILE) 
     """
     try:
         metrics_data = metrics.to_dict()
-        os.makedirs(os.path.dirname(metrics_file), exist_ok=True)
+        metrics_dir = os.path.dirname(metrics_file)
+        if metrics_dir:
+            os.makedirs(metrics_dir, exist_ok=True)
         with open(metrics_file, 'w') as f:
             json.dump(metrics_data, f, indent=2)
     except (IOError, OSError) as e:

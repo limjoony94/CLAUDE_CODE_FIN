@@ -166,7 +166,7 @@ def open_position(
         regime_tp_sl = state.get('regime_tp_sl')
         current_regime = state.get('current_regime', 'UNKNOWN')
 
-        tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = _calculate_tp_sl(
+        tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = calculate_tp_sl(
             actual_entry_price, direction, strategy, vol_mult, pattern, regime_tp_sl
         )
 
@@ -180,7 +180,7 @@ def open_position(
         logger.info(f"TP: ${tp_price:.1f} ({tp_pct_adjusted:.2f}%) | SL: ${sl_price:.1f} ({sl_pct_adjusted:.2f}%)")
 
         # Handle scale-out if enabled
-        scale_out_stages = _setup_scale_out(
+        scale_out_stages = setup_scale_out(
             strategy, actual_entry_price, actual_quantity, direction, tp_pct_adjusted
         )
 
@@ -326,7 +326,7 @@ def _get_actual_fill_price(
     return actual_entry_price, actual_quantity
 
 
-def _calculate_tp_sl(
+def calculate_tp_sl(
     entry_price: float,
     direction: int,
     strategy: Dict[str, Any],
@@ -334,7 +334,10 @@ def _calculate_tp_sl(
     pattern: Optional[str] = None,
     regime_tp_sl: Optional[tuple] = None,
 ) -> tuple:
-    """Calculate TP and SL prices.
+    """Calculate TP and SL prices — single source of truth.
+
+    Used by: open_position, refill_position, recover_position_to_state,
+             recalculate_position_orders.
 
     v1.18: Priority: regime_tp_sl > PATTERN_OPTIMAL_TPSL > strategy defaults
     v1.6: Uses pattern-specific TP/SL from PATTERN_OPTIMAL_TPSL if available.
@@ -360,14 +363,18 @@ def _calculate_tp_sl(
     return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
 
 
-def _setup_scale_out(
+def setup_scale_out(
     strategy: Dict[str, Any],
     entry_price: float,
     quantity: float,
     direction: int,
     tp_pct_adjusted: float,
 ) -> List[Dict]:
-    """Setup scale-out stages if enabled."""
+    """Setup scale-out stages if enabled — single source of truth.
+
+    Used by: open_position, refill_position, recover_position_to_state,
+             recalculate_position_orders.
+    """
     scale_out_config = strategy.get('scale_out', {})
     scale_out_enabled = scale_out_config.get('enabled', False)
     scale_out_stages = []
@@ -497,7 +504,7 @@ def refill_position(
             pattern = pos_reason.split('Pattern:')[-1].strip().split()[0]
         regime_tp_sl = position.get('regime_tp_sl')
 
-        tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = _calculate_tp_sl(
+        tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = calculate_tp_sl(
             new_avg_entry, direction, strategy, vol_mult, pattern, regime_tp_sl
         )
 
@@ -522,7 +529,7 @@ def refill_position(
         position['refill_entries'] = refill_entries
 
         # Reset scale-out stages for new full position
-        scale_out_stages = _setup_scale_out(
+        scale_out_stages = setup_scale_out(
             strategy, new_avg_entry, total_qty, direction, tp_pct_adjusted
         )
         position['scale_out_stages'] = scale_out_stages

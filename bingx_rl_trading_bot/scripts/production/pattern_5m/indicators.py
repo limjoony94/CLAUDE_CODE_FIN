@@ -87,12 +87,14 @@ def classify_candle(row: pd.Series, avg_body_20: float) -> CandleType:
 
 def calculate_indicators(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFrame:
     """
-    Calculate all indicators needed for pattern detection.
+    Calculate all indicators needed for pattern detection and context filtering.
 
     Adds columns:
     - body, body_abs, avg_body_20: Body metrics
     - candle_type, type_code: Classification
     - pattern_3: 3-candle pattern string
+    - rsi: 14-period RSI
+    - atr, atr_pct: 14-period ATR and ATR%
 
     Args:
         df: DataFrame with OHLCV data
@@ -136,6 +138,21 @@ def calculate_indicators(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFra
             patterns.append(p)
     df['pattern_3'] = patterns
 
+    # RSI (14-period) — used by context filters
+    delta = df['close'].diff()
+    gain = delta.where(delta > 0, 0).rolling(14).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+    rs = gain / (loss + 1e-10)
+    df['rsi'] = 100 - (100 / (1 + rs))
+
+    # ATR and ATR% (14-period) — used by context filters and volatility multiplier
+    high_low = df['high'] - df['low']
+    high_close = (df['high'] - df['close'].shift(1)).abs()
+    low_close = (df['low'] - df['close'].shift(1)).abs()
+    tr = pd.concat([high_low, high_close, low_close], axis=1).max(axis=1)
+    df['atr'] = tr.rolling(14).mean()
+    df['atr_pct'] = df['atr'] / df['close'] * 100
+
     return df
 
 
@@ -154,43 +171,6 @@ def get_current_pattern(df: pd.DataFrame) -> str:
 
     pattern = df.iloc[-2].get('pattern_3', '')  # Last completed candle
     return pattern if pattern else ""
-
-
-def get_pattern_description(pattern: str) -> str:
-    """
-    Get human-readable description of a pattern.
-
-    Args:
-        pattern: Pattern string (e.g., "MU-U-DN")
-
-    Returns:
-        Description string
-    """
-    descriptions = {
-        # LONG patterns (10) - v1.25.0
-        "MD-BU-U": "Marubozu Down → Big Up → Up (LONG reversal momentum)",
-        "MU-MU-U": "Marubozu Up → Marubozu Up → Up (LONG triple momentum)",
-        "MU-U-MU": "Marubozu Up → Up → Marubozu Up (LONG momentum continuation)",
-        "BU-BU-BD": "Big Up → Big Up → Big Down (LONG pullback entry)",
-        "ST-H-DN": "Spinning → Hammer → Down (LONG hammer reversal)",
-        "ST-MU-U": "Spinning → Marubozu Up → Up (LONG breakout)",
-        "DN-IH-ST": "Down → Inv Hammer → Spinning (LONG indecision reversal)",
-        "IH-DN-DN": "Inv Hammer → Down → Down (LONG oversold bounce)",
-        "MD-DN-MU": "Marubozu Down → Down → Marubozu Up (LONG V-reversal)",
-        "BD-ST-U": "Big Down → Spinning → Up (LONG bottom reversal)",
-        # SHORT patterns (10) - v1.25.0
-        "MD-ST-ST": "Marubozu Down → Spinning → Spinning (SHORT continuation)",
-        "U-MU-BU": "Up → Marubozu Up → Big Up (SHORT exhaustion top)",
-        "MU-BU-DN": "Marubozu Up → Big Up → Down (SHORT reversal)",
-        "ST-H-U": "Spinning → Hammer → Up (SHORT trap setup)",
-        "ST-DN-H": "Spinning → Down → Hammer (SHORT continuation)",
-        "MD-MU-U": "Marubozu Down → Marubozu Up → Up (SHORT failed bounce)",
-        "BU-U-ST": "Big Up → Up → Spinning (SHORT momentum exhaustion)",
-        "H-DN-ST": "Hammer → Down → Spinning (SHORT breakdown)",
-        "DN-BD-BU": "Down → Big Down → Big Up (SHORT bounce trap)",
-        "DN-BU-U": "Down → Big Up → Up (SHORT dead cat bounce)",
-    }
-    return descriptions.get(pattern, pattern)
 
 
 def get_volatility_multiplier(df: pd.DataFrame, config: Dict[str, Any]) -> float:

@@ -9,7 +9,7 @@ from typing import Dict, Any, Optional, Tuple
 
 import numpy as np
 
-from .indicators import classify_candle
+from .indicators import classify_candle, calculate_indicators
 from .constants import (
     CandleType,
     VALIDATED_LONG_PATTERNS,
@@ -55,55 +55,21 @@ from .constants import (
 logger = logging.getLogger('pattern_5m')
 
 
-def add_candle_classification(df: pd.DataFrame) -> pd.DataFrame:
+def add_candle_classification(df: pd.DataFrame, config: dict = None) -> pd.DataFrame:
     """
     Add candle type classification to DataFrame.
 
-    Adds columns:
-    - body: close - open
-    - body_abs: abs(body)
-    - avg_body_20: rolling 20-period average of body_abs
-    - candle_type: CandleType enum
-    - type_code: string code (e.g., "MU", "DN")
-    - pattern_3: 3-candle pattern string (e.g., "MU-U-DN")
+    Delegates to indicators.calculate_indicators() — the single source of truth
+    for candle classification. This wrapper is kept for backward compatibility.
 
     Args:
         df: DataFrame with OHLCV data
+        config: Optional bot config (passed to calculate_indicators)
 
     Returns:
         DataFrame with added classification columns
     """
-    df = df.copy()
-    df['body'] = df['close'] - df['open']
-    df['body_abs'] = df['body'].abs()
-    df['avg_body_20'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
-
-    # Use the canonical classify_candle() from indicators.py for ALL bars.
-    # For bars 0-19 where avg_body_20 is NaN, default to 1.0
-    # (preserves range-based types like DOJI, HAMMER, DRAGONFLY, GRAVESTONE).
-    # Previously this forced MED_UP/MED_DOWN for early bars — a divergence
-    # from indicators.py's calculate_indicators() which uses avg_b=1.0.
-    candle_types = []
-    for i in range(len(df)):
-        avg_b = df.iloc[i]['avg_body_20']
-        if pd.isna(avg_b):
-            avg_b = 1.0
-        candle_types.append(classify_candle(df.iloc[i], avg_b))
-
-    df['candle_type'] = candle_types
-    df['type_code'] = [ct.value for ct in candle_types]
-
-    # Build 3-candle patterns
-    patterns = []
-    for i in range(len(df)):
-        if i < 2:
-            patterns.append(None)
-        else:
-            p = f"{df.iloc[i-2]['type_code']}-{df.iloc[i-1]['type_code']}-{df.iloc[i]['type_code']}"
-            patterns.append(p)
-    df['pattern_3'] = patterns
-
-    return df
+    return calculate_indicators(df, config or {})
 
 
 def detect_market_regime(df: pd.DataFrame) -> MarketRegime:
@@ -182,14 +148,10 @@ def calculate_context(df: pd.DataFrame) -> Dict[str, Any]:
 
     current = df.iloc[-2]  # Last complete candle
 
-    # RSI calculation (14-period)
-    close = df['close']
-    delta = close.diff()
-    gain = delta.where(delta > 0, 0).rolling(14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
-    rs = gain / (loss + 1e-10)
-    rsi = 100 - (100 / (1 + rs))
-    current_rsi = rsi.iloc[-2]
+    # Use pre-computed RSI from calculate_indicators() (avoids redundant computation)
+    current_rsi = current.get('rsi', 50.0) if 'rsi' in df.columns else 50.0
+    if pd.isna(current_rsi):
+        current_rsi = 50.0
 
     if current_rsi < RSI_OVERSOLD_THRESHOLD:
         rsi_zone = 'OS'
@@ -198,18 +160,20 @@ def calculate_context(df: pd.DataFrame) -> Dict[str, Any]:
     else:
         rsi_zone = 'N'
 
-    # ATR-based volatility (14-period)
-    high_low = df['high'] - df['low']
-    high_close = abs(df['high'] - df['close'].shift(1))
-    low_close = abs(df['low'] - df['close'].shift(1))
-    tr = pd.concat([high_low, high_close, low_close], axis=1).max(axis=1)
-    atr = tr.rolling(14).mean()
-    atr_pct = atr / df['close'] * 100
-    current_atr_pct = atr_pct.iloc[-2]
+    # Use pre-computed ATR% from calculate_indicators() (avoids redundant computation)
+    if 'atr_pct' in df.columns:
+        current_atr_pct = current.get('atr_pct', 0)
+        if pd.isna(current_atr_pct):
+            current_atr_pct = 0
+    else:
+        current_atr_pct = 0
 
     # Calculate quantiles from recent data (use last 200 bars for stability)
     lookback = min(200, len(df) - 1)
-    recent_atr = atr_pct.iloc[-lookback:-1]
+    if 'atr_pct' in df.columns:
+        recent_atr = df['atr_pct'].iloc[-lookback:-1]
+    else:
+        recent_atr = pd.Series([current_atr_pct])
     q_low = recent_atr.quantile(VOL_LOW_QUANTILE)
     q_high = recent_atr.quantile(VOL_HIGH_QUANTILE)
 
@@ -428,9 +392,9 @@ def check_entry_signal(
     if len(df) < 5:
         return None, None
 
-    # Ensure classification is done
+    # Ensure classification is done (single source: indicators.calculate_indicators)
     if 'pattern_3' not in df.columns:
-        df = add_candle_classification(df)
+        df = calculate_indicators(df, config)
 
     current = df.iloc[-2]  # Last complete candle
     current_timestamp = current.get('timestamp', df.index[-2])

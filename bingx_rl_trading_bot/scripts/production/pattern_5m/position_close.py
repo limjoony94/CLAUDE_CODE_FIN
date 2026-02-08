@@ -12,15 +12,12 @@ import ccxt
 import re
 
 from .constants import (
-    SLIPPAGE_BUFFER_PCT,
     FEE_PCT,
     QTY_TOLERANCE,
-    PRICE_ROUND_DECIMALS,
-    QUANTITY_ROUND_DECIMALS,
     ROTATION_ENABLED,
     CONFIDENCE_LOG_FILE,
-    PATTERN_OPTIMAL_TPSL,
 )
+from .position_open import calculate_tp_sl, setup_scale_out
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_positions_cached
 from .state import save_state
@@ -184,19 +181,15 @@ def recover_position_to_state(
     quantity = float(exchange_pos.get('contracts', 0))
     dir_mult = 1 if direction == 'LONG' else -1
 
-    vol_mult = 1.0
-    base_tp_pct = strategy['tp_pct']
-    base_sl_pct = strategy['sl_pct']
-    tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
-    sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
-
-    tp_price = round(entry_price * (1 + dir_mult * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
-    sl_price = round(entry_price * (1 - dir_mult * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+    # Use shared calculate_tp_sl (supports per-pattern TP/SL via needs_tpsl)
+    tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
+        entry_price, dir_mult, strategy, vol_mult=1.0
+    )
 
     logger.info(f"Recovered {direction} position: entry=${entry_price:.1f}")
 
     # Setup scale-out if enabled
-    scale_out_stages = _setup_scale_out_for_recovery(strategy, entry_price, quantity, dir_mult, tp_pct_adjusted)
+    scale_out_stages = setup_scale_out(strategy, entry_price, quantity, dir_mult, tp_pct_adjusted)
 
     state['position'] = {
         'direction': direction,
@@ -205,7 +198,7 @@ def recover_position_to_state(
         'remaining_quantity': quantity,
         'tp_price': tp_price,
         'sl_price': sl_price,
-        'vol_mult': vol_mult,
+        'vol_mult': 1.0,  # Recovery uses default volatility multiplier
         'scale_out_enabled': bool(scale_out_stages),
         'scale_out_stages': scale_out_stages,
         'entry_time': datetime.now().isoformat(),
@@ -220,46 +213,6 @@ def recover_position_to_state(
         if state['position'].get('tp_order_id') or state['position'].get('sl_order_id') or scale_out_stages:
             state['position']['needs_tpsl'] = False
             save_state(state)
-
-
-def _setup_scale_out_for_recovery(
-    strategy: Dict[str, Any],
-    entry_price: float,
-    quantity: float,
-    direction: int,
-    tp_pct_adjusted: float,
-) -> List[Dict]:
-    """Setup scale-out stages for recovery."""
-    scale_out_config = strategy.get('scale_out', {})
-    scale_out_enabled = scale_out_config.get('enabled', False)
-    scale_out_stages = []
-
-    if scale_out_enabled:
-        stages_config = scale_out_config.get('stages', [])
-        allocated_qty = 0.0
-
-        for i, (pct, tp_mult) in enumerate(stages_config):
-            stage_tp_pct = tp_pct_adjusted * tp_mult
-            stage_tp_price = round(entry_price * (1 + direction * stage_tp_pct / 100), PRICE_ROUND_DECIMALS)
-
-            if i == len(stages_config) - 1:
-                stage_qty = round(quantity - allocated_qty, QUANTITY_ROUND_DECIMALS)
-            else:
-                stage_qty = round(quantity * pct, QUANTITY_ROUND_DECIMALS)
-                allocated_qty += stage_qty
-
-            scale_out_stages.append({
-                'stage': i + 1,
-                'pct': pct,
-                'tp_mult': tp_mult,
-                'tp_price': stage_tp_price,
-                'quantity': stage_qty,
-                'filled': False,
-                'order_id': None,
-            })
-            logger.info(f"  Stage {i+1}: {pct*100:.0f}% @ ${stage_tp_price:.1f}")
-
-    return scale_out_stages
 
 
 def recalculate_position_orders(
@@ -299,28 +252,21 @@ def recalculate_position_orders(
     position['quantity'] = new_quantity
     position['remaining_quantity'] = new_quantity
 
-    # Recalculate TP/SL — use per-pattern values if available
+    # Recalculate TP/SL using shared function (supports per-pattern values)
     reason = position.get('reason', '')
     pattern_match = re.search(r'Pattern:\s*(\S+)', reason)
     pattern_name = pattern_match.group(1) if pattern_match else None
+    regime_tp_sl = position.get('regime_tp_sl')
 
-    if pattern_name and pattern_name in PATTERN_OPTIMAL_TPSL:
-        base_tp_pct, base_sl_pct = PATTERN_OPTIMAL_TPSL[pattern_name]
-        logger.info(f"Using pattern-specific TP/SL for recalc: {pattern_name} → TP={base_tp_pct}%, SL={base_sl_pct}%")
-    else:
-        base_tp_pct = strategy['tp_pct']
-        base_sl_pct = strategy['sl_pct']
-    tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
-    sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
-
-    tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
-    sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+    tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
+        entry_price, direction, strategy, vol_mult, pattern_name, regime_tp_sl
+    )
 
     position['tp_price'] = tp_price
     position['sl_price'] = sl_price
 
     # Recalculate scale-out stages (after cancelling old orders)
-    scale_out_stages = _setup_scale_out_for_recovery(
+    scale_out_stages = setup_scale_out(
         strategy, entry_price, new_quantity, direction, tp_pct_adjusted
     )
     position['scale_out_stages'] = scale_out_stages
@@ -548,13 +494,10 @@ def _update_confidence_log_outcome(
         outcome: "WIN" or "LOSS"
         pnl_pct: Profit/loss percentage
     """
-    import os
     import csv
 
     try:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
-        csv_path = os.path.join(project_root, CONFIDENCE_LOG_FILE)
+        csv_path = CONFIDENCE_LOG_FILE  # Already absolute path from constants
 
         if not os.path.exists(csv_path):
             logger.debug("Confidence log file not found, skipping outcome update")

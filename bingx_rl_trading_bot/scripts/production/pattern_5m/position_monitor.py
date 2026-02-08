@@ -5,6 +5,7 @@ Functions for monitoring and syncing trading positions.
 
 import time
 import logging
+from datetime import datetime
 from typing import Dict, Any, Optional
 
 import ccxt
@@ -132,12 +133,20 @@ def get_actual_exit_price(
     try:
         trades = exchange.fetch_my_trades(symbol, limit=20)
         close_side = 'sell' if position['direction'] == 'LONG' else 'buy'
-        entry_time = position.get('entry_time', '')
+
+        # Convert entry_time to epoch ms for timezone-safe comparison
+        entry_time_str = position.get('entry_time', '')
+        entry_ts = 0
+        if entry_time_str:
+            try:
+                entry_ts = datetime.fromisoformat(entry_time_str).timestamp() * 1000
+            except (ValueError, TypeError):
+                entry_ts = 0
 
         for trade in reversed(trades):
             if trade.get('side') == close_side:
-                trade_time = trade.get('datetime', '')
-                if trade_time > entry_time:
+                trade_ts = trade.get('timestamp', 0)  # CCXT provides epoch ms
+                if trade_ts > entry_ts:
                     filled_price = float(trade.get('price', 0))
                     if filled_price > 0:
                         reason = _infer_exit_reason(filled_price, position)

@@ -161,31 +161,31 @@ bingx_rl_trading_bot/
 ├── scripts/
 │   ├── production/
 │   │   ├── pattern_5m_bot.py       # 엔트리포인트
-│   │   └── pattern_5m/             # 14개 모듈 ★
+│   │   └── pattern_5m/             # 14개 모듈
 │   │       ├── bot.py              # 메인 루프
 │   │       ├── config.py           # 설정
-│   │       ├── constants.py        # 패턴 + Per-pattern TP/SL ★
+│   │       ├── constants.py        # 패턴 + Per-pattern TP/SL
 │   │       ├── exchange.py         # BingX API
 │   │       ├── indicators.py       # 기술 지표
 │   │       ├── models.py           # 데이터클래스
 │   │       ├── orders.py           # 주문 + TP/SL 자동조정
 │   │       ├── position.py         # facade
-│   │       ├── position_open.py    # 진입 ★
+│   │       ├── position_open.py    # 진입
 │   │       ├── position_monitor.py # 모니터링
 │   │       ├── position_close.py   # 청산
 │   │       ├── signals.py          # 패턴 탐지 + Context Filter
 │   │       ├── state.py            # 상태 저장
 │   │       └── utils/              # lock, logging
 │   ├── analysis/                   # 연구 스크립트
-│   └── monitoring/                 # 모니터링 스크립트
-├── data/                           # 시장 데이터 CSV
-├── results/                        # 봇 상태/메트릭 JSON
-├── logs/                           # 운영 로그
-├── claudedocs/                     # 연구 리포트 아카이브
-└── archive/                        # 레거시 아카이브
+│   ├── monitor/                    # 모니터링 스크립트
+│   ├── tests/                      # 테스트
+│   └── utils/                      # 유틸리티
+├── data/                           # 시장 데이터 CSV (270일 Ground Truth)
+├── results/                        # 봇 상태/메트릭 JSON (pattern_5m 전용)
+├── logs/                           # pattern_5m 운영 로그
+├── claudedocs/                     # 활성 연구 리포트 (2026~)
+└── archive/                        # 레거시 전체 (ML data, logs, experiments 등)
 ```
-
-★ = v1.25.4에서 수정된 파일
 
 ---
 
@@ -219,7 +219,7 @@ bingx_rl_trading_bot/
 - ✅ 실제 슬리피지 영향은 주장의 1/3 수준
 - ✅ 시장가 주문 허용 가능 (BingX BTC 스프레드 <5bps)
 
-> 상세: [claudedocs/PATTERN_VALIDATION_AUDIT_20260203.md](bingx_rl_trading_bot/claudedocs/PATTERN_VALIDATION_AUDIT_20260203.md)
+> 상세: 2026-02-03 독립 검증 완료 (보고서 아카이브됨)
 
 ---
 
@@ -291,11 +291,9 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 ## 🔗 문서 링크
 
-- [프로젝트 분석](docs/analysis.md)
 - [에이전트 가이드](docs/agent-guides.md)
-- [구조 개선안](docs/restructure-plan.md)
-- [정리 목록](docs/cleanup-list.md)
 - [코딩 컨벤션](docs/CODING_CONVENTIONS.md)
 - [Git 워크플로](docs/GIT_WORKFLOW.md)
 - [기술 스택](docs/TECH_STACK.md)
 - [전체 문서 목차](docs/INDEX.md)
+- [v1.25.0 리뷰](docs/v1.25.0-review.md)

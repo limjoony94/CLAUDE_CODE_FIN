@@ -48,6 +48,13 @@ bingx_rl_trading_bot/results/deep_*.json
 bingx_rl_trading_bot/results/*_validation.json
 bingx_rl_trading_bot/results/*_FAILURE*.txt
 
+# Archive (legacy data, moved during cleanup)
+bingx_rl_trading_bot/archive/
+
+# Cache
+.pytest_cache/
+bingx_rl_trading_bot/data/cache/
+
 # bkit temp files
 docs/.bkit-memory.json
 docs/.pdca-*

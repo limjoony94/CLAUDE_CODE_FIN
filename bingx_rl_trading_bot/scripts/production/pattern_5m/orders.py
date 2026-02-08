@@ -36,7 +36,7 @@ def place_tp_sl_orders(
 
     try:
         direction = position['direction']
-        quantity = position['quantity']
+        quantity = position.get('remaining_quantity', position['quantity'])
         tp_price = position['tp_price']
         sl_price = position['sl_price']
         close_side = 'sell' if direction == 'LONG' else 'buy'
@@ -410,7 +410,7 @@ def _verify_sl_order(
                 symbol=symbol,
                 type='STOP_MARKET',
                 side=close_side,
-                amount=position['quantity'],
+                amount=position.get('remaining_quantity', position['quantity']),
                 params={
                     'positionSide': 'BOTH',
                     'stopPrice': position['sl_price'],

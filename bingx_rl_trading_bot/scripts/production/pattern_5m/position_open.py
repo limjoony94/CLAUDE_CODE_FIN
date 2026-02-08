@@ -222,6 +222,9 @@ def open_position(
     except ccxt.NetworkError as e:
         logger.error(f"Failed to open position (network error): {e}")
         return False
+    except ccxt.InsufficientFunds as e:
+        logger.error(f"Failed to open position (insufficient funds): {e}")
+        return False
     except ccxt.ExchangeError as e:
         error_msg = str(e)
         # Auto-recover from Hedge mode error
@@ -234,9 +237,6 @@ def open_position(
                 logger.error(f"Failed to switch position mode: {mode_err}")
         else:
             logger.error(f"Failed to open position (exchange error): {e}")
-        return False
-    except ccxt.InsufficientFunds as e:
-        logger.error(f"Failed to open position (insufficient funds): {e}")
         return False
     except Exception as e:
         logger.error(f"Failed to open position: {e}")
@@ -263,13 +263,14 @@ def _verify_no_existing_position(
                 logger.warning("Position already exists on exchange")
                 sync_position_with_exchange(exchange, state, config, cache, circuit_breaker, metrics)
                 return False
+        return True  # Verified: no existing position
     except ccxt.NetworkError as e:
         logger.warning(f"Could not verify exchange position (network error): {e}")
     except ccxt.ExchangeError as e:
         logger.warning(f"Could not verify exchange position (exchange error): {e}")
     except Exception as e:
         logger.warning(f"Could not verify exchange position: {e}")
-    return True
+    return False  # Cannot verify — block new position for safety
 
 
 def _set_leverage(exchange: ccxt.bingx, symbol: str, leverage: int) -> None:
@@ -549,11 +550,11 @@ def refill_position(
     except ccxt.NetworkError as e:
         logger.error(f"Failed to refill position (network error): {e}")
         return False
-    except ccxt.ExchangeError as e:
-        logger.error(f"Failed to refill position (exchange error): {e}")
-        return False
     except ccxt.InsufficientFunds as e:
         logger.error(f"Failed to refill position (insufficient funds): {e}")
+        return False
+    except ccxt.ExchangeError as e:
+        logger.error(f"Failed to refill position (exchange error): {e}")
         return False
     except Exception as e:
         logger.error(f"Failed to refill position: {e}")

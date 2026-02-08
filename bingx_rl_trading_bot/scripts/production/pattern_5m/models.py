@@ -59,7 +59,7 @@ class APICache:
 
     def get_positions(self, ttl: float = CACHE_TTL_SECONDS) -> Optional[List]:
         """Get cached positions if not expired."""
-        if self.positions and (time.time() - self.positions_time) < ttl:
+        if self.positions is not None and (time.time() - self.positions_time) < ttl:
             return self.positions
         return None
 

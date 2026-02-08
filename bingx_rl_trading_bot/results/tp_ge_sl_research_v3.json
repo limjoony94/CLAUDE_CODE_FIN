@@ -1,0 +1,569 @@
+{
+  "timestamp": "2026-02-08T21:47:52.648598",
+  "research": "TP/SL Research v3 \u2014 R:R Improvement Study",
+  "methodology": {
+    "returns": "simple (sum of % PnL)",
+    "position_limit": "1-position-at-a-time",
+    "safety_margin": "BE + 15%",
+    "new_pattern_filters": "MC<0.005, WF=5/5, Period=3/3, Trades>=20, R:R>=1.0"
+  },
+  "phase1_current_rr_retest": {
+    "MD-BU-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 76,
+        "wr": 92.1,
+        "total_pnl": 61.4
+      },
+      "best_rr": null
+    },
+    "MU-MU-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 81,
+        "wr": 85.2,
+        "total_pnl": 64.8
+      },
+      "best_rr": null
+    },
+    "MU-U-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 109,
+        "wr": 85.3,
+        "total_pnl": 32.6
+      },
+      "best_rr": null
+    },
+    "BU-BU-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 75,
+        "wr": 84.0,
+        "total_pnl": 52.8
+      },
+      "best_rr": {
+        "tp": 3.0,
+        "sl": 2.5,
+        "rr": 1.2,
+        "trades": 38,
+        "wr": 65.8,
+        "mc": 0.0068,
+        "wf": 5,
+        "pp": 3,
+        "total_pnl": 123.7,
+        "avg_win": 8.9,
+        "avg_loss": 7.6,
+        "expectancy": 3.255
+      }
+    },
+    "ST-MU-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 144,
+        "wr": 79.2,
+        "total_pnl": 45.0
+      },
+      "best_rr": null
+    },
+    "IH-DN-DN": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 104,
+        "wr": 80.8,
+        "total_pnl": 46.0
+      },
+      "best_rr": null
+    },
+    "MD-ST-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 95,
+        "wr": 90.5,
+        "total_pnl": 65.5
+      },
+      "best_rr": null
+    },
+    "U-MU-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 78,
+        "wr": 91.0,
+        "total_pnl": 56.7
+      },
+      "best_rr": null
+    },
+    "MU-BU-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 77,
+        "wr": 88.3,
+        "total_pnl": 81.1
+      },
+      "best_rr": null
+    },
+    "ST-H-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 57,
+        "wr": 91.2,
+        "total_pnl": 42.3
+      },
+      "best_rr": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "rr": 0.83,
+        "trades": 29,
+        "wr": 72.4,
+        "mc": 0.0265,
+        "wf": 4,
+        "pp": 2,
+        "total_pnl": 82.6,
+        "avg_win": 7.4,
+        "avg_loss": 9.1,
+        "expectancy": 2.848
+      }
+    },
+    "ST-DN-H": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 75,
+        "wr": 85.3,
+        "total_pnl": 60.9
+      },
+      "best_rr": null
+    },
+    "MD-MU-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.0,
+        "sl": 2.0,
+        "rr": 0.5,
+        "trades": 85,
+        "wr": 81.2,
+        "total_pnl": 102.5
+      },
+      "best_rr": null
+    },
+    "BU-U-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 117,
+        "wr": 83.8,
+        "total_pnl": 80.1
+      },
+      "best_rr": null
+    },
+    "H-DN-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 65,
+        "wr": 78.5,
+        "total_pnl": 16.6
+      },
+      "best_rr": null
+    },
+    "DN-BD-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 101,
+        "wr": 82.2,
+        "total_pnl": 56.2
+      },
+      "best_rr": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "rr": 0.83,
+        "trades": 56,
+        "wr": 73.2,
+        "mc": 0.0018,
+        "wf": 5,
+        "pp": 3,
+        "total_pnl": 166.9,
+        "avg_win": 7.4,
+        "avg_loss": 9.1,
+        "expectancy": 2.98
+      }
+    },
+    "DN-BU-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.0,
+        "sl": 2.0,
+        "rr": 0.5,
+        "trades": 184,
+        "wr": 74.5,
+        "total_pnl": 110.6
+      },
+      "best_rr": null
+    },
+    "DN-U-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 909,
+        "wr": 81.5,
+        "total_pnl": 12.6
+      },
+      "best_rr": null
+    },
+    "ST-DN-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 461,
+        "wr": 79.8,
+        "total_pnl": 168.7
+      },
+      "best_rr": null
+    },
+    "ST-DN-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 459,
+        "wr": 73.6,
+        "total_pnl": -62.1
+      },
+      "best_rr": null
+    },
+    "U-ST-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 466,
+        "wr": 75.5,
+        "total_pnl": 8.6
+      },
+      "best_rr": null
+    },
+    "U-U-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 458,
+        "wr": 76.4,
+        "total_pnl": 41.2
+      },
+      "best_rr": null
+    },
+    "ST-U-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 463,
+        "wr": 73.9,
+        "total_pnl": -54.1
+      },
+      "best_rr": null
+    },
+    "ST-ST-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 248,
+        "wr": 78.6,
+        "total_pnl": 66.7
+      },
+      "best_rr": null
+    }
+  },
+  "phase2_new_rr_patterns": [
+    {
+      "pattern": "BU-MU-DN",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 2.0,
+      "rr": 1.25,
+      "trades": 44,
+      "wr": 72.7,
+      "mc": 0.0002,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 163.6,
+      "avg_win": 7.4,
+      "avg_loss": 6.1,
+      "expectancy": 3.718
+    },
+    {
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 26,
+      "wr": 84.6,
+      "mc": 0.0001,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 159.4,
+      "avg_win": 8.9,
+      "avg_loss": 9.1,
+      "expectancy": 6.131
+    },
+    {
+      "pattern": "MD-BD-BU",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 2.5,
+      "rr": 1.0,
+      "trades": 20,
+      "wr": 80.0,
+      "mc": 0.0049,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 88.0,
+      "avg_win": 7.4,
+      "avg_loss": 7.6,
+      "expectancy": 4.4
+    },
+    {
+      "pattern": "BU-IH-DN",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 1.0,
+      "rr": 1.5,
+      "trades": 26,
+      "wr": 69.2,
+      "mc": 0.0039,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 54.4,
+      "avg_win": 4.4,
+      "avg_loss": 3.1,
+      "expectancy": 2.092
+    },
+    {
+      "pattern": "MU-H-MU",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "rr": 2.14,
+      "trades": 28,
+      "wr": 60.7,
+      "mc": 0.0047,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 50.6,
+      "avg_win": 4.4,
+      "avg_loss": 2.2,
+      "expectancy": 1.807
+    },
+    {
+      "pattern": "MD-MD-ST",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0,
+      "rr": 1.0,
+      "trades": 39,
+      "wr": 71.8,
+      "mc": 0.0049,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 47.1,
+      "avg_win": 2.9,
+      "avg_loss": 3.1,
+      "expectancy": 1.208
+    },
+    {
+      "pattern": "MU-DF-U",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.7,
+      "rr": 1.43,
+      "trades": 20,
+      "wr": 75.0,
+      "mc": 0.004,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 32.5,
+      "avg_win": 2.9,
+      "avg_loss": 2.2,
+      "expectancy": 1.625
+    },
+    {
+      "pattern": "H-MU-MD",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.5,
+      "rr": 1.4,
+      "trades": 29,
+      "wr": 69.0,
+      "mc": 0.0048,
+      "wf": 5,
+      "pp": 3,
+      "total_pnl": 25.6,
+      "avg_win": 2.0,
+      "avg_loss": 1.6,
+      "expectancy": 0.883
+    }
+  ],
+  "phase3_portfolio_comparison": {
+    "Current": {
+      "patterns": 23,
+      "trades": 648,
+      "trades_per_day": 2.4,
+      "wr": 79.8,
+      "expectancy": 0.254,
+      "pnl": 164.4,
+      "mdd": 36.0,
+      "pnl_mdd": 4.57,
+      "pf": 1.21,
+      "avg_win": 1.86,
+      "avg_loss": 6.1,
+      "wf": 5
+    },
+    "Current-RR": {
+      "patterns": 23,
+      "trades": 608,
+      "trades_per_day": 2.3,
+      "wr": 80.3,
+      "expectancy": 0.483,
+      "pnl": 293.5,
+      "mdd": 36.6,
+      "pnl_mdd": 8.02,
+      "pf": 1.4,
+      "avg_win": 2.12,
+      "avg_loss": 6.17,
+      "wf": 5
+    },
+    "New-RR": {
+      "patterns": 8,
+      "trades": 138,
+      "trades_per_day": 0.5,
+      "wr": 68.1,
+      "expectancy": 2.198,
+      "pnl": 303.3,
+      "mdd": 22.7,
+      "pnl_mdd": 13.36,
+      "pf": 2.69,
+      "avg_win": 5.14,
+      "avg_loss": 4.09,
+      "wf": 4
+    },
+    "Hybrid": {
+      "patterns": 31,
+      "trades": 579,
+      "trades_per_day": 2.1,
+      "wr": 79.4,
+      "expectancy": 0.55,
+      "pnl": 318.3,
+      "mdd": 33.6,
+      "pnl_mdd": 9.47,
+      "pf": 1.44,
+      "avg_win": 2.27,
+      "avg_loss": 6.09,
+      "wf": 5
+    }
+  },
+  "phase4_wr_resilience": {
+    "Current": {
+      "actual_wr": 79.8,
+      "avg_win": 1.86,
+      "avg_loss": 6.1,
+      "max_tolerable_wr_drop": 3.2,
+      "be_wr": 76.6,
+      "sensitivities": {
+        "5": -0.144,
+        "10": -0.543,
+        "15": -0.941,
+        "20": -1.339
+      }
+    },
+    "Current-RR": {
+      "actual_wr": 80.3,
+      "avg_win": 2.12,
+      "avg_loss": 6.17,
+      "max_tolerable_wr_drop": 5.8,
+      "be_wr": 74.4,
+      "sensitivities": {
+        "5": 0.068,
+        "10": -0.347,
+        "15": -0.762,
+        "20": -1.176
+      }
+    },
+    "New-RR": {
+      "actual_wr": 68.1,
+      "avg_win": 5.14,
+      "avg_loss": 4.09,
+      "max_tolerable_wr_drop": 23.8,
+      "be_wr": 44.3,
+      "sensitivities": {
+        "5": 1.736,
+        "10": 1.275,
+        "15": 0.813,
+        "20": 0.352
+      }
+    },
+    "Hybrid": {
+      "actual_wr": 79.4,
+      "avg_win": 2.27,
+      "avg_loss": 6.09,
+      "max_tolerable_wr_drop": 6.6,
+      "be_wr": 72.9,
+      "sensitivities": {
+        "5": 0.132,
+        "10": -0.286,
+        "15": -0.703,
+        "20": -1.121
+      }
+    }
+  }
+}

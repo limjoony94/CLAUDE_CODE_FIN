@@ -11,8 +11,8 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.25.5"  # v1.25.5: Fix CWD-dependent path bug (absolute paths)
-# 23 patterns (6L+17S), validated via quality pruning analysis (2026-02-07)
+BOT_VERSION = "1.26.1"  # v1.26.1: T5_Optimized pruned portfolio (58 patterns, 35L+23S)
+# R:R >= 0.75, MC < 0.01, WF >= 4/5, bias-validated (excess WR +22.6pp avg over random baseline)
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)
@@ -106,77 +106,144 @@ REGIME_PATTERNS = {
 DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # ============================================================
-# Validated Patterns (v1.25.4 Quality-Filtered Portfolio)
-# Research: comprehensive_pattern_evaluation.py (2026-02-07)
-# Validation: MC < 0.05, WF >= 4/5, WR >= 85% (quality filter)
-# Removed v1.25.4: DN-IH-ST (76.3%), U-U-DN (84.1%), U-U-U (84.2%) - WR < 85%
+# Validated Patterns (v1.26.1: T5_Optimized pruned portfolio)
+# Source: portfolio_pruning_v4.py leave-one-out optimization
+# Criteria: R:R >= 0.75, MC < 0.01, WF >= 4/5
+# Validated: tp_sl_bias_research.py — 57/58 excess WR > random (avg +22.6pp)
+# Portfolio: PnL +963.8%, MDD 19.8%, PnL/MDD 48.68x, PF 3.53, WF 5/5
 # ============================================================
 
-# LONG patterns - v1.25.4: 6 total (WR >= 85% only)
+# LONG patterns (35) — v1.26.1 T5_Optimized
 VALIDATED_LONG_PATTERNS: List[str] = [
-    "MD-BU-U",     # WR 94.4%, 54t, MC=0.0004, WF 5/5, PnL +14.1%
-    "MU-MU-U",     # WR 93.3%, 30t, MC=0.0011, WF 5/5, PnL +12.6%
-    "MU-U-MU",     # WR 96.3%, 54t, MC=0.0000, WF 4/5, PnL +16.6%
-    "BU-BU-BD",    # WR 90.5%, 42t, MC=0.0038, WF 5/5, PnL +14.4%
-    "ST-MU-U",     # WR 91.4%, 81t, MC=0.0000, WF 5/5, PnL +29.7%
-    "IH-DN-DN",    # WR 87.5%, 56t, MC=0.0179, WF 4/5, PnL +14.7%
-    # REMOVED v1.25.4: "DN-IH-ST" (WR 76.3% < 85%)
-    # REMOVED v1.25.4: "U-U-DN" (WR 84.1% < 85%)
-    # REMOVED v1.25.4: "U-U-U" (WR 84.2% < 85%)
+    "BD-BD-U",     # R:R 1.00, 101t, WR 63.4%, Exp +1.10%, PnL +111.4%
+    "BD-MU-BD",    # R:R 1.43,  23t, WR 69.6%, Exp +1.35%, PnL  +31.0%
+    "BD-ST-U",     # R:R 1.00, 122t, WR 63.1%, Exp +1.08%, PnL +131.8%
+    "BU-BU-BD",    # R:R 1.20,  38t, WR 65.8%, Exp +3.26%, PnL +123.7%
+    "BU-U-GS",     # R:R 0.75,  21t, WR 81.0%, Exp +2.40%, PnL  +50.4%
+    "D-MU-U",      # R:R 0.75,  35t, WR 80.0%, Exp +2.30%, PnL  +80.5%
+    "DN-BD-BD",    # R:R 2.00, 107t, WR 48.6%, Exp +1.27%, PnL +136.3%
+    "DN-DF-MU",    # R:R 1.00,  15t, WR 86.7%, Exp +3.20%, PnL  +48.0%
+    "DN-DF-ST",    # R:R 1.33,  29t, WR 69.0%, Exp +2.64%, PnL  +76.6%
+    "DN-DN-H",     # R:R 1.00, 117t, WR 63.2%, Exp +0.70%, PnL  +81.3%
+    "DN-MD-DN",    # R:R 0.75, 184t, WR 68.5%, Exp +1.09%, PnL +200.6%
+    "GS-ST-ST",    # R:R 0.75,  18t, WR 83.3%, Exp +2.65%, PnL  +47.7%
+    "GS-U-MU",     # R:R 0.75,  18t, WR 83.3%, Exp +2.65%, PnL  +47.7%
+    "H-BU-BU",     # R:R 1.50,  17t, WR 76.5%, Exp +2.64%, PnL  +44.8%
+    "H-MU-MD",     # R:R 1.40,  29t, WR 69.0%, Exp +0.88%, PnL  +25.6%
+    "IH-MD-MD",    # R:R 2.00,  21t, WR 66.7%, Exp +1.40%, PnL  +29.4%
+    "IH-ST-MU",    # R:R 1.67,  25t, WR 68.0%, Exp +0.63%, PnL  +15.8%
+    "MD-BU-MD",    # R:R 1.33,  17t, WR 76.5%, Exp +3.43%, PnL  +58.3%
+    "MD-DN-MU",    # R:R 1.00, 130t, WR 62.3%, Exp +0.64%, PnL  +83.0%
+    "MD-H-MD",     # R:R 2.00,  24t, WR 62.5%, Exp +1.21%, PnL  +29.1%
+    "MD-MD-ST",    # R:R 1.50,  35t, WR 62.9%, Exp +1.61%, PnL  +56.5%
+    "MD-ST-BD",    # R:R 2.00,  33t, WR 57.6%, Exp +0.99%, PnL  +32.7%
+    "MD-ST-MD",    # R:R 1.00,  30t, WR 73.3%, Exp +2.70%, PnL  +81.0%
+    "MU-BD-ST",    # R:R 0.83,  18t, WR 83.3%, Exp +4.65%, PnL  +83.7%
+    "MU-DF-U",     # R:R 2.14,  19t, WR 73.7%, Exp +2.66%, PnL  +50.6%
+    "MU-H-MU",     # R:R 2.14,  28t, WR 60.7%, Exp +1.81%, PnL  +50.6%
+    "MU-IH-DN",    # R:R 1.33,  38t, WR 65.8%, Exp +2.31%, PnL  +87.7%
+    "MU-MU-IH",    # R:R 1.00,  30t, WR 73.3%, Exp +2.00%, PnL  +60.0%
+    "MU-U-H",      # R:R 0.83,  27t, WR 77.8%, Exp +3.73%, PnL +100.8%
+    "U-H-MU",      # R:R 0.75,  38t, WR 84.2%, Exp +2.74%, PnL +104.2%
+    "U-MD-GS",     # R:R 1.67,  23t, WR 69.6%, Exp +0.67%, PnL  +15.4%
+    "U-MD-MD",     # R:R 2.14, 104t, WR 45.2%, Exp +0.78%, PnL  +81.4%
+    "U-MU-H",      # R:R 4.00,  58t, WR 37.9%, Exp +1.25%, PnL  +72.2%
+    "U-MU-IH",     # R:R10.00,  40t, WR 35.0%, Exp +2.47%, PnL  +98.6%
+    "U-ST-DF",     # R:R 0.80,  21t, WR 81.0%, Exp +3.33%, PnL  +69.9%
 ]
 
-# SHORT patterns - v1.25.4: 17 total (WR >= 85% only)
+# SHORT patterns (23) — v1.26.1 T5_Optimized
 VALIDATED_SHORT_PATTERNS: List[str] = [
-    "MD-ST-ST",    # WR 98.5%, 65t, MC=0.0000, WF 5/5, PnL +23.5%
-    "U-MU-BU",     # WR 98.1%, 54t, MC=0.0000, WF 5/5, PnL +19.1%
-    "MU-BU-DN",    # WR 97.8%, 45t, MC=0.0000, WF 5/5, PnL +24.3%
-    "ST-H-U",      # WR 97.1%, 34t, MC=0.0000, WF 5/5, PnL +11.1%
-    "ST-DN-H",     # WR 93.6%, 47t, MC=0.0000, WF 5/5, PnL +20.1%
-    "MD-MU-U",     # WR 90.5%, 42t, MC=0.0000, WF 5/5, PnL +25.8%
-    "BU-U-ST",     # WR 91.7%, 72t, MC=0.0001, WF 5/5, PnL +27.0%
-    "H-DN-ST",     # WR 97.3%, 37t, MC=0.0000, WF 5/5, PnL +19.5%
-    "DN-BD-BU",    # WR 94.4%, 71t, MC=0.0000, WF 5/5, PnL +31.8%
-    "DN-BU-U",     # WR 88.9%, 90t, MC=0.0000, WF 5/5, PnL +51.0%
-    "DN-U-U",      # WR 91.1%, 644t, MC=0.0000, WF 5/5, PnL +115.1% ★★ TOP
-    "ST-DN-U",     # WR 88.1%, 286t, MC=0.0000, WF 5/5, PnL +79.8%
-    "ST-DN-DN",    # WR 88.1%, 269t, MC=0.0000, WF 5/5, PnL +75.0%
-    "U-ST-DN",     # WR 87.8%, 270t, MC=0.0000, WF 5/5, PnL +72.9%
-    "U-U-ST",      # WR 87.6%, 266t, MC=0.0000, WF 5/5, PnL +70.5%
-    "ST-U-DN",     # WR 87.7%, 260t, MC=0.0000, WF 5/5, PnL +69.6%
-    "ST-ST-U",     # WR 91.8%, 159t, MC=0.0000, WF 5/5, PnL +60.3%
-    # REMOVED v1.25.4: "DN-DN-DN" (WR 80.6% < 85%)
+    "BD-BU-DN",    # R:R 1.00,  47t, WR 68.1%, Exp +3.16%, PnL +148.3%
+    "BD-D-D",      # R:R 1.00,  15t, WR 86.7%, Exp +3.20%, PnL  +48.0%
+    "BD-U-H",      # R:R 0.83,  20t, WR 85.0%, Exp +4.93%, PnL  +98.5%
+    "BU-MD-MD",    # R:R 1.50,  16t, WR 75.0%, Exp +5.15%, PnL  +82.4%
+    "BU-ST-GS",    # R:R 1.00,  15t, WR 86.7%, Exp +1.00%, PnL  +15.0%
+    "D-BD-ST",     # R:R 0.83,  18t, WR 83.3%, Exp +4.65%, PnL  +83.7%
+    "D-DN-DN",     # R:R 0.83,  99t, WR 67.7%, Exp +2.07%, PnL +204.6%
+    "DN-BD-BU",    # R:R 0.83,  56t, WR 73.2%, Exp +2.98%, PnL +166.9%
+    "DN-D-BD",     # R:R 8.33,  45t, WR 28.9%, Exp +1.43%, PnL  +64.2%
+    "DN-DF-DN",    # R:R 1.00,  48t, WR 68.8%, Exp +2.15%, PnL +103.2%
+    "DN-IH-U",     # R:R 0.83,  65t, WR 69.2%, Exp +2.32%, PnL +151.0%
+    "GS-ST-U",     # R:R 1.40,  32t, WR 65.6%, Exp +0.76%, PnL  +24.4%
+    "H-U-BD",      # R:R 1.50,  20t, WR 70.0%, Exp +4.40%, PnL  +88.0%
+    "IH-ST-ST",    # R:R 0.80,  28t, WR 78.6%, Exp +3.01%, PnL  +84.2%
+    "MD-MD-MD",    # R:R 1.00,  21t, WR 85.7%, Exp +6.33%, PnL +132.9%
+    "MD-MU-U",     # R:R 0.75,  67t, WR 71.6%, Exp +1.42%, PnL  +95.3%
+    "ST-BD-BU",    # R:R 1.00,  22t, WR 77.3%, Exp +4.81%, PnL +105.8%
+    "ST-DN-BU",    # R:R 0.80,  62t, WR 72.6%, Exp +2.20%, PnL +136.3%
+    "ST-DN-U",     # R:R 1.00, 234t, WR 60.7%, Exp +1.82%, PnL +426.6% ★ TOP
+    "ST-MU-ST",    # R:R 0.80,  46t, WR 73.9%, Exp +2.38%, PnL +109.4%
+    "U-GS-DN",     # R:R 1.00,  26t, WR 84.6%, Exp +6.13%, PnL +159.4%
+    "U-H-BU",      # R:R 3.33,  42t, WR 45.2%, Exp +0.76%, PnL  +32.1%
+    "U-ST-DN",     # R:R 1.00, 234t, WR 60.7%, Exp +1.82%, PnL +426.6%
 ]
 
 # ============================================================
 # Pattern Historical Statistics (for confidence calculation)
-# Source: v1.25.4 quality-filtered portfolio (2026-02-07)
+# Source: v1.26.1 — T5_Optimized (58 patterns, 35L+23S)
 # ============================================================
 PATTERN_STATS = {
-    # LONG patterns (6) - v1.25.4: WR >= 85% only
-    "MD-BU-U": {"direction": "LONG", "trades": 54, "wr": 94.4, "mc": 0.0004, "wf": 5, "periods": 3},
-    "MU-MU-U": {"direction": "LONG", "trades": 30, "wr": 93.3, "mc": 0.0011, "wf": 5, "periods": 3},
-    "MU-U-MU": {"direction": "LONG", "trades": 54, "wr": 96.3, "mc": 0.0000, "wf": 4, "periods": 3},
-    "BU-BU-BD": {"direction": "LONG", "trades": 42, "wr": 90.5, "mc": 0.0038, "wf": 5, "periods": 3},
-    "ST-MU-U": {"direction": "LONG", "trades": 81, "wr": 91.4, "mc": 0.0000, "wf": 5, "periods": 3},
-    "IH-DN-DN": {"direction": "LONG", "trades": 56, "wr": 87.5, "mc": 0.0179, "wf": 4, "periods": 3},
-    # SHORT patterns (17) - v1.25.4: WR >= 85% only
-    "MD-ST-ST": {"direction": "SHORT", "trades": 65, "wr": 98.5, "mc": 0.0000, "wf": 5, "periods": 3},
-    "U-MU-BU": {"direction": "SHORT", "trades": 54, "wr": 98.1, "mc": 0.0000, "wf": 5, "periods": 3},
-    "MU-BU-DN": {"direction": "SHORT", "trades": 45, "wr": 97.8, "mc": 0.0000, "wf": 5, "periods": 3},
-    "ST-H-U": {"direction": "SHORT", "trades": 34, "wr": 97.1, "mc": 0.0000, "wf": 5, "periods": 3},
-    "ST-DN-H": {"direction": "SHORT", "trades": 47, "wr": 93.6, "mc": 0.0000, "wf": 5, "periods": 3},
-    "MD-MU-U": {"direction": "SHORT", "trades": 42, "wr": 90.5, "mc": 0.0000, "wf": 5, "periods": 3},
-    "BU-U-ST": {"direction": "SHORT", "trades": 72, "wr": 91.7, "mc": 0.0001, "wf": 5, "periods": 3},
-    "H-DN-ST": {"direction": "SHORT", "trades": 37, "wr": 97.3, "mc": 0.0000, "wf": 5, "periods": 3},
-    "DN-BD-BU": {"direction": "SHORT", "trades": 71, "wr": 94.4, "mc": 0.0000, "wf": 5, "periods": 3},
-    "DN-BU-U": {"direction": "SHORT", "trades": 90, "wr": 88.9, "mc": 0.0000, "wf": 5, "periods": 3},
-    "DN-U-U": {"direction": "SHORT", "trades": 644, "wr": 91.1, "mc": 0.0000, "wf": 5, "periods": 3},
-    "ST-DN-U": {"direction": "SHORT", "trades": 286, "wr": 88.1, "mc": 0.0000, "wf": 5, "periods": 3},
-    "ST-DN-DN": {"direction": "SHORT", "trades": 269, "wr": 88.1, "mc": 0.0000, "wf": 5, "periods": 3},
-    "U-ST-DN": {"direction": "SHORT", "trades": 270, "wr": 87.8, "mc": 0.0000, "wf": 5, "periods": 3},
-    "U-U-ST": {"direction": "SHORT", "trades": 266, "wr": 87.6, "mc": 0.0000, "wf": 5, "periods": 3},
-    "ST-U-DN": {"direction": "SHORT", "trades": 260, "wr": 87.7, "mc": 0.0000, "wf": 5, "periods": 3},
-    "ST-ST-U": {"direction": "SHORT", "trades": 159, "wr": 91.8, "mc": 0.0000, "wf": 5, "periods": 3},
+    # LONG patterns (35)
+    "BD-BD-U":   {"direction": "LONG",  "trades": 101, "wr": 63.4, "mc": 0.0065, "wf": 4, "periods": 2},
+    "BD-MU-BD":  {"direction": "LONG",  "trades":  23, "wr": 69.6, "mc": 0.0086, "wf": 5, "periods": 3},
+    "BD-ST-U":   {"direction": "LONG",  "trades": 122, "wr": 63.1, "mc": 0.0044, "wf": 5, "periods": 3},
+    "BU-BU-BD":  {"direction": "LONG",  "trades":  38, "wr": 65.8, "mc": 0.0072, "wf": 5, "periods": 3},
+    "BU-U-GS":   {"direction": "LONG",  "trades":  21, "wr": 81.0, "mc": 0.0120, "wf": 4, "periods": 3},
+    "D-MU-U":    {"direction": "LONG",  "trades":  35, "wr": 80.0, "mc": 0.0016, "wf": 5, "periods": 3},
+    "DN-BD-BD":  {"direction": "LONG",  "trades": 107, "wr": 48.6, "mc": 0.0025, "wf": 4, "periods": 3},
+    "DN-DF-MU":  {"direction": "LONG",  "trades":  15, "wr": 86.7, "mc": 0.0026, "wf": 5, "periods": 3},
+    "DN-DF-ST":  {"direction": "LONG",  "trades":  29, "wr": 69.0, "mc": 0.0044, "wf": 4, "periods": 3},
+    "DN-DN-H":   {"direction": "LONG",  "trades": 117, "wr": 63.2, "mc": 0.0050, "wf": 5, "periods": 3},
+    "DN-MD-DN":  {"direction": "LONG",  "trades": 184, "wr": 68.5, "mc": 0.0013, "wf": 4, "periods": 3},
+    "GS-ST-ST":  {"direction": "LONG",  "trades":  18, "wr": 83.3, "mc": 0.0089, "wf": 5, "periods": 3},
+    "GS-U-MU":   {"direction": "LONG",  "trades":  18, "wr": 83.3, "mc": 0.0102, "wf": 4, "periods": 3},
+    "H-BU-BU":   {"direction": "LONG",  "trades":  17, "wr": 76.5, "mc": 0.0043, "wf": 4, "periods": 3},
+    "H-MU-MD":   {"direction": "LONG",  "trades":  29, "wr": 69.0, "mc": 0.0053, "wf": 5, "periods": 3},
+    "IH-MD-MD":  {"direction": "LONG",  "trades":  21, "wr": 66.7, "mc": 0.0060, "wf": 5, "periods": 2},
+    "IH-ST-MU":  {"direction": "LONG",  "trades":  25, "wr": 68.0, "mc": 0.0089, "wf": 5, "periods": 2},
+    "MD-BU-MD":  {"direction": "LONG",  "trades":  17, "wr": 76.5, "mc": 0.0054, "wf": 5, "periods": 3},
+    "MD-DN-MU":  {"direction": "LONG",  "trades": 130, "wr": 62.3, "mc": 0.0073, "wf": 4, "periods": 3},
+    "MD-H-MD":   {"direction": "LONG",  "trades":  24, "wr": 62.5, "mc": 0.0059, "wf": 4, "periods": 3},
+    "MD-MD-ST":  {"direction": "LONG",  "trades":  35, "wr": 62.9, "mc": 0.0086, "wf": 5, "periods": 3},
+    "MD-ST-BD":  {"direction": "LONG",  "trades":  33, "wr": 57.6, "mc": 0.0085, "wf": 5, "periods": 3},
+    "MD-ST-MD":  {"direction": "LONG",  "trades":  30, "wr": 73.3, "mc": 0.0097, "wf": 4, "periods": 3},
+    "MU-BD-ST":  {"direction": "LONG",  "trades":  18, "wr": 83.3, "mc": 0.0039, "wf": 5, "periods": 3},
+    "MU-DF-U":   {"direction": "LONG",  "trades":  19, "wr": 73.7, "mc": 0.0016, "wf": 5, "periods": 3},
+    "MU-H-MU":   {"direction": "LONG",  "trades":  28, "wr": 60.7, "mc": 0.0051, "wf": 5, "periods": 3},
+    "MU-IH-DN":  {"direction": "LONG",  "trades":  38, "wr": 65.8, "mc": 0.0042, "wf": 4, "periods": 3},
+    "MU-MU-IH":  {"direction": "LONG",  "trades":  30, "wr": 73.3, "mc": 0.0100, "wf": 4, "periods": 3},
+    "MU-U-H":    {"direction": "LONG",  "trades":  27, "wr": 77.8, "mc": 0.0078, "wf": 4, "periods": 3},
+    "U-H-MU":    {"direction": "LONG",  "trades":  38, "wr": 84.2, "mc": 0.0001, "wf": 4, "periods": 3},
+    "U-MD-GS":   {"direction": "LONG",  "trades":  23, "wr": 69.6, "mc": 0.0057, "wf": 5, "periods": 3},
+    "U-MD-MD":   {"direction": "LONG",  "trades": 104, "wr": 45.2, "mc": 0.0074, "wf": 4, "periods": 2},
+    "U-MU-H":    {"direction": "LONG",  "trades":  58, "wr": 37.9, "mc": 0.0046, "wf": 5, "periods": 3},
+    "U-MU-IH":   {"direction": "LONG",  "trades":  40, "wr": 35.0, "mc": 0.0007, "wf": 4, "periods": 3},
+    "U-ST-DF":   {"direction": "LONG",  "trades":  21, "wr": 81.0, "mc": 0.0051, "wf": 4, "periods": 3},
+    # SHORT patterns (23)
+    "BD-BU-DN":  {"direction": "SHORT", "trades":  47, "wr": 68.1, "mc": 0.0090, "wf": 4, "periods": 3},
+    "BD-D-D":    {"direction": "SHORT", "trades":  15, "wr": 86.7, "mc": 0.0040, "wf": 4, "periods": 3},
+    "BD-U-H":    {"direction": "SHORT", "trades":  20, "wr": 85.0, "mc": 0.0013, "wf": 5, "periods": 3},
+    "BU-MD-MD":  {"direction": "SHORT", "trades":  16, "wr": 75.0, "mc": 0.0064, "wf": 5, "periods": 3},
+    "BU-ST-GS":  {"direction": "SHORT", "trades":  15, "wr": 86.7, "mc": 0.0032, "wf": 4, "periods": 3},
+    "D-BD-ST":   {"direction": "SHORT", "trades":  18, "wr": 83.3, "mc": 0.0040, "wf": 5, "periods": 2},
+    "D-DN-DN":   {"direction": "SHORT", "trades":  99, "wr": 67.7, "mc": 0.0059, "wf": 5, "periods": 3},
+    "DN-BD-BU":  {"direction": "SHORT", "trades":  56, "wr": 73.2, "mc": 0.0017, "wf": 5, "periods": 3},
+    "DN-D-BD":   {"direction": "SHORT", "trades":  45, "wr": 28.9, "mc": 0.0089, "wf": 5, "periods": 3},
+    "DN-DF-DN":  {"direction": "SHORT", "trades":  48, "wr": 68.8, "mc": 0.0074, "wf": 5, "periods": 3},
+    "DN-IH-U":   {"direction": "SHORT", "trades":  65, "wr": 69.2, "mc": 0.0084, "wf": 4, "periods": 2},
+    "GS-ST-U":   {"direction": "SHORT", "trades":  32, "wr": 65.6, "mc": 0.0119, "wf": 4, "periods": 3},
+    "H-U-BD":    {"direction": "SHORT", "trades":  20, "wr": 70.0, "mc": 0.0084, "wf": 5, "periods": 3},
+    "IH-ST-ST":  {"direction": "SHORT", "trades":  28, "wr": 78.6, "mc": 0.0061, "wf": 5, "periods": 3},
+    "MD-MD-MD":  {"direction": "SHORT", "trades":  21, "wr": 85.7, "mc": 0.0007, "wf": 4, "periods": 3},
+    "MD-MU-U":   {"direction": "SHORT", "trades":  67, "wr": 71.6, "mc": 0.0110, "wf": 5, "periods": 3},
+    "ST-BD-BU":  {"direction": "SHORT", "trades":  22, "wr": 77.3, "mc": 0.0095, "wf": 4, "periods": 3},
+    "ST-DN-BU":  {"direction": "SHORT", "trades":  62, "wr": 72.6, "mc": 0.0032, "wf": 4, "periods": 2},
+    "ST-DN-U":   {"direction": "SHORT", "trades": 234, "wr": 60.7, "mc": 0.0018, "wf": 4, "periods": 2},
+    "ST-MU-ST":  {"direction": "SHORT", "trades":  46, "wr": 73.9, "mc": 0.0056, "wf": 5, "periods": 3},
+    "U-GS-DN":   {"direction": "SHORT", "trades":  26, "wr": 84.6, "mc": 0.0003, "wf": 5, "periods": 3},
+    "U-H-BU":    {"direction": "SHORT", "trades":  42, "wr": 45.2, "mc": 0.0076, "wf": 5, "periods": 3},
+    "U-ST-DN":   {"direction": "SHORT", "trades": 234, "wr": 60.7, "mc": 0.0010, "wf": 4, "periods": 2},
 }
 
 # Confidence calculation weights
@@ -189,36 +256,44 @@ CONFIDENCE_LOG_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_confiden
 
 
 # ============================================================
-# Pattern TP/SL (v1.25.4 Per-Pattern Optimized)
-# Research: quality-filtered portfolio (2026-02-07)
-# Individually optimized TP/SL for each pattern
+# Pattern TP/SL (v1.26.0 Per-Pattern Optimized)
+# v1.25.4 WR-based: TP 0.5-1.0% / SL 2.0% (R:R < 1.0, high WR)
+# v3 R:R-based: TP >= SL (R:R >= 1.0, lower WR but better expectancy)
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
-    # LONG patterns (6) - format: (tp_pct, sl_pct)
-    "MD-BU-U": (0.5, 2.0),
-    "MU-MU-U": (0.7, 2.0),
-    "MU-U-MU": (0.5, 2.0),
-    "BU-BU-BD": (0.7, 2.0),
-    "ST-MU-U": (0.7, 2.0),
-    "IH-DN-DN": (0.7, 2.0),
-    # SHORT patterns (17)
-    "MD-ST-ST": (0.5, 2.0),
-    "U-MU-BU": (0.5, 2.0),
-    "MU-BU-DN": (0.7, 2.0),
-    "ST-H-U": (0.5, 2.0),
-    "ST-DN-H": (0.7, 2.0),
-    "MD-MU-U": (1.0, 2.0),
-    "BU-U-ST": (0.7, 2.0),
-    "H-DN-ST": (0.7, 2.0),
-    "DN-BD-BU": (0.7, 2.0),
-    "DN-BU-U": (1.0, 2.0),
-    "DN-U-U": (0.5, 2.0),   # WR 91.1%, PnL +115.1% ★★ TOP
-    "ST-DN-U": (0.7, 2.0),
-    "ST-DN-DN": (0.7, 2.0),
-    "U-ST-DN": (0.7, 2.0),
-    "U-U-ST": (0.7, 2.0),
-    "ST-U-DN": (0.7, 2.0),
-    "ST-ST-U": (0.7, 2.0),
+    # LONG patterns (9) — format: (tp_pct, sl_pct)
+    # v1.25.4 WR-based
+    "MD-BU-U":  (0.5, 2.0),   # R:R=0.25, WR 94.4%
+    "MU-MU-U":  (0.7, 2.0),   # R:R=0.35, WR 93.3%
+    "MU-U-MU":  (0.5, 2.0),   # R:R=0.25, WR 96.3%
+    "BU-BU-BD": (0.7, 2.0),   # R:R=0.35, WR 90.5%
+    "ST-MU-U":  (0.7, 2.0),   # R:R=0.35, WR 91.4%
+    "IH-DN-DN": (0.7, 2.0),   # R:R=0.35, WR 87.5%
+    # v3 R:R-based additions
+    "BU-IH-DN": (1.5, 1.0),   # R:R=1.50, WR 69.2%, Exp +2.092%
+    "MU-H-MU":  (1.5, 0.7),   # R:R=2.14, WR 60.7%, Exp +1.807%
+    "MD-MD-ST": (1.0, 1.0),   # R:R=1.00, WR 71.8%, Exp +1.208%
+    # SHORT patterns (18)
+    # v1.25.4 WR-based
+    "MD-ST-ST": (0.5, 2.0),   # R:R=0.25, WR 98.5%
+    "U-MU-BU":  (0.5, 2.0),   # R:R=0.25, WR 98.1%
+    "MU-BU-DN": (0.7, 2.0),   # R:R=0.35, WR 97.8%
+    "ST-H-U":   (0.5, 2.0),   # R:R=0.25, WR 97.1%
+    "H-DN-ST":  (0.7, 2.0),   # R:R=0.35, WR 97.3%
+    "DN-BD-BU": (0.7, 2.0),   # R:R=0.35, WR 94.4%
+    "ST-DN-H":  (0.7, 2.0),   # R:R=0.35, WR 93.6%
+    "ST-ST-U":  (0.7, 2.0),   # R:R=0.35, WR 91.8%
+    "BU-U-ST":  (0.7, 2.0),   # R:R=0.35, WR 91.7%
+    "DN-U-U":   (0.5, 2.0),   # R:R=0.25, WR 91.1% ★ TOP
+    "MD-MU-U":  (1.0, 2.0),   # R:R=0.50, WR 90.5%
+    "DN-BU-U":  (1.0, 2.0),   # R:R=0.50, WR 88.9%
+    "ST-DN-U":  (0.7, 2.0),   # R:R=0.35, WR 88.1%
+    "ST-DN-DN": (0.7, 2.0),   # R:R=0.35, WR 88.1%
+    "U-ST-DN":  (0.7, 2.0),   # R:R=0.35, WR 87.8%
+    "ST-U-DN":  (0.7, 2.0),   # R:R=0.35, WR 87.7%
+    "U-U-ST":   (0.7, 2.0),   # R:R=0.35, WR 87.6%
+    # v3 R:R-based addition
+    "BU-MU-DN": (2.5, 2.0),   # R:R=1.25, WR 72.7%, Exp +3.718%
 }
 
 # ============================================================
@@ -435,10 +510,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 76.0  # v1.19.0: Average across 15 tight TP/SL patterns
-EXPECTED_AVG_WIN = 1.0    # Tight TP targets (0.3-1.0%)
-EXPECTED_AVG_LOSS = 1.0   # Tight SL (0.3-1.0%)
-EXPECTED_EDGE = 50.0      # Conservative estimate for tight TP/SL
+EXPECTED_WIN_RATE = 87.0  # v1.26.0: Weighted avg (23 WR-based ~90% + 4 R:R-based ~68%)
+EXPECTED_AVG_WIN = 2.5    # Mix of tight TP (0.5-1.0%) and R:R TP (1.0-2.5%)
+EXPECTED_AVG_LOSS = 5.0   # Mix of wide SL (2.0%) and R:R SL (0.7-2.0%)
+EXPECTED_EDGE = 50.0      # Conservative estimate
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 

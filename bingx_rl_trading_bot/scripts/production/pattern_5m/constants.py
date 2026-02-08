@@ -256,44 +256,70 @@ CONFIDENCE_LOG_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_confiden
 
 
 # ============================================================
-# Pattern TP/SL (v1.26.0 Per-Pattern Optimized)
-# v1.25.4 WR-based: TP 0.5-1.0% / SL 2.0% (R:R < 1.0, high WR)
-# v3 R:R-based: TP >= SL (R:R >= 1.0, lower WR but better expectancy)
+# Pattern TP/SL (v1.26.1 T5_Optimized Per-Pattern)
+# All R:R >= 0.75, bias-validated against random baseline
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
-    # LONG patterns (9) — format: (tp_pct, sl_pct)
-    # v1.25.4 WR-based
-    "MD-BU-U":  (0.5, 2.0),   # R:R=0.25, WR 94.4%
-    "MU-MU-U":  (0.7, 2.0),   # R:R=0.35, WR 93.3%
-    "MU-U-MU":  (0.5, 2.0),   # R:R=0.25, WR 96.3%
-    "BU-BU-BD": (0.7, 2.0),   # R:R=0.35, WR 90.5%
-    "ST-MU-U":  (0.7, 2.0),   # R:R=0.35, WR 91.4%
-    "IH-DN-DN": (0.7, 2.0),   # R:R=0.35, WR 87.5%
-    # v3 R:R-based additions
-    "BU-IH-DN": (1.5, 1.0),   # R:R=1.50, WR 69.2%, Exp +2.092%
-    "MU-H-MU":  (1.5, 0.7),   # R:R=2.14, WR 60.7%, Exp +1.807%
-    "MD-MD-ST": (1.0, 1.0),   # R:R=1.00, WR 71.8%, Exp +1.208%
-    # SHORT patterns (18)
-    # v1.25.4 WR-based
-    "MD-ST-ST": (0.5, 2.0),   # R:R=0.25, WR 98.5%
-    "U-MU-BU":  (0.5, 2.0),   # R:R=0.25, WR 98.1%
-    "MU-BU-DN": (0.7, 2.0),   # R:R=0.35, WR 97.8%
-    "ST-H-U":   (0.5, 2.0),   # R:R=0.25, WR 97.1%
-    "H-DN-ST":  (0.7, 2.0),   # R:R=0.35, WR 97.3%
-    "DN-BD-BU": (0.7, 2.0),   # R:R=0.35, WR 94.4%
-    "ST-DN-H":  (0.7, 2.0),   # R:R=0.35, WR 93.6%
-    "ST-ST-U":  (0.7, 2.0),   # R:R=0.35, WR 91.8%
-    "BU-U-ST":  (0.7, 2.0),   # R:R=0.35, WR 91.7%
-    "DN-U-U":   (0.5, 2.0),   # R:R=0.25, WR 91.1% ★ TOP
-    "MD-MU-U":  (1.0, 2.0),   # R:R=0.50, WR 90.5%
-    "DN-BU-U":  (1.0, 2.0),   # R:R=0.50, WR 88.9%
-    "ST-DN-U":  (0.7, 2.0),   # R:R=0.35, WR 88.1%
-    "ST-DN-DN": (0.7, 2.0),   # R:R=0.35, WR 88.1%
-    "U-ST-DN":  (0.7, 2.0),   # R:R=0.35, WR 87.8%
-    "ST-U-DN":  (0.7, 2.0),   # R:R=0.35, WR 87.7%
-    "U-U-ST":   (0.7, 2.0),   # R:R=0.35, WR 87.6%
-    # v3 R:R-based addition
-    "BU-MU-DN": (2.5, 2.0),   # R:R=1.25, WR 72.7%, Exp +3.718%
+    # LONG patterns (35) — format: (tp_pct, sl_pct)
+    "BD-BD-U":   (1.5, 1.5),  # R:R=1.00
+    "BD-MU-BD":  (1.0, 0.7),  # R:R=1.43
+    "BD-ST-U":   (1.5, 1.5),  # R:R=1.00
+    "BU-BU-BD":  (3.0, 2.5),  # R:R=1.20
+    "BU-U-GS":   (1.5, 2.0),  # R:R=0.75
+    "D-MU-U":    (1.5, 2.0),  # R:R=0.75
+    "DN-BD-BD":  (2.0, 1.0),  # R:R=2.00
+    "DN-DF-MU":  (1.5, 1.5),  # R:R=1.00
+    "DN-DF-ST":  (2.0, 1.5),  # R:R=1.33
+    "DN-DN-H":   (1.0, 1.0),  # R:R=1.00
+    "DN-MD-DN":  (1.5, 2.0),  # R:R=0.75
+    "GS-ST-ST":  (1.5, 2.0),  # R:R=0.75
+    "GS-U-MU":   (1.5, 2.0),  # R:R=0.75
+    "H-BU-BU":   (1.5, 1.0),  # R:R=1.50
+    "H-MU-MD":   (0.7, 0.5),  # R:R=1.40
+    "IH-MD-MD":  (1.0, 0.5),  # R:R=2.00
+    "IH-ST-MU":  (0.5, 0.3),  # R:R=1.67
+    "MD-BU-MD":  (2.0, 1.5),  # R:R=1.33
+    "MD-DN-MU":  (1.0, 1.0),  # R:R=1.00
+    "MD-H-MD":   (1.0, 0.5),  # R:R=2.00
+    "MD-MD-ST":  (1.5, 1.0),  # R:R=1.50
+    "MD-ST-BD":  (1.0, 0.5),  # R:R=2.00
+    "MD-ST-MD":  (2.0, 2.0),  # R:R=1.00
+    "MU-BD-ST":  (2.5, 3.0),  # R:R=0.83
+    "MU-DF-U":   (1.5, 0.7),  # R:R=2.14
+    "MU-H-MU":   (1.5, 0.7),  # R:R=2.14
+    "MU-IH-DN":  (2.0, 1.5),  # R:R=1.33
+    "MU-MU-IH":  (1.5, 1.5),  # R:R=1.00
+    "MU-U-H":    (2.5, 3.0),  # R:R=0.83
+    "U-H-MU":    (1.5, 2.0),  # R:R=0.75
+    "U-MD-GS":   (0.5, 0.3),  # R:R=1.67
+    "U-MD-MD":   (1.5, 0.7),  # R:R=2.14
+    "U-MU-H":    (2.0, 0.5),  # R:R=4.00
+    "U-MU-IH":   (3.0, 0.3),  # R:R=10.0
+    "U-ST-DF":   (2.0, 2.5),  # R:R=0.80
+    # SHORT patterns (23)
+    "BD-BU-DN":  (3.0, 3.0),  # R:R=1.00
+    "BD-D-D":    (1.5, 1.5),  # R:R=1.00
+    "BD-U-H":    (2.5, 3.0),  # R:R=0.83
+    "BU-MD-MD":  (3.0, 2.0),  # R:R=1.50
+    "BU-ST-GS":  (0.5, 0.5),  # R:R=1.00
+    "D-BD-ST":   (2.5, 3.0),  # R:R=0.83
+    "D-DN-DN":   (2.5, 3.0),  # R:R=0.83
+    "DN-BD-BU":  (2.5, 3.0),  # R:R=0.83
+    "DN-D-BD":   (2.5, 0.3),  # R:R=8.33
+    "DN-DF-DN":  (2.0, 2.0),  # R:R=1.00
+    "DN-IH-U":   (2.5, 3.0),  # R:R=0.83
+    "GS-ST-U":   (0.7, 0.5),  # R:R=1.40
+    "H-U-BD":    (3.0, 2.0),  # R:R=1.50
+    "IH-ST-ST":  (2.0, 2.5),  # R:R=0.80
+    "MD-MD-MD":  (3.0, 3.0),  # R:R=1.00
+    "MD-MU-U":   (1.5, 2.0),  # R:R=0.75
+    "ST-BD-BU":  (3.0, 3.0),  # R:R=1.00
+    "ST-DN-BU":  (2.0, 2.5),  # R:R=0.80
+    "ST-DN-U":   (3.0, 3.0),  # R:R=1.00
+    "ST-MU-ST":  (2.0, 2.5),  # R:R=0.80
+    "U-GS-DN":   (3.0, 3.0),  # R:R=1.00
+    "U-H-BU":    (1.0, 0.3),  # R:R=3.33
+    "U-ST-DN":   (3.0, 3.0),  # R:R=1.00
 }
 
 # ============================================================
@@ -510,9 +536,9 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 87.0  # v1.26.0: Weighted avg (23 WR-based ~90% + 4 R:R-based ~68%)
-EXPECTED_AVG_WIN = 2.5    # Mix of tight TP (0.5-1.0%) and R:R TP (1.0-2.5%)
-EXPECTED_AVG_LOSS = 5.0   # Mix of wide SL (2.0%) and R:R SL (0.7-2.0%)
+EXPECTED_WIN_RATE = 73.5  # v1.26.1: T5_Optimized 58-pattern portfolio avg WR
+EXPECTED_AVG_WIN = 5.38   # R:R >= 0.75, TP range 0.5-3.0%
+EXPECTED_AVG_LOSS = 4.24  # SL range 0.7-2.0%
 EXPECTED_EDGE = 50.0      # Conservative estimate
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5

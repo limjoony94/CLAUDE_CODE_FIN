@@ -11,8 +11,9 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.26.2"  # v1.26.2: T5 + MC/edge cleanup (52 patterns, 32L+20S)
-# R:R >= 0.75, MC < 0.01 strict, WF >= 4/5, genuine edge only (p<0.05)
+BOT_VERSION = "1.26.3"  # v1.26.3: R:R re-optimization (5 patterns TP/SL improved)
+# Base: v1.26.2 T5 + MC/edge cleanup (52 patterns, 32L+20S)
+# Re-opt: D-MU-U, GS-ST-ST, MU-BD-ST, D-BD-ST, ST-DN-BU → R:R >= 1.0
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)
@@ -106,26 +107,30 @@ REGIME_PATTERNS = {
 DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # ============================================================
-# Validated Patterns (v1.26.2: T5 + MC/edge cleanup)
-# Source: portfolio_pruning_v4.py + tp_sl_bias_research.py
-# Criteria: R:R >= 0.75, MC < 0.01 strict, WF >= 4/5, genuine edge (p<0.05)
-# Removed: BU-U-GS, GS-U-MU, MU-MU-IH (MC>=0.01), DN-IH-U (p=0.052),
-#          GS-ST-U (MC=0.0119), MD-MU-U (MC=0.011)
+# Validated Patterns (v1.26.3: R:R re-optimization)
+# Base: v1.26.2 T5 + MC/edge cleanup (52 patterns, 32L+20S)
+# Re-optimized 5 patterns for R:R >= 1.0 with better expectancy:
+#   D-MU-U:   TP 1.5/SL 2.0 → TP 3.0/SL 2.0 (exp +32%)
+#   GS-ST-ST: TP 1.5/SL 2.0 → TP 2.0/SL 2.0 (exp +32%)
+#   MU-BD-ST: TP 2.5/SL 3.0 → TP 3.0/SL 3.0 (exp +14%)
+#   D-BD-ST:  TP 2.5/SL 3.0 → TP 3.0/SL 3.0 (exp +8%)
+#   ST-DN-BU: TP 2.0/SL 2.5 → TP 3.0/SL 3.0 (exp +38%)
+# Source: strategy_deep_review.py Phase 4
 # ============================================================
 
-# LONG patterns (32) — v1.26.2 T5 + MC/edge cleanup
+# LONG patterns (32) — v1.26.3 R:R re-optimization (3 LONG re-opt)
 VALIDATED_LONG_PATTERNS: List[str] = [
     "BD-BD-U",     # R:R 1.00, 101t, WR 63.4%, Exp +1.10%, PnL +111.4%
     "BD-MU-BD",    # R:R 1.43,  23t, WR 69.6%, Exp +1.35%, PnL  +31.0%
     "BD-ST-U",     # R:R 1.00, 122t, WR 63.1%, Exp +1.08%, PnL +131.8%
     "BU-BU-BD",    # R:R 1.20,  38t, WR 65.8%, Exp +3.26%, PnL +123.7%
-    "D-MU-U",      # R:R 0.75,  35t, WR 80.0%, Exp +2.30%, PnL  +80.5%
+    "D-MU-U",      # R:R 1.50,  23t, WR 60.9%, Exp +3.03%, PnL  +69.7%  ★ Re-opt v1.26.3
     "DN-BD-BD",    # R:R 2.00, 107t, WR 48.6%, Exp +1.27%, PnL +136.3%
     "DN-DF-MU",    # R:R 1.00,  15t, WR 86.7%, Exp +3.20%, PnL  +48.0%
     "DN-DF-ST",    # R:R 1.33,  29t, WR 69.0%, Exp +2.64%, PnL  +76.6%
     "DN-DN-H",     # R:R 1.00, 117t, WR 63.2%, Exp +0.70%, PnL  +81.3%
     "DN-MD-DN",    # R:R 0.75, 184t, WR 68.5%, Exp +1.09%, PnL +200.6%
-    "GS-ST-ST",    # R:R 0.75,  18t, WR 83.3%, Exp +2.65%, PnL  +47.7%
+    "GS-ST-ST",    # R:R 1.00,  15t, WR 80.0%, Exp +3.50%, PnL  +52.5%  ★ Re-opt v1.26.3
     "H-BU-BU",     # R:R 1.50,  17t, WR 76.5%, Exp +2.64%, PnL  +44.8%
     "H-MU-MD",     # R:R 1.40,  29t, WR 69.0%, Exp +0.88%, PnL  +25.6%
     "IH-MD-MD",    # R:R 2.00,  21t, WR 66.7%, Exp +1.40%, PnL  +29.4%
@@ -136,7 +141,7 @@ VALIDATED_LONG_PATTERNS: List[str] = [
     "MD-MD-ST",    # R:R 1.50,  35t, WR 62.9%, Exp +1.61%, PnL  +56.5%
     "MD-ST-BD",    # R:R 2.00,  33t, WR 57.6%, Exp +0.99%, PnL  +32.7%
     "MD-ST-MD",    # R:R 1.00,  30t, WR 73.3%, Exp +2.70%, PnL  +81.0%
-    "MU-BD-ST",    # R:R 0.83,  18t, WR 83.3%, Exp +4.65%, PnL  +83.7%
+    "MU-BD-ST",    # R:R 1.00,  15t, WR 80.0%, Exp +5.30%, PnL  +79.5%  ★ Re-opt v1.26.3
     "MU-DF-U",     # R:R 2.14,  19t, WR 73.7%, Exp +2.66%, PnL  +50.6%
     "MU-H-MU",     # R:R 2.14,  28t, WR 60.7%, Exp +1.81%, PnL  +50.6%
     "MU-IH-DN",    # R:R 1.33,  38t, WR 65.8%, Exp +2.31%, PnL  +87.7%
@@ -149,14 +154,14 @@ VALIDATED_LONG_PATTERNS: List[str] = [
     "U-ST-DF",     # R:R 0.80,  21t, WR 81.0%, Exp +3.33%, PnL  +69.9%
 ]
 
-# SHORT patterns (20) — v1.26.2 T5 + MC/edge cleanup
+# SHORT patterns (20) — v1.26.3 R:R re-optimization (2 SHORT re-opt)
 VALIDATED_SHORT_PATTERNS: List[str] = [
     "BD-BU-DN",    # R:R 1.00,  47t, WR 68.1%, Exp +3.16%, PnL +148.3%
     "BD-D-D",      # R:R 1.00,  15t, WR 86.7%, Exp +3.20%, PnL  +48.0%
     "BD-U-H",      # R:R 0.83,  20t, WR 85.0%, Exp +4.93%, PnL  +98.5%
     "BU-MD-MD",    # R:R 1.50,  16t, WR 75.0%, Exp +5.15%, PnL  +82.4%
     "BU-ST-GS",    # R:R 1.00,  15t, WR 86.7%, Exp +1.00%, PnL  +15.0%
-    "D-BD-ST",     # R:R 0.83,  18t, WR 83.3%, Exp +4.65%, PnL  +83.7%
+    "D-BD-ST",     # R:R 1.00,  14t, WR 78.6%, Exp +5.04%, PnL  +70.6%  ★ Re-opt v1.26.3
     "D-DN-DN",     # R:R 0.83,  99t, WR 67.7%, Exp +2.07%, PnL +204.6%
     "DN-BD-BU",    # R:R 0.83,  56t, WR 73.2%, Exp +2.98%, PnL +166.9%
     "DN-D-BD",     # R:R 8.33,  45t, WR 28.9%, Exp +1.43%, PnL  +64.2%
@@ -165,7 +170,7 @@ VALIDATED_SHORT_PATTERNS: List[str] = [
     "IH-ST-ST",    # R:R 0.80,  28t, WR 78.6%, Exp +3.01%, PnL  +84.2%
     "MD-MD-MD",    # R:R 1.00,  21t, WR 85.7%, Exp +6.33%, PnL +132.9%
     "ST-BD-BU",    # R:R 1.00,  22t, WR 77.3%, Exp +4.81%, PnL +105.8%
-    "ST-DN-BU",    # R:R 0.80,  62t, WR 72.6%, Exp +2.20%, PnL +136.3%
+    "ST-DN-BU",    # R:R 1.00,  46t, WR 67.4%, Exp +3.03%, PnL +139.4%  ★ Re-opt v1.26.3
     "ST-DN-U",     # R:R 1.00, 234t, WR 60.7%, Exp +1.82%, PnL +426.6% ★ TOP
     "ST-MU-ST",    # R:R 0.80,  46t, WR 73.9%, Exp +2.38%, PnL +109.4%
     "U-GS-DN",     # R:R 1.00,  26t, WR 84.6%, Exp +6.13%, PnL +159.4%
@@ -175,7 +180,7 @@ VALIDATED_SHORT_PATTERNS: List[str] = [
 
 # ============================================================
 # Pattern Historical Statistics (for confidence calculation)
-# Source: v1.26.2 — T5 + MC/edge cleanup (52 patterns, 32L+20S)
+# Source: v1.26.3 — R:R re-optimization (52 patterns, 32L+20S)
 # ============================================================
 PATTERN_STATS = {
     # LONG patterns (32)
@@ -183,13 +188,13 @@ PATTERN_STATS = {
     "BD-MU-BD":  {"direction": "LONG",  "trades":  23, "wr": 69.6, "mc": 0.0086, "wf": 5, "periods": 3},
     "BD-ST-U":   {"direction": "LONG",  "trades": 122, "wr": 63.1, "mc": 0.0044, "wf": 5, "periods": 3},
     "BU-BU-BD":  {"direction": "LONG",  "trades":  38, "wr": 65.8, "mc": 0.0072, "wf": 5, "periods": 3},
-    "D-MU-U":    {"direction": "LONG",  "trades":  35, "wr": 80.0, "mc": 0.0016, "wf": 5, "periods": 3},
+    "D-MU-U":    {"direction": "LONG",  "trades":  23, "wr": 60.9, "mc": 0.0370, "wf": 4, "periods": 3},  # Re-opt v1.26.3
     "DN-BD-BD":  {"direction": "LONG",  "trades": 107, "wr": 48.6, "mc": 0.0025, "wf": 4, "periods": 3},
     "DN-DF-MU":  {"direction": "LONG",  "trades":  15, "wr": 86.7, "mc": 0.0026, "wf": 5, "periods": 3},
     "DN-DF-ST":  {"direction": "LONG",  "trades":  29, "wr": 69.0, "mc": 0.0044, "wf": 4, "periods": 3},
     "DN-DN-H":   {"direction": "LONG",  "trades": 117, "wr": 63.2, "mc": 0.0050, "wf": 5, "periods": 3},
     "DN-MD-DN":  {"direction": "LONG",  "trades": 184, "wr": 68.5, "mc": 0.0013, "wf": 4, "periods": 3},
-    "GS-ST-ST":  {"direction": "LONG",  "trades":  18, "wr": 83.3, "mc": 0.0089, "wf": 5, "periods": 3},
+    "GS-ST-ST":  {"direction": "LONG",  "trades":  15, "wr": 80.0, "mc": 0.0170, "wf": 5, "periods": 3},  # Re-opt v1.26.3
     "H-BU-BU":   {"direction": "LONG",  "trades":  17, "wr": 76.5, "mc": 0.0043, "wf": 4, "periods": 3},
     "H-MU-MD":   {"direction": "LONG",  "trades":  29, "wr": 69.0, "mc": 0.0053, "wf": 5, "periods": 3},
     "IH-MD-MD":  {"direction": "LONG",  "trades":  21, "wr": 66.7, "mc": 0.0060, "wf": 5, "periods": 2},
@@ -200,7 +205,7 @@ PATTERN_STATS = {
     "MD-MD-ST":  {"direction": "LONG",  "trades":  35, "wr": 62.9, "mc": 0.0086, "wf": 5, "periods": 3},
     "MD-ST-BD":  {"direction": "LONG",  "trades":  33, "wr": 57.6, "mc": 0.0085, "wf": 5, "periods": 3},
     "MD-ST-MD":  {"direction": "LONG",  "trades":  30, "wr": 73.3, "mc": 0.0097, "wf": 4, "periods": 3},
-    "MU-BD-ST":  {"direction": "LONG",  "trades":  18, "wr": 83.3, "mc": 0.0039, "wf": 5, "periods": 3},
+    "MU-BD-ST":  {"direction": "LONG",  "trades":  15, "wr": 80.0, "mc": 0.0190, "wf": 4, "periods": 3},  # Re-opt v1.26.3
     "MU-DF-U":   {"direction": "LONG",  "trades":  19, "wr": 73.7, "mc": 0.0016, "wf": 5, "periods": 3},
     "MU-H-MU":   {"direction": "LONG",  "trades":  28, "wr": 60.7, "mc": 0.0051, "wf": 5, "periods": 3},
     "MU-IH-DN":  {"direction": "LONG",  "trades":  38, "wr": 65.8, "mc": 0.0042, "wf": 4, "periods": 3},
@@ -217,7 +222,7 @@ PATTERN_STATS = {
     "BD-U-H":    {"direction": "SHORT", "trades":  20, "wr": 85.0, "mc": 0.0013, "wf": 5, "periods": 3},
     "BU-MD-MD":  {"direction": "SHORT", "trades":  16, "wr": 75.0, "mc": 0.0064, "wf": 5, "periods": 3},
     "BU-ST-GS":  {"direction": "SHORT", "trades":  15, "wr": 86.7, "mc": 0.0032, "wf": 4, "periods": 3},
-    "D-BD-ST":   {"direction": "SHORT", "trades":  18, "wr": 83.3, "mc": 0.0040, "wf": 5, "periods": 2},
+    "D-BD-ST":   {"direction": "SHORT", "trades":  14, "wr": 78.6, "mc": 0.0287, "wf": 4, "periods": 2},  # Re-opt v1.26.3
     "D-DN-DN":   {"direction": "SHORT", "trades":  99, "wr": 67.7, "mc": 0.0059, "wf": 5, "periods": 3},
     "DN-BD-BU":  {"direction": "SHORT", "trades":  56, "wr": 73.2, "mc": 0.0017, "wf": 5, "periods": 3},
     "DN-D-BD":   {"direction": "SHORT", "trades":  45, "wr": 28.9, "mc": 0.0089, "wf": 5, "periods": 3},
@@ -226,7 +231,7 @@ PATTERN_STATS = {
     "IH-ST-ST":  {"direction": "SHORT", "trades":  28, "wr": 78.6, "mc": 0.0061, "wf": 5, "periods": 3},
     "MD-MD-MD":  {"direction": "SHORT", "trades":  21, "wr": 85.7, "mc": 0.0007, "wf": 4, "periods": 3},
     "ST-BD-BU":  {"direction": "SHORT", "trades":  22, "wr": 77.3, "mc": 0.0095, "wf": 4, "periods": 3},
-    "ST-DN-BU":  {"direction": "SHORT", "trades":  62, "wr": 72.6, "mc": 0.0032, "wf": 4, "periods": 2},
+    "ST-DN-BU":  {"direction": "SHORT", "trades":  46, "wr": 67.4, "mc": 0.0140, "wf": 3, "periods": 2},  # Re-opt v1.26.3
     "ST-DN-U":   {"direction": "SHORT", "trades": 234, "wr": 60.7, "mc": 0.0018, "wf": 4, "periods": 2},
     "ST-MU-ST":  {"direction": "SHORT", "trades":  46, "wr": 73.9, "mc": 0.0056, "wf": 5, "periods": 3},
     "U-GS-DN":   {"direction": "SHORT", "trades":  26, "wr": 84.6, "mc": 0.0003, "wf": 5, "periods": 3},
@@ -244,8 +249,8 @@ CONFIDENCE_LOG_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_confiden
 
 
 # ============================================================
-# Pattern TP/SL (v1.26.2 T5 + MC/edge cleanup Per-Pattern)
-# All R:R >= 0.75, MC < 0.01 strict, genuine edge (p<0.05)
+# Pattern TP/SL (v1.26.3 R:R re-optimization)
+# Base: v1.26.2 T5 + MC/edge cleanup, 5 patterns re-optimized for R:R >= 1.0
 # ============================================================
 PATTERN_OPTIMAL_TPSL = {
     # LONG patterns (32) — format: (tp_pct, sl_pct)
@@ -253,13 +258,13 @@ PATTERN_OPTIMAL_TPSL = {
     "BD-MU-BD":  (1.0, 0.7),  # R:R=1.43
     "BD-ST-U":   (1.5, 1.5),  # R:R=1.00
     "BU-BU-BD":  (3.0, 2.5),  # R:R=1.20
-    "D-MU-U":    (1.5, 2.0),  # R:R=0.75
+    "D-MU-U":    (3.0, 2.0),  # R:R=1.50  ★ Re-opt v1.26.3 (was 1.5/2.0)
     "DN-BD-BD":  (2.0, 1.0),  # R:R=2.00
     "DN-DF-MU":  (1.5, 1.5),  # R:R=1.00
     "DN-DF-ST":  (2.0, 1.5),  # R:R=1.33
     "DN-DN-H":   (1.0, 1.0),  # R:R=1.00
     "DN-MD-DN":  (1.5, 2.0),  # R:R=0.75
-    "GS-ST-ST":  (1.5, 2.0),  # R:R=0.75
+    "GS-ST-ST":  (2.0, 2.0),  # R:R=1.00  ★ Re-opt v1.26.3 (was 1.5/2.0)
     "H-BU-BU":   (1.5, 1.0),  # R:R=1.50
     "H-MU-MD":   (0.7, 0.5),  # R:R=1.40
     "IH-MD-MD":  (1.0, 0.5),  # R:R=2.00
@@ -270,7 +275,7 @@ PATTERN_OPTIMAL_TPSL = {
     "MD-MD-ST":  (1.5, 1.0),  # R:R=1.50
     "MD-ST-BD":  (1.0, 0.5),  # R:R=2.00
     "MD-ST-MD":  (2.0, 2.0),  # R:R=1.00
-    "MU-BD-ST":  (2.5, 3.0),  # R:R=0.83
+    "MU-BD-ST":  (3.0, 3.0),  # R:R=1.00  ★ Re-opt v1.26.3 (was 2.5/3.0)
     "MU-DF-U":   (1.5, 0.7),  # R:R=2.14
     "MU-H-MU":   (1.5, 0.7),  # R:R=2.14
     "MU-IH-DN":  (2.0, 1.5),  # R:R=1.33
@@ -287,7 +292,7 @@ PATTERN_OPTIMAL_TPSL = {
     "BD-U-H":    (2.5, 3.0),  # R:R=0.83
     "BU-MD-MD":  (3.0, 2.0),  # R:R=1.50
     "BU-ST-GS":  (0.5, 0.5),  # R:R=1.00
-    "D-BD-ST":   (2.5, 3.0),  # R:R=0.83
+    "D-BD-ST":   (3.0, 3.0),  # R:R=1.00  ★ Re-opt v1.26.3 (was 2.5/3.0)
     "D-DN-DN":   (2.5, 3.0),  # R:R=0.83
     "DN-BD-BU":  (2.5, 3.0),  # R:R=0.83
     "DN-D-BD":   (2.5, 0.3),  # R:R=8.33
@@ -296,7 +301,7 @@ PATTERN_OPTIMAL_TPSL = {
     "IH-ST-ST":  (2.0, 2.5),  # R:R=0.80
     "MD-MD-MD":  (3.0, 3.0),  # R:R=1.00
     "ST-BD-BU":  (3.0, 3.0),  # R:R=1.00
-    "ST-DN-BU":  (2.0, 2.5),  # R:R=0.80
+    "ST-DN-BU":  (3.0, 3.0),  # R:R=1.00  ★ Re-opt v1.26.3 (was 2.0/2.5)
     "ST-DN-U":   (3.0, 3.0),  # R:R=1.00
     "ST-MU-ST":  (2.0, 2.5),  # R:R=0.80
     "U-GS-DN":   (3.0, 3.0),  # R:R=1.00

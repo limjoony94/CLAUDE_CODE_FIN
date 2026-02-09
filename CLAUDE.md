@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.26.2 | **Bot**: Pattern 5m (52패턴, 32L+20S) | **Updated**: 2026-02-09
+> **Version**: v1.26.4 | **Bot**: Pattern 5m (52패턴, 32L+20S) | **Updated**: 2026-02-09
 
 ---
 
@@ -42,34 +42,34 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.26.1
+## 📊 현재 전략: Pattern 5m v1.26.4
 
 ### 핵심 파라미터
 
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | Per-pattern R:R >= 0.75 (0.3-3.0%) |
+| TP/SL | Per-pattern deep-validated (grid search + 5-phase) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Double Exit | 50%@0.8x + 50%@1.0x |
 | Leverage | 3x |
 | Timeframe | 5m |
-| Quality Filter | **R:R >= 0.75, T5 leave-one-out pruning** |
+| Quality Filter | **T5 leave-one-out + MC/edge cleanup + deep-validated TP/SL** |
 
 ### 270일 종합 검증 결과
 
-| 지표 | v1.26.1 |
+| 지표 | v1.26.4 |
 |------|---------|
-| Patterns | **58 (35L+23S)** — T5_Optimized |
-| PnL | **+963.8%** |
-| MDD | **19.8%** |
-| PnL/MDD | **48.68x** |
-| WR | **73.5%** |
-| PF | **3.53** |
-| Expectancy | **+2.84%/trade** |
-| WF | **5/5** |
-| Bias Test | 77/78 genuine edge (avg +22.6pp excess WR over random) |
-| Research | tp_ge_sl_research_v2 + portfolio_pruning_v4 + tp_sl_bias_research |
+| Patterns | **52 (32L+20S)** — Deep-Validated |
+| PnL | **+882.7%** |
+| MDD | **24.4%** |
+| PnL/MDD | **36.2x** |
+| WR | **77.1%** |
+| PF | **3.23** |
+| Trades | **314** |
+| Optimization | Grid search + 5-phase deep validation (CV, plateau, edge, OOS) |
+| Changes | 31/32 accepted, 1 rejected (DN-MD-DN: insufficient edge) |
+| Research | tp_sl_optimization_v1264 + tp_sl_deep_validation |
 
 ### LONG Patterns (35) — v1.26.1 T5_Optimized
 
@@ -294,7 +294,9 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.26.2** | 02-09 | MC/edge cleanup: 6패턴 제거 (MC>=0.01 5개 + DN-IH-U p=0.052), 52패턴 (32L+20S) ← **현재** |
+| **v1.26.4** | 02-09 | Full TP/SL optimization: grid search + 5-phase deep validation, 31/32 accepted, WR 77.1%, PnL +882.7% ← **현재** |
+| v1.26.3 | 02-09 | R:R re-optimization (5패턴), superseded by v1.26.4 |
+| v1.26.2 | 02-09 | MC/edge cleanup: 6패턴 제거 (MC>=0.01 5개 + DN-IH-U p=0.052), 52패턴 (32L+20S) |
 | v1.26.1 | 02-08 | T5_Optimized 58패턴 (35L+23S), R:R>=0.75 + leave-one-out pruning, PnL +963.8%, MDD 19.8% |
 | v1.26.0 | 02-08 | R:R>=0.75 포트폴리오 마이그레이션 (78→58패턴, bias research 검증) |
 | v1.25.6 | 02-08 | Opus 4.6 코드 리뷰 — 중복 제거, 5개 크리티컬 버그 수정 |

@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.26.1 | **Bot**: Pattern 5m (58패턴, 35L+23S) | **Updated**: 2026-02-08
+> **Version**: v1.26.2 | **Bot**: Pattern 5m (52패턴, 32L+20S) | **Updated**: 2026-02-09
 
 ---
 
@@ -294,7 +294,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.26.1** | 02-08 | T5_Optimized 58패턴 (35L+23S), R:R>=0.75 + leave-one-out pruning, PnL +963.8%, MDD 19.8% ← **현재** |
+| **v1.26.2** | 02-09 | MC/edge cleanup: 6패턴 제거 (MC>=0.01 5개 + DN-IH-U p=0.052), 52패턴 (32L+20S) ← **현재** |
+| v1.26.1 | 02-08 | T5_Optimized 58패턴 (35L+23S), R:R>=0.75 + leave-one-out pruning, PnL +963.8%, MDD 19.8% |
 | v1.26.0 | 02-08 | R:R>=0.75 포트폴리오 마이그레이션 (78→58패턴, bias research 검증) |
 | v1.25.6 | 02-08 | Opus 4.6 코드 리뷰 — 중복 제거, 5개 크리티컬 버그 수정 |
 | v1.25.5 | 02-07 | CWD 의존 경로 버그 수정 — 모든 경로를 절대 경로로 변경 |

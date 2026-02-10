@@ -1,0 +1,2685 @@
+{
+  "metadata": {
+    "version": "1.26.4",
+    "date": "2026-02-10 15:01:08",
+    "elapsed_seconds": 13.4,
+    "tp1_ratio": 0.8,
+    "tp1_qty_pct": 50,
+    "parameters": {
+      "max_bars": 500,
+      "fee_pct": 0.1,
+      "leverage": 3,
+      "mc_sims": 10000
+    }
+  },
+  "phase1_dual_tp_analysis": {
+    "IH-ST-MU": {
+      "direction": "LONG",
+      "tp": 0.5,
+      "sl": 2.5,
+      "rr": 0.2,
+      "trades": 25,
+      "full_win": 24,
+      "partial_win": 0,
+      "sl_loss": 0,
+      "timeout": 1,
+      "full_win_rate": 96.0,
+      "any_win_rate": 96.0,
+      "total_pnl": 30.0
+    },
+    "U-MD-GS": {
+      "direction": "LONG",
+      "tp": 0.5,
+      "sl": 2.5,
+      "rr": 0.2,
+      "trades": 23,
+      "full_win": 21,
+      "partial_win": 0,
+      "sl_loss": 1,
+      "timeout": 1,
+      "full_win_rate": 91.3,
+      "any_win_rate": 91.3,
+      "total_pnl": 18.65
+    },
+    "BU-ST-GS": {
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.5,
+      "rr": 0.4,
+      "trades": 15,
+      "full_win": 13,
+      "partial_win": 0,
+      "sl_loss": 0,
+      "timeout": 2,
+      "full_win_rate": 86.7,
+      "any_win_rate": 86.7,
+      "total_pnl": 33.8
+    },
+    "IH-MD-MD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 2.0,
+      "rr": 0.5,
+      "trades": 21,
+      "full_win": 18,
+      "partial_win": 0,
+      "sl_loss": 1,
+      "timeout": 2,
+      "full_win_rate": 85.7,
+      "any_win_rate": 85.7,
+      "total_pnl": 40.7
+    },
+    "MU-DF-U": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "rr": 0.75,
+      "trades": 20,
+      "full_win": 16,
+      "partial_win": 0,
+      "sl_loss": 2,
+      "timeout": 2,
+      "full_win_rate": 80.0,
+      "any_win_rate": 80.0,
+      "total_pnl": 51.0
+    },
+    "GS-ST-ST": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "rr": 0.75,
+      "trades": 19,
+      "full_win": 15,
+      "partial_win": 0,
+      "sl_loss": 3,
+      "timeout": 1,
+      "full_win_rate": 78.9,
+      "any_win_rate": 78.9,
+      "total_pnl": 40.95
+    },
+    "DN-DF-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 3.0,
+      "rr": 0.5,
+      "trades": 17,
+      "full_win": 13,
+      "partial_win": 0,
+      "sl_loss": 1,
+      "timeout": 3,
+      "full_win_rate": 76.5,
+      "any_win_rate": 76.5,
+      "total_pnl": 42.25
+    },
+    "DN-DN-H": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 2.5,
+      "rr": 0.4,
+      "trades": 120,
+      "full_win": 86,
+      "partial_win": 4,
+      "sl_loss": 13,
+      "timeout": 17,
+      "full_win_rate": 71.7,
+      "any_win_rate": 75.0,
+      "total_pnl": 114.2
+    },
+    "MD-H-MD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.7,
+      "rr": 1.43,
+      "trades": 24,
+      "full_win": 17,
+      "partial_win": 0,
+      "sl_loss": 7,
+      "timeout": 0,
+      "full_win_rate": 70.8,
+      "any_win_rate": 70.8,
+      "total_pnl": 28.8
+    },
+    "H-MU-MD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 2.0,
+      "rr": 0.5,
+      "trades": 30,
+      "full_win": 21,
+      "partial_win": 0,
+      "sl_loss": 2,
+      "timeout": 7,
+      "full_win_rate": 70.0,
+      "any_win_rate": 70.0,
+      "total_pnl": 42.4
+    },
+    "BD-MU-BD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.7,
+      "rr": 1.43,
+      "trades": 24,
+      "full_win": 16,
+      "partial_win": 2,
+      "sl_loss": 5,
+      "timeout": 1,
+      "full_win_rate": 66.7,
+      "any_win_rate": 75.0,
+      "total_pnl": 30.7
+    },
+    "U-H-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "rr": 0.75,
+      "trades": 48,
+      "full_win": 32,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 10,
+      "full_win_rate": 66.7,
+      "any_win_rate": 66.7,
+      "total_pnl": 89.8
+    },
+    "D-MU-U": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "rr": 0.75,
+      "trades": 43,
+      "full_win": 28,
+      "partial_win": 0,
+      "sl_loss": 7,
+      "timeout": 8,
+      "full_win_rate": 65.1,
+      "any_win_rate": 65.1,
+      "total_pnl": 67.9
+    },
+    "BD-D-D": {
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 3.0,
+      "rr": 0.5,
+      "trades": 20,
+      "full_win": 13,
+      "partial_win": 0,
+      "sl_loss": 0,
+      "timeout": 7,
+      "full_win_rate": 65.0,
+      "any_win_rate": 65.0,
+      "total_pnl": 51.35
+    },
+    "H-BU-BU": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 17,
+      "full_win": 11,
+      "partial_win": 0,
+      "sl_loss": 0,
+      "timeout": 6,
+      "full_win_rate": 64.7,
+      "any_win_rate": 64.7,
+      "total_pnl": 58.3
+    },
+    "U-MU-H": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 3.0,
+      "rr": 0.5,
+      "trades": 65,
+      "full_win": 42,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 17,
+      "full_win_rate": 64.6,
+      "any_win_rate": 64.6,
+      "total_pnl": 111.3
+    },
+    "D-BD-ST": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "rr": 0.83,
+      "trades": 25,
+      "full_win": 15,
+      "partial_win": 0,
+      "sl_loss": 3,
+      "timeout": 7,
+      "full_win_rate": 60.0,
+      "any_win_rate": 60.0,
+      "total_pnl": 72.45
+    },
+    "U-ST-DF": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 29,
+      "full_win": 17,
+      "partial_win": 0,
+      "sl_loss": 3,
+      "timeout": 9,
+      "full_win_rate": 58.6,
+      "any_win_rate": 58.6,
+      "total_pnl": 62.8
+    },
+    "MD-MD-ST": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "rr": 0.75,
+      "trades": 41,
+      "full_win": 24,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 11,
+      "full_win_rate": 58.5,
+      "any_win_rate": 58.5,
+      "total_pnl": 58.2
+    },
+    "MD-BU-MD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.5,
+      "rr": 0.8,
+      "trades": 24,
+      "full_win": 14,
+      "partial_win": 0,
+      "sl_loss": 2,
+      "timeout": 8,
+      "full_win_rate": 58.3,
+      "any_win_rate": 58.3,
+      "total_pnl": 59.0
+    },
+    "MD-ST-BD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.5,
+      "rr": 2.0,
+      "trades": 33,
+      "full_win": 19,
+      "partial_win": 0,
+      "sl_loss": 14,
+      "timeout": 0,
+      "full_win_rate": 57.6,
+      "any_win_rate": 57.6,
+      "total_pnl": 27.0
+    },
+    "MD-DN-MU": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0,
+      "rr": 1.0,
+      "trades": 142,
+      "full_win": 81,
+      "partial_win": 1,
+      "sl_loss": 48,
+      "timeout": 12,
+      "full_win_rate": 57.0,
+      "any_win_rate": 57.7,
+      "total_pnl": 61.4
+    },
+    "DN-MD-DN": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "rr": 0.75,
+      "trades": 226,
+      "full_win": 126,
+      "partial_win": 2,
+      "sl_loss": 56,
+      "timeout": 42,
+      "full_win_rate": 55.8,
+      "any_win_rate": 56.6,
+      "total_pnl": 153.5
+    },
+    "DN-DF-ST": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 36,
+      "full_win": 20,
+      "partial_win": 0,
+      "sl_loss": 4,
+      "timeout": 12,
+      "full_win_rate": 55.6,
+      "any_win_rate": 55.6,
+      "total_pnl": 69.6
+    },
+    "MU-IH-DN": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "rr": 1.0,
+      "trades": 47,
+      "full_win": 26,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 15,
+      "full_win_rate": 55.3,
+      "any_win_rate": 55.3,
+      "total_pnl": 101.2
+    },
+    "IH-ST-ST": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 40,
+      "full_win": 22,
+      "partial_win": 1,
+      "sl_loss": 3,
+      "timeout": 14,
+      "full_win_rate": 55.0,
+      "any_win_rate": 57.5,
+      "total_pnl": 87.1
+    },
+    "MU-H-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "rr": 2.14,
+      "trades": 31,
+      "full_win": 17,
+      "partial_win": 0,
+      "sl_loss": 11,
+      "timeout": 3,
+      "full_win_rate": 54.8,
+      "any_win_rate": 54.8,
+      "total_pnl": 42.95
+    },
+    "DN-BD-BD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 1.5,
+      "rr": 1.33,
+      "trades": 117,
+      "full_win": 61,
+      "partial_win": 1,
+      "sl_loss": 41,
+      "timeout": 14,
+      "full_win_rate": 52.1,
+      "any_win_rate": 53.0,
+      "total_pnl": 134.75
+    },
+    "DN-DF-DN": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "rr": 1.0,
+      "trades": 66,
+      "full_win": 33,
+      "partial_win": 0,
+      "sl_loss": 15,
+      "timeout": 18,
+      "full_win_rate": 50.0,
+      "any_win_rate": 50.0,
+      "total_pnl": 83.4
+    },
+    "BD-BD-U": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 112,
+      "full_win": 55,
+      "partial_win": 1,
+      "sl_loss": 16,
+      "timeout": 40,
+      "full_win_rate": 49.1,
+      "any_win_rate": 50.0,
+      "total_pnl": 143.7
+    },
+    "BD-ST-U": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "rr": 1.0,
+      "trades": 138,
+      "full_win": 67,
+      "partial_win": 5,
+      "sl_loss": 34,
+      "timeout": 32,
+      "full_win_rate": 48.6,
+      "any_win_rate": 52.2,
+      "total_pnl": 144.2
+    },
+    "ST-MU-ST": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 70,
+      "full_win": 34,
+      "partial_win": 1,
+      "sl_loss": 8,
+      "timeout": 27,
+      "full_win_rate": 48.6,
+      "any_win_rate": 50.0,
+      "total_pnl": 105.2
+    },
+    "MU-BD-ST": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 44,
+      "full_win": 21,
+      "partial_win": 0,
+      "sl_loss": 3,
+      "timeout": 20,
+      "full_win_rate": 47.7,
+      "any_win_rate": 47.7,
+      "total_pnl": 84.0
+    },
+    "BU-MD-MD": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 2.0,
+      "rr": 1.5,
+      "trades": 26,
+      "full_win": 12,
+      "partial_win": 0,
+      "sl_loss": 4,
+      "timeout": 10,
+      "full_win_rate": 46.2,
+      "any_win_rate": 46.2,
+      "total_pnl": 71.6
+    },
+    "DN-D-BD": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 1.0,
+      "rr": 2.5,
+      "trades": 46,
+      "full_win": 21,
+      "partial_win": 2,
+      "sl_loss": 20,
+      "timeout": 3,
+      "full_win_rate": 45.7,
+      "any_win_rate": 50.0,
+      "total_pnl": 80.45
+    },
+    "U-H-BU": {
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 0.3,
+      "rr": 3.33,
+      "trades": 42,
+      "full_win": 19,
+      "partial_win": 1,
+      "sl_loss": 22,
+      "timeout": 0,
+      "full_win_rate": 45.2,
+      "any_win_rate": 47.6,
+      "total_pnl": 28.05
+    },
+    "BD-U-H": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "rr": 0.83,
+      "trades": 39,
+      "full_win": 17,
+      "partial_win": 0,
+      "sl_loss": 3,
+      "timeout": 19,
+      "full_win_rate": 43.6,
+      "any_win_rate": 43.6,
+      "total_pnl": 85.75
+    },
+    "ST-DN-BU": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 104,
+      "full_win": 45,
+      "partial_win": 0,
+      "sl_loss": 14,
+      "timeout": 45,
+      "full_win_rate": 43.3,
+      "any_win_rate": 43.3,
+      "total_pnl": 111.1
+    },
+    "MD-ST-MD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "rr": 1.0,
+      "trades": 51,
+      "full_win": 22,
+      "partial_win": 0,
+      "sl_loss": 8,
+      "timeout": 21,
+      "full_win_rate": 43.1,
+      "any_win_rate": 43.1,
+      "total_pnl": 67.8
+    },
+    "U-MU-IH": {
+      "direction": "LONG",
+      "tp": 3.0,
+      "sl": 2.5,
+      "rr": 1.2,
+      "trades": 46,
+      "full_win": 19,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 21,
+      "full_win_rate": 41.3,
+      "any_win_rate": 41.3,
+      "total_pnl": 106.4
+    },
+    "U-ST-DN": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "rr": 0.67,
+      "trades": 504,
+      "full_win": 207,
+      "partial_win": 7,
+      "sl_loss": 78,
+      "timeout": 212,
+      "full_win_rate": 41.1,
+      "any_win_rate": 42.5,
+      "total_pnl": 371.9
+    },
+    "D-DN-DN": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "rr": 0.83,
+      "trades": 165,
+      "full_win": 67,
+      "partial_win": 0,
+      "sl_loss": 32,
+      "timeout": 66,
+      "full_win_rate": 40.6,
+      "any_win_rate": 40.6,
+      "total_pnl": 154.35
+    },
+    "U-MD-MD": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "rr": 2.14,
+      "trades": 116,
+      "full_win": 47,
+      "partial_win": 1,
+      "sl_loss": 56,
+      "timeout": 12,
+      "full_win_rate": 40.5,
+      "any_win_rate": 41.4,
+      "total_pnl": 63.1
+    },
+    "DN-BD-BU": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "rr": 0.83,
+      "trades": 108,
+      "full_win": 41,
+      "partial_win": 0,
+      "sl_loss": 15,
+      "timeout": 52,
+      "full_win_rate": 38.0,
+      "any_win_rate": 38.0,
+      "total_pnl": 136.15
+    },
+    "H-U-BD": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 2.0,
+      "rr": 1.5,
+      "trades": 37,
+      "full_win": 14,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 17,
+      "full_win_rate": 37.8,
+      "any_win_rate": 37.8,
+      "total_pnl": 75.4
+    },
+    "ST-BD-BU": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 47,
+      "full_win": 17,
+      "partial_win": 0,
+      "sl_loss": 5,
+      "timeout": 25,
+      "full_win_rate": 36.2,
+      "any_win_rate": 36.2,
+      "total_pnl": 90.5
+    },
+    "BD-BU-DN": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 95,
+      "full_win": 32,
+      "partial_win": 0,
+      "sl_loss": 15,
+      "timeout": 48,
+      "full_win_rate": 33.7,
+      "any_win_rate": 33.7,
+      "total_pnl": 119.5
+    },
+    "BU-BU-BD": {
+      "direction": "LONG",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 76,
+      "full_win": 25,
+      "partial_win": 0,
+      "sl_loss": 10,
+      "timeout": 41,
+      "full_win_rate": 32.9,
+      "any_win_rate": 32.9,
+      "total_pnl": 109.0
+    },
+    "U-GS-DN": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 67,
+      "full_win": 22,
+      "partial_win": 0,
+      "sl_loss": 4,
+      "timeout": 41,
+      "full_win_rate": 32.8,
+      "any_win_rate": 32.8,
+      "total_pnl": 139.6
+    },
+    "MU-U-H": {
+      "direction": "LONG",
+      "tp": 2.5,
+      "sl": 3.0,
+      "rr": 0.83,
+      "trades": 68,
+      "full_win": 21,
+      "partial_win": 0,
+      "sl_loss": 6,
+      "timeout": 41,
+      "full_win_rate": 30.9,
+      "any_win_rate": 30.9,
+      "total_pnl": 85.05
+    },
+    "MD-MD-MD": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 60,
+      "full_win": 18,
+      "partial_win": 0,
+      "sl_loss": 3,
+      "timeout": 39,
+      "full_win_rate": 30.0,
+      "any_win_rate": 30.0,
+      "total_pnl": 116.7
+    },
+    "ST-DN-U": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "rr": 1.0,
+      "trades": 492,
+      "full_win": 142,
+      "partial_win": 1,
+      "sl_loss": 91,
+      "timeout": 258,
+      "full_win_rate": 28.9,
+      "any_win_rate": 29.1,
+      "total_pnl": 306.9
+    }
+  },
+  "phase2_grid_search": {
+    "BD-BD-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 49.1,
+        "pnl": 143.7
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 112,
+        "full_wins": 92,
+        "partial_wins": 5,
+        "fwr": 82.1,
+        "awr": 86.6,
+        "pnl": 31.3,
+        "score": 50.4
+      },
+      "improved": false
+    },
+    "BD-BU-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "fwr": 33.7,
+        "pnl": 119.5
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 3.0,
+        "rr": 0.23,
+        "trades": 95,
+        "full_wins": 65,
+        "partial_wins": 0,
+        "fwr": 68.4,
+        "awr": 68.4,
+        "pnl": 7.15,
+        "score": 41.35
+      },
+      "improved": false
+    },
+    "BD-D-D": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.5,
+        "sl": 3.0,
+        "fwr": 65.0,
+        "pnl": 51.35
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 20,
+        "full_wins": 16,
+        "partial_wins": 0,
+        "fwr": 80.0,
+        "awr": 80.0,
+        "pnl": 20.0,
+        "score": 52.0
+      },
+      "improved": false
+    },
+    "BD-MU-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 0.7,
+        "fwr": 66.7,
+        "pnl": 30.7
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 0.7,
+        "rr": 1.0,
+        "trades": 24,
+        "full_wins": 19,
+        "partial_wins": 0,
+        "fwr": 79.2,
+        "awr": 79.2,
+        "pnl": 23.01,
+        "score": 51.33
+      },
+      "improved": false
+    },
+    "BD-ST-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "fwr": 48.6,
+        "pnl": 144.2
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 138,
+        "full_wins": 113,
+        "partial_wins": 3,
+        "fwr": 81.9,
+        "awr": 84.1,
+        "pnl": 9.9,
+        "score": 49.42
+      },
+      "improved": false
+    },
+    "BD-U-H": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "fwr": 43.6,
+        "pnl": 85.75
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 39,
+        "full_wins": 32,
+        "partial_wins": 1,
+        "fwr": 82.1,
+        "awr": 84.6,
+        "pnl": 26.9,
+        "score": 51.99
+      },
+      "improved": false
+    },
+    "BU-BU-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "fwr": 32.9,
+        "pnl": 109.0
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 76,
+        "full_wins": 68,
+        "partial_wins": 1,
+        "fwr": 89.5,
+        "awr": 90.8,
+        "pnl": 44.6,
+        "score": 56.03
+      },
+      "improved": false
+    },
+    "BU-MD-MD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "fwr": 46.2,
+        "pnl": 71.6
+      },
+      "optimized": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "rr": 0.75,
+        "trades": 26,
+        "full_wins": 19,
+        "partial_wins": 0,
+        "fwr": 73.1,
+        "awr": 73.1,
+        "pnl": 62.85,
+        "score": 53.52
+      },
+      "improved": true
+    },
+    "BU-ST-GS": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.0,
+        "sl": 2.5,
+        "fwr": 86.7,
+        "pnl": 33.8
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 1.5,
+        "rr": 0.33,
+        "trades": 15,
+        "full_wins": 15,
+        "partial_wins": 0,
+        "fwr": 100.0,
+        "awr": 100.0,
+        "pnl": 18.75,
+        "score": 65.0
+      },
+      "improved": false
+    },
+    "D-BD-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "fwr": 60.0,
+        "pnl": 72.45
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 25,
+        "full_wins": 21,
+        "partial_wins": 0,
+        "fwr": 84.0,
+        "awr": 84.0,
+        "pnl": 8.05,
+        "score": 51.69
+      },
+      "improved": false
+    },
+    "D-DN-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "fwr": 40.6,
+        "pnl": 154.35
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 165,
+        "full_wins": 135,
+        "partial_wins": 3,
+        "fwr": 81.8,
+        "awr": 83.6,
+        "pnl": 11.15,
+        "score": 49.36
+      },
+      "improved": false
+    },
+    "D-MU-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "fwr": 65.1,
+        "pnl": 67.9
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 43,
+        "full_wins": 37,
+        "partial_wins": 0,
+        "fwr": 86.0,
+        "awr": 86.0,
+        "pnl": 27.95,
+        "score": 54.23
+      },
+      "improved": false
+    },
+    "DN-BD-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 1.5,
+        "fwr": 52.1,
+        "pnl": 134.75
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 117,
+        "full_wins": 100,
+        "partial_wins": 4,
+        "fwr": 85.5,
+        "awr": 88.9,
+        "pnl": 28.4,
+        "score": 52.25
+      },
+      "improved": false
+    },
+    "DN-BD-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "fwr": 38.0,
+        "pnl": 136.15
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 108,
+        "full_wins": 93,
+        "partial_wins": 1,
+        "fwr": 86.1,
+        "awr": 87.0,
+        "pnl": 57.65,
+        "score": 53.8
+      },
+      "improved": false
+    },
+    "DN-D-BD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.5,
+        "sl": 1.0,
+        "fwr": 45.7,
+        "pnl": 80.45
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 2.5,
+        "rr": 0.28,
+        "trades": 46,
+        "full_wins": 38,
+        "partial_wins": 1,
+        "fwr": 82.6,
+        "awr": 84.8,
+        "pnl": 19.41,
+        "score": 51.25
+      },
+      "improved": false
+    },
+    "DN-DF-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "fwr": 50.0,
+        "pnl": 83.4
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 66,
+        "full_wins": 55,
+        "partial_wins": 1,
+        "fwr": 83.3,
+        "awr": 84.8,
+        "pnl": 19.25,
+        "score": 51.17
+      },
+      "improved": false
+    },
+    "DN-DF-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 3.0,
+        "fwr": 76.5,
+        "pnl": 42.25
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 1.5,
+        "rr": 0.47,
+        "trades": 17,
+        "full_wins": 16,
+        "partial_wins": 0,
+        "fwr": 94.1,
+        "awr": 94.1,
+        "pnl": 24.04,
+        "score": 62.13
+      },
+      "improved": false
+    },
+    "DN-DF-ST": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 55.6,
+        "pnl": 69.6
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 36,
+        "full_wins": 34,
+        "partial_wins": 0,
+        "fwr": 94.4,
+        "awr": 94.4,
+        "pnl": 42.5,
+        "score": 61.39
+      },
+      "improved": false
+    },
+    "DN-DN-H": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 2.5,
+        "fwr": 71.7,
+        "pnl": 114.2
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 120,
+        "full_wins": 103,
+        "partial_wins": 2,
+        "fwr": 85.8,
+        "awr": 87.5,
+        "pnl": 84.25,
+        "score": 54.31
+      },
+      "improved": false
+    },
+    "DN-MD-DN": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "fwr": 55.8,
+        "pnl": 153.5
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 226,
+        "full_wins": 181,
+        "partial_wins": 4,
+        "fwr": 80.1,
+        "awr": 81.9,
+        "pnl": 28.25,
+        "score": 48.55
+      },
+      "improved": false
+    },
+    "GS-ST-ST": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "fwr": 78.9,
+        "pnl": 40.95
+      },
+      "optimized": {
+        "tp": 1.0,
+        "sl": 2.0,
+        "rr": 0.5,
+        "trades": 19,
+        "full_wins": 17,
+        "partial_wins": 0,
+        "fwr": 89.5,
+        "awr": 89.5,
+        "pnl": 32.0,
+        "score": 60.42
+      },
+      "improved": false
+    },
+    "H-BU-BU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 64.7,
+        "pnl": 58.3
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 17,
+        "full_wins": 17,
+        "partial_wins": 0,
+        "fwr": 100.0,
+        "awr": 100.0,
+        "pnl": 30.43,
+        "score": 67.16
+      },
+      "improved": false
+    },
+    "H-MU-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 2.0,
+        "fwr": 70.0,
+        "pnl": 42.4
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 30,
+        "full_wins": 26,
+        "partial_wins": 0,
+        "fwr": 86.7,
+        "awr": 86.7,
+        "pnl": 34.34,
+        "score": 56.58
+      },
+      "improved": true
+    },
+    "H-U-BD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "fwr": 37.8,
+        "pnl": 75.4
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 3.0,
+        "rr": 0.23,
+        "trades": 37,
+        "full_wins": 31,
+        "partial_wins": 0,
+        "fwr": 83.8,
+        "awr": 83.8,
+        "pnl": 28.19,
+        "score": 53.32
+      },
+      "improved": false
+    },
+    "IH-MD-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 2.0,
+        "fwr": 85.7,
+        "pnl": 40.7
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 1.0,
+        "rr": 0.5,
+        "trades": 21,
+        "full_wins": 21,
+        "partial_wins": 0,
+        "fwr": 100.0,
+        "awr": 100.0,
+        "pnl": 26.25,
+        "score": 65.0
+      },
+      "improved": false
+    },
+    "IH-ST-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "fwr": 96.0,
+        "pnl": 30.0
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 25,
+        "full_wins": 24,
+        "partial_wins": 0,
+        "fwr": 96.0,
+        "awr": 96.0,
+        "pnl": 30.0,
+        "score": 62.4
+      },
+      "improved": false
+    },
+    "IH-ST-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 55.0,
+        "pnl": 87.1
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 3.0,
+        "rr": 0.23,
+        "trades": 40,
+        "full_wins": 35,
+        "partial_wins": 0,
+        "fwr": 87.5,
+        "awr": 87.5,
+        "pnl": 44.45,
+        "score": 56.95
+      },
+      "improved": false
+    },
+    "MD-BU-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.5,
+        "fwr": 58.3,
+        "pnl": 59.0
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 24,
+        "full_wins": 23,
+        "partial_wins": 0,
+        "fwr": 95.8,
+        "awr": 95.8,
+        "pnl": 28.75,
+        "score": 62.29
+      },
+      "improved": false
+    },
+    "MD-DN-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 1.0,
+        "fwr": 57.0,
+        "pnl": 61.4
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 142,
+        "full_wins": 114,
+        "partial_wins": 8,
+        "fwr": 80.3,
+        "awr": 85.9,
+        "pnl": 31.0,
+        "score": 49.04
+      },
+      "improved": false
+    },
+    "MD-H-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 0.7,
+        "fwr": 70.8,
+        "pnl": 28.8
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 24,
+        "full_wins": 21,
+        "partial_wins": 0,
+        "fwr": 87.5,
+        "awr": 87.5,
+        "pnl": 8.05,
+        "score": 53.84
+      },
+      "improved": false
+    },
+    "MD-MD-MD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "fwr": 30.0,
+        "pnl": 116.7
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 60,
+        "full_wins": 36,
+        "partial_wins": 0,
+        "fwr": 60.0,
+        "awr": 60.0,
+        "pnl": 17.7,
+        "score": 37.18
+      },
+      "improved": false
+    },
+    "MD-MD-ST": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "fwr": 58.5,
+        "pnl": 58.2
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 2.5,
+        "rr": 0.28,
+        "trades": 41,
+        "full_wins": 35,
+        "partial_wins": 0,
+        "fwr": 85.4,
+        "awr": 85.4,
+        "pnl": 39.85,
+        "score": 55.11
+      },
+      "improved": false
+    },
+    "MD-ST-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 0.5,
+        "fwr": 57.6,
+        "pnl": 27.0
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 1.5,
+        "rr": 0.33,
+        "trades": 33,
+        "full_wins": 28,
+        "partial_wins": 1,
+        "fwr": 84.8,
+        "awr": 87.9,
+        "pnl": 14.85,
+        "score": 52.71
+      },
+      "improved": false
+    },
+    "MD-ST-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "fwr": 43.1,
+        "pnl": 67.8
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 1.5,
+        "rr": 0.47,
+        "trades": 51,
+        "full_wins": 39,
+        "partial_wins": 0,
+        "fwr": 76.5,
+        "awr": 76.5,
+        "pnl": 33.01,
+        "score": 48.47
+      },
+      "improved": false
+    },
+    "MU-BD-ST": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 47.7,
+        "pnl": 84.0
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 44,
+        "full_wins": 40,
+        "partial_wins": 0,
+        "fwr": 90.9,
+        "awr": 90.9,
+        "pnl": 31.8,
+        "score": 57.44
+      },
+      "improved": false
+    },
+    "MU-DF-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "fwr": 80.0,
+        "pnl": 51.0
+      },
+      "optimized": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "rr": 0.75,
+        "trades": 20,
+        "full_wins": 16,
+        "partial_wins": 0,
+        "fwr": 80.0,
+        "awr": 80.0,
+        "pnl": 51.0,
+        "score": 58.2
+      },
+      "improved": false
+    },
+    "MU-H-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "fwr": 54.8,
+        "pnl": 42.95
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 31,
+        "full_wins": 25,
+        "partial_wins": 0,
+        "fwr": 80.6,
+        "awr": 80.6,
+        "pnl": 6.85,
+        "score": 49.27
+      },
+      "improved": false
+    },
+    "MU-IH-DN": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "fwr": 55.3,
+        "pnl": 101.2
+      },
+      "optimized": {
+        "tp": 0.7,
+        "sl": 2.0,
+        "rr": 0.35,
+        "trades": 47,
+        "full_wins": 38,
+        "partial_wins": 0,
+        "fwr": 80.9,
+        "awr": 80.9,
+        "pnl": 43.62,
+        "score": 52.22
+      },
+      "improved": false
+    },
+    "MU-U-H": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "fwr": 30.9,
+        "pnl": 85.05
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 68,
+        "full_wins": 57,
+        "partial_wins": 0,
+        "fwr": 83.8,
+        "awr": 83.8,
+        "pnl": 34.85,
+        "score": 52.34
+      },
+      "improved": false
+    },
+    "ST-BD-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "fwr": 36.2,
+        "pnl": 90.5
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 47,
+        "full_wins": 40,
+        "partial_wins": 0,
+        "fwr": 85.1,
+        "awr": 85.1,
+        "pnl": 22.7,
+        "score": 53.0
+      },
+      "improved": false
+    },
+    "ST-DN-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 43.3,
+        "pnl": 111.1
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 104,
+        "full_wins": 80,
+        "partial_wins": 1,
+        "fwr": 76.9,
+        "awr": 77.9,
+        "pnl": 32.3,
+        "score": 47.4
+      },
+      "improved": false
+    },
+    "ST-DN-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "fwr": 28.9,
+        "pnl": 306.9
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 492,
+        "full_wins": 409,
+        "partial_wins": 6,
+        "fwr": 83.1,
+        "awr": 84.3,
+        "pnl": 186.95,
+        "score": 51.4
+      },
+      "improved": false
+    },
+    "ST-MU-ST": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 48.6,
+        "pnl": 105.2
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 70,
+        "full_wins": 57,
+        "partial_wins": 2,
+        "fwr": 81.4,
+        "awr": 84.3,
+        "pnl": 17.75,
+        "score": 49.87
+      },
+      "improved": false
+    },
+    "U-GS-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "fwr": 32.8,
+        "pnl": 139.6
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 67,
+        "full_wins": 57,
+        "partial_wins": 1,
+        "fwr": 85.1,
+        "awr": 86.6,
+        "pnl": 58.15,
+        "score": 54.52
+      },
+      "improved": false
+    },
+    "U-H-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.0,
+        "sl": 0.3,
+        "fwr": 45.2,
+        "pnl": 28.05
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 0.5,
+        "rr": 1.0,
+        "trades": 42,
+        "full_wins": 24,
+        "partial_wins": 1,
+        "fwr": 57.1,
+        "awr": 59.5,
+        "pnl": 2.55,
+        "score": 34.53
+      },
+      "improved": false
+    },
+    "U-H-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 2.0,
+        "fwr": 66.7,
+        "pnl": 89.8
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.0,
+        "rr": 0.25,
+        "trades": 48,
+        "full_wins": 43,
+        "partial_wins": 0,
+        "fwr": 89.6,
+        "awr": 89.6,
+        "pnl": 41.55,
+        "score": 57.21
+      },
+      "improved": false
+    },
+    "U-MD-GS": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "fwr": 91.3,
+        "pnl": 18.65
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 23,
+        "full_wins": 21,
+        "partial_wins": 0,
+        "fwr": 91.3,
+        "awr": 91.3,
+        "pnl": 18.65,
+        "score": 58.03
+      },
+      "improved": false
+    },
+    "U-MD-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "fwr": 40.5,
+        "pnl": 63.1
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 116,
+        "full_wins": 92,
+        "partial_wins": 2,
+        "fwr": 79.3,
+        "awr": 81.0,
+        "pnl": 6.9,
+        "score": 47.82
+      },
+      "improved": false
+    },
+    "U-MU-H": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 3.0,
+        "fwr": 64.6,
+        "pnl": 111.3
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 65,
+        "full_wins": 56,
+        "partial_wins": 1,
+        "fwr": 86.2,
+        "awr": 87.7,
+        "pnl": 43.95,
+        "score": 54.4
+      },
+      "improved": false
+    },
+    "U-MU-IH": {
+      "direction": "LONG",
+      "current": {
+        "tp": 3.0,
+        "sl": 2.5,
+        "fwr": 41.3,
+        "pnl": 106.4
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 46,
+        "full_wins": 38,
+        "partial_wins": 0,
+        "fwr": 82.6,
+        "awr": 82.6,
+        "pnl": 17.1,
+        "score": 51.05
+      },
+      "improved": false
+    },
+    "U-ST-DF": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 58.6,
+        "pnl": 62.8
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 2.5,
+        "rr": 0.2,
+        "trades": 29,
+        "full_wins": 27,
+        "partial_wins": 0,
+        "fwr": 93.1,
+        "awr": 93.1,
+        "pnl": 18.55,
+        "score": 58.42
+      },
+      "improved": false
+    },
+    "U-ST-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "fwr": 41.1,
+        "pnl": 371.9
+      },
+      "optimized": {
+        "tp": 0.5,
+        "sl": 3.0,
+        "rr": 0.17,
+        "trades": 504,
+        "full_wins": 416,
+        "partial_wins": 5,
+        "fwr": 82.5,
+        "awr": 83.5,
+        "pnl": 217.9,
+        "score": 51.25
+      },
+      "improved": false
+    }
+  },
+  "phase3_validated": {
+    "BD-BD-U": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 49.1
+    },
+    "BD-BU-DN": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 33.7
+    },
+    "BD-D-D": {
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 65.0
+    },
+    "BD-MU-BD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.7,
+      "source": "current",
+      "fwr": 66.7
+    },
+    "BD-ST-U": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 48.6
+    },
+    "BD-U-H": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 43.6
+    },
+    "BU-BU-BD": {
+      "direction": "LONG",
+      "tp": 3.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 32.9
+    },
+    "BU-MD-MD": {
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "optimized",
+      "fwr": 73.1,
+      "mc": 0.0001,
+      "wf": 5
+    },
+    "BU-ST-GS": {
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.5,
+      "source": "current",
+      "fwr": 86.7
+    },
+    "D-BD-ST": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 60.0
+    },
+    "D-DN-DN": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 40.6
+    },
+    "D-MU-U": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 65.1
+    },
+    "DN-BD-BD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 1.5,
+      "source": "current",
+      "fwr": 52.1
+    },
+    "DN-BD-BU": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 38.0
+    },
+    "DN-D-BD": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 1.0,
+      "source": "current",
+      "fwr": 45.7
+    },
+    "DN-DF-DN": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 50.0
+    },
+    "DN-DF-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 76.5
+    },
+    "DN-DF-ST": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 55.6
+    },
+    "DN-DN-H": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 2.5,
+      "source": "current",
+      "fwr": 71.7
+    },
+    "DN-MD-DN": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 55.8
+    },
+    "GS-ST-ST": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 78.9
+    },
+    "H-BU-BU": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 64.7
+    },
+    "H-MU-MD": {
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 2.0,
+      "source": "optimized",
+      "fwr": 86.7,
+      "mc": 0.001,
+      "wf": 4
+    },
+    "H-U-BD": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 37.8
+    },
+    "IH-MD-MD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 85.7
+    },
+    "IH-ST-MU": {
+      "direction": "LONG",
+      "tp": 0.5,
+      "sl": 2.5,
+      "source": "current",
+      "fwr": 96.0
+    },
+    "IH-ST-ST": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 55.0
+    },
+    "MD-BU-MD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.5,
+      "source": "current",
+      "fwr": 58.3
+    },
+    "MD-DN-MU": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0,
+      "source": "current",
+      "fwr": 57.0
+    },
+    "MD-H-MD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.7,
+      "source": "current",
+      "fwr": 70.8
+    },
+    "MD-MD-MD": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 30.0
+    },
+    "MD-MD-ST": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 58.5
+    },
+    "MD-ST-BD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.5,
+      "source": "current",
+      "fwr": 57.6
+    },
+    "MD-ST-MD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 43.1
+    },
+    "MU-BD-ST": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 47.7
+    },
+    "MU-DF-U": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 80.0
+    },
+    "MU-H-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "source": "current",
+      "fwr": 54.8
+    },
+    "MU-IH-DN": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 55.3
+    },
+    "MU-U-H": {
+      "direction": "LONG",
+      "tp": 2.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 30.9
+    },
+    "ST-BD-BU": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 36.2
+    },
+    "ST-DN-BU": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 43.3
+    },
+    "ST-DN-U": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 28.9
+    },
+    "ST-MU-ST": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 48.6
+    },
+    "U-GS-DN": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 32.8
+    },
+    "U-H-BU": {
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 0.3,
+      "source": "current",
+      "fwr": 45.2
+    },
+    "U-H-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.0,
+      "source": "current",
+      "fwr": 66.7
+    },
+    "U-MD-GS": {
+      "direction": "LONG",
+      "tp": 0.5,
+      "sl": 2.5,
+      "source": "current",
+      "fwr": 91.3
+    },
+    "U-MD-MD": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "source": "current",
+      "fwr": 40.5
+    },
+    "U-MU-H": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 64.6
+    },
+    "U-MU-IH": {
+      "direction": "LONG",
+      "tp": 3.0,
+      "sl": 2.5,
+      "source": "current",
+      "fwr": 41.3
+    },
+    "U-ST-DF": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 58.6
+    },
+    "U-ST-DN": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "source": "current",
+      "fwr": 41.1
+    }
+  },
+  "phase4_portfolios": {
+    "A_Current": {
+      "patterns": 52,
+      "stats": {
+        "pnl": 882.7,
+        "trades": 314.0,
+        "wr": 77.07,
+        "mdd": 24.4,
+        "pf": 3.23,
+        "avg_win": 5.28,
+        "avg_loss": 5.49,
+        "expectancy": 2.81,
+        "pnl_mdd": 36.18
+      }
+    },
+    "B_Optimized": {
+      "patterns": 52,
+      "stats": {
+        "pnl": 886.1,
+        "trades": 319.0,
+        "wr": 77.43,
+        "mdd": 24.4,
+        "pf": 3.21,
+        "avg_win": 5.21,
+        "avg_loss": 5.57,
+        "expectancy": 2.78,
+        "pnl_mdd": 36.32
+      }
+    },
+    "C_FWR50": {
+      "patterns": 30,
+      "stats": {
+        "pnl": 420.1,
+        "trades": 296.0,
+        "wr": 69.93,
+        "mdd": 29.0,
+        "pf": 1.91,
+        "avg_win": 4.26,
+        "avg_loss": 5.2,
+        "expectancy": 1.42,
+        "pnl_mdd": 14.49
+      },
+      "pattern_list": [
+        "BD-D-D",
+        "BD-MU-BD",
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "D-BD-ST",
+        "D-MU-U",
+        "DN-BD-BD",
+        "DN-DF-DN",
+        "DN-DF-MU",
+        "DN-DF-ST",
+        "DN-DN-H",
+        "DN-MD-DN",
+        "GS-ST-ST",
+        "H-BU-BU",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "IH-ST-ST",
+        "MD-BU-MD",
+        "MD-DN-MU",
+        "MD-H-MD",
+        "MD-MD-ST",
+        "MD-ST-BD",
+        "MU-DF-U",
+        "MU-H-MU",
+        "MU-IH-DN",
+        "U-H-MU",
+        "U-MD-GS",
+        "U-MU-H",
+        "U-ST-DF"
+      ]
+    },
+    "C_FWR55": {
+      "patterns": 27,
+      "stats": {
+        "pnl": 415.0,
+        "trades": 278.0,
+        "wr": 73.38,
+        "mdd": 31.9,
+        "pf": 2.04,
+        "avg_win": 4.0,
+        "avg_loss": 5.41,
+        "expectancy": 1.49,
+        "pnl_mdd": 13.01
+      },
+      "pattern_list": [
+        "BD-D-D",
+        "BD-MU-BD",
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "D-BD-ST",
+        "D-MU-U",
+        "DN-DF-MU",
+        "DN-DF-ST",
+        "DN-DN-H",
+        "DN-MD-DN",
+        "GS-ST-ST",
+        "H-BU-BU",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "IH-ST-ST",
+        "MD-BU-MD",
+        "MD-DN-MU",
+        "MD-H-MD",
+        "MD-MD-ST",
+        "MD-ST-BD",
+        "MU-DF-U",
+        "MU-IH-DN",
+        "U-H-MU",
+        "U-MD-GS",
+        "U-MU-H",
+        "U-ST-DF"
+      ]
+    },
+    "C_FWR60": {
+      "patterns": 18,
+      "stats": {
+        "pnl": 424.6,
+        "trades": 218.0,
+        "wr": 83.03,
+        "mdd": 22.8,
+        "pf": 2.87,
+        "avg_win": 3.6,
+        "avg_loss": 6.15,
+        "expectancy": 1.95,
+        "pnl_mdd": 18.62
+      },
+      "pattern_list": [
+        "BD-D-D",
+        "BD-MU-BD",
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "D-BD-ST",
+        "D-MU-U",
+        "DN-DF-MU",
+        "DN-DN-H",
+        "GS-ST-ST",
+        "H-BU-BU",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MD-H-MD",
+        "MU-DF-U",
+        "U-H-MU",
+        "U-MD-GS",
+        "U-MU-H"
+      ]
+    },
+    "C_FWR65": {
+      "patterns": 15,
+      "stats": {
+        "pnl": 363.4,
+        "trades": 206.0,
+        "wr": 83.5,
+        "mdd": 21.3,
+        "pf": 2.84,
+        "avg_win": 3.26,
+        "avg_loss": 5.8,
+        "expectancy": 1.76,
+        "pnl_mdd": 17.06
+      },
+      "pattern_list": [
+        "BD-D-D",
+        "BD-MU-BD",
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "D-MU-U",
+        "DN-DF-MU",
+        "DN-DN-H",
+        "GS-ST-ST",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MD-H-MD",
+        "MU-DF-U",
+        "U-H-MU",
+        "U-MD-GS"
+      ]
+    },
+    "C_FWR70": {
+      "patterns": 11,
+      "stats": {
+        "pnl": 303.9,
+        "trades": 177.0,
+        "wr": 87.01,
+        "mdd": 18.4,
+        "pf": 3.03,
+        "avg_win": 2.94,
+        "avg_loss": 6.5,
+        "expectancy": 1.72,
+        "pnl_mdd": 16.52
+      },
+      "pattern_list": [
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "DN-DF-MU",
+        "DN-DN-H",
+        "GS-ST-ST",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MD-H-MD",
+        "MU-DF-U",
+        "U-MD-GS"
+      ]
+    },
+    "C_FWR75": {
+      "patterns": 8,
+      "stats": {
+        "pnl": 216.4,
+        "trades": 107.0,
+        "wr": 91.59,
+        "mdd": 12.2,
+        "pf": 4.74,
+        "avg_win": 2.8,
+        "avg_loss": 6.43,
+        "expectancy": 2.02,
+        "pnl_mdd": 17.74
+      },
+      "pattern_list": [
+        "BU-ST-GS",
+        "DN-DF-MU",
+        "GS-ST-ST",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MU-DF-U",
+        "U-MD-GS"
+      ]
+    },
+    "C_FWR80": {
+      "patterns": 6,
+      "stats": {
+        "pnl": 171.5,
+        "trades": 94.0,
+        "wr": 93.62,
+        "mdd": 12.2,
+        "pf": 5.5,
+        "avg_win": 2.38,
+        "avg_loss": 6.35,
+        "expectancy": 1.82,
+        "pnl_mdd": 14.06
+      },
+      "pattern_list": [
+        "BU-ST-GS",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MU-DF-U",
+        "U-MD-GS"
+      ]
+    },
+    "D_DualTP_Current": {
+      "patterns": 52,
+      "stats": {
+        "pnl": 768.4,
+        "trades": 314.0,
+        "wr": 78.03,
+        "mdd": 24.7,
+        "pf": 3.01,
+        "avg_win": 4.7,
+        "avg_loss": 5.53,
+        "expectancy": 2.45,
+        "pnl_mdd": 31.11
+      },
+      "full_wins": 242,
+      "partial_wins": 4,
+      "sl_losses": 68
+    },
+    "E_DualTP_Optimized": {
+      "patterns": 52,
+      "stats": {
+        "pnl": 770.81,
+        "trades": 319.0,
+        "wr": 78.37,
+        "mdd": 24.7,
+        "pf": 2.99,
+        "avg_win": 4.63,
+        "avg_loss": 5.62,
+        "expectancy": 2.42,
+        "pnl_mdd": 31.21
+      },
+      "full_wins": 247,
+      "partial_wins": 4,
+      "sl_losses": 68
+    },
+    "F_DualTP_FWR60": {
+      "patterns": 18,
+      "stats": {
+        "pnl": 374.68,
+        "trades": 218.0,
+        "wr": 83.49,
+        "mdd": 22.8,
+        "pf": 2.78,
+        "avg_win": 3.22,
+        "avg_loss": 5.85,
+        "expectancy": 1.72,
+        "pnl_mdd": 16.43
+      },
+      "pattern_list": [
+        "BD-D-D",
+        "BD-MU-BD",
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "D-BD-ST",
+        "D-MU-U",
+        "DN-DF-MU",
+        "DN-DN-H",
+        "GS-ST-ST",
+        "H-BU-BU",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MD-H-MD",
+        "MU-DF-U",
+        "U-H-MU",
+        "U-MD-GS",
+        "U-MU-H"
+      ],
+      "full_wins": 181,
+      "partial_wins": 4,
+      "sl_losses": 33
+    },
+    "F_DualTP_FWR65": {
+      "patterns": 15,
+      "stats": {
+        "pnl": 322.72,
+        "trades": 206.0,
+        "wr": 83.98,
+        "mdd": 21.3,
+        "pf": 2.79,
+        "avg_win": 2.91,
+        "avg_loss": 5.46,
+        "expectancy": 1.57,
+        "pnl_mdd": 15.15
+      },
+      "pattern_list": [
+        "BD-D-D",
+        "BD-MU-BD",
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "D-MU-U",
+        "DN-DF-MU",
+        "DN-DN-H",
+        "GS-ST-ST",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MD-H-MD",
+        "MU-DF-U",
+        "U-H-MU",
+        "U-MD-GS"
+      ],
+      "full_wins": 172,
+      "partial_wins": 4,
+      "sl_losses": 30
+    },
+    "F_DualTP_FWR70": {
+      "patterns": 11,
+      "stats": {
+        "pnl": 271.86,
+        "trades": 177.0,
+        "wr": 87.01,
+        "mdd": 15.2,
+        "pf": 3.02,
+        "avg_win": 2.64,
+        "avg_loss": 5.86,
+        "expectancy": 1.54,
+        "pnl_mdd": 17.89
+      },
+      "pattern_list": [
+        "BU-MD-MD",
+        "BU-ST-GS",
+        "DN-DF-MU",
+        "DN-DN-H",
+        "GS-ST-ST",
+        "H-MU-MD",
+        "IH-MD-MD",
+        "IH-ST-MU",
+        "MD-H-MD",
+        "MU-DF-U",
+        "U-MD-GS"
+      ],
+      "full_wins": 154,
+      "partial_wins": 3,
+      "sl_losses": 20
+    }
+  },
+  "phase5_recommendations": [
+    {
+      "id": 1,
+      "category": "FWR_DISTRIBUTION",
+      "finding": "\ud604\uc7ac 52\ud328\ud134 \ud3c9\uade0 Full Win Rate: 54.9% (\uc911\uc559\uac12 54.9%)",
+      "detail": "FWR>=80%: 5, FWR>=70%: 10, FWR>=60%: 17, FWR<50%: 23"
+    },
+    {
+      "id": 2,
+      "category": "OPTIMIZATION",
+      "finding": "Grid search \uac1c\uc120 \ud6c4\ubcf4: 2\uac1c \u2192 MC/WF \uac80\uc99d \ud1b5\uacfc: 2\uac1c",
+      "detail": "FWR > current + 1pp, PnL >= 80% of current, MC < 0.01, WF >= 4/5"
+    },
+    {
+      "id": 3,
+      "category": "BEST_PORTFOLIO",
+      "finding": "PnL/MDD \ucd5c\uace0: B_Optimized (PnL/MDD 36.3x)",
+      "detail": "PnL +886.1%, MDD 24.4%, WR 77.4%, 319 trades, 52 patterns"
+    },
+    {
+      "id": 4,
+      "category": "ULTRA_STABLE_PATTERNS",
+      "finding": "FWR >= 70% \ucd08\uc548\uc815 \ud328\ud134: 11\uac1c",
+      "detail": "IH-ST-MU(96%), U-MD-GS(91%), BU-ST-GS(87%), H-MU-MD(87%), IH-MD-MD(86%), MU-DF-U(80%), GS-ST-ST(79%), DN-DF-MU(76%), BU-MD-MD(73%), DN-DN-H(72%)"
+    },
+    {
+      "id": 5,
+      "category": "DUAL_TP_IMPACT",
+      "finding": "Dual-TP PnL: +768.4% (\ub2e8\uc77cTP \ub300\ube44 -114.3%)",
+      "detail": "FullWin 242, Partial 4, SL 68"
+    }
+  ]
+}

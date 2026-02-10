@@ -69,6 +69,7 @@ def _create_default_state() -> Dict[str, Any]:
         'last_signal_candle_timestamp': None,
         'daily_pnl': 0.0,
         'daily_trades': 0,
+        'consecutive_losses': 0,
         'total_trades': 0,
         'total_pnl': 0.0,
         'winning_trades': 0,
@@ -88,6 +89,7 @@ def _check_daily_reset(state: Dict[str, Any]) -> Dict[str, Any]:
         logger.info(f"📅 New day detected ({last_date} → {today}), resetting daily stats")
         state['daily_pnl'] = 0.0
         state['daily_trades'] = 0
+        state['consecutive_losses'] = 0
         state['last_trade_date'] = today
 
     return state
@@ -220,6 +222,7 @@ def reset_daily_stats_if_needed(state: Dict[str, Any]) -> bool:
             logger.info(f"📅 New day detected ({last_date} → {today}), resetting daily stats")
         state['daily_pnl'] = 0.0
         state['daily_trades'] = 0
+        state['consecutive_losses'] = 0
         state['last_trade_date'] = today
         save_state(state)
         return True

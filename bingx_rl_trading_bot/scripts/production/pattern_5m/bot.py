@@ -58,7 +58,7 @@ from .exchange import (
     health_check,
 )
 from .indicators import calculate_indicators
-from .signals import check_entry_signal, check_cooldown, check_daily_loss_limit, check_early_exit_signal
+from .signals import check_entry_signal, check_cooldown, check_daily_loss_limit, check_consecutive_loss_limit, check_early_exit_signal
 from .position import (
     open_position,
     check_position_status,
@@ -263,6 +263,15 @@ def _run_bot_main(
             if check_daily_loss_limit(state, config):
                 logger.warning(f"⚠️ Daily loss limit reached, pausing {DAILY_LOSS_PAUSE_SECONDS}s")
                 _interruptible_sleep(DAILY_LOSS_PAUSE_SECONDS)
+                continue
+
+            # Check consecutive loss limit (v1.27.0)
+            if check_consecutive_loss_limit(state) and not state.get('position'):
+                from .constants import CONSECUTIVE_LOSS_PAUSE_SECONDS, MAX_CONSECUTIVE_LOSSES
+                consec = state.get('consecutive_losses', 0)
+                logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), pausing {CONSECUTIVE_LOSS_PAUSE_SECONDS}s")
+                _interruptible_sleep(CONSECUTIVE_LOSS_PAUSE_SECONDS)
+                state['consecutive_losses'] = 0  # Reset after pause
                 continue
 
             timing = _get_candle_timing()

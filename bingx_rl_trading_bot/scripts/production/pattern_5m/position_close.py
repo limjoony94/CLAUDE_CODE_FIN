@@ -130,6 +130,9 @@ def record_closed_position(
 
     if pnl_pct > 0:
         state['winning_trades'] += 1
+        state['consecutive_losses'] = 0
+    else:
+        state['consecutive_losses'] = state.get('consecutive_losses', 0) + 1
 
     state['last_trade'] = {
         'direction': position['direction'],

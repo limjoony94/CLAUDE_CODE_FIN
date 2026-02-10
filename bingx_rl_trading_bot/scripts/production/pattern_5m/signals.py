@@ -620,6 +620,23 @@ def check_daily_loss_limit(state: Dict[str, Any], config: Dict[str, Any]) -> boo
     return state.get('daily_pnl', 0) <= -max_loss
 
 
+def check_consecutive_loss_limit(state: Dict[str, Any]) -> bool:
+    """
+    Check if consecutive loss limit has been reached.
+
+    v1.27.0: Pause trading after MAX_CONSECUTIVE_LOSSES consecutive SL hits.
+    Resets on next winning trade or daily reset.
+
+    Args:
+        state: Bot state dictionary
+
+    Returns:
+        True if consecutive loss limit reached (should pause trading)
+    """
+    from .constants import MAX_CONSECUTIVE_LOSSES
+    return state.get('consecutive_losses', 0) >= MAX_CONSECUTIVE_LOSSES
+
+
 def check_early_exit_signal(
     position: Dict[str, Any],
     df: pd.DataFrame,

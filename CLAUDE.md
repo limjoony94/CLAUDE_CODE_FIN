@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.26.4 | **Bot**: Pattern 5m (52패턴, 32L+20S) | **Updated**: 2026-02-09
+> **Version**: v1.27.0 | **Bot**: Pattern 5m (52패턴, 32L+20S) | **Updated**: 2026-02-10
 
 ---
 
@@ -42,34 +42,36 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.26.4
+## 📊 현재 전략: Pattern 5m v1.27.0
 
 ### 핵심 파라미터
 
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | Per-pattern deep-validated (grid search + 5-phase) |
+| TP/SL | **Uniform TP 70%** (v1.26.4 TP * 0.7, SL unchanged) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Double Exit | 50%@0.8x + 50%@1.0x |
 | Leverage | 3x |
 | Timeframe | 5m |
-| Quality Filter | **T5 leave-one-out + MC/edge cleanup + deep-validated TP/SL** |
+| Quality Filter | **T5 leave-one-out + MC/edge cleanup + Uniform TP 70%** |
+| Risk | Daily loss 7%, 3-consecutive-loss pause |
 
 ### 270일 종합 검증 결과
 
-| 지표 | v1.26.4 |
-|------|---------|
-| Patterns | **52 (32L+20S)** — Deep-Validated |
-| PnL | **+882.7%** |
-| MDD | **24.4%** |
-| PnL/MDD | **36.2x** |
-| WR | **77.1%** |
-| PF | **3.23** |
-| Trades | **314** |
-| Optimization | Grid search + 5-phase deep validation (CV, plateau, edge, OOS) |
-| Changes | 31/32 accepted, 1 rejected (DN-MD-DN: insufficient edge) |
-| Research | tp_sl_optimization_v1264 + tp_sl_deep_validation |
+| 지표 | v1.26.4 | v1.27.0 |
+|------|---------|---------|
+| Patterns | 52 (32L+20S) | **52 (32L+20S)** |
+| PnL | +882.7% | **+911.1%** |
+| MDD | 24.4% | **16.2%** |
+| PnL/MDD | 36.2x | **56.2x** |
+| WR | 77.1% | **83.7%** |
+| PF | 3.23 | **3.62** |
+| Trades | 314 | **386** |
+| Max Consec Loss | 3 | **2** |
+| MC MDD P99 | 47.2% | **39.9%** |
+| Change | — | All TP * 0.7 + risk management |
+| Research | tp_sl_optimization_v1264 | uniform_tp_validation + 4 microstructure studies |
 
 ### LONG Patterns (35) — v1.26.1 T5_Optimized
 
@@ -294,7 +296,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.26.4** | 02-09 | Full TP/SL optimization: grid search + 5-phase deep validation, 31/32 accepted, WR 77.1%, PnL +882.7% ← **현재** |
+| **v1.27.0** | 02-10 | Uniform TP 70% + 리스크 관리: TP×0.7 전체 적용, WR 83.7%, PnL +911.1%, MDD 16.2%, daily limit 7%, 연속손실 3회 pause ← **현재** |
+| v1.26.4 | 02-09 | Full TP/SL optimization: grid search + 5-phase deep validation, 31/32 accepted, WR 77.1%, PnL +882.7% |
 | v1.26.3 | 02-09 | R:R re-optimization (5패턴), superseded by v1.26.4 |
 | v1.26.2 | 02-09 | MC/edge cleanup: 6패턴 제거 (MC>=0.01 5개 + DN-IH-U p=0.052), 52패턴 (32L+20S) |
 | v1.26.1 | 02-08 | T5_Optimized 58패턴 (35L+23S), R:R>=0.75 + leave-one-out pruning, PnL +963.8%, MDD 19.8% |

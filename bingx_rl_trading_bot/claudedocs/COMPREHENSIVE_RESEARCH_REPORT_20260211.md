@@ -2,14 +2,14 @@
 
 > **작성일**: 2026-02-11
 > **대상**: BTC 5m Pattern Trading Bot v1.27.0
-> **범위**: v1.26.0 ~ v1.27.0 전체 연구 시리즈 (19개 연구, 14개 결과 JSON)
+> **범위**: v1.26.0 ~ v1.27.0 전체 연구 시리즈 (21개 연구, 16개 결과 JSON)
 > **데이터**: 270일 (77,760 bars), Ground Truth 12-type classification
 
 ---
 
 ## 1. Executive Summary
 
-v1.27.0 Pattern 5m 봇에 대해 19개 독립 연구를 수행한 결과, **현재 설정이 Walk-Forward OOS 기준으로 최적에 근접**해 있음을 확인했다. 테스트한 모든 개선 경로 — TP/SL 조정, 패턴 필터링, 신호 스케줄링, SL 축소, 패턴 추가/제거, 구조 변경 — 가 OOS에서 현재 대비 개선에 실패했다. 또한 과적합 위험에 대한 6-phase 심층 연구를 수행하여, 개별 패턴 수준의 불안정성에도 불구하고 포트폴리오 수준의 견고성을 데이터로 확인했다.
+v1.27.0 Pattern 5m 봇에 대해 21개 독립 연구를 수행한 결과, **현재 설정이 Walk-Forward OOS 기준으로 최적에 근접**해 있음을 확인했다. 테스트한 모든 개선 경로 — TP/SL 조정, 패턴 필터링, 신호 스케줄링, SL 축소, 패턴 추가/제거, 구조 변경 — 가 OOS에서 현재 대비 개선에 실패했다. 또한 과적합 위험에 대한 6-phase 심층 연구를 수행하여, 개별 패턴 수준의 불안정성에도 불구하고 포트폴리오 수준의 견고성을 데이터로 확인했다. 최종 연구로 라이브 31거래 데이터 기반 미래 리스크 정량화 및 전략 붕괴 탐지 시스템을 설계하여, 실전 운영에 필요한 모니터링 체계를 완성했다.
 
 ### 핵심 지표
 
@@ -49,8 +49,10 @@ v1.27.0 Pattern 5m 봇에 대해 19개 독립 연구를 수행한 결과, **현�
 | 17 | ATR-Adaptive TP/SL | **FAIL** — 모든 배수에서 fixed 열등 | MC 실패까지 |
 | 18 | Combined Best | **FAIL** — 단일 최선도 baseline 미달 | - |
 | 19 | Overfitting & Forward Decay | **MODERATE RISK** — 개별 불안정, 포트폴리오 견고 | Bootstrap P(PnL>0)=100% |
+| 20 | Future Risk Stress Test | **INFO** — 라이브 마진 정량화, 방향 edge 확인 | 방향 edge +751% |
+| 21 | R:R & Detection Deep Study | **CRITICAL FIX** — break-even 오류 수정 (3pp→7pp) | 탐지 한계 규명 |
 
-**생산 반영**: Uniform TP 70% + 7% daily limit + 3-loss pause만 적용. 나머지 18개 연구는 변경 불필요 확인.
+**생산 반영**: Uniform TP 70% + 7% daily limit + 3-loss pause만 적용. 나머지 20개 연구는 변경 불필요 확인. 모니터링: 3단계 티어드 알림 시스템 권고.
 
 ---
 
@@ -647,6 +649,79 @@ Edge          = +30.5pp (순수 패턴 예측력)
 
 **메타 교훈**: In-sample 최적화 결과는 OOS로 전이되지 않는다. 270일 데이터에서도 과적합이 발생한다.
 
+### 7.6 라이브 성과 검증 및 미래 리스크 (연구 #20, #21)
+
+31거래 라이브 데이터를 기반으로 **미래 리스크 정량화**와 **전략 붕괴 탐지** 시스템을 설계했다.
+
+#### 7.6.1 Break-Even 마진 수정 (CRITICAL)
+
+초기 연구(#20)에서 `pattern_5m_metrics.json`의 `recent_wins/losses` 버퍼를 직접 사용하여 break-even WR 64.8%, 마진 3.0pp라는 위험한 결론을 도출했다. 후속 검증(#21)에서 **버퍼 데이터 왜곡**을 발견:
+
+| 항목 | 버퍼(잘못된 값) | 실제(수정값) | 차이 |
+|------|----------------|-------------|------|
+| Wins/Losses | 20W/12L | **21W/10L** | 버퍼 크기 불일치 |
+| avg_win | 3.094 | **3.994** | +29% |
+| avg_loss | 5.690 | **6.186** | +9% |
+| R:R | 0.544 | **0.646** | +19% |
+| Break-even WR | 64.8% | **60.8%** | -4.0pp |
+| **마진** | **3.0pp** | **7.0pp** | **+4.0pp** |
+
+`recent_wins/losses`는 롤링 버퍼로, 실제 거래 수(21W/10L)와 버퍼 엔트리 수(20W/12L)가 불일치한다. **항상 `total_pnl`, `winning_trades`, `losing_trades`에서 역산해야 정확한 평균을 얻을 수 있다.**
+
+#### 7.6.2 R:R 불리 원인 규명
+
+| 분석 항목 | 결과 |
+|-----------|------|
+| 설계 R:R 평균 | 0.478 (52개 패턴 TP/SL 비율) |
+| TP < SL 비율 | **92.3%** (48/52 패턴) |
+| 백테스트 R:R | 0.523 |
+| 라이브 R:R | **0.646** (백테스트보다 양호) |
+| Exit 구성 | TP 71.4%, SL 12.4%, TIMEOUT 16.2% |
+
+R:R 불리는 **설계 의도**(작고 빈번한 승리 + 드문 큰 손실, 높은 WR로 보상)이며, 라이브 anomaly가 아니다.
+
+#### 7.6.3 전략 붕괴 탐지 한계
+
+Working WR(68%)과 Broken WR(60%)의 **8pp 갭**이 동시에 낮은 FP + 높은 TP를 불가능하게 만든다:
+
+| 탐지 방법 | FP(68%) | TP(60%) | TP(55%) | 탐지(60%) |
+|-----------|---------|---------|---------|-----------|
+| Rolling WR(30,<50%) | 27.0% | 83.6% | 97.9% | 85t |
+| Rolling WR(40,<50%) | 11.8% | 66.5% | 93.0% | 97t |
+| CUSUM(0.40, 6) | 11.1% | 68.1% | 95.1% | 98t |
+| Bayesian(0.8, 0.7) | **8.5%** | 69.0% | 96.2% | 73t |
+| PnL < -25% | 13.4% | 72.6% | 96.6% | 64t |
+| WR(30,<45%) AND DD>20% | 12.7% | 62.1% | 91.1% | 94t |
+
+FP<25% AND TP(60%)>70%를 동시에 만족하는 **Pareto-optimal 규칙은 존재하지 않는다**.
+
+#### 7.6.4 실용적 권고: 3단계 알림 시스템
+
+| 단계 | 조건 | 행동 |
+|------|------|------|
+| Green | PnL > -15%, WR > 50% | 정상 운영 |
+| **Yellow** | PnL < -25% (FP 13%, TP60 73%) | 포지션 사이즈 절반, 주시 |
+| **Red** | WR(30)<45% AND DD>20% (FP 13%, TP60 62%) | 봇 정지, 수동 검토 |
+
+#### 7.6.5 Forward Monte Carlo (라이브 파라미터 기반)
+
+| Horizon | Mean PnL | P(손실) | P(>50% 손실) | 95% MDD |
+|---------|----------|---------|-------------|---------|
+| 50거래 | +13.1% | 33.2% | 1.4% | 53.9% |
+| 100거래 | +26.5% | 23.8% | 3.8% | 72.8% |
+| 200거래 | +52.0% | 18.1% | 3.6% | 96.7% |
+| 500거래 | +129.5% | 7.2% | 2.6% | 127.6% |
+
+#### 7.6.6 방향 Edge 검증
+
+| 테스트 | 결과 |
+|--------|------|
+| 방향 반전 | PnL -464% → edge +751% |
+| 무작위 방향 (200회) | P(원본보다 우수) = **0.0%** |
+| 40% 패턴 고장 | 평균 PnL +166%, P(손실) = 0.0% |
+
+52개 패턴의 방향 예측력은 **실재하며, 부분적 고장에도 견고**하다.
+
 ---
 
 ## 7. Common Mistakes 정리
@@ -665,12 +740,14 @@ Edge          = +30.5pp (순수 패턴 예측력)
 | 8 | Multi-position = 무조건 개선 | PnL/MDD 악화, 사이즈 분산 필요 |
 | 9 | 백테스트 WR = 실전 WR | 270일 최적화 WR 84%는 과적합 포함. 실전 67-75% 기대 |
 | 10 | 개별 패턴 안정성 = 포트폴리오 안정성 | 개별 Jaccard 0.12이나 포트폴리오 9개월 연속 양수 |
+| 11 | recent_wins/losses 버퍼 직접 사용 | 롤링 버퍼 크기 ≠ 실제 거래 수. total_pnl + trade counts에서 역산 |
+| 12 | Break-even margin 3pp 공포 | 버퍼 왜곡. 실제 마진 7pp (수정값 60.8% BE vs 라이브 67.7%) |
 
 ---
 
 ## 8. 연구 자산 목록
 
-### 8.1 Research Scripts (15개)
+### 8.1 Research Scripts (17개)
 
 | 스크립트 | Phase | 주요 내용 |
 |---------|-------|----------|
@@ -690,6 +767,8 @@ Edge          = +30.5pp (순수 패턴 예측력)
 | `pattern_combination_research.py` | v1.27.0+ | BWD/FWD/TRUE WF |
 | `structural_improvement_research.py` | v1.27.0+ | Multi-pos, time, ATR |
 | `overfitting_forward_decay_research.py` | v1.27.0+ | 6-phase 과적합/미래 적용성 |
+| `future_risk_stress_test.py` | v1.27.0+ | 6-phase 미래 리스크 정량화 |
+| `rr_detection_deep_study.py` | v1.27.0+ | R:R 원인 + 전략 붕괴 탐지 |
 
 ### 8.2 Validation Scripts (5개)
 
@@ -701,7 +780,7 @@ Edge          = +30.5pp (순수 패턴 예측력)
 | `new_pattern_wf_validation.py` | New pattern portfolio WF |
 | `wf_validation_v1263.py` | v1.26.3 WF (superseded) |
 
-### 8.3 Result JSONs (14개)
+### 8.3 Result JSONs (16개)
 
 모든 결과는 `bingx_rl_trading_bot/results/` 디렉토리에 저장:
 
@@ -716,6 +795,7 @@ reverse_edge_research.json      new_pattern_wf_validation.json
 pattern_combination_research.json
 structural_improvement_research.json
 overfitting_forward_decay_research.json
+future_risk_stress_test.json    rr_detection_deep_study.json
 uniform_tp_validation.json      tp_sl_deep_validation.json
 ```
 
@@ -769,11 +849,16 @@ v1.27.0은 **270일 데이터에서 도달 가능한 최적점에 근접**해 �
 ### 9.5 운영 권고
 
 1. **현재 설정 유지**: v1.27.0 52패턴, Uniform TP 70%, 1-pos, FIFO
-2. **모니터링 지표**: WR < 67%, MDD > 25%, 연속손실 >= 3
-3. **재검증 시점**: 90일 후 (540일 데이터) 또는 WR이 67% 미만으로 하락 시
+2. **3단계 모니터링**:
+   - **Green**: 정상 운영 (PnL > -15%, WR > 50%)
+   - **Yellow**: PnL < -25% → 포지션 사이즈 절반, 주시 (FP 13%, TP60 73%)
+   - **Red**: WR(30)<45% AND DD>20% → 봇 정지, 수동 검토 (FP 13%, TP60 62%)
+3. **재검증 시점**: 90일 후 (540일 데이터) 또는 Red alert 발동 시
 4. **과적합 경계**: 향후 최적화 시도 시 반드시 expanding-window WF OOS 기준 적용
-5. **라이브 기대치 조정**: 백테스트 WR 84% → 라이브 기대 67-75%, 이에 기반한 리스크 관리
-6. **보수적 대안 준비**: WR 60% 미만 지속 시 31개 robust-only 포트폴리오로 전환 검토
+5. **라이브 기대치**: 백테스트 WR 84% → 라이브 기대 67-75%, Break-even 60.8% (마진 7pp)
+6. **버퍼 데이터 경고**: `recent_wins/losses`는 롤링 버퍼 — 정확한 평균은 `total_pnl`에서 역산
+7. **보수적 대안 준비**: WR 60% 미만 지속 시 31개 robust-only 포트폴리오로 전환 검토
+8. **탐지 한계 인지**: WR 68%→60% 구간은 통계적으로 구별 곤란 (1539거래 = 34개월 필요)
 
 ---
 

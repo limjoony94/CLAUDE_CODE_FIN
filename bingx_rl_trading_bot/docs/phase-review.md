@@ -1,6 +1,12 @@
 # Phase 1-6 Review Report
 
-**Date:** 2026-02-02  
+> **Status**: ARCHIVED — 이 문서는 v1.23.0 시점(2026-02-02)의 Phase 리뷰 스냅샷입니다.
+> 아래 이슈들의 현재 상태:
+> - Phase 3 (Classification 통일): v1.24.0에서 Ground Truth Classification으로 완전 통일 완료
+> - Phase 4 (테스트 실패): conftest.py sys.path 설정으로 해결됨
+> - Phase 6 (MDD/WR threshold): v1.27.0에서 재조정됨 (daily loss 7%, WR 기대치 84%)
+
+**Date:** 2026-02-02
 **Commits:** 8492f8c → dd9683d (6 commits)
 
 ---

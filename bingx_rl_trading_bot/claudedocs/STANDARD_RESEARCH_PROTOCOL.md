@@ -1,7 +1,8 @@
 # Trading Strategy Research Standard Protocol
 
-**Version**: 1.0
+**Version**: 2.0
 **Created**: 2026-01-19
+**Updated**: 2026-02-11
 **Status**: ACTIVE
 
 ---
@@ -28,10 +29,11 @@
 
 | 항목 | 최소 기준 | 권장 |
 |------|----------|------|
-| **기간** | 60일 | 90일+ |
-| **캔들 수** | 17,280 (5m×60일) | 25,920+ |
+| **기간** | 90일 | 270일+ |
+| **캔들 수** | 25,920 (5m×90일) | 77,760+ |
 | **데이터 소스** | BingX API | 검증된 거래소 |
-| **타임프레임** | 분석 대상 TF | 5m, 15m, 1h |
+| **타임프레임** | 5m (프로덕션 기준) | 5m |
+| **Ground Truth** | `data/btc_5m_270days_reclassified.csv` | 270일 GT 분류 |
 
 ### 1.2 데이터 품질 체크리스트
 
@@ -53,11 +55,10 @@ def validate_data(df):
 
 ```
 data/
-├── raw/                    # 원본 데이터 (수정 금지)
+├── btc_5m_270days_reclassified.csv  # Ground Truth 270일 데이터 (프로덕션 + 연구 공용)
+├── raw/                              # 원본 데이터 (수정 금지)
 │   └── btc_5m_YYYYMMDD.csv
-├── processed/              # 전처리된 데이터
-│   └── btc_5m_indicators.csv
-└── cache/                  # 임시 캐시 (삭제 가능)
+└── cache/                            # 임시 캐시 (삭제 가능)
 ```
 
 ---
@@ -372,19 +373,20 @@ def type2_validation(df, signal_func, tp_pct, sl_pct, leverage, position_pct, fe
 | 메트릭 | 최소 | 권장 |
 |--------|------|------|
 | Total PnL | > 0% | > 30% |
-| Walk-Forward | ≥ 4/8 (50%) | ≥ 6/8 (75%) |
-| Monte Carlo | ≥ 80% | ≥ 95% |
+| Walk-Forward | ≥ 3/5 (60%) | ≥ 4/5 (80%) |
+| Monte Carlo p-value | < 0.02 | < 0.01 |
 | Max Drawdown | < 50% | < 30% |
+| Edge (Excess WR) | > 5pp over random | > 10pp |
 
 ### 4.2 Walk-Forward Analysis
 
 ```python
-def walk_forward_validation(df, signal_func, params, n_folds=8):
+def walk_forward_validation(df, signal_func, params, n_folds=5):
     """
     Walk-Forward 검증
-    - 데이터를 n_folds로 분할
+    - 데이터를 n_folds로 분할 (기본 5-fold)
     - 각 fold에서 독립적으로 백테스트
-    - 과반수 이상 수익이면 PASS
+    - 3/5 이상 수익이면 PASS
     """
     fold_size = len(df) // n_folds
     results = []
@@ -412,33 +414,57 @@ def walk_forward_validation(df, signal_func, params, n_folds=8):
     }
 ```
 
-### 4.3 Monte Carlo Simulation (권장)
+### 4.3 Monte Carlo Simulation (필수)
+
+**방법: Sign Randomization (부호 무작위화)**
 
 ```python
-def monte_carlo_simulation(trades, n_simulations=1000):
+def monte_carlo_sign_randomization(trades, n_simulations=10000):
     """
-    Monte Carlo 시뮬레이션
-    - 거래 순서를 랜덤하게 섞어 1000회 시뮬레이션
-    - 80% 이상 수익이면 PASS
+    Monte Carlo Sign Randomization Test
+    - 각 거래의 부호(+/-)를 무작위로 뒤집어 10,000회 시뮬레이션
+    - 실제 PnL이 시뮬레이션 분포의 상위 2%에 있으면 PASS (p < 0.02)
+    - 거래 순서 섞기(shuffle)가 아닌 부호 뒤집기(sign flip)가 표준
     """
-    import random
+    import numpy as np
 
-    profitable_count = 0
+    actual_pnl = sum(t['pnl_pct'] for t in trades)
+    pnl_values = np.array([t['pnl_pct'] for t in trades])
 
+    count_ge = 0
     for _ in range(n_simulations):
-        shuffled = random.sample(trades, len(trades))
-        balance = 100
+        signs = np.random.choice([-1, 1], size=len(pnl_values))
+        sim_pnl = np.sum(pnl_values * signs)
+        if sim_pnl >= actual_pnl:
+            count_ge += 1
 
-        for trade in shuffled:
-            pnl_dollar = balance * 0.25 * (trade['pnl_pct'] / 100)
-            balance += pnl_dollar
+    p_value = count_ge / n_simulations
+    return {
+        'p_value': p_value,
+        'is_valid': p_value < 0.02,  # 필수: p < 0.02
+        'is_strong': p_value < 0.01  # 권장: p < 0.01
+    }
+```
 
-        if balance > 100:
-            profitable_count += 1
+**Edge Test (v1.26.2+ 추가 검증)**
+
+```python
+def edge_test(trades, tp_pct, sl_pct):
+    """
+    Random Walk 대비 초과 승률 검증
+    - Random walk WR = SL / (TP + SL) (distance-based baseline)
+    - 초과 WR (edge) > 5pp이면 genuine edge
+    - ALL profit comes from edge, not distance
+    """
+    random_wr = sl_pct / (tp_pct + sl_pct)
+    actual_wr = sum(1 for t in trades if t['pnl_pct'] > 0) / len(trades)
+    edge_pp = (actual_wr - random_wr) * 100
 
     return {
-        'profitable_rate': profitable_count / n_simulations * 100,
-        'is_valid': profitable_count / n_simulations >= 0.80
+        'random_wr': random_wr * 100,
+        'actual_wr': actual_wr * 100,
+        'edge_pp': edge_pp,
+        'has_edge': edge_pp > 5.0  # 최소 5pp 초과 승률
     }
 ```
 
@@ -480,7 +506,7 @@ def monte_carlo_simulation(trades, n_simulations=1000):
 ### 5.2 Configuration Template
 
 ```yaml
-# config/strategy_config.yaml
+# config/pattern_5m_config.yaml (v1.27.0 기준)
 symbol: 'BTC-USDT'
 timeframe: '5m'
 leverage: 3                    # 실효 레버리지
@@ -490,28 +516,32 @@ margin_mode: 'crossed'
 position_size_pct: 95
 
 strategy:
-  tp_pct: 2.5
-  sl_pct: 2.0
+  # TP/SL은 PATTERN_OPTIMAL_TPSL에서 패턴별 관리 (Uniform TP 70%)
+  default_tp_pct: 1.0          # fallback only
+  default_sl_pct: 1.0          # fallback only
   cooldown_candles: 0
 
-  # 필터
-  use_volume_filter: true
-  volume_ma_period: 20
-  min_volume_ratio: 1.2
+  # Context Filters
+  use_context_filter: true     # RSI/Vol/Trend
 
 risk:
-  max_daily_loss_pct: 10
+  max_daily_loss_pct: 7        # v1.27.0: 10% → 7%
   max_position_size_usd: 10000
+  consecutive_loss_pause: 3    # v1.27.0: 3연속 손실 → 600초 일시정지
+  consecutive_loss_cooldown: 600
 
 # 메타데이터
-version: "1.0"
-validated_date: "2026-01-19"
+version: "1.27.0"
+validated_date: "2026-02-10"
 backtest_results:
-  type1_win_rate: 61.5
-  type1_expected_value: 1.2
-  type2_total_pnl: 83.8
-  type2_max_dd: 11.3
-  walk_forward: "4/8"
+  patterns: 52                 # 32L + 20S
+  total_pnl: 911.1
+  win_rate: 83.7
+  max_drawdown: 16.2
+  profit_factor: 3.62
+  trades: 386
+  walk_forward: "5/5"
+  mc_p_value: 0.0000
 ```
 
 ---
@@ -526,7 +556,7 @@ class PerformanceMetrics:
 
     def __init__(self):
         self.trades = []
-        self.expected_win_rate = 60.0  # 백테스트 기대치
+        self.expected_win_rate = 84.0  # v1.27.0 백테스트 기대치
         self.expected_avg_win = 2.5
         self.expected_avg_loss = 2.0
 
@@ -548,12 +578,12 @@ class PerformanceMetrics:
 
 ### 6.2 Backtest vs Production Comparison
 
-| 메트릭 | 백테스트 | 프로덕션 | 허용 괴리 |
-|--------|----------|----------|----------|
-| 승률 | 61.5% | TBD | ±10% |
-| 평균 수익 | +2.5% | TBD | ±20% |
-| 평균 손실 | -2.0% | TBD | ±20% |
-| 거래 빈도 | 13/월 | TBD | ±30% |
+| 메트릭 | 백테스트 (v1.27.0) | 프로덕션 | 허용 괴리 |
+|--------|-------------------|----------|----------|
+| 승률 | 83.7% | TBD | ±10% |
+| PnL/MDD | 56.2x | TBD | ±30% |
+| Profit Factor | 3.62 | TBD | ±20% |
+| 거래 빈도 | ~43/월 (386/9mo) | TBD | ±30% |
 
 ### 6.3 Strategy Lifecycle
 
@@ -596,17 +626,28 @@ class PerformanceMetrics:
 | 검증 | 필수 통과 조건 |
 |------|---------------|
 | **Type 1** | 신호 ≥100, 승률 ≥50%, 기대값 >0 |
-| **Type 2** | PnL >0%, WF ≥50%, DD <50% |
-| **Monte Carlo** | 수익 확률 ≥80% |
+| **Type 2** | PnL >0%, WF ≥3/5 (60%), DD <50% |
+| **Monte Carlo** | Sign randomization p < 0.02 (10k sims) |
+| **Edge Test** | Excess WR > 5pp over random walk baseline |
 
 ### 파일 위치
 
 ```
 claudedocs/
-├── STANDARD_RESEARCH_PROTOCOL.md   ← 본 문서
-├── BACKTEST_VERIFICATION_METHODOLOGY_20251231.md
-├── LOOK_AHEAD_BIAS_AUDIT_20251224.md
-└── [전략별 연구 문서]
+├── STANDARD_RESEARCH_PROTOCOL.md                ← 본 문서
+├── PRODUCTION_TRADING_LOGIC_ANALYSIS_20260204.md ← 트레이딩 로직 분석
+└── [과거 연구 리포트]
+
+scripts/analysis/                                ← 연구 스크립트 (45+)
+├── uniform_tp_validation.py                     ← v1.27.0 핵심 검증
+├── tp_sl_optimization_v1264.py                  ← v1.26.4 TP/SL 최적화
+├── tp_sl_deep_validation.py                     ← 5-phase deep validation
+└── ...
+
+results/                                         ← 검증 결과 JSON
+├── uniform_tp_validation.json
+├── tp_sl_optimization_v1264.json
+└── tp_sl_deep_validation.json
 ```
 
 ---
@@ -636,17 +677,22 @@ claudedocs/
 | Win Rate | ___% | |
 | Max DD | ___% | <50%? |
 
-## Walk-Forward (8 Folds)
+## Walk-Forward (5 Folds)
 | Fold | PnL | Status |
 |------|-----|--------|
 | 1 | ___% | PASS/FAIL |
 | 2 | ___% | PASS/FAIL |
-| ... | | |
+| 3 | ___% | PASS/FAIL |
+| 4 | ___% | PASS/FAIL |
+| 5 | ___% | PASS/FAIL |
 
-**Pass Rate**: ___/8 (___%)
+**Pass Rate**: ___/5 (___%)
 
-## Monte Carlo (1000 sims)
-- Profitable: ___% (≥80%?)
+## Monte Carlo Sign Randomization (10,000 sims)
+- p-value: ___ (<0.02?)
+
+## Edge Test
+- Random WR: ___% | Actual WR: ___% | Edge: ___pp (>5pp?)
 
 ## Final Decision
 - [ ] APPROVED for Production
@@ -664,3 +710,4 @@ claudedocs/
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0 | 2026-01-19 | Initial release |
+| 2.0 | 2026-02-11 | v1.27.0 기준 업데이트: MC sign randomization 10k sims, WF 5-fold, Edge Test 추가, 데이터 270일, 검증 기준 강화 |

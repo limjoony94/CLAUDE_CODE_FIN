@@ -1,6 +1,21 @@
 # Production Trading Logic Analysis Report
 
-> **Date**: 2026-02-04 | **Version**: v1.25.0 | **Analyst**: Claude
+> **Date**: 2026-02-04 | **Version**: v1.25.0 → **현재 프로덕션: v1.27.0** | **Analyst**: Claude
+>
+> **Note**: 이 문서는 v1.25.0 시점(2026-02-04)의 코드 로직 분석 스냅샷입니다.
+> 코드 아키텍처(캔들 분류, 신호 탐지 흐름, Confidence 계산, 주문 관리, Early Exit 등)는
+> v1.27.0에서도 동일하게 유지됩니다. 아래 항목들이 변경되었으므로 참고하세요:
+>
+> | 항목 | v1.25.0 (본 문서) | v1.27.0 (현재) |
+> |------|------------------|----------------|
+> | 패턴 수 | 20 (10L+10S) | **52 (32L+20S)** |
+> | TP/SL 전략 | Per-pattern 원본값 | **Uniform TP 70%** (TP×0.7, SL 유지) |
+> | Daily Loss Limit | 10% | **7%** |
+> | 연속 손실 Pause | 없음 | **3연속 → 600초 일시정지** |
+> | EXPECTED_WIN_RATE | ~77% | **84.0** |
+> | 포트폴리오 성과 | WR 77.2%, PnL +1,346% | **WR 83.7%, PnL +911.1%, MDD 16.2%** |
+>
+> 최신 패턴 목록과 TP/SL 값은 `constants.py` 또는 `CLAUDE.md`를 참조하세요.
 
 ---
 
@@ -352,16 +367,23 @@ CB_MAX_TIMEOUT = 600            # 최대 타임아웃 (10분)
 ### 9.2 Daily Loss Limit
 
 ```python
-max_daily_loss_pct = 10.0  # -10% 도달 시 거래 중단
+max_daily_loss_pct = 7.0  # v1.27.0: -7% 도달 시 거래 중단 (v1.25.0: 10%)
 ```
 
-### 9.3 Cooldown Period
+### 9.3 Consecutive Loss Pause (v1.27.0 추가)
+
+```python
+CONSECUTIVE_LOSS_PAUSE_THRESHOLD = 3   # 3연속 손실 시
+CONSECUTIVE_LOSS_COOLDOWN = 600        # 600초(10분) 일시정지
+```
+
+### 9.4 Cooldown Period
 
 ```python
 cooldown_candles = 0  # 현재 비활성화 (즉시 재진입 가능)
 ```
 
-### 9.4 Duplicate Signal Prevention
+### 9.5 Duplicate Signal Prevention
 
 ```python
 if last_signal_candle == current_timestamp:
@@ -471,19 +493,23 @@ if last_signal_candle == current_timestamp:
 3. **Multi-Layer Validation**: Context Filter + Confidence Score
 4. **Robust Error Handling**: Circuit Breaker + Auto-Recovery
 
-### 12.2 Areas for Improvement
+### 12.2 Areas for Improvement (v1.25.0 시점)
 
-1. **Context Filter 연구 필요**: v1.25.0 패턴에 대한 Context Filter 미정의
-2. **Regime Detection 비활성화**: v1.19.0 이후 비활성화 상태
-3. **Confidence → Trade Outcome 상관관계**: 추가 연구 필요
+> **v1.27.0 업데이트**: 아래 3번 항목 외에는 후속 버전에서 진전 없음.
+> v1.26.x~v1.27.0에서는 패턴 포트폴리오 최적화와 TP/SL 연구에 집중.
+
+1. **Context Filter 연구 필요**: 52패턴에 대한 Context Filter 미정의 상태 유지
+2. **Regime Detection 비활성화**: v1.19.0 이후 비활성화 상태 유지
+3. ~~Confidence → Trade Outcome 상관관계~~ → v1.27.0 microstructure research에서 부분 분석
 
 ### 12.3 Recommendations
 
-1. v1.25.0 패턴에 대한 Context Filter 연구 수행
+1. 52패턴에 대한 Context Filter 연구 수행
 2. Confidence Score와 실제 거래 결과 상관관계 분석
 3. Walk-Forward 지속 모니터링 (월간 검증)
 
 ---
 
 **Report Generated**: 2026-02-04 02:00 KST
+**Updated**: 2026-02-11 (v1.27.0 아카이브 노트, 리스크 관리 섹션 추가)
 **Author**: Claude Code Analysis System

@@ -1,5 +1,7 @@
 # 에이전트별 작업 가이드
 
+> **Version**: v1.27.0 | **Updated**: 2026-02-11
+
 ---
 
 ## 🔧 dev 에이전트 가이드
@@ -14,23 +16,35 @@
 ```
 bingx_rl_trading_bot/
 ├── scripts/production/pattern_5m/   # 운영 코드 (14개 모듈)
-├── scripts/analysis/                # 연구 스크립트
+├── scripts/analysis/                # 연구 스크립트 (45+)
 ├── config/pattern_5m_config.yaml    # 전략 설정
-└── data/btc_5m_270days.csv         # 백테스트 데이터
+├── data/btc_5m_270days_reclassified.csv  # 백테스트 데이터 (270일, Ground Truth)
+└── results/                         # 봇 상태/메트릭 JSON
 ```
 
 ### 작업 프로토콜
 1. **코드 수정 전** CLAUDE.md의 Standard Research Protocol 숙지
-2. **백테스트 필수**: MC test (10k sims), WF 5-fold 검증
+2. **백테스트 필수**: MC sign randomization (10k sims), WF 5-fold 검증
 3. **Look-Ahead Bias 금지**: `shift(-1)`, `rolling(center=True)` 사용 금지
 4. **버전 관리**: 변경 시 CLAUDE.md Version History 업데이트
-5. **커밋 메시지**: `v1.XX.X: 간단한 설명`
+5. **커밋 메시지**: `feat(vX.XX.X): 간단한 설명`
 
-### 자주 쓰는 명령
+### 현재 전략 파라미터 (v1.27.0)
+- **패턴**: 52개 (32L+20S), Uniform TP 70% + Risk Management
+- **TP/SL**: Per-pattern 최적화 (v1.26.4 TP × 0.7, SL unchanged)
+- **레버리지**: 3x
+- **리스크**: 일일 손실 7%, 연속 3패 → 600초 pause
+
+### 자주 쓰는 연구 스크립트
 ```bash
-cd /home/sp/.openclaw/workspace/CLAUDE_CODE_FIN/bingx_rl_trading_bot
-python3 scripts/analysis/overfitting_diagnosis.py    # 과적합 진단
-python3 scripts/analysis/per_pattern_backtest.py     # 패턴별 백테스트
+cd C:/Users/J/OneDrive/CLAUDE_CODE_FIN/bingx_rl_trading_bot
+python scripts/analysis/uniform_tp_validation.py        # Uniform TP 검증
+python scripts/analysis/tp_sl_optimization_v1264.py     # TP/SL 최적화
+python scripts/analysis/tp_sl_deep_validation.py        # 심층 검증
+python scripts/analysis/distance_edge_decomposition.py  # Edge 분해
+python scripts/analysis/context_filter_research_v2.py   # Context filter 연구 (FAIL)
+python scripts/analysis/portfolio_pruning_v4.py         # 포트폴리오 프루닝
+python scripts/analysis/full_270d_revalidation.py       # 270일 전수 검증
 ```
 
 ---
@@ -44,19 +58,29 @@ python3 scripts/analysis/per_pattern_backtest.py     # 패턴별 백테스트
 
 ### 핵심 명령
 ```bash
+cd C:/Users/J/OneDrive/CLAUDE_CODE_FIN/bingx_rl_trading_bot
+
 # 봇 시작 (tmux)
-cd /home/sp/.openclaw/workspace/CLAUDE_CODE_FIN/bingx_rl_trading_bot
 tmux new-session -d -s pattern_5m "python3 scripts/production/pattern_5m_bot.py"
 
 # 봇 상태 확인
 tmux list-sessions | grep pattern_5m
-ps aux | grep pattern_5m_bot
 
 # 봇 중지
 tmux send-keys -t pattern_5m C-c
 
 # 로그 확인
 tail -50 logs/pattern_5m_bot_*.log
+```
+
+### 유틸리티 스크립트
+```bash
+python scripts/utils/check_status.py      # 봇 상태 확인
+python scripts/utils/monitor_simple.py     # 간단 모니터링
+python scripts/utils/get_current_balance.py # 잔고 조회
+python scripts/utils/verify_state.py       # 상태 검증
+python scripts/utils/stop_bot.py           # 봇 안전 중지
+python scripts/utils/safe_reset.py         # 안전 리셋
 ```
 
 ### 주의사항
@@ -89,21 +113,22 @@ tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"
 
 | 항목 | 확인 방법 | 알림 기준 |
 |------|----------|----------|
-| 봇 생존 | `ps aux \| grep pattern_5m` | 프로세스 없음 |
-| 연속 손실 | metrics.json → consecutive_losses | ≥ 5회 |
-| 일일 손실 | metrics.json → daily_pnl | ≤ -5% |
-| MDD | metrics.json → max_drawdown | ≥ 25% |
+| 봇 생존 | `tmux list-sessions` | 프로세스 없음 |
+| 연속 손실 | state.json → consecutive_losses | ≥ 3회 (v1.27.0: pause 발동) |
+| 일일 손실 | state.json → daily_pnl | ≤ -7% (v1.27.0: 자동 중단) |
+| MDD | metrics.json → max_drawdown | ≥ 20% |
 | API 에러 | 로그 grep ERROR | ≥ 10회/시간 |
-| WR 이탈 | metrics.json → win_rate | < 65% (20trades) |
+| WR 이탈 | state.json → winning_trades/total_trades | < 70% (20trades) |
+| 기대 WR | EXPECTED_WIN_RATE=84.0 | 실제 WR과 비교 |
 
-### 리포트 포맷 (Discord #monitor)
+### 리포트 포맷
 ```
-📊 Pattern 5m 성과 리포트 (YYYY-MM-DD HH:MM)
+📊 Pattern 5m v1.27.0 성과 리포트 (YYYY-MM-DD HH:MM)
 ━━━━━━━━━━━━━━━━━━━━
 • 상태: ✅ 운영중 / ❌ 중단
 • 오늘 거래: N건 (W승 L패)
 • 오늘 PnL: +X.XX%
-• 누적 WR: XX.X% (N trades)
-• 현재 MDD: X.X%
-• 열린 포지션: LONG/SHORT @ $XX,XXX
+• 누적 WR: XX.X% (N trades) | 기대: 84.0%
+• 연속손실: N회 / 일일손실: X.X%
+• 열린 포지션: LONG/SHORT [패턴명] @ $XX,XXX
 ```

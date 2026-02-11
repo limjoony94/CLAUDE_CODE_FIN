@@ -1,6 +1,6 @@
 # Coding Conventions - CLAUDE_CODE_FIN
 
-**Last Updated**: 2025-10-14
+**Last Updated**: 2026-02-11 | **Bot Version**: v1.27.0
 
 ---
 
@@ -11,11 +11,11 @@
 ### 1. Naming Conventions
 ```python
 # 클래스: PascalCase
-class BingXClient:
+class PatternBot:
     pass
 
 # 함수/메서드: snake_case
-def get_klines():
+def calculate_tp_sl():
     pass
 
 # 변수: snake_case
@@ -25,6 +25,7 @@ stop_loss_pct = 0.01
 # 상수: UPPER_CASE
 MAX_POSITION_SIZE = 0.95
 DEFAULT_LEVERAGE = 3
+EXPECTED_WIN_RATE = 84.0
 
 # Private 메서드/속성: _prefix
 def _calculate_indicators():
@@ -33,14 +34,12 @@ def _calculate_indicators():
 
 ### 2. Type Hints (Required)
 ```python
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 
-def get_balance() -> Dict[str, Any]:
-    """계정 잔고 조회"""
-    pass
-
-def process_data(data: List[Dict], limit: Optional[int] = None) -> pd.DataFrame:
-    """데이터 전처리"""
+def calculate_tp_sl(
+    entry_price: float, direction: str, tp_pct: float, sl_pct: float
+) -> Tuple[float, float]:
+    """TP/SL 가격 계산"""
     pass
 ```
 
@@ -65,8 +64,8 @@ def create_order(
         주문 결과 딕셔너리
 
     Raises:
-        BingXAPIError: API 호출 실패 시
-        BingXInsufficientBalanceError: 잔고 부족 시
+        ccxt.NetworkError: 네트워크 오류 시
+        ccxt.InsufficientFunds: 잔고 부족 시
     """
     pass
 ```
@@ -77,38 +76,42 @@ def create_order(
 indicators = calculate_indicators(data)
 
 # LONG 포지션 진입 조건 확인
-if signal > 0.7 and current_position is None:
-    # 포지션 사이징 계산
-    position_size = calculate_position_size(balance, risk_pct)
+if pattern in VALIDATED_LONG_PATTERNS:
+    # Per-pattern TP/SL 조회
+    tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pattern]
 ```
 
 ### 5. Imports Organization
 ```python
 # 1. Standard library
 import os
-import sys
+import json
 from typing import Dict, List, Optional
+from datetime import datetime
 
 # 2. Third-party
 import numpy as np
 import pandas as pd
+import ccxt
 from loguru import logger
 
-# 3. Local imports
-from src.api.bingx_client import BingXClient
-from src.models.xgboost_model import XGBoostModel
+# 3. Local imports (relative within pattern_5m package)
+from .constants import VALIDATED_LONG_PATTERNS, PATTERN_OPTIMAL_TPSL
+from .models import PositionState
+from .exchange import create_exchange
 ```
 
 ### 6. Error Handling
 ```python
-# 커스텀 예외 사용
+# CCXT 예외 사용
 try:
-    result = client.create_order(...)
-except BingXInsufficientBalanceError:
+    result = exchange.create_order(...)
+except ccxt.InsufficientFunds:
     logger.error("잔고 부족")
     return None
-except BingXAPIError as e:
-    logger.error(f"API 에러: {e}")
+except ccxt.NetworkError as e:
+    logger.error(f"네트워크 에러: {e}")
+    # Circuit Breaker 처리
     raise
 ```
 
@@ -117,63 +120,54 @@ except BingXAPIError as e:
 from loguru import logger
 
 # 정보성 로그
-logger.info(f"Position opened: {side} {quantity} @ {price}")
+logger.info(f"Position opened: {direction} {quantity} @ {price}")
 
 # 경고
-logger.warning(f"High volatility detected: {volatility:.2f}%")
+logger.warning(f"Daily loss limit approaching: {daily_pnl:.2f}%")
 
 # 에러
 logger.error(f"Order failed: {error_msg}")
 
 # 디버그 (개발 중에만)
-logger.debug(f"Feature vector: {features}")
+logger.debug(f"Pattern detected: {pattern} → {direction}")
 ```
 
-### 8. Code Organization
-```python
-class TradingBot:
-    """트레이딩 봇 메인 클래스"""
-
-    # ========== 초기화 ==========
-
-    def __init__(self, config: Dict):
-        """초기화"""
-        pass
-
-    # ========== 데이터 수집 ==========
-
-    def fetch_market_data(self) -> pd.DataFrame:
-        """시장 데이터 수집"""
-        pass
-
-    # ========== 신호 생성 ==========
-
-    def generate_signal(self, data: pd.DataFrame) -> float:
-        """매매 신호 생성"""
-        pass
-
-    # ========== 주문 실행 ==========
-
-    def execute_order(self, signal: float) -> bool:
-        """주문 실행"""
-        pass
-
-    # ========== 유틸리티 ==========
-
-    def _calculate_position_size(self, balance: float) -> float:
-        """포지션 사이징 계산 (Private)"""
-        pass
+### 8. Module Organization (pattern_5m)
+```
+pattern_5m/
+├── bot.py              # 메인 루프 — 봇 시작/정지
+├── config.py           # 설정 로딩 — YAML 파싱
+├── constants.py        # 패턴/TP-SL/상수 — 전략 파라미터
+├── exchange.py         # BingX API — CCXT 래퍼
+├── indicators.py       # 지표 계산 — RSI, ATR, 캔들 분류
+├── models.py           # 데이터클래스 — PositionState 등
+├── orders.py           # 주문 관리 — TP/SL 배치/검증
+├── position.py         # Facade — 진입/청산/모니터링 통합
+├── position_open.py    # 진입 로직 — 사이징, 주문, 상태 업데이트
+├── position_monitor.py # 모니터링 — Early Exit, 동기화
+├── position_close.py   # 청산 로직 — TP/SL/수동 청산
+├── signals.py          # 신호 탐지 — 패턴 매칭, Context Filter
+├── state.py            # 상태 관리 — JSON 저장/로드
+└── utils/              # 유틸리티 — lock, logging
 ```
 
 ---
 
 ## File Organization Principles
 
-### src/ vs scripts/ 구분
-- **src/**: 재사용 가능한 모듈, 클래스, 함수 (라이브러리 코드)
-- **scripts/**: 일회성 실행 스크립트, 실험, 분석 도구
+### 프로젝트 구조
+- **scripts/production/pattern_5m/**: 프로덕션 봇 코드 (14 모듈)
+- **scripts/analysis/**: 연구 및 백테스트 스크립트
+- **scripts/data/**: 데이터 수집 스크립트
+- **scripts/utils/**: 운영 유틸리티 (모니터링, 상태 확인)
+- **config/**: YAML 설정 파일
+- **data/**: 시장 데이터 CSV (Ground Truth)
+- **results/**: 봇 상태/메트릭 JSON
+- **claudedocs/**: 연구 프로토콜 및 분석 문서
+- **archive/**: 레거시 코드 및 실험 (참고용)
 
 ### Documentation Hierarchy
-- **Root-level MD**: 프로젝트 현황 및 Quick Start
-- **claudedocs/**: 핵심 의사결정 문서 (3-6개 유지)
-- **archive/**: 과거 기록 및 실험 문서 (참고용)
+- **CLAUDE.md**: 프로젝트 핵심 문서 (전략, 파라미터, 버전 히스토리)
+- **docs/**: 가이드 및 컨벤션 문서
+- **claudedocs/**: 연구 프로토콜 및 분석 리포트
+- **archive/**: 과거 기록 (참고용)

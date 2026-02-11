@@ -107,6 +107,9 @@ def verify_position_mode(exchange: ccxt.bingx, config: Dict[str, Any]) -> bool:
             except ccxt.ExchangeError as e:
                 if 'No need to change' in str(e) or 'same' in str(e).lower():
                     logger.info("✅ Position mode already One-Way")
+                else:
+                    logger.warning(f"⚠️ Unexpected error setting position mode: {e}")
+                    return False
 
         return True
     except ccxt.NetworkError as e:

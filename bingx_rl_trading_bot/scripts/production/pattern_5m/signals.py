@@ -538,10 +538,7 @@ def _save_confidence_to_csv(
     from datetime import datetime
 
     try:
-        # Get project root (relative to this file)
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
-        csv_path = os.path.join(project_root, CONFIDENCE_LOG_FILE)
+        csv_path = CONFIDENCE_LOG_FILE
 
         # Ensure directory exists
         os.makedirs(os.path.dirname(csv_path), exist_ok=True)

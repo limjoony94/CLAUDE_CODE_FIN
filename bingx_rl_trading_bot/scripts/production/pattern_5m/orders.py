@@ -481,11 +481,11 @@ def cancel_remaining_orders(
                 exchange.cancel_order(tp_order_id, symbol)
                 logger.info(f"🗑️ Cancelled TP order: {tp_order_id}")
             except ccxt.OrderNotFound:
-                pass
-            except ccxt.ExchangeError:
-                pass
-            except Exception:
-                pass
+                logger.debug(f"TP order already filled/cancelled: {tp_order_id}")
+            except ccxt.ExchangeError as e:
+                logger.warning(f"⚠️ Failed to cancel TP order {tp_order_id}: {e}")
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to cancel TP order {tp_order_id}: {e}")
 
         # Cancel SL order
         if sl_order_id and sl_order_id in open_order_ids:
@@ -493,11 +493,11 @@ def cancel_remaining_orders(
                 exchange.cancel_order(sl_order_id, symbol)
                 logger.info(f"🗑️ Cancelled SL order: {sl_order_id}")
             except ccxt.OrderNotFound:
-                pass
-            except ccxt.ExchangeError:
-                pass
-            except Exception:
-                pass
+                logger.debug(f"SL order already filled/cancelled: {sl_order_id}")
+            except ccxt.ExchangeError as e:
+                logger.warning(f"⚠️ Failed to cancel SL order {sl_order_id}: {e}")
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to cancel SL order {sl_order_id}: {e}")
 
     except ccxt.NetworkError as e:
         logger.error(f"Failed to cancel remaining orders (network): {e}")

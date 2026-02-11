@@ -579,18 +579,39 @@ def _log_position_status(
     cache: APICache,
     exchange: ccxt.bingx,
 ) -> None:
-    """Log current position status."""
+    """Log current position status with TP/SL progress."""
     try:
+        import re
+
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
         current_price = ticker['last']
         direction = 1 if position['direction'] == 'LONG' else -1
         pnl_pct = direction * (current_price / position['entry_price'] - 1) * 100 * config['leverage']
 
+        # Extract pattern name
+        pattern_match = re.search(r'Pattern:\s*(\S+)', position.get('reason', ''))
+        pattern_name = pattern_match.group(1) if pattern_match else ''
+
+        # Calculate TP/SL progress (0% = at entry, 100% = at target)
+        entry = position['entry_price']
+        tp = position.get('tp_price', 0)
+        sl = position.get('sl_price', 0)
+
+        tp_progress = 0
+        sl_progress = 0
+        if tp and entry and tp != entry:
+            tp_progress = max(0, direction * (current_price - entry) / (direction * (tp - entry)) * 100)
+        if sl and entry and sl != entry:
+            sl_progress = max(0, -direction * (current_price - entry) / (-direction * (sl - entry)) * 100)
+
+        dir_label = position['direction']
+        pattern_str = f" {pattern_name}" if pattern_name else ""
+
         logger.info(
-            f"📊 Position: {position['direction']} | "
-            f"Entry: ${position['entry_price']:.1f} | "
-            f"Current: ${current_price:.1f} | "
-            f"PnL: {pnl_pct:+.2f}%"
+            f"📊 {dir_label}{pattern_str} | "
+            f"${entry:.1f} → ${current_price:.1f} | "
+            f"PnL: {pnl_pct:+.2f}% (lev) | "
+            f"TP {tp_progress:.0f}% done | SL {sl_progress:.0f}%"
         )
     except ccxt.NetworkError as e:
         logger.debug(f"Could not log position status (network error): {e}")

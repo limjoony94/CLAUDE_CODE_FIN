@@ -87,11 +87,11 @@ def sync_position_with_exchange(
         # Exchange has position but state doesn't
         if not state_position:
             if exchange_long:
-                logger.warning("Exchange has LONG position but state doesn't - recovering")
+                logger.info("Exchange has LONG position but state doesn't - recovering")
                 recover_position_to_state(state, config, exchange_long, 'LONG', exchange, cache)
                 return True
             elif exchange_short:
-                logger.warning("Exchange has SHORT position but state doesn't - recovering")
+                logger.info("Exchange has SHORT position but state doesn't - recovering")
                 recover_position_to_state(state, config, exchange_short, 'SHORT', exchange, cache)
                 return True
 

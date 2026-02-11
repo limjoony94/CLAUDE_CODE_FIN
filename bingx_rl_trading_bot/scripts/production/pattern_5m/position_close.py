@@ -4,6 +4,7 @@ Functions for closing positions and crash recovery.
 """
 
 import logging
+import os
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 
@@ -116,7 +117,32 @@ def record_closed_position(
     pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100 * config['leverage']
     pnl_pct -= 2 * FEE_PCT * config['leverage']
 
-    logger.info(f"Position closed: {exit_reason} | Exit: ${exit_price:.1f} | PnL: {pnl_pct:+.2f}%")
+    # Calculate price-basis PnL (without leverage) for log clarity
+    price_pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100
+    price_pnl_pct -= 2 * FEE_PCT
+
+    # Extract pattern name from reason
+    import re
+    pattern_match = re.search(r'Pattern:\s*(\S+)', position.get('reason', ''))
+    pattern_name = pattern_match.group(1) if pattern_match else 'N/A'
+
+    # Calculate hold time
+    entry_time_str = position.get('entry_time', '')
+    hold_minutes = 0
+    if entry_time_str:
+        try:
+            entry_dt = datetime.fromisoformat(entry_time_str)
+            hold_minutes = int((datetime.now() - entry_dt).total_seconds() / 60)
+        except (ValueError, TypeError):
+            pass
+
+    logger.info(
+        f"🏁 TRADE CLOSED | {position['direction']} {pattern_name} | "
+        f"Entry: ${position['entry_price']:.1f} → Exit: ${exit_price:.1f} | "
+        f"PnL: {pnl_pct:+.2f}% (lev) / {price_pnl_pct:+.2f}% (price) | "
+        f"TP: ${position.get('tp_price', 0):.1f} SL: ${position.get('sl_price', 0):.1f} | "
+        f"Reason: {exit_reason} | Hold: {hold_minutes}m"
+    )
 
     # Update metrics
     if metrics:

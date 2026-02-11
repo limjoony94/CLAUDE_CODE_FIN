@@ -120,7 +120,7 @@ def open_position(
         # Calculate position size
         quantity, available = get_position_size(exchange, config, cache, circuit_breaker, metrics)
         if quantity is None or quantity <= 0:
-            logger.warning("Invalid position size, skipping")
+            logger.warning(f"Invalid position size (qty={quantity}, balance=${available}), skipping")
             return False
 
         # Get estimated price

@@ -421,13 +421,6 @@ EARLY_EXIT_MIN_PROFIT_PCT = EARLY_EXIT_CONFIG['min_profit_pct']
 # CACHE_TTL_BALANCE = 5
 # CACHE_TTL_POSITIONS = 5
 
-# Circuit breaker
-CIRCUIT_BREAKER_THRESHOLD = 5  # consecutive failures
-CIRCUIT_BREAKER_TIMEOUT = 60   # seconds
-
-# Polling interval
-CANDLE_POLL_INTERVAL = 60  # seconds (check every minute)
-
 # Min data bars for classification
 MIN_BARS_FOR_CLASSIFICATION = 25  # Need 20 for avg_body + 5 buffer
 
@@ -468,7 +461,6 @@ QTY_REDUCTION_THRESHOLD = 0.99
 CANDLE_DURATION_MS = 300000  # 5 minutes
 CANDLE_SETTLE_SECONDS = 5  # v1.25.1: Reduced from 15 (BingX delivers BTC 5m in 2-3s)
 DEFAULT_SLEEP_INTERVAL = 10  # v1.25.1: Error fallback only (candle-aligned loop replaces polling)
-POSITION_CHECK_SLEEP = 30  # DEPRECATED (v1.25.1): candle-aligned loop replaces polling
 
 # Candle-aligned loop timing (v1.25.1)
 TRADING_WINDOW_SECONDS = 30     # First 30s after candle close = trading window
@@ -486,13 +478,7 @@ MAX_EXIT_PRICE_RETRIES = 3
 # ============================================================
 # INTERVAL CONSTANTS
 # ============================================================
-# DEPRECATED: Iteration-based intervals replaced by time-based (v1.25.1).
-# Kept only for DEFAULT_CONFIG and backward compat.
-TP_SL_CHECK_INTERVAL = 20           # DEPRECATED: use TP_SL_VERIFY_INTERVAL_SECONDS
-DEFAULT_HEALTH_CHECK_INTERVAL = 50  # Used in DEFAULT_CONFIG
-LOG_STATUS_INTERVAL = 10            # DEPRECATED: use LOG_STATUS_INTERVAL_SECONDS
 MAX_OHLCV_CANDLES = 150  # v1.18.2: Increased from 100 for regime detection (needs 114+)
-METRICS_SAVE_INTERVAL = 10          # DEPRECATED: use METRICS_SAVE_INTERVAL_SECONDS
 CACHE_TTL_SECONDS = 5               # Used in models.py APICache
 
 # Time-based intervals (v1.25.1: replaces iteration-based in main loop)
@@ -578,5 +564,4 @@ DEFAULT_CONFIG = {
     },
     'debug_mode': False,
     'json_logging': False,
-    'health_check_interval': DEFAULT_HEALTH_CHECK_INTERVAL,
 }

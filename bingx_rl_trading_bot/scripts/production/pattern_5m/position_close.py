@@ -122,7 +122,6 @@ def record_closed_position(
     price_pnl_pct -= 2 * FEE_PCT
 
     # Extract pattern name from reason
-    import re
     pattern_match = re.search(r'Pattern:\s*(\S+)', position.get('reason', ''))
     pattern_name = pattern_match.group(1) if pattern_match else 'N/A'
 

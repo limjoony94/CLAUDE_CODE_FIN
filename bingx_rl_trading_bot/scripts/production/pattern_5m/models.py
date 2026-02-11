@@ -267,4 +267,6 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
         metrics.api_call_count = data.get('api_call_count', 0)
         metrics.recent_wins = data.get('recent_wins', [])
         metrics.recent_losses = data.get('recent_losses', [])
+        metrics.session_start = data.get('session_start', '')
+        metrics.last_updated = data.get('last_updated', '')
         return metrics

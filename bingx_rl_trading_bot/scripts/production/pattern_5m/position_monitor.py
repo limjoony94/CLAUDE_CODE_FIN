@@ -286,6 +286,10 @@ def _handle_position_closed(
     # Import here to avoid circular dependency
     from .position_close import record_closed_position
 
+    logger.info(
+        f"🔍 Position closure detected: {position['direction']} "
+        f"(entry=${position['entry_price']:.1f}), fetching exit details..."
+    )
     time.sleep(EXIT_PRICE_INITIAL_DELAY)
 
     actual_exit = None

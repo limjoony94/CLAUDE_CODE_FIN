@@ -30,6 +30,8 @@ from .constants import (
     MAX_OHLCV_CANDLES,
     DEFAULT_SLEEP_INTERVAL,
     DAILY_LOSS_PAUSE_SECONDS,
+    CONSECUTIVE_LOSS_PAUSE_SECONDS,
+    MAX_CONSECUTIVE_LOSSES,
     CANDLE_SETTLE_SECONDS,
     CANDLE_DURATION_MS,
     POSITION_SYNC_INTERVAL_MINUTES,
@@ -267,11 +269,11 @@ def _run_bot_main(
 
             # Check consecutive loss limit (v1.27.0)
             if check_consecutive_loss_limit(state) and not state.get('position'):
-                from .constants import CONSECUTIVE_LOSS_PAUSE_SECONDS, MAX_CONSECUTIVE_LOSSES
                 consec = state.get('consecutive_losses', 0)
                 logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), pausing {CONSECUTIVE_LOSS_PAUSE_SECONDS}s")
                 _interruptible_sleep(CONSECUTIVE_LOSS_PAUSE_SECONDS)
                 state['consecutive_losses'] = 0  # Reset after pause
+                save_state(state)  # Persist reset to prevent re-pause on crash
                 continue
 
             timing = _get_candle_timing()

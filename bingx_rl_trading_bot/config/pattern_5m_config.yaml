@@ -11,7 +11,7 @@ margin_mode: crossed
 position_mode: one-way
 position_size_pct: 95
 risk:
-  max_daily_loss_pct: 10
+  max_daily_loss_pct: 5    # v1.27.3: 7% → 5% (genuine forward edge smaller than backtest)
   max_position_size_usd: 10000
 rotation:
   enabled: false

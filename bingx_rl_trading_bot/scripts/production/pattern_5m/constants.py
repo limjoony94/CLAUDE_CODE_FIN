@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.27.2"  # v1.27.2: Remove U-H-BU (SL 0.3% execution infeasible)
+BOT_VERSION = "1.27.3"  # v1.27.3: Expectation reset — genuine forward WR 68.5%, daily limit 5%
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -513,10 +513,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 85.0  # v1.27.2: U-H-BU removed — portfolio WR 84.9%
-EXPECTED_AVG_WIN = 5.38   # R:R >= 0.75, TP range 0.5-3.0%
-EXPECTED_AVG_LOSS = 4.24  # SL range 0.7-2.0%
-EXPECTED_EDGE = 50.0      # Conservative estimate
+EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
+EXPECTED_AVG_WIN = 3.5    # v1.27.3: live avg_win ~3.09, forward estimate 3.5
+EXPECTED_AVG_LOSS = 5.5   # v1.27.3: live avg_loss ~5.69, forward estimate 5.5
+EXPECTED_EDGE = 15.0      # v1.27.3: genuine edge ~10-20% (was 50% — inflated by look-ahead)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 
@@ -553,7 +553,7 @@ DEFAULT_CONFIG = {
         'short_patterns': VALIDATED_SHORT_PATTERNS,
     },
     'risk': {
-        'max_daily_loss_pct': 7,  # v1.27.0: 10% → 7% (risk_management_research.py)
+        'max_daily_loss_pct': 5,  # v1.27.3: 7% → 5% (genuine forward edge smaller than backtest)
         'max_position_size_usd': 10000,
     },
     'api': {

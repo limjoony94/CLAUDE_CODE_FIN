@@ -1,0 +1,240 @@
+{
+  "meta": {
+    "script": "extended_rediscovery_v2_tpsl.py",
+    "timestamp": "2026-02-12T18:12:05.325603",
+    "data_days": 720
+  },
+  "atr_analysis": {
+    "percentiles": {
+      "p10": 0.0728,
+      "p25": 0.1054,
+      "p50": 0.1562,
+      "p75": 0.2346,
+      "p90": 0.3447,
+      "p95": 0.4323,
+      "p99": 0.6621
+    },
+    "median": 0.1562
+  },
+  "mfe_mae": {
+    "5": {
+      "mfe_p50": 0.143,
+      "mfe_p75": 0.285,
+      "mfe_p90": 0.497,
+      "mae_p50": 0.143,
+      "mae_p75": 0.286,
+      "mae_p90": 0.507
+    },
+    "10": {
+      "mfe_p50": 0.207,
+      "mfe_p75": 0.406,
+      "mfe_p90": 0.706,
+      "mae_p50": 0.205,
+      "mae_p75": 0.408,
+      "mae_p90": 0.729
+    },
+    "20": {
+      "mfe_p50": 0.298,
+      "mfe_p75": 0.584,
+      "mfe_p90": 1.01,
+      "mae_p50": 0.295,
+      "mae_p75": 0.587,
+      "mae_p90": 1.063
+    },
+    "50": {
+      "mfe_p50": 0.488,
+      "mfe_p75": 0.953,
+      "mfe_p90": 1.627,
+      "mae_p50": 0.485,
+      "mae_p75": 0.966,
+      "mae_p90": 1.749
+    },
+    "100": {
+      "mfe_p50": 0.721,
+      "mfe_p75": 1.399,
+      "mfe_p90": 2.351,
+      "mae_p50": 0.711,
+      "mae_p75": 1.435,
+      "mae_p90": 2.531
+    },
+    "200": {
+      "mfe_p50": 1.08,
+      "mfe_p75": 2.085,
+      "mfe_p90": 3.413,
+      "mae_p50": 1.057,
+      "mae_p75": 2.148,
+      "mae_p90": 3.586
+    },
+    "500": {
+      "mfe_p50": 1.848,
+      "mfe_p75": 3.418,
+      "mfe_p90": 5.317,
+      "mae_p50": 1.8,
+      "mae_p75": 3.483,
+      "mae_p90": 5.85
+    }
+  },
+  "strategies": {
+    "A_Original": {
+      "total_pnl": -64.6,
+      "total_trades": 243,
+      "avg_wr": 37.0,
+      "folds_positive": 1,
+      "total_folds": 3,
+      "per_fold": [
+        {
+          "pnl": 14.38,
+          "trades": 66,
+          "wr": 51.5,
+          "mdd": 10.36,
+          "pf": 1.32,
+          "discovered": 35
+        },
+        {
+          "pnl": -50.86,
+          "trades": 79,
+          "wr": 30.4,
+          "mdd": 50.73,
+          "pf": 0.46,
+          "discovered": 41
+        },
+        {
+          "pnl": -28.15,
+          "trades": 98,
+          "wr": 33.7,
+          "mdd": 35.13,
+          "pf": 0.72,
+          "discovered": 26
+        }
+      ]
+    },
+    "B_Tight": {
+      "total_pnl": -17.7,
+      "total_trades": 86,
+      "avg_wr": 46.5,
+      "folds_positive": 0,
+      "total_folds": 3,
+      "per_fold": [
+        {
+          "pnl": -8.16,
+          "trades": 45,
+          "wr": 51.1,
+          "mdd": 10.1,
+          "pf": 0.5,
+          "discovered": 9
+        },
+        {
+          "pnl": -5.26,
+          "trades": 34,
+          "wr": 47.1,
+          "mdd": 8.95,
+          "pf": 0.59,
+          "discovered": 5
+        },
+        {
+          "pnl": -4.25,
+          "trades": 7,
+          "wr": 28.6,
+          "mdd": 3.45,
+          "pf": 0.08,
+          "discovered": 3
+        }
+      ]
+    },
+    "C_ATR": {
+      "total_pnl": 2.8,
+      "total_trades": 3,
+      "avg_wr": 100.0,
+      "folds_positive": 1,
+      "total_folds": 3,
+      "per_fold": [
+        {
+          "pnl": 0,
+          "trades": 0,
+          "wr": 0,
+          "mdd": 0,
+          "pf": 0,
+          "discovered": 0
+        },
+        {
+          "pnl": 0,
+          "trades": 0,
+          "wr": 0,
+          "mdd": 0,
+          "pf": 0,
+          "discovered": 0
+        },
+        {
+          "pnl": 2.77,
+          "trades": 3,
+          "wr": 100.0,
+          "mdd": 0.0,
+          "pf": 999,
+          "discovered": 1
+        }
+      ]
+    }
+  },
+  "verdict": "MARGINAL IMPROVEMENT \u2014 some benefit but not conclusive",
+  "grids": {
+    "A": {
+      "tp": [
+        0.3,
+        0.5,
+        0.7,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0
+      ],
+      "sl": [
+        0.5,
+        0.7,
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0
+      ],
+      "max_bars": 500
+    },
+    "B": {
+      "tp": [
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.4,
+        0.5,
+        0.7,
+        1.0
+      ],
+      "sl": [
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.4,
+        0.5,
+        0.7,
+        1.0
+      ],
+      "max_bars": 100
+    },
+    "C": {
+      "atr_mults": [
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        2.0,
+        2.5,
+        3.0
+      ],
+      "max_bars": 100
+    }
+  }
+}

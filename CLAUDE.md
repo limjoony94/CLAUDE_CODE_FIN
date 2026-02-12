@@ -39,7 +39,7 @@
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-5%, MDD ≥25%, WR <60% | EXPECTED_WIN_RATE=68.0 (v1.27.3)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-10%, MDD ≥25%, WR <60% | EXPECTED_WIN_RATE=68.0 (v1.28.0)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
@@ -57,7 +57,7 @@
 | Leverage | 3x |
 | Timeframe | 5m |
 | Quality Filter | **T5 leave-one-out + MC/edge cleanup + Uniform TP 70% + Legacy reopt + Low-WR review** |
-| Risk | Daily loss **5%** (v1.27.3), 3-consecutive-loss pause |
+| Risk | Daily loss **10%** (v1.28.0), 3-consecutive-loss pause |
 
 ### 270일 종합 검증 결과
 
@@ -314,7 +314,7 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.28.0** | 02-12 | **Static→Dynamic 프로덕션 전환**. Universal TP 2.0/SL 3.0 + 75패턴 (28L+47S). True WF OOS: Universal +562% vs Per-pattern +416% (per-pattern이 173.6% look-ahead bias). Expected per-trade: +1.10% (기존 +0.62% 대비 +77%). pattern_source: dynamic 활성화. Rollback: static 한 줄 변경 ← **현재** |
+| **v1.28.0** | 02-12 | **Static→Dynamic 프로덕션 전환**. Universal TP 2.0/SL 3.0 + 75패턴 (28L+47S). True WF OOS: Universal +562% vs Per-pattern +416% (per-pattern이 173.6% look-ahead bias). Expected per-trade: +1.10% (기존 +0.62% 대비 +77%). pattern_source: dynamic 활성화. Daily limit 5→10% (1회 SL=9.1%). Rollback: static 한 줄 변경 ← **현재** |
 | v1.27.3 | 02-12 | Expectation reset + Dynamic WF Pattern Selection 인프라. 백테스트 PnL의 90%가 look-ahead bias, 순수 forward edge +80.5%/68.5% WR. EXPECTED_WIN_RATE 85→68, daily limit 7→5%. Dynamic pattern_source 모드 추가 (scanner CLI → Universal TP 2.0/SL 3.0, 75패턴=28L+47S). 90일 OOS 테스트 대기 (2026-04-30 목표) |
 | v1.27.2 | 02-12 | Low-WR pattern review: U-H-BU 제거 (SL 0.3% 실전 불가), 51패턴 (32L+19S), PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x + 25개 개별 검증 + Pattern-Rediscovery WF + Strategy Options Evaluation |
 | v1.27.1 | 02-12 | Legacy pattern re-optimization: 15/21 legacy 패턴 TP/SL 재최적화 (9 MC fix + 6 upgrade), PnL +956.2%, MDD 16.2%, PnL/MDD 59.0x, PF 3.82, WR 82.1% |

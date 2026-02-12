@@ -34,6 +34,7 @@ CONFIG_FILE = os.path.join(PROJECT_ROOT, "config", "pattern_5m_config.yaml")
 STATE_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot_state.json")
 LOCK_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot.lock")
 METRICS_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_metrics.json")
+DYNAMIC_PATTERNS_FILE = os.path.join(PROJECT_ROOT, "results", "dynamic_patterns.json")
 LOG_DIR = os.path.join(PROJECT_ROOT, "logs")
 API_KEYS_FILE = os.path.join(PROJECT_ROOT, "config", "api_keys.yaml")
 

@@ -43,7 +43,7 @@ from .constants import (
     METRICS_SAVE_INTERVAL_SECONDS,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
-from .config import load_config, validate_config
+from .config import load_config, validate_config, load_dynamic_patterns
 from .state import (
     load_state,
     save_state,
@@ -171,6 +171,7 @@ def run_bot(config_file: str = CONFIG_FILE) -> None:
 
     # Load configuration
     config = load_config(config_path)
+    config = load_dynamic_patterns(config)
     validate_config(config)
 
     # Setup logging

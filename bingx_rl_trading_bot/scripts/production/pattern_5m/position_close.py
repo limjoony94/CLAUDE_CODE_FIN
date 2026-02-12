@@ -212,7 +212,7 @@ def recover_position_to_state(
 
     # Use shared calculate_tp_sl (supports per-pattern TP/SL via needs_tpsl)
     tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
-        entry_price, dir_mult, strategy, vol_mult=1.0
+        entry_price, dir_mult, strategy, vol_mult=1.0, config=config
     )
 
     logger.info(f"Recovered {direction} position: entry=${entry_price:.1f}")
@@ -288,7 +288,7 @@ def recalculate_position_orders(
     regime_tp_sl = position.get('regime_tp_sl')
 
     tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
-        entry_price, direction, strategy, vol_mult, pattern_name, regime_tp_sl
+        entry_price, direction, strategy, vol_mult, pattern_name, regime_tp_sl, config
     )
 
     position['tp_price'] = tp_price

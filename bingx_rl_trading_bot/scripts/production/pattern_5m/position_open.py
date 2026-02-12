@@ -174,7 +174,7 @@ def open_position(
         current_regime = state.get('current_regime', 'UNKNOWN')
 
         tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = calculate_tp_sl(
-            actual_entry_price, direction, strategy, vol_mult, pattern, regime_tp_sl
+            actual_entry_price, direction, strategy, vol_mult, pattern, regime_tp_sl, config
         )
 
         # v1.18: Log regime-specific TP/SL usage
@@ -341,15 +341,27 @@ def calculate_tp_sl(
     vol_mult: float,
     pattern: Optional[str] = None,
     regime_tp_sl: Optional[tuple] = None,
+    config: Optional[Dict[str, Any]] = None,
 ) -> tuple:
     """Calculate TP and SL prices — single source of truth.
 
     Used by: open_position, refill_position, recover_position_to_state,
              recalculate_position_orders.
 
-    v1.18: Priority: regime_tp_sl > PATTERN_OPTIMAL_TPSL > strategy defaults
-    v1.6: Uses pattern-specific TP/SL from PATTERN_OPTIMAL_TPSL if available.
+    Priority: dynamic_universal > regime_tp_sl > PATTERN_OPTIMAL_TPSL > strategy defaults
     """
+    # Dynamic Universal TP/SL mode (highest priority)
+    if config and config.get('_dynamic_tpsl_universal'):
+        base_tp_pct = config['_dynamic_tp']
+        base_sl_pct = config['_dynamic_sl']
+        logger.debug(f"Using dynamic universal TP/SL: TP={base_tp_pct}%, SL={base_sl_pct}%")
+
+        tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
+        sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT
+        tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+        sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+        return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
+
     # v1.18: Check for regime-specific TP/SL first (highest priority)
     if regime_tp_sl:
         base_tp_pct, base_sl_pct = regime_tp_sl
@@ -513,7 +525,7 @@ def refill_position(
         regime_tp_sl = position.get('regime_tp_sl')
 
         tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = calculate_tp_sl(
-            new_avg_entry, direction, strategy, vol_mult, pattern, regime_tp_sl
+            new_avg_entry, direction, strategy, vol_mult, pattern, regime_tp_sl, config
         )
 
         logger.info(f"New TP: ${tp_price:.1f} | New SL: ${sl_price:.1f}")

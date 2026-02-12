@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.27.1 | **Bot**: Pattern 5m (52패턴, 32L+20S) | **Updated**: 2026-02-12
+> **Version**: v1.27.2 | **Bot**: Pattern 5m (51패턴, 32L+19S) | **Updated**: 2026-02-12
 
 ---
 
@@ -37,12 +37,12 @@
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-7%, MDD ≥25%, WR <70% (EXPECTED_WIN_RATE=84.0)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-7%, MDD ≥25%, WR <70% (EXPECTED_WIN_RATE=85.0)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.27.1
+## 📊 현재 전략: Pattern 5m v1.27.2
 
 ### 핵심 파라미터
 
@@ -54,26 +54,26 @@
 | Double Exit | 50%@0.8x + 50%@1.0x |
 | Leverage | 3x |
 | Timeframe | 5m |
-| Quality Filter | **T5 leave-one-out + MC/edge cleanup + Uniform TP 70% + Legacy reopt** |
+| Quality Filter | **T5 leave-one-out + MC/edge cleanup + Uniform TP 70% + Legacy reopt + Low-WR review** |
 | Risk | Daily loss 7%, 3-consecutive-loss pause |
 
 ### 270일 종합 검증 결과
 
-| 지표 | v1.27.0 | v1.27.1 |
+| 지표 | v1.27.1 | v1.27.2 |
 |------|---------|---------|
-| Patterns | 52 (32L+20S) | **52 (32L+20S)** |
-| PnL | +911.1% | **+956.2%** |
+| Patterns | 52 (32L+20S) | **51 (32L+19S)** |
+| PnL | +956.2% | **+966.0%** |
 | MDD | 16.2% | **16.2%** |
-| PnL/MDD | 56.2x | **59.0x** |
-| WR | 83.7% | **82.1%** |
-| PF | 3.62 | **3.82** |
-| Trades | 386 | **341** |
+| PnL/MDD | 59.0x | **59.6x** |
+| WR | 82.1% | **84.9%** |
+| PF | 3.82 | **3.87** |
+| Trades | 341 | **339** |
 | Max Consec Loss | 2 | **2** |
-| MC MDD P99 | 40.2% | **41.0%** |
-| Change | All TP * 0.7 | 15 legacy patterns re-optimized |
-| Research | uniform_tp_validation | tp_sl_lineage_analysis + tp_sl_reoptimization_v1270 |
+| MC MDD P99 | 41.0% | **TBD** |
+| Change | 15 legacy patterns re-optimized | U-H-BU removed (SL 0.3% infeasible) |
+| Research | tp_sl_lineage_analysis + tp_sl_reoptimization_v1270 | low_wr_pattern_review + low_wr_individual_validation |
 
-### LONG Patterns (32) — v1.27.1
+### LONG Patterns (32) — v1.27.2
 
 | Pattern | TP/SL | R:R | WR | MC | WF | Trades |
 |---------|-------|-----|-----|-------|------|--------|
@@ -110,7 +110,7 @@
 | U-MU-IH | 2.1/2.5 | 0.84 | 80.6% | 0.0011 | 4/3 | 25 |
 | U-ST-DF | 1.4/3.0 | 0.47 | 86.4% | 0.0131 | 4/3 | 20 |
 
-### SHORT Patterns (20) — v1.27.1
+### SHORT Patterns (19) — v1.27.2
 
 | Pattern | TP/SL | R:R | WR | MC | WF | Trades |
 |---------|-------|-----|-----|-------|------|--------|
@@ -132,7 +132,6 @@
 | ST-DN-U | 2.1/3.0 | 0.70 | 69.3% | 0.0000 | 5/2 | 234 |
 | ST-MU-ST | 1.4/3.0 | 0.47 | 83.7% | 0.0047 | 4/3 | 43 |
 | U-GS-DN | **3.0/3.0** | 1.00 | 84.6% | 0.0002 | 5/3 | 26 |
-| U-H-BU | **1.0/0.3** | 3.33 | 45.2% | 0.0071 | 5/3 | 42 |
 | U-ST-DN | 1.4/3.0 | 0.47 | 77.4% | 0.0002 | 5/3 | 292 |
 
 ### 12-Type Candle Classification (Ground Truth)
@@ -290,7 +289,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.27.1** | 02-12 | Legacy pattern re-optimization: 15/21 legacy 패턴 TP/SL 재최적화 (9 MC fix + 6 upgrade), PnL +956.2%, MDD 16.2%, PnL/MDD 59.0x, PF 3.82, WR 82.1% ← **현재** |
+| **v1.27.2** | 02-12 | Low-WR pattern review: U-H-BU 제거 (SL 0.3% 실전 불가), 51패턴 (32L+19S), PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x + 25개 개별 검증 (0 HIGH, 3 MODERATE, 22 LOW risk) ← **현재** |
+| v1.27.1 | 02-12 | Legacy pattern re-optimization: 15/21 legacy 패턴 TP/SL 재최적화 (9 MC fix + 6 upgrade), PnL +956.2%, MDD 16.2%, PnL/MDD 59.0x, PF 3.82, WR 82.1% |
 | v1.27.0 | 02-10 | Uniform TP 70% + 리스크 관리: TP×0.7 전체 적용, WR 83.7%, PnL +911.1%, MDD 16.2%, daily limit 7%, 연속손실 3회 pause + context filter 심층연구 FAIL (BH FDR 0/156 유의) |
 | v1.26.4 | 02-09 | Full TP/SL optimization: grid search + 5-phase deep validation, 31/32 accepted, WR 77.1%, PnL +882.7% |
 | v1.26.3 | 02-09 | R:R re-optimization (5패턴), superseded by v1.26.4 |

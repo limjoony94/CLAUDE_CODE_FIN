@@ -1,0 +1,2311 @@
+{
+  "meta": {
+    "script": "low_wr_pattern_review.py",
+    "version": "v1.27.2",
+    "timestamp": "2026-02-12T11:49:01.659005",
+    "total_patterns": 52,
+    "target_patterns": 26,
+    "grid": [
+      0.3,
+      0.5,
+      0.7,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0
+    ],
+    "constraints": {
+      "mc_threshold": 0.01,
+      "wf_threshold": 4,
+      "period_threshold": 2,
+      "min_trades": 10,
+      "edge_threshold": 5,
+      "composite_threshold": 2,
+      "min_sl_pct": 0.5
+    }
+  },
+  "audit": {
+    "U-MD-MD": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "trades": 104,
+      "total_pnl": 81.4,
+      "actual_wr": 45.2,
+      "rw_wr": 31.8,
+      "excess_wr": 13.4,
+      "empirical_rw_wr": 36.4,
+      "empirical_excess": 8.8,
+      "sl_risk": "MARGINAL",
+      "effective_sl": 0.63,
+      "wr_degradation": 2.3,
+      "ci_95": [
+        36.0,
+        54.8
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0062,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "SL 0.7% marginal \u2014 try wider SL"
+      ]
+    },
+    "U-H-BU": {
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 0.3,
+      "trades": 42,
+      "total_pnl": 32.1,
+      "actual_wr": 45.2,
+      "rw_wr": 23.1,
+      "excess_wr": 22.2,
+      "empirical_rw_wr": 20.0,
+      "empirical_excess": 25.2,
+      "sl_risk": "DANGER",
+      "effective_sl": 0.23,
+      "wr_degradation": 0.0,
+      "ci_95": [
+        31.2,
+        60.1
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0085,
+      "verdict": "REMOVE",
+      "reasons": [
+        "SL 0.3% < 0.5% (execution infeasible)"
+      ]
+    },
+    "DN-D-BD": {
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.0,
+      "trades": 44,
+      "total_pnl": 61.6,
+      "actual_wr": 54.5,
+      "rw_wr": 36.4,
+      "excess_wr": 18.2,
+      "empirical_rw_wr": 31.7,
+      "empirical_excess": 22.8,
+      "sl_risk": "OK",
+      "effective_sl": 0.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        40.1,
+        68.3
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0162,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "MC p=0.0162 borderline \u2014 try re-optimize"
+      ]
+    },
+    "MD-ST-BD": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.5,
+      "trades": 33,
+      "total_pnl": 32.7,
+      "actual_wr": 57.6,
+      "rw_wr": 33.3,
+      "excess_wr": 24.2,
+      "empirical_rw_wr": 37.6,
+      "empirical_excess": 20.0,
+      "sl_risk": "MARGINAL",
+      "effective_sl": 0.43,
+      "wr_degradation": 3.0,
+      "ci_95": [
+        40.8,
+        72.8
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0087,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "SL 0.5% marginal \u2014 try wider SL"
+      ]
+    },
+    "MU-H-MU": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7,
+      "trades": 28,
+      "total_pnl": 50.6,
+      "actual_wr": 60.7,
+      "rw_wr": 31.8,
+      "excess_wr": 28.9,
+      "empirical_rw_wr": 36.4,
+      "empirical_excess": 24.3,
+      "sl_risk": "MARGINAL",
+      "effective_sl": 0.63,
+      "wr_degradation": 3.6,
+      "ci_95": [
+        42.4,
+        76.4
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0054,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "SL 0.7% marginal \u2014 try wider SL"
+      ]
+    },
+    "MD-DN-MU": {
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0,
+      "trades": 130,
+      "total_pnl": 83.0,
+      "actual_wr": 62.3,
+      "rw_wr": 50.0,
+      "excess_wr": 12.3,
+      "empirical_rw_wr": 56.2,
+      "empirical_excess": 6.1,
+      "sl_risk": "OK",
+      "effective_sl": 0.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        53.7,
+        70.2
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.008,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "DN-BD-BD": {
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 1.5,
+      "trades": 108,
+      "total_pnl": 103.5,
+      "actual_wr": 63.9,
+      "rw_wr": 51.7,
+      "excess_wr": 12.2,
+      "empirical_rw_wr": 58.5,
+      "empirical_excess": 5.4,
+      "sl_risk": "OK",
+      "effective_sl": 1.43,
+      "wr_degradation": 0,
+      "ci_95": [
+        54.5,
+        72.3
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0112,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "MC p=0.0112 borderline \u2014 try re-optimize"
+      ]
+    },
+    "D-DN-DN": {
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0,
+      "trades": 99,
+      "total_pnl": 204.6,
+      "actual_wr": 67.7,
+      "rw_wr": 54.5,
+      "excess_wr": 13.1,
+      "empirical_rw_wr": 55.9,
+      "empirical_excess": 11.7,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        58.0,
+        76.1
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0043,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "BD-BU-DN": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0,
+      "trades": 47,
+      "total_pnl": 148.3,
+      "actual_wr": 68.1,
+      "rw_wr": 50.0,
+      "excess_wr": 18.1,
+      "empirical_rw_wr": 50.0,
+      "empirical_excess": 18.1,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        53.8,
+        79.6
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0086,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "DN-DF-DN": {
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "trades": 48,
+      "total_pnl": 103.2,
+      "actual_wr": 68.8,
+      "rw_wr": 50.0,
+      "excess_wr": 18.8,
+      "empirical_rw_wr": 46.6,
+      "empirical_excess": 22.2,
+      "sl_risk": "OK",
+      "effective_sl": 1.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        54.7,
+        80.1
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0061,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "ST-DN-U": {
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 293,
+      "total_pnl": 439.6,
+      "actual_wr": 69.3,
+      "rw_wr": 58.8,
+      "excess_wr": 10.5,
+      "empirical_rw_wr": 60.4,
+      "empirical_excess": 8.9,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        63.8,
+        74.3
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0002,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "BD-ST-U": {
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.0,
+      "trades": 115,
+      "total_pnl": 145.1,
+      "actual_wr": 72.2,
+      "rw_wr": 58.8,
+      "excess_wr": 13.4,
+      "empirical_rw_wr": 64.5,
+      "empirical_excess": 7.7,
+      "sl_risk": "OK",
+      "effective_sl": 1.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        63.4,
+        79.5
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0025,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "MD-ST-MD": {
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "trades": 30,
+      "total_pnl": 81.0,
+      "actual_wr": 73.3,
+      "rw_wr": 50.0,
+      "excess_wr": 23.3,
+      "empirical_rw_wr": 53.4,
+      "empirical_excess": 19.9,
+      "sl_risk": "OK",
+      "effective_sl": 1.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        55.6,
+        85.8
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0082,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "MD-H-MD": {
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.7,
+      "trades": 24,
+      "total_pnl": 22.8,
+      "actual_wr": 75.0,
+      "rw_wr": 50.0,
+      "excess_wr": 25.0,
+      "empirical_rw_wr": 52.4,
+      "empirical_excess": 22.6,
+      "sl_risk": "MARGINAL",
+      "effective_sl": 0.63,
+      "wr_degradation": 0.0,
+      "ci_95": [
+        55.1,
+        88.0
+      ],
+      "small_sample": true,
+      "mc_pvalue": 0.0105,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "SL 0.7% marginal \u2014 try wider SL",
+        "MC p=0.0105 borderline \u2014 try re-optimize"
+      ]
+    },
+    "BU-MD-MD": {
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 2.0,
+      "trades": 16,
+      "total_pnl": 82.4,
+      "actual_wr": 75.0,
+      "rw_wr": 40.0,
+      "excess_wr": 35.0,
+      "empirical_rw_wr": 34.7,
+      "empirical_excess": 40.3,
+      "sl_risk": "OK",
+      "effective_sl": 1.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        50.5,
+        89.8
+      ],
+      "small_sample": true,
+      "mc_pvalue": 0.007,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "H-U-BD": {
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 2.0,
+      "trades": 24,
+      "total_pnl": 75.0,
+      "actual_wr": 75.0,
+      "rw_wr": 48.8,
+      "excess_wr": 26.2,
+      "empirical_rw_wr": 45.5,
+      "empirical_excess": 29.5,
+      "sl_risk": "OK",
+      "effective_sl": 1.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        55.1,
+        88.0
+      ],
+      "small_sample": true,
+      "mc_pvalue": 0.0037,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "DN-MD-DN": {
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 3.0,
+      "trades": 167,
+      "total_pnl": 221.8,
+      "actual_wr": 77.2,
+      "rw_wr": 66.7,
+      "excess_wr": 10.6,
+      "empirical_rw_wr": 73.1,
+      "empirical_excess": 4.2,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        70.3,
+        82.9
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0017,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "U-ST-DN": {
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 340,
+      "total_pnl": 377.6,
+      "actual_wr": 77.4,
+      "rw_wr": 68.2,
+      "excess_wr": 9.2,
+      "empirical_rw_wr": 70.0,
+      "empirical_excess": 7.3,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        72.6,
+        81.5
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0001,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "Edge +9.2pp moderate \u2014 room for improvement"
+      ]
+    },
+    "BD-MU-BD": {
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.7,
+      "trades": 24,
+      "total_pnl": 27.0,
+      "actual_wr": 79.2,
+      "rw_wr": 50.0,
+      "excess_wr": 29.2,
+      "empirical_rw_wr": 52.4,
+      "empirical_excess": 26.8,
+      "sl_risk": "MARGINAL",
+      "effective_sl": 0.63,
+      "wr_degradation": 0.0,
+      "ci_95": [
+        59.5,
+        90.8
+      ],
+      "small_sample": true,
+      "mc_pvalue": 0.0033,
+      "verdict": "OPTIMIZE",
+      "reasons": [
+        "SL 0.7% marginal \u2014 try wider SL"
+      ]
+    },
+    "DN-BD-BU": {
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 72,
+      "total_pnl": 157.1,
+      "actual_wr": 79.2,
+      "rw_wr": 63.2,
+      "excess_wr": 16.0,
+      "empirical_rw_wr": 65.0,
+      "empirical_excess": 14.1,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        68.4,
+        86.9
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0012,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "BU-BU-BD": {
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 44,
+      "total_pnl": 135.1,
+      "actual_wr": 79.5,
+      "rw_wr": 58.8,
+      "excess_wr": 20.7,
+      "empirical_rw_wr": 63.7,
+      "empirical_excess": 15.8,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        65.5,
+        88.8
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0017,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "U-MU-IH": {
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 2.5,
+      "trades": 31,
+      "total_pnl": 109.4,
+      "actual_wr": 80.6,
+      "rw_wr": 54.3,
+      "excess_wr": 26.3,
+      "empirical_rw_wr": 58.0,
+      "empirical_excess": 22.7,
+      "sl_risk": "OK",
+      "effective_sl": 2.43,
+      "wr_degradation": 0,
+      "ci_95": [
+        63.7,
+        90.8
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0008,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "ST-DN-BU": {
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 72,
+      "total_pnl": 110.4,
+      "actual_wr": 80.6,
+      "rw_wr": 68.2,
+      "excess_wr": 12.4,
+      "empirical_rw_wr": 70.0,
+      "empirical_excess": 10.5,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        70.0,
+        88.0
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0063,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "BD-BD-U": {
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 85,
+      "total_pnl": 137.3,
+      "actual_wr": 81.2,
+      "rw_wr": 68.2,
+      "excess_wr": 13.0,
+      "empirical_rw_wr": 74.7,
+      "empirical_excess": 6.4,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        71.6,
+        88.1
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0024,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "MU-U-H": {
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 33,
+      "total_pnl": 84.5,
+      "actual_wr": 81.8,
+      "rw_wr": 63.2,
+      "excess_wr": 18.7,
+      "empirical_rw_wr": 69.4,
+      "empirical_excess": 12.4,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        65.6,
+        91.4
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0067,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    },
+    "ST-BD-BU": {
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 28,
+      "total_pnl": 97.1,
+      "actual_wr": 82.1,
+      "rw_wr": 58.8,
+      "excess_wr": 23.3,
+      "empirical_rw_wr": 60.4,
+      "empirical_excess": 21.7,
+      "sl_risk": "OK",
+      "effective_sl": 2.93,
+      "wr_degradation": 0,
+      "ci_95": [
+        64.4,
+        92.1
+      ],
+      "small_sample": false,
+      "mc_pvalue": 0.0022,
+      "verdict": "KEEP",
+      "reasons": [
+        "Passes all viability checks"
+      ]
+    }
+  },
+  "verdicts": {
+    "U-MD-MD": {
+      "action": "KEEP",
+      "detail": "Current 1.5/0.7 is optimal",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7
+    },
+    "U-H-BU": {
+      "action": "REMOVE",
+      "detail": "Remove (SL 0.3% < 0.5% (execution infeasible))",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 0.3
+    },
+    "DN-D-BD": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.75/1.0 -> 2.5/1.0",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.0
+    },
+    "MD-ST-BD": {
+      "action": "KEEP",
+      "detail": "Current 1.0/0.5 is optimal",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 0.5
+    },
+    "MU-H-MU": {
+      "action": "KEEP",
+      "detail": "Current 1.5/0.7 is optimal",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 0.7
+    },
+    "MD-DN-MU": {
+      "action": "KEEP",
+      "detail": "Current 1.0/1.0 is optimal",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0
+    },
+    "DN-BD-BD": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.4/1.5 -> 2.0/1.5",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 1.5
+    },
+    "D-DN-DN": {
+      "action": "KEEP",
+      "detail": "Current 2.5/3.0 is optimal",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.0
+    },
+    "BD-BU-DN": {
+      "action": "KEEP",
+      "detail": "Current 3.0/3.0 is optimal",
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 3.0
+    },
+    "DN-DF-DN": {
+      "action": "KEEP",
+      "detail": "Current 2.0/2.0 is optimal",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0
+    },
+    "ST-DN-U": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 2.1/3.0 -> 3.0/3.0",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0
+    },
+    "BD-ST-U": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.4/2.0 -> 2.0/2.0",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.0
+    },
+    "MD-ST-MD": {
+      "action": "KEEP",
+      "detail": "Current 2.0/2.0 is optimal",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0
+    },
+    "MD-H-MD": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 0.7/0.7 -> 1.0/0.7",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.7
+    },
+    "BU-MD-MD": {
+      "action": "KEEP",
+      "detail": "Current 3.0/2.0 is optimal",
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 2.0
+    },
+    "H-U-BD": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 2.1/2.0 -> 3.0/2.0",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 2.0
+    },
+    "DN-MD-DN": {
+      "action": "KEEP",
+      "detail": "Current 1.5/3.0 is optimal",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 3.0
+    },
+    "U-ST-DN": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.4/3.0 -> 2.0/3.0",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0
+    },
+    "BD-MU-BD": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 0.7/0.7 -> 1.0/0.7",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.7
+    },
+    "DN-BD-BU": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.75/3.0 -> 2.5/3.0",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 3.0
+    },
+    "BU-BU-BD": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 2.1/3.0 -> 3.0/3.0",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 3.0
+    },
+    "U-MU-IH": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 2.1/2.5 -> 3.0/2.5",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 2.5
+    },
+    "ST-DN-BU": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.4/3.0 -> 2.0/3.0",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0
+    },
+    "BD-BD-U": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.4/3.0 -> 2.0/3.0",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0
+    },
+    "MU-U-H": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 1.75/3.0 -> 2.5/3.0",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 3.0
+    },
+    "ST-BD-BU": {
+      "action": "OPTIMIZE",
+      "detail": "TP/SL 2.1/3.0 -> 3.0/3.0",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0
+    }
+  },
+  "optimization": {
+    "BD-BD-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.4,
+        "sl": 3.0,
+        "pnl": 137.3,
+        "trades": 85,
+        "wr": 81.2
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "rr": 0.67,
+        "trades": 72,
+        "wr": 76.4,
+        "total_pnl": 169.8,
+        "avg_win": 5.9,
+        "avg_loss": 9.1,
+        "mc": 0.0015,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 4,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "cv_stable": true,
+        "cv_oos_positive": 3,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 60.0,
+        "act_wr": 76.4,
+        "excess_wr": 16.4,
+        "composite_score": 4,
+        "verdict": "ACCEPT"
+      }
+    },
+    "BD-BU-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "pnl": 148.3,
+        "trades": 47,
+        "wr": 68.1
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "rr": 1.0,
+        "trades": 47,
+        "wr": 68.1,
+        "total_pnl": 148.3,
+        "avg_win": 8.9,
+        "avg_loss": 9.1,
+        "mc": 0.0095,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 2,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 0,
+        "plateau": true,
+        "n_profitable_nb": 4,
+        "n_total_nb": 4,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 68.1,
+        "excess_wr": 18.1,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "BD-MU-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.7,
+        "sl": 0.7,
+        "pnl": 27.0,
+        "trades": 24,
+        "wr": 79.2
+      },
+      "best": {
+        "tp": 1.0,
+        "sl": 0.7,
+        "rr": 1.43,
+        "trades": 23,
+        "wr": 69.6,
+        "total_pnl": 31.0,
+        "avg_win": 2.9,
+        "avg_loss": 2.2,
+        "mc": 0.0087,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 1,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 1.0,
+        "sl": 0.7,
+        "cv_stable": false,
+        "cv_oos_positive": 2,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 41.2,
+        "act_wr": 69.6,
+        "excess_wr": 28.4,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "BD-ST-U": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.4,
+        "sl": 2.0,
+        "pnl": 145.1,
+        "trades": 115,
+        "wr": 72.2
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "rr": 1.0,
+        "trades": 106,
+        "wr": 63.2,
+        "total_pnl": 157.4,
+        "avg_win": 5.9,
+        "avg_loss": 6.1,
+        "mc": 0.0043,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 4,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "cv_stable": false,
+        "cv_oos_positive": 1,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 63.2,
+        "excess_wr": 13.2,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "BU-BU-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.1,
+        "sl": 3.0,
+        "pnl": 135.1,
+        "trades": 44,
+        "wr": 79.5
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "rr": 1.0,
+        "trades": 35,
+        "wr": 71.4,
+        "total_pnl": 131.5,
+        "avg_win": 8.9,
+        "avg_loss": 9.1,
+        "mc": 0.0082,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 10,
+      "changed": true,
+      "improved": false,
+      "validation": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 4,
+        "plateau": true,
+        "n_profitable_nb": 4,
+        "n_total_nb": 4,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 71.4,
+        "excess_wr": 21.4,
+        "composite_score": 3,
+        "verdict": "ACCEPT"
+      }
+    },
+    "BU-MD-MD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "pnl": 82.4,
+        "trades": 16,
+        "wr": 75.0
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "rr": 1.5,
+        "trades": 16,
+        "wr": 75.0,
+        "total_pnl": 82.4,
+        "avg_win": 8.9,
+        "avg_loss": 6.1,
+        "mc": 0.0061,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 9,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "cv_stable": true,
+        "cv_oos_positive": 5,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 40.0,
+        "act_wr": 75.0,
+        "excess_wr": 35.0,
+        "composite_score": 4,
+        "verdict": "ACCEPT"
+      }
+    },
+    "D-DN-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "pnl": 204.6,
+        "trades": 99,
+        "wr": 67.7
+      },
+      "best": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "rr": 0.83,
+        "trades": 99,
+        "wr": 67.7,
+        "total_pnl": 204.6,
+        "avg_win": 7.4,
+        "avg_loss": 9.1,
+        "mc": 0.0053,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 2,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 1,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 54.5,
+        "act_wr": 67.7,
+        "excess_wr": 13.1,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "DN-BD-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.4,
+        "sl": 1.5,
+        "pnl": 103.5,
+        "trades": 108,
+        "wr": 63.9
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 1.5,
+        "rr": 1.33,
+        "trades": 103,
+        "wr": 59.2,
+        "total_pnl": 166.7,
+        "avg_win": 5.9,
+        "avg_loss": 4.6,
+        "mc": 0.0009,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 6,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.0,
+        "sl": 1.5,
+        "cv_stable": false,
+        "cv_oos_positive": 2,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 42.9,
+        "act_wr": 59.2,
+        "excess_wr": 16.4,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "DN-BD-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.75,
+        "sl": 3.0,
+        "pnl": 157.1,
+        "trades": 72,
+        "wr": 79.2
+      },
+      "best": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "rr": 0.83,
+        "trades": 56,
+        "wr": 73.2,
+        "total_pnl": 166.9,
+        "avg_win": 7.4,
+        "avg_loss": 9.1,
+        "mc": 0.002,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 9,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "cv_stable": true,
+        "cv_oos_positive": 4,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 54.5,
+        "act_wr": 73.2,
+        "excess_wr": 18.7,
+        "composite_score": 4,
+        "verdict": "ACCEPT"
+      }
+    },
+    "DN-D-BD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.75,
+        "sl": 1.0,
+        "pnl": 61.6,
+        "trades": 44,
+        "wr": 54.5
+      },
+      "best": {
+        "tp": 2.5,
+        "sl": 1.0,
+        "rr": 2.5,
+        "trades": 43,
+        "wr": 48.8,
+        "total_pnl": 87.2,
+        "avg_win": 7.4,
+        "avg_loss": 3.1,
+        "mc": 0.0094,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 2,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.5,
+        "sl": 1.0,
+        "cv_stable": false,
+        "cv_oos_positive": 1,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 28.6,
+        "act_wr": 48.8,
+        "excess_wr": 20.3,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "DN-DF-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "pnl": 103.2,
+        "trades": 48,
+        "wr": 68.8
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "rr": 1.0,
+        "trades": 48,
+        "wr": 68.8,
+        "total_pnl": 103.2,
+        "avg_win": 5.9,
+        "avg_loss": 6.1,
+        "mc": 0.0072,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 1,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "cv_stable": false,
+        "cv_oos_positive": 1,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 68.8,
+        "excess_wr": 18.8,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "DN-MD-DN": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 3.0,
+        "pnl": 221.8,
+        "trades": 167,
+        "wr": 77.2
+      },
+      "best": {
+        "tp": 1.5,
+        "sl": 3.0,
+        "rr": 0.5,
+        "trades": 167,
+        "wr": 77.2,
+        "total_pnl": 221.8,
+        "avg_win": 4.4,
+        "avg_loss": 9.1,
+        "mc": 0.0015,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 3,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 1.5,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 3,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 66.7,
+        "act_wr": 77.2,
+        "excess_wr": 10.6,
+        "composite_score": 3,
+        "verdict": "ACCEPT"
+      }
+    },
+    "H-U-BD": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.1,
+        "sl": 2.0,
+        "pnl": 75.0,
+        "trades": 24,
+        "wr": 75.0
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "rr": 1.5,
+        "trades": 20,
+        "wr": 70.0,
+        "total_pnl": 88.0,
+        "avg_win": 8.9,
+        "avg_loss": 6.1,
+        "mc": 0.0094,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 3,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 3.0,
+        "sl": 2.0,
+        "cv_stable": false,
+        "cv_oos_positive": 2,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 40.0,
+        "act_wr": 70.0,
+        "excess_wr": 30.0,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "MD-DN-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 1.0,
+        "pnl": 83.0,
+        "trades": 130,
+        "wr": 62.3
+      },
+      "best": {
+        "tp": 1.0,
+        "sl": 1.0,
+        "rr": 1.0,
+        "trades": 130,
+        "wr": 62.3,
+        "total_pnl": 83.0,
+        "avg_win": 2.9,
+        "avg_loss": 3.1,
+        "mc": 0.007,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 1,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 1.0,
+        "sl": 1.0,
+        "cv_stable": false,
+        "cv_oos_positive": 2,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 62.3,
+        "excess_wr": 12.3,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "MD-H-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 0.7,
+        "sl": 0.7,
+        "pnl": 22.8,
+        "trades": 24,
+        "wr": 75.0
+      },
+      "best": {
+        "tp": 1.0,
+        "sl": 0.7,
+        "rr": 1.43,
+        "trades": 24,
+        "wr": 70.8,
+        "total_pnl": 33.9,
+        "avg_win": 2.9,
+        "avg_loss": 2.2,
+        "mc": 0.0052,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 3,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 1.0,
+        "sl": 0.7,
+        "cv_stable": false,
+        "cv_oos_positive": 0,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 41.2,
+        "act_wr": 70.8,
+        "excess_wr": 29.7,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "MD-ST-BD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.0,
+        "sl": 0.5,
+        "pnl": 32.7,
+        "trades": 33,
+        "wr": 57.6
+      },
+      "best": {
+        "tp": 1.0,
+        "sl": 0.5,
+        "rr": 2.0,
+        "trades": 33,
+        "wr": 57.6,
+        "total_pnl": 32.7,
+        "avg_win": 2.9,
+        "avg_loss": 1.6,
+        "mc": 0.0085,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 3,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 1.0,
+        "sl": 0.5,
+        "cv_stable": false,
+        "cv_oos_positive": 0,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 33.3,
+        "act_wr": 57.6,
+        "excess_wr": 24.2,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "MD-ST-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "pnl": 81.0,
+        "trades": 30,
+        "wr": 73.3
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "rr": 1.0,
+        "trades": 30,
+        "wr": 73.3,
+        "total_pnl": 81.0,
+        "avg_win": 5.9,
+        "avg_loss": 6.1,
+        "mc": 0.0072,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 5,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 2.0,
+        "sl": 2.0,
+        "cv_stable": true,
+        "cv_oos_positive": 3,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 73.3,
+        "excess_wr": 23.3,
+        "composite_score": 4,
+        "verdict": "ACCEPT"
+      }
+    },
+    "MU-H-MU": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "pnl": 50.6,
+        "trades": 28,
+        "wr": 60.7
+      },
+      "best": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "rr": 2.14,
+        "trades": 28,
+        "wr": 60.7,
+        "total_pnl": 50.6,
+        "avg_win": 4.4,
+        "avg_loss": 2.2,
+        "mc": 0.0054,
+        "wf": 5,
+        "pp": 3
+      },
+      "n_valid": 2,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "cv_stable": false,
+        "cv_oos_positive": 1,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 31.8,
+        "act_wr": 60.7,
+        "excess_wr": 28.9,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "MU-U-H": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.75,
+        "sl": 3.0,
+        "pnl": 84.5,
+        "trades": 33,
+        "wr": 81.8
+      },
+      "best": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "rr": 0.83,
+        "trades": 27,
+        "wr": 77.8,
+        "total_pnl": 100.8,
+        "avg_win": 7.4,
+        "avg_loss": 9.1,
+        "mc": 0.0052,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 4,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.5,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 2,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 54.5,
+        "act_wr": 77.8,
+        "excess_wr": 23.2,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "ST-BD-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.1,
+        "sl": 3.0,
+        "pnl": 97.1,
+        "trades": 28,
+        "wr": 82.1
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "rr": 1.0,
+        "trades": 22,
+        "wr": 77.3,
+        "total_pnl": 105.8,
+        "avg_win": 8.9,
+        "avg_loss": 9.1,
+        "mc": 0.008,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 4,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 3,
+        "plateau": true,
+        "n_profitable_nb": 4,
+        "n_total_nb": 4,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 77.3,
+        "excess_wr": 27.3,
+        "composite_score": 3,
+        "verdict": "ACCEPT"
+      }
+    },
+    "ST-DN-BU": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.4,
+        "sl": 3.0,
+        "pnl": 110.4,
+        "trades": 72,
+        "wr": 80.6
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "rr": 0.67,
+        "trades": 59,
+        "wr": 76.3,
+        "total_pnl": 138.1,
+        "avg_win": 5.9,
+        "avg_loss": 9.1,
+        "mc": 0.0053,
+        "wf": 4,
+        "pp": 2
+      },
+      "n_valid": 6,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 1,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 60.0,
+        "act_wr": 76.3,
+        "excess_wr": 16.3,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "ST-DN-U": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 2.1,
+        "sl": 3.0,
+        "pnl": 439.6,
+        "trades": 293,
+        "wr": 69.3
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "rr": 1.0,
+        "trades": 234,
+        "wr": 60.7,
+        "total_pnl": 426.6,
+        "avg_win": 8.9,
+        "avg_loss": 9.1,
+        "mc": 0.0013,
+        "wf": 4,
+        "pp": 2
+      },
+      "n_valid": 13,
+      "changed": true,
+      "improved": false,
+      "validation": {
+        "tp": 3.0,
+        "sl": 3.0,
+        "cv_stable": true,
+        "cv_oos_positive": 3,
+        "plateau": true,
+        "n_profitable_nb": 4,
+        "n_total_nb": 4,
+        "has_edge": true,
+        "rw_wr": 50.0,
+        "act_wr": 60.7,
+        "excess_wr": 10.7,
+        "composite_score": 4,
+        "verdict": "ACCEPT"
+      }
+    },
+    "U-MD-MD": {
+      "direction": "LONG",
+      "current": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "pnl": 81.4,
+        "trades": 104,
+        "wr": 45.2
+      },
+      "best": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "rr": 2.14,
+        "trades": 104,
+        "wr": 45.2,
+        "total_pnl": 81.4,
+        "avg_win": 4.4,
+        "avg_loss": 2.2,
+        "mc": 0.0067,
+        "wf": 4,
+        "pp": 2
+      },
+      "n_valid": 1,
+      "changed": false,
+      "improved": false,
+      "validation": {
+        "tp": 1.5,
+        "sl": 0.7,
+        "cv_stable": false,
+        "cv_oos_positive": 0,
+        "plateau": true,
+        "n_profitable_nb": 9,
+        "n_total_nb": 9,
+        "has_edge": true,
+        "rw_wr": 31.8,
+        "act_wr": 45.2,
+        "excess_wr": 13.4,
+        "composite_score": 2,
+        "verdict": "ACCEPT"
+      }
+    },
+    "U-MU-IH": {
+      "direction": "LONG",
+      "current": {
+        "tp": 2.1,
+        "sl": 2.5,
+        "pnl": 109.4,
+        "trades": 31,
+        "wr": 80.6
+      },
+      "best": {
+        "tp": 3.0,
+        "sl": 2.5,
+        "rr": 1.2,
+        "trades": 25,
+        "wr": 76.0,
+        "total_pnl": 123.5,
+        "avg_win": 8.9,
+        "avg_loss": 7.6,
+        "mc": 0.0016,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 21,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 3.0,
+        "sl": 2.5,
+        "cv_stable": false,
+        "cv_oos_positive": 4,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 45.5,
+        "act_wr": 76.0,
+        "excess_wr": 30.5,
+        "composite_score": 3,
+        "verdict": "ACCEPT"
+      }
+    },
+    "U-ST-DN": {
+      "direction": "SHORT",
+      "current": {
+        "tp": 1.4,
+        "sl": 3.0,
+        "pnl": 377.6,
+        "trades": 340,
+        "wr": 77.4
+      },
+      "best": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "rr": 0.67,
+        "trades": 292,
+        "wr": 70.9,
+        "total_pnl": 447.8,
+        "avg_win": 5.9,
+        "avg_loss": 9.1,
+        "mc": 0.0002,
+        "wf": 4,
+        "pp": 3
+      },
+      "n_valid": 8,
+      "changed": true,
+      "improved": true,
+      "validation": {
+        "tp": 2.0,
+        "sl": 3.0,
+        "cv_stable": false,
+        "cv_oos_positive": 4,
+        "plateau": true,
+        "n_profitable_nb": 6,
+        "n_total_nb": 6,
+        "has_edge": true,
+        "rw_wr": 60.0,
+        "act_wr": 70.9,
+        "excess_wr": 10.9,
+        "composite_score": 3,
+        "verdict": "ACCEPT"
+      }
+    }
+  },
+  "portfolio": {
+    "scenario_a": {
+      "pnl": 956.15,
+      "trades": 364,
+      "wr": 83.24,
+      "mdd": 16.2,
+      "pf": 3.9,
+      "avg_win": 4.24,
+      "avg_loss": 5.41,
+      "pnl_mdd": 59.02,
+      "max_consec_loss": 2
+    },
+    "scenario_b": {
+      "pnl": 966.0,
+      "trades": 357,
+      "wr": 84.87,
+      "mdd": 16.2,
+      "pf": 3.99,
+      "avg_win": 4.25,
+      "avg_loss": 5.98,
+      "pnl_mdd": 59.63,
+      "max_consec_loss": 2
+    },
+    "scenario_c": {
+      "pnl": 885.4,
+      "trades": 323,
+      "wr": 81.42,
+      "mdd": 16.2,
+      "pf": 3.52,
+      "avg_win": 4.7,
+      "avg_loss": 5.86,
+      "pnl_mdd": 54.65,
+      "max_consec_loss": 2
+    },
+    "removed_patterns": [
+      "U-H-BU"
+    ],
+    "optimized_patterns": [
+      {
+        "pattern": "BD-BD-U",
+        "direction": "LONG",
+        "old_tp": 1.4,
+        "old_sl": 3.0,
+        "new_tp": 2.0,
+        "new_sl": 3.0,
+        "old_pnl": 137.3,
+        "new_pnl": 169.8,
+        "score": 4
+      },
+      {
+        "pattern": "BD-MU-BD",
+        "direction": "LONG",
+        "old_tp": 0.7,
+        "old_sl": 0.7,
+        "new_tp": 1.0,
+        "new_sl": 0.7,
+        "old_pnl": 27.0,
+        "new_pnl": 31.0,
+        "score": 2
+      },
+      {
+        "pattern": "BD-ST-U",
+        "direction": "LONG",
+        "old_tp": 1.4,
+        "old_sl": 2.0,
+        "new_tp": 2.0,
+        "new_sl": 2.0,
+        "old_pnl": 145.1,
+        "new_pnl": 157.4,
+        "score": 2
+      },
+      {
+        "pattern": "BU-BU-BD",
+        "direction": "LONG",
+        "old_tp": 2.1,
+        "old_sl": 3.0,
+        "new_tp": 3.0,
+        "new_sl": 3.0,
+        "old_pnl": 135.1,
+        "new_pnl": 131.5,
+        "score": 3
+      },
+      {
+        "pattern": "DN-BD-BD",
+        "direction": "LONG",
+        "old_tp": 1.4,
+        "old_sl": 1.5,
+        "new_tp": 2.0,
+        "new_sl": 1.5,
+        "old_pnl": 103.5,
+        "new_pnl": 166.7,
+        "score": 2
+      },
+      {
+        "pattern": "MD-H-MD",
+        "direction": "LONG",
+        "old_tp": 0.7,
+        "old_sl": 0.7,
+        "new_tp": 1.0,
+        "new_sl": 0.7,
+        "old_pnl": 22.8,
+        "new_pnl": 33.9,
+        "score": 2
+      },
+      {
+        "pattern": "MU-U-H",
+        "direction": "LONG",
+        "old_tp": 1.75,
+        "old_sl": 3.0,
+        "new_tp": 2.5,
+        "new_sl": 3.0,
+        "old_pnl": 84.5,
+        "new_pnl": 100.8,
+        "score": 2
+      },
+      {
+        "pattern": "U-MU-IH",
+        "direction": "LONG",
+        "old_tp": 2.1,
+        "old_sl": 2.5,
+        "new_tp": 3.0,
+        "new_sl": 2.5,
+        "old_pnl": 109.4,
+        "new_pnl": 123.5,
+        "score": 3
+      },
+      {
+        "pattern": "DN-BD-BU",
+        "direction": "SHORT",
+        "old_tp": 1.75,
+        "old_sl": 3.0,
+        "new_tp": 2.5,
+        "new_sl": 3.0,
+        "old_pnl": 157.1,
+        "new_pnl": 166.9,
+        "score": 4
+      },
+      {
+        "pattern": "DN-D-BD",
+        "direction": "SHORT",
+        "old_tp": 1.75,
+        "old_sl": 1.0,
+        "new_tp": 2.5,
+        "new_sl": 1.0,
+        "old_pnl": 61.6,
+        "new_pnl": 87.2,
+        "score": 2
+      },
+      {
+        "pattern": "H-U-BD",
+        "direction": "SHORT",
+        "old_tp": 2.1,
+        "old_sl": 2.0,
+        "new_tp": 3.0,
+        "new_sl": 2.0,
+        "old_pnl": 75.0,
+        "new_pnl": 88.0,
+        "score": 2
+      },
+      {
+        "pattern": "ST-BD-BU",
+        "direction": "SHORT",
+        "old_tp": 2.1,
+        "old_sl": 3.0,
+        "new_tp": 3.0,
+        "new_sl": 3.0,
+        "old_pnl": 97.1,
+        "new_pnl": 105.8,
+        "score": 3
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "direction": "SHORT",
+        "old_tp": 1.4,
+        "old_sl": 3.0,
+        "new_tp": 2.0,
+        "new_sl": 3.0,
+        "old_pnl": 110.4,
+        "new_pnl": 138.1,
+        "score": 2
+      },
+      {
+        "pattern": "ST-DN-U",
+        "direction": "SHORT",
+        "old_tp": 2.1,
+        "old_sl": 3.0,
+        "new_tp": 3.0,
+        "new_sl": 3.0,
+        "old_pnl": 439.6,
+        "new_pnl": 426.6,
+        "score": 4
+      },
+      {
+        "pattern": "U-ST-DN",
+        "direction": "SHORT",
+        "old_tp": 1.4,
+        "old_sl": 3.0,
+        "new_tp": 2.0,
+        "new_sl": 3.0,
+        "old_pnl": 377.6,
+        "new_pnl": 447.8,
+        "score": 3
+      }
+    ],
+    "mc_mdd": {
+      "a": {
+        "p50": 21.7,
+        "p90": 29.8,
+        "p95": 32.9,
+        "p99": 39.4
+      },
+      "b": {
+        "p50": 21.4,
+        "p90": 29.4,
+        "p95": 32.6,
+        "p99": 39.8
+      },
+      "c": {
+        "p50": 23.8,
+        "p90": 32.9,
+        "p95": 36.5,
+        "p99": 43.8
+      }
+    }
+  },
+  "recommendations": {
+    "overall_verdict": "MARGINAL",
+    "best_scenario": "B",
+    "final_verdicts": {
+      "U-MD-MD": {
+        "action": "KEEP",
+        "detail": "Current 1.5/0.7 is optimal",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 0.7
+      },
+      "U-H-BU": {
+        "action": "REMOVE",
+        "detail": "Remove (SL 0.3% < 0.5% (execution infeasible))",
+        "direction": "SHORT",
+        "tp": 1.0,
+        "sl": 0.3
+      },
+      "DN-D-BD": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.75/1.0 -> 2.5/1.0",
+        "direction": "SHORT",
+        "tp": 1.75,
+        "sl": 1.0
+      },
+      "MD-ST-BD": {
+        "action": "KEEP",
+        "detail": "Current 1.0/0.5 is optimal",
+        "direction": "LONG",
+        "tp": 1.0,
+        "sl": 0.5
+      },
+      "MU-H-MU": {
+        "action": "KEEP",
+        "detail": "Current 1.5/0.7 is optimal",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 0.7
+      },
+      "MD-DN-MU": {
+        "action": "KEEP",
+        "detail": "Current 1.0/1.0 is optimal",
+        "direction": "LONG",
+        "tp": 1.0,
+        "sl": 1.0
+      },
+      "DN-BD-BD": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.4/1.5 -> 2.0/1.5",
+        "direction": "LONG",
+        "tp": 1.4,
+        "sl": 1.5
+      },
+      "D-DN-DN": {
+        "action": "KEEP",
+        "detail": "Current 2.5/3.0 is optimal",
+        "direction": "SHORT",
+        "tp": 2.5,
+        "sl": 3.0
+      },
+      "BD-BU-DN": {
+        "action": "KEEP",
+        "detail": "Current 3.0/3.0 is optimal",
+        "direction": "SHORT",
+        "tp": 3.0,
+        "sl": 3.0
+      },
+      "DN-DF-DN": {
+        "action": "KEEP",
+        "detail": "Current 2.0/2.0 is optimal",
+        "direction": "SHORT",
+        "tp": 2.0,
+        "sl": 2.0
+      },
+      "ST-DN-U": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 2.1/3.0 -> 3.0/3.0",
+        "direction": "SHORT",
+        "tp": 2.1,
+        "sl": 3.0
+      },
+      "BD-ST-U": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.4/2.0 -> 2.0/2.0",
+        "direction": "LONG",
+        "tp": 1.4,
+        "sl": 2.0
+      },
+      "MD-ST-MD": {
+        "action": "KEEP",
+        "detail": "Current 2.0/2.0 is optimal",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 2.0
+      },
+      "MD-H-MD": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 0.7/0.7 -> 1.0/0.7",
+        "direction": "LONG",
+        "tp": 0.7,
+        "sl": 0.7
+      },
+      "BU-MD-MD": {
+        "action": "KEEP",
+        "detail": "Current 3.0/2.0 is optimal",
+        "direction": "SHORT",
+        "tp": 3.0,
+        "sl": 2.0
+      },
+      "H-U-BD": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 2.1/2.0 -> 3.0/2.0",
+        "direction": "SHORT",
+        "tp": 2.1,
+        "sl": 2.0
+      },
+      "DN-MD-DN": {
+        "action": "KEEP",
+        "detail": "Current 1.5/3.0 is optimal",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 3.0
+      },
+      "U-ST-DN": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.4/3.0 -> 2.0/3.0",
+        "direction": "SHORT",
+        "tp": 1.4,
+        "sl": 3.0
+      },
+      "BD-MU-BD": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 0.7/0.7 -> 1.0/0.7",
+        "direction": "LONG",
+        "tp": 0.7,
+        "sl": 0.7
+      },
+      "DN-BD-BU": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.75/3.0 -> 2.5/3.0",
+        "direction": "SHORT",
+        "tp": 1.75,
+        "sl": 3.0
+      },
+      "BU-BU-BD": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 2.1/3.0 -> 3.0/3.0",
+        "direction": "LONG",
+        "tp": 2.1,
+        "sl": 3.0
+      },
+      "U-MU-IH": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 2.1/2.5 -> 3.0/2.5",
+        "direction": "LONG",
+        "tp": 2.1,
+        "sl": 2.5
+      },
+      "ST-DN-BU": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.4/3.0 -> 2.0/3.0",
+        "direction": "SHORT",
+        "tp": 1.4,
+        "sl": 3.0
+      },
+      "BD-BD-U": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.4/3.0 -> 2.0/3.0",
+        "direction": "LONG",
+        "tp": 1.4,
+        "sl": 3.0
+      },
+      "MU-U-H": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 1.75/3.0 -> 2.5/3.0",
+        "direction": "LONG",
+        "tp": 1.75,
+        "sl": 3.0
+      },
+      "ST-BD-BU": {
+        "action": "OPTIMIZE",
+        "detail": "TP/SL 2.1/3.0 -> 3.0/3.0",
+        "direction": "SHORT",
+        "tp": 2.1,
+        "sl": 3.0
+      }
+    },
+    "issues": [
+      "Scenario C PnL +885.4% < A +956.2% (-7.4%)"
+    ],
+    "advantages": [
+      "Scenario B PnL +966.0% > A +956.2%"
+    ]
+  }
+}

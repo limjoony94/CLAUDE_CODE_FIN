@@ -11,10 +11,10 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.27.1"  # v1.27.1: Legacy pattern re-optimization + logging improvements
-# Base: v1.27.0 Uniform TP 70% + 15 legacy patterns re-optimized via lineage analysis
-# Result: PnL +955%, WR 82.0%, MDD 16.2%, PnL/MDD 59.0x, portfolio MC p=0.0000
-# Changes: 9 NEEDS_FIX + 6 UPGRADE patterns, log rotation, timing, balance logging
+BOT_VERSION = "1.27.2"  # v1.27.2: Remove U-H-BU (SL 0.3% execution infeasible)
+# Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
+# Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
+# Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)
@@ -174,7 +174,7 @@ VALIDATED_SHORT_PATTERNS: List[str] = [
     "ST-DN-U",     # R:R 1.00, 234t, WR 60.7%, Exp +1.82%, PnL +426.6%
     "ST-MU-ST",    # R:R 0.67,  43t, WR 79.1%, Exp +2.76%, PnL +118.7%
     "U-GS-DN",     # R:R 1.00,  26t, WR 84.6%, Exp +6.13%, PnL +159.4%
-    "U-H-BU",      # R:R 3.33,  42t, WR 45.2%, Exp +0.76%, PnL  +32.1%
+    # U-H-BU removed v1.27.2: SL 0.3% execution infeasible (effective SL 0.23% after costs)
     "U-ST-DN",     # R:R 0.67, 292t, WR 70.9%, Exp +1.53%, PnL +447.8%
 ]
 
@@ -236,7 +236,7 @@ PATTERN_STATS = {
     "ST-DN-U":   {"direction": "SHORT", "trades": 234, "wr": 69.3, "mc": 0.0000, "wf": 5, "periods": 2},
     "ST-MU-ST":  {"direction": "SHORT", "trades":  43, "wr": 83.7, "mc": 0.0047, "wf": 4, "periods": 3},
     "U-GS-DN":   {"direction": "SHORT", "trades":  26, "wr": 84.6, "mc": 0.0002, "wf": 5, "periods": 3},
-    "U-H-BU":    {"direction": "SHORT", "trades":  42, "wr": 45.2, "mc": 0.0071, "wf": 5, "periods": 3},
+    # U-H-BU removed v1.27.2: SL 0.3% execution infeasible
     "U-ST-DN":   {"direction": "SHORT", "trades": 292, "wr": 77.4, "mc": 0.0002, "wf": 5, "periods": 3},
 }
 
@@ -307,7 +307,7 @@ PATTERN_OPTIMAL_TPSL = {
     "ST-DN-U":   (2.1, 3.0),   # R:R=0.70  (was 3.0)
     "ST-MU-ST":  (1.4, 3.0),   # R:R=0.47  (was 2.0)
     "U-GS-DN":   (3.0, 3.0),   # R:R=1.00  (v1.27.1 reopt, was 2.1/3.0)
-    "U-H-BU":    (1.0, 0.3),   # R:R=3.33  (v1.27.1 reopt, was 0.7/0.3)
+    # U-H-BU removed v1.27.2: SL 0.3% execution infeasible
     "U-ST-DN":   (1.4, 3.0),   # R:R=0.47  (was 2.0)
 }
 
@@ -513,7 +513,7 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 82.0  # v1.27.1: Legacy reopt — portfolio WR 82.1%
+EXPECTED_WIN_RATE = 85.0  # v1.27.2: U-H-BU removed — portfolio WR 84.9%
 EXPECTED_AVG_WIN = 5.38   # R:R >= 0.75, TP range 0.5-3.0%
 EXPECTED_AVG_LOSS = 4.24  # SL range 0.7-2.0%
 EXPECTED_EDGE = 50.0      # Conservative estimate

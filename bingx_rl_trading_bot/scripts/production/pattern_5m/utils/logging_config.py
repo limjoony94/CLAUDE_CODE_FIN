@@ -4,12 +4,16 @@ Enhanced logging setup with JSON format support and debug mode filtering.
 """
 
 import os
+import glob
 import json
 import logging
 from datetime import datetime
 from typing import Optional
 
 from ..constants import BOT_NAME, LOG_DIR
+
+# Log retention: delete files older than this many days
+LOG_RETENTION_DAYS = 7
 
 
 class JSONFormatter(logging.Formatter):
@@ -106,7 +110,24 @@ def setup_logging(
     logger.addHandler(file_handler)
     logger.addHandler(console_handler)
 
+    # Clean up old log files
+    _cleanup_old_logs(_log_dir, _bot_name, LOG_RETENTION_DAYS)
+
     return logger
+
+
+def _cleanup_old_logs(log_dir: str, bot_name: str, retention_days: int) -> None:
+    """Remove log files older than retention_days."""
+    import time as _time
+    cutoff = _time.time() - (retention_days * 86400)
+    pattern = os.path.join(log_dir, f"{bot_name}_*.log")
+    for filepath in glob.glob(pattern):
+        try:
+            if os.path.getmtime(filepath) < cutoff:
+                os.remove(filepath)
+                logging.getLogger('pattern_5m').info(f"Removed old log: {os.path.basename(filepath)}")
+        except OSError:
+            pass
 
 
 def log_signal_conditions(logger: logging.Logger, df, config: dict, level: str = 'DEBUG') -> None:

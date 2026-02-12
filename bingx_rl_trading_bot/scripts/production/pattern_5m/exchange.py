@@ -146,6 +146,7 @@ def set_margin_mode(exchange: ccxt.bingx, config: Dict[str, Any]) -> bool:
         if 'No need to change' in str(e) or 'same' in str(e).lower():
             logger.info(f"✅ Margin mode already {margin_mode}")
             return True
+        logger.warning(f"Failed to set margin mode (exchange error): {e}")
         return False
     except ccxt.NetworkError as e:
         logger.warning(f"Failed to set margin mode (network error): {e}")

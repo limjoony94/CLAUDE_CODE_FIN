@@ -5,6 +5,7 @@ Functions for closing positions and crash recovery.
 
 import logging
 import os
+import time
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 
@@ -370,6 +371,7 @@ def close_position_market(
         logger.info(f"🚨 Early exit: closing {direction} {quantity} {symbol} @ market ({exit_reason})")
 
         # Place market order to close
+        t_close = time.time()
         order = exchange.create_order(
             symbol=symbol,
             type='market',
@@ -388,7 +390,8 @@ def close_position_market(
                 ticker = fetch_ticker_cached(exchange, symbol, cache, force_refresh=True)
                 fill_price = ticker['last']
 
-            logger.info(f"✅ Early exit executed @ ${fill_price:.1f}")
+            close_latency_ms = (time.time() - t_close) * 1000
+            logger.info(f"✅ Early exit executed @ ${fill_price:.1f} [{close_latency_ms:.0f}ms]")
 
             # Record the closed position
             record_closed_position(

@@ -127,7 +127,7 @@ def _place_single_tp_order(
             }
         )
         position['tp_order_id'] = tp_order.get('id')
-        logger.info(f"TP order placed: {tp_order.get('id')} @ ${tp_price}")
+        logger.info(f"TP order placed: {tp_order.get('id')} @ ${tp_price} (qty: {quantity})")
     except ccxt.InsufficientFunds as e:
         logger.warning(f"TP order failed (insufficient funds): {e}")
     except ccxt.ExchangeError as e:
@@ -158,7 +158,7 @@ def _place_sl_order(
             }
         )
         position['sl_order_id'] = sl_order.get('id')
-        logger.info(f"SL order placed: {sl_order.get('id')} @ ${sl_price}")
+        logger.info(f"SL order placed: {sl_order.get('id')} @ ${sl_price} (qty: {quantity})")
     except ccxt.InsufficientFunds as e:
         logger.warning(f"SL order failed (insufficient funds): {e}")
     except ccxt.ExchangeError as e:
@@ -341,11 +341,11 @@ def verify_tp_sl_orders(
             save_state(state)
 
     except ccxt.NetworkError as e:
-        logger.debug(f"Could not verify TP/SL orders (network): {e}")
+        logger.warning(f"Could not verify TP/SL orders (network): {e}")
     except ccxt.ExchangeError as e:
-        logger.debug(f"Could not verify TP/SL orders (exchange): {e}")
+        logger.warning(f"Could not verify TP/SL orders (exchange): {e}")
     except Exception as e:
-        logger.debug(f"Could not verify TP/SL orders: {e}")
+        logger.warning(f"Could not verify TP/SL orders: {e}")
 
 
 def _verify_scale_out_orders(

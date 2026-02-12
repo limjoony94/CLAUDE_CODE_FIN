@@ -545,6 +545,7 @@ def _fetch_and_calculate_indicators(
 ) -> Optional[pd.DataFrame]:
     """Fetch OHLCV data and calculate indicators."""
     try:
+        t0 = time.time()
         ohlcv = fetch_ohlcv(
             exchange,
             config['symbol'],
@@ -561,6 +562,8 @@ def _fetch_and_calculate_indicators(
             columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']
         )
         df = calculate_indicators(df, config)
+        elapsed_ms = (time.time() - t0) * 1000
+        logger.debug(f"OHLCV fetch + indicators: {elapsed_ms:.0f}ms ({len(ohlcv)} candles)")
 
         return df
 
@@ -695,7 +698,7 @@ def _run_health_check(
         else:
             logger.debug("✅ Health check passed")
     except Exception as e:
-        logger.debug(f"Health check failed: {e}")
+        logger.warning(f"Health check failed: {e}")
 
 
 # Entry point for direct execution

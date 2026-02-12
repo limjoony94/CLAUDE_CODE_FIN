@@ -128,7 +128,13 @@ def open_position(
                                      circuit_breaker=circuit_breaker, metrics=metrics)
         estimated_price = ticker['last']
 
+        # Log balance and position sizing details
+        position_value = quantity * estimated_price / leverage
+        size_pct = config['position_size_pct']
+        logger.info(f"Balance: ${available:.2f} | Size: ${position_value:.2f} ({size_pct}%) | Notional: ${quantity * estimated_price:.2f} ({leverage}x)")
+
         # Execute market order
+        t_open = time.time()
         side = 'buy' if signal == 'LONG' else 'sell'
         logger.info(f"Opening {signal} position: {quantity} {symbol} @ ~${estimated_price:.1f}")
 
@@ -147,7 +153,8 @@ def open_position(
         # Invalidate cache after order
         cache.invalidate_all()
 
-        logger.info(f"Actual fill: ${actual_entry_price:.1f} (qty: {actual_quantity})")
+        open_latency_ms = (time.time() - t_open) * 1000
+        logger.info(f"Actual fill: ${actual_entry_price:.1f} (qty: {actual_quantity}) [{open_latency_ms:.0f}ms]")
 
         # Calculate TP/SL
         direction = 1 if signal == 'LONG' else -1
@@ -279,7 +286,7 @@ def _set_leverage(exchange: ccxt.bingx, symbol: str, leverage: int) -> None:
         exchange.set_leverage(leverage, symbol, params={'side': 'BOTH'})
     except ccxt.ExchangeError as e:
         if 'No need to change' in str(e) or 'same' in str(e).lower():
-            pass  # Already set
+            logger.debug(f"Leverage already set to {leverage}x")
         else:
             logger.warning(f"Set leverage warning (exchange error): {e}")
     except ccxt.NetworkError as e:

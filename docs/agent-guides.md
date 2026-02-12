@@ -1,6 +1,6 @@
 # 에이전트별 작업 가이드
 
-> **Version**: v1.27.0 | **Updated**: 2026-02-11
+> **Version**: v1.27.3 | **Updated**: 2026-02-12
 
 ---
 
@@ -16,10 +16,11 @@
 ```
 bingx_rl_trading_bot/
 ├── scripts/production/pattern_5m/   # 운영 코드 (14개 모듈)
+├── scripts/scanner/                 # Dynamic WF Pattern Scanner CLI
 ├── scripts/analysis/                # 연구 스크립트 (45+)
 ├── config/pattern_5m_config.yaml    # 전략 설정
 ├── data/btc_5m_270days_reclassified.csv  # 백테스트 데이터 (270일, Ground Truth)
-└── results/                         # 봇 상태/메트릭 JSON
+└── results/                         # 봇 상태/메트릭 JSON + dynamic_patterns.json
 ```
 
 ### 작업 프로토콜
@@ -29,11 +30,12 @@ bingx_rl_trading_bot/
 4. **버전 관리**: 변경 시 CLAUDE.md Version History 업데이트
 5. **커밋 메시지**: `feat(vX.XX.X): 간단한 설명`
 
-### 현재 전략 파라미터 (v1.27.0)
-- **패턴**: 52개 (32L+20S), Uniform TP 70% + Risk Management
-- **TP/SL**: Per-pattern 최적화 (v1.26.4 TP × 0.7, SL unchanged)
+### 현재 전략 파라미터 (v1.27.3)
+- **패턴**: 51개 (32L+19S), Uniform TP 70% + Legacy reopt + Low-WR review
+- **TP/SL**: Per-pattern 최적화 (v1.27.1 legacy reopt 포함) / Dynamic 모드: Universal TP 2.0/SL 3.0
 - **레버리지**: 3x
-- **리스크**: 일일 손실 7%, 연속 3패 → 600초 pause
+- **리스크**: 일일 손실 **5%** (v1.27.3), 연속 3패 → 600초 pause
+- **Pattern Source**: `static` (constants.py) 또는 `dynamic` (results/dynamic_patterns.json)
 
 ### 자주 쓰는 연구 스크립트
 ```bash
@@ -45,6 +47,7 @@ python scripts/analysis/distance_edge_decomposition.py  # Edge 분해
 python scripts/analysis/context_filter_research_v2.py   # Context filter 연구 (FAIL)
 python scripts/analysis/portfolio_pruning_v4.py         # 포트폴리오 프루닝
 python scripts/analysis/full_270d_revalidation.py       # 270일 전수 검증
+python scripts/scanner/pattern_scanner.py               # Dynamic WF Pattern Selection
 ```
 
 ---
@@ -115,20 +118,20 @@ tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"
 |------|----------|----------|
 | 봇 생존 | `tmux list-sessions` | 프로세스 없음 |
 | 연속 손실 | state.json → consecutive_losses | ≥ 3회 (v1.27.0: pause 발동) |
-| 일일 손실 | state.json → daily_pnl | ≤ -7% (v1.27.0: 자동 중단) |
+| 일일 손실 | state.json → daily_pnl | ≤ -5% (v1.27.3: 자동 중단) |
 | MDD | metrics.json → max_drawdown | ≥ 20% |
 | API 에러 | 로그 grep ERROR | ≥ 10회/시간 |
-| WR 이탈 | state.json → winning_trades/total_trades | < 70% (20trades) |
-| 기대 WR | EXPECTED_WIN_RATE=84.0 | 실제 WR과 비교 |
+| WR 이탈 | state.json → winning_trades/total_trades | < 60% (20trades) |
+| 기대 WR | EXPECTED_WIN_RATE=68.0 (v1.27.3) | 실제 WR과 비교 |
 
 ### 리포트 포맷
 ```
-📊 Pattern 5m v1.27.0 성과 리포트 (YYYY-MM-DD HH:MM)
+📊 Pattern 5m v1.27.3 성과 리포트 (YYYY-MM-DD HH:MM)
 ━━━━━━━━━━━━━━━━━━━━
 • 상태: ✅ 운영중 / ❌ 중단
 • 오늘 거래: N건 (W승 L패)
 • 오늘 PnL: +X.XX%
-• 누적 WR: XX.X% (N trades) | 기대: 84.0%
+• 누적 WR: XX.X% (N trades) | 기대: 68.0%
 • 연속손실: N회 / 일일손실: X.X%
 • 열린 포지션: LONG/SHORT [패턴명] @ $XX,XXX
 ```

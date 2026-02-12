@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.27.3 | **Bot**: Pattern 5m (51패턴, 32L+19S) | **Updated**: 2026-02-12
+> **Version**: v1.28.0 | **Bot**: Pattern 5m (75패턴, 28L+47S) | **Updated**: 2026-02-12
 
 ---
 
@@ -16,6 +16,8 @@
 | 메트릭 | `results/pattern_5m_metrics.json` |
 | 로그 | `logs/pattern_5m_bot_*.log` |
 | 데이터 | `data/btc_5m_270days_reclassified.csv` (270일, Ground Truth) |
+| Dynamic Patterns | `results/dynamic_patterns.json` (scanner 출력) |
+| Scanner | `scripts/scanner/pattern_scanner.py` (Dynamic WF 패턴 선택 CLI) |
 
 ---
 
@@ -37,12 +39,12 @@
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-5%, MDD ≥25%, WR <60% (EXPECTED_WIN_RATE=68.0)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-5%, MDD ≥25%, WR <60% | EXPECTED_WIN_RATE=68.0 (v1.27.3)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.27.2
+## 📊 현재 전략: Pattern 5m v1.28.0
 
 ### 핵심 파라미터
 
@@ -55,7 +57,7 @@
 | Leverage | 3x |
 | Timeframe | 5m |
 | Quality Filter | **T5 leave-one-out + MC/edge cleanup + Uniform TP 70% + Legacy reopt + Low-WR review** |
-| Risk | Daily loss 7%, 3-consecutive-loss pause |
+| Risk | Daily loss **5%** (v1.27.3), 3-consecutive-loss pause |
 
 ### 270일 종합 검증 결과
 
@@ -175,6 +177,27 @@
 | TP/SL Auto-Adjust (v1.17) | 시작 시 기존 포지션 TP/SL 자동 조정 |
 | Context Filters (v1.14) | RSI/Vol/Trend 인프라 (v2 연구 결과: 유의 효과 없음, 필터 비활성) |
 | Per-Pattern TP/SL (v1.21.0) | MC<0.01 패턴 개별 최적화 |
+| Dynamic Pattern Selection (v1.27.3) | `pattern_source: dynamic` 모드 — scanner CLI가 생성한 Universal TP/SL 패턴 세트 사용 |
+
+### Dynamic Pattern Selection (v1.27.3)
+
+`pattern_source` 설정으로 정적(constants.py) 또는 동적(scanner 출력) 패턴 세트 선택 가능.
+
+| 모드 | 설정값 | 패턴 소스 | TP/SL |
+|------|--------|-----------|-------|
+| Static (기본) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
+| Dynamic | `pattern_source: dynamic` | results/dynamic_patterns.json | Universal TP 2.0/SL 3.0 |
+
+**Scanner CLI 사용법**:
+```bash
+cd bingx_rl_trading_bot
+python scripts/scanner/pattern_scanner.py                           # 기본 (270d 데이터)
+python scripts/scanner/pattern_scanner.py --data data/custom.csv    # 커스텀 데이터
+python scripts/scanner/pattern_scanner.py --edge-threshold 5 --mc-threshold 0.01
+```
+
+**Dynamic 모드 활성화**: `config/pattern_5m_config.yaml`에서 `pattern_source: dynamic` 설정.
+봇 시작 시 `results/dynamic_patterns.json`에서 패턴과 Universal TP/SL을 로드.
 
 ---
 
@@ -190,19 +213,21 @@ bingx_rl_trading_bot/
 │   │   ├── pattern_5m_bot.py       # 엔트리포인트
 │   │   └── pattern_5m/             # 14개 모듈
 │   │       ├── bot.py              # 메인 루프
-│   │       ├── config.py           # 설정
+│   │       ├── config.py           # 설정 + Dynamic Pattern 로딩
 │   │       ├── constants.py        # 패턴 + Per-pattern TP/SL
 │   │       ├── exchange.py         # BingX API
 │   │       ├── indicators.py       # 기술 지표
 │   │       ├── models.py           # 데이터클래스
 │   │       ├── orders.py           # 주문 + TP/SL 자동조정
 │   │       ├── position.py         # facade
-│   │       ├── position_open.py    # 진입
+│   │       ├── position_open.py    # 진입 (dynamic universal TP/SL 지원)
 │   │       ├── position_monitor.py # 모니터링
 │   │       ├── position_close.py   # 청산
 │   │       ├── signals.py          # 패턴 탐지 + Context Filter
 │   │       ├── state.py            # 상태 저장
 │   │       └── utils/              # lock, logging
+│   ├── scanner/                    # Dynamic WF Pattern Scanner CLI
+│   │   └── pattern_scanner.py      # 오프라인 패턴 스캔 → dynamic_patterns.json
 │   ├── analysis/                   # 연구 스크립트
 │   ├── monitor/                    # 모니터링 스크립트
 │   ├── tests/                      # 테스트
@@ -289,7 +314,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.27.3** | 02-12 | Expectation reset: 백테스트 PnL의 90%가 look-ahead bias, 순수 forward edge +80.5%/68.5% WR. EXPECTED_WIN_RATE 85→68, daily limit 7→5%. 90일 OOS 테스트 대기 (2026-04-30 목표) ← **현재** |
+| **v1.28.0** | 02-12 | **Static→Dynamic 프로덕션 전환**. Universal TP 2.0/SL 3.0 + 75패턴 (28L+47S). True WF OOS: Universal +562% vs Per-pattern +416% (per-pattern이 173.6% look-ahead bias). Expected per-trade: +1.10% (기존 +0.62% 대비 +77%). pattern_source: dynamic 활성화. Rollback: static 한 줄 변경 ← **현재** |
+| v1.27.3 | 02-12 | Expectation reset + Dynamic WF Pattern Selection 인프라. 백테스트 PnL의 90%가 look-ahead bias, 순수 forward edge +80.5%/68.5% WR. EXPECTED_WIN_RATE 85→68, daily limit 7→5%. Dynamic pattern_source 모드 추가 (scanner CLI → Universal TP 2.0/SL 3.0, 75패턴=28L+47S). 90일 OOS 테스트 대기 (2026-04-30 목표) |
 | v1.27.2 | 02-12 | Low-WR pattern review: U-H-BU 제거 (SL 0.3% 실전 불가), 51패턴 (32L+19S), PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x + 25개 개별 검증 + Pattern-Rediscovery WF + Strategy Options Evaluation |
 | v1.27.1 | 02-12 | Legacy pattern re-optimization: 15/21 legacy 패턴 TP/SL 재최적화 (9 MC fix + 6 upgrade), PnL +956.2%, MDD 16.2%, PnL/MDD 59.0x, PF 3.82, WR 82.1% |
 | v1.27.0 | 02-10 | Uniform TP 70% + 리스크 관리: TP×0.7 전체 적용, WR 83.7%, PnL +911.1%, MDD 16.2%, daily limit 7%, 연속손실 3회 pause + context filter 심층연구 FAIL (BH FDR 0/156 유의) |

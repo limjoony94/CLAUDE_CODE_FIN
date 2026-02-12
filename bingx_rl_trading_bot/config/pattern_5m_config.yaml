@@ -17,7 +17,7 @@ rotation:
   enabled: false
 strategy:
   cooldown_candles: 0
-  pattern_source: static  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
+  pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)
   # Per-pattern TP/SL in constants.py PATTERN_OPTIMAL_TPSL (tp_pct/sl_pct are fallback defaults)
   sl_pct: 1.0

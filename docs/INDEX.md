@@ -1,6 +1,6 @@
 # 문서 목차 (INDEX)
 
-> **Updated**: 2026-02-11 | **Bot Version**: v1.27.0
+> **Updated**: 2026-02-12 | **Bot Version**: v1.27.3
 
 ---
 
@@ -8,7 +8,7 @@
 
 | 문서 | 설명 |
 |------|------|
-| [CLAUDE.md](../CLAUDE.md) | **프로젝트 핵심 문서** — 전략, 파라미터, 52패턴, 버전 히스토리 |
+| [CLAUDE.md](../CLAUDE.md) | **프로젝트 핵심 문서** — 전략, 파라미터, 51패턴, 버전 히스토리 |
 
 ## docs/
 
@@ -48,6 +48,7 @@
 | scripts/production/README.md | 프로덕션 봇 실행 가이드 |
 | scripts/production/pattern_5m/README.md | 14개 모듈 패키지 구조 |
 | scripts/analysis/README.md | 연구/분석 스크립트 가이드 (45+) |
+| scripts/scanner/pattern_scanner.py | Dynamic WF Pattern Scanner CLI (Universal TP/SL) |
 | scripts/data/README.md | 데이터 수집 스크립트 가이드 |
 | scripts/utils/README.md | 유틸리티 스크립트 가이드 |
 

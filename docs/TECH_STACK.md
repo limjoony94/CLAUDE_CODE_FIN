@@ -1,6 +1,6 @@
 # Tech Stack - CLAUDE_CODE_FIN
 
-**Last Updated**: 2026-02-11 | **Bot Version**: v1.27.0
+**Last Updated**: 2026-02-12 | **Bot Version**: v1.27.3
 
 ---
 
@@ -35,6 +35,7 @@
 ```
 bingx_rl_trading_bot/
 ├── scripts/production/pattern_5m/  # 프로덕션 봇 (14 모듈)
+├── scripts/scanner/               # Dynamic WF Pattern Scanner CLI
 ├── scripts/analysis/               # 연구 스크립트 (45+)
 ├── scripts/data/                   # 데이터 수집
 ├── scripts/utils/                  # 유틸리티

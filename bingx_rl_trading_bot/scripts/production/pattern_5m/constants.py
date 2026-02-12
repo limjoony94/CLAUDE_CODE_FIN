@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.27.3"  # v1.27.3: Expectation reset — genuine forward WR 68.5%, daily limit 5%
+BOT_VERSION = "1.28.0"  # v1.28.0: Static→Dynamic — 75 patterns + Universal TP 2.0/SL 3.0
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -515,8 +515,8 @@ API_MAX_DELAY = 30
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
 EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
-EXPECTED_AVG_WIN = 3.5    # v1.27.3: live avg_win ~3.09, forward estimate 3.5
-EXPECTED_AVG_LOSS = 5.5   # v1.27.3: live avg_loss ~5.69, forward estimate 5.5
+EXPECTED_AVG_WIN = 5.90   # v1.28.0: Universal TP 2.0% × 3x leverage - 0.10% fee
+EXPECTED_AVG_LOSS = 9.10  # v1.28.0: Universal SL 3.0% × 3x leverage + 0.10% fee
 EXPECTED_EDGE = 15.0      # v1.27.3: genuine edge ~10-20% (was 50% — inflated by look-ahead)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5

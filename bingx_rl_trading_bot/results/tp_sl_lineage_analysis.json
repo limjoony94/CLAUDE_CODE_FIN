@@ -1,0 +1,1219 @@
+{
+  "meta": {
+    "script": "tp_sl_lineage_analysis.py",
+    "timestamp": "2026-02-12T04:15:40.093266"
+  },
+  "lineage": {
+    "v1264_optimized": [
+      "BD-BD-U",
+      "BD-D-D",
+      "BD-ST-U",
+      "BU-BU-BD",
+      "BU-ST-GS",
+      "D-BD-ST",
+      "D-MU-U",
+      "DN-BD-BD",
+      "DN-D-BD",
+      "DN-DF-MU",
+      "DN-DF-ST",
+      "DN-DN-H",
+      "GS-ST-ST",
+      "H-BU-BU",
+      "H-MU-MD",
+      "IH-MD-MD",
+      "IH-ST-MU",
+      "IH-ST-ST",
+      "MD-BU-MD",
+      "MD-H-MD",
+      "MD-MD-ST",
+      "MU-BD-ST",
+      "MU-DF-U",
+      "MU-IH-DN",
+      "ST-DN-BU",
+      "ST-MU-ST",
+      "U-MD-GS",
+      "U-MU-H",
+      "U-MU-IH",
+      "U-ST-DF",
+      "U-ST-DN"
+    ],
+    "legacy_v1261": [
+      "BD-BU-DN",
+      "BD-MU-BD",
+      "BD-U-H",
+      "BU-MD-MD",
+      "D-DN-DN",
+      "DN-BD-BU",
+      "DN-DF-DN",
+      "DN-MD-DN",
+      "H-U-BD",
+      "MD-DN-MU",
+      "MD-MD-MD",
+      "MD-ST-BD",
+      "MD-ST-MD",
+      "MU-H-MU",
+      "MU-U-H",
+      "ST-BD-BU",
+      "ST-DN-U",
+      "U-GS-DN",
+      "U-H-BU",
+      "U-H-MU",
+      "U-MD-MD"
+    ]
+  },
+  "pattern_health": {
+    "BD-BD-U": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 85,
+      "wr": 81.2,
+      "pnl": 137.3,
+      "mc": 0.0025,
+      "edge": 13.0,
+      "status": "OK"
+    },
+    "BD-BU-DN": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 56,
+      "wr": 73.2,
+      "pnl": 117.7,
+      "mc": 0.0121,
+      "edge": 14.4,
+      "status": "MC_FAIL"
+    },
+    "BD-D-D": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.05,
+      "sl": 3.0,
+      "trades": 13,
+      "wr": 100.0,
+      "pnl": 39.7,
+      "mc": 0.0001,
+      "edge": 25.9,
+      "status": "FEW_TRADES"
+    },
+    "BD-MU-BD": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.7,
+      "trades": 24,
+      "wr": 79.2,
+      "pnl": 27.0,
+      "mc": 0.0036,
+      "edge": 29.2,
+      "status": "OK"
+    },
+    "BD-ST-U": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.0,
+      "trades": 115,
+      "wr": 72.2,
+      "pnl": 145.1,
+      "mc": 0.0025,
+      "edge": 13.4,
+      "status": "OK"
+    },
+    "BD-U-H": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 22,
+      "wr": 86.4,
+      "pnl": 70.6,
+      "mc": 0.0054,
+      "edge": 23.2,
+      "status": "OK"
+    },
+    "BU-BU-BD": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 44,
+      "wr": 79.5,
+      "pnl": 135.1,
+      "mc": 0.0013,
+      "edge": 20.7,
+      "status": "OK"
+    },
+    "BU-MD-MD": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 2.0,
+      "trades": 19,
+      "wr": 78.9,
+      "pnl": 68.6,
+      "mc": 0.0025,
+      "edge": 30.2,
+      "status": "OK"
+    },
+    "BU-ST-GS": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 0.7,
+      "sl": 2.5,
+      "trades": 14,
+      "wr": 100.0,
+      "pnl": 28.0,
+      "mc": 0.0,
+      "edge": 21.9,
+      "status": "FEW_TRADES"
+    },
+    "D-BD-ST": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 18,
+      "wr": 83.3,
+      "pnl": 50.0,
+      "mc": 0.0268,
+      "edge": 20.2,
+      "status": "MC_FAIL"
+    },
+    "D-DN-DN": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 111,
+      "wr": 71.2,
+      "pnl": 115.7,
+      "mc": 0.0466,
+      "edge": 8.0,
+      "status": "MC_FAIL"
+    },
+    "D-MU-U": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 2.0,
+      "trades": 38,
+      "wr": 86.8,
+      "pnl": 70.2,
+      "mc": 0.0003,
+      "edge": 21.3,
+      "status": "OK"
+    },
+    "DN-BD-BD": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 1.5,
+      "trades": 108,
+      "wr": 63.9,
+      "pnl": 103.5,
+      "mc": 0.0101,
+      "edge": 12.2,
+      "status": "MC_FAIL"
+    },
+    "DN-BD-BU": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 72,
+      "wr": 79.2,
+      "pnl": 157.1,
+      "mc": 0.0012,
+      "edge": 16.0,
+      "status": "OK"
+    },
+    "DN-D-BD": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.0,
+      "trades": 44,
+      "wr": 54.5,
+      "pnl": 61.6,
+      "mc": 0.0179,
+      "edge": 18.2,
+      "status": "MC_FAIL"
+    },
+    "DN-DF-DN": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 2.0,
+      "trades": 54,
+      "wr": 74.1,
+      "pnl": 78.6,
+      "mc": 0.0107,
+      "edge": 15.3,
+      "status": "MC_FAIL"
+    },
+    "DN-DF-MU": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 3.0,
+      "trades": 16,
+      "wr": 93.8,
+      "pnl": 36.7,
+      "mc": 0.0015,
+      "edge": 19.7,
+      "status": "OK"
+    },
+    "DN-DF-ST": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 27,
+      "wr": 85.2,
+      "pnl": 57.9,
+      "mc": 0.0104,
+      "edge": 17.0,
+      "status": "MC_FAIL"
+    },
+    "DN-DN-H": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 2.5,
+      "trades": 107,
+      "wr": 89.7,
+      "pnl": 108.4,
+      "mc": 0.0002,
+      "edge": 11.6,
+      "status": "OK"
+    },
+    "DN-MD-DN": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 2.0,
+      "trades": 202,
+      "wr": 73.8,
+      "pnl": 131.2,
+      "mc": 0.011,
+      "edge": 8.2,
+      "status": "MC_FAIL"
+    },
+    "GS-ST-ST": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 2.0,
+      "trades": 19,
+      "wr": 84.2,
+      "pnl": 30.5,
+      "mc": 0.0187,
+      "edge": 18.6,
+      "status": "MC_FAIL"
+    },
+    "H-BU-BU": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 13,
+      "wr": 100.0,
+      "pnl": 53.3,
+      "mc": 0.0,
+      "edge": 31.8,
+      "status": "FEW_TRADES"
+    },
+    "H-MU-MD": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 2.0,
+      "trades": 28,
+      "wr": 92.9,
+      "pnl": 39.8,
+      "mc": 0.0013,
+      "edge": 18.8,
+      "status": "OK"
+    },
+    "H-U-BD": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 2.0,
+      "trades": 24,
+      "wr": 75.0,
+      "pnl": 75.0,
+      "mc": 0.0028,
+      "edge": 26.2,
+      "status": "OK"
+    },
+    "IH-MD-MD": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 2.0,
+      "trades": 21,
+      "wr": 95.2,
+      "pnl": 33.9,
+      "mc": 0.0006,
+      "edge": 21.2,
+      "status": "OK"
+    },
+    "IH-ST-MU": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 0.35,
+      "sl": 2.5,
+      "trades": 24,
+      "wr": 100.0,
+      "pnl": 22.8,
+      "mc": 0.0,
+      "edge": 12.3,
+      "status": "OK"
+    },
+    "IH-ST-ST": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 30,
+      "wr": 90.0,
+      "pnl": 83.4,
+      "mc": 0.0002,
+      "edge": 21.8,
+      "status": "OK"
+    },
+    "MD-BU-MD": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.5,
+      "trades": 20,
+      "wr": 90.0,
+      "pnl": 58.6,
+      "mc": 0.0014,
+      "edge": 25.9,
+      "status": "OK"
+    },
+    "MD-DN-MU": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 1.0,
+      "trades": 135,
+      "wr": 65.9,
+      "pnl": 35.4,
+      "mc": 0.1001,
+      "edge": 7.1,
+      "status": "MC_FAIL"
+    },
+    "MD-H-MD": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.7,
+      "trades": 24,
+      "wr": 75.0,
+      "pnl": 22.8,
+      "mc": 0.0111,
+      "edge": 25.0,
+      "status": "MC_FAIL"
+    },
+    "MD-MD-MD": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 22,
+      "wr": 86.4,
+      "pnl": 90.5,
+      "mc": 0.0013,
+      "edge": 27.5,
+      "status": "OK"
+    },
+    "MD-MD-ST": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 2.0,
+      "trades": 37,
+      "wr": 83.8,
+      "pnl": 58.0,
+      "mc": 0.0059,
+      "edge": 18.2,
+      "status": "OK"
+    },
+    "MD-ST-BD": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 0.5,
+      "trades": 33,
+      "wr": 57.6,
+      "pnl": 15.6,
+      "mc": 0.0758,
+      "edge": 15.9,
+      "status": "MC_FAIL"
+    },
+    "MD-ST-MD": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.0,
+      "trades": 36,
+      "wr": 77.8,
+      "pnl": 66.0,
+      "mc": 0.0071,
+      "edge": 19.0,
+      "status": "OK"
+    },
+    "MU-BD-ST": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 28,
+      "wr": 89.3,
+      "pnl": 75.2,
+      "mc": 0.002,
+      "edge": 21.1,
+      "status": "OK"
+    },
+    "MU-DF-U": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 2.0,
+      "trades": 19,
+      "wr": 89.5,
+      "pnl": 39.7,
+      "mc": 0.0054,
+      "edge": 23.9,
+      "status": "OK"
+    },
+    "MU-H-MU": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 0.7,
+      "trades": 29,
+      "wr": 62.1,
+      "pnl": 30.7,
+      "mc": 0.0184,
+      "edge": 22.1,
+      "status": "MC_FAIL"
+    },
+    "MU-IH-DN": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.0,
+      "trades": 36,
+      "wr": 83.3,
+      "pnl": 86.4,
+      "mc": 0.0005,
+      "edge": 24.5,
+      "status": "OK"
+    },
+    "MU-U-H": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 3.0,
+      "trades": 33,
+      "wr": 81.8,
+      "pnl": 84.5,
+      "mc": 0.0059,
+      "edge": 18.7,
+      "status": "OK"
+    },
+    "ST-BD-BU": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 28,
+      "wr": 82.1,
+      "pnl": 97.1,
+      "mc": 0.003,
+      "edge": 23.3,
+      "status": "OK"
+    },
+    "ST-DN-BU": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 72,
+      "wr": 80.6,
+      "pnl": 110.4,
+      "mc": 0.0095,
+      "edge": 12.4,
+      "status": "OK"
+    },
+    "ST-DN-U": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 293,
+      "wr": 69.3,
+      "pnl": 439.6,
+      "mc": 0.0002,
+      "edge": 10.5,
+      "status": "OK"
+    },
+    "ST-MU-ST": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 49,
+      "wr": 83.7,
+      "pnl": 95.3,
+      "mc": 0.0038,
+      "edge": 15.5,
+      "status": "OK"
+    },
+    "U-GS-DN": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 3.0,
+      "trades": 32,
+      "wr": 87.5,
+      "pnl": 137.2,
+      "mc": 0.0,
+      "edge": 28.7,
+      "status": "OK"
+    },
+    "U-H-BU": {
+      "lineage": "LEGACY",
+      "direction": "SHORT",
+      "tp": 0.7,
+      "sl": 0.3,
+      "trades": 42,
+      "wr": 47.6,
+      "pnl": 18.0,
+      "mc": 0.0459,
+      "edge": 17.6,
+      "status": "MC_FAIL"
+    },
+    "U-H-MU": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 2.0,
+      "trades": 43,
+      "wr": 86.0,
+      "pnl": 76.3,
+      "mc": 0.0003,
+      "edge": 20.5,
+      "status": "OK"
+    },
+    "U-MD-GS": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 0.35,
+      "sl": 2.5,
+      "trades": 23,
+      "wr": 95.7,
+      "pnl": 13.3,
+      "mc": 0.0727,
+      "edge": 7.9,
+      "status": "MC_FAIL"
+    },
+    "U-MD-MD": {
+      "lineage": "LEGACY",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 0.7,
+      "trades": 111,
+      "wr": 50.5,
+      "pnl": 49.8,
+      "mc": 0.0385,
+      "edge": 10.5,
+      "status": "MC_FAIL"
+    },
+    "U-MU-H": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.05,
+      "sl": 3.0,
+      "trades": 54,
+      "wr": 88.9,
+      "pnl": 91.8,
+      "mc": 0.0012,
+      "edge": 14.8,
+      "status": "OK"
+    },
+    "U-MU-IH": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 2.5,
+      "trades": 31,
+      "wr": 80.6,
+      "pnl": 109.4,
+      "mc": 0.001,
+      "edge": 26.3,
+      "status": "OK"
+    },
+    "U-ST-DF": {
+      "lineage": "v1.26.4",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 22,
+      "wr": 86.4,
+      "pnl": 50.6,
+      "mc": 0.0142,
+      "edge": 18.2,
+      "status": "MC_FAIL"
+    },
+    "U-ST-DN": {
+      "lineage": "v1.26.4",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 340,
+      "wr": 77.4,
+      "pnl": 377.6,
+      "mc": 0.0,
+      "edge": 9.2,
+      "status": "OK"
+    }
+  },
+  "hybrid_comparison": {
+    "H0": {
+      "changes": 0,
+      "stats": {
+        "pnl": 911.1,
+        "trades": 386,
+        "wr": 83.7,
+        "mdd": 16.2,
+        "pf": 3.62,
+        "pnl_mdd": 56.2,
+        "max_consec": 2
+      }
+    },
+    "H1": {
+      "changes": 21,
+      "stats": {
+        "pnl": 908.4,
+        "trades": 352,
+        "wr": 81.8,
+        "mdd": 16.2,
+        "pf": 3.56,
+        "pnl_mdd": 56.1,
+        "max_consec": 2
+      }
+    },
+    "H2": {
+      "changes": 17,
+      "stats": {
+        "pnl": 924.8,
+        "trades": 355,
+        "wr": 82.0,
+        "mdd": 16.2,
+        "pf": 3.69,
+        "pnl_mdd": 57.1,
+        "max_consec": 2
+      }
+    },
+    "H3": {
+      "changes": 32,
+      "stats": {
+        "pnl": 881.1,
+        "trades": 343,
+        "wr": 80.5,
+        "mdd": 24.4,
+        "pf": 3.25,
+        "pnl_mdd": 36.1,
+        "max_consec": 3
+      }
+    },
+    "H4": {
+      "changes": 29,
+      "stats": {
+        "pnl": 955.1,
+        "trades": 341,
+        "wr": 82.1,
+        "mdd": 16.2,
+        "pf": 3.82,
+        "pnl_mdd": 59.0,
+        "max_consec": 2
+      }
+    },
+    "H5": {
+      "changes": 51,
+      "stats": {
+        "pnl": 853.0,
+        "trades": 328,
+        "wr": 77.4,
+        "mdd": 24.4,
+        "pf": 3.09,
+        "pnl_mdd": 35.0,
+        "max_consec": 3
+      }
+    },
+    "H6": {
+      "changes": 20,
+      "stats": {
+        "pnl": 956.5,
+        "trades": 358,
+        "wr": 83.2,
+        "mdd": 16.2,
+        "pf": 3.83,
+        "pnl_mdd": 59.0,
+        "max_consec": 2
+      }
+    }
+  },
+  "legacy_verdicts": [
+    {
+      "pattern": "BD-BU-DN",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 117.7,
+      "new_pnl": 148.3,
+      "score": 2
+    },
+    {
+      "pattern": "BD-MU-BD",
+      "verdict": "CONSIDER",
+      "current_pnl": 27.0,
+      "new_pnl": 31.0,
+      "score": 2
+    },
+    {
+      "pattern": "BD-U-H",
+      "verdict": "UPGRADE",
+      "current_pnl": 70.6,
+      "new_pnl": 98.5,
+      "score": 4
+    },
+    {
+      "pattern": "BU-MD-MD",
+      "verdict": "UPGRADE",
+      "current_pnl": 68.6,
+      "new_pnl": 82.4,
+      "score": 4
+    },
+    {
+      "pattern": "D-DN-DN",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 115.7,
+      "new_pnl": 204.6,
+      "score": 2
+    },
+    {
+      "pattern": "DN-BD-BU",
+      "verdict": "CONSIDER",
+      "current_pnl": 157.1,
+      "new_pnl": 166.9,
+      "score": 4
+    },
+    {
+      "pattern": "DN-DF-DN",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 78.6,
+      "new_pnl": 103.2,
+      "score": 2
+    },
+    {
+      "pattern": "DN-MD-DN",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 131.2,
+      "new_pnl": 221.8,
+      "score": 2
+    },
+    {
+      "pattern": "H-U-BD",
+      "verdict": "CONSIDER",
+      "current_pnl": 75.0,
+      "new_pnl": 88.0,
+      "score": 2
+    },
+    {
+      "pattern": "MD-DN-MU",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 35.4,
+      "new_pnl": 83.0,
+      "score": 2
+    },
+    {
+      "pattern": "MD-MD-MD",
+      "verdict": "UPGRADE",
+      "current_pnl": 90.5,
+      "new_pnl": 132.9,
+      "score": 4
+    },
+    {
+      "pattern": "MD-ST-BD",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 15.6,
+      "new_pnl": 32.7,
+      "score": 2
+    },
+    {
+      "pattern": "MD-ST-MD",
+      "verdict": "UPGRADE",
+      "current_pnl": 66.0,
+      "new_pnl": 81.0,
+      "score": 4
+    },
+    {
+      "pattern": "MU-H-MU",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 30.7,
+      "new_pnl": 50.6,
+      "score": 2
+    },
+    {
+      "pattern": "MU-U-H",
+      "verdict": "CONSIDER",
+      "current_pnl": 84.5,
+      "new_pnl": 100.8,
+      "score": 2
+    },
+    {
+      "pattern": "ST-BD-BU",
+      "verdict": "CONSIDER",
+      "current_pnl": 97.1,
+      "new_pnl": 105.8,
+      "score": 3
+    },
+    {
+      "pattern": "ST-DN-U",
+      "verdict": "KEEP",
+      "current_pnl": 439.6,
+      "new_pnl": 426.6,
+      "score": 4
+    },
+    {
+      "pattern": "U-GS-DN",
+      "verdict": "UPGRADE",
+      "current_pnl": 137.2,
+      "new_pnl": 159.4,
+      "score": 4
+    },
+    {
+      "pattern": "U-H-BU",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 18.0,
+      "new_pnl": 32.1,
+      "score": 2
+    },
+    {
+      "pattern": "U-H-MU",
+      "verdict": "UPGRADE",
+      "current_pnl": 76.3,
+      "new_pnl": 104.2,
+      "score": 4
+    },
+    {
+      "pattern": "U-MD-MD",
+      "verdict": "NEEDS_FIX",
+      "current_pnl": 49.8,
+      "new_pnl": 81.4,
+      "score": 2
+    }
+  ],
+  "scale_distribution": {
+    "v1.26.4": [
+      {
+        "pattern": "BD-BD-U",
+        "best_scale": 0.85,
+        "delta": 47.10000000000002
+      },
+      {
+        "pattern": "BD-D-D",
+        "best_scale": 1.0,
+        "delta": 17.549999999999997
+      },
+      {
+        "pattern": "BD-ST-U",
+        "best_scale": 0.95,
+        "delta": 26.299999999999983
+      },
+      {
+        "pattern": "BU-BU-BD",
+        "best_scale": 0.75,
+        "delta": 2.44999999999996
+      },
+      {
+        "pattern": "BU-ST-GS",
+        "best_scale": 1.0,
+        "delta": 9.700000000000003
+      },
+      {
+        "pattern": "D-BD-ST",
+        "best_scale": 1.0,
+        "delta": 33.75
+      },
+      {
+        "pattern": "D-MU-U",
+        "best_scale": 1.0,
+        "delta": 10.350000000000009
+      },
+      {
+        "pattern": "DN-BD-BD",
+        "best_scale": 1.0,
+        "delta": 63.20000000000006
+      },
+      {
+        "pattern": "DN-D-BD",
+        "best_scale": 0.9,
+        "delta": 26.25
+      },
+      {
+        "pattern": "DN-DF-MU",
+        "best_scale": 0.95,
+        "delta": 12.909999999999997
+      },
+      {
+        "pattern": "DN-DF-ST",
+        "best_scale": 1.0,
+        "delta": 23.700000000000017
+      },
+      {
+        "pattern": "DN-DN-H",
+        "best_scale": 0.9,
+        "delta": 16.800000000000054
+      },
+      {
+        "pattern": "GS-ST-ST",
+        "best_scale": 1.0,
+        "delta": 17.199999999999996
+      },
+      {
+        "pattern": "H-BU-BU",
+        "best_scale": 1.0,
+        "delta": 11.600000000000009
+      },
+      {
+        "pattern": "H-MU-MD",
+        "best_scale": 0.9,
+        "delta": 10.400000000000013
+      },
+      {
+        "pattern": "IH-MD-MD",
+        "best_scale": 0.95,
+        "delta": 12.25
+      },
+      {
+        "pattern": "IH-ST-MU",
+        "best_scale": 1.0,
+        "delta": 10.799999999999997
+      },
+      {
+        "pattern": "IH-ST-ST",
+        "best_scale": 0.95,
+        "delta": 23.700000000000003
+      },
+      {
+        "pattern": "MD-BU-MD",
+        "best_scale": 1.0,
+        "delta": 8.800000000000011
+      },
+      {
+        "pattern": "MD-H-MD",
+        "best_scale": 1.0,
+        "delta": 11.100000000000005
+      },
+      {
+        "pattern": "MD-MD-ST",
+        "best_scale": 0.9,
+        "delta": 12.100000000000016
+      },
+      {
+        "pattern": "MU-BD-ST",
+        "best_scale": 1.0,
+        "delta": 21.40000000000002
+      },
+      {
+        "pattern": "MU-DF-U",
+        "best_scale": 0.95,
+        "delta": 19.380000000000003
+      },
+      {
+        "pattern": "MU-IH-DN",
+        "best_scale": 0.95,
+        "delta": 33.8
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "best_scale": 0.9,
+        "delta": 32.50000000000006
+      },
+      {
+        "pattern": "ST-MU-ST",
+        "best_scale": 1.0,
+        "delta": 23.400000000000034
+      },
+      {
+        "pattern": "U-MD-GS",
+        "best_scale": 1.0,
+        "delta": 8.5
+      },
+      {
+        "pattern": "U-MU-H",
+        "best_scale": 1.0,
+        "delta": 38.400000000000006
+      },
+      {
+        "pattern": "U-MU-IH",
+        "best_scale": 0.95,
+        "delta": 22.44999999999999
+      },
+      {
+        "pattern": "U-ST-DF",
+        "best_scale": 0.95,
+        "delta": 22.900000000000006
+      },
+      {
+        "pattern": "U-ST-DN",
+        "best_scale": 0.95,
+        "delta": 85.80000000000007
+      }
+    ],
+    "LEGACY": [
+      {
+        "pattern": "BD-BU-DN",
+        "best_scale": 0.95,
+        "delta": 50.0
+      },
+      {
+        "pattern": "BD-MU-BD",
+        "best_scale": 0.9,
+        "delta": 8.800000000000011
+      },
+      {
+        "pattern": "BD-U-H",
+        "best_scale": 1.0,
+        "delta": 27.94999999999999
+      },
+      {
+        "pattern": "BU-MD-MD",
+        "best_scale": 1.0,
+        "delta": 13.799999999999983
+      },
+      {
+        "pattern": "D-DN-DN",
+        "best_scale": 1.0,
+        "delta": 88.94999999999999
+      },
+      {
+        "pattern": "DN-BD-BU",
+        "best_scale": 1.0,
+        "delta": 9.850000000000023
+      },
+      {
+        "pattern": "DN-DF-DN",
+        "best_scale": 0.95,
+        "delta": 25.900000000000006
+      },
+      {
+        "pattern": "DN-MD-DN",
+        "best_scale": 1.0,
+        "delta": 69.45000000000002
+      },
+      {
+        "pattern": "H-U-BD",
+        "best_scale": 0.8,
+        "delta": 16.19999999999996
+      },
+      {
+        "pattern": "MD-DN-MU",
+        "best_scale": 1.0,
+        "delta": 47.60000000000003
+      },
+      {
+        "pattern": "MD-MD-MD",
+        "best_scale": 1.0,
+        "delta": 42.39999999999998
+      },
+      {
+        "pattern": "MD-ST-BD",
+        "best_scale": 1.0,
+        "delta": 17.100000000000005
+      },
+      {
+        "pattern": "MD-ST-MD",
+        "best_scale": 1.0,
+        "delta": 15.000000000000014
+      },
+      {
+        "pattern": "MU-H-MU",
+        "best_scale": 0.95,
+        "delta": 20.520000000000007
+      },
+      {
+        "pattern": "MU-U-H",
+        "best_scale": 1.0,
+        "delta": 16.349999999999994
+      },
+      {
+        "pattern": "ST-BD-BU",
+        "best_scale": 0.95,
+        "delta": 9.5
+      },
+      {
+        "pattern": "ST-DN-U",
+        "best_scale": 0.7,
+        "delta": 0.0
+      },
+      {
+        "pattern": "U-GS-DN",
+        "best_scale": 0.95,
+        "delta": 29.19999999999999
+      },
+      {
+        "pattern": "U-H-BU",
+        "best_scale": 1.0,
+        "delta": 14.100000000000009
+      },
+      {
+        "pattern": "U-H-MU",
+        "best_scale": 1.0,
+        "delta": 27.950000000000003
+      },
+      {
+        "pattern": "U-MD-MD",
+        "best_scale": 0.95,
+        "delta": 34.300000000000004
+      }
+    ]
+  },
+  "selective_upgrade": {
+    "fix_list": [
+      "BD-BU-DN",
+      "D-DN-DN",
+      "DN-DF-DN",
+      "DN-MD-DN",
+      "MD-DN-MU",
+      "MD-ST-BD",
+      "MU-H-MU",
+      "U-H-BU",
+      "U-MD-MD"
+    ],
+    "upgrade_list": [
+      "BD-U-H",
+      "BU-MD-MD",
+      "MD-MD-MD",
+      "MD-ST-MD",
+      "U-GS-DN",
+      "U-H-MU"
+    ],
+    "consider_list": [
+      "BD-MU-BD",
+      "DN-BD-BU",
+      "H-U-BD",
+      "MU-U-H",
+      "ST-BD-BU"
+    ]
+  }
+}

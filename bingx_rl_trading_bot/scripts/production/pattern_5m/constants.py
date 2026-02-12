@@ -554,7 +554,7 @@ DEFAULT_CONFIG = {
         'short_patterns': VALIDATED_SHORT_PATTERNS,
     },
     'risk': {
-        'max_daily_loss_pct': 5,  # v1.27.3: 7% → 5% (genuine forward edge smaller than backtest)
+        'max_daily_loss_pct': 10,  # v1.28.0: 5% → 10% (Universal SL 3.0% × 3x = 9.1% per loss)
         'max_position_size_usd': 10000,
     },
     'api': {

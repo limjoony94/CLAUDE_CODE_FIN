@@ -11,11 +11,10 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.27.0"  # v1.27.0: Uniform TP 70% — all TP * 0.7, SL unchanged
-# Base: v1.26.4 (52 patterns, 32L+20S, deep-validated TP/SL)
-# Research: microstructure race dynamics → distance-edge decomposition → uniform TP validation
-# Result: PnL +911%, WR 83.7%, MDD 16.2%, PnL/MDD 56.2x, portfolio MC p=0.0000
-# Mechanism: faster trade resolution → more trades (314→386) under 1-pos-at-a-time constraint
+BOT_VERSION = "1.27.1"  # v1.27.1: Legacy pattern re-optimization + logging improvements
+# Base: v1.27.0 Uniform TP 70% + 15 legacy patterns re-optimized via lineage analysis
+# Result: PnL +955%, WR 82.0%, MDD 16.2%, PnL/MDD 59.0x, portfolio MC p=0.0000
+# Changes: 9 NEEDS_FIX + 6 UPGRADE patterns, log rotation, timing, balance logging
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)

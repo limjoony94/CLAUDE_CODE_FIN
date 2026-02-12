@@ -32,7 +32,7 @@ bingx_rl_trading_bot/
 
 ### 현재 전략 파라미터 (v1.27.3)
 - **패턴**: 51개 (32L+19S), Uniform TP 70% + Legacy reopt + Low-WR review
-- **TP/SL**: Per-pattern 최적화 (v1.27.1 legacy reopt 포함) / Dynamic 모드: Universal TP 2.0/SL 3.0
+- **TP/SL**: Per-pattern 최적화 (v1.27.1 legacy reopt 포함) / Dynamic 모드: Universal TP 2.1/SL 3.0
 - **레버리지**: 3x
 - **리스크**: 일일 손실 **10%** (v1.28.0), 연속 3패 → 600초 pause
 - **Pattern Source**: `static` (constants.py) 또는 `dynamic` (results/dynamic_patterns.json)

@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.0 | **Bot**: Pattern 5m (75패턴, 28L+47S) | **Updated**: 2026-02-12
+> **Version**: v1.28.1 | **Bot**: Pattern 5m (69패턴, 24L+45S) | **Updated**: 2026-02-13
 
 ---
 
@@ -186,7 +186,7 @@
 | 모드 | 설정값 | 패턴 소스 | TP/SL |
 |------|--------|-----------|-------|
 | Static (기본) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
-| Dynamic | `pattern_source: dynamic` | results/dynamic_patterns.json | Universal TP 2.0/SL 3.0 |
+| Dynamic | `pattern_source: dynamic` | results/dynamic_patterns.json | Universal TP 2.1/SL 3.0 |
 
 **Scanner CLI 사용법**:
 ```bash
@@ -314,7 +314,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.28.0** | 02-12 | **Static→Dynamic 프로덕션 전환**. Universal TP 2.0/SL 3.0 + 75패턴 (28L+47S). True WF OOS: Universal +562% vs Per-pattern +416% (per-pattern이 173.6% look-ahead bias). Expected per-trade: +1.10% (기존 +0.62% 대비 +77%). pattern_source: dynamic 활성화. Daily limit 5→10% (1회 SL=9.1%). Rollback: static 한 줄 변경 ← **현재** |
+| **v1.28.1** | 02-13 | **Fine grid TP 최적화**: TP 2.0→2.1 (784-combo compound grid search). Pre-overlap PnL/MDD 18.8x→36.9x (+96%), Safety +4.8→+5.7pp. Expected per-trade: +1.30% (기존 +1.10%). 69패턴 (24L+45S) ← **현재** |
+| v1.28.0 | 02-12 | Static→Dynamic 프로덕션 전환. Universal TP 2.0/SL 3.0 + 75패턴 (28L+47S). True WF OOS: Universal +562% vs Per-pattern +416%. pattern_source: dynamic 활성화. Daily limit 5→10% (1회 SL=9.1%) |
 | v1.27.3 | 02-12 | Expectation reset + Dynamic WF Pattern Selection 인프라. 백테스트 PnL의 90%가 look-ahead bias, 순수 forward edge +80.5%/68.5% WR. EXPECTED_WIN_RATE 85→68, daily limit 7→5%. Dynamic pattern_source 모드 추가 (scanner CLI → Universal TP 2.0/SL 3.0, 75패턴=28L+47S). 90일 OOS 테스트 대기 (2026-04-30 목표) |
 | v1.27.2 | 02-12 | Low-WR pattern review: U-H-BU 제거 (SL 0.3% 실전 불가), 51패턴 (32L+19S), PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x + 25개 개별 검증 + Pattern-Rediscovery WF + Strategy Options Evaluation |
 | v1.27.1 | 02-12 | Legacy pattern re-optimization: 15/21 legacy 패턴 TP/SL 재최적화 (9 MC fix + 6 upgrade), PnL +956.2%, MDD 16.2%, PnL/MDD 59.0x, PF 3.82, WR 82.1% |

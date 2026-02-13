@@ -69,6 +69,7 @@ from .position import (
     close_position_market,
 )
 from .orders import verify_tp_sl_orders, adjust_tpsl_to_config
+from .utils import extract_pattern_name
 from .utils.lock import acquire_lock, release_lock
 from .utils.logging_config import setup_logging
 
@@ -338,7 +339,7 @@ def _run_bot_main(
                     save_metrics(metrics, metrics_path)
                     last_metrics_save_time = now
 
-            # Smart sleep
+            # Smart sleep — refresh in case position changed during this iteration
             has_position = bool(state.get('position'))
             sleep_duration = _calculate_sleep_duration(has_position, last_processed_candle_id)
             _interruptible_sleep(sleep_duration)
@@ -441,8 +442,6 @@ def _process_existing_position(
     Returns:
         True if trading action occurred (early exit), False otherwise
     """
-    from .state import save_state
-
     position = state['position']
 
     # Fetch indicators for early exit analysis
@@ -537,7 +536,7 @@ def _wait_for_candle_settle(config: Dict[str, Any]) -> None:
     if time_since_close < CANDLE_SETTLE_SECONDS:
         wait_time = CANDLE_SETTLE_SECONDS - time_since_close
         logger.debug(f"Waiting {wait_time:.1f}s for candle to settle")
-        time.sleep(wait_time)
+        _interruptible_sleep(wait_time)
 
 
 def _fetch_and_calculate_indicators(
@@ -595,8 +594,7 @@ def _log_position_status(
         pnl_pct = direction * (current_price / position['entry_price'] - 1) * 100 * config['leverage']
 
         # Extract pattern name
-        pattern_match = re.search(r'Pattern:\s*(\S+)', position.get('reason', ''))
-        pattern_name = pattern_match.group(1) if pattern_match else ''
+        pattern_name = extract_pattern_name(position.get('reason', ''))
 
         # Calculate TP/SL progress (0% = at entry, 100% = at target)
         entry = position['entry_price']

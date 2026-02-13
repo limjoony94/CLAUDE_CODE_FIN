@@ -11,8 +11,6 @@ from typing import Dict, Any, Optional, List
 
 import ccxt
 
-import re
-
 from .constants import (
     FEE_PCT,
     QTY_TOLERANCE,
@@ -21,9 +19,10 @@ from .constants import (
 )
 from .position_open import calculate_tp_sl, setup_scale_out
 from .models import APICache, CircuitBreaker, PerformanceMetrics
-from .exchange import fetch_positions_cached
-from .state import save_state
+from .exchange import fetch_positions_cached, fetch_ticker_cached
+from .state import save_state, save_metrics
 from .orders import place_tp_sl_orders, cancel_remaining_orders
+from .utils import extract_pattern_name
 
 logger = logging.getLogger('pattern_5m')
 
@@ -105,8 +104,6 @@ def record_closed_position(
         cache: APICache instance
         metrics: Optional PerformanceMetrics
     """
-    from .state import save_metrics
-
     position = state.get('position')
     if not position:
         return
@@ -123,8 +120,7 @@ def record_closed_position(
     price_pnl_pct -= 2 * FEE_PCT
 
     # Extract pattern name from reason
-    pattern_match = re.search(r'Pattern:\s*(\S+)', position.get('reason', ''))
-    pattern_name = pattern_match.group(1) if pattern_match else 'N/A'
+    pattern_name = extract_pattern_name(position.get('reason', '')) or 'N/A'
 
     # Calculate hold time
     entry_time_str = position.get('entry_time', '')
@@ -283,8 +279,7 @@ def recalculate_position_orders(
 
     # Recalculate TP/SL using shared function (supports per-pattern values)
     reason = position.get('reason', '')
-    pattern_match = re.search(r'Pattern:\s*(\S+)', reason)
-    pattern_name = pattern_match.group(1) if pattern_match else None
+    pattern_name = extract_pattern_name(reason) or None
     regime_tp_sl = position.get('regime_tp_sl')
 
     tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
@@ -316,14 +311,16 @@ def recalculate_position_orders(
         if position.get('sl_order_id') or scale_out_stages:
             position['needs_tpsl'] = False
             save_state(state)
-            logger.info("✅ TP/SL orders updated")
+            logger.info("TP/SL orders updated after recalculation")
             return True
+        else:
+            logger.warning("TP/SL orders placed but SL not confirmed — needs_tpsl remains True")
+            save_state(state)
+            return False
     except Exception as e:
         logger.error(f"Failed to update TP/SL orders: {e}")
         save_state(state)
         return False
-
-    return True
 
 
 def close_position_market(
@@ -386,7 +383,6 @@ def close_position_market(
 
             if fill_price <= 0:
                 # Fallback to ticker price
-                from .exchange import fetch_ticker_cached
                 ticker = fetch_ticker_cached(exchange, symbol, cache, force_refresh=True)
                 fill_price = ticker['last']
 
@@ -518,51 +514,35 @@ def _update_confidence_log_outcome(
     """
     Update the most recent confidence log entry with trade outcome.
 
-    This allows correlation of confidence scores with actual trade results.
-
-    Args:
-        entry_time: Position entry timestamp (ISO format)
-        outcome: "WIN" or "LOSS"
-        pnl_pct: Profit/loss percentage
+    Reads only the last few KB of the file to find the target row,
+    then rewrites only if an empty-outcome row is found.
     """
-    import csv
-
     try:
-        csv_path = CONFIDENCE_LOG_FILE  # Already absolute path from constants
+        csv_path = CONFIDENCE_LOG_FILE
 
         if not os.path.exists(csv_path):
-            logger.debug("Confidence log file not found, skipping outcome update")
             return
 
-        # Read all rows
-        rows = []
+        outcome_value = f"{outcome}:{pnl_pct:+.2f}%"
+
+        # Read the file and update the last row with empty outcome
         with open(csv_path, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            rows = list(reader)
+            lines = f.readlines()
 
-        if len(rows) < 2:
+        if len(lines) < 2:
             return
 
-        # Find the most recent row with empty outcome (last row typically)
-        header = rows[0]
-        outcome_idx = header.index('outcome') if 'outcome' in header else -1
-
-        if outcome_idx == -1:
-            logger.warning("Confidence log missing 'outcome' column")
-            return
-
-        # Update the last row with empty outcome
-        for i in range(len(rows) - 1, 0, -1):
-            if len(rows[i]) > outcome_idx and rows[i][outcome_idx].strip() == '':
-                rows[i][outcome_idx] = f"{outcome}:{pnl_pct:+.2f}%"
+        # Search from end for row with trailing comma (empty outcome field)
+        for i in range(len(lines) - 1, 0, -1):
+            line = lines[i].rstrip('\n').rstrip('\r')
+            if line.endswith(','):
+                lines[i] = line + outcome_value + '\n'
                 break
+        else:
+            return  # No empty-outcome row found
 
-        # Write back
         with open(csv_path, 'w', encoding='utf-8', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerows(rows)
-
-        logger.debug(f"📝 Confidence log updated with outcome: {outcome}")
+            f.writelines(lines)
 
     except Exception as e:
         logger.warning(f"Failed to update confidence log outcome: {e}")

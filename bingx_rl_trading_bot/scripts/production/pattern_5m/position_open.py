@@ -23,6 +23,7 @@ from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance_cached, verify_position_mode
 from .indicators import get_volatility_multiplier
 from .state import save_state
+from .utils import extract_pattern_name
 from .orders import place_tp_sl_orders
 
 logger = logging.getLogger('pattern_5m')
@@ -165,9 +166,7 @@ def open_position(
                 logger.info(f"Vol-Adaptive: ATR multiplier = {vol_mult:.2f}x")
 
         # v1.6: Extract pattern from reason for pattern-specific TP/SL
-        pattern = None
-        if reason and 'Pattern:' in reason:
-            pattern = reason.split('Pattern:')[-1].strip().split()[0]
+        pattern = extract_pattern_name(reason) or None
 
         # v1.18: Get regime-specific TP/SL from state (set by check_entry_signal)
         regime_tp_sl = state.get('regime_tp_sl')

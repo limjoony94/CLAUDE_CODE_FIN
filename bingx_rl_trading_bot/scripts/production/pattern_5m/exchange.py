@@ -17,6 +17,7 @@ from .constants import (
     API_MAX_ATTEMPTS,
     API_BASE_DELAY,
     API_MAX_DELAY,
+    STATE_STALE_THRESHOLD_SECONDS,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 
@@ -410,7 +411,6 @@ def health_check(
         Health status dictionary
     """
     import os
-    from .constants import STATE_STALE_THRESHOLD_SECONDS
 
     health = {
         'timestamp': time.strftime('%Y-%m-%dT%H:%M:%S'),

@@ -6,7 +6,7 @@ Dataclasses for type-safe data structures.
 import time
 from datetime import datetime
 from dataclasses import dataclass, field
-from typing import Optional, Dict, List, Any
+from typing import Optional, Dict, List, Any, TypedDict
 
 from .constants import (
     CACHE_TTL_SECONDS,
@@ -270,3 +270,29 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
         metrics.session_start = data.get('session_start', '')
         metrics.last_updated = data.get('last_updated', '')
         return metrics
+
+
+class BotState(TypedDict, total=False):
+    """Schema for bot state dictionary — documents required and optional keys."""
+    # Required
+    position: Optional[Dict[str, Any]]
+    daily_pnl: float
+    daily_trades: int
+    consecutive_losses: int
+    total_trades: int
+    total_pnl: float
+    winning_trades: int
+    last_trade_date: str
+    # Optional
+    last_signal_time: Optional[str]
+    last_signal_candle_timestamp: Optional[Any]
+    last_trade: Optional[Dict[str, Any]]
+    created_at: str
+    updated_at: str
+
+
+# Keys that MUST exist in a valid state (used by validate_state)
+BOT_STATE_REQUIRED_KEYS = {
+    'position', 'daily_pnl', 'daily_trades', 'consecutive_losses',
+    'total_trades', 'total_pnl', 'winning_trades', 'last_trade_date',
+}

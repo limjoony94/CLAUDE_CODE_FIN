@@ -4,13 +4,13 @@ Place and manage TP/SL orders.
 """
 
 import logging
-import re
 from typing import Dict, Any, List, Optional, Tuple
 
 import ccxt
 
 from .state import save_state
 from .constants import PATTERN_OPTIMAL_TPSL
+from .utils import extract_pattern_name
 
 logger = logging.getLogger('pattern_5m')
 
@@ -199,13 +199,10 @@ def adjust_tpsl_to_config(
     symbol = config['symbol']
 
     # Extract pattern name from reason field
-    reason = position.get('reason', '')
-    pattern_match = re.search(r'Pattern:\s*(\S+)', reason)
-    if not pattern_match:
+    pattern_name = extract_pattern_name(position.get('reason', ''))
+    if not pattern_name:
         logger.debug("No pattern found in position reason, skipping TP/SL adjustment")
         return False
-
-    pattern_name = pattern_match.group(1)
 
     # Get expected TP/SL from config
     if pattern_name not in PATTERN_OPTIMAL_TPSL:

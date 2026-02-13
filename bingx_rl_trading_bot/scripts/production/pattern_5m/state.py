@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 from .constants import STATE_FILE, METRICS_FILE, MAX_STATE_BACKUPS
-from .models import PerformanceMetrics
+from .models import PerformanceMetrics, BOT_STATE_REQUIRED_KEYS
 
 logger = logging.getLogger('pattern_5m')
 
@@ -33,7 +33,7 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
         try:
             with open(state_file, 'r') as f:
                 state = json.load(f)
-                # Reset daily stats if new day
+                state = _ensure_required_keys(state, default_state)
                 state = _check_daily_reset(state)
                 return state
         except json.JSONDecodeError as e:
@@ -45,7 +45,8 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
                 try:
                     with open(bak_file, 'r') as f:
                         state = json.load(f)
-                        logger.info(f"✅ Successfully recovered state from backup")
+                        logger.info(f"Successfully recovered state from backup")
+                        state = _ensure_required_keys(state, default_state)
                         state = _check_daily_reset(state)
                         return state
                 except Exception as bak_error:
@@ -80,13 +81,23 @@ def _create_default_state() -> Dict[str, Any]:
     }
 
 
+def _ensure_required_keys(state: Dict[str, Any], defaults: Dict[str, Any]) -> Dict[str, Any]:
+    """Fill missing required keys from defaults. Logs a warning for each missing key."""
+    missing = BOT_STATE_REQUIRED_KEYS - state.keys()
+    if missing:
+        logger.warning(f"State missing required keys, filling defaults: {missing}")
+        for key in missing:
+            state[key] = defaults[key]
+    return state
+
+
 def _check_daily_reset(state: Dict[str, Any]) -> Dict[str, Any]:
     """Check if daily stats should be reset (new trading day)."""
     today = datetime.now().strftime('%Y-%m-%d')
     last_date = state.get('last_trade_date', '')
 
     if last_date and last_date != today:
-        logger.info(f"📅 New day detected ({last_date} → {today}), resetting daily stats")
+        logger.info(f"New day detected ({last_date} -> {today}), resetting daily stats")
         state['daily_pnl'] = 0.0
         state['daily_trades'] = 0
         state['consecutive_losses'] = 0

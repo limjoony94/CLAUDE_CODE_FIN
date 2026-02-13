@@ -7,9 +7,8 @@ import logging
 import pandas as pd
 from typing import Dict, Any, Optional, Tuple
 
-import numpy as np
-
 from .indicators import classify_candle, calculate_indicators
+from .state import reset_daily_stats_if_needed
 from .constants import (
     CandleType,
     VALIDATED_LONG_PATTERNS,
@@ -42,14 +41,7 @@ from .constants import (
     VOL_LOW_QUANTILE,
     VOL_HIGH_QUANTILE,
     TREND_LOOKBACK_BARS,
-    # v1.18 Regime Detection
-    MarketRegime,
-    REGIME_DETECTION_ENABLED,
-    REGIME_LOOKBACK_BARS,
-    REGIME_TREND_THRESHOLD,
-    REGIME_VOL_THRESHOLD,
-    REGIME_PATTERNS,
-    DEFAULT_REGIME,
+    MAX_CONSECUTIVE_LOSSES,
 )
 
 logger = logging.getLogger('pattern_5m')
@@ -71,61 +63,6 @@ def add_candle_classification(df: pd.DataFrame, config: dict = None) -> pd.DataF
     """
     return calculate_indicators(df, config or {})
 
-
-def detect_market_regime(df: pd.DataFrame) -> MarketRegime:
-    """
-    Detect current market regime (v1.18).
-
-    Uses:
-    - Price change over lookback period for trend detection
-    - ATR% for volatility detection
-
-    Regimes:
-    - BULL: price_change > 2%
-    - BEAR: price_change < -2%
-    - SIDEWAYS: -2% <= price_change <= 2%
-
-    Research: regime_adaptive_research.py
-    Distribution: SIDEWAYS 85.8%, BEAR 8.5%, BULL 5.4%
-
-    Args:
-        df: DataFrame with OHLCV data (needs at least REGIME_LOOKBACK_BARS + 14 bars)
-
-    Returns:
-        MarketRegime enum value
-    """
-    if not REGIME_DETECTION_ENABLED:
-        return DEFAULT_REGIME
-
-    min_bars = REGIME_LOOKBACK_BARS + 14  # Need lookback + ATR period
-    if len(df) < min_bars:
-        logger.debug(f"Not enough data for regime detection ({len(df)} < {min_bars}), using {DEFAULT_REGIME.value}")
-        return DEFAULT_REGIME
-
-    try:
-        # Calculate price change over lookback period
-        current_close = df.iloc[-2]['close']  # Last complete candle
-        past_close = df.iloc[-2 - REGIME_LOOKBACK_BARS]['close']
-        price_change = (current_close - past_close) / past_close * 100
-
-        # Determine regime based on price change
-        if price_change > REGIME_TREND_THRESHOLD:
-            regime = MarketRegime.BULL
-        elif price_change < -REGIME_TREND_THRESHOLD:
-            regime = MarketRegime.BEAR
-        else:
-            regime = MarketRegime.SIDEWAYS
-
-        logger.debug(
-            f"📊 Regime detected: {regime.value} | "
-            f"Price change ({REGIME_LOOKBACK_BARS} bars): {price_change:+.2f}%"
-        )
-
-        return regime
-
-    except Exception as e:
-        logger.warning(f"Regime detection error: {e}, using {DEFAULT_REGIME.value}")
-        return DEFAULT_REGIME
 
 
 def calculate_context(df: pd.DataFrame) -> Dict[str, Any]:
@@ -410,63 +347,34 @@ def check_entry_signal(
 
     signal = None
     reason = None
-    regime_tp_sl = None  # v1.18: Regime-specific TP/SL
 
-    # v1.18: Detect market regime and use regime-specific patterns
-    if REGIME_DETECTION_ENABLED:
-        regime = detect_market_regime(df)
-        regime_name = regime.value
+    # Check LONG patterns
+    long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
+    if pattern in long_patterns:
+        signal = 'LONG'
+        reason = f"Pattern: {pattern} (LONG)"
 
-        # Get patterns for current regime
-        regime_patterns = REGIME_PATTERNS.get(regime_name, {})
-
-        if pattern in regime_patterns:
-            direction, tp, sl = regime_patterns[pattern]
-            signal = direction
-            reason = f"Pattern: {pattern} ({direction}) | Regime: {regime_name}"
-            regime_tp_sl = (tp, sl)  # Store for later use
-            state['current_regime'] = regime_name
-            state['regime_tp_sl'] = regime_tp_sl
-
-            logger.info(
-                f"📊 Regime-Adaptive Signal: {pattern} → {direction} | "
-                f"Regime: {regime_name} | TP={tp}%, SL={sl}%"
-            )
-    else:
-        # Fallback to v1.17 behavior (non-regime-adaptive)
-        # Check LONG patterns
-        long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
-        if pattern in long_patterns:
-            signal = 'LONG'
-            reason = f"Pattern: {pattern} (LONG)"
-
-        # Check SHORT patterns
-        short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
-        if pattern in short_patterns:
-            signal = 'SHORT'
-            reason = f"Pattern: {pattern} (SHORT)"
+    # Check SHORT patterns
+    short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
+    if pattern in short_patterns:
+        signal = 'SHORT'
+        reason = f"Pattern: {pattern} (SHORT)"
 
     if signal:
-        # v1.7: Context filter check
-        context = calculate_context(df)
-        passes_filter, ctx_bonus, filter_reason = check_context_filter(pattern, context)
+        # Context filter check (skip computation when no filters configured)
+        ctx_bonus = 0.0
+        if PATTERN_CONTEXT_FILTERS:
+            context = calculate_context(df)
+            passes_filter, ctx_bonus, filter_reason = check_context_filter(pattern, context)
 
-        if not passes_filter:
-            logger.info(
-                f"🚫 Context filter rejected: {pattern} | "
-                f"RSI={context.get('rsi', 0):.1f} ({context['rsi_zone']}) | "
-                f"Vol={context['vol']} | Trend={context['trend']} | "
-                f"Reason: {filter_reason}"
-            )
-            return None, None
-
-        # Log context info
-        logger.info(
-            f"✅ Context check passed: {pattern} | "
-            f"RSI={context.get('rsi', 0):.1f} ({context['rsi_zone']}) | "
-            f"Vol={context['vol']} | Trend={context['trend']} | "
-            f"Bonus={ctx_bonus:.2f} | {filter_reason}"
-        )
+            if not passes_filter:
+                logger.info(
+                    f"Context filter rejected: {pattern} | "
+                    f"RSI={context.get('rsi', 0):.1f} ({context['rsi_zone']}) | "
+                    f"Vol={context['vol']} | Trend={context['trend']} | "
+                    f"Reason: {filter_reason}"
+                )
+                return None, None
 
         state['last_signal_candle_timestamp'] = current_timestamp
         confidence, conf_components = calculate_pattern_confidence(df, pattern)
@@ -610,8 +518,6 @@ def check_daily_loss_limit(state: Dict[str, Any], config: Dict[str, Any]) -> boo
     Returns:
         True if daily loss limit reached (should pause trading)
     """
-    from .state import reset_daily_stats_if_needed
-
     reset_daily_stats_if_needed(state)
     max_loss = config.get('risk', {}).get('max_daily_loss_pct', 10.0)
     return state.get('daily_pnl', 0) <= -max_loss
@@ -630,7 +536,6 @@ def check_consecutive_loss_limit(state: Dict[str, Any]) -> bool:
     Returns:
         True if consecutive loss limit reached (should pause trading)
     """
-    from .constants import MAX_CONSECUTIVE_LOSSES
     return state.get('consecutive_losses', 0) >= MAX_CONSECUTIVE_LOSSES
 
 

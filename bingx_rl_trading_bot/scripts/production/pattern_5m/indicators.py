@@ -24,18 +24,18 @@ from .constants import (
 logger = logging.getLogger('pattern_5m')
 
 
-def classify_candle(row: pd.Series, avg_body_20: float) -> CandleType:
+def classify_candle(row, avg_body_20: float) -> CandleType:
     """
     Classify a single candle into one of 12 types.
 
     Args:
-        row: OHLCV row from DataFrame
+        row: OHLCV row (pd.Series or namedtuple with open/high/low/close attrs)
         avg_body_20: 20-period average absolute body size
 
     Returns:
         CandleType enum value
     """
-    o, h, l, c = row['open'], row['high'], row['low'], row['close']
+    o, h, l, c = row.open, row.high, row.low, row.close
     body = c - o
     body_abs = abs(body)
     range_hl = h - l
@@ -114,28 +114,24 @@ def calculate_indicators(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFra
     df['body_abs'] = df['body'].abs()
     df['avg_body_20'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
 
-    # Classify each candle
-    # For bars 0-19: avg_body_20 is NaN, so use default=1.0
-    # This preserves range-based types (DOJI, HAMMER, DRAGONFLY, GRAVESTONE, MARUBOZU)
-    # while norm_body-dependent types (SPINNING_TOP, BIG) default conservatively
+    # Classify each candle using itertuples (faster than df.iloc[i])
+    avg_body_vals = df['avg_body_20'].values
     candle_types = []
-    for i in range(len(df)):
-        avg_b = df.iloc[i]['avg_body_20']
+    for i, row in enumerate(df.itertuples(index=False)):
+        avg_b = avg_body_vals[i]
         if pd.isna(avg_b):
-            avg_b = 1.0  # default: preserves range-based classification
-        candle_types.append(classify_candle(df.iloc[i], avg_b))
+            avg_b = 1.0
+        candle_types.append(classify_candle(row, avg_b))
 
     df['candle_type'] = candle_types
     df['type_code'] = [ct.value for ct in candle_types]
 
-    # Build 3-candle patterns
-    patterns = []
-    for i in range(len(df)):
-        if i < 2:
-            patterns.append(None)
-        else:
-            p = f"{df.iloc[i-2]['type_code']}-{df.iloc[i-1]['type_code']}-{df.iloc[i]['type_code']}"
-            patterns.append(p)
+    # Build 3-candle patterns using pre-extracted array
+    type_codes = df['type_code'].values
+    patterns = [None, None] + [
+        f"{type_codes[i-2]}-{type_codes[i-1]}-{type_codes[i]}"
+        for i in range(2, len(type_codes))
+    ]
     df['pattern_3'] = patterns
 
     # RSI (14-period) — used by context filters

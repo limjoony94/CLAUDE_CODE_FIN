@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2026-02-13T02:18:35",
+  "generated_at": "2026-02-14T02:43:27",
   "data_file": "btc_5m_270days_reclassified.csv",
   "data_bars": 77760,
   "selection_criteria": {
@@ -13,7 +13,6 @@
   "universal_sl": 3.0,
   "patterns": {
     "long": [
-      "BD-BD-BU",
       "BD-BD-U",
       "BD-H-BU",
       "BD-MU-IH",
@@ -31,8 +30,10 @@
       "MD-BU-MD",
       "MU-BD-ST",
       "MU-IH-DN",
+      "MU-MD-BD",
       "MU-U-DN",
       "MU-U-H",
+      "U-BU-DN",
       "U-MD-DN",
       "U-MU-H",
       "U-MU-IH",
@@ -40,27 +41,30 @@
     ],
     "short": [
       "BD-BU-U",
+      "BD-DN-ST",
       "BD-U-DN",
       "BD-U-H",
       "BD-U-IH",
-      "BU-BU-U",
       "BU-H-BD",
       "BU-MD-MD",
+      "BU-MD-ST",
       "BU-MU-DN",
       "D-BD-ST",
       "D-D-DN",
-      "D-U-H",
+      "D-DN-DN",
       "DN-BD-BU",
       "DN-BD-H",
       "DN-DN-BU",
+      "DN-DN-IH",
       "DN-IH-U",
       "DN-ST-BU",
       "DN-ST-ST",
-      "DN-U-ST",
       "DN-U-U",
       "GS-ST-BD",
       "GS-ST-DN",
+      "H-DN-GS",
       "H-H-ST",
+      "H-MD-ST",
       "H-U-BD",
       "IH-IH-MD",
       "IH-ST-ST",
@@ -77,6 +81,7 @@
       "ST-DN-U",
       "ST-MU-ST",
       "ST-ST-DN",
+      "ST-ST-H",
       "U-DN-DN",
       "U-GS-DN",
       "U-H-D",
@@ -87,15 +92,15 @@
     ]
   },
   "pattern_count": {
-    "long": 24,
-    "short": 45
+    "long": 25,
+    "short": 49
   },
   "backtest_summary": {
-    "total_trades": 233,
-    "win_rate": 78.1,
-    "pnl_pct": 664.3,
+    "total_trades": 238,
+    "win_rate": 80.3,
+    "pnl_pct": 756.5,
     "max_drawdown_pct": 27.3,
-    "profit_factor": 2.43,
+    "profit_factor": 2.77,
     "mc_pvalue": 0.0
   },
   "pattern_details": {
@@ -105,15 +110,7 @@
       "trades": 565,
       "wr": 65.5,
       "edge": 6.7,
-      "mc_p": 0.0006
-    },
-    "DN-U-ST_SHORT": {
-      "pattern": "DN-U-ST",
-      "direction": "SHORT",
-      "trades": 313,
-      "wr": 65.8,
-      "edge": 7.0,
-      "mc_p": 0.0084
+      "mc_p": 0.001
     },
     "U-ST-ST_SHORT": {
       "pattern": "U-ST-ST",
@@ -121,7 +118,7 @@
       "trades": 169,
       "wr": 68.0,
       "edge": 9.2,
-      "mc_p": 0.0096
+      "mc_p": 0.0094
     },
     "BU-BU-BD_LONG": {
       "pattern": "BU-BU-BD",
@@ -129,7 +126,7 @@
       "trades": 44,
       "wr": 79.5,
       "edge": 20.7,
-      "mc_p": 0.0014
+      "mc_p": 0.0008
     },
     "DN-BD-DN_LONG": {
       "pattern": "DN-BD-DN",
@@ -137,7 +134,7 @@
       "trades": 131,
       "wr": 70.2,
       "edge": 11.4,
-      "mc_p": 0.0054
+      "mc_p": 0.005
     },
     "DN-IH-U_SHORT": {
       "pattern": "DN-IH-U",
@@ -145,7 +142,7 @@
       "trades": 70,
       "wr": 72.9,
       "edge": 14.0,
-      "mc_p": 0.009
+      "mc_p": 0.0084
     },
     "BD-U-DN_SHORT": {
       "pattern": "BD-U-DN",
@@ -161,7 +158,7 @@
       "trades": 159,
       "wr": 69.2,
       "edge": 10.4,
-      "mc_p": 0.0044
+      "mc_p": 0.0056
     },
     "MU-IH-DN_LONG": {
       "pattern": "MU-IH-DN",
@@ -169,7 +166,7 @@
       "trades": 28,
       "wr": 82.1,
       "edge": 23.3,
-      "mc_p": 0.0026
+      "mc_p": 0.0032
     },
     "ST-DN-U_SHORT": {
       "pattern": "ST-DN-U",
@@ -177,7 +174,7 @@
       "trades": 293,
       "wr": 69.3,
       "edge": 10.5,
-      "mc_p": 0.0
+      "mc_p": 0.0002
     },
     "U-ST-DN_SHORT": {
       "pattern": "U-ST-DN",
@@ -185,7 +182,7 @@
       "trades": 290,
       "wr": 70.3,
       "edge": 11.5,
-      "mc_p": 0.0002
+      "mc_p": 0.0004
     },
     "DN-DN-BU_SHORT": {
       "pattern": "DN-DN-BU",
@@ -193,7 +190,7 @@
       "trades": 122,
       "wr": 70.5,
       "edge": 11.7,
-      "mc_p": 0.0078
+      "mc_p": 0.0068
     },
     "U-DN-DN_SHORT": {
       "pattern": "U-DN-DN",
@@ -201,7 +198,7 @@
       "trades": 581,
       "wr": 65.2,
       "edge": 6.4,
-      "mc_p": 0.0016
+      "mc_p": 0.0022
     },
     "IH-U-U_SHORT": {
       "pattern": "IH-U-U",
@@ -209,7 +206,7 @@
       "trades": 68,
       "wr": 76.5,
       "edge": 17.6,
-      "mc_p": 0.0012
+      "mc_p": 0.001
     },
     "U-U-ST_SHORT": {
       "pattern": "U-U-ST",
@@ -217,7 +214,15 @@
       "trades": 282,
       "wr": 67.4,
       "edge": 8.6,
-      "mc_p": 0.0014
+      "mc_p": 0.0024
+    },
+    "D-DN-DN_SHORT": {
+      "pattern": "D-DN-DN",
+      "direction": "SHORT",
+      "trades": 107,
+      "wr": 70.1,
+      "edge": 11.3,
+      "mc_p": 0.009
     },
     "U-GS-DN_SHORT": {
       "pattern": "U-GS-DN",
@@ -227,22 +232,6 @@
       "edge": 28.7,
       "mc_p": 0.0
     },
-    "BD-BD-BU_LONG": {
-      "pattern": "BD-BD-BU",
-      "direction": "LONG",
-      "trades": 48,
-      "wr": 75.0,
-      "edge": 16.2,
-      "mc_p": 0.0094
-    },
-    "BU-BU-U_SHORT": {
-      "pattern": "BU-BU-U",
-      "direction": "SHORT",
-      "trades": 44,
-      "wr": 75.0,
-      "edge": 16.2,
-      "mc_p": 0.0092
-    },
     "U-ST-U_SHORT": {
       "pattern": "U-ST-U",
       "direction": "SHORT",
@@ -251,13 +240,21 @@
       "edge": 8.9,
       "mc_p": 0.0016
     },
+    "U-BU-DN_LONG": {
+      "pattern": "U-BU-DN",
+      "direction": "LONG",
+      "trades": 163,
+      "wr": 68.1,
+      "edge": 9.3,
+      "mc_p": 0.009
+    },
     "H-ST-BD_LONG": {
       "pattern": "H-ST-BD",
       "direction": "LONG",
       "trades": 12,
       "wr": 91.7,
       "edge": 32.8,
-      "mc_p": 0.0024
+      "mc_p": 0.0036
     },
     "BU-MU-DN_SHORT": {
       "pattern": "BU-MU-DN",
@@ -273,7 +270,7 @@
       "trades": 31,
       "wr": 80.6,
       "edge": 21.8,
-      "mc_p": 0.0038
+      "mc_p": 0.003
     },
     "BU-MU-MU_LONG": {
       "pattern": "BU-MU-MU",
@@ -281,7 +278,7 @@
       "trades": 11,
       "wr": 90.9,
       "edge": 32.1,
-      "mc_p": 0.0062
+      "mc_p": 0.005
     },
     "BU-BU-BU_LONG": {
       "pattern": "BU-BU-BU",
@@ -289,7 +286,7 @@
       "trades": 38,
       "wr": 78.9,
       "edge": 20.1,
-      "mc_p": 0.0028
+      "mc_p": 0.0042
     },
     "MU-U-DN_LONG": {
       "pattern": "MU-U-DN",
@@ -297,7 +294,7 @@
       "trades": 148,
       "wr": 68.9,
       "edge": 10.1,
-      "mc_p": 0.0082
+      "mc_p": 0.0064
     },
     "ST-ST-DN_SHORT": {
       "pattern": "ST-ST-DN",
@@ -313,7 +310,7 @@
       "trades": 8,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0028
+      "mc_p": 0.0042
     },
     "U-MU-H_LONG": {
       "pattern": "U-MU-H",
@@ -321,7 +318,7 @@
       "trades": 34,
       "wr": 82.4,
       "edge": 23.5,
-      "mc_p": 0.0008
+      "mc_p": 0.0014
     },
     "DN-DF-ST_LONG": {
       "pattern": "DN-DF-ST",
@@ -329,7 +326,7 @@
       "trades": 23,
       "wr": 82.6,
       "edge": 23.8,
-      "mc_p": 0.0044
+      "mc_p": 0.0036
     },
     "MU-BD-ST_LONG": {
       "pattern": "MU-BD-ST",
@@ -337,7 +334,15 @@
       "trades": 22,
       "wr": 86.4,
       "edge": 27.5,
-      "mc_p": 0.001
+      "mc_p": 0.0024
+    },
+    "DN-DN-IH_SHORT": {
+      "pattern": "DN-DN-IH",
+      "direction": "SHORT",
+      "trades": 75,
+      "wr": 72.0,
+      "edge": 13.2,
+      "mc_p": 0.0098
     },
     "DN-ST-ST_SHORT": {
       "pattern": "DN-ST-ST",
@@ -345,7 +350,7 @@
       "trades": 147,
       "wr": 70.1,
       "edge": 11.2,
-      "mc_p": 0.0052
+      "mc_p": 0.0036
     },
     "MU-ST-DN_SHORT": {
       "pattern": "MU-ST-DN",
@@ -353,7 +358,7 @@
       "trades": 91,
       "wr": 73.6,
       "edge": 14.8,
-      "mc_p": 0.0016
+      "mc_p": 0.0014
     },
     "MU-U-H_LONG": {
       "pattern": "MU-U-H",
@@ -361,7 +366,7 @@
       "trades": 29,
       "wr": 79.3,
       "edge": 20.5,
-      "mc_p": 0.0066
+      "mc_p": 0.0086
     },
     "ST-DN-MU_SHORT": {
       "pattern": "ST-DN-MU",
@@ -369,7 +374,7 @@
       "trades": 96,
       "wr": 71.9,
       "edge": 13.1,
-      "mc_p": 0.005
+      "mc_p": 0.0048
     },
     "DN-MD-GS_LONG": {
       "pattern": "DN-MD-GS",
@@ -377,7 +382,7 @@
       "trades": 14,
       "wr": 85.7,
       "edge": 26.9,
-      "mc_p": 0.0048
+      "mc_p": 0.0058
     },
     "BD-BU-U_SHORT": {
       "pattern": "BD-BU-U",
@@ -385,7 +390,7 @@
       "trades": 51,
       "wr": 78.4,
       "edge": 19.6,
-      "mc_p": 0.0012
+      "mc_p": 0.0006
     },
     "DN-ST-BU_SHORT": {
       "pattern": "DN-ST-BU",
@@ -393,7 +398,23 @@
       "trades": 76,
       "wr": 73.7,
       "edge": 14.9,
-      "mc_p": 0.004
+      "mc_p": 0.0044
+    },
+    "ST-ST-H_SHORT": {
+      "pattern": "ST-ST-H",
+      "direction": "SHORT",
+      "trades": 28,
+      "wr": 78.6,
+      "edge": 19.7,
+      "mc_p": 0.0092
+    },
+    "BU-MD-ST_SHORT": {
+      "pattern": "BU-MD-ST",
+      "direction": "SHORT",
+      "trades": 25,
+      "wr": 80.0,
+      "edge": 21.2,
+      "mc_p": 0.0084
     },
     "BD-U-IH_SHORT": {
       "pattern": "BD-U-IH",
@@ -401,7 +422,7 @@
       "trades": 15,
       "wr": 93.3,
       "edge": 34.5,
-      "mc_p": 0.0008
+      "mc_p": 0.0004
     },
     "BD-U-H_SHORT": {
       "pattern": "BD-U-H",
@@ -409,7 +430,7 @@
       "trades": 20,
       "wr": 85.0,
       "edge": 26.2,
-      "mc_p": 0.0026
+      "mc_p": 0.0032
     },
     "DN-BD-H_SHORT": {
       "pattern": "DN-BD-H",
@@ -417,7 +438,15 @@
       "trades": 16,
       "wr": 87.5,
       "edge": 28.7,
-      "mc_p": 0.0012
+      "mc_p": 0.0022
+    },
+    "BD-DN-ST_SHORT": {
+      "pattern": "BD-DN-ST",
+      "direction": "SHORT",
+      "trades": 63,
+      "wr": 73.0,
+      "edge": 14.2,
+      "mc_p": 0.0076
     },
     "ST-BD-BU_SHORT": {
       "pattern": "ST-BD-BU",
@@ -425,7 +454,7 @@
       "trades": 28,
       "wr": 82.1,
       "edge": 23.3,
-      "mc_p": 0.0024
+      "mc_p": 0.0034
     },
     "BD-BD-U_LONG": {
       "pattern": "BD-BD-U",
@@ -433,7 +462,7 @@
       "trades": 67,
       "wr": 74.6,
       "edge": 15.8,
-      "mc_p": 0.0046
+      "mc_p": 0.0038
     },
     "MU-MU-MD_SHORT": {
       "pattern": "MU-MU-MD",
@@ -441,7 +470,7 @@
       "trades": 32,
       "wr": 78.1,
       "edge": 19.3,
-      "mc_p": 0.0072
+      "mc_p": 0.0094
     },
     "MU-MD-D_SHORT": {
       "pattern": "MU-MD-D",
@@ -449,7 +478,15 @@
       "trades": 14,
       "wr": 92.9,
       "edge": 34.0,
-      "mc_p": 0.0012
+      "mc_p": 0.001
+    },
+    "H-MD-ST_SHORT": {
+      "pattern": "H-MD-ST",
+      "direction": "SHORT",
+      "trades": 13,
+      "wr": 84.6,
+      "edge": 25.8,
+      "mc_p": 0.0078
     },
     "DN-BD-BU_SHORT": {
       "pattern": "DN-BD-BU",
@@ -457,15 +494,7 @@
       "trades": 63,
       "wr": 76.2,
       "edge": 17.4,
-      "mc_p": 0.0016
-    },
-    "D-U-H_SHORT": {
-      "pattern": "D-U-H",
-      "direction": "SHORT",
-      "trades": 10,
-      "wr": 90.0,
-      "edge": 31.2,
-      "mc_p": 0.009
+      "mc_p": 0.0024
     },
     "MD-BD-BU_SHORT": {
       "pattern": "MD-BD-BU",
@@ -481,7 +510,7 @@
       "trades": 27,
       "wr": 81.5,
       "edge": 22.7,
-      "mc_p": 0.0028
+      "mc_p": 0.004
     },
     "GS-ST-DN_SHORT": {
       "pattern": "GS-ST-DN",
@@ -497,7 +526,7 @@
       "trades": 41,
       "wr": 78.0,
       "edge": 19.2,
-      "mc_p": 0.0026
+      "mc_p": 0.0028
     },
     "U-H-D_SHORT": {
       "pattern": "U-H-D",
@@ -505,7 +534,7 @@
       "trades": 11,
       "wr": 90.9,
       "edge": 32.1,
-      "mc_p": 0.0054
+      "mc_p": 0.0062
     },
     "DF-MU-U_LONG": {
       "pattern": "DF-MU-U",
@@ -513,7 +542,7 @@
       "trades": 9,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.002
+      "mc_p": 0.0018
     },
     "IH-D-U_LONG": {
       "pattern": "IH-D-U",
@@ -521,7 +550,7 @@
       "trades": 11,
       "wr": 90.9,
       "edge": 32.1,
-      "mc_p": 0.008
+      "mc_p": 0.0068
     },
     "H-BU-BU_LONG": {
       "pattern": "H-BU-BU",
@@ -529,7 +558,7 @@
       "trades": 9,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0018
+      "mc_p": 0.003
     },
     "D-BD-ST_SHORT": {
       "pattern": "D-BD-ST",
@@ -537,7 +566,15 @@
       "trades": 18,
       "wr": 83.3,
       "edge": 24.5,
-      "mc_p": 0.0074
+      "mc_p": 0.0094
+    },
+    "MU-MD-BD_LONG": {
+      "pattern": "MU-MD-BD",
+      "direction": "LONG",
+      "trades": 13,
+      "wr": 84.6,
+      "edge": 25.8,
+      "mc_p": 0.0092
     },
     "BU-MD-MD_SHORT": {
       "pattern": "BU-MD-MD",
@@ -545,7 +582,7 @@
       "trades": 18,
       "wr": 83.3,
       "edge": 24.5,
-      "mc_p": 0.008
+      "mc_p": 0.0086
     },
     "MD-D-MD_SHORT": {
       "pattern": "MD-D-MD",
@@ -553,7 +590,7 @@
       "trades": 12,
       "wr": 91.7,
       "edge": 32.8,
-      "mc_p": 0.0036
+      "mc_p": 0.0022
     },
     "D-D-DN_SHORT": {
       "pattern": "D-D-DN",
@@ -561,7 +598,7 @@
       "trades": 26,
       "wr": 84.6,
       "edge": 25.8,
-      "mc_p": 0.0012
+      "mc_p": 0.0008
     },
     "IH-ST-ST_SHORT": {
       "pattern": "IH-ST-ST",
@@ -569,7 +606,7 @@
       "trades": 23,
       "wr": 82.6,
       "edge": 23.8,
-      "mc_p": 0.0044
+      "mc_p": 0.004
     },
     "U-ST-DF_LONG": {
       "pattern": "U-ST-DF",
@@ -577,7 +614,7 @@
       "trades": 20,
       "wr": 85.0,
       "edge": 26.2,
-      "mc_p": 0.0034
+      "mc_p": 0.0028
     },
     "GS-ST-BD_SHORT": {
       "pattern": "GS-ST-BD",
@@ -585,7 +622,7 @@
       "trades": 8,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0038
+      "mc_p": 0.0044
     },
     "IH-IH-MD_SHORT": {
       "pattern": "IH-IH-MD",
@@ -593,7 +630,7 @@
       "trades": 9,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0024
+      "mc_p": 0.0022
     },
     "BD-MU-IH_LONG": {
       "pattern": "BD-MU-IH",
@@ -601,7 +638,7 @@
       "trades": 9,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0008
+      "mc_p": 0.001
     },
     "H-U-BD_SHORT": {
       "pattern": "H-U-BD",
@@ -609,7 +646,7 @@
       "trades": 22,
       "wr": 81.8,
       "edge": 23.0,
-      "mc_p": 0.0064
+      "mc_p": 0.0086
     },
     "MD-BU-MD_LONG": {
       "pattern": "MD-BU-MD",
@@ -617,7 +654,7 @@
       "trades": 14,
       "wr": 85.7,
       "edge": 26.9,
-      "mc_p": 0.006
+      "mc_p": 0.0072
     },
     "MD-MD-MD_SHORT": {
       "pattern": "MD-MD-MD",
@@ -625,7 +662,15 @@
       "trades": 22,
       "wr": 86.4,
       "edge": 27.5,
-      "mc_p": 0.0006
+      "mc_p": 0.0016
+    },
+    "H-DN-GS_SHORT": {
+      "pattern": "H-DN-GS",
+      "direction": "SHORT",
+      "trades": 10,
+      "wr": 90.0,
+      "edge": 31.2,
+      "mc_p": 0.0078
     },
     "GS-U-BD_LONG": {
       "pattern": "GS-U-BD",
@@ -641,7 +686,7 @@
       "trades": 8,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0038
+      "mc_p": 0.0026
     },
     "H-H-ST_SHORT": {
       "pattern": "H-H-ST",
@@ -649,7 +694,7 @@
       "trades": 8,
       "wr": 100.0,
       "edge": 41.2,
-      "mc_p": 0.0034
+      "mc_p": 0.006
     }
   }
 }

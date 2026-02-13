@@ -118,7 +118,7 @@ def bt_pattern(indices, direction, tp_pct, sl_pct, opens, highs, lows, n_bars):
             ht = (highs[j] >= tpp) if direction == 'LONG' else (lows[j] <= tpp)
             hs = (lows[j] <= slp) if direction == 'LONG' else (highs[j] >= slp)
             if ht and hs:
-                pnls.append((tp_pct if abs(tpp - entry) <= abs(slp - entry) else -sl_pct) * LEVERAGE - FEE_PCT)
+                bo = opens[j]; pnls.append((tp_pct if abs(tpp - bo) <= abs(slp - bo) else -sl_pct) * LEVERAGE - FEE_PCT)
                 break
             elif ht:
                 pnls.append(tp_pct * LEVERAGE - FEE_PCT)
@@ -153,7 +153,7 @@ def collect_trades_1pos(types, opens, highs, lows, n_bars, pattern_map,
             ht = (highs[j] >= tpp) if d == 'LONG' else (lows[j] <= tpp)
             hs = (lows[j] <= slp) if d == 'LONG' else (highs[j] >= slp)
             if ht and hs:
-                pnl = (tp if abs(tpp - entry) <= abs(slp - entry) else -sl) * LEVERAGE - FEE_PCT
+                bo = opens[j]; pnl = (tp if abs(tpp - bo) <= abs(slp - bo) else -sl) * LEVERAGE - FEE_PCT
                 raw.append((eb, j, pnl, pat)); break
             elif ht:
                 raw.append((eb, j, tp * LEVERAGE - FEE_PCT, pat)); break

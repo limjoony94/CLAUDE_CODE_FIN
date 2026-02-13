@@ -89,7 +89,7 @@ def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bar
                 hs = highs[j] >= slp
 
             if ht and hs:
-                pnl = (tp_pct if abs(tpp - entry) <= abs(slp - entry) else -sl_pct) * LEVERAGE - FEE_PCT
+                bo = opens[j]; pnl = (tp_pct if abs(tpp - bo) <= abs(slp - bo) else -sl_pct) * LEVERAGE - FEE_PCT
                 trades.append((eb, j, pnl))
                 break
             elif ht:

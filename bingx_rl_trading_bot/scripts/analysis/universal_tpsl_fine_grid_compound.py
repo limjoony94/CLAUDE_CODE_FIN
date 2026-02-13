@@ -91,7 +91,7 @@ def collect_trades_1pos(types, opens, highs, lows, n_bars, pattern_dirs,
             ht = (highs[j] >= tpp) if d == 'LONG' else (lows[j] <= tpp)
             hs = (lows[j] <= slp) if d == 'LONG' else (highs[j] >= slp)
             if ht and hs:
-                pnl = (tp_pct if abs(tpp - entry) <= abs(slp - entry) else -sl_pct) * LEVERAGE - FEE_PCT
+                bo = opens[j]; pnl = (tp_pct if abs(tpp - bo) <= abs(slp - bo) else -sl_pct) * LEVERAGE - FEE_PCT
                 raw.append((eb, j, pnl)); break
             elif ht:
                 raw.append((eb, j, tp_pct * LEVERAGE - FEE_PCT)); break

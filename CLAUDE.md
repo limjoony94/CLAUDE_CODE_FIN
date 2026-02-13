@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.1 | **Bot**: Pattern 5m (69패턴, 24L+45S) | **Updated**: 2026-02-13
+> **Version**: v1.28.1 | **Bot**: Pattern 5m (74패턴, 25L+49S) | **Updated**: 2026-02-14
 
 ---
 
@@ -314,7 +314,7 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.28.1** | 02-13 | **Fine grid TP 최적화**: TP 2.0→2.1 (784-combo compound grid search). Pre-overlap PnL/MDD 18.8x→36.9x (+96%), Safety +4.8→+5.7pp. Expected per-trade: +1.30% (기존 +1.10%). 69패턴 (24L+45S) ← **현재** |
+| **v1.28.1** | 02-14 | **Fine grid TP 최적화 + distance-based exit fix**: TP 2.0→2.1 (784-combo compound grid search) + same-bar TP/SL 해상도를 entry→bar open 기준으로 수정. 74패턴 (25L+49S). Expected per-trade: +1.30%. ← **현재** |
 | v1.28.0 | 02-12 | Static→Dynamic 프로덕션 전환. Universal TP 2.0/SL 3.0 + 75패턴 (28L+47S). True WF OOS: Universal +562% vs Per-pattern +416%. pattern_source: dynamic 활성화. Daily limit 5→10% (1회 SL=9.1%) |
 | v1.27.3 | 02-12 | Expectation reset + Dynamic WF Pattern Selection 인프라. 백테스트 PnL의 90%가 look-ahead bias, 순수 forward edge +80.5%/68.5% WR. EXPECTED_WIN_RATE 85→68, daily limit 7→5%. Dynamic pattern_source 모드 추가 (scanner CLI → Universal TP 2.0/SL 3.0, 75패턴=28L+47S). 90일 OOS 테스트 대기 (2026-04-30 목표) |
 | v1.27.2 | 02-12 | Low-WR pattern review: U-H-BU 제거 (SL 0.3% 실전 불가), 51패턴 (32L+19S), PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x + 25개 개별 검증 + Pattern-Rediscovery WF + Strategy Options Evaluation |

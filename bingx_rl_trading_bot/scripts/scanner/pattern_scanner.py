@@ -127,8 +127,11 @@ def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bar
                 hs = highs[j] >= slp
 
             if ht and hs:
-                # Both hit same bar — take closer target
-                pnl = (tp_pct if abs(tpp - entry) <= abs(slp - entry) else -sl_pct) * LEVERAGE - FEE_PCT
+                # Both hit same bar — bar open 기준 distance-based resolution
+                bo = opens[j]
+                dist_tp = abs(tpp - bo)
+                dist_sl = abs(slp - bo)
+                pnl = (tp_pct if dist_tp <= dist_sl else -sl_pct) * LEVERAGE - FEE_PCT
                 trades.append((eb, j, pnl))
                 break
             elif ht:

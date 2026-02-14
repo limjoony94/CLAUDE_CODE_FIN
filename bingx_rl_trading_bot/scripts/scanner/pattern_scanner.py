@@ -45,7 +45,7 @@ MAX_BARS = 500          # Max bars to hold trade before timeout
 MC_SIMS = 5000          # Monte Carlo simulations
 DEFAULT_UNI_TP = 2.0    # Universal TP % (v1.28.2: WF frontier optimal)
 DEFAULT_UNI_SL = 3.0    # Universal SL %
-DEFAULT_EDGE_THRESHOLD = 5.0   # Minimum edge in pp
+DEFAULT_EDGE_THRESHOLD = 10.0  # Minimum edge in pp (v1.28.4: 5→10 for statistical rigor)
 DEFAULT_MC_THRESHOLD = 0.01    # MC p-value cutoff
 DEFAULT_MIN_TRADES = 20        # Minimum trades required (v1.28.3: 10→20 for statistical reliability)
 

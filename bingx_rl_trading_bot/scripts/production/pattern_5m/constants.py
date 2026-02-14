@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.28.3"  # v1.28.3: Statistical significance filter — min_trades 10→20, 66→51 patterns
+BOT_VERSION = "1.28.4"  # v1.28.4: Statistical rigor filter — edge_threshold 5→10pp, 51→46 patterns
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)

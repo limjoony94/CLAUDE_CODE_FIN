@@ -1,0 +1,630 @@
+{
+  "analysis_date": "2026-02-14",
+  "current_patterns": 66,
+  "baseline_wr": 60.0,
+  "uni_tp": 2.0,
+  "uni_sl": 3.0,
+  "wf_results": {
+    "U-DN-DN_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 59.9,
+      "avg_oos_pnl": -22.7
+    },
+    "DN-U-U_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 64.4,
+      "avg_oos_pnl": 96.85
+    },
+    "ST-DN-U_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 64.9,
+      "avg_oos_pnl": 48.8
+    },
+    "U-ST-U_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 66.4,
+      "avg_oos_pnl": 74.0
+    },
+    "U-ST-DN_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 67.0,
+      "avg_oos_pnl": 76.1
+    },
+    "U-U-ST_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 67.9,
+      "avg_oos_pnl": 104.1
+    },
+    "ST-U-ST_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 60.0,
+      "avg_oos_pnl": -4.5
+    },
+    "U-BU-DN_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 64.4,
+      "avg_oos_pnl": 40.7
+    },
+    "BD-U-U_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 63.3,
+      "avg_oos_pnl": 19.1
+    },
+    "ST-ST-DN_SHORT": {
+      "wf_folds": 3,
+      "wf_positive": 3,
+      "avg_oos_wr": 75.0,
+      "avg_oos_pnl": 119.5
+    },
+    "BD-U-DN_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 70.6,
+      "avg_oos_pnl": 70.25
+    },
+    "U-MD-DN_LONG": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 67.9,
+      "avg_oos_pnl": 59.05
+    },
+    "MU-U-DN_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 64.7,
+      "avg_oos_pnl": 30.9
+    },
+    "DN-ST-ST_SHORT": {
+      "wf_folds": 3,
+      "wf_positive": 3,
+      "avg_oos_wr": 72.3,
+      "avg_oos_pnl": 86.97
+    },
+    "BU-U-DN_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 64.6,
+      "avg_oos_pnl": 28.2
+    },
+    "DN-BD-DN_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 63.5,
+      "avg_oos_pnl": 21.8
+    },
+    "BU-U-U_LONG": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 64.4,
+      "avg_oos_pnl": 22.55
+    },
+    "DN-DN-BU_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 1,
+      "avg_oos_wr": 62.2,
+      "avg_oos_pnl": 9.05
+    },
+    "ST-DN-MU_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 65.6,
+      "avg_oos_pnl": 24.05
+    },
+    "MU-ST-DN_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 1,
+      "avg_oos_wr": 63.6,
+      "avg_oos_pnl": 19.75
+    },
+    "DN-BD-BD_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 66.7,
+      "avg_oos_pnl": 27.0
+    },
+    "DN-ST-BU_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 61.1,
+      "avg_oos_pnl": 1.2
+    },
+    "BD-BD-U_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 75.0,
+      "avg_oos_pnl": 34.4
+    },
+    "IH-U-U_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 67.4,
+      "avg_oos_pnl": 20.5
+    },
+    "BD-DN-ST_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 66.7,
+      "avg_oos_pnl": 16.2
+    },
+    "DN-BD-BU_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 70.2,
+      "avg_oos_pnl": 28.0
+    },
+    "BD-DN-BD_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 67.7,
+      "avg_oos_pnl": 32.9
+    },
+    "ST-DN-BU_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 57.9,
+      "avg_oos_pnl": -7.9
+    },
+    "BD-BU-U_SHORT": {
+      "wf_folds": 3,
+      "wf_positive": 3,
+      "avg_oos_wr": 82.2,
+      "avg_oos_pnl": 52.27
+    },
+    "BD-BD-BU_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 71.4,
+      "avg_oos_pnl": 22.6
+    },
+    "U-MD-BD_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 69.2,
+      "avg_oos_pnl": 16.7
+    },
+    "BU-BU-BD_LONG": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 73.6,
+      "avg_oos_pnl": 28.5
+    },
+    "GS-DN-U_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 66.7,
+      "avg_oos_pnl": 10.8
+    },
+    "ST-MU-ST_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 73.7,
+      "avg_oos_pnl": 37.1
+    },
+    "BU-MU-DN_SHORT": {
+      "wf_folds": 3,
+      "wf_positive": 3,
+      "avg_oos_wr": 90.2,
+      "avg_oos_pnl": 54.73
+    },
+    "BU-BU-BU_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 61.5,
+      "avg_oos_pnl": 1.7
+    },
+    "U-MU-H_LONG": {
+      "wf_folds": 3,
+      "wf_positive": 3,
+      "avg_oos_wr": 84.3,
+      "avg_oos_pnl": 42.77
+    },
+    "BD-BU-BU_SHORT": {
+      "wf_folds": 0,
+      "wf_positive": 0,
+      "avg_oos_wr": 0,
+      "avg_oos_pnl": 0
+    },
+    "U-GS-DN_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 81.6,
+      "avg_oos_pnl": 24.7
+    },
+    "MU-IH-DN_LONG": {
+      "wf_folds": 3,
+      "wf_positive": 3,
+      "avg_oos_wr": 85.0,
+      "avg_oos_pnl": 35.97
+    },
+    "U-MU-IH_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 60.0,
+      "avg_oos_pnl": -1.0
+    },
+    "MU-U-H_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 60.0,
+      "avg_oos_pnl": -1.0
+    },
+    "ST-BD-BU_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 80.0,
+      "avg_oos_pnl": 29.0
+    },
+    "MD-D-U_SHORT": {
+      "wf_folds": 0,
+      "wf_positive": 0,
+      "avg_oos_wr": 0,
+      "avg_oos_pnl": 0
+    },
+    "D-D-DN_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 85.7,
+      "avg_oos_pnl": 26.3
+    },
+    "U-BU-D_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 60.0,
+      "avg_oos_pnl": -1.0
+    },
+    "IH-ST-ST_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 83.3,
+      "avg_oos_pnl": 20.4
+    },
+    "DN-DF-ST_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 66.7,
+      "avg_oos_pnl": 5.4
+    },
+    "MU-BD-ST_LONG": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 80.0,
+      "avg_oos_pnl": 21.75
+    },
+    "MD-MD-MD_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 60.0,
+      "avg_oos_pnl": -0.5
+    },
+    "BD-U-H_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 72.7,
+      "avg_oos_pnl": 19.9
+    },
+    "MD-BD-BU_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 90.9,
+      "avg_oos_pnl": 23.35
+    },
+    "U-ST-DF_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 66.7,
+      "avg_oos_pnl": 2.7
+    },
+    "DN-BD-H_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 83.3,
+      "avg_oos_pnl": 20.4
+    },
+    "GS-ST-DN_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 83.3,
+      "avg_oos_pnl": 20.4
+    },
+    "MD-BU-MD_LONG": {
+      "wf_folds": 0,
+      "wf_positive": 0,
+      "avg_oos_wr": 0,
+      "avg_oos_pnl": 0
+    },
+    "BD-U-IH_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 91.6,
+      "avg_oos_pnl": 22.0
+    },
+    "H-ST-BD_LONG": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 91.6,
+      "avg_oos_pnl": 16.1
+    },
+    "MU-MD-D_SHORT": {
+      "wf_folds": 2,
+      "wf_positive": 2,
+      "avg_oos_wr": 91.6,
+      "avg_oos_pnl": 16.1
+    },
+    "GS-U-BD_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 0,
+      "avg_oos_wr": 50.0,
+      "avg_oos_pnl": -3.2
+    },
+    "BU-MU-MU_LONG": {
+      "wf_folds": 0,
+      "wf_positive": 0,
+      "avg_oos_wr": 0,
+      "avg_oos_pnl": 0
+    },
+    "IH-D-U_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 75.0,
+      "avg_oos_pnl": 8.6
+    },
+    "MD-D-MD_SHORT": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 66.7,
+      "avg_oos_pnl": 2.7
+    },
+    "U-H-D_SHORT": {
+      "wf_folds": 0,
+      "wf_positive": 0,
+      "avg_oos_wr": 0,
+      "avg_oos_pnl": 0
+    },
+    "H-DN-GS_SHORT": {
+      "wf_folds": 0,
+      "wf_positive": 0,
+      "avg_oos_wr": 0,
+      "avg_oos_pnl": 0
+    },
+    "H-BU-BU_LONG": {
+      "wf_folds": 1,
+      "wf_positive": 1,
+      "avg_oos_wr": 100.0,
+      "avg_oos_pnl": 11.8
+    }
+  },
+  "verdicts": {
+    "U-DN-DN_SHORT": "FAIL",
+    "DN-U-U_SHORT": "PASS",
+    "ST-DN-U_SHORT": "PASS",
+    "U-ST-U_SHORT": "PASS",
+    "U-ST-DN_SHORT": "PASS",
+    "U-U-ST_SHORT": "PASS",
+    "ST-U-ST_SHORT": "FAIL",
+    "U-BU-DN_LONG": "WEAK",
+    "BD-U-U_LONG": "WEAK",
+    "ST-ST-DN_SHORT": "PASS",
+    "BD-U-DN_SHORT": "PASS",
+    "U-MD-DN_LONG": "PASS",
+    "MU-U-DN_LONG": "WEAK",
+    "DN-ST-ST_SHORT": "PASS",
+    "BU-U-DN_SHORT": "WEAK",
+    "DN-BD-DN_LONG": "WEAK",
+    "BU-U-U_LONG": "PASS",
+    "DN-DN-BU_SHORT": "WEAK",
+    "ST-DN-MU_SHORT": "PASS",
+    "MU-ST-DN_SHORT": "WEAK",
+    "DN-BD-BD_LONG": "WEAK",
+    "DN-ST-BU_SHORT": "WEAK",
+    "BD-BD-U_LONG": "WEAK",
+    "IH-U-U_SHORT": "PASS",
+    "BD-DN-ST_SHORT": "WEAK",
+    "DN-BD-BU_SHORT": "PASS",
+    "BD-DN-BD_LONG": "WEAK",
+    "ST-DN-BU_SHORT": "FAIL",
+    "BD-BU-U_SHORT": "PASS",
+    "BD-BD-BU_LONG": "WEAK",
+    "U-MD-BD_SHORT": "WEAK",
+    "BU-BU-BD_LONG": "PASS",
+    "GS-DN-U_SHORT": "WEAK",
+    "ST-MU-ST_SHORT": "WEAK",
+    "BU-MU-DN_SHORT": "PASS",
+    "BU-BU-BU_LONG": "WEAK",
+    "U-MU-H_LONG": "PASS",
+    "BD-BU-BU_SHORT": "NO_DATA",
+    "U-GS-DN_SHORT": "PASS",
+    "MU-IH-DN_LONG": "PASS",
+    "U-MU-IH_LONG": "FAIL",
+    "MU-U-H_LONG": "FAIL",
+    "ST-BD-BU_SHORT": "WEAK",
+    "MD-D-U_SHORT": "NO_DATA",
+    "D-D-DN_SHORT": "PASS",
+    "U-BU-D_SHORT": "FAIL",
+    "IH-ST-ST_SHORT": "WEAK",
+    "DN-DF-ST_LONG": "WEAK",
+    "MU-BD-ST_LONG": "PASS",
+    "MD-MD-MD_SHORT": "FAIL",
+    "BD-U-H_SHORT": "WEAK",
+    "MD-BD-BU_SHORT": "PASS",
+    "U-ST-DF_LONG": "WEAK",
+    "DN-BD-H_SHORT": "WEAK",
+    "GS-ST-DN_SHORT": "WEAK",
+    "MD-BU-MD_LONG": "NO_DATA",
+    "BD-U-IH_SHORT": "PASS",
+    "H-ST-BD_LONG": "PASS",
+    "MU-MD-D_SHORT": "PASS",
+    "GS-U-BD_LONG": "FAIL",
+    "BU-MU-MU_LONG": "NO_DATA",
+    "IH-D-U_LONG": "WEAK",
+    "MD-D-MD_SHORT": "WEAK",
+    "U-H-D_SHORT": "NO_DATA",
+    "H-DN-GS_SHORT": "NO_DATA",
+    "H-BU-BU_LONG": "WEAK"
+  },
+  "scenario_summary": {
+    "A_CURRENT_66": {
+      "patterns": 66,
+      "long": 25,
+      "short": 41,
+      "trades": 253,
+      "wr": 81.0,
+      "pnl": 130138.1,
+      "mdd": 30.4,
+      "pnl_mdd": 4280.9,
+      "pf": 2.77,
+      "pnl_per_trade": 514.38
+    },
+    "B_MIN_TRADES_20": {
+      "patterns": 53,
+      "long": 19,
+      "short": 34,
+      "trades": 254,
+      "wr": 81.5,
+      "pnl": 160581.6,
+      "mdd": 24.9,
+      "pnl_mdd": 6449.1,
+      "pf": 2.86,
+      "pnl_per_trade": 632.21
+    },
+    "C_MIN_TRADES_30": {
+      "patterns": 42,
+      "long": 16,
+      "short": 26,
+      "trades": 250,
+      "wr": 80.8,
+      "pnl": 109560.5,
+      "mdd": 24.9,
+      "pnl_mdd": 4400.0,
+      "pf": 2.73,
+      "pnl_per_trade": 438.24
+    },
+    "D_WF_PASS_ONLY": {
+      "patterns": 25,
+      "long": 7,
+      "short": 18,
+      "trades": 230,
+      "wr": 76.1,
+      "pnl": 11862.1,
+      "mdd": 34.3,
+      "pnl_mdd": 345.8,
+      "pf": 2.06,
+      "pnl_per_trade": 51.57
+    },
+    "E_WF_PASS_OR_WEAK": {
+      "patterns": 52,
+      "long": 20,
+      "short": 32,
+      "trades": 255,
+      "wr": 81.2,
+      "pnl": 145959.6,
+      "mdd": 30.4,
+      "pnl_mdd": 4801.3,
+      "pf": 2.8,
+      "pnl_per_trade": 572.39
+    },
+    "F_STRICT": {
+      "patterns": 35,
+      "long": 12,
+      "short": 23,
+      "trades": 238,
+      "wr": 79.0,
+      "pnl": 40510.2,
+      "mdd": 27.7,
+      "pnl_mdd": 1462.5,
+      "pf": 2.44,
+      "pnl_per_trade": 170.21
+    },
+    "G_WF_PASS_TRADES20": {
+      "patterns": 22,
+      "long": 6,
+      "short": 16,
+      "trades": 231,
+      "wr": 76.6,
+      "pnl": 14658.2,
+      "mdd": 31.7,
+      "pnl_mdd": 462.4,
+      "pf": 2.13,
+      "pnl_per_trade": 63.46
+    }
+  },
+  "best_scenario": "B_MIN_TRADES_20",
+  "best_patterns": [
+    "BD-BD-BU_LONG",
+    "BD-BD-U_LONG",
+    "BD-BU-BU_SHORT",
+    "BD-BU-U_SHORT",
+    "BD-DN-BD_LONG",
+    "BD-DN-ST_SHORT",
+    "BD-U-DN_SHORT",
+    "BD-U-H_SHORT",
+    "BD-U-U_LONG",
+    "BU-BU-BD_LONG",
+    "BU-BU-BU_LONG",
+    "BU-MU-DN_SHORT",
+    "BU-U-DN_SHORT",
+    "BU-U-U_LONG",
+    "D-D-DN_SHORT",
+    "DN-BD-BD_LONG",
+    "DN-BD-BU_SHORT",
+    "DN-BD-DN_LONG",
+    "DN-DF-ST_LONG",
+    "DN-DN-BU_SHORT",
+    "DN-ST-BU_SHORT",
+    "DN-ST-ST_SHORT",
+    "DN-U-U_SHORT",
+    "GS-DN-U_SHORT",
+    "IH-ST-ST_SHORT",
+    "IH-U-U_SHORT",
+    "MD-BD-BU_SHORT",
+    "MD-D-U_SHORT",
+    "MD-MD-MD_SHORT",
+    "MU-BD-ST_LONG",
+    "MU-IH-DN_LONG",
+    "MU-ST-DN_SHORT",
+    "MU-U-DN_LONG",
+    "MU-U-H_LONG",
+    "ST-BD-BU_SHORT",
+    "ST-DN-BU_SHORT",
+    "ST-DN-MU_SHORT",
+    "ST-DN-U_SHORT",
+    "ST-MU-ST_SHORT",
+    "ST-ST-DN_SHORT",
+    "ST-U-ST_SHORT",
+    "U-BU-DN_LONG",
+    "U-BU-D_SHORT",
+    "U-DN-DN_SHORT",
+    "U-GS-DN_SHORT",
+    "U-MD-BD_SHORT",
+    "U-MD-DN_LONG",
+    "U-MU-H_LONG",
+    "U-MU-IH_LONG",
+    "U-ST-DF_LONG",
+    "U-ST-DN_SHORT",
+    "U-ST-U_SHORT",
+    "U-U-ST_SHORT"
+  ],
+  "removed_patterns": [
+    "BD-U-IH_SHORT",
+    "BU-MU-MU_LONG",
+    "DN-BD-H_SHORT",
+    "GS-ST-DN_SHORT",
+    "GS-U-BD_LONG",
+    "H-BU-BU_LONG",
+    "H-DN-GS_SHORT",
+    "H-ST-BD_LONG",
+    "IH-D-U_LONG",
+    "MD-BU-MD_LONG",
+    "MD-D-MD_SHORT",
+    "MU-MD-D_SHORT",
+    "U-H-D_SHORT"
+  ]
+}

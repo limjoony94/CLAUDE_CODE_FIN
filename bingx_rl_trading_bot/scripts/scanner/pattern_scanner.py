@@ -91,12 +91,15 @@ def load_and_classify(data_file: str) -> pd.DataFrame:
 
     # Calculate avg_body for classification
     df['body'] = abs(df['close'] - df['open'])
-    df['avg_body'] = df['body'].rolling(AVG_BODY_WINDOW, min_periods=1).mean()
+    df['avg_body'] = df['body'].rolling(AVG_BODY_WINDOW).mean()
 
-    # Classify each candle using production function
+    # Classify each candle using production function (match NaN handling)
     types = []
     for i, row in df.iterrows():
-        ct = classify_candle(row, df.at[i, 'avg_body'])
+        avg_b = df.at[i, 'avg_body']
+        if pd.isna(avg_b):
+            avg_b = 1.0
+        ct = classify_candle(row, avg_b)
         types.append(ct.value)
 
     df['candle_type'] = types
@@ -280,7 +283,7 @@ def portfolio_1pos(all_trades):
     """1-position-at-a-time filter: sort by entry, skip overlapping."""
     if not all_trades:
         return []
-    all_trades.sort(key=lambda x: x[0])
+    all_trades = sorted(all_trades, key=lambda x: x[0])
     filtered = []
     last_exit = -1
     for eb, xb, pnl in all_trades:
@@ -402,8 +405,11 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
 
     Supports both 'universal' and 'per_pattern' modes.
     Returns list of selected pattern dicts with trades_raw.
+    Uses bar_end as trade boundary to prevent data leakage beyond the range.
     """
     selected = []
+    # Use bar_end as boundary for bt_signals to prevent data leakage
+    trade_boundary = bar_end if bar_end is not None else n_bars
 
     for pat_name, all_sigs in signal_index.items():
         sigs = [s for s in all_sigs if bar_start <= s < bar_end]
@@ -415,18 +421,18 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
             if mode == 'universal':
                 tp, sl = uni_tp, uni_sl
                 trades = bt_signals(sigs, direction, tp, sl,
-                                    opens, highs, lows, n_bars)
+                                    opens, highs, lows, trade_boundary)
                 if len(trades) < min_trades:
                     continue
             elif mode == 'per_pattern':
                 opt = grid_search_best(sigs, direction, opens, highs, lows,
-                                       n_bars, min_tr=min_trades,
+                                       trade_boundary, min_tr=min_trades,
                                        max_baseline_wr=max_baseline_wr)
                 if opt is None:
                     continue
                 tp, sl = opt['tp'], opt['sl']
                 trades = bt_signals(sigs, direction, tp, sl,
-                                    opens, highs, lows, n_bars)
+                                    opens, highs, lows, trade_boundary)
                 if len(trades) < min_trades:
                     continue
             else:
@@ -495,13 +501,14 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
             pattern_appearances[(r['pattern'], r['direction'])] += 1
 
         # OOS backtest with IS-discovered patterns and their TP/SL
+        # Use oos_end as boundary to prevent data leakage into next fold
         oos_trades = []
         for r in is_patterns:
             oos_sigs = [s for s in signal_index[r['pattern']]
                         if oos_start <= s < oos_end]
             oos_trades.extend(bt_signals(
                 oos_sigs, r['direction'], r['tp'], r['sl'],
-                opens, highs, lows, n_bars
+                opens, highs, lows, oos_end
             ))
 
         oos_port = portfolio_1pos(oos_trades)
@@ -788,20 +795,6 @@ def scan_patterns_pp(
     pattern_details = [pd_item for pd_item in pattern_details
                        if pd_item['key'] in surviving_keys]
 
-    # Portfolio 1-pos filter + stats
-    all_trades = []
-    for pd_item in pattern_details:
-        all_trades.extend(pd_item['trades_raw'])
-    portfolio_trades = portfolio_1pos(all_trades)
-    portfolio_stats = calc_stats(portfolio_trades)
-    portfolio_mc = (mc_test([t[2] for t in portfolio_trades])
-                    if portfolio_trades else 1.0)
-
-    portfolio_mc_pass = portfolio_mc < mc_threshold
-    if require_portfolio_mc and not portfolio_mc_pass:
-        logger.warning(f"Portfolio MC FAILED: p={portfolio_mc:.4f} "
-                       f">= {mc_threshold}")
-
     # Deduplicate dual-direction patterns: keep direction with better edge
     pat_by_name = {}
     for k, v in selected.items():
@@ -818,6 +811,24 @@ def scan_patterns_pp(
     if n_removed:
         logger.info(f"Removed {n_removed} dual-direction duplicates")
         selected = deduped
+        # Rebuild pattern_details after dedup
+        surviving_keys = set(selected.keys())
+        pattern_details = [pd_item for pd_item in pattern_details
+                           if pd_item['key'] in surviving_keys]
+
+    # Portfolio 1-pos filter + stats (computed AFTER dedup for accuracy)
+    all_trades = []
+    for pd_item in pattern_details:
+        all_trades.extend(pd_item['trades_raw'])
+    portfolio_trades = portfolio_1pos(all_trades)
+    portfolio_stats = calc_stats(portfolio_trades)
+    portfolio_mc = (mc_test([t[2] for t in portfolio_trades])
+                    if portfolio_trades else 1.0)
+
+    portfolio_mc_pass = portfolio_mc < mc_threshold
+    if require_portfolio_mc and not portfolio_mc_pass:
+        logger.warning(f"Portfolio MC FAILED: p={portfolio_mc:.4f} "
+                       f">= {mc_threshold}")
 
     # Organize by direction
     long_patterns = sorted([v['pattern'] for v in selected.values()

@@ -155,7 +155,7 @@ VALIDATED_LONG_PATTERNS: List[str] = [
     "U-ST-DF",     # R:R 0.67,  20t, WR 85.0%, Exp +3.65%, PnL  +73.0%
 ]
 
-# SHORT patterns (20) — v1.26.4 full TP/SL optimization (8 SHORT optimized)
+# SHORT patterns (19) — v1.26.4 full TP/SL optimization (8 SHORT optimized)
 VALIDATED_SHORT_PATTERNS: List[str] = [
     "BD-BU-DN",    # R:R 1.00,  47t, WR 68.1%, Exp +3.16%, PnL +148.3%
     "BD-D-D",      # R:R 0.50,  13t, WR 100 %, Exp +4.40%, PnL  +57.2%
@@ -218,7 +218,7 @@ PATTERN_STATS = {
     "U-MU-H":    {"direction": "LONG",  "trades":  48, "wr": 88.9, "mc": 0.0006, "wf": 5, "periods": 3},
     "U-MU-IH":   {"direction": "LONG",  "trades":  25, "wr": 80.6, "mc": 0.0011, "wf": 4, "periods": 3},
     "U-ST-DF":   {"direction": "LONG",  "trades":  20, "wr": 86.4, "mc": 0.0131, "wf": 4, "periods": 3},
-    # SHORT patterns (20)
+    # SHORT patterns (19)
     "BD-BU-DN":  {"direction": "SHORT", "trades":  47, "wr": 68.1, "mc": 0.0089, "wf": 4, "periods": 3},
     "BD-D-D":    {"direction": "SHORT", "trades":  13, "wr": 100.0,"mc": 0.0001, "wf": 5, "periods": 3},
     "BD-U-H":    {"direction": "SHORT", "trades":  20, "wr": 85.0, "mc": 0.0011, "wf": 5, "periods": 3},
@@ -289,7 +289,7 @@ PATTERN_OPTIMAL_TPSL = {
     "U-MU-H":    (1.05, 3.0),  # R:R=0.35  (was 1.5)
     "U-MU-IH":   (2.1, 2.5),   # R:R=0.84  (was 3.0)
     "U-ST-DF":   (1.4, 3.0),   # R:R=0.47  (was 2.0)
-    # SHORT patterns (20)
+    # SHORT patterns (19)
     "BD-BU-DN":  (3.0, 3.0),   # R:R=1.00  (v1.27.1 reopt, was 2.1/3.0)
     "BD-D-D":    (1.05, 3.0),  # R:R=0.35  (was 1.5)
     "BD-U-H":    (2.5, 3.0),   # R:R=0.83  (v1.27.1 reopt, was 1.75/3.0)

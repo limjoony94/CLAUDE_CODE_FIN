@@ -72,6 +72,12 @@ def sync_position_with_exchange(
 
         state_position = state.get('position')
 
+        logger.debug(
+            f"Position sync: exchange_long={'yes' if exchange_long else 'no'}, "
+            f"exchange_short={'yes' if exchange_short else 'no'}, "
+            f"state_position={'yes' if state_position else 'no'}"
+        )
+
         # State has position but exchange doesn't
         if state_position and not exchange_long and not exchange_short:
             logger.warning("State has position but exchange doesn't")
@@ -105,7 +111,7 @@ def sync_position_with_exchange(
         logger.error(f"Failed to sync position (exchange error): {e}")
         return False
     except Exception as e:
-        logger.error(f"Failed to sync position: {e}")
+        logger.exception(f"Failed to sync position: {e}")
         return False
 
 
@@ -238,7 +244,7 @@ def check_position_status(
         logger.error(f"Failed to check position status (exchange error): {e}")
         return False
     except Exception as e:
-        logger.error(f"Failed to check position status: {e}")
+        logger.exception(f"Failed to check position status: {e}")
         return False
 
 

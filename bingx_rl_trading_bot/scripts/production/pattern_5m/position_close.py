@@ -80,7 +80,7 @@ def detect_ghost_positions(
                 f"   → Crash recovery will attempt to reconcile"
             )
     except Exception as e:
-        logger.error(f"❌ Ghost position detection failed: {e}")
+        logger.exception(f"❌ Ghost position detection failed: {e}")
 
 
 def record_closed_position(
@@ -318,7 +318,7 @@ def recalculate_position_orders(
             save_state(state)
             return False
     except Exception as e:
-        logger.error(f"Failed to update TP/SL orders: {e}")
+        logger.exception(f"Failed to update TP/SL orders: {e}")
         save_state(state)
         return False
 
@@ -513,7 +513,7 @@ def recover_from_crash(
         logger.error(f"Crash recovery failed (exchange error): {e}")
         return False
     except Exception as e:
-        logger.error(f"Crash recovery failed: {e}")
+        logger.exception(f"Crash recovery failed: {e}")
         return False
 
 

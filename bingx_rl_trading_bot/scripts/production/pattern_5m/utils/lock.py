@@ -14,7 +14,7 @@ from abc import ABC, abstractmethod
 
 from ..constants import BOT_NAME, BOT_VERSION, LOCK_FILE
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('pattern_5m')
 
 # Global lock handle
 _lock_file_handle = None

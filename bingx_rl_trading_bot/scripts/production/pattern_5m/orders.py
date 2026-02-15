@@ -60,7 +60,7 @@ def place_tp_sl_orders(
     except ccxt.ExchangeError as e:
         logger.error(f"Exchange error placing TP/SL orders: {e}")
     except Exception as e:
-        logger.error(f"Failed to place TP/SL orders: {e}")
+        logger.exception(f"Failed to place TP/SL orders: {e}")
 
 
 def _place_scale_out_orders(
@@ -266,7 +266,7 @@ def adjust_tpsl_to_config(
         return True
 
     except Exception as e:
-        logger.error(f"Failed to adjust TP/SL: {e}")
+        logger.exception(f"Failed to adjust TP/SL: {e}")
         return False
 
 
@@ -389,7 +389,7 @@ def _verify_scale_out_orders(
             except ccxt.ExchangeError as e:
                 logger.error(f"Failed to re-place Stage {stage['stage']} TP (exchange error): {e}")
             except Exception as e:
-                logger.error(f"Failed to re-place Stage {stage['stage']} TP: {e}")
+                logger.exception(f"Failed to re-place Stage {stage['stage']} TP: {e}")
 
     return state_changed
 
@@ -425,7 +425,7 @@ def _verify_sl_order(
         except ccxt.ExchangeError as e:
             logger.error(f"Failed to re-place SL order (exchange error): {e}")
         except Exception as e:
-            logger.error(f"Failed to re-place SL order: {e}")
+            logger.exception(f"Failed to re-place SL order: {e}")
 
     return state_changed
 
@@ -506,4 +506,4 @@ def cancel_remaining_orders(
     except ccxt.ExchangeError as e:
         logger.error(f"Failed to cancel remaining orders (exchange): {e}")
     except Exception as e:
-        logger.error(f"Failed to cancel remaining orders: {e}")
+        logger.exception(f"Failed to cancel remaining orders: {e}")

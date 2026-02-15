@@ -120,7 +120,7 @@ def verify_position_mode(exchange: ccxt.bingx, config: Dict[str, Any]) -> bool:
         logger.error(f"Failed to verify position mode (exchange error): {e}")
         return False
     except Exception as e:
-        logger.error(f"Failed to verify position mode: {e}")
+        logger.exception(f"Failed to verify position mode: {e}")
         return False
 
 

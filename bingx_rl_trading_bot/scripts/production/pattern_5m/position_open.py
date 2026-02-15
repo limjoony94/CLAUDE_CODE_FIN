@@ -73,7 +73,7 @@ def get_position_size(
         logger.error(f"Failed to calculate position size (exchange error): {e}")
         return None, None
     except Exception as e:
-        logger.error(f"Failed to calculate position size: {e}")
+        logger.exception(f"Failed to calculate position size: {e}")
         return None, None
 
 
@@ -245,7 +245,7 @@ def open_position(
             logger.error(f"Failed to open position (exchange error): {e}")
         return False
     except Exception as e:
-        logger.error(f"Failed to open position: {e}")
+        logger.exception(f"Failed to open position: {e}")
         return False
 
 
@@ -397,6 +397,8 @@ def calculate_tp_sl(
 
     tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
     sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+
+    logger.debug(f"TP/SL calculated: entry=${entry_price:.1f} dir={direction} | TP=${tp_price:.1f} ({tp_pct_adjusted:.2f}%) SL=${sl_price:.1f} ({sl_pct_adjusted:.2f}%)")
 
     return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
 
@@ -591,7 +593,7 @@ def refill_position(
         logger.error(f"Failed to refill position (exchange error): {e}")
         return False
     except Exception as e:
-        logger.error(f"Failed to refill position: {e}")
+        logger.exception(f"Failed to refill position: {e}")
         return False
 
 

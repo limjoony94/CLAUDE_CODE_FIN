@@ -574,7 +574,7 @@ def _fetch_and_calculate_indicators(
         logger.error(f"Failed to fetch indicators (exchange error): {e}")
         return None
     except Exception as e:
-        logger.error(f"Failed to fetch/calculate indicators: {e}")
+        logger.exception(f"Failed to fetch/calculate indicators: {e}")
         return None
 
 

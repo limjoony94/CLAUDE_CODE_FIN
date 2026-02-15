@@ -56,7 +56,7 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
         except (IOError, OSError) as e:
             logger.error(f"Failed to read state file: {e}")
         except Exception as e:
-            logger.error(f"Failed to load state: {e}")
+            logger.exception(f"Failed to load state: {e}")
 
     logger.warning(f"⚠️ Returning default state (no valid state file found)")
     return default_state
@@ -162,7 +162,7 @@ def save_state(
                 os.remove(tmp_path)
             raise
     except Exception as e:
-        logger.error(f"Failed to save state atomically: {e}")
+        logger.exception(f"Failed to save state atomically: {e}")
         # Fallback to non-atomic write
         with open(state_file, 'w') as f:
             json.dump(state, f, indent=2, default=str)

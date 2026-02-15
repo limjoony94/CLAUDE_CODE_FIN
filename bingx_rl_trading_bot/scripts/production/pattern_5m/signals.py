@@ -327,6 +327,7 @@ def check_entry_signal(
         Tuple of (signal, reason) or (None, None) if no signal
     """
     if len(df) < 5:
+        logger.debug(f"Insufficient data for signal check: {len(df)} bars (need 5)")
         return None, None
 
     # Ensure classification is done (single source: indicators.calculate_indicators)
@@ -343,6 +344,7 @@ def check_entry_signal(
 
     pattern = current.get('pattern_3')
     if pattern is None:
+        logger.debug("No pattern_3 available for current candle")
         return None, None
 
     signal = None
@@ -358,6 +360,8 @@ def check_entry_signal(
     elif pattern in short_patterns:
         signal = 'SHORT'
         reason = f"Pattern: {pattern} (SHORT)"
+    else:
+        logger.debug(f"Pattern {pattern} not in validated patterns (L={len(long_patterns)}, S={len(short_patterns)})")
 
     if signal:
         # Context filter check (skip computation when no filters configured)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Pattern Scanner CLI — Dynamic Walk-Forward Pattern Selection
+Pattern Scanner CLI v2.1 — Dynamic Walk-Forward Pattern Selection
 
 Standalone offline tool that scans historical data to select patterns
 with genuine edge. Supports Universal and Per-Pattern TP/SL discovery.
@@ -10,15 +10,17 @@ Discovery methods:
 - per_pattern: Grid search optimal TP/SL per pattern (v1.28.6, default)
   PP discovery: +487% avg OOS vs Universal +18% (fair_discovery_comparison.py)
 
-Features:
-- Multi-seed MC test (3 seeds, conservative max p-value)
-- MAX_BASELINE_WR filter to exclude distance-dominated combos
-- 1-position-at-a-time portfolio constraint
+v2.1 Enhancements:
+- Multiple testing correction (BH FDR / Bonferroni)
+- Expanding window walk-forward validation
+- Parallel grid search (ProcessPoolExecutor)
+- Progress bars (tqdm) and timing
 
 Usage:
   python scripts/scanner/pattern_scanner.py                              # PP discovery (default)
   python scripts/scanner/pattern_scanner.py --discovery-method universal  # Universal mode
-  python scripts/scanner/pattern_scanner.py --data data/custom.csv -v
+  python scripts/scanner/pattern_scanner.py --correction bh --wf-folds 3  # With corrections + WF
+  python scripts/scanner/pattern_scanner.py --concurrency 4 -v           # 4 workers, verbose
 """
 
 import os
@@ -26,10 +28,18 @@ import sys
 import json
 import argparse
 import logging
+import time
 from datetime import datetime
+from collections import Counter
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import numpy as np
 import pandas as pd
+
+try:
+    from tqdm import tqdm as _tqdm_cls
+except ImportError:
+    _tqdm_cls = None
 
 # Add project root to path for production imports
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -50,9 +60,9 @@ MAX_BARS = 500          # Max bars to hold trade before timeout
 MC_SIMS = 5000          # Monte Carlo simulations
 DEFAULT_UNI_TP = 2.0    # Universal TP % (v1.28.2: WF frontier optimal)
 DEFAULT_UNI_SL = 3.0    # Universal SL %
-DEFAULT_EDGE_THRESHOLD = 10.0  # Minimum edge in pp (v1.28.4: 5→10 for statistical rigor)
+DEFAULT_EDGE_THRESHOLD = 10.0  # Minimum edge in pp (v1.28.4: 5->10 for statistical rigor)
 DEFAULT_MC_THRESHOLD = 0.01    # MC p-value cutoff
-DEFAULT_MIN_TRADES = 25        # v1.28.6: 20→25 (scanner_param_study: OOS PnL/MDD 2.38 best)
+DEFAULT_MIN_TRADES = 25        # v1.28.6: 20->25 (scanner_param_study: OOS PnL/MDD 2.38 best)
 
 # Per-pattern discovery grid (v1.28.6)
 TP_GRID = [0.5, 0.7, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.1, 2.5, 3.0]
@@ -107,7 +117,7 @@ def build_signal_index(types, n):
 
 def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bars):
     """
-    Backtest given signal bars with Universal TP/SL.
+    Backtest given signal bars with TP/SL.
 
     Entry: next bar open after signal.
     Exit: intrabar high/low check (distance-based).
@@ -138,7 +148,7 @@ def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bar
                 hs = highs[j] >= slp
 
             if ht and hs:
-                # Both hit same bar — bar open 기준 distance-based resolution
+                # Both hit same bar — bar open distance-based resolution
                 bo = opens[j]
                 dist_tp = abs(tpp - bo)
                 dist_sl = abs(slp - bo)
@@ -171,8 +181,72 @@ def mc_test(pnls, n_sims=MC_SIMS):
     return max(p_vals)
 
 
-def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars, min_tr=20):
-    """Grid search for best TP/SL by PnL/MDD. Skips combos with baseline WR > MAX_BASELINE_WR."""
+def apply_multiple_testing_correction(selected, n_tested, method='none',
+                                      fdr_q=0.05, alpha=0.01):
+    """Apply multiple testing correction to selected patterns.
+
+    Args:
+        selected: dict of pattern_key -> pattern_info (must have 'mc_p')
+        n_tested: total number of pattern-direction combos tested
+        method: 'none' | 'bh' | 'bonferroni'
+        fdr_q: FDR q-value for BH correction (default 0.05)
+        alpha: significance level for Bonferroni (default 0.01)
+
+    Returns:
+        (filtered_selected, correction_meta)
+    """
+    if method == 'none' or not selected:
+        return selected, {
+            'correction_method': 'none', 'n_tested': n_tested,
+            'n_before_correction': len(selected),
+            'n_after_correction': len(selected),
+        }
+
+    # Sort by p-value ascending
+    sorted_items = sorted(selected.items(), key=lambda x: x[1]['mc_p'])
+
+    if method == 'bonferroni':
+        threshold = alpha / n_tested if n_tested > 0 else alpha
+        filtered = {k: v for k, v in sorted_items if v['mc_p'] <= threshold}
+        meta = {
+            'correction_method': 'bonferroni', 'n_tested': n_tested,
+            'bonf_threshold': threshold, 'alpha': alpha,
+            'n_before_correction': len(selected),
+            'n_after_correction': len(filtered),
+        }
+        logger.info(f"Bonferroni: threshold={threshold:.6f}, "
+                     f"{len(selected)} -> {len(filtered)} patterns")
+        return filtered, meta
+
+    elif method == 'bh':
+        # Benjamini-Hochberg step-up: find largest k where p(k) <= q*k/m
+        m = len(sorted_items)
+        last_pass_idx = -1
+        for i in range(m - 1, -1, -1):
+            rank = i + 1
+            bh_threshold = fdr_q * rank / m
+            if sorted_items[i][1]['mc_p'] <= bh_threshold:
+                last_pass_idx = i
+                break
+
+        filtered = dict(sorted_items[:last_pass_idx + 1]) if last_pass_idx >= 0 else {}
+        meta = {
+            'correction_method': 'bh', 'n_tested': n_tested,
+            'fdr_q': fdr_q, 'm_positive_edge': m,
+            'n_before_correction': len(selected),
+            'n_after_correction': len(filtered),
+        }
+        logger.info(f"BH FDR: q={fdr_q}, "
+                     f"{len(selected)} -> {len(filtered)} patterns")
+        return filtered, meta
+
+    else:
+        raise ValueError(f"Unknown correction method: {method}")
+
+
+def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars,
+                     min_tr=20, max_baseline_wr=MAX_BASELINE_WR):
+    """Grid search for best TP/SL by PnL/MDD. Skips combos with baseline WR > max_baseline_wr."""
     best = None
     best_score = -9999
     for tp in TP_GRID:
@@ -180,7 +254,7 @@ def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars, min_tr=
             if sl < 0.5:
                 continue
             bwr = sl / (tp + sl) * 100
-            if bwr > MAX_BASELINE_WR:
+            if bwr > max_baseline_wr:
                 continue
             trades = bt_signals(signal_bars, direction, tp, sl, opens, highs, lows, n_bars)
             if len(trades) < min_tr:
@@ -249,6 +323,233 @@ def calc_stats(trades):
 
 
 # ============================================================
+# Parallel PP Worker (module-level for pickling)
+# ============================================================
+
+_shared_data = {}
+
+
+def _pp_init(opens, highs, lows, n_bars):
+    """Initialize shared data in worker processes."""
+    _shared_data['opens'] = opens
+    _shared_data['highs'] = highs
+    _shared_data['lows'] = lows
+    _shared_data['n_bars'] = n_bars
+
+
+def _pp_worker(args_tuple):
+    """Worker for parallel per-pattern grid search.
+
+    Returns result dict or None if pattern doesn't pass filters.
+    """
+    (pat_name, direction, sigs_list,
+     min_trades, edge_threshold, mc_threshold, max_baseline_wr) = args_tuple
+
+    opens = _shared_data['opens']
+    highs = _shared_data['highs']
+    lows = _shared_data['lows']
+    n_bars = _shared_data['n_bars']
+
+    if len(sigs_list) < min_trades:
+        return None
+
+    opt = grid_search_best(sigs_list, direction, opens, highs, lows, n_bars,
+                           min_tr=min_trades, max_baseline_wr=max_baseline_wr)
+    if opt is None:
+        return None
+
+    tp, sl = opt['tp'], opt['sl']
+    trades = bt_signals(sigs_list, direction, tp, sl, opens, highs, lows, n_bars)
+    if len(trades) < min_trades:
+        return None
+
+    pnls = [t[2] for t in trades]
+    wr = len([p for p in pnls if p > 0]) / len(pnls) * 100
+    baseline_wr = sl / (tp + sl) * 100
+    edge = wr - baseline_wr
+
+    if edge < edge_threshold:
+        return None
+
+    p = mc_test(pnls)
+    if p >= mc_threshold:
+        return None
+
+    key = f"{pat_name}_{direction}"
+    return {
+        'key': key,
+        'pattern': pat_name, 'direction': direction,
+        'tp': tp, 'sl': sl,
+        'trades': len(trades), 'wr': round(wr, 1),
+        'edge': round(edge, 1), 'mc_p': round(p, 4),
+        'baseline_wr': round(baseline_wr, 1),
+        'trades_raw': trades,
+    }
+
+
+# ============================================================
+# Range-Based Scanning (for Walk-Forward)
+# ============================================================
+
+def scan_universe_range(signal_index, opens, highs, lows, n_bars,
+                        bar_start, bar_end, mode,
+                        uni_tp=None, uni_sl=None,
+                        min_trades=DEFAULT_MIN_TRADES,
+                        edge_threshold=DEFAULT_EDGE_THRESHOLD,
+                        mc_threshold=DEFAULT_MC_THRESHOLD,
+                        max_baseline_wr=MAX_BASELINE_WR):
+    """Scan patterns within [bar_start, bar_end) signal range.
+
+    Supports both 'universal' and 'per_pattern' modes.
+    Returns list of selected pattern dicts with trades_raw.
+    """
+    selected = []
+
+    for pat_name, all_sigs in signal_index.items():
+        sigs = [s for s in all_sigs if bar_start <= s < bar_end]
+
+        for direction in ['LONG', 'SHORT']:
+            if len(sigs) < min_trades:
+                continue
+
+            if mode == 'universal':
+                tp, sl = uni_tp, uni_sl
+                trades = bt_signals(sigs, direction, tp, sl,
+                                    opens, highs, lows, n_bars)
+                if len(trades) < min_trades:
+                    continue
+            elif mode == 'per_pattern':
+                opt = grid_search_best(sigs, direction, opens, highs, lows,
+                                       n_bars, min_tr=min_trades,
+                                       max_baseline_wr=max_baseline_wr)
+                if opt is None:
+                    continue
+                tp, sl = opt['tp'], opt['sl']
+                trades = bt_signals(sigs, direction, tp, sl,
+                                    opens, highs, lows, n_bars)
+                if len(trades) < min_trades:
+                    continue
+            else:
+                raise ValueError(f"Unknown mode: {mode}")
+
+            pnls = [t[2] for t in trades]
+            wr = len([p for p in pnls if p > 0]) / len(pnls) * 100
+            baseline_wr = sl / (tp + sl) * 100
+            edge = wr - baseline_wr
+
+            if edge < edge_threshold:
+                continue
+
+            p = mc_test(pnls)
+            if p >= mc_threshold:
+                continue
+
+            selected.append({
+                'pattern': pat_name, 'direction': direction,
+                'tp': tp, 'sl': sl,
+                'trades': len(trades), 'wr': round(wr, 1),
+                'edge': round(edge, 1), 'mc_p': round(p, 4),
+                'trades_raw': trades,
+            })
+
+    return selected
+
+
+def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
+                        n_folds, mode,
+                        uni_tp=None, uni_sl=None,
+                        min_trades=DEFAULT_MIN_TRADES,
+                        edge_threshold=DEFAULT_EDGE_THRESHOLD,
+                        mc_threshold=DEFAULT_MC_THRESHOLD,
+                        max_baseline_wr=MAX_BASELINE_WR):
+    """True expanding window walk-forward validation.
+
+    Splits data into n_folds+1 equal segments.
+    Fold f: IS=[0, (f+1)*seg), OOS=[(f+1)*seg, (f+2)*seg)
+
+    Returns dict with folds, positive_folds, total_oos_pnl, stable_patterns.
+    """
+    seg_size = n_bars // (n_folds + 1)
+    folds = []
+    pattern_appearances = Counter()
+
+    for fold in range(n_folds):
+        is_end = (fold + 1) * seg_size
+        oos_start = is_end
+        oos_end = (fold + 2) * seg_size if fold < n_folds - 1 else n_bars
+
+        logger.info(f"  WF Fold {fold+1}/{n_folds}: "
+                     f"IS=[0, {is_end}), OOS=[{oos_start}, {oos_end})")
+
+        # Fresh scan on IS range
+        is_patterns = scan_universe_range(
+            signal_index, opens, highs, lows, n_bars,
+            bar_start=0, bar_end=is_end, mode=mode,
+            uni_tp=uni_tp, uni_sl=uni_sl,
+            min_trades=min_trades, edge_threshold=edge_threshold,
+            mc_threshold=mc_threshold, max_baseline_wr=max_baseline_wr,
+        )
+
+        # Track pattern stability
+        for r in is_patterns:
+            pattern_appearances[(r['pattern'], r['direction'])] += 1
+
+        # OOS backtest with IS-discovered patterns and their TP/SL
+        oos_trades = []
+        for r in is_patterns:
+            oos_sigs = [s for s in signal_index[r['pattern']]
+                        if oos_start <= s < oos_end]
+            oos_trades.extend(bt_signals(
+                oos_sigs, r['direction'], r['tp'], r['sl'],
+                opens, highs, lows, n_bars
+            ))
+
+        oos_port = portfolio_1pos(oos_trades)
+        oos_stats = calc_stats(oos_port)
+        n_long = sum(1 for r in is_patterns if r['direction'] == 'LONG')
+        n_short = sum(1 for r in is_patterns if r['direction'] == 'SHORT')
+
+        fold_result = {
+            'fold': fold + 1,
+            'is_bars': is_end,
+            'oos_bars': oos_end - oos_start,
+            'is_patterns': len(is_patterns),
+            'is_long': n_long, 'is_short': n_short,
+            'oos_trades': oos_stats['trades'],
+            'oos_wr': oos_stats['wr'],
+            'oos_pnl': oos_stats['pnl'],
+            'oos_mdd': oos_stats['mdd'],
+            'oos_pf': oos_stats['pf'],
+            'oos_positive': oos_stats['pnl'] > 0,
+        }
+        folds.append(fold_result)
+
+        logger.info(f"    IS: {len(is_patterns)} pat ({n_long}L+{n_short}S) | "
+                     f"OOS: {oos_stats['trades']} tr, "
+                     f"WR {oos_stats['wr']}%, PnL {oos_stats['pnl']}%")
+
+    # Stable patterns = appear in ALL folds
+    stable = sorted(
+        f"{pat}_{d}"
+        for (pat, d), cnt in pattern_appearances.items()
+        if cnt == n_folds
+    )
+    positive_folds = sum(1 for f in folds if f['oos_positive'])
+    total_oos_pnl = round(sum(f['oos_pnl'] for f in folds), 1)
+    total_oos_trades = sum(f['oos_trades'] for f in folds)
+
+    return {
+        'n_folds': n_folds,
+        'folds': folds,
+        'positive_folds': positive_folds,
+        'total_oos_pnl': total_oos_pnl,
+        'total_oos_trades': total_oos_trades,
+        'stable_pattern_count': len(stable),
+        'stable_patterns': stable,
+    }
+
+
+# ============================================================
 # Main Scanner Logic
 # ============================================================
 
@@ -259,6 +560,10 @@ def scan_patterns(
     edge_threshold: float = DEFAULT_EDGE_THRESHOLD,
     mc_threshold: float = DEFAULT_MC_THRESHOLD,
     min_trades: int = DEFAULT_MIN_TRADES,
+    signal_index: dict = None,
+    correction_method: str = 'none',
+    fdr_q: float = 0.05,
+    require_portfolio_mc: bool = False,
 ) -> dict:
     """
     Scan all 3456 patterns (12^3 x 2 directions) and filter by edge + MC.
@@ -271,8 +576,9 @@ def scan_patterns(
     highs = df['high'].values
     lows = df['low'].values
 
-    # Build signal index for all patterns
-    signal_index = build_signal_index(types, n)
+    # Build signal index if not provided
+    if signal_index is None:
+        signal_index = build_signal_index(types, n)
     logger.info(f"Built signal index: {len(signal_index)} unique patterns found")
 
     # Baseline WR for random walk
@@ -281,6 +587,7 @@ def scan_patterns(
     # Scan all patterns x directions
     selected = {}
     pattern_details = []
+    n_tested = 0
 
     for pat_name in signal_index:
         for direction in ['LONG', 'SHORT']:
@@ -288,9 +595,12 @@ def scan_patterns(
             if len(sigs) < min_trades:
                 continue
 
-            trades = bt_signals(sigs, direction, uni_tp, uni_sl, opens, highs, lows, n)
+            trades = bt_signals(sigs, direction, uni_tp, uni_sl,
+                                opens, highs, lows, n)
             if len(trades) < min_trades:
                 continue
+
+            n_tested += 1
 
             pnls = [t[2] for t in trades]
             wr = len([p for p in pnls if p > 0]) / len(pnls) * 100
@@ -318,7 +628,17 @@ def scan_patterns(
                 'trades_raw': trades,
             })
 
-    logger.info(f"Patterns passing filters: {len(selected)}")
+    logger.info(f"Patterns passing filters: {len(selected)} (tested: {n_tested})")
+
+    # Apply multiple testing correction
+    selected, correction_meta = apply_multiple_testing_correction(
+        selected, n_tested, method=correction_method, fdr_q=fdr_q
+    )
+
+    # Rebuild pattern_details after correction
+    surviving_keys = set(selected.keys())
+    pattern_details = [pd_item for pd_item in pattern_details
+                       if pd_item['key'] in surviving_keys]
 
     # Build portfolio and run 1-pos filter
     all_trades = []
@@ -334,19 +654,29 @@ def scan_patterns(
     else:
         portfolio_mc = 1.0
 
-    # Organize by direction
-    long_patterns = sorted([v['pattern'] for v in selected.values() if v['direction'] == 'LONG'])
-    short_patterns = sorted([v['pattern'] for v in selected.values() if v['direction'] == 'SHORT'])
+    portfolio_mc_pass = portfolio_mc < mc_threshold
+    if require_portfolio_mc and not portfolio_mc_pass:
+        logger.warning(f"Portfolio MC FAILED: p={portfolio_mc:.4f} >= {mc_threshold}")
 
-    logger.info(f"Selected: {len(long_patterns)}L + {len(short_patterns)}S = {len(selected)} patterns")
-    logger.info(f"Portfolio: {portfolio_stats['trades']} trades, WR {portfolio_stats['wr']}%, PnL {portfolio_stats['pnl']}%")
+    # Organize by direction
+    long_patterns = sorted([v['pattern'] for v in selected.values()
+                            if v['direction'] == 'LONG'])
+    short_patterns = sorted([v['pattern'] for v in selected.values()
+                             if v['direction'] == 'SHORT'])
+
+    logger.info(f"Selected: {len(long_patterns)}L + {len(short_patterns)}S "
+                f"= {len(selected)} patterns")
+    logger.info(f"Portfolio: {portfolio_stats['trades']} trades, "
+                f"WR {portfolio_stats['wr']}%, PnL {portfolio_stats['pnl']}%")
 
     return {
         'long_patterns': long_patterns,
         'short_patterns': short_patterns,
         'portfolio_stats': portfolio_stats,
         'portfolio_mc': round(portfolio_mc, 4),
-        'pattern_details': {k: {kk: vv for kk, vv in v.items()} for k, v in selected.items()},
+        'portfolio_mc_pass': portfolio_mc_pass,
+        'pattern_details': {k: v for k, v in selected.items()},
+        'correction_meta': correction_meta,
     }
 
 
@@ -355,59 +685,108 @@ def scan_patterns_pp(
     edge_threshold: float = DEFAULT_EDGE_THRESHOLD,
     mc_threshold: float = DEFAULT_MC_THRESHOLD,
     min_trades: int = DEFAULT_MIN_TRADES,
+    signal_index: dict = None,
+    concurrency: int = 0,
+    max_baseline_wr: float = MAX_BASELINE_WR,
+    correction_method: str = 'none',
+    fdr_q: float = 0.05,
+    require_portfolio_mc: bool = False,
 ) -> dict:
-    """Per-Pattern Discovery: grid search optimal TP/SL per pattern → edge+MC filter."""
+    """Per-Pattern Discovery: grid search optimal TP/SL per pattern.
+
+    Args:
+        concurrency: 0=auto (min(cpu_count, 8)), 1=sequential, N=N workers
+    """
     types = df['candle_type'].tolist()
     n = len(types)
     opens = df['open'].values
     highs = df['high'].values
     lows = df['low'].values
 
-    signal_index = build_signal_index(types, n)
+    if signal_index is None:
+        signal_index = build_signal_index(types, n)
     logger.info(f"Built signal index: {len(signal_index)} unique patterns found")
+
+    # Build work items
+    work_items = []
+    for pat_name in signal_index:
+        for direction in ['LONG', 'SHORT']:
+            sigs = signal_index[pat_name]
+            work_items.append(
+                (pat_name, direction, sigs, min_trades,
+                 edge_threshold, mc_threshold, max_baseline_wr)
+            )
+
+    # n_tested = combos with enough signals to be tested
+    n_tested = sum(1 for item in work_items if len(item[2]) >= min_trades)
+    logger.info(f"Pattern-direction combos to test: {n_tested} "
+                f"(of {len(work_items)} total)")
 
     selected = {}
     pattern_details = []
 
-    for pat_name in signal_index:
-        for direction in ['LONG', 'SHORT']:
-            sigs = signal_index[pat_name]
-            if len(sigs) < min_trades:
-                continue
+    # Determine concurrency
+    if concurrency == 0:
+        n_workers = min(os.cpu_count() or 1, 8)
+    else:
+        n_workers = concurrency
 
-            opt = grid_search_best(sigs, direction, opens, highs, lows, n, min_tr=min_trades)
-            if opt is None:
-                continue
+    if n_workers > 1:
+        # Parallel mode
+        logger.info(f"Parallel grid search: {n_workers} workers")
+        with ProcessPoolExecutor(
+            max_workers=n_workers,
+            initializer=_pp_init,
+            initargs=(opens, highs, lows, n),
+        ) as executor:
+            futures = {executor.submit(_pp_worker, item): item
+                       for item in work_items}
+            iterator = as_completed(futures)
+            if _tqdm_cls:
+                iterator = _tqdm_cls(iterator, total=len(futures),
+                                     desc="PP Grid Search")
+            for future in iterator:
+                result = future.result()
+                if result is not None:
+                    key = result['key']
+                    trades_raw = result.pop('trades_raw')
+                    selected[key] = result
+                    pattern_details.append({
+                        'key': key, 'trades_raw': trades_raw,
+                    })
+    else:
+        # Sequential mode
+        logger.info("Sequential grid search")
+        _shared_data['opens'] = opens
+        _shared_data['highs'] = highs
+        _shared_data['lows'] = lows
+        _shared_data['n_bars'] = n
 
-            tp, sl = opt['tp'], opt['sl']
-            # Re-backtest with optimal TP/SL
-            trades = bt_signals(sigs, direction, tp, sl, opens, highs, lows, n)
-            if len(trades) < min_trades:
-                continue
+        iterator = work_items
+        if _tqdm_cls:
+            iterator = _tqdm_cls(iterator, desc="PP Grid Search")
+        for item in iterator:
+            result = _pp_worker(item)
+            if result is not None:
+                key = result['key']
+                trades_raw = result.pop('trades_raw')
+                selected[key] = result
+                pattern_details.append({
+                    'key': key, 'trades_raw': trades_raw,
+                })
 
-            pnls = [t[2] for t in trades]
-            wr = len([p for p in pnls if p > 0]) / len(pnls) * 100
-            baseline_wr = sl / (tp + sl) * 100
-            edge = wr - baseline_wr
+    logger.info(f"Patterns passing filters: {len(selected)} "
+                f"(tested: {n_tested})")
 
-            if edge < edge_threshold:
-                continue
+    # Apply multiple testing correction
+    selected, correction_meta = apply_multiple_testing_correction(
+        selected, n_tested, method=correction_method, fdr_q=fdr_q
+    )
 
-            p = mc_test(pnls)
-            if p >= mc_threshold:
-                continue
-
-            key = f"{pat_name}_{direction}"
-            selected[key] = {
-                'pattern': pat_name, 'direction': direction,
-                'tp': tp, 'sl': sl,
-                'trades': len(trades), 'wr': round(wr, 1),
-                'edge': round(edge, 1), 'mc_p': round(p, 4),
-                'baseline_wr': round(baseline_wr, 1),
-            }
-            pattern_details.append({'key': key, 'trades_raw': trades})
-
-    logger.info(f"Patterns passing filters: {len(selected)}")
+    # Rebuild pattern_details after correction
+    surviving_keys = set(selected.keys())
+    pattern_details = [pd_item for pd_item in pattern_details
+                       if pd_item['key'] in surviving_keys]
 
     # Portfolio 1-pos filter + stats
     all_trades = []
@@ -415,11 +794,36 @@ def scan_patterns_pp(
         all_trades.extend(pd_item['trades_raw'])
     portfolio_trades = portfolio_1pos(all_trades)
     portfolio_stats = calc_stats(portfolio_trades)
-    portfolio_mc = mc_test([t[2] for t in portfolio_trades]) if portfolio_trades else 1.0
+    portfolio_mc = (mc_test([t[2] for t in portfolio_trades])
+                    if portfolio_trades else 1.0)
+
+    portfolio_mc_pass = portfolio_mc < mc_threshold
+    if require_portfolio_mc and not portfolio_mc_pass:
+        logger.warning(f"Portfolio MC FAILED: p={portfolio_mc:.4f} "
+                       f">= {mc_threshold}")
+
+    # Deduplicate dual-direction patterns: keep direction with better edge
+    pat_by_name = {}
+    for k, v in selected.items():
+        pn = v['pattern']
+        if pn not in pat_by_name or v['edge'] > pat_by_name[pn]['edge']:
+            pat_by_name[pn] = v
+        else:
+            logger.info(f"Dedup: {pn} keeping {pat_by_name[pn]['direction']} "
+                        f"(edge {pat_by_name[pn]['edge']}pp) over "
+                        f"{v['direction']} (edge {v['edge']}pp)")
+    deduped = {f"{v['pattern']}_{v['direction']}": v
+               for v in pat_by_name.values()}
+    n_removed = len(selected) - len(deduped)
+    if n_removed:
+        logger.info(f"Removed {n_removed} dual-direction duplicates")
+        selected = deduped
 
     # Organize by direction
-    long_patterns = sorted([v['pattern'] for v in selected.values() if v['direction'] == 'LONG'])
-    short_patterns = sorted([v['pattern'] for v in selected.values() if v['direction'] == 'SHORT'])
+    long_patterns = sorted([v['pattern'] for v in selected.values()
+                            if v['direction'] == 'LONG'])
+    short_patterns = sorted([v['pattern'] for v in selected.values()
+                             if v['direction'] == 'SHORT'])
 
     # Build patterns_tpsl dict
     patterns_tpsl = {}
@@ -430,8 +834,10 @@ def scan_patterns_pp(
     tps = [v['tp'] for v in selected.values()]
     sls = [v['sl'] for v in selected.values()]
 
-    logger.info(f"Selected: {len(long_patterns)}L + {len(short_patterns)}S = {len(selected)} patterns")
-    logger.info(f"Portfolio: {portfolio_stats['trades']} trades, WR {portfolio_stats['wr']}%, PnL {portfolio_stats['pnl']}%")
+    logger.info(f"Selected: {len(long_patterns)}L + {len(short_patterns)}S "
+                f"= {len(selected)} patterns")
+    logger.info(f"Portfolio: {portfolio_stats['trades']} trades, "
+                f"WR {portfolio_stats['wr']}%, PnL {portfolio_stats['pnl']}%")
 
     return {
         'long_patterns': long_patterns,
@@ -439,11 +845,17 @@ def scan_patterns_pp(
         'patterns_tpsl': patterns_tpsl,
         'portfolio_stats': portfolio_stats,
         'portfolio_mc': round(portfolio_mc, 4),
+        'portfolio_mc_pass': portfolio_mc_pass,
         'pattern_details': {k: v for k, v in selected.items()},
-        'tp_distribution': {'min': min(tps), 'median': round(float(np.median(tps)), 1),
-                            'mean': round(float(np.mean(tps)), 1), 'max': max(tps)} if tps else {},
-        'sl_distribution': {'min': min(sls), 'median': round(float(np.median(sls)), 1),
-                            'mean': round(float(np.mean(sls)), 1), 'max': max(sls)} if sls else {},
+        'tp_distribution': {
+            'min': min(tps), 'median': round(float(np.median(tps)), 1),
+            'mean': round(float(np.mean(tps)), 1), 'max': max(tps),
+        } if tps else {},
+        'sl_distribution': {
+            'min': min(sls), 'median': round(float(np.median(sls)), 1),
+            'mean': round(float(np.mean(sls)), 1), 'max': max(sls),
+        } if sls else {},
+        'correction_meta': correction_meta,
     }
 
 
@@ -457,10 +869,13 @@ def build_output_json(
     min_trades: int,
     uni_tp: float = None,
     uni_sl: float = None,
+    correction_meta: dict = None,
+    wf_result: dict = None,
+    timing: dict = None,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
-        'version': '2.0',
+        'version': '2.1',
         'generated_at': datetime.now().isoformat(timespec='seconds'),
         'data_file': os.path.basename(data_file),
         'data_bars': data_bars,
@@ -469,7 +884,8 @@ def build_output_json(
             'edge_threshold_pp': edge_threshold,
             'mc_threshold': mc_threshold,
             'min_trades': min_trades,
-            'max_baseline_wr': MAX_BASELINE_WR if discovery_method == 'per_pattern' else None,
+            'max_baseline_wr': (MAX_BASELINE_WR
+                                if discovery_method == 'per_pattern' else None),
         },
         'patterns': {
             'long': scan_result['long_patterns'],
@@ -486,10 +902,18 @@ def build_output_json(
             'max_drawdown_pct': scan_result['portfolio_stats']['mdd'],
             'profit_factor': scan_result['portfolio_stats']['pf'],
             'mc_pvalue': scan_result['portfolio_mc'],
+            'portfolio_mc_pass': scan_result.get('portfolio_mc_pass', True),
         },
         'pattern_details': scan_result['pattern_details'],
     }
 
+    # Correction metadata
+    if correction_meta:
+        output['selection_criteria'].update(correction_meta)
+    elif 'correction_meta' in scan_result:
+        output['selection_criteria'].update(scan_result['correction_meta'])
+
+    # TP/SL mode specifics
     if discovery_method == 'universal':
         output['tp_sl_mode'] = 'universal'
         output['universal_tp'] = uni_tp
@@ -500,6 +924,14 @@ def build_output_json(
         output['tp_distribution'] = scan_result['tp_distribution']
         output['sl_distribution'] = scan_result['sl_distribution']
 
+    # Walk-forward results
+    if wf_result:
+        output['walk_forward'] = wf_result
+
+    # Timing
+    if timing:
+        output['timing'] = timing
+
     return output
 
 
@@ -509,7 +941,7 @@ def build_output_json(
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Pattern Scanner — Dynamic Walk-Forward Pattern Selection'
+        description='Pattern Scanner v2.1 — Dynamic Walk-Forward Pattern Selection'
     )
     parser.add_argument('--data', default=DEFAULT_DATA_FILE,
                         help='Path to OHLCV CSV file')
@@ -528,6 +960,20 @@ def main():
                         help=f'MC p-value cutoff (default: {DEFAULT_MC_THRESHOLD})')
     parser.add_argument('--min-trades', type=int, default=DEFAULT_MIN_TRADES,
                         help=f'Min trades required (default: {DEFAULT_MIN_TRADES})')
+    # v2.1 new args
+    parser.add_argument('--correction', choices=['none', 'bh', 'bonferroni'],
+                        default='none',
+                        help='Multiple testing correction (default: none)')
+    parser.add_argument('--fdr-q', type=float, default=0.05,
+                        help='FDR q-value for BH correction (default: 0.05)')
+    parser.add_argument('--max-baseline-wr', type=float, default=MAX_BASELINE_WR,
+                        help=f'Max baseline WR filter (default: {MAX_BASELINE_WR})')
+    parser.add_argument('--require-portfolio-mc', action='store_true',
+                        help='Log warning if portfolio MC test fails')
+    parser.add_argument('--wf-folds', type=int, default=0,
+                        help='Walk-forward folds (0=disabled, 3=typical)')
+    parser.add_argument('--concurrency', type=int, default=0,
+                        help='Parallel workers: 0=auto, 1=sequential, N=N workers')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
@@ -541,20 +987,41 @@ def main():
     )
 
     logger.info("=" * 60)
-    logger.info("Pattern Scanner — Dynamic Walk-Forward Selection")
+    logger.info("Pattern Scanner v2.1 — Dynamic Walk-Forward Selection")
     logger.info("=" * 60)
     logger.info(f"Data: {args.data}")
     logger.info(f"Discovery: {args.discovery_method}")
     if args.discovery_method == 'universal':
-        logger.info(f"TP: {args.tp}% | SL: {args.sl}% | Edge >= {args.edge_threshold}pp | MC < {args.mc_threshold}")
+        logger.info(f"TP: {args.tp}% | SL: {args.sl}% | "
+                     f"Edge >= {args.edge_threshold}pp | MC < {args.mc_threshold}")
     else:
-        logger.info(f"Grid: TP {TP_GRID} | SL {SL_GRID} | Max baseline WR: {MAX_BASELINE_WR}%")
-        logger.info(f"Edge >= {args.edge_threshold}pp | MC < {args.mc_threshold} (3-seed)")
+        logger.info(f"Grid: TP {TP_GRID} | SL {SL_GRID} | "
+                     f"Max baseline WR: {args.max_baseline_wr}%")
+        logger.info(f"Edge >= {args.edge_threshold}pp | "
+                     f"MC < {args.mc_threshold} (3-seed)")
+    if args.correction != 'none':
+        logger.info(f"Correction: {args.correction} (FDR q={args.fdr_q})")
+    if args.wf_folds > 0:
+        logger.info(f"Walk-Forward: {args.wf_folds} expanding folds")
+    if args.concurrency != 1:
+        n_w = (min(os.cpu_count() or 1, 8)
+               if args.concurrency == 0 else args.concurrency)
+        logger.info(f"Concurrency: {n_w} workers")
+
+    timing = {}
 
     # Load and classify
+    t0 = time.time()
     df = load_and_classify(args.data)
+    timing['classify_sec'] = round(time.time() - t0, 1)
+
+    # Build signal index (shared between scan and WF)
+    types = df['candle_type'].tolist()
+    n = len(types)
+    signal_index = build_signal_index(types, n)
 
     # Scan patterns
+    t1 = time.time()
     if args.discovery_method == 'universal':
         result = scan_patterns(
             df,
@@ -563,6 +1030,10 @@ def main():
             edge_threshold=args.edge_threshold,
             mc_threshold=args.mc_threshold,
             min_trades=args.min_trades,
+            signal_index=signal_index,
+            correction_method=args.correction,
+            fdr_q=args.fdr_q,
+            require_portfolio_mc=args.require_portfolio_mc,
         )
     else:
         result = scan_patterns_pp(
@@ -570,7 +1041,41 @@ def main():
             edge_threshold=args.edge_threshold,
             mc_threshold=args.mc_threshold,
             min_trades=args.min_trades,
+            signal_index=signal_index,
+            concurrency=args.concurrency,
+            max_baseline_wr=args.max_baseline_wr,
+            correction_method=args.correction,
+            fdr_q=args.fdr_q,
+            require_portfolio_mc=args.require_portfolio_mc,
         )
+    timing['scan_sec'] = round(time.time() - t1, 1)
+
+    # Walk-forward validation (optional)
+    wf_result = None
+    if args.wf_folds > 0:
+        logger.info("")
+        logger.info(f"Walk-Forward validation ({args.wf_folds} folds)...")
+        t2 = time.time()
+        opens = df['open'].values
+        highs = df['high'].values
+        lows = df['low'].values
+        wf_result = expanding_window_wf(
+            signal_index, opens, highs, lows, n,
+            n_folds=args.wf_folds,
+            mode=args.discovery_method,
+            uni_tp=args.tp if args.discovery_method == 'universal' else None,
+            uni_sl=args.sl if args.discovery_method == 'universal' else None,
+            min_trades=args.min_trades,
+            edge_threshold=args.edge_threshold,
+            mc_threshold=args.mc_threshold,
+            max_baseline_wr=args.max_baseline_wr,
+        )
+        timing['wf_sec'] = round(time.time() - t2, 1)
+        logger.info(f"WF Complete: {wf_result['positive_folds']}/{args.wf_folds} "
+                     f"positive, OOS PnL {wf_result['total_oos_pnl']}%, "
+                     f"{wf_result['stable_pattern_count']} stable patterns")
+
+    timing['total_sec'] = round(time.time() - t0, 1)
 
     # Build output
     output = build_output_json(
@@ -583,6 +1088,9 @@ def main():
         min_trades=args.min_trades,
         uni_tp=args.tp if args.discovery_method == 'universal' else None,
         uni_sl=args.sl if args.discovery_method == 'universal' else None,
+        correction_meta=result.get('correction_meta'),
+        wf_result=wf_result,
+        timing=timing,
     )
 
     # Write JSON
@@ -598,13 +1106,32 @@ def main():
     pc = output['pattern_count']
     print(f"\nScan Complete ({args.discovery_method}):")
     print(f"  Patterns: {pc['long']}L + {pc['short']}S = {pc['long'] + pc['short']}")
-    print(f"  Trades: {bs['total_trades']} | WR: {bs['win_rate']}% | PnL: {bs['pnl_pct']}%")
-    print(f"  MDD: {bs['max_drawdown_pct']}% | PF: {bs['profit_factor']} | MC p: {bs['mc_pvalue']}")
+    print(f"  Trades: {bs['total_trades']} | WR: {bs['win_rate']}% "
+          f"| PnL: {bs['pnl_pct']}%")
+    print(f"  MDD: {bs['max_drawdown_pct']}% | PF: {bs['profit_factor']} "
+          f"| MC p: {bs['mc_pvalue']}")
+    if args.correction != 'none':
+        sc = output['selection_criteria']
+        print(f"  Correction: {args.correction} "
+              f"({sc.get('n_before_correction', '?')} "
+              f"-> {sc.get('n_after_correction', '?')})")
     if args.discovery_method == 'per_pattern' and 'tp_distribution' in output:
         tp_d = output['tp_distribution']
         sl_d = output['sl_distribution']
-        print(f"  TP: min={tp_d['min']} med={tp_d['median']} max={tp_d['max']}")
-        print(f"  SL: min={sl_d['min']} med={sl_d['median']} max={sl_d['max']}")
+        if tp_d:
+            print(f"  TP: min={tp_d['min']} med={tp_d['median']} "
+                  f"max={tp_d['max']}")
+            print(f"  SL: min={sl_d['min']} med={sl_d['median']} "
+                  f"max={sl_d['max']}")
+    if wf_result:
+        print(f"  Walk-Forward: {wf_result['positive_folds']}/"
+              f"{wf_result['n_folds']} positive, "
+              f"OOS PnL {wf_result['total_oos_pnl']}%, "
+              f"{wf_result['stable_pattern_count']} stable patterns")
+    wf_time = f", wf {timing['wf_sec']}s" if 'wf_sec' in timing else ""
+    print(f"  Timing: classify {timing['classify_sec']}s, "
+          f"scan {timing['scan_sec']}s{wf_time}, "
+          f"total {timing['total_sec']}s")
     print(f"  Output: {args.output}")
 
 

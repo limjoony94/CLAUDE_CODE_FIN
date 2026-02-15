@@ -348,15 +348,14 @@ def check_entry_signal(
     signal = None
     reason = None
 
-    # Check LONG patterns
     long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
+    short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
+
+    # Check LONG first; elif prevents SHORT overwriting for dual-direction patterns
     if pattern in long_patterns:
         signal = 'LONG'
         reason = f"Pattern: {pattern} (LONG)"
-
-    # Check SHORT patterns
-    short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
-    if pattern in short_patterns:
+    elif pattern in short_patterns:
         signal = 'SHORT'
         reason = f"Pattern: {pattern} (SHORT)"
 

@@ -82,7 +82,6 @@
       "ST-MU-MU",
       "ST-MU-U",
       "ST-U-DF",
-      "ST-U-U",
       "U-BD-DN",
       "U-BD-ST",
       "U-H-MU",
@@ -98,7 +97,6 @@
       "U-U-H"
     ],
     "short": [
-      "BD-BD-BU",
       "BD-BD-ST",
       "BD-BU-BU",
       "BD-BU-DN",
@@ -153,10 +151,8 @@
       "DN-IH-MD",
       "DN-IH-ST",
       "DN-IH-U",
-      "DN-MD-DN",
       "DN-MD-MU",
       "DN-MD-U",
-      "DN-MU-MU",
       "DN-MU-ST",
       "DN-ST-BD",
       "DN-ST-BU",
@@ -185,7 +181,6 @@
       "IH-U-U",
       "MD-BU-DN",
       "MD-D-U",
-      "MD-DN-DN",
       "MD-DN-MD",
       "MD-MD-DN",
       "MD-MD-MD",
@@ -207,7 +202,6 @@
       "MU-DN-U",
       "MU-MD-MU",
       "MU-MU-BD",
-      "MU-MU-DN",
       "MU-MU-MD",
       "MU-ST-DN",
       "MU-ST-MD",
@@ -279,8 +273,8 @@
     ]
   },
   "pattern_count": {
-    "long": 84,
-    "short": 178
+    "long": 83,
+    "short": 173
   },
   "backtest_summary": {
     "total_trades": 342,
@@ -3329,11 +3323,11 @@
       4.0
     ],
     "DN-MD-DN": [
-      2.0,
+      1.8,
       4.0
     ],
     "MD-DN-DN": [
-      2.1,
+      1.8,
       4.0
     ],
     "ST-DN-U": [
@@ -3509,7 +3503,7 @@
       4.0
     ],
     "BD-BD-BU": [
-      1.6,
+      1.8,
       3.5
     ],
     "BD-BU-BU": [
@@ -3893,7 +3887,7 @@
       2.0
     ],
     "DN-MU-MU": [
-      2.1,
+      1.8,
       4.0
     ],
     "BD-BU-U": [
@@ -4025,7 +4019,7 @@
       3.0
     ],
     "MU-MU-DN": [
-      2.1,
+      1.8,
       4.0
     ],
     "IH-MU-DN": [

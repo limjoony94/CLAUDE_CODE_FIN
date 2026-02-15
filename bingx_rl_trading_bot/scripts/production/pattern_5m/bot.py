@@ -477,7 +477,7 @@ def _process_existing_position(
                 if success:
                     logger.info(f"✅ Early exit completed: {exit_reason}")
                     return True
-                return True  # Attempted to exit
+                return False  # Early exit attempted but failed
 
         except Exception as e:
             logger.warning(f"Early exit check failed: {e}")
@@ -586,8 +586,6 @@ def _log_position_status(
 ) -> None:
     """Log current position status with TP/SL progress."""
     try:
-        import re
-
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
         current_price = ticker['last']
         direction = 1 if position['direction'] == 'LONG' else -1

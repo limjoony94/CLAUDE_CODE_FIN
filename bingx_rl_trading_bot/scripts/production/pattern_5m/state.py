@@ -258,8 +258,21 @@ def save_metrics(metrics: PerformanceMetrics, metrics_file: str = METRICS_FILE) 
         metrics_dir = os.path.dirname(metrics_file)
         if metrics_dir:
             os.makedirs(metrics_dir, exist_ok=True)
-        with open(metrics_file, 'w') as f:
-            json.dump(metrics_data, f, indent=2)
+        # Atomic write: write to temp file, then rename
+        tmp_dir = os.path.dirname(metrics_file) or '.'
+        fd, tmp_path = tempfile.mkstemp(
+            dir=tmp_dir,
+            prefix='.tmp_metrics_',
+            suffix='.json'
+        )
+        try:
+            with os.fdopen(fd, 'w') as f:
+                json.dump(metrics_data, f, indent=2)
+            os.replace(tmp_path, metrics_file)
+        except Exception:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+            raise
     except (IOError, OSError) as e:
         logger.warning(f"Failed to save metrics (I/O error): {e}")
     except (TypeError, ValueError) as e:

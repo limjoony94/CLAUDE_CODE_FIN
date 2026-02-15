@@ -20,7 +20,7 @@ from .constants import (
     PATTERN_OPTIMAL_TPSL,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
-from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance_cached, verify_position_mode
+from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance_cached
 from .indicators import get_volatility_multiplier
 from .state import save_state
 from .utils import extract_pattern_name

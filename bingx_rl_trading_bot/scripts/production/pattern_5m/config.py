@@ -127,12 +127,12 @@ def get_strategy_config(config: Dict[str, Any]) -> Dict[str, Any]:
 
 def get_risk_config(config: Dict[str, Any]) -> Dict[str, Any]:
     """Extract risk configuration with defaults."""
-    return config.get('risk', DEFAULT_CONFIG['risk'])
+    return _deep_copy_config(config.get('risk', DEFAULT_CONFIG['risk']))
 
 
 def get_api_config(config: Dict[str, Any]) -> Dict[str, Any]:
     """Extract API configuration with defaults."""
-    return config.get('api', DEFAULT_CONFIG['api'])
+    return _deep_copy_config(config.get('api', DEFAULT_CONFIG['api']))
 
 
 def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:

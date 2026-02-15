@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.28.6"  # v1.28.6: PP discovery scanner (WF OOS: PP +487% vs Uni +18%), 294 patterns (102L+192S)
+BOT_VERSION = "1.28.7"  # v1.28.7: production code review + dual-direction pattern bug fix, 256 patterns (83L+173S)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)

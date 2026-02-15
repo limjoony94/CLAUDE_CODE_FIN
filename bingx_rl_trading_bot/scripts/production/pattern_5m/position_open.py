@@ -535,10 +535,7 @@ def refill_position(
         vol_mult = position.get('vol_mult', 1.0)
 
         # Extract pattern from position reason for per-pattern TP/SL
-        pattern = None
-        pos_reason = position.get('reason', '')
-        if pos_reason and 'Pattern:' in pos_reason:
-            pattern = pos_reason.split('Pattern:')[-1].strip().split()[0]
+        pattern = extract_pattern_name(position.get('reason', '')) or None
         regime_tp_sl = position.get('regime_tp_sl')
 
         tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted = calculate_tp_sl(

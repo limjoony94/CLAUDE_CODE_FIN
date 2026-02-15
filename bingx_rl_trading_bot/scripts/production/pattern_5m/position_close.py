@@ -406,6 +406,16 @@ def close_position_market(
     except Exception as e:
         logger.exception(f"Failed to close position: {e}")
 
+    # TP/SL was cancelled at line 363 but market close failed — re-place SL to protect position
+    try:
+        from .orders import place_sl_order
+        sl_price = position.get('sl_price')
+        if sl_price and quantity > 0:
+            logger.warning(f"⚠️ Re-placing SL @ ${sl_price} after failed market close")
+            place_sl_order(exchange, state, config, sl_price, quantity, direction)
+    except Exception as sl_e:
+        logger.error(f"Failed to re-place SL after market close failure: {sl_e}")
+
     return False
 
 

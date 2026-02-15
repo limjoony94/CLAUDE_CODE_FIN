@@ -1,0 +1,331 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-02-14T17:20:18",
+  "data_file": "btc_5m_270days_reclassified.csv",
+  "data_bars": 77760,
+  "selection_criteria": {
+    "edge_threshold_pp": 5.0,
+    "mc_threshold": 0.01,
+    "min_trades": 10
+  },
+  "tp_sl_mode": "universal",
+  "universal_tp": 1.0,
+  "universal_sl": 1.5,
+  "patterns": {
+    "long": [
+      "BD-BD-U",
+      "BD-H-BU",
+      "D-DN-MU",
+      "D-ST-H",
+      "DF-BD-ST",
+      "DF-U-BD",
+      "DF-U-H",
+      "DN-BD-BD",
+      "DN-DF-MU",
+      "DN-MD-GS",
+      "DN-U-MU",
+      "GS-ST-ST",
+      "IH-DN-MD",
+      "IH-H-ST",
+      "IH-MD-MD",
+      "MD-BU-MD",
+      "MD-H-ST",
+      "MD-ST-MD",
+      "MU-DF-U",
+      "MU-MU-D",
+      "ST-BD-H",
+      "U-H-MU",
+      "U-MU-DN",
+      "U-MU-H"
+    ],
+    "short": [
+      "BD-U-GS",
+      "BU-H-BD",
+      "BU-U-ST",
+      "D-DF-U",
+      "GS-ST-U",
+      "IH-MD-BD",
+      "IH-ST-MD",
+      "MD-MU-U",
+      "ST-MU-ST"
+    ]
+  },
+  "pattern_count": {
+    "long": 24,
+    "short": 9
+  },
+  "backtest_summary": {
+    "total_trades": 430,
+    "win_rate": 74.7,
+    "pnl_pct": 429.5,
+    "max_drawdown_pct": 20.1,
+    "profit_factor": 1.86,
+    "mc_pvalue": 0.0
+  },
+  "pattern_details": {
+    "DN-U-MU_LONG": {
+      "pattern": "DN-U-MU",
+      "direction": "LONG",
+      "trades": 271,
+      "wr": 68.3,
+      "edge": 8.3,
+      "mc_p": 0.0062
+    },
+    "U-MU-DN_LONG": {
+      "pattern": "U-MU-DN",
+      "direction": "LONG",
+      "trades": 280,
+      "wr": 68.6,
+      "edge": 8.6,
+      "mc_p": 0.0054
+    },
+    "BU-U-ST_SHORT": {
+      "pattern": "BU-U-ST",
+      "direction": "SHORT",
+      "trades": 112,
+      "wr": 71.4,
+      "edge": 11.4,
+      "mc_p": 0.0092
+    },
+    "GS-ST-U_SHORT": {
+      "pattern": "GS-ST-U",
+      "direction": "SHORT",
+      "trades": 30,
+      "wr": 83.3,
+      "edge": 23.3,
+      "mc_p": 0.0018
+    },
+    "DN-BD-BD_LONG": {
+      "pattern": "DN-BD-BD",
+      "direction": "LONG",
+      "trades": 114,
+      "wr": 73.7,
+      "edge": 13.7,
+      "mc_p": 0.0016
+    },
+    "BD-U-GS_SHORT": {
+      "pattern": "BD-U-GS",
+      "direction": "SHORT",
+      "trades": 12,
+      "wr": 91.7,
+      "edge": 31.7,
+      "mc_p": 0.0034
+    },
+    "D-DN-MU_LONG": {
+      "pattern": "D-DN-MU",
+      "direction": "LONG",
+      "trades": 43,
+      "wr": 79.1,
+      "edge": 19.1,
+      "mc_p": 0.0048
+    },
+    "MU-DF-U_LONG": {
+      "pattern": "MU-DF-U",
+      "direction": "LONG",
+      "trades": 20,
+      "wr": 85.0,
+      "edge": 25.0,
+      "mc_p": 0.0068
+    },
+    "MU-MU-D_LONG": {
+      "pattern": "MU-MU-D",
+      "direction": "LONG",
+      "trades": 11,
+      "wr": 90.9,
+      "edge": 30.9,
+      "mc_p": 0.0046
+    },
+    "BD-H-BU_LONG": {
+      "pattern": "BD-H-BU",
+      "direction": "LONG",
+      "trades": 12,
+      "wr": 91.7,
+      "edge": 31.7,
+      "mc_p": 0.003
+    },
+    "DN-DF-MU_LONG": {
+      "pattern": "DN-DF-MU",
+      "direction": "LONG",
+      "trades": 17,
+      "wr": 88.2,
+      "edge": 28.2,
+      "mc_p": 0.0044
+    },
+    "U-MU-H_LONG": {
+      "pattern": "U-MU-H",
+      "direction": "LONG",
+      "trades": 61,
+      "wr": 78.7,
+      "edge": 18.7,
+      "mc_p": 0.001
+    },
+    "MD-MU-U_SHORT": {
+      "pattern": "MD-MU-U",
+      "direction": "SHORT",
+      "trades": 92,
+      "wr": 73.9,
+      "edge": 13.9,
+      "mc_p": 0.0036
+    },
+    "D-DF-U_SHORT": {
+      "pattern": "D-DF-U",
+      "direction": "SHORT",
+      "trades": 11,
+      "wr": 90.9,
+      "edge": 30.9,
+      "mc_p": 0.0048
+    },
+    "IH-H-ST_LONG": {
+      "pattern": "IH-H-ST",
+      "direction": "LONG",
+      "trades": 11,
+      "wr": 90.9,
+      "edge": 30.9,
+      "mc_p": 0.006
+    },
+    "DN-MD-GS_LONG": {
+      "pattern": "DN-MD-GS",
+      "direction": "LONG",
+      "trades": 27,
+      "wr": 81.5,
+      "edge": 21.5,
+      "mc_p": 0.0064
+    },
+    "DF-U-BD_LONG": {
+      "pattern": "DF-U-BD",
+      "direction": "LONG",
+      "trades": 16,
+      "wr": 87.5,
+      "edge": 27.5,
+      "mc_p": 0.0092
+    },
+    "DF-BD-ST_LONG": {
+      "pattern": "DF-BD-ST",
+      "direction": "LONG",
+      "trades": 10,
+      "wr": 100.0,
+      "edge": 40.0,
+      "mc_p": 0.0006
+    },
+    "BD-BD-U_LONG": {
+      "pattern": "BD-BD-U",
+      "direction": "LONG",
+      "trades": 106,
+      "wr": 71.7,
+      "edge": 11.7,
+      "mc_p": 0.0096
+    },
+    "U-H-MU_LONG": {
+      "pattern": "U-H-MU",
+      "direction": "LONG",
+      "trades": 44,
+      "wr": 77.3,
+      "edge": 17.3,
+      "mc_p": 0.0086
+    },
+    "IH-ST-MD_SHORT": {
+      "pattern": "IH-ST-MD",
+      "direction": "SHORT",
+      "trades": 16,
+      "wr": 93.8,
+      "edge": 33.8,
+      "mc_p": 0.0002
+    },
+    "ST-MU-ST_SHORT": {
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "trades": 65,
+      "wr": 75.4,
+      "edge": 15.4,
+      "mc_p": 0.0062
+    },
+    "D-ST-H_LONG": {
+      "pattern": "D-ST-H",
+      "direction": "LONG",
+      "trades": 13,
+      "wr": 92.3,
+      "edge": 32.3,
+      "mc_p": 0.0012
+    },
+    "DF-U-H_LONG": {
+      "pattern": "DF-U-H",
+      "direction": "LONG",
+      "trades": 13,
+      "wr": 92.3,
+      "edge": 32.3,
+      "mc_p": 0.0018
+    },
+    "MD-ST-MD_LONG": {
+      "pattern": "MD-ST-MD",
+      "direction": "LONG",
+      "trades": 45,
+      "wr": 80.0,
+      "edge": 20.0,
+      "mc_p": 0.002
+    },
+    "MD-H-ST_LONG": {
+      "pattern": "MD-H-ST",
+      "direction": "LONG",
+      "trades": 19,
+      "wr": 84.2,
+      "edge": 24.2,
+      "mc_p": 0.0076
+    },
+    "ST-BD-H_LONG": {
+      "pattern": "ST-BD-H",
+      "direction": "LONG",
+      "trades": 15,
+      "wr": 93.3,
+      "edge": 33.3,
+      "mc_p": 0.0004
+    },
+    "GS-ST-ST_LONG": {
+      "pattern": "GS-ST-ST",
+      "direction": "LONG",
+      "trades": 19,
+      "wr": 84.2,
+      "edge": 24.2,
+      "mc_p": 0.0078
+    },
+    "IH-DN-MD_LONG": {
+      "pattern": "IH-DN-MD",
+      "direction": "LONG",
+      "trades": 36,
+      "wr": 83.3,
+      "edge": 23.3,
+      "mc_p": 0.0012
+    },
+    "IH-MD-MD_LONG": {
+      "pattern": "IH-MD-MD",
+      "direction": "LONG",
+      "trades": 19,
+      "wr": 89.5,
+      "edge": 29.5,
+      "mc_p": 0.0026
+    },
+    "MD-BU-MD_LONG": {
+      "pattern": "MD-BU-MD",
+      "direction": "LONG",
+      "trades": 21,
+      "wr": 90.5,
+      "edge": 30.5,
+      "mc_p": 0.0008
+    },
+    "IH-MD-BD_SHORT": {
+      "pattern": "IH-MD-BD",
+      "direction": "SHORT",
+      "trades": 12,
+      "wr": 100.0,
+      "edge": 40.0,
+      "mc_p": 0.0004
+    },
+    "BU-H-BD_SHORT": {
+      "pattern": "BU-H-BD",
+      "direction": "SHORT",
+      "trades": 11,
+      "wr": 100.0,
+      "edge": 40.0,
+      "mc_p": 0.0006
+    }
+  }
+}

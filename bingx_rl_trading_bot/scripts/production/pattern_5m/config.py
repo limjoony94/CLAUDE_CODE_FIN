@@ -170,14 +170,8 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             return config
 
         tp_sl_mode = data.get('tp_sl_mode')
-        if tp_sl_mode != 'universal':
+        if tp_sl_mode not in ('universal', 'per_pattern'):
             logger.error(f"Unsupported tp_sl_mode '{tp_sl_mode}' — falling back to static")
-            return config
-
-        uni_tp = data.get('universal_tp')
-        uni_sl = data.get('universal_sl')
-        if not uni_tp or not uni_sl or uni_tp <= 0 or uni_sl <= 0:
-            logger.error("Invalid universal_tp/universal_sl in JSON — falling back to static")
             return config
 
         # Staleness check (warn if > 30 days old)
@@ -191,18 +185,34 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             except (ValueError, TypeError):
                 logger.warning(f"Could not parse generated_at: {generated_at}")
 
-        # Inject into config
+        # Inject patterns into config
         long_patterns = patterns['long']
         short_patterns = patterns['short']
         config['strategy']['long_patterns'] = long_patterns
         config['strategy']['short_patterns'] = short_patterns
-        config['_dynamic_tpsl_universal'] = True
-        config['_dynamic_tp'] = uni_tp
-        config['_dynamic_sl'] = uni_sl
 
         total = len(long_patterns) + len(short_patterns)
         logger.info(f"Dynamic patterns loaded: {len(long_patterns)}L + {len(short_patterns)}S = {total}")
-        logger.info(f"Universal TP/SL: {uni_tp}% / {uni_sl}%")
+
+        # Mode-specific TP/SL injection
+        if tp_sl_mode == 'universal':
+            uni_tp = data.get('universal_tp')
+            uni_sl = data.get('universal_sl')
+            if not uni_tp or not uni_sl or uni_tp <= 0 or uni_sl <= 0:
+                logger.error("Invalid universal_tp/universal_sl in JSON — falling back to static")
+                return config
+            config['_dynamic_tpsl_universal'] = True
+            config['_dynamic_tp'] = uni_tp
+            config['_dynamic_sl'] = uni_sl
+            logger.info(f"Universal TP/SL: {uni_tp}% / {uni_sl}%")
+        elif tp_sl_mode == 'per_pattern':
+            patterns_tpsl = data.get('patterns_tpsl', {})
+            if not patterns_tpsl:
+                logger.error("per_pattern mode but no patterns_tpsl — falling back to static")
+                return config
+            config['_dynamic_tpsl_per_pattern'] = True
+            config['_dynamic_patterns_tpsl'] = patterns_tpsl
+            logger.info(f"Per-pattern TP/SL loaded: {len(patterns_tpsl)} patterns")
 
         bs = data.get('backtest_summary', {})
         if bs:

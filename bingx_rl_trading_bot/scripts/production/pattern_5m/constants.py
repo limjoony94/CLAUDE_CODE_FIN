@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.28.4"  # v1.28.4: Statistical rigor filter — edge_threshold 5→10pp, 51→46 patterns
+BOT_VERSION = "1.28.5"  # v1.28.5: Dynamic per-pattern TP/SL optimization (WF OOS +1,209% vs Universal +1,166%)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -516,7 +516,7 @@ API_MAX_DELAY = 30
 # ============================================================
 EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
 EXPECTED_AVG_WIN = 5.90   # v1.28.2: Universal TP 2.0% × 3x leverage - 0.10% fee
-EXPECTED_AVG_LOSS = 9.10  # v1.28.0: Universal SL 3.0% × 3x leverage + 0.10% fee
+EXPECTED_AVG_LOSS = 10.60  # v1.28.5: Per-pattern SL mean 3.5% × 3x leverage + 0.10% fee
 EXPECTED_EDGE = 15.0      # v1.27.3: genuine edge ~10-20% (was 50% — inflated by look-ahead)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
@@ -554,7 +554,7 @@ DEFAULT_CONFIG = {
         'short_patterns': VALIDATED_SHORT_PATTERNS,
     },
     'risk': {
-        'max_daily_loss_pct': 10,  # v1.28.0: 5% → 10% (Universal SL 3.0% × 3x = 9.1% per loss)
+        'max_daily_loss_pct': 13,  # v1.28.5: 10% → 13% (Per-pattern SL max 4.0% × 3x = 12.1% per loss)
         'max_position_size_usd': 10000,
     },
     'api': {

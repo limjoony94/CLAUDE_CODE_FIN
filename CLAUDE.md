@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.4 | **Bot**: Pattern 5m (47패턴, 19L+28S) | **Updated**: 2026-02-15
+> **Version**: v1.28.5 | **Bot**: Pattern 5m (47패턴, 19L+28S) | **Updated**: 2026-02-15
 
 ---
 
@@ -186,7 +186,8 @@
 | 모드 | 설정값 | 패턴 소스 | TP/SL |
 |------|--------|-----------|-------|
 | Static (기본) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
-| Dynamic | `pattern_source: dynamic` | results/dynamic_patterns.json | Universal TP 2.1/SL 3.0 |
+| Dynamic Universal | `pattern_source: dynamic` + `tp_sl_mode: universal` | results/dynamic_patterns.json | Universal TP/SL |
+| Dynamic Per-Pattern | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | Per-pattern 최적화 (v1.28.5) |
 
 **Scanner CLI 사용법**:
 ```bash
@@ -314,7 +315,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.28.4** | 02-15 | **Statistical rigor filter**: edge_threshold 5→10pp (통계적 엄밀성 연구 기반). BH FDR/Bonferroni/Bootstrap CI/11-scenario WF 비교 → edge≥10pp가 WF 3/3 최적. 47패턴 (19L+28S), PnL 740.5%, WR 80.8%, MDD 30.5%, PF 2.73 ← **현재** |
+| **v1.28.5** | 02-15 | **Dynamic per-pattern TP/SL optimization**: Universal TP 2.0/SL 3.0 → Per-pattern 최적화 (TP median 2.0%, SL median 4.0%). WF 3-fold OOS: Per-pattern +1,209% vs Universal +1,166% (+3.7%). 47패턴 (19L+28S), max_daily_loss 10→13% (SL max 4.0%×3x=12.1%). Rollback: tp_sl_mode "per_pattern"→"universal" ← **현재** |
+| v1.28.4 | 02-15 | Statistical rigor filter: edge_threshold 5→10pp (통계적 엄밀성 연구 기반). BH FDR/Bonferroni/Bootstrap CI/11-scenario WF 비교 → edge≥10pp가 WF 3/3 최적. 47패턴 (19L+28S), PnL 740.5%, WR 80.8%, MDD 30.5%, PF 2.73 |
 | v1.28.3 | 02-14 | Statistical significance filter: min_trades 10→20 (trades<20 패턴 13개 제거 — MC 신뢰도 부족). 7개 시나리오 비교, WF 3-fold 개별 검증. 51패턴 (18L+33S), PnL 671.4%, MDD 27.3%, PF 2.42 |
 | v1.28.2 | 02-14 | WF frontier optimal TP: TP 2.1→2.0 (15후보 3-fold WF 검증). OOS Edge 12.6pp(최고), OOS MDD 31.7%(최저), E[trade] 1.79%(최고). v1.29.0 TP 0.80/SL 1.20 시도→WF 1/3 FAIL→롤백. 66패턴 (25L+41S), PnL 772.7%, MDD 33.7% |
 | v1.28.1 | 02-14 | Fine grid TP + distance fix + min_trades filter: TP 2.0→2.1 + same-bar TP/SL를 bar open 기준으로 수정 + min_trades 8→10. 62패턴 (22L+40S), PnL 661%, MDD 27.3% |

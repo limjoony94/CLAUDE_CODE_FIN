@@ -349,7 +349,25 @@ def calculate_tp_sl(
 
     Priority: dynamic_universal > regime_tp_sl > PATTERN_OPTIMAL_TPSL > strategy defaults
     """
-    # Dynamic Universal TP/SL mode (highest priority)
+    # Dynamic Per-Pattern TP/SL mode (highest priority)
+    if config and config.get('_dynamic_tpsl_per_pattern'):
+        pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
+        if pattern and pattern in pp_tpsl:
+            base_tp_pct = pp_tpsl[pattern][0]
+            base_sl_pct = pp_tpsl[pattern][1]
+            logger.debug(f"Using dynamic per-pattern TP/SL: {pattern} → TP={base_tp_pct}%, SL={base_sl_pct}%")
+        else:
+            base_tp_pct = strategy['tp_pct']
+            base_sl_pct = strategy['sl_pct']
+            logger.warning(f"Pattern {pattern} not in dynamic per-pattern dict, using defaults")
+
+        tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
+        sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT
+        tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+        sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
+        return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
+
+    # Dynamic Universal TP/SL mode
     if config and config.get('_dynamic_tpsl_universal'):
         base_tp_pct = config['_dynamic_tp']
         base_sl_pct = config['_dynamic_sl']

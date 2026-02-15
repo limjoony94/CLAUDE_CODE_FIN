@@ -190,9 +190,9 @@ def adjust_tpsl_to_config(
     if not state.get('position'):
         return False
 
-    # Dynamic universal mode: TP/SL already set at open time, skip per-pattern adjustment
-    if config.get('_dynamic_tpsl_universal'):
-        logger.debug("Dynamic universal TP/SL mode — skipping per-pattern adjustment")
+    # Dynamic mode (universal or per-pattern): TP/SL already set at open time, skip adjustment
+    if config.get('_dynamic_tpsl_universal') or config.get('_dynamic_tpsl_per_pattern'):
+        logger.debug("Dynamic TP/SL mode — skipping per-pattern adjustment")
         return False
 
     position = state['position']

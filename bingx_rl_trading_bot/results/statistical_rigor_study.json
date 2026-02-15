@@ -1,0 +1,28 @@
+{
+  "version": "v1.28.3",
+  "date": "2026-02-14",
+  "phase1_multiple_testing": {
+    "n_tested": 1758,
+    "bonf_threshold": 5.6882821387940845e-06,
+    "bonf_pass": [],
+    "bh_fdr_pass": [
+      "BU-MU-DN_SHORT",
+      "ST-ST-DN_SHORT",
+      "U-ST-DN_SHORT",
+      "ST-DN-U_SHORT",
+      "U-GS-DN_SHORT"
+    ],
+    "expected_fp_raw": 18.0
+  },
+  "phase2_bootstrap_ci": {
+    "pass_count": 51,
+    "fail_count": 0,
+    "fail_patterns": [],
+    "details": [
+      {
+        "key": "U-DN-DN_SHORT",
+        "trades": 590,
+        "edge": 5.9,
+        "ci_lower": 2.0,
+        "ci_upper": 9.7,
+        "ci_excludes_zero": 

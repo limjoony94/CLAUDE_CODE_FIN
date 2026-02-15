@@ -1,0 +1,1851 @@
+{
+  "study": "scanner_parameter_sensitivity",
+  "generated_at": "2026-02-16T04:07:12",
+  "data_file": "btc_5m_270days_reclassified.csv",
+  "data_bars": 77760,
+  "parameters": {
+    "edge_thresholds": [
+      10,
+      12,
+      15,
+      18,
+      20,
+      25
+    ],
+    "min_trades_list": [
+      20,
+      25,
+      30,
+      40
+    ],
+    "mc_threshold": 0.01,
+    "max_baseline_wr": 70.0
+  },
+  "wf_folds": 3,
+  "results": [
+    {
+      "combo": "edge10_mt25",
+      "edge": 10,
+      "min_trades": 25,
+      "avg_patterns": 135.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 100.2,
+      "total_oos_pnl": 300.7,
+      "avg_oos_wr": 70.1,
+      "avg_oos_mdd": 42.2,
+      "avg_oos_trades": 94.0,
+      "oos_pnl_mdd": 2.38,
+      "avg_is_pnl": 514.5,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 61,
+          "long": 55,
+          "short": 6,
+          "is": {
+            "pnl": 165.5,
+            "trades": 124,
+            "wr": 73.4,
+            "mdd": 18.4,
+            "pf": 2.16
+          },
+          "oos": {
+            "pnl": 25.5,
+            "trades": 99,
+            "wr": 58.6,
+            "mdd": 38.6,
+            "pf": 1.15
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 167,
+          "long": 135,
+          "short": 32,
+          "is": {
+            "pnl": 504.0,
+            "trades": 162,
+            "wr": 89.5,
+            "mdd": 15.8,
+            "pf": 4.95
+          },
+          "oos": {
+            "pnl": 22.3,
+            "trades": 98,
+            "wr": 67.3,
+            "mdd": 63.5,
+            "pf": 1.08
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 176,
+          "long": 66,
+          "short": 110,
+          "is": {
+            "pnl": 873.9,
+            "trades": 288,
+            "wr": 85.1,
+            "mdd": 19.3,
+            "pf": 4.28
+          },
+          "oos": {
+            "pnl": 252.9,
+            "trades": 84,
+            "wr": 84.5,
+            "mdd": 24.4,
+            "pf": 3.33
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge12_mt20",
+      "edge": 12,
+      "min_trades": 20,
+      "avg_patterns": 169.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 79.3,
+      "total_oos_pnl": 237.8,
+      "avg_oos_wr": 67.6,
+      "avg_oos_mdd": 35.6,
+      "avg_oos_trades": 93.0,
+      "oos_pnl_mdd": 2.23,
+      "avg_is_pnl": 493.9,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 90,
+          "long": 82,
+          "short": 8,
+          "is": {
+            "pnl": 151.0,
+            "trades": 119,
+            "wr": 76.5,
+            "mdd": 26.8,
+            "pf": 2.04
+          },
+          "oos": {
+            "pnl": 56.2,
+            "trades": 89,
+            "wr": 65.2,
+            "mdd": 38.8,
+            "pf": 1.36
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 217,
+          "long": 172,
+          "short": 45,
+          "is": {
+            "pnl": 426.9,
+            "trades": 162,
+            "wr": 85.2,
+            "mdd": 19.7,
+            "pf": 3.59
+          },
+          "oos": {
+            "pnl": 4.4,
+            "trades": 100,
+            "wr": 63.0,
+            "mdd": 41.2,
+            "pf": 1.01
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 200,
+          "long": 79,
+          "short": 121,
+          "is": {
+            "pnl": 903.8,
+            "trades": 271,
+            "wr": 87.5,
+            "mdd": 19.9,
+            "pf": 5.47
+          },
+          "oos": {
+            "pnl": 177.2,
+            "trades": 91,
+            "wr": 74.7,
+            "mdd": 26.7,
+            "pf": 2.07
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge10_mt20",
+      "edge": 10,
+      "min_trades": 20,
+      "avg_patterns": 177.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 79.4,
+      "total_oos_pnl": 238.3,
+      "avg_oos_wr": 68.2,
+      "avg_oos_mdd": 38.7,
+      "avg_oos_trades": 95.0,
+      "oos_pnl_mdd": 2.05,
+      "avg_is_pnl": 498.3,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 92,
+          "long": 84,
+          "short": 8,
+          "is": {
+            "pnl": 141.5,
+            "trades": 121,
+            "wr": 74.4,
+            "mdd": 27.5,
+            "pf": 1.91
+          },
+          "oos": {
+            "pnl": 23.8,
+            "trades": 98,
+            "wr": 61.2,
+            "mdd": 48.1,
+            "pf": 1.14
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 221,
+          "long": 173,
+          "short": 48,
+          "is": {
+            "pnl": 442.4,
+            "trades": 163,
+            "wr": 85.9,
+            "mdd": 19.7,
+            "pf": 3.71
+          },
+          "oos": {
+            "pnl": 22.2,
+            "trades": 102,
+            "wr": 64.7,
+            "mdd": 41.2,
+            "pf": 1.07
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 219,
+          "long": 86,
+          "short": 133,
+          "is": {
+            "pnl": 910.9,
+            "trades": 284,
+            "wr": 86.3,
+            "mdd": 19.3,
+            "pf": 4.93
+          },
+          "oos": {
+            "pnl": 192.3,
+            "trades": 84,
+            "wr": 78.6,
+            "mdd": 26.7,
+            "pf": 2.35
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge10_mt40",
+      "edge": 10,
+      "min_trades": 40,
+      "avg_patterns": 85.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 83.7,
+      "total_oos_pnl": 251.0,
+      "avg_oos_wr": 69.7,
+      "avg_oos_mdd": 46.1,
+      "avg_oos_trades": 89.0,
+      "oos_pnl_mdd": 1.82,
+      "avg_is_pnl": 450.1,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 33,
+          "long": 31,
+          "short": 2,
+          "is": {
+            "pnl": 103.0,
+            "trades": 116,
+            "wr": 69.0,
+            "mdd": 26.4,
+            "pf": 1.59
+          },
+          "oos": {
+            "pnl": 42.2,
+            "trades": 94,
+            "wr": 61.7,
+            "mdd": 22.7,
+            "pf": 1.28
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 104,
+          "long": 86,
+          "short": 18,
+          "is": {
+            "pnl": 456.1,
+            "trades": 152,
+            "wr": 88.2,
+            "mdd": 19.7,
+            "pf": 4.03
+          },
+          "oos": {
+            "pnl": 13.4,
+            "trades": 97,
+            "wr": 67.0,
+            "mdd": 80.0,
+            "pf": 1.04
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 118,
+          "long": 43,
+          "short": 75,
+          "is": {
+            "pnl": 791.1,
+            "trades": 285,
+            "wr": 82.8,
+            "mdd": 24.2,
+            "pf": 3.57
+          },
+          "oos": {
+            "pnl": 195.4,
+            "trades": 77,
+            "wr": 80.5,
+            "mdd": 35.5,
+            "pf": 2.53
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge10_mt30",
+      "edge": 10,
+      "min_trades": 30,
+      "avg_patterns": 115.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 84.1,
+      "total_oos_pnl": 252.4,
+      "avg_oos_wr": 68.0,
+      "avg_oos_mdd": 47.4,
+      "avg_oos_trades": 93.0,
+      "oos_pnl_mdd": 1.77,
+      "avg_is_pnl": 460.0,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 50,
+          "long": 46,
+          "short": 4,
+          "is": {
+            "pnl": 118.1,
+            "trades": 121,
+            "wr": 70.2,
+            "mdd": 20.9,
+            "pf": 1.69
+          },
+          "oos": {
+            "pnl": 25.3,
+            "trades": 95,
+            "wr": 56.8,
+            "mdd": 36.3,
+            "pf": 1.15
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 142,
+          "long": 114,
+          "short": 28,
+          "is": {
+            "pnl": 477.5,
+            "trades": 157,
+            "wr": 87.9,
+            "mdd": 17.1,
+            "pf": 4.29
+          },
+          "oos": {
+            "pnl": 45.7,
+            "trades": 98,
+            "wr": 68.4,
+            "mdd": 64.1,
+            "pf": 1.16
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 154,
+          "long": 56,
+          "short": 98,
+          "is": {
+            "pnl": 784.4,
+            "trades": 283,
+            "wr": 82.7,
+            "mdd": 24.1,
+            "pf": 3.56
+          },
+          "oos": {
+            "pnl": 181.4,
+            "trades": 85,
+            "wr": 78.8,
+            "mdd": 41.9,
+            "pf": 2.18
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge12_mt30",
+      "edge": 12,
+      "min_trades": 30,
+      "avg_patterns": 107.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 75.0,
+      "total_oos_pnl": 224.9,
+      "avg_oos_wr": 66.8,
+      "avg_oos_mdd": 46.4,
+      "avg_oos_trades": 92.0,
+      "oos_pnl_mdd": 1.62,
+      "avg_is_pnl": 458.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 48,
+          "long": 44,
+          "short": 4,
+          "is": {
+            "pnl": 131.8,
+            "trades": 119,
+            "wr": 72.3,
+            "mdd": 24.9,
+            "pf": 1.82
+          },
+          "oos": {
+            "pnl": 74.8,
+            "trades": 89,
+            "wr": 61.8,
+            "mdd": 26.1,
+            "pf": 1.53
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 138,
+          "long": 113,
+          "short": 25,
+          "is": {
+            "pnl": 491.6,
+            "trades": 163,
+            "wr": 88.3,
+            "mdd": 17.1,
+            "pf": 4.63
+          },
+          "oos": {
+            "pnl": 5.4,
+            "trades": 96,
+            "wr": 64.6,
+            "mdd": 64.1,
+            "pf": 1.02
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 135,
+          "long": 49,
+          "short": 86,
+          "is": {
+            "pnl": 752.3,
+            "trades": 265,
+            "wr": 83.8,
+            "mdd": 22.0,
+            "pf": 3.75
+          },
+          "oos": {
+            "pnl": 144.7,
+            "trades": 92,
+            "wr": 73.9,
+            "mdd": 48.9,
+            "pf": 1.76
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge12_mt40",
+      "edge": 12,
+      "min_trades": 40,
+      "avg_patterns": 77.0,
+      "oos_positive": "3/3",
+      "avg_oos_pnl": 69.6,
+      "total_oos_pnl": 208.9,
+      "avg_oos_wr": 68.1,
+      "avg_oos_mdd": 47.7,
+      "avg_oos_trades": 90.0,
+      "oos_pnl_mdd": 1.46,
+      "avg_is_pnl": 435.5,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 31,
+          "long": 29,
+          "short": 2,
+          "is": {
+            "pnl": 118.2,
+            "trades": 120,
+            "wr": 70.0,
+            "mdd": 23.7,
+            "pf": 1.71
+          },
+          "oos": {
+            "pnl": 67.4,
+            "trades": 88,
+            "wr": 65.9,
+            "mdd": 25.2,
+            "pf": 1.49
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 100,
+          "long": 85,
+          "short": 15,
+          "is": {
+            "pnl": 450.6,
+            "trades": 156,
+            "wr": 87.2,
+            "mdd": 19.9,
+            "pf": 3.99
+          },
+          "oos": {
+            "pnl": 3.0,
+            "trades": 96,
+            "wr": 65.6,
+            "mdd": 80.0,
+            "pf": 1.01
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 99,
+          "long": 36,
+          "short": 63,
+          "is": {
+            "pnl": 737.8,
+            "trades": 269,
+            "wr": 82.9,
+            "mdd": 24.2,
+            "pf": 3.56
+          },
+          "oos": {
+            "pnl": 138.5,
+            "trades": 85,
+            "wr": 72.9,
+            "mdd": 37.9,
+            "pf": 1.79
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge12_mt25",
+      "edge": 12,
+      "min_trades": 25,
+      "avg_patterns": 126.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 75.8,
+      "total_oos_pnl": 227.4,
+      "avg_oos_wr": 67.8,
+      "avg_oos_mdd": 52.8,
+      "avg_oos_trades": 91.0,
+      "oos_pnl_mdd": 1.43,
+      "avg_is_pnl": 475.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 59,
+          "long": 53,
+          "short": 6,
+          "is": {
+            "pnl": 119.1,
+            "trades": 111,
+            "wr": 73.0,
+            "mdd": 24.8,
+            "pf": 1.78
+          },
+          "oos": {
+            "pnl": 74.2,
+            "trades": 89,
+            "wr": 65.2,
+            "mdd": 38.2,
+            "pf": 1.5
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 163,
+          "long": 134,
+          "short": 29,
+          "is": {
+            "pnl": 508.2,
+            "trades": 165,
+            "wr": 89.1,
+            "mdd": 15.8,
+            "pf": 4.93
+          },
+          "oos": {
+            "pnl": -32.7,
+            "trades": 93,
+            "wr": 62.4,
+            "mdd": 82.1,
+            "pf": 0.89
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 157,
+          "long": 59,
+          "short": 98,
+          "is": {
+            "pnl": 799.5,
+            "trades": 267,
+            "wr": 85.0,
+            "mdd": 19.9,
+            "pf": 4.23
+          },
+          "oos": {
+            "pnl": 185.9,
+            "trades": 91,
+            "wr": 75.8,
+            "mdd": 38.2,
+            "pf": 2.19
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge15_mt20",
+      "edge": 15,
+      "min_trades": 20,
+      "avg_patterns": 149.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": 48.4,
+      "total_oos_pnl": 145.1,
+      "avg_oos_wr": 64.1,
+      "avg_oos_mdd": 41.0,
+      "avg_oos_trades": 91.0,
+      "oos_pnl_mdd": 1.18,
+      "avg_is_pnl": 488.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 84,
+          "long": 78,
+          "short": 6,
+          "is": {
+            "pnl": 126.8,
+            "trades": 100,
+            "wr": 72.0,
+            "mdd": 33.7,
+            "pf": 1.85
+          },
+          "oos": {
+            "pnl": -3.2,
+            "trades": 86,
+            "wr": 57.0,
+            "mdd": 33.9,
+            "pf": 0.98
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 191,
+          "long": 156,
+          "short": 35,
+          "is": {
+            "pnl": 424.0,
+            "trades": 164,
+            "wr": 84.1,
+            "mdd": 19.7,
+            "pf": 3.51
+          },
+          "oos": {
+            "pnl": -33.5,
+            "trades": 101,
+            "wr": 59.4,
+            "mdd": 67.8,
+            "pf": 0.9
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 172,
+          "long": 70,
+          "short": 102,
+          "is": {
+            "pnl": 915.0,
+            "trades": 276,
+            "wr": 85.9,
+            "mdd": 12.1,
+            "pf": 5.66
+          },
+          "oos": {
+            "pnl": 181.8,
+            "trades": 87,
+            "wr": 75.9,
+            "mdd": 21.3,
+            "pf": 2.29
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge15_mt30",
+      "edge": 15,
+      "min_trades": 30,
+      "avg_patterns": 87.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 53.5,
+      "total_oos_pnl": 160.6,
+      "avg_oos_wr": 64.8,
+      "avg_oos_mdd": 52.7,
+      "avg_oos_trades": 89.0,
+      "oos_pnl_mdd": 1.02,
+      "avg_is_pnl": 438.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 42,
+          "long": 40,
+          "short": 2,
+          "is": {
+            "pnl": 106.1,
+            "trades": 103,
+            "wr": 68.0,
+            "mdd": 22.8,
+            "pf": 1.67
+          },
+          "oos": {
+            "pnl": 14.2,
+            "trades": 89,
+            "wr": 56.2,
+            "mdd": 31.4,
+            "pf": 1.08
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 112,
+          "long": 97,
+          "short": 15,
+          "is": {
+            "pnl": 411.2,
+            "trades": 163,
+            "wr": 83.4,
+            "mdd": 17.1,
+            "pf": 3.3
+          },
+          "oos": {
+            "pnl": -33.6,
+            "trades": 90,
+            "wr": 61.1,
+            "mdd": 95.4,
+            "pf": 0.89
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 107,
+          "long": 40,
+          "short": 67,
+          "is": {
+            "pnl": 798.6,
+            "trades": 267,
+            "wr": 85.0,
+            "mdd": 13.1,
+            "pf": 4.36
+          },
+          "oos": {
+            "pnl": 180.0,
+            "trades": 87,
+            "wr": 77.0,
+            "mdd": 31.3,
+            "pf": 2.28
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge15_mt25",
+      "edge": 15,
+      "min_trades": 25,
+      "avg_patterns": 106.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 56.2,
+      "total_oos_pnl": 168.7,
+      "avg_oos_wr": 65.3,
+      "avg_oos_mdd": 56.2,
+      "avg_oos_trades": 92.0,
+      "oos_pnl_mdd": 1.0,
+      "avg_is_pnl": 461.3,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 53,
+          "long": 49,
+          "short": 4,
+          "is": {
+            "pnl": 105.3,
+            "trades": 102,
+            "wr": 69.6,
+            "mdd": 30.3,
+            "pf": 1.68
+          },
+          "oos": {
+            "pnl": 23.5,
+            "trades": 95,
+            "wr": 58.9,
+            "mdd": 35.7,
+            "pf": 1.13
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 137,
+          "long": 118,
+          "short": 19,
+          "is": {
+            "pnl": 431.0,
+            "trades": 169,
+            "wr": 83.4,
+            "mdd": 19.7,
+            "pf": 3.55
+          },
+          "oos": {
+            "pnl": -59.6,
+            "trades": 92,
+            "wr": 59.8,
+            "mdd": 111.6,
+            "pf": 0.81
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 129,
+          "long": 50,
+          "short": 79,
+          "is": {
+            "pnl": 847.5,
+            "trades": 276,
+            "wr": 85.9,
+            "mdd": 12.1,
+            "pf": 4.89
+          },
+          "oos": {
+            "pnl": 204.8,
+            "trades": 88,
+            "wr": 77.3,
+            "mdd": 21.3,
+            "pf": 2.61
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge15_mt40",
+      "edge": 15,
+      "min_trades": 40,
+      "avg_patterns": 57.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 41.6,
+      "total_oos_pnl": 124.8,
+      "avg_oos_wr": 65.1,
+      "avg_oos_mdd": 46.4,
+      "avg_oos_trades": 85.0,
+      "oos_pnl_mdd": 0.9,
+      "avg_is_pnl": 400.9,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 25,
+          "long": 25,
+          "short": 0,
+          "is": {
+            "pnl": 80.7,
+            "trades": 102,
+            "wr": 64.7,
+            "mdd": 29.3,
+            "pf": 1.48
+          },
+          "oos": {
+            "pnl": 9.5,
+            "trades": 88,
+            "wr": 58.0,
+            "mdd": 30.6,
+            "pf": 1.05
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 74,
+          "long": 69,
+          "short": 5,
+          "is": {
+            "pnl": 374.3,
+            "trades": 157,
+            "wr": 81.5,
+            "mdd": 19.7,
+            "pf": 3.02
+          },
+          "oos": {
+            "pnl": -27.6,
+            "trades": 90,
+            "wr": 63.3,
+            "mdd": 82.8,
+            "pf": 0.91
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 71,
+          "long": 27,
+          "short": 44,
+          "is": {
+            "pnl": 747.6,
+            "trades": 270,
+            "wr": 82.6,
+            "mdd": 22.7,
+            "pf": 3.74
+          },
+          "oos": {
+            "pnl": 142.9,
+            "trades": 77,
+            "wr": 74.0,
+            "mdd": 25.8,
+            "pf": 2.11
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge18_mt30",
+      "edge": 18,
+      "min_trades": 30,
+      "avg_patterns": 55.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": 47.7,
+      "total_oos_pnl": 143.0,
+      "avg_oos_wr": 59.4,
+      "avg_oos_mdd": 57.4,
+      "avg_oos_trades": 86.0,
+      "oos_pnl_mdd": 0.83,
+      "avg_is_pnl": 389.9,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 27,
+          "long": 25,
+          "short": 2,
+          "is": {
+            "pnl": 121.4,
+            "trades": 103,
+            "wr": 62.1,
+            "mdd": 24.2,
+            "pf": 1.8
+          },
+          "oos": {
+            "pnl": -31.6,
+            "trades": 82,
+            "wr": 41.5,
+            "mdd": 63.9,
+            "pf": 0.83
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 68,
+          "long": 59,
+          "short": 9,
+          "is": {
+            "pnl": 346.8,
+            "trades": 144,
+            "wr": 81.2,
+            "mdd": 24.0,
+            "pf": 3.06
+          },
+          "oos": {
+            "pnl": -15.5,
+            "trades": 89,
+            "wr": 60.7,
+            "mdd": 76.9,
+            "pf": 0.95
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 69,
+          "long": 28,
+          "short": 41,
+          "is": {
+            "pnl": 701.5,
+            "trades": 257,
+            "wr": 84.0,
+            "mdd": 27.1,
+            "pf": 3.56
+          },
+          "oos": {
+            "pnl": 190.1,
+            "trades": 88,
+            "wr": 76.1,
+            "mdd": 31.3,
+            "pf": 2.38
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge20_mt25",
+      "edge": 20,
+      "min_trades": 25,
+      "avg_patterns": 52.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 36.6,
+      "total_oos_pnl": 109.8,
+      "avg_oos_wr": 59.7,
+      "avg_oos_mdd": 50.0,
+      "avg_oos_trades": 91.0,
+      "oos_pnl_mdd": 0.73,
+      "avg_is_pnl": 442.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 30,
+          "long": 26,
+          "short": 4,
+          "is": {
+            "pnl": 115.7,
+            "trades": 103,
+            "wr": 64.1,
+            "mdd": 29.0,
+            "pf": 1.8
+          },
+          "oos": {
+            "pnl": 18.0,
+            "trades": 99,
+            "wr": 52.5,
+            "mdd": 42.0,
+            "pf": 1.1
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 64,
+          "long": 57,
+          "short": 7,
+          "is": {
+            "pnl": 329.7,
+            "trades": 156,
+            "wr": 81.4,
+            "mdd": 24.2,
+            "pf": 2.85
+          },
+          "oos": {
+            "pnl": -40.3,
+            "trades": 88,
+            "wr": 59.1,
+            "mdd": 76.8,
+            "pf": 0.86
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 61,
+          "long": 27,
+          "short": 34,
+          "is": {
+            "pnl": 882.4,
+            "trades": 254,
+            "wr": 89.8,
+            "mdd": 20.2,
+            "pf": 5.98
+          },
+          "oos": {
+            "pnl": 132.1,
+            "trades": 86,
+            "wr": 67.4,
+            "mdd": 31.1,
+            "pf": 1.84
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge18_mt25",
+      "edge": 18,
+      "min_trades": 25,
+      "avg_patterns": 74.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": 39.7,
+      "total_oos_pnl": 119.1,
+      "avg_oos_wr": 59.6,
+      "avg_oos_mdd": 66.0,
+      "avg_oos_trades": 93.0,
+      "oos_pnl_mdd": 0.6,
+      "avg_is_pnl": 398.3,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 38,
+          "long": 34,
+          "short": 4,
+          "is": {
+            "pnl": 101.5,
+            "trades": 98,
+            "wr": 64.3,
+            "mdd": 30.5,
+            "pf": 1.67
+          },
+          "oos": {
+            "pnl": -12.9,
+            "trades": 90,
+            "wr": 47.8,
+            "mdd": 60.6,
+            "pf": 0.93
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 93,
+          "long": 80,
+          "short": 13,
+          "is": {
+            "pnl": 379.3,
+            "trades": 155,
+            "wr": 82.6,
+            "mdd": 17.0,
+            "pf": 3.43
+          },
+          "oos": {
+            "pnl": -71.2,
+            "trades": 94,
+            "wr": 56.4,
+            "mdd": 114.9,
+            "pf": 0.78
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 91,
+          "long": 38,
+          "short": 53,
+          "is": {
+            "pnl": 714.2,
+            "trades": 265,
+            "wr": 84.2,
+            "mdd": 24.2,
+            "pf": 3.55
+          },
+          "oos": {
+            "pnl": 203.2,
+            "trades": 95,
+            "wr": 74.7,
+            "mdd": 22.6,
+            "pf": 2.51
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge18_mt20",
+      "edge": 18,
+      "min_trades": 20,
+      "avg_patterns": 117.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 30.8,
+      "total_oos_pnl": 92.3,
+      "avg_oos_wr": 59.1,
+      "avg_oos_mdd": 51.9,
+      "avg_oos_trades": 97.0,
+      "oos_pnl_mdd": 0.59,
+      "avg_is_pnl": 487.8,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 69,
+          "long": 63,
+          "short": 6,
+          "is": {
+            "pnl": 124.4,
+            "trades": 100,
+            "wr": 70.0,
+            "mdd": 25.9,
+            "pf": 1.82
+          },
+          "oos": {
+            "pnl": 3.2,
+            "trades": 91,
+            "wr": 51.6,
+            "mdd": 39.2,
+            "pf": 1.02
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 147,
+          "long": 118,
+          "short": 29,
+          "is": {
+            "pnl": 468.6,
+            "trades": 165,
+            "wr": 86.7,
+            "mdd": 14.3,
+            "pf": 4.46
+          },
+          "oos": {
+            "pnl": -73.5,
+            "trades": 102,
+            "wr": 56.9,
+            "mdd": 95.1,
+            "pf": 0.78
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 134,
+          "long": 58,
+          "short": 76,
+          "is": {
+            "pnl": 870.4,
+            "trades": 272,
+            "wr": 86.4,
+            "mdd": 24.2,
+            "pf": 4.95
+          },
+          "oos": {
+            "pnl": 162.6,
+            "trades": 99,
+            "wr": 68.7,
+            "mdd": 21.3,
+            "pf": 1.94
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge20_mt30",
+      "edge": 20,
+      "min_trades": 30,
+      "avg_patterns": 35.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": 28.0,
+      "total_oos_pnl": 84.1,
+      "avg_oos_wr": 57.4,
+      "avg_oos_mdd": 50.3,
+      "avg_oos_trades": 84.0,
+      "oos_pnl_mdd": 0.56,
+      "avg_is_pnl": 384.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 20,
+          "long": 18,
+          "short": 2,
+          "is": {
+            "pnl": 141.8,
+            "trades": 103,
+            "wr": 63.1,
+            "mdd": 20.0,
+            "pf": 2.13
+          },
+          "oos": {
+            "pnl": -14.5,
+            "trades": 85,
+            "wr": 44.7,
+            "mdd": 54.0,
+            "pf": 0.92
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 42,
+          "long": 38,
+          "short": 4,
+          "is": {
+            "pnl": 318.7,
+            "trades": 143,
+            "wr": 81.8,
+            "mdd": 24.2,
+            "pf": 2.84
+          },
+          "oos": {
+            "pnl": -2.4,
+            "trades": 81,
+            "wr": 61.7,
+            "mdd": 63.0,
+            "pf": 0.99
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 42,
+          "long": 19,
+          "short": 23,
+          "is": {
+            "pnl": 693.3,
+            "trades": 228,
+            "wr": 85.5,
+            "mdd": 24.2,
+            "pf": 4.05
+          },
+          "oos": {
+            "pnl": 101.0,
+            "trades": 85,
+            "wr": 65.9,
+            "mdd": 33.8,
+            "pf": 1.59
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge20_mt20",
+      "edge": 20,
+      "min_trades": 20,
+      "avg_patterns": 91.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 17.3,
+      "total_oos_pnl": 51.8,
+      "avg_oos_wr": 58.5,
+      "avg_oos_mdd": 42.5,
+      "avg_oos_trades": 92.0,
+      "oos_pnl_mdd": 0.41,
+      "avg_is_pnl": 465.2,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 59,
+          "long": 53,
+          "short": 6,
+          "is": {
+            "pnl": 112.5,
+            "trades": 99,
+            "wr": 68.7,
+            "mdd": 32.2,
+            "pf": 1.72
+          },
+          "oos": {
+            "pnl": -18.0,
+            "trades": 93,
+            "wr": 50.5,
+            "mdd": 51.1,
+            "pf": 0.91
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 111,
+          "long": 91,
+          "short": 20,
+          "is": {
+            "pnl": 460.4,
+            "trades": 169,
+            "wr": 87.6,
+            "mdd": 12.1,
+            "pf": 4.42
+          },
+          "oos": {
+            "pnl": 3.9,
+            "trades": 96,
+            "wr": 63.5,
+            "mdd": 47.6,
+            "pf": 1.01
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 103,
+          "long": 47,
+          "short": 56,
+          "is": {
+            "pnl": 822.7,
+            "trades": 263,
+            "wr": 87.1,
+            "mdd": 22.7,
+            "pf": 4.59
+          },
+          "oos": {
+            "pnl": 65.9,
+            "trades": 88,
+            "wr": 61.4,
+            "mdd": 28.8,
+            "pf": 1.31
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge20_mt40",
+      "edge": 20,
+      "min_trades": 40,
+      "avg_patterns": 13.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 20.4,
+      "total_oos_pnl": 61.2,
+      "avg_oos_wr": 58.7,
+      "avg_oos_mdd": 56.1,
+      "avg_oos_trades": 69.0,
+      "oos_pnl_mdd": 0.36,
+      "avg_is_pnl": 274.6,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 5,
+          "long": 5,
+          "short": 0,
+          "is": {
+            "pnl": 93.1,
+            "trades": 77,
+            "wr": 58.4,
+            "mdd": 19.0,
+            "pf": 1.94
+          },
+          "oos": {
+            "pnl": 11.2,
+            "trades": 74,
+            "wr": 43.2,
+            "mdd": 32.6,
+            "pf": 1.08
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 16,
+          "long": 16,
+          "short": 0,
+          "is": {
+            "pnl": 174.4,
+            "trades": 98,
+            "wr": 76.5,
+            "mdd": 31.1,
+            "pf": 2.03
+          },
+          "oos": {
+            "pnl": -70.2,
+            "trades": 69,
+            "wr": 59.4,
+            "mdd": 113.1,
+            "pf": 0.74
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 19,
+          "long": 10,
+          "short": 9,
+          "is": {
+            "pnl": 556.2,
+            "trades": 198,
+            "wr": 83.3,
+            "mdd": 24.2,
+            "pf": 3.24
+          },
+          "oos": {
+            "pnl": 120.2,
+            "trades": 64,
+            "wr": 73.4,
+            "mdd": 22.7,
+            "pf": 1.94
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge18_mt40",
+      "edge": 18,
+      "min_trades": 40,
+      "avg_patterns": 26.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": 19.8,
+      "total_oos_pnl": 59.3,
+      "avg_oos_wr": 59.3,
+      "avg_oos_mdd": 69.0,
+      "avg_oos_trades": 74.0,
+      "oos_pnl_mdd": 0.29,
+      "avg_is_pnl": 279.4,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 10,
+          "long": 10,
+          "short": 0,
+          "is": {
+            "pnl": 95.6,
+            "trades": 85,
+            "wr": 61.2,
+            "mdd": 30.4,
+            "pf": 1.7
+          },
+          "oos": {
+            "pnl": -3.3,
+            "trades": 72,
+            "wr": 47.2,
+            "mdd": 45.5,
+            "pf": 0.98
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 33,
+          "long": 33,
+          "short": 0,
+          "is": {
+            "pnl": 118.8,
+            "trades": 123,
+            "wr": 67.5,
+            "mdd": 37.4,
+            "pf": 1.47
+          },
+          "oos": {
+            "pnl": -78.8,
+            "trades": 80,
+            "wr": 56.2,
+            "mdd": 122.3,
+            "pf": 0.74
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 36,
+          "long": 17,
+          "short": 19,
+          "is": {
+            "pnl": 623.9,
+            "trades": 244,
+            "wr": 81.1,
+            "mdd": 40.2,
+            "pf": 3.12
+          },
+          "oos": {
+            "pnl": 141.4,
+            "trades": 71,
+            "wr": 74.6,
+            "mdd": 39.3,
+            "pf": 2.06
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge25_mt40",
+      "edge": 25,
+      "min_trades": 40,
+      "avg_patterns": 2.0,
+      "oos_positive": "2/3",
+      "avg_oos_pnl": 4.6,
+      "total_oos_pnl": 13.8,
+      "avg_oos_wr": 64.0,
+      "avg_oos_mdd": 21.8,
+      "avg_oos_trades": 19.0,
+      "oos_pnl_mdd": 0.21,
+      "avg_is_pnl": 154.2,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 1,
+          "long": 1,
+          "short": 0,
+          "is": {
+            "pnl": 87.9,
+            "trades": 30,
+            "wr": 90.0,
+            "mdd": 15.2,
+            "pf": 4.86
+          },
+          "oos": {
+            "pnl": -4.0,
+            "trades": 19,
+            "wr": 63.2,
+            "mdd": 25.1,
+            "pf": 0.92
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 1,
+          "long": 1,
+          "short": 0,
+          "is": {
+            "pnl": 104.5,
+            "trades": 23,
+            "wr": 95.7,
+            "mdd": 12.1,
+            "pf": 9.64
+          },
+          "oos": {
+            "pnl": 11.4,
+            "trades": 12,
+            "wr": 75.0,
+            "mdd": 18.9,
+            "pf": 1.31
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 3,
+          "long": 2,
+          "short": 1,
+          "is": {
+            "pnl": 270.2,
+            "trades": 94,
+            "wr": 83.0,
+            "mdd": 12.1,
+            "pf": 4.76
+          },
+          "oos": {
+            "pnl": 6.4,
+            "trades": 26,
+            "wr": 53.8,
+            "mdd": 21.3,
+            "pf": 1.11
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge25_mt30",
+      "edge": 25,
+      "min_trades": 30,
+      "avg_patterns": 11.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": -26.9,
+      "total_oos_pnl": -80.8,
+      "avg_oos_wr": 51.0,
+      "avg_oos_mdd": 75.6,
+      "avg_oos_trades": 60.0,
+      "oos_pnl_mdd": -0.36,
+      "avg_is_pnl": 247.3,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 11,
+          "long": 10,
+          "short": 1,
+          "is": {
+            "pnl": 106.4,
+            "trades": 76,
+            "wr": 67.1,
+            "mdd": 20.1,
+            "pf": 1.88
+          },
+          "oos": {
+            "pnl": -34.6,
+            "trades": 79,
+            "wr": 40.5,
+            "mdd": 66.7,
+            "pf": 0.8
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 11,
+          "long": 10,
+          "short": 1,
+          "is": {
+            "pnl": 226.4,
+            "trades": 109,
+            "wr": 78.0,
+            "mdd": 19.9,
+            "pf": 2.94
+          },
+          "oos": {
+            "pnl": -96.5,
+            "trades": 53,
+            "wr": 47.2,
+            "mdd": 136.4,
+            "pf": 0.59
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 11,
+          "long": 4,
+          "short": 7,
+          "is": {
+            "pnl": 409.0,
+            "trades": 149,
+            "wr": 81.9,
+            "mdd": 24.2,
+            "pf": 3.14
+          },
+          "oos": {
+            "pnl": 50.3,
+            "trades": 49,
+            "wr": 65.3,
+            "mdd": 23.7,
+            "pf": 1.46
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge25_mt20",
+      "edge": 25,
+      "min_trades": 20,
+      "avg_patterns": 41.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": -31.2,
+      "total_oos_pnl": -93.7,
+      "avg_oos_wr": 50.6,
+      "avg_oos_mdd": 70.1,
+      "avg_oos_trades": 87.0,
+      "oos_pnl_mdd": -0.45,
+      "avg_is_pnl": 406.4,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 25,
+          "long": 24,
+          "short": 1,
+          "is": {
+            "pnl": 111.6,
+            "trades": 84,
+            "wr": 69.0,
+            "mdd": 33.3,
+            "pf": 1.79
+          },
+          "oos": {
+            "pnl": -38.6,
+            "trades": 86,
+            "wr": 43.0,
+            "mdd": 73.8,
+            "pf": 0.79
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 51,
+          "long": 39,
+          "short": 12,
+          "is": {
+            "pnl": 426.6,
+            "trades": 165,
+            "wr": 84.8,
+            "mdd": 12.2,
+            "pf": 4.97
+          },
+          "oos": {
+            "pnl": 32.1,
+            "trades": 102,
+            "wr": 65.7,
+            "mdd": 49.2,
+            "pf": 1.13
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 46,
+          "long": 22,
+          "short": 24,
+          "is": {
+            "pnl": 680.9,
+            "trades": 229,
+            "wr": 83.0,
+            "mdd": 13.8,
+            "pf": 4.48
+          },
+          "oos": {
+            "pnl": -87.2,
+            "trades": 74,
+            "wr": 43.2,
+            "mdd": 87.2,
+            "pf": 0.64
+          }
+        }
+      ]
+    },
+    {
+      "combo": "edge25_mt25",
+      "edge": 25,
+      "min_trades": 25,
+      "avg_patterns": 18.0,
+      "oos_positive": "1/3",
+      "avg_oos_pnl": -41.6,
+      "total_oos_pnl": -124.7,
+      "avg_oos_wr": 49.8,
+      "avg_oos_mdd": 77.7,
+      "avg_oos_trades": 71.0,
+      "oos_pnl_mdd": -0.54,
+      "avg_is_pnl": 296.9,
+      "folds": [
+        {
+          "fold": 1,
+          "patterns": 13,
+          "long": 12,
+          "short": 1,
+          "is": {
+            "pnl": 98.7,
+            "trades": 75,
+            "wr": 66.7,
+            "mdd": 29.6,
+            "pf": 1.75
+          },
+          "oos": {
+            "pnl": -37.0,
+            "trades": 79,
+            "wr": 40.5,
+            "mdd": 69.1,
+            "pf": 0.78
+          }
+        },
+        {
+          "fold": 2,
+          "patterns": 23,
+          "long": 20,
+          "short": 3,
+          "is": {
+            "pnl": 302.5,
+            "trades": 149,
+            "wr": 79.9,
+            "mdd": 19.7,
+            "pf": 3.16
+          },
+          "oos": {
+            "pnl": -108.0,
+            "trades": 75,
+            "wr": 52.0,
+            "mdd": 112.0,
+            "pf": 0.62
+          }
+        },
+        {
+          "fold": 3,
+          "patterns": 19,
+          "long": 7,
+          "short": 12,
+          "is": {
+            "pnl": 489.4,
+            "trades": 185,
+            "wr": 81.6,
+            "mdd": 28.5,
+            "pf": 3.49
+          },
+          "oos": {
+            "pnl": 20.3,
+            "trades": 58,
+            "wr": 56.9,
+            "mdd": 51.9,
+            "pf": 1.14
+          }
+        }
+      ]
+    }
+  ]
+}

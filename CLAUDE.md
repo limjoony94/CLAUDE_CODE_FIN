@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.8 | **Bot**: Pattern 5m (256패턴, 83L+173S) | **Updated**: 2026-02-16
+> **Version**: v1.28.9 | **Bot**: Pattern 5m (50패턴, 15L+35S) | **Updated**: 2026-02-16
 
 ---
 
@@ -44,97 +44,92 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.28.0
+## 📊 현재 전략: Pattern 5m v1.28.9
 
 ### 핵심 파라미터
 
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | **Uniform TP 70% + Legacy 15패턴 재최적화** |
+| TP/SL | **Per-pattern 최적화** (scanner PP grid search) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
-| Double Exit | 50%@0.8x + 50%@1.0x |
 | Leverage | 3x |
 | Timeframe | 5m |
-| Quality Filter | **T5 leave-one-out + MC/edge cleanup + Uniform TP 70% + Legacy reopt + Low-WR review** |
-| Risk | Daily loss **10%** (v1.28.0), 3-consecutive-loss pause |
+| Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
+| Quality Filter | **Edge>=21.8pp + WR>=60% + MC<0.01 + BH FDR + min_trades>=25** |
+| Patterns | **50** (15L + 35S), edge mean 25.0pp, WR mean 85.5% |
+| Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause |
 
-### 270일 종합 검증 결과
+### 270일 In-Sample 검증 결과
 
-| 지표 | v1.27.1 | v1.27.2 |
-|------|---------|---------|
-| Patterns | 52 (32L+20S) | **51 (32L+19S)** |
-| PnL | +956.2% | **+966.0%** |
-| MDD | 16.2% | **16.2%** |
-| PnL/MDD | 59.0x | **59.6x** |
-| WR | 82.1% | **84.9%** |
-| PF | 3.82 | **3.87** |
-| Trades | 341 | **339** |
-| Max Consec Loss | 2 | **2** |
-| MC MDD P99 | 41.0% | **TBD** |
-| Change | 15 legacy patterns re-optimized | U-H-BU removed (SL 0.3% infeasible) |
-| Research | tp_sl_lineage_analysis + tp_sl_reoptimization_v1270 | low_wr_pattern_review + low_wr_individual_validation |
+| 지표 | Static 51 (v1.27.2) | **Dynamic 50 (v1.28.9)** |
+|------|---------------------|--------------------------|
+| Patterns | 51 (32L+19S) | **50 (15L+35S)** |
+| Filter | MC<0.01 + edge>=10pp | **MC<0.01 + BH FDR + edge>=21.8pp + WR>=60%** |
+| WR mean | 84.9% | **85.5%** |
+| Edge mean | ~15pp | **25.0pp** |
+| Trades | 339 | **1,580** |
+| TP/SL | Per-pattern (legacy) | **Per-pattern (PP grid search)** |
 
-### LONG Patterns (32) — v1.27.2
+### LONG Patterns (15) — v1.28.9 Dynamic
 
-| Pattern | TP/SL | R:R | WR | MC | WF | Trades |
-|---------|-------|-----|-----|-------|------|--------|
-| BD-BD-U | 1.4/3.0 | 0.47 | 81.2% | 0.0027 | 4/3 | 72 |
-| BD-MU-BD | 0.7/0.7 | 1.00 | 79.2% | 0.0024 | 5/3 | 23 |
-| BD-ST-U | 1.4/2.0 | 0.70 | 72.2% | 0.0019 | 4/3 | 106 |
-| BU-BU-BD | 2.1/3.0 | 0.70 | 79.5% | 0.0017 | 5/3 | 35 |
-| D-MU-U | 1.05/2.0 | 0.53 | 86.8% | 0.0002 | 4/3 | 35 |
-| DN-BD-BD | 1.4/1.5 | 0.93 | 63.9% | 0.0099 | 4/3 | 103 |
-| DN-DF-MU | 1.05/3.0 | 0.35 | 93.8% | 0.0017 | 4/3 | 14 |
-| DN-DF-ST | 1.4/3.0 | 0.47 | 85.2% | 0.0122 | 4/3 | 24 |
-| DN-DN-H | 0.7/2.5 | 0.28 | 89.7% | 0.0003 | 4/3 | 103 |
-| DN-MD-DN | **1.5/3.0** | 0.50 | 77.2% | 0.0007 | 4/3 | 167 |
-| GS-ST-ST | 1.05/2.0 | 0.53 | 84.2% | 0.0174 | 5/3 | 18 |
-| H-BU-BU | 1.4/3.0 | 0.47 | 100.0% | 0.0001 | 5/3 | 11 |
-| H-MU-MD | 0.7/2.0 | 0.35 | 92.9% | 0.0007 | 4/3 | 23 |
-| IH-MD-MD | 0.7/2.0 | 0.35 | 95.2% | 0.0003 | 5/2 | 19 |
-| IH-ST-MU | 0.35/2.5 | 0.14 | 100.0% | 0.0000 | 5/3 | 24 |
-| MD-BU-MD | 1.4/2.5 | 0.56 | 90.0% | 0.0014 | 5/3 | 16 |
-| MD-DN-MU | **1.0/1.0** | 1.00 | 62.3% | 0.0090 | 4/3 | 130 |
-| MD-H-MD | 0.7/0.7 | 1.00 | 75.0% | 0.0110 | 3/3 | 24 |
-| MD-MD-ST | 1.05/2.0 | 0.53 | 83.8% | 0.0059 | 5/3 | 30 |
-| MD-ST-BD | **1.0/0.5** | 2.00 | 57.6% | 0.0088 | 5/3 | 33 |
-| MD-ST-MD | **2.0/2.0** | 1.00 | 73.3% | 0.0083 | 4/3 | 30 |
-| MU-BD-ST | 1.4/3.0 | 0.47 | 89.3% | 0.0010 | 5/3 | 24 |
-| MU-DF-U | 1.05/2.0 | 0.53 | 89.5% | 0.0056 | 4/3 | 18 |
-| MU-H-MU | **1.5/0.7** | 2.14 | 60.7% | 0.0068 | 5/3 | 28 |
-| MU-IH-DN | 1.4/2.0 | 0.70 | 83.3% | 0.0004 | 4/3 | 32 |
-| MU-U-H | 1.75/3.0 | 0.58 | 81.8% | 0.0055 | 4/3 | 27 |
-| U-H-MU | **1.5/2.0** | 0.75 | 84.2% | 0.0001 | 4/3 | 38 |
-| U-MD-GS | 0.35/2.5 | 0.14 | 95.7% | 0.0707 | 4/3 | 22 |
-| U-MD-MD | **1.5/0.7** | 2.14 | 45.2% | 0.0066 | 4/2 | 104 |
-| U-MU-H | 1.05/3.0 | 0.35 | 88.9% | 0.0006 | 5/3 | 48 |
-| U-MU-IH | 2.1/2.5 | 0.84 | 80.6% | 0.0011 | 4/3 | 25 |
-| U-ST-DF | 1.4/3.0 | 0.47 | 86.4% | 0.0131 | 4/3 | 20 |
+| Pattern | TP/SL | Edge | WR | Trades |
+|---------|-------|------|-----|--------|
+| BD-BD-BU | 1.8/3.5 | 22.2pp | 88.2% | 51 |
+| BD-MD-DN | 2.5/4.0 | 23.6pp | 85.2% | 27 |
+| DN-MD-GS | 1.2/2.0 | 25.5pp | 88.0% | 25 |
+| H-MU-MD | 0.7/0.5 | 27.3pp | 69.0% | 29 |
+| IH-DN-MD | 1.0/1.5 | 23.3pp | 83.3% | 36 |
+| IH-ST-MU | 1.4/0.7 | 30.7pp | 64.0% | 25 |
+| MD-DN-D | 2.1/4.0 | 23.7pp | 89.3% | 28 |
+| MD-MD-ST | 1.2/1.0 | 23.8pp | 69.2% | 39 |
+| MU-BD-ST | 1.8/3.0 | 26.0pp | 88.5% | 26 |
+| MU-MD-ST | 2.5/4.0 | 24.2pp | 85.7% | 28 |
+| MU-U-H | 2.5/3.0 | 23.2pp | 77.8% | 27 |
+| ST-DN-GS | 0.5/1.0 | 21.9pp | 88.6% | 35 |
+| ST-U-DF | 1.8/4.0 | 23.3pp | 92.3% | 26 |
+| U-H-MU | 1.6/2.0 | 28.2pp | 83.8% | 37 |
+| U-MU-H | 1.8/3.5 | 28.7pp | 94.7% | 38 |
 
-### SHORT Patterns (19) — v1.27.2
+### SHORT Patterns (35) — v1.28.9 Dynamic
 
-| Pattern | TP/SL | R:R | WR | MC | WF | Trades |
-|---------|-------|-----|-----|-------|------|--------|
-| BD-BU-DN | **3.0/3.0** | 1.00 | 68.1% | 0.0089 | 4/3 | 47 |
-| BD-D-D | 1.05/3.0 | 0.35 | 100.0% | 0.0001 | 5/3 | 13 |
-| BD-U-H | **2.5/3.0** | 0.83 | 85.0% | 0.0011 | 5/3 | 20 |
-| BU-MD-MD | **3.0/2.0** | 1.50 | 75.0% | 0.0089 | 5/3 | 16 |
-| BU-ST-GS | 0.7/2.5 | 0.28 | 100.0% | 0.0003 | 5/3 | 13 |
-| D-BD-ST | 1.75/3.0 | 0.58 | 83.3% | 0.0260 | 5/2 | 18 |
-| D-DN-DN | **2.5/3.0** | 0.83 | 67.7% | 0.0058 | 5/3 | 99 |
-| DN-BD-BU | 1.75/3.0 | 0.58 | 79.2% | 0.0014 | 5/3 | 56 |
-| DN-D-BD | 1.75/1.0 | 1.75 | 54.5% | 0.0177 | 4/3 | 43 |
-| DN-DF-DN | **2.0/2.0** | 1.00 | 68.8% | 0.0064 | 5/3 | 48 |
-| H-U-BD | 2.1/2.0 | 1.05 | 75.0% | 0.0038 | 5/3 | 20 |
-| IH-ST-ST | 1.4/3.0 | 0.47 | 90.0% | 0.0014 | 5/3 | 26 |
-| MD-MD-MD | **3.0/3.0** | 1.00 | 85.7% | 0.0004 | 4/3 | 21 |
-| ST-BD-BU | 2.1/3.0 | 0.70 | 82.1% | 0.0027 | 5/3 | 22 |
-| ST-DN-BU | 1.4/3.0 | 0.47 | 80.6% | 0.0080 | 5/2 | 59 |
-| ST-DN-U | 2.1/3.0 | 0.70 | 69.3% | 0.0000 | 5/2 | 234 |
-| ST-MU-ST | 1.4/3.0 | 0.47 | 83.7% | 0.0047 | 4/3 | 43 |
-| U-GS-DN | **3.0/3.0** | 1.00 | 84.6% | 0.0002 | 5/3 | 26 |
-| U-ST-DN | 1.4/3.0 | 0.47 | 77.4% | 0.0002 | 5/3 | 292 |
+| Pattern | TP/SL | Edge | WR | Trades |
+|---------|-------|------|-----|--------|
+| BD-U-H | 1.4/3.0 | 23.8pp | 92.0% | 25 |
+| BU-BU-DN | 2.0/4.0 | 23.7pp | 90.4% | 52 |
+| BU-MU-DN | 2.5/3.0 | 31.9pp | 86.5% | 37 |
+| D-D-DN | 2.1/3.0 | 25.8pp | 84.6% | 26 |
+| D-D-U | 1.6/3.0 | 26.8pp | 92.0% | 25 |
+| D-DN-BD | 1.6/3.5 | 24.2pp | 92.9% | 28 |
+| DN-BU-BU | 2.0/4.0 | 28.6pp | 95.2% | 42 |
+| DN-BU-MD | 2.1/4.0 | 21.9pp | 87.5% | 32 |
+| DN-H-BD | 2.1/4.0 | 22.4pp | 88.0% | 25 |
+| DN-IH-MD | 1.8/4.0 | 23.0pp | 92.0% | 25 |
+| DN-IH-U | 2.5/4.0 | 26.7pp | 88.2% | 51 |
+| DN-ST-BU | 2.5/4.0 | 21.8pp | 83.3% | 60 |
+| DN-U-H | 3.0/4.0 | 30.0pp | 87.2% | 39 |
+| GS-ST-U | 1.0/1.5 | 23.3pp | 83.3% | 30 |
+| H-ST-ST | 0.7/1.5 | 22.1pp | 90.3% | 31 |
+| H-U-BD | 1.8/2.0 | 23.4pp | 76.0% | 25 |
+| IH-MD-U | 2.0/4.0 | 21.8pp | 88.5% | 26 |
+| IH-MU-DN | 2.5/4.0 | 22.5pp | 84.0% | 25 |
+| IH-ST-ST | 1.8/3.5 | 26.3pp | 92.3% | 26 |
+| MD-BU-DN | 3.0/4.0 | 23.6pp | 80.8% | 26 |
+| MD-D-U | 2.1/3.0 | 22.7pp | 81.5% | 27 |
+| MD-MD-MD | 3.0/2.5 | 26.5pp | 72.0% | 25 |
+| MU-DN-BU | 2.5/4.0 | 23.8pp | 85.3% | 34 |
+| MU-MD-MU | 3.0/4.0 | 23.6pp | 80.8% | 26 |
+| MU-MU-BD | 1.0/0.7 | 22.2pp | 63.4% | 41 |
+| ST-BD-BU | 2.1/4.0 | 30.4pp | 96.0% | 25 |
+| ST-H-U | 2.5/4.0 | 22.5pp | 84.0% | 25 |
+| ST-IH-DN | 2.5/4.0 | 31.3pp | 92.9% | 28 |
+| ST-MD-MU | 1.8/4.0 | 23.9pp | 92.9% | 28 |
+| ST-U-H | 3.0/4.0 | 22.2pp | 79.3% | 29 |
+| U-GS-DN | 3.0/3.0 | 34.6pp | 84.6% | 26 |
+| U-H-MD | 2.0/4.0 | 22.2pp | 88.9% | 27 |
+| U-IH-ST | 1.6/3.5 | 23.7pp | 92.3% | 26 |
+| U-IH-U | 3.0/4.0 | 27.3pp | 84.4% | 45 |
+| U-ST-IH | 1.8/4.0 | 25.3pp | 94.3% | 35 |
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -185,20 +180,18 @@
 
 | 모드 | 설정값 | 패턴 소스 | TP/SL |
 |------|--------|-----------|-------|
-| Static (기본) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
-| Dynamic Universal | `pattern_source: dynamic` + `tp_sl_mode: universal` | results/dynamic_patterns.json | Universal TP/SL |
-| Dynamic Per-Pattern | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | Per-pattern 최적화 (v1.28.5) |
+| Static (fallback) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
+| **Dynamic PP (현재)** | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | **PP grid search** |
 
 **Scanner CLI 사용법**:
 ```bash
 cd bingx_rl_trading_bot
-python scripts/scanner/pattern_scanner.py                           # 기본 (270d 데이터)
-python scripts/scanner/pattern_scanner.py --data data/custom.csv    # 커스텀 데이터
-python scripts/scanner/pattern_scanner.py --edge-threshold 5 --mc-threshold 0.01
+python scripts/scanner/pattern_scanner.py                           # 기본 (PP 모드, 270d)
+python scripts/scanner/pattern_scanner.py --edge-threshold 10 --correction bh --wf-folds 3
 ```
 
-**Dynamic 모드 활성화**: `config/pattern_5m_config.yaml`에서 `pattern_source: dynamic` 설정.
-봇 시작 시 `results/dynamic_patterns.json`에서 패턴과 Universal TP/SL을 로드.
+**현재 적용**: Scanner 출력 257패턴 → Edge>=21.8pp + WR>=60% 후처리 필터 → 50패턴.
+257패턴 원본: `results/dynamic_patterns_257_backup.json`
 
 ---
 
@@ -315,7 +308,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.28.8** | 02-16 | **Logging system improvement**: lock.py 로거명 수정 (`__name__`→`'pattern_5m'`), 17곳 generic Exception `logger.error`→`logger.exception` (traceback 추가), 5곳 critical path DEBUG 로깅 추가 (signals/position_open/position_monitor). 9개 파일 수정, 비즈니스 로직 변경 없음. ← **현재** |
+| **v1.28.9** | 02-16 | **Edge>=21.8pp + WR>=60% quality filter**: 257→50 patterns (15L+35S). Edge sensitivity 9시나리오 분석 후 edge+WR 이중 필터. WR min 63.4%, mean 85.5%, edge mean 25.0pp, trades 1,580. EXPECTED_AVG_WIN 5.96, EXPECTED_AVG_LOSS 9.60. 257패턴 backup: `dynamic_patterns_257_backup.json` ← **현재** |
+| v1.28.8 | 02-16 | **Logging system improvement**: lock.py 로거명 수정 (`__name__`→`'pattern_5m'`), 17곳 generic Exception `logger.error`→`logger.exception` (traceback 추가), 5곳 critical path DEBUG 로깅 추가 (signals/position_open/position_monitor). 9개 파일 수정, 비즈니스 로직 변경 없음. |
 | v1.28.7 | 02-16 | **Production code review + dual-direction bug fix**: (1) bot.py early exit return False on failure (2) save_metrics atomic write (3) signals.py if/elif fix — 5/6 dual-direction patterns were trading wrong direction (4) scanner dedup logic (5) dead import cleanup (6) config mutable return fix. 256패턴 (83L+173S) after dedup. |
 | v1.28.6 | 02-16 | PP discovery scanner: Scanner에 per_pattern grid search 모드 추가 (default). PP +487% avg OOS vs Uni +18%. Multi-seed MC, MAX_BASELINE_WR 70% 필터. 294패턴→256 dedup. Rollback: `--discovery-method universal` |
 | v1.28.5 | 02-15 | Dynamic per-pattern TP/SL optimization: Universal TP 2.0/SL 3.0 → Per-pattern 최적화 (TP median 2.0%, SL median 4.0%). WF 3-fold OOS: Per-pattern +1,209% vs Universal +1,166% (+3.7%). 47패턴 (19L+28S), max_daily_loss 10→13% (SL max 4.0%×3x=12.1%). Rollback: tp_sl_mode "per_pattern"→"universal" |

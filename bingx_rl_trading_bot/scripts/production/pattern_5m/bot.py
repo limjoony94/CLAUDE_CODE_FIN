@@ -41,6 +41,8 @@ from .constants import (
     TP_SL_VERIFY_INTERVAL_SECONDS,
     LOG_STATUS_INTERVAL_SECONDS,
     METRICS_SAVE_INTERVAL_SECONDS,
+    VALIDATED_LONG_PATTERNS,
+    VALIDATED_SHORT_PATTERNS,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .config import load_config, validate_config, load_dynamic_patterns
@@ -58,6 +60,7 @@ from .exchange import (
     fetch_ohlcv,
     fetch_ticker_cached,
     health_check,
+    set_shutdown_checker,
 )
 from .indicators import calculate_indicators
 from .signals import check_entry_signal, check_cooldown, check_daily_loss_limit, check_consecutive_loss_limit, check_early_exit_signal
@@ -186,6 +189,9 @@ def run_bot(config_file: str = CONFIG_FILE) -> None:
     logger.info(f"{'='*60}")
     logger.info(f"Symbol: {config['symbol']} | TF: {config['timeframe']} | Lev: {config['leverage']}x")
 
+    # Log active pattern summary for quick reference
+    _log_pattern_summary(config)
+
     # Acquire lock
     lock_acquired = acquire_lock()
     if not lock_acquired:
@@ -195,6 +201,9 @@ def run_bot(config_file: str = CONFIG_FILE) -> None:
     # Setup signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
+
+    # Register shutdown checker so API retry/circuit breaker sleeps are interruptible
+    set_shutdown_checker(lambda: shutdown_requested)
 
     try:
         _run_bot_main(config, state_path, metrics_path)
@@ -696,6 +705,32 @@ def _run_health_check(
             logger.debug("✅ Health check passed")
     except Exception as e:
         logger.warning(f"Health check failed: {e}")
+
+
+def _log_pattern_summary(config: Dict[str, Any]) -> None:
+    """Log active pattern count and TP/SL range at startup."""
+    long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
+    short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
+
+    source = 'dynamic' if config.get('_dynamic_tpsl_per_pattern') or config.get('_dynamic_tpsl_universal') else 'static'
+    tp_sl_mode = 'per-pattern' if config.get('_dynamic_tpsl_per_pattern') else 'universal' if config.get('_dynamic_tpsl_universal') else 'static'
+
+    logger.info(
+        f"Patterns: {len(long_patterns)}L + {len(short_patterns)}S = "
+        f"{len(long_patterns) + len(short_patterns)} ({source}, {tp_sl_mode})"
+    )
+
+    if config.get('_dynamic_tpsl_per_pattern'):
+        tpsl = config.get('_dynamic_patterns_tpsl', {})
+        if tpsl:
+            tps = [v[0] for v in tpsl.values()]
+            sls = [v[1] for v in tpsl.values()]
+            logger.info(
+                f"TP range: {min(tps):.1f}%~{max(tps):.1f}% | "
+                f"SL range: {min(sls):.1f}%~{max(sls):.1f}%"
+            )
+    elif config.get('_dynamic_tpsl_universal'):
+        logger.info(f"Universal TP: {config['_dynamic_tp']}% | SL: {config['_dynamic_sl']}%")
 
 
 # Entry point for direct execution

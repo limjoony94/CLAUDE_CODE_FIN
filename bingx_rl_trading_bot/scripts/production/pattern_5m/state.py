@@ -138,8 +138,8 @@ def save_state(
         except Exception as e:
             logger.warning(f"Failed to create .bak backup: {e}")
 
-    # 2. Create timestamped backup (legacy behavior)
-    if create_backup and os.path.exists(state_file):
+    # 2. Create timestamped backup only on trade close (avoid excessive I/O)
+    if create_backup and is_trade_close and os.path.exists(state_file):
         _create_backup(state_file)
 
     # 3. Atomic write: write to temp file, then rename

@@ -4,6 +4,7 @@ Dataclasses for type-safe data structures.
 """
 
 import time
+from collections import deque
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Optional, Dict, List, Any, TypedDict
@@ -153,9 +154,9 @@ class PerformanceMetrics:
     actual_avg_loss: float = 0.0
     actual_edge: float = 0.0
 
-    # Recent trades for rolling stats
-    recent_wins: List[float] = field(default_factory=list)
-    recent_losses: List[float] = field(default_factory=list)
+    # Recent trades for rolling stats (deque for O(1) popleft)
+    recent_wins: deque = field(default_factory=lambda: deque(maxlen=METRICS_WINDOW_SIZE))
+    recent_losses: deque = field(default_factory=lambda: deque(maxlen=METRICS_WINDOW_SIZE))
 
     # Timing stats
     avg_api_latency_ms: float = 0.0
@@ -173,13 +174,9 @@ class PerformanceMetrics:
         if pnl_pct > 0:
             self.winning_trades += 1
             self.recent_wins.append(pnl_pct)
-            if len(self.recent_wins) > METRICS_WINDOW_SIZE:
-                self.recent_wins.pop(0)
         else:
             self.losing_trades += 1
             self.recent_losses.append(abs(pnl_pct))
-            if len(self.recent_losses) > METRICS_WINDOW_SIZE:
-                self.recent_losses.pop(0)
 
         self._recalculate()
 
@@ -247,8 +244,8 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
             'api_call_count': self.api_call_count,
             'session_start': self.session_start,
             'last_updated': self.last_updated,
-            'recent_wins': self.recent_wins[-20:],  # Keep last 20
-            'recent_losses': self.recent_losses[-20:],
+            'recent_wins': list(self.recent_wins),
+            'recent_losses': list(self.recent_losses),
         }
 
     @classmethod
@@ -265,8 +262,8 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
         metrics.actual_edge = data.get('actual_edge', 0.0)
         metrics.avg_api_latency_ms = data.get('avg_api_latency_ms', 0.0)
         metrics.api_call_count = data.get('api_call_count', 0)
-        metrics.recent_wins = data.get('recent_wins', [])
-        metrics.recent_losses = data.get('recent_losses', [])
+        metrics.recent_wins = deque(data.get('recent_wins', []), maxlen=METRICS_WINDOW_SIZE)
+        metrics.recent_losses = deque(data.get('recent_losses', []), maxlen=METRICS_WINDOW_SIZE)
         metrics.session_start = data.get('session_start', '')
         metrics.last_updated = data.get('last_updated', '')
         return metrics

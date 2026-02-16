@@ -135,6 +135,15 @@ def get_api_config(config: Dict[str, Any]) -> Dict[str, Any]:
     return _deep_copy_config(config.get('api', DEFAULT_CONFIG['api']))
 
 
+def _log_fallback_warning(reason: str) -> None:
+    """Log a prominent warning when falling back to static patterns."""
+    logger.error(f"{'!'*60}")
+    logger.error(f"  DYNAMIC PATTERN LOAD FAILED — FALLING BACK TO STATIC")
+    logger.error(f"  Reason: {reason}")
+    logger.error(f"  The bot will trade with STATIC patterns from constants.py")
+    logger.error(f"{'!'*60}")
+
+
 def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
     """
     Load dynamic patterns from JSON if pattern_source is 'dynamic'.
@@ -157,7 +166,7 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
         if not os.path.exists(json_path):
-            logger.error(f"Dynamic patterns file not found: {json_path} — falling back to static")
+            _log_fallback_warning(f"File not found: {json_path}")
             return config
 
         with open(json_path, 'r', encoding='utf-8') as f:
@@ -166,12 +175,12 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
         # Validate required fields
         patterns = data.get('patterns')
         if not patterns or 'long' not in patterns or 'short' not in patterns:
-            logger.error("Dynamic patterns JSON missing 'patterns.long/short' — falling back to static")
+            _log_fallback_warning("JSON missing 'patterns.long/short'")
             return config
 
         tp_sl_mode = data.get('tp_sl_mode')
         if tp_sl_mode not in ('universal', 'per_pattern'):
-            logger.error(f"Unsupported tp_sl_mode '{tp_sl_mode}' — falling back to static")
+            _log_fallback_warning(f"Unsupported tp_sl_mode '{tp_sl_mode}'")
             return config
 
         # Staleness check (warn if > 30 days old)
@@ -199,7 +208,7 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             uni_tp = data.get('universal_tp')
             uni_sl = data.get('universal_sl')
             if not uni_tp or not uni_sl or uni_tp <= 0 or uni_sl <= 0:
-                logger.error("Invalid universal_tp/universal_sl in JSON — falling back to static")
+                _log_fallback_warning("Invalid universal_tp/universal_sl in JSON")
                 return config
             config['_dynamic_tpsl_universal'] = True
             config['_dynamic_tp'] = uni_tp
@@ -208,8 +217,37 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
         elif tp_sl_mode == 'per_pattern':
             patterns_tpsl = data.get('patterns_tpsl', {})
             if not patterns_tpsl:
-                logger.error("per_pattern mode but no patterns_tpsl — falling back to static")
+                _log_fallback_warning("per_pattern mode but no patterns_tpsl")
                 return config
+
+            # Validate per-pattern TP/SL values
+            # patterns_tpsl uses plain pattern names (e.g. "BD-BD-BU"), not direction-suffixed
+            all_pattern_keys = set()
+            for p in long_patterns:
+                all_pattern_keys.add(p)
+            for p in short_patterns:
+                all_pattern_keys.add(p)
+
+            invalid = []
+            for key, vals in patterns_tpsl.items():
+                if not isinstance(vals, (list, tuple)) or len(vals) < 2:
+                    invalid.append(f"{key}: invalid format {vals}")
+                elif vals[0] <= 0 or vals[1] <= 0:
+                    invalid.append(f"{key}: TP={vals[0]} SL={vals[1]} (must be > 0)")
+                elif vals[0] > 10 or vals[1] > 10:
+                    invalid.append(f"{key}: TP={vals[0]}% SL={vals[1]}% (> 10% is suspicious)")
+
+            if invalid:
+                for msg in invalid[:5]:
+                    logger.warning(f"  TP/SL validation: {msg}")
+                if len(invalid) > 5:
+                    logger.warning(f"  ... and {len(invalid) - 5} more")
+
+            # Check for missing tpsl entries
+            missing = all_pattern_keys - set(patterns_tpsl.keys())
+            if missing:
+                logger.warning(f"  {len(missing)} patterns have no TP/SL entry (will use config defaults): {list(missing)[:5]}")
+
             config['_dynamic_tpsl_per_pattern'] = True
             config['_dynamic_patterns_tpsl'] = patterns_tpsl
             logger.info(f"Per-pattern TP/SL loaded: {len(patterns_tpsl)} patterns")
@@ -222,8 +260,8 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
         return config
 
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse dynamic patterns JSON: {e} — falling back to static")
+        _log_fallback_warning(f"JSON parse error: {e}")
         return config
     except Exception as e:
-        logger.error(f"Failed to load dynamic patterns: {e} — falling back to static")
+        _log_fallback_warning(f"Unexpected error: {e}")
         return config

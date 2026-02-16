@@ -134,20 +134,27 @@ def calculate_indicators(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFra
     ]
     df['pattern_3'] = patterns
 
-    # RSI (14-period) — used by context filters
-    delta = df['close'].diff()
-    gain = delta.where(delta > 0, 0).rolling(14).mean()
-    loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
-    rs = gain / (loss + 1e-10)
-    df['rsi'] = 100 - (100 / (1 + rs))
+    # RSI and ATR — only compute when context filters or vol_adaptive are enabled
+    strategy = config.get('strategy', {})
+    has_context_filters = bool(strategy.get('context_filters', {}))
+    has_vol_adaptive = strategy.get('vol_adaptive', {}).get('enabled', False)
 
-    # ATR and ATR% (14-period) — used by context filters and volatility multiplier
-    high_low = df['high'] - df['low']
-    high_close = (df['high'] - df['close'].shift(1)).abs()
-    low_close = (df['low'] - df['close'].shift(1)).abs()
-    tr = pd.concat([high_low, high_close, low_close], axis=1).max(axis=1)
-    df['atr'] = tr.rolling(14).mean()
-    df['atr_pct'] = df['atr'] / df['close'] * 100
+    if has_context_filters or has_vol_adaptive:
+        # RSI (14-period)
+        delta = df['close'].diff()
+        gain = delta.where(delta > 0, 0).rolling(14).mean()
+        loss = (-delta.where(delta < 0, 0)).rolling(14).mean()
+        rs = gain / (loss + 1e-10)
+        df['rsi'] = 100 - (100 / (1 + rs))
+
+        # ATR and ATR% (14-period)
+        high_low = (df['high'] - df['low']).values
+        prev_close = df['close'].shift(1).values
+        high_close = np.abs(df['high'].values - prev_close)
+        low_close = np.abs(df['low'].values - prev_close)
+        tr = pd.Series(np.maximum(high_low, np.maximum(high_close, low_close)), index=df.index)
+        df['atr'] = tr.rolling(14).mean()
+        df['atr_pct'] = df['atr'] / df['close'] * 100
 
     return df
 

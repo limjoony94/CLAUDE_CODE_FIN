@@ -34,11 +34,21 @@ class JSONFormatter(logging.Formatter):
 
 
 class FlushingFileHandler(logging.FileHandler):
-    """FileHandler that flushes after every log entry for real-time logging."""
+    """FileHandler that flushes WARNING+ immediately, buffers INFO/DEBUG every 5s."""
+
+    def __init__(self, *args, flush_interval: float = 5.0, **kwargs):
+        super().__init__(*args, **kwargs)
+        import time as _time
+        self._last_flush = _time.time()
+        self._flush_interval = flush_interval
+        self._time = _time
 
     def emit(self, record: logging.LogRecord) -> None:
         super().emit(record)
-        self.flush()
+        now = self._time.time()
+        if record.levelno >= logging.WARNING or (now - self._last_flush) >= self._flush_interval:
+            self.flush()
+            self._last_flush = now
 
 
 class SignalConditionFilter(logging.Filter):

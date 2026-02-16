@@ -47,7 +47,7 @@ def get_position_size(
         metrics: Optional PerformanceMetrics
 
     Returns:
-        Tuple of (quantity, available_balance) or (None, None) on error
+        Tuple of (quantity, available_balance, price) or (None, None, None) on error
     """
     try:
         balance = fetch_balance_cached(exchange, cache, force_refresh=True,
@@ -65,16 +65,16 @@ def get_position_size(
         quantity = (position_value * config['leverage']) / price
         quantity = round(quantity, QUANTITY_ROUND_DECIMALS)
 
-        return quantity, available
+        return quantity, available, price
     except ccxt.NetworkError as e:
         logger.error(f"Failed to calculate position size (network error): {e}")
-        return None, None
+        return None, None, None
     except ccxt.ExchangeError as e:
         logger.error(f"Failed to calculate position size (exchange error): {e}")
-        return None, None
+        return None, None, None
     except Exception as e:
         logger.exception(f"Failed to calculate position size: {e}")
-        return None, None
+        return None, None, None
 
 
 def open_position(
@@ -118,16 +118,11 @@ def open_position(
         # Set leverage
         _set_leverage(exchange, symbol, exchange_leverage)
 
-        # Calculate position size
-        quantity, available = get_position_size(exchange, config, cache, circuit_breaker, metrics)
+        # Calculate position size (also returns current price to avoid double ticker fetch)
+        quantity, available, estimated_price = get_position_size(exchange, config, cache, circuit_breaker, metrics)
         if quantity is None or quantity <= 0:
             logger.warning(f"Invalid position size (qty={quantity}, balance=${available}), skipping")
             return False
-
-        # Get estimated price
-        ticker = fetch_ticker_cached(exchange, symbol, cache, force_refresh=True,
-                                     circuit_breaker=circuit_breaker, metrics=metrics)
-        estimated_price = ticker['last']
 
         # Log balance and position sizing details
         position_value = quantity * estimated_price / leverage
@@ -362,7 +357,7 @@ def calculate_tp_sl(
             logger.warning(f"Pattern {pattern} not in dynamic per-pattern dict, using defaults")
 
         tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
-        sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT
+        sl_pct_adjusted = max(0.1, (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT)
         tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
@@ -374,7 +369,7 @@ def calculate_tp_sl(
         logger.debug(f"Using dynamic universal TP/SL: TP={base_tp_pct}%, SL={base_sl_pct}%")
 
         tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
-        sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT
+        sl_pct_adjusted = max(0.1, (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT)
         tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted

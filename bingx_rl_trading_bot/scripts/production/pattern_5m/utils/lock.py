@@ -250,19 +250,18 @@ def acquire_lock() -> bool:
 
     os.makedirs(os.path.dirname(LOCK_FILE), exist_ok=True)
 
-    # Check for duplicate instances first
-    other_instances = check_duplicate_instances()
-    if other_instances:
-        logger.error("🔴 DUPLICATE INSTANCE DETECTED!")
-        logger.error(f"Other bot PIDs: {other_instances}")
-        return False
-
     _lock_instance = get_file_lock()
     if _lock_instance.acquire(LOCK_FILE):
         logger.info(f"🔒 Lock acquired (PID: {os.getpid()})")
         return True
 
-    logger.error("🔴 LOCK ACQUISITION FAILED!")
+    # Lock failed — run duplicate check as diagnostic (wmic is slow, only run on failure)
+    other_instances = check_duplicate_instances()
+    if other_instances:
+        logger.error("🔴 DUPLICATE INSTANCE DETECTED!")
+        logger.error(f"Other bot PIDs: {other_instances}")
+    else:
+        logger.error("🔴 LOCK ACQUISITION FAILED (no duplicate found — stale lock?)")
     return False
 
 

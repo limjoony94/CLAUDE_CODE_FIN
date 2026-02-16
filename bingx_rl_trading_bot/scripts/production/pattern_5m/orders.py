@@ -251,7 +251,6 @@ def adjust_tpsl_to_config(
         position['sl_price'] = expected_sl_price
 
         # Place new orders
-        direction = position['direction']
         quantity = position['quantity']
         close_side = 'sell' if direction == 'LONG' else 'buy'
 
@@ -274,14 +273,16 @@ def _cancel_existing_tpsl_orders(
     exchange: ccxt.bingx,
     position: Dict,
     symbol: str,
+    open_orders: Optional[List] = None,
 ) -> None:
     """Cancel existing TP/SL orders before placing new ones."""
     tp_order_id = position.get('tp_order_id')
     sl_order_id = position.get('sl_order_id')
 
     try:
-        open_orders = exchange.fetch_open_orders(symbol)
-        open_order_ids = [o.get('id') for o in open_orders]
+        if open_orders is None:
+            open_orders = exchange.fetch_open_orders(symbol)
+        open_order_ids = {o.get('id') for o in open_orders}
 
         if tp_order_id and tp_order_id in open_order_ids:
             exchange.cancel_order(tp_order_id, symbol)
@@ -328,10 +329,14 @@ def verify_tp_sl_orders(
         open_order_ids = {o.get('id'): o for o in open_orders}
         state_changed = False
 
-        # Verify scale-out orders
+        # Verify TP orders (scale-out or single)
         if scale_out_enabled and scale_out_stages:
             state_changed = _verify_scale_out_orders(
                 exchange, position, symbol, scale_out_stages, open_order_ids
+            ) or state_changed
+        else:
+            state_changed = _verify_single_tp_order(
+                exchange, position, symbol, open_order_ids
             ) or state_changed
 
         # Verify SL order
@@ -348,6 +353,59 @@ def verify_tp_sl_orders(
         logger.warning(f"Could not verify TP/SL orders (exchange): {e}")
     except Exception as e:
         logger.warning(f"Could not verify TP/SL orders: {e}")
+
+
+def _verify_single_tp_order(
+    exchange: ccxt.bingx,
+    position: Dict,
+    symbol: str,
+    open_order_ids: Dict,
+) -> bool:
+    """Verify and re-place missing single TP order (non-scale-out mode).
+
+    Handles two cases:
+    - tp_order_id exists but order is missing from exchange
+    - tp_order_id was never set (initial placement failed)
+    """
+    tp_order_id = position.get('tp_order_id')
+    tp_price = position.get('tp_price')
+    state_changed = False
+
+    if not tp_price or tp_price <= 0:
+        logger.warning("Cannot verify TP order: tp_price is missing or invalid")
+        return False
+
+    needs_tp = False
+    if not tp_order_id:
+        logger.warning("TP order was never placed — placing now")
+        needs_tp = True
+    elif tp_order_id not in open_order_ids:
+        logger.warning("TP order missing from exchange, re-placing...")
+        needs_tp = True
+
+    if needs_tp:
+        try:
+            close_side = 'sell' if position['direction'] == 'LONG' else 'buy'
+            tp_order = exchange.create_order(
+                symbol=symbol,
+                type='TAKE_PROFIT_MARKET',
+                side=close_side,
+                amount=position.get('remaining_quantity', position['quantity']),
+                params={
+                    'positionSide': 'BOTH',
+                    'stopPrice': position['tp_price'],
+                    'closePosition': True,
+                }
+            )
+            position['tp_order_id'] = tp_order.get('id')
+            logger.info(f"TP order {'placed' if not tp_order_id else 're-placed'}: {tp_order.get('id')}")
+            state_changed = True
+        except ccxt.ExchangeError as e:
+            logger.error(f"Failed to place TP order (exchange error): {e}")
+        except Exception as e:
+            logger.exception(f"Failed to place TP order: {e}")
+
+    return state_changed
 
 
 def _verify_scale_out_orders(
@@ -400,12 +458,29 @@ def _verify_sl_order(
     symbol: str,
     open_order_ids: Dict,
 ) -> bool:
-    """Verify and re-place missing SL order."""
+    """Verify and re-place missing SL order.
+
+    Handles two cases:
+    - sl_order_id exists but order is missing from exchange (cancelled/expired)
+    - sl_order_id was never set (initial placement failed) — CRITICAL safety gap
+    """
     sl_order_id = position.get('sl_order_id')
+    sl_price = position.get('sl_price')
     state_changed = False
 
-    if sl_order_id and sl_order_id not in open_order_ids:
-        logger.warning("SL order missing, re-placing...")
+    if not sl_price or sl_price <= 0:
+        logger.error("Cannot verify SL order: sl_price is missing or invalid — position UNPROTECTED")
+        return False
+
+    needs_sl = False
+    if not sl_order_id:
+        logger.warning("SL order was never placed — placing now for position protection")
+        needs_sl = True
+    elif sl_order_id not in open_order_ids:
+        logger.warning("SL order missing from exchange, re-placing...")
+        needs_sl = True
+
+    if needs_sl:
         try:
             close_side = 'sell' if position['direction'] == 'LONG' else 'buy'
             sl_order = exchange.create_order(
@@ -420,12 +495,12 @@ def _verify_sl_order(
                 }
             )
             position['sl_order_id'] = sl_order.get('id')
-            logger.info(f"SL order re-placed: {sl_order.get('id')}")
+            logger.info(f"SL order {'placed' if not sl_order_id else 're-placed'}: {sl_order.get('id')}")
             state_changed = True
         except ccxt.ExchangeError as e:
-            logger.error(f"Failed to re-place SL order (exchange error): {e}")
+            logger.error(f"Failed to place SL order (exchange error): {e}")
         except Exception as e:
-            logger.exception(f"Failed to re-place SL order: {e}")
+            logger.exception(f"Failed to place SL order: {e}")
 
     return state_changed
 
@@ -462,7 +537,7 @@ def cancel_remaining_orders(
 
     try:
         open_orders = exchange.fetch_open_orders(symbol)
-        open_order_ids = [o.get('id') for o in open_orders]
+        open_order_ids = {o.get('id') for o in open_orders}
 
         # Cancel scale-out TP orders
         for so_tp_id in scale_out_tp_ids:

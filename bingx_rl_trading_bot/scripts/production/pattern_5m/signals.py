@@ -350,8 +350,8 @@ def check_entry_signal(
     signal = None
     reason = None
 
-    long_patterns = config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS)
-    short_patterns = config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS)
+    long_patterns = set(config.get('strategy', {}).get('long_patterns', VALIDATED_LONG_PATTERNS))
+    short_patterns = set(config.get('strategy', {}).get('short_patterns', VALIDATED_SHORT_PATTERNS))
 
     # Check LONG first; elif prevents SHORT overwriting for dual-direction patterns
     if pattern in long_patterns:
@@ -451,11 +451,10 @@ def _save_confidence_to_csv(
     try:
         csv_path = CONFIDENCE_LOG_FILE
 
-        # Ensure directory exists
-        os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-
-        # Check if file exists (to write header)
+        # Check if file exists (to write header); create dir on first write only
         file_exists = os.path.exists(csv_path)
+        if not file_exists:
+            os.makedirs(os.path.dirname(csv_path), exist_ok=True)
 
         # Format timestamp
         if isinstance(timestamp, (int, float)):

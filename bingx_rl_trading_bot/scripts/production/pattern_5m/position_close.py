@@ -406,16 +406,21 @@ def close_position_market(
     except Exception as e:
         logger.exception(f"Failed to close position: {e}")
 
-    # TP/SL was cancelled but market close failed — re-place SL to protect position
+    # TP/SL was cancelled but market close failed — re-place both to protect position
     try:
-        from .orders import _place_sl_order
+        from .orders import _place_sl_order, _place_single_tp_order
+        close_side = 'sell' if direction == 'LONG' else 'buy'
         sl_price = position.get('sl_price')
+        tp_price = position.get('tp_price')
         if sl_price and quantity > 0:
-            close_side = 'sell' if direction == 'LONG' else 'buy'
             logger.warning(f"⚠️ Re-placing SL @ ${sl_price} after failed market close")
             _place_sl_order(exchange, position, symbol, close_side, quantity, sl_price)
-    except Exception as sl_e:
-        logger.error(f"Failed to re-place SL after market close failure: {sl_e}")
+        if tp_price and quantity > 0:
+            logger.warning(f"⚠️ Re-placing TP @ ${tp_price} after failed market close")
+            _place_single_tp_order(exchange, position, symbol, close_side, quantity, tp_price)
+        save_state(state)
+    except Exception as restore_e:
+        logger.error(f"Failed to re-place TP/SL after market close failure: {restore_e}")
 
     return False
 
@@ -483,8 +488,25 @@ def recover_from_crash(
                                       'CRASH_RECOVERY', cache, metrics)
             return True
 
-        # Case 3: Both have positions - verify they match
+        # Case 3: Both exist — check direction mismatch first
         if exchange_position and local_position:
+            ex_side = exchange_position.get('side', '')  # 'long' or 'short'
+            local_dir = local_position.get('direction', '')  # 'LONG' or 'SHORT'
+            expected_side = 'long' if local_dir == 'LONG' else 'short'
+
+            if ex_side != expected_side:
+                actual_dir = 'LONG' if ex_side == 'long' else 'SHORT'
+                logger.error(
+                    f"🔧 Recovery: Direction mismatch (local={local_dir}, exchange={actual_dir}). "
+                    f"Closing local state, recovering exchange position."
+                )
+                actual_exit = get_actual_exit_price(exchange, state, config)
+                exit_price = actual_exit['price'] if actual_exit else local_position['entry_price']
+                record_closed_position(exchange, state, config, exit_price,
+                                      'DIRECTION_MISMATCH', cache, metrics)
+                recover_position_to_state(state, config, exchange_position, actual_dir, exchange, cache)
+                return True
+
             ex_qty = float(exchange_position.get('contracts', 0))
             local_qty = local_position.get('quantity', 0)
 
@@ -536,24 +558,36 @@ def _update_confidence_log_outcome(
 
         outcome_value = f"{outcome}:{pnl_pct:+.2f}%"
 
-        # Read the file and update the last row with empty outcome
-        with open(csv_path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
+        # Read only the tail of the file to find the last empty-outcome row
+        file_size = os.path.getsize(csv_path)
+        read_size = min(4096, file_size)  # Last 4KB is sufficient
 
-        if len(lines) < 2:
-            return
+        with open(csv_path, 'r+', encoding='utf-8') as f:
+            # Seek to near end of file
+            if file_size > read_size:
+                f.seek(file_size - read_size)
+                # Skip partial first line
+                f.readline()
+                tail_start = f.tell()
+            else:
+                tail_start = 0
+                f.seek(0)
 
-        # Search from end for row with trailing comma (empty outcome field)
-        for i in range(len(lines) - 1, 0, -1):
-            line = lines[i].rstrip('\n').rstrip('\r')
-            if line.endswith(','):
-                lines[i] = line + outcome_value + '\n'
-                break
-        else:
-            return  # No empty-outcome row found
+            tail_lines = f.readlines()
 
-        with open(csv_path, 'w', encoding='utf-8', newline='') as f:
-            f.writelines(lines)
+            if not tail_lines:
+                return
+
+            # Search from end for row with trailing comma
+            for i in range(len(tail_lines) - 1, -1, -1):
+                line = tail_lines[i].rstrip('\n').rstrip('\r')
+                if line.endswith(','):
+                    tail_lines[i] = line + outcome_value + '\n'
+                    # Rewrite only the tail portion
+                    f.seek(tail_start)
+                    f.writelines(tail_lines)
+                    f.truncate()
+                    return
 
     except Exception as e:
         logger.warning(f"Failed to update confidence log outcome: {e}")

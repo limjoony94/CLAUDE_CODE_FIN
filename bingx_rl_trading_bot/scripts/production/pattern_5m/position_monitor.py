@@ -101,6 +101,25 @@ def sync_position_with_exchange(
                 recover_position_to_state(state, config, exchange_short, 'SHORT', exchange, cache)
                 return True
 
+        # Direction mismatch: state says one direction but exchange has the other
+        if state_position:
+            state_dir = state_position.get('direction', '')
+            expected_exchange = exchange_long if state_dir == 'LONG' else exchange_short
+            opposite_exchange = exchange_short if state_dir == 'LONG' else exchange_long
+            if not expected_exchange and opposite_exchange:
+                opposite_dir = 'SHORT' if state_dir == 'LONG' else 'LONG'
+                logger.error(
+                    f"Direction mismatch: state={state_dir} but exchange has {opposite_dir}. "
+                    f"Closing state position, recovering exchange position."
+                )
+                actual_exit = get_actual_exit_price(exchange, state, config)
+                exit_price = actual_exit['price'] if actual_exit else state_position['entry_price']
+                exit_reason = 'DIRECTION_MISMATCH'
+                record_closed_position(exchange, state, config, exit_price,
+                                      exit_reason, cache, metrics)
+                recover_position_to_state(state, config, opposite_exchange, opposite_dir, exchange, cache)
+                return True
+
         logger.info("Position sync completed - state matches exchange")
         return False
 
@@ -219,12 +238,32 @@ def check_position_status(
         positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
                                            circuit_breaker=circuit_breaker, metrics=metrics)
         position_side = 'long' if position['direction'] == 'LONG' else 'short'
+        opposite_side = 'short' if position_side == 'long' else 'long'
         current_pos = None
+        opposite_pos = None
 
         for pos in positions:
-            if pos.get('side') == position_side and float(pos.get('contracts', 0)) > 0:
-                current_pos = pos
-                break
+            contracts = float(pos.get('contracts', 0))
+            if contracts > 0:
+                if pos.get('side') == position_side:
+                    current_pos = pos
+                elif pos.get('side') == opposite_side:
+                    opposite_pos = pos
+
+        # Direction mismatch: expected side empty but opposite side has position
+        if current_pos is None and opposite_pos is not None:
+            from .position_close import recover_position_to_state
+            actual_dir = opposite_side.upper()
+            logger.error(
+                f"Direction mismatch: state={position['direction']} but "
+                f"exchange has {actual_dir} position. "
+                f"Closing state position and recovering exchange position immediately."
+            )
+            # Close the stale local state first
+            _handle_position_closed(exchange, state, config, position, cache, metrics)
+            # Immediately recover the actual exchange position
+            recover_position_to_state(state, config, opposite_pos, actual_dir, exchange, cache)
+            return True
 
         # Handle scale-out partial fills
         scale_out_enabled = position.get('scale_out_enabled', False)

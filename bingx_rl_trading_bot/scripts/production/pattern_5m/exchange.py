@@ -3,6 +3,7 @@ Pattern 5m Bot - Exchange Interface
 Exchange setup, API calls, and caching logic.
 """
 
+import os
 import time
 import logging
 import yaml
@@ -22,6 +23,29 @@ from .constants import (
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 
 logger = logging.getLogger('pattern_5m')
+
+# Shutdown-aware sleep: bot.py sets this callback via set_shutdown_checker()
+_shutdown_checker: Callable[[], bool] = lambda: False
+
+
+def set_shutdown_checker(checker: Callable[[], bool]) -> None:
+    """Register a callback that returns True when shutdown is requested.
+
+    Called by bot.py after setting up signal handlers so that API retry
+    and circuit breaker waits can be interrupted within ~1 second.
+    """
+    global _shutdown_checker
+    _shutdown_checker = checker
+
+
+def _interruptible_api_sleep(duration: float) -> None:
+    """Sleep in 1-second chunks, returning early if shutdown is requested."""
+    end_time = time.time() + duration
+    while time.time() < end_time:
+        if _shutdown_checker():
+            return
+        remaining = end_time - time.time()
+        time.sleep(min(1.0, max(0.0, remaining)))
 
 
 def create_exchange(api_keys_file: str = API_KEYS_FILE) -> ccxt.bingx:
@@ -188,7 +212,7 @@ def api_retry(
             if circuit_breaker and not circuit_breaker.can_execute():
                 wait_time = circuit_breaker.get_wait_time()
                 logger.warning(f"Circuit breaker OPEN, waiting {wait_time:.1f}s")
-                time.sleep(wait_time)
+                _interruptible_api_sleep(wait_time)
 
             last_exception = None
             start_time = time.time()
@@ -209,7 +233,7 @@ def api_retry(
                 except ccxt.RateLimitExceeded as e:
                     delay = min(base_delay * (2 ** attempt), max_delay)
                     logger.warning(f"Rate limit exceeded, retrying in {delay}s (attempt {attempt + 1}/{max_attempts})")
-                    time.sleep(delay)
+                    _interruptible_api_sleep(delay)
                     last_exception = e
                     if circuit_breaker:
                         circuit_breaker.record_failure()
@@ -217,7 +241,7 @@ def api_retry(
                 except ccxt.NetworkError as e:
                     delay = min(base_delay * (2 ** attempt), max_delay)
                     logger.warning(f"Network error, retrying in {delay}s (attempt {attempt + 1}/{max_attempts}): {e}")
-                    time.sleep(delay)
+                    _interruptible_api_sleep(delay)
                     last_exception = e
                     if circuit_breaker:
                         circuit_breaker.record_failure()
@@ -231,7 +255,7 @@ def api_retry(
                 except Exception as e:
                     delay = min(base_delay * (2 ** attempt), max_delay)
                     logger.warning(f"API error, retrying in {delay}s (attempt {attempt + 1}/{max_attempts}): {e}")
-                    time.sleep(delay)
+                    _interruptible_api_sleep(delay)
                     last_exception = e
                     if circuit_breaker:
                         circuit_breaker.record_failure()
@@ -245,6 +269,68 @@ def api_retry(
 # ============================================================
 # CACHED API CALLS
 # ============================================================
+
+def _api_call_with_retry(
+    func: Callable,
+    circuit_breaker: Optional[CircuitBreaker] = None,
+    metrics: Optional[PerformanceMetrics] = None,
+) -> Any:
+    """
+    Execute an API call with retry logic, circuit breaker, and metrics.
+
+    Avoids recreating a decorated function on every call.
+    """
+    if circuit_breaker and not circuit_breaker.can_execute():
+        wait_time = circuit_breaker.get_wait_time()
+        logger.warning(f"Circuit breaker OPEN, waiting {wait_time:.1f}s")
+        _interruptible_api_sleep(wait_time)
+
+    last_exception = None
+    start_time = time.time()
+
+    for attempt in range(API_MAX_ATTEMPTS):
+        try:
+            result = func()
+
+            if metrics:
+                latency_ms = (time.time() - start_time) * 1000
+                metrics.update_api_latency(latency_ms)
+            if circuit_breaker:
+                circuit_breaker.record_success()
+
+            return result
+
+        except ccxt.RateLimitExceeded as e:
+            delay = min(API_BASE_DELAY * (2 ** attempt), API_MAX_DELAY)
+            logger.warning(f"Rate limit exceeded, retrying in {delay}s (attempt {attempt + 1}/{API_MAX_ATTEMPTS})")
+            _interruptible_api_sleep(delay)
+            last_exception = e
+            if circuit_breaker:
+                circuit_breaker.record_failure()
+
+        except ccxt.NetworkError as e:
+            delay = min(API_BASE_DELAY * (2 ** attempt), API_MAX_DELAY)
+            logger.warning(f"Network error, retrying in {delay}s (attempt {attempt + 1}/{API_MAX_ATTEMPTS}): {e}")
+            _interruptible_api_sleep(delay)
+            last_exception = e
+            if circuit_breaker:
+                circuit_breaker.record_failure()
+
+        except ccxt.ExchangeError as e:
+            if circuit_breaker:
+                circuit_breaker.record_failure()
+            raise e
+
+        except Exception as e:
+            delay = min(API_BASE_DELAY * (2 ** attempt), API_MAX_DELAY)
+            logger.warning(f"API error, retrying in {delay}s (attempt {attempt + 1}/{API_MAX_ATTEMPTS}): {e}")
+            _interruptible_api_sleep(delay)
+            last_exception = e
+            if circuit_breaker:
+                circuit_breaker.record_failure()
+
+    raise last_exception
+
 
 def fetch_ticker_cached(
     exchange: ccxt.bingx,
@@ -274,11 +360,10 @@ def fetch_ticker_cached(
             logger.debug("Using cached ticker")
             return cached
 
-    @api_retry(circuit_breaker=circuit_breaker, metrics=metrics)
-    def _fetch() -> Dict[str, Any]:
-        return exchange.fetch_ticker(symbol)
-
-    ticker = _fetch()
+    ticker = _api_call_with_retry(
+        lambda: exchange.fetch_ticker(symbol),
+        circuit_breaker, metrics,
+    )
     cache.set_ticker(ticker)
     return ticker
 
@@ -309,11 +394,10 @@ def fetch_balance_cached(
             logger.debug("Using cached balance")
             return cached
 
-    @api_retry(circuit_breaker=circuit_breaker, metrics=metrics)
-    def _fetch() -> Dict[str, Any]:
-        return exchange.fetch_balance()
-
-    balance = _fetch()
+    balance = _api_call_with_retry(
+        lambda: exchange.fetch_balance(),
+        circuit_breaker, metrics,
+    )
     cache.set_balance(balance)
     return balance
 
@@ -346,11 +430,10 @@ def fetch_positions_cached(
             logger.debug("Using cached positions")
             return cached
 
-    @api_retry(circuit_breaker=circuit_breaker, metrics=metrics)
-    def _fetch() -> List[Dict[str, Any]]:
-        return exchange.fetch_positions([symbol])
-
-    positions = _fetch()
+    positions = _api_call_with_retry(
+        lambda: exchange.fetch_positions([symbol]),
+        circuit_breaker, metrics,
+    )
     cache.set_positions(positions)
     return positions
 
@@ -377,11 +460,10 @@ def fetch_ohlcv(
     Returns:
         List of OHLCV data (each item: [timestamp, open, high, low, close, volume])
     """
-    @api_retry(circuit_breaker=circuit_breaker, metrics=metrics)
-    def _fetch() -> List[List[Any]]:
-        return exchange.fetch_ohlcv(symbol, timeframe, limit=limit)
-
-    return _fetch()
+    return _api_call_with_retry(
+        lambda: exchange.fetch_ohlcv(symbol, timeframe, limit=limit),
+        circuit_breaker, metrics,
+    )
 
 
 # ============================================================
@@ -410,8 +492,6 @@ def health_check(
     Returns:
         Health status dictionary
     """
-    import os
-
     health = {
         'timestamp': time.strftime('%Y-%m-%dT%H:%M:%S'),
         'status': 'healthy',

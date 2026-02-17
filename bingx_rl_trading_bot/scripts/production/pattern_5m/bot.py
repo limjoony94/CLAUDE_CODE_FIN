@@ -314,9 +314,11 @@ def _run_bot_main(
             else:
                 # === MAINTENANCE WINDOW ===
                 if has_position:
-                    check_position_status(
+                    position_closed = check_position_status(
                         exchange, state, config, cache, circuit_breaker, metrics
                     )
+                    if position_closed:
+                        has_position = bool(state.get('position'))
 
                 # Position sync (clock-aligned, every 5 min)
                 last_sync_time = _maybe_sync_position(

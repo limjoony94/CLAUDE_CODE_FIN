@@ -179,6 +179,16 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             return config
 
         tp_sl_mode = data.get('tp_sl_mode')
+
+        # Auto-infer tp_sl_mode from JSON structure when field is missing
+        if not tp_sl_mode:
+            if data.get('patterns_tpsl'):
+                tp_sl_mode = 'per_pattern'
+                logger.warning(f"tp_sl_mode missing — auto-inferred 'per_pattern' from patterns_tpsl")
+            elif data.get('universal_tp') and data.get('universal_sl'):
+                tp_sl_mode = 'universal'
+                logger.warning(f"tp_sl_mode missing — auto-inferred 'universal' from universal_tp/sl")
+
         if tp_sl_mode not in ('universal', 'per_pattern'):
             _log_fallback_warning(f"Unsupported tp_sl_mode '{tp_sl_mode}'")
             return config

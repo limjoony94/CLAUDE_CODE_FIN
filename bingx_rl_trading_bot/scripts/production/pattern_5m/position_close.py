@@ -7,7 +7,7 @@ import logging
 import os
 import time
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Tuple
 
 import ccxt
 
@@ -206,12 +206,29 @@ def recover_position_to_state(
     quantity = float(exchange_pos.get('contracts', 0))
     dir_mult = 1 if direction == 'LONG' else -1
 
-    # Use shared calculate_tp_sl (supports per-pattern TP/SL via needs_tpsl)
-    tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
-        entry_price, dir_mult, strategy, vol_mult=1.0, config=config
+    # Try to read TP/SL from existing exchange orders (preserves per-pattern values)
+    tp_from_exchange, sl_from_exchange = _read_tpsl_from_exchange_orders(
+        exchange, config.get('symbol', 'BTC-USDT'), direction
     )
 
-    logger.info(f"Recovered {direction} position: entry=${entry_price:.1f}")
+    if tp_from_exchange and sl_from_exchange:
+        tp_price = tp_from_exchange
+        sl_price = sl_from_exchange
+        # Estimate tp_pct_adjusted for scale-out calculation
+        tp_pct_adjusted = abs(tp_price / entry_price - 1) * 100 if entry_price > 0 else 1.0
+        logger.info(
+            f"Recovered {direction} position: entry=${entry_price:.1f} | "
+            f"TP/SL from exchange orders: TP=${tp_price:.1f}, SL=${sl_price:.1f}"
+        )
+    else:
+        # Fallback: calculate from config defaults (may use wrong TP/SL in per-pattern mode)
+        tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
+            entry_price, dir_mult, strategy, vol_mult=1.0, config=config
+        )
+        logger.info(
+            f"Recovered {direction} position: entry=${entry_price:.1f} | "
+            f"TP/SL from config defaults: TP=${tp_price:.1f}, SL=${sl_price:.1f}"
+        )
 
     # Setup scale-out if enabled
     scale_out_stages = setup_scale_out(strategy, entry_price, quantity, dir_mult, tp_pct_adjusted)
@@ -238,6 +255,58 @@ def recover_position_to_state(
         if state['position'].get('tp_order_id') or state['position'].get('sl_order_id') or scale_out_stages:
             state['position']['needs_tpsl'] = False
             save_state(state)
+
+
+def _read_tpsl_from_exchange_orders(
+    exchange: Optional[ccxt.bingx],
+    symbol: str,
+    direction: str,
+) -> Tuple[Optional[float], Optional[float]]:
+    """
+    Read TP and SL prices from existing exchange open orders.
+
+    Args:
+        exchange: Exchange instance (may be None)
+        symbol: Trading symbol
+        direction: 'LONG' or 'SHORT'
+
+    Returns:
+        Tuple of (tp_price, sl_price) — either may be None if not found
+    """
+    if not exchange:
+        return None, None
+
+    try:
+        open_orders = exchange.fetch_open_orders(symbol)
+        tp_price = None
+        sl_price = None
+
+        for order in open_orders:
+            order_type = (order.get('type') or '').upper()
+            # CCXT normalizes stopPrice; BingX also provides it in info
+            stop_price = float(
+                order.get('stopPrice')
+                or (order.get('info') or {}).get('stopPrice')
+                or 0
+            )
+            if stop_price <= 0:
+                continue
+
+            if 'TAKE_PROFIT' in order_type:
+                tp_price = stop_price
+            elif 'STOP' in order_type and 'TAKE' not in order_type:
+                sl_price = stop_price
+
+        # Sanity check: TP and SL must be on correct sides of entry
+        # (skip validation if we don't have both — partial is still useful)
+        if tp_price and sl_price:
+            logger.debug(f"Exchange orders found: TP=${tp_price:.1f}, SL=${sl_price:.1f}")
+
+        return tp_price, sl_price
+
+    except Exception as e:
+        logger.debug(f"Could not read TP/SL from exchange orders: {e}")
+        return None, None
 
 
 def recalculate_position_orders(

@@ -32,7 +32,7 @@ class FileLock(ABC):
         """Release the lock."""
         pass
 
-    def _write_lock_info(self, filepath: str) -> None:
+    def _write_lock_info(self) -> None:
         if self._handle:
             lock_data = {
                 'pid': os.getpid(),
@@ -65,7 +65,7 @@ class WindowsFileLock(FileLock):
                 self._handle = None
                 return False
 
-            self._write_lock_info(filepath)
+            self._write_lock_info()
             return True
         except (IOError, OSError) as e:
             logger.error(f"Failed to acquire lock (I/O error): {e}")
@@ -103,7 +103,7 @@ class UnixFileLock(FileLock):
             self._handle = open(filepath, 'w')
             fcntl.flock(self._handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 
-            self._write_lock_info(filepath)
+            self._write_lock_info()
             return True
         except (IOError, OSError):
             if self._handle:

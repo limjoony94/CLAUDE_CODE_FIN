@@ -300,11 +300,11 @@ def _cancel_existing_tpsl_orders(
             open_orders = exchange.fetch_open_orders(symbol)
         open_order_ids = {o.get('id') for o in open_orders}
 
-        if tp_order_id and tp_order_id in open_order_ids:
+        if tp_order_id and tp_order_id != _EXCHANGE_MANAGED and tp_order_id in open_order_ids:
             exchange.cancel_order(tp_order_id, symbol)
             logger.info(f"   Cancelled old TP order: {tp_order_id}")
 
-        if sl_order_id and sl_order_id in open_order_ids:
+        if sl_order_id and sl_order_id != _EXCHANGE_MANAGED and sl_order_id in open_order_ids:
             exchange.cancel_order(sl_order_id, symbol)
             logger.info(f"   Cancelled old SL order: {sl_order_id}")
 

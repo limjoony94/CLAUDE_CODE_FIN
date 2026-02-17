@@ -58,6 +58,11 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
         except Exception as e:
             logger.exception(f"Failed to load state: {e}")
 
+    # Try timestamped backups as last resort
+    backup_state = _try_timestamped_backups(state_file, default_state)
+    if backup_state is not None:
+        return backup_state
+
     logger.warning(f"⚠️ Returning default state (no valid state file found)")
     return default_state
 
@@ -104,6 +109,45 @@ def _check_daily_reset(state: Dict[str, Any]) -> Dict[str, Any]:
         state['last_trade_date'] = today
 
     return state
+
+
+def _try_timestamped_backups(state_file: str, default_state: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Try to recover state from timestamped backup files (newest first)."""
+    try:
+        state_dir = os.path.dirname(state_file)
+        state_name = os.path.basename(state_file)
+        backup_pattern = f"{state_name}.backup_"
+
+        backups = []
+        for filename in os.listdir(state_dir):
+            if filename.startswith(backup_pattern):
+                filepath = os.path.join(state_dir, filename)
+                backups.append((filepath, os.path.getmtime(filepath)))
+
+        if not backups:
+            return None
+
+        # Sort newest first
+        backups.sort(key=lambda x: x[1], reverse=True)
+        logger.warning(f"⚠️ Trying {len(backups)} timestamped backups for recovery...")
+
+        for filepath, _ in backups:
+            try:
+                with open(filepath, 'r') as f:
+                    state = json.load(f)
+                # Validate: must have total_trades key
+                if 'total_trades' not in state:
+                    continue
+                logger.info(f"✅ Recovered state from backup: {os.path.basename(filepath)}")
+                state = _ensure_required_keys(state, default_state)
+                state = _check_daily_reset(state)
+                return state
+            except (json.JSONDecodeError, IOError, OSError):
+                continue
+    except Exception:
+        pass
+
+    return None
 
 
 def save_state(
@@ -314,6 +358,9 @@ def sync_metrics_with_state(metrics: PerformanceMetrics, state: Dict[str, Any]) 
     """
     Synchronize metrics with state if they're out of sync.
 
+    When state has MORE trades than metrics, trust state (normal: state updated, metrics lagged).
+    When state has FEWER trades than metrics, trust metrics (state likely corrupted by crash).
+
     Args:
         metrics: PerformanceMetrics instance
         state: State dictionary
@@ -323,10 +370,13 @@ def sync_metrics_with_state(metrics: PerformanceMetrics, state: Dict[str, Any]) 
     """
     state_trades = state.get('total_trades', 0)
 
-    if state_trades != metrics.total_trades:
-        logger.warning(f"⚠️ Metrics out of sync: state={state_trades}, metrics={metrics.total_trades}")
+    if state_trades == metrics.total_trades:
+        return metrics
 
-        # Trust state file as source of truth
+    logger.warning(f"⚠️ Metrics out of sync: state={state_trades}, metrics={metrics.total_trades}")
+
+    if state_trades >= metrics.total_trades:
+        # State has more trades → trust state (normal case)
         metrics.total_trades = state_trades
         metrics.winning_trades = state.get('winning_trades', 0)
         metrics.losing_trades = metrics.total_trades - metrics.winning_trades
@@ -338,5 +388,20 @@ def sync_metrics_with_state(metrics: PerformanceMetrics, state: Dict[str, Any]) 
         metrics._recalculate()
 
         logger.info(f"✅ Metrics synced with state: {metrics.total_trades} trades, {metrics.actual_win_rate:.1f}% WR")
+    else:
+        # State has FEWER trades → state likely corrupted!
+        logger.critical(
+            f"🚨 State corruption detected: state={state_trades} < metrics={metrics.total_trades}. "
+            f"Trusting metrics and updating state."
+        )
+        # Update state to match metrics (prevent data loss)
+        state['total_trades'] = metrics.total_trades
+        state['winning_trades'] = metrics.winning_trades
+        state['total_pnl'] = metrics.total_pnl_pct
+        save_state(state)
+
+        logger.info(
+            f"✅ State restored from metrics: {metrics.total_trades} trades, {metrics.actual_win_rate:.1f}% WR"
+        )
 
     return metrics

@@ -144,8 +144,8 @@ def _try_timestamped_backups(state_file: str, default_state: Dict[str, Any]) -> 
                 return state
             except (json.JSONDecodeError, IOError, OSError):
                 continue
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"Failed to search timestamped backups: {e}")
 
     return None
 
@@ -217,9 +217,7 @@ def _create_backup(state_file: str) -> None:
     try:
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         backup_file = f"{state_file}.backup_{timestamp}"
-        with open(state_file, 'r') as f:
-            with open(backup_file, 'w') as bf:
-                bf.write(f.read())
+        shutil.copy2(state_file, backup_file)
         cleanup_old_backups(state_file)
     except (IOError, OSError) as e:
         logger.warning(f"Backup failed (I/O error): {e}")
@@ -253,10 +251,10 @@ def cleanup_old_backups(state_file: str, max_backups: int = MAX_STATE_BACKUPS) -
         for filepath, _ in backups[max_backups:]:
             try:
                 os.remove(filepath)
-            except Exception:
-                pass
-    except Exception:
-        pass
+            except Exception as e:
+                logger.debug(f"Failed to remove old backup {filepath}: {e}")
+    except Exception as e:
+        logger.debug(f"Failed to cleanup old backups: {e}")
 
 
 def reset_daily_stats_if_needed(state: Dict[str, Any]) -> bool:

@@ -85,8 +85,8 @@ class WindowsFileLock(FileLock):
         if self._handle:
             try:
                 msvcrt.locking(self._handle.fileno(), msvcrt.LK_UNLCK, 1)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to unlock file (msvcrt): {e}")
             self._handle.close()
             self._handle = None
 
@@ -116,8 +116,8 @@ class UnixFileLock(FileLock):
         if self._handle:
             try:
                 fcntl.flock(self._handle.fileno(), fcntl.LOCK_UN)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Failed to unlock file (fcntl): {e}")
             self._handle.close()
             self._handle = None
 

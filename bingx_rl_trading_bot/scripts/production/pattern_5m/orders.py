@@ -4,7 +4,7 @@ Place and manage TP/SL orders.
 """
 
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 
 import ccxt
 

@@ -9,7 +9,7 @@ from datetime import datetime
 import pandas as pd
 from typing import Dict, Any, Optional, Tuple
 
-from .indicators import classify_candle, calculate_indicators
+from .indicators import calculate_indicators
 from .state import reset_daily_stats_if_needed
 from .constants import (
     CandleType,

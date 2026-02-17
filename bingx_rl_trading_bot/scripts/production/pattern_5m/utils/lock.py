@@ -23,6 +23,8 @@ _lock_file_handle = None
 class FileLock(ABC):
     """Abstract base class for file locking."""
 
+    _handle = None
+
     @abstractmethod
     def acquire(self, filepath: str) -> bool:
         """Acquire the lock. Returns True on success."""
@@ -33,12 +35,26 @@ class FileLock(ABC):
         """Release the lock."""
         pass
 
+    def _write_lock_info(self, filepath: str) -> None:
+        if self._handle:
+            lock_data = {
+                'pid': os.getpid(),
+                'timestamp': datetime.now().isoformat(),
+                'bot_version': BOT_VERSION,
+            }
+            self._handle.write(json.dumps(lock_data))
+            self._handle.flush()
+
+    def _cleanup_file(self, filepath: str) -> None:
+        try:
+            if os.path.exists(filepath):
+                os.remove(filepath)
+        except (IOError, OSError):
+            pass
+
 
 class WindowsFileLock(FileLock):
     """Windows-specific file locking using msvcrt."""
-
-    def __init__(self):
-        self._handle = None
 
     def acquire(self, filepath: str) -> bool:
         import msvcrt
@@ -79,31 +95,9 @@ class WindowsFileLock(FileLock):
 
         self._cleanup_file(filepath)
 
-    def _write_lock_info(self, filepath: str) -> None:
-        if self._handle:
-            lock_data = {
-                'pid': os.getpid(),
-                'timestamp': datetime.now().isoformat(),
-                'bot_version': BOT_VERSION,
-            }
-            self._handle.write(json.dumps(lock_data))
-            self._handle.flush()
-
-    def _cleanup_file(self, filepath: str) -> None:
-        try:
-            if os.path.exists(filepath):
-                os.remove(filepath)
-        except (IOError, OSError):
-            pass
-        except Exception:
-            pass
-
 
 class UnixFileLock(FileLock):
     """Unix-specific file locking using fcntl."""
-
-    def __init__(self):
-        self._handle = None
 
     def acquire(self, filepath: str) -> bool:
         import fcntl
@@ -131,25 +125,6 @@ class UnixFileLock(FileLock):
             self._handle = None
 
         self._cleanup_file(filepath)
-
-    def _write_lock_info(self, filepath: str) -> None:
-        if self._handle:
-            lock_data = {
-                'pid': os.getpid(),
-                'timestamp': datetime.now().isoformat(),
-                'bot_version': BOT_VERSION,
-            }
-            self._handle.write(json.dumps(lock_data))
-            self._handle.flush()
-
-    def _cleanup_file(self, filepath: str) -> None:
-        try:
-            if os.path.exists(filepath):
-                os.remove(filepath)
-        except (IOError, OSError):
-            pass
-        except Exception:
-            pass
 
 
 def get_file_lock() -> FileLock:
@@ -186,7 +161,7 @@ def _check_windows_process(pid: int) -> bool:
             creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)
         )
         output = result.stdout.strip().lower()
-        if output and ('python.exe' in output or 'pythonw.exe' in output):
+        if output and ('python.exe' in output or 'python3.exe' in output or 'pythonw.exe' in output):
             return True
         return False
     except Exception:
@@ -213,7 +188,7 @@ def check_duplicate_instances() -> List[int]:
         return other_pids
 
     try:
-        for process_name in ['python.exe', 'pythonw.exe']:
+        for process_name in ['python.exe', 'python3.exe', 'pythonw.exe']:
             try:
                 result = subprocess.run(
                     ['wmic', 'process', 'where', f"name='{process_name}'",

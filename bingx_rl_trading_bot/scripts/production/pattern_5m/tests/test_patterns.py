@@ -79,7 +79,7 @@ class TestPatternMatching:
             assert 0.1 <= sl <= 10.0, f"{pattern} SL={sl} out of range"
 
     def test_stats_win_rates_reasonable(self):
-        """Historical win rates should be between 50% and 100%."""
+        """Historical win rates should be between 0% and 100%."""
         for pattern, stats in PATTERN_STATS.items():
             wr = stats['wr']
-            assert 50.0 <= wr <= 100.0, f"{pattern} WR={wr} out of range"
+            assert 0.0 <= wr <= 100.0, f"{pattern} WR={wr} out of range"

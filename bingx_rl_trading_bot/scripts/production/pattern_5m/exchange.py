@@ -8,10 +8,7 @@ import time
 import logging
 import yaml
 import ccxt
-from functools import wraps
-from typing import Dict, List, Any, Optional, Callable, TypeVar
-
-T = TypeVar('T')
+from typing import Dict, List, Any, Optional, Callable
 
 from .constants import (
     API_KEYS_FILE,
@@ -182,91 +179,6 @@ def set_margin_mode(exchange: ccxt.bingx, config: Dict[str, Any]) -> bool:
 
 
 # ============================================================
-# API RETRY DECORATOR
-# ============================================================
-
-def api_retry(
-    max_attempts: int = API_MAX_ATTEMPTS,
-    base_delay: int = API_BASE_DELAY,
-    max_delay: int = API_MAX_DELAY,
-    circuit_breaker: Optional[CircuitBreaker] = None,
-    metrics: Optional[PerformanceMetrics] = None,
-) -> Callable:
-    """
-    Decorator for API calls with retry logic and circuit breaker.
-
-    Args:
-        max_attempts: Maximum retry attempts
-        base_delay: Base delay between retries (seconds)
-        max_delay: Maximum delay between retries (seconds)
-        circuit_breaker: Optional CircuitBreaker instance
-        metrics: Optional PerformanceMetrics instance
-
-    Returns:
-        Decorated function
-    """
-    def decorator(func: Callable[..., T]) -> Callable[..., T]:
-        @wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> T:
-            # Check circuit breaker
-            if circuit_breaker and not circuit_breaker.can_execute():
-                wait_time = circuit_breaker.get_wait_time()
-                logger.warning(f"Circuit breaker OPEN, waiting {wait_time:.1f}s")
-                _interruptible_api_sleep(wait_time)
-
-            last_exception = None
-            start_time = time.time()
-
-            for attempt in range(max_attempts):
-                try:
-                    result = func(*args, **kwargs)
-
-                    # Record success
-                    if metrics:
-                        latency_ms = (time.time() - start_time) * 1000
-                        metrics.update_api_latency(latency_ms)
-                    if circuit_breaker:
-                        circuit_breaker.record_success()
-
-                    return result
-
-                except ccxt.RateLimitExceeded as e:
-                    delay = min(base_delay * (2 ** attempt), max_delay)
-                    logger.warning(f"Rate limit exceeded, retrying in {delay}s (attempt {attempt + 1}/{max_attempts})")
-                    _interruptible_api_sleep(delay)
-                    last_exception = e
-                    if circuit_breaker:
-                        circuit_breaker.record_failure()
-
-                except ccxt.NetworkError as e:
-                    delay = min(base_delay * (2 ** attempt), max_delay)
-                    logger.warning(f"Network error, retrying in {delay}s (attempt {attempt + 1}/{max_attempts}): {e}")
-                    _interruptible_api_sleep(delay)
-                    last_exception = e
-                    if circuit_breaker:
-                        circuit_breaker.record_failure()
-
-                except ccxt.ExchangeError as e:
-                    # Don't retry exchange errors (likely permanent)
-                    if circuit_breaker:
-                        circuit_breaker.record_failure()
-                    raise e
-
-                except Exception as e:
-                    delay = min(base_delay * (2 ** attempt), max_delay)
-                    logger.warning(f"API error, retrying in {delay}s (attempt {attempt + 1}/{max_attempts}): {e}")
-                    _interruptible_api_sleep(delay)
-                    last_exception = e
-                    if circuit_breaker:
-                        circuit_breaker.record_failure()
-
-            raise last_exception
-
-        return wrapper
-    return decorator
-
-
-# ============================================================
 # CACHED API CALLS
 # ============================================================
 
@@ -316,10 +228,10 @@ def _api_call_with_retry(
             if circuit_breaker:
                 circuit_breaker.record_failure()
 
-        except ccxt.ExchangeError as e:
+        except ccxt.ExchangeError:
             if circuit_breaker:
                 circuit_breaker.record_failure()
-            raise e
+            raise
 
         except Exception as e:
             delay = min(API_BASE_DELAY * (2 ** attempt), API_MAX_DELAY)

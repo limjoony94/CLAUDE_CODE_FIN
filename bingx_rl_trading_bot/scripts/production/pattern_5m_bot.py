@@ -2,15 +2,8 @@
 """
 Pattern 5m Bot - Entry Point
 
-3-candle pattern trading strategy using validated patterns.
-
-Validated Patterns:
-  LONG: MU-U-DN, DN-MD-BD, DF-U-U, BU-ST-ST, MU-DN-MU
-  SHORT: MU-ST-ST, U-MU-ST, IH-DN-DN, D-ST-U
-
-Backtest Results (104 days, 3x leverage):
-  - Combined: +219.4% compound
-  - vs Buy & Hold: +302.0% excess return
+3-candle pattern trading strategy with dynamic pattern selection.
+See CLAUDE.md for current version, pattern list, and configuration.
 
 Usage:
   python pattern_5m_bot.py

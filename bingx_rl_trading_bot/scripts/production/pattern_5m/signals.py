@@ -4,6 +4,8 @@ Pattern 5m Bot - Signal Detection
 """
 
 import logging
+import os
+from datetime import datetime
 import pandas as pd
 from typing import Dict, Any, Optional, Tuple
 
@@ -445,9 +447,6 @@ def _save_confidence_to_csv(
 
     This accumulates data to validate if confidence correlates with trade outcomes.
     """
-    import os
-    from datetime import datetime
-
     try:
         csv_path = CONFIDENCE_LOG_FILE
 
@@ -493,8 +492,6 @@ def check_cooldown(state: Dict[str, Any], config: Dict[str, Any]) -> bool:
     Returns:
         True if cooldown passed (can trade), False otherwise
     """
-    from datetime import datetime
-
     cooldown = config.get('strategy', {}).get('cooldown_candles', 0)
     if cooldown == 0:
         return True
@@ -643,19 +640,3 @@ def check_early_exit_signal(
         reversal_count = 0
 
     return False, reversal_count, None, candle_ts
-
-
-def get_candle_type_for_price(df: pd.DataFrame) -> str:
-    """
-    Get the type code of the last completed candle.
-
-    Args:
-        df: DataFrame with candle classification
-
-    Returns:
-        Type code string (e.g., 'BD', 'BU', 'U', etc.)
-    """
-    if 'type_code' not in df.columns or len(df) < 2:
-        return 'UNKNOWN'
-
-    return df.iloc[-2].get('type_code', 'UNKNOWN')

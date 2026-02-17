@@ -218,6 +218,17 @@ def open_position(
         # Place TP/SL orders
         place_tp_sl_orders(exchange, state, config)
 
+        # CRITICAL: Verify SL was placed — position is unprotected without it
+        if not state['position'].get('sl_order_id'):
+            logger.warning("SL order not placed after open — retrying...")
+            for retry in range(2):
+                place_tp_sl_orders(exchange, state, config)
+                if state['position'].get('sl_order_id'):
+                    logger.info(f"SL order placed on retry {retry + 1}")
+                    break
+            if not state['position'].get('sl_order_id'):
+                logger.error("CRITICAL: SL order failed after retries — position UNPROTECTED until next verify cycle")
+
         return True
 
     except ccxt.NetworkError as e:
@@ -602,6 +613,10 @@ def _cancel_existing_tp_sl(
 
     if position.get('sl_order_id'):
         orders_to_cancel.append(position['sl_order_id'])
+
+    # Cancel single TP order (non-scale-out mode)
+    if position.get('tp_order_id'):
+        orders_to_cancel.append(position['tp_order_id'])
 
     # Cancel scale-out TP orders
     for stage in position.get('scale_out_stages', []):

@@ -374,14 +374,14 @@ def _infer_exit_from_price(exit_price: float, position: Dict) -> str:
     direction = position.get('direction', '')
 
     if direction == 'LONG':
-        if exit_price >= tp * TP_LOWER_MULT:
+        if tp > 0 and exit_price >= tp * TP_LOWER_MULT:
             return 'TP'
-        elif exit_price <= sl * SL_UPPER_MULT:
+        elif sl > 0 and exit_price <= sl * SL_UPPER_MULT:
             return 'SL'
     else:  # SHORT
-        if exit_price <= tp * TP_UPPER_MULT:
+        if tp > 0 and exit_price <= tp * TP_UPPER_MULT:
             return 'TP'
-        elif exit_price >= sl * SL_LOWER_MULT:
+        elif sl > 0 and exit_price >= sl * SL_LOWER_MULT:
             return 'SL'
 
     return 'UNKNOWN'

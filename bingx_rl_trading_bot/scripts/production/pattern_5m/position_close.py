@@ -178,8 +178,8 @@ def record_closed_position(
     outcome = "WIN" if pnl_pct > 0 else "LOSS"
     _update_confidence_log_outcome(position.get('entry_time'), outcome, pnl_pct)
 
-    # Invalidate position cache
-    cache.set_positions([])
+    # Invalidate position cache (don't set empty — forces fresh fetch next time)
+    cache.invalidate_all()
 
 
 def recover_position_to_state(

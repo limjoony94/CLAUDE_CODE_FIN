@@ -250,8 +250,8 @@ def adjust_tpsl_to_config(
         position['tp_price'] = expected_tp_price
         position['sl_price'] = expected_sl_price
 
-        # Place new orders
-        quantity = position['quantity']
+        # Place new orders (use remaining_quantity for scale-out partial fills)
+        quantity = position.get('remaining_quantity', position['quantity'])
         close_side = 'sell' if direction == 'LONG' else 'buy'
 
         # Place TP order
@@ -427,8 +427,10 @@ def _verify_scale_out_orders(
         stage_order_id = stage.get('order_id')
         is_last_stage = (idx == num_stages - 1)
 
-        if stage_order_id and stage_order_id not in open_order_ids:
-            logger.warning(f"Stage {stage['stage']} TP order missing, re-placing...")
+        # Re-place if order was never placed (order_id=None) or missing from exchange
+        if not stage_order_id or stage_order_id not in open_order_ids:
+            action = "was never placed" if not stage_order_id else "missing from exchange"
+            logger.warning(f"Stage {stage['stage']} TP order {action}, re-placing...")
             try:
                 order_params = {'positionSide': 'BOTH', 'stopPrice': stage['tp_price']}
                 if is_last_stage:

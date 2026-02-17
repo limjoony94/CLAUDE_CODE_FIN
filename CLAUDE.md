@@ -44,7 +44,7 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.28.11
+## 📊 현재 전략: Pattern 5m v1.28.24
 
 ### 핵심 파라미터
 
@@ -56,77 +56,33 @@
 | Leverage | 3x |
 | Timeframe | 5m |
 | Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
+| Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
 | Quality Filter | **Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + BH FDR + min_trades>=25** |
-| Patterns | **47** (13L + 34S), edge mean 24.9pp, WR mean 86.8% |
+| Patterns | **112** (22L + 90S), edge mean 24.7pp, WR mean 90.5% |
 | Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause |
 
 ### 270일 In-Sample 검증 결과
 
-| 지표 | Static 51 (v1.27.2) | **Dynamic 47 (v1.28.11)** |
-|------|---------------------|--------------------------|
-| Patterns | 51 (32L+19S) | **47 (13L+34S)** |
-| Filter | MC<0.01 + edge>=10pp | **MC<0.01 + BH FDR + edge>=21.8pp + WR>=60% + SL>=1.0%** |
-| WR mean | 84.9% | **86.8%** |
-| Edge mean | ~15pp | **24.9pp** |
-| Trades | 339 | **1,485** |
-| TP/SL | Per-pattern (legacy) | **Per-pattern (PP grid search)** |
+| 지표 | Static 51 (v1.27.2) | Dynamic 47 (v1.28.11) | **Dynamic 112 (v1.28.24)** |
+|------|---------------------|------------------------|---------------------------|
+| Patterns | 51 (32L+19S) | 47 (13L+34S) | **112 (22L+90S)** |
+| Scanner MAX_BARS | 500 | 500 | **288 (24h)** |
+| Filter | MC<0.01 + edge>=10pp | MC<0.01 + BH FDR + E>=21.8 + WR>=60% + SL>=1.0% | **동일** |
+| WR mean | 84.9% | 86.8% | **90.5%** |
+| Edge mean | ~15pp | 24.9pp | **24.7pp** |
+| Portfolio Trades | 339 | 339 | **358** |
+| Portfolio PnL | +966% | +894% | **+1,398%** |
+| Portfolio MDD | 16.2% | 24.2% | **17.0%** |
+| PnL/MDD | 59.6x | 36.9x | **82.1x** |
+| TP/SL | Per-pattern (legacy) | Per-pattern (PP grid) | **Per-pattern (PP grid)** |
 
-### LONG Patterns (13) — v1.28.11 Dynamic
+### Pattern Summary — v1.28.24 Dynamic (112 patterns)
 
-| Pattern | TP/SL | Edge | WR | Trades |
-|---------|-------|------|-----|--------|
-| BD-BD-BU | 1.8/3.5 | 22.2pp | 88.2% | 51 |
-| BD-MD-DN | 2.5/4.0 | 23.6pp | 85.2% | 27 |
-| DN-MD-GS | 1.2/2.0 | 25.5pp | 88.0% | 25 |
-| IH-DN-MD | 1.0/1.5 | 23.3pp | 83.3% | 36 |
-| MD-DN-D | 2.1/4.0 | 23.7pp | 89.3% | 28 |
-| MD-MD-ST | 1.2/1.0 | 23.8pp | 69.2% | 39 |
-| MU-BD-ST | 1.8/3.0 | 26.0pp | 88.5% | 26 |
-| MU-MD-ST | 2.5/4.0 | 24.2pp | 85.7% | 28 |
-| MU-U-H | 2.5/3.0 | 23.2pp | 77.8% | 27 |
-| ST-DN-GS | 0.5/1.0 | 21.9pp | 88.6% | 35 |
-| ST-U-DF | 1.8/4.0 | 23.3pp | 92.3% | 26 |
-| U-H-MU | 1.6/2.0 | 28.2pp | 83.8% | 37 |
-| U-MU-H | 1.8/3.5 | 28.7pp | 94.7% | 38 |
+> 전체 패턴 상세는 `results/dynamic_patterns.json` 참조
 
-### SHORT Patterns (34) — v1.28.11 Dynamic
+**LONG (22)**: BD-BD-BU, BD-DN-MU, BU-BD-DN, DN-MD-MD, H-MD-DN, H-ST-DN, IH-DN-MD, IH-MU-DN, MD-BD-DN, MD-DN-BU, MD-MU-ST, MD-ST-MD, MU-MD-ST, MU-ST-U, MU-U-BU, MU-U-U, ST-DN-IH, ST-MU-U, ST-ST-D, U-D-ST, U-MD-BD, U-MU-H
 
-| Pattern | TP/SL | Edge | WR | Trades |
-|---------|-------|------|-----|--------|
-| BD-U-H | 1.4/3.0 | 23.8pp | 92.0% | 25 |
-| BU-BU-DN | 2.0/4.0 | 23.7pp | 90.4% | 52 |
-| BU-MU-DN | 2.5/3.0 | 31.9pp | 86.5% | 37 |
-| D-D-DN | 2.1/3.0 | 25.8pp | 84.6% | 26 |
-| D-D-U | 1.6/3.0 | 26.8pp | 92.0% | 25 |
-| D-DN-BD | 1.6/3.5 | 24.2pp | 92.9% | 28 |
-| DN-BU-BU | 2.0/4.0 | 28.6pp | 95.2% | 42 |
-| DN-BU-MD | 2.1/4.0 | 21.9pp | 87.5% | 32 |
-| DN-H-BD | 2.1/4.0 | 22.4pp | 88.0% | 25 |
-| DN-IH-MD | 1.8/4.0 | 23.0pp | 92.0% | 25 |
-| DN-IH-U | 2.5/4.0 | 26.7pp | 88.2% | 51 |
-| DN-ST-BU | 2.5/4.0 | 21.8pp | 83.3% | 60 |
-| DN-U-H | 3.0/4.0 | 30.0pp | 87.2% | 39 |
-| GS-ST-U | 1.0/1.5 | 23.3pp | 83.3% | 30 |
-| H-ST-ST | 0.7/1.5 | 22.1pp | 90.3% | 31 |
-| H-U-BD | 1.8/2.0 | 23.4pp | 76.0% | 25 |
-| IH-MD-U | 2.0/4.0 | 21.8pp | 88.5% | 26 |
-| IH-MU-DN | 2.5/4.0 | 22.5pp | 84.0% | 25 |
-| IH-ST-ST | 1.8/3.5 | 26.3pp | 92.3% | 26 |
-| MD-BU-DN | 3.0/4.0 | 23.6pp | 80.8% | 26 |
-| MD-D-U | 2.1/3.0 | 22.7pp | 81.5% | 27 |
-| MD-MD-MD | 3.0/2.5 | 26.5pp | 72.0% | 25 |
-| MU-DN-BU | 2.5/4.0 | 23.8pp | 85.3% | 34 |
-| MU-MD-MU | 3.0/4.0 | 23.6pp | 80.8% | 26 |
-| ST-BD-BU | 2.1/4.0 | 30.4pp | 96.0% | 25 |
-| ST-H-U | 2.5/4.0 | 22.5pp | 84.0% | 25 |
-| ST-IH-DN | 2.5/4.0 | 31.3pp | 92.9% | 28 |
-| ST-MD-MU | 1.8/4.0 | 23.9pp | 92.9% | 28 |
-| ST-U-H | 3.0/4.0 | 22.2pp | 79.3% | 29 |
-| U-GS-DN | 3.0/3.0 | 34.6pp | 84.6% | 26 |
-| U-H-MD | 2.0/4.0 | 22.2pp | 88.9% | 27 |
-| U-IH-ST | 1.6/3.5 | 23.7pp | 92.3% | 26 |
-| U-IH-U | 3.0/4.0 | 27.3pp | 84.4% | 45 |
-| U-ST-IH | 1.8/4.0 | 25.3pp | 94.3% | 35 |
+**SHORT (90)**: BD-BU-BU, BD-BU-U, BD-DN-BU, BD-U-DN, BD-U-MU, BU-BD-D, BU-BD-U, BU-BU-DN, BU-BU-U, BU-DN-BU, BU-DN-H, BU-MU-DN, BU-U-DN, BU-U-ST, D-D-DN, D-DN-ST, D-MU-DN, D-ST-U, D-U-MU, DF-U-U, DN-BD-BU, DN-BD-ST, DN-BU-BU, DN-BU-MD, DN-D-BD, DN-DF-DN, DN-DN-GS, DN-DN-IH, DN-GS-ST, DN-IH-MD, DN-IH-ST, DN-MD-BD, DN-MD-DN, DN-MD-MU, DN-MU-MU, DN-ST-BD, DN-ST-BU, DN-ST-D, DN-U-H, GS-ST-U, GS-U-DN, H-DN-ST, H-DN-U, H-ST-ST, IH-DN-DN, IH-DN-U, IH-ST-ST, IH-U-DN, IH-U-U, MD-BD-U, MD-BU-DN, MD-DN-ST, MD-MU-DN, MD-ST-ST, MD-U-D, MU-BU-DN, MU-DN-BU, MU-DN-MU, MU-DN-ST, MU-MD-U, MU-MU-U, MU-ST-MD, MU-U-ST, ST-BD-BD, ST-BD-BU, ST-D-U, ST-DN-BU, ST-H-DN, ST-IH-DN, ST-ST-H, ST-ST-MD, ST-ST-U, ST-U-BD, ST-U-BU, ST-U-H, U-BU-BD, U-BU-MD, U-BU-ST, U-D-DN, U-DN-BD, U-DN-DF, U-DN-H, U-GS-DN, U-H-DN, U-IH-U, U-MD-ST, U-MU-MD, U-ST-IH, U-ST-U, U-U-ST
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -309,7 +265,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 | v1.28.16 | 02-18 | **Test fix + dead code cleanup**: (1) `test_patterns.py`: `test_stats_win_rates_reasonable` 실패 수정 — WR 45.2% 패턴(U-MD-MD, R:R 2.14 보상 구조)이 50% 하한에 걸림, 유효 범위 0-100%로 수정 (2) `exchange.py`: 미사용 `api_retry` 데코레이터 제거 + dead import (`wraps`, `TypeVar`) 정리 + `raise e` → `raise` (traceback 보존) (3) `pattern_5m_bot.py`: 오래된 docstring 업데이트 (v1.24 시절 패턴+백테스트 결과 제거). **214 tests all pass**. | |
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
-| **v1.28.23** | 02-18 | **Extend EXCHANGE_MANAGED to initial TP/SL placement**: v1.28.22는 verify 경로만 처리 → crash recovery 시 `place_tp_sl_orders`에서도 110407/110406/110413 에러 발생 (매 재시작마다 WARNING 로그). `_place_single_tp_order`와 `_place_sl_order`에도 동일한 에러코드 감지 + `_EXCHANGE_MANAGED` sentinel 마킹 추가. 이제 recovery → placement → verify 전체 경로에서 "already exists" 에러를 깔끔하게 처리. 214 tests passed. ← **현재** |
+| **v1.28.24** | 02-18 | **Scanner MAX_BARS 500→288 (24h timeout study)**: 3-phase 24h 연구 (v1 DROP비교, v2 edge threshold, v3 forced close) 결과 288봉(24h) 최적 확인. Scanner `MAX_BARS=500→288` 변경 후 재스캔. 325패턴 → E>=21.8pp+WR>=60%+SL>=1.0% → **112패턴 (22L+90S)**. 포트폴리오: PnL +1398% (vs +894%), WR 93.6% (vs 88.1%), MDD 17.0% (vs 24.2%), PnL/MDD 82.1x (vs 36.9x). Forced close(패배처리) WF 1/3 FAIL → 미적용. Production 봇 변경 없음 (timeout 미도입, TP/SL 보유). EXPECTED_AVG_WIN 5.44, EXPECTED_AVG_LOSS 10.73. ← **현재** |
+| v1.28.23 | 02-18 | **Extend EXCHANGE_MANAGED to initial TP/SL placement**: v1.28.22는 verify 경로만 처리 → crash recovery 시 `place_tp_sl_orders`에서도 110407/110406/110413 에러 발생 (매 재시작마다 WARNING 로그). `_place_single_tp_order`와 `_place_sl_order`에도 동일한 에러코드 감지 + `_EXCHANGE_MANAGED` sentinel 마킹 추가. 이제 recovery → placement → verify 전체 경로에서 "already exists" 에러를 깔끔하게 처리. 214 tests passed. |
 | v1.28.22 | 02-18 | **Fix TP/SL verify infinite retry loop**: crash recovery 후 `tp_order_id`/`sl_order_id`가 None → `verify_tp_sl_orders`가 10분마다 재배치 시도 → exchange "already exists" (110407/110406) 거부 → ID가 None 유지 → 무한 반복. `_EXCHANGE_MANAGED` sentinel 도입: BingX 에러코드 110407(TP exists)/110406(SL exists)/110413(TP exceeded)를 감지하여 "exchange가 관리 중" 상태로 마킹, 이후 재시도 방지. orders.py 수정 (`_verify_single_tp_order`, `_verify_sl_order`). 214 tests passed. |
 | v1.28.21 | 02-18 | **Silent except → debug logging + backup consistency**: (1) state.py: 3곳 `except Exception: pass` → `logger.debug` 추가 (timestamped backup 검색/정리 실패 로깅) (2) lock.py: 2곳 `except Exception: pass` → `logger.debug` 추가 (unlock 실패 로깅) (3) state.py `_create_backup`: 수동 `open/read/write` → `shutil.copy2` 변경 (save_state의 .bak 생성과 일관성). 214 tests passed. |
 | v1.28.20 | 02-18 | **Utils cleanup + outdated docstring**: (1) `__init__.py` docstring을 v1.28.x 현재 상태로 업데이트 (2) `logging_config.py`: local `import time as _time` 2곳 → module-level `import time`으로 이동 (3) `lock.py`: 미사용 `_lock_file_handle` 전역변수 제거 (실제 lock 상태는 `_lock_instance`로 관리). 214 tests passed. |

@@ -1,131 +1,709 @@
 {
   "version": "2.1",
-  "generated_at": "2026-02-16T07:27:36",
+  "generated_at": "2026-02-18T06:16:14",
   "data_file": "btc_5m_270days_reclassified.csv",
   "data_bars": 77760,
   "selection_criteria": {
     "discovery_method": "per_pattern",
-    "edge_threshold_pp": 21.8,
+    "edge_threshold_pp": 10.0,
     "mc_threshold": 0.01,
     "min_trades": 25,
     "max_baseline_wr": 70.0,
-    "correction_method": "bh",
+    "correction_method": "none",
     "n_tested": 1360,
-    "fdr_q": 0.05,
-    "m_positive_edge": 263,
-    "n_before_correction": 263,
-    "n_after_correction": 263,
-    "min_wr": 60.0,
-    "post_filter": "edge>=21.8pp + WR>=60.0% + SL>=1.0%",
-    "n_before_filter": 257,
-    "n_after_filter": 47
+    "n_before_correction": 433,
+    "n_after_correction": 433,
+    "post_filter": "Edge>=21.8pp + WR>=60% + SL>=1.0%",
+    "max_bars": 288
   },
   "patterns": {
     "long": [
       "BD-BD-BU",
-      "BD-MD-DN",
-      "DN-MD-GS",
+      "BD-DN-MU",
+      "BU-BD-DN",
+      "DN-MD-MD",
+      "H-MD-DN",
+      "H-ST-DN",
       "IH-DN-MD",
-      "MD-DN-D",
-      "MD-MD-ST",
-      "MU-BD-ST",
+      "IH-MU-DN",
+      "MD-BD-DN",
+      "MD-DN-BU",
+      "MD-MU-ST",
+      "MD-ST-MD",
       "MU-MD-ST",
-      "MU-U-H",
-      "ST-DN-GS",
-      "ST-U-DF",
-      "U-H-MU",
+      "MU-ST-U",
+      "MU-U-BU",
+      "MU-U-U",
+      "ST-DN-IH",
+      "ST-MU-U",
+      "ST-ST-D",
+      "U-D-ST",
+      "U-MD-BD",
       "U-MU-H"
     ],
     "short": [
-      "BD-U-H",
+      "BD-BU-BU",
+      "BD-BU-U",
+      "BD-DN-BU",
+      "BD-U-DN",
+      "BD-U-MU",
+      "BU-BD-D",
+      "BU-BD-U",
       "BU-BU-DN",
+      "BU-BU-U",
+      "BU-DN-BU",
+      "BU-DN-H",
       "BU-MU-DN",
+      "BU-U-DN",
+      "BU-U-ST",
       "D-D-DN",
-      "D-D-U",
-      "D-DN-BD",
+      "D-DN-ST",
+      "D-MU-DN",
+      "D-ST-U",
+      "D-U-MU",
+      "DF-U-U",
+      "DN-BD-BU",
+      "DN-BD-ST",
       "DN-BU-BU",
       "DN-BU-MD",
-      "DN-H-BD",
+      "DN-D-BD",
+      "DN-DF-DN",
+      "DN-DN-GS",
+      "DN-DN-IH",
+      "DN-GS-ST",
       "DN-IH-MD",
-      "DN-IH-U",
+      "DN-IH-ST",
+      "DN-MD-BD",
+      "DN-MD-DN",
+      "DN-MD-MU",
+      "DN-MU-MU",
+      "DN-ST-BD",
       "DN-ST-BU",
+      "DN-ST-D",
       "DN-U-H",
       "GS-ST-U",
+      "GS-U-DN",
+      "H-DN-ST",
+      "H-DN-U",
       "H-ST-ST",
-      "H-U-BD",
-      "IH-MD-U",
-      "IH-MU-DN",
+      "IH-DN-DN",
+      "IH-DN-U",
       "IH-ST-ST",
+      "IH-U-DN",
+      "IH-U-U",
+      "MD-BD-U",
       "MD-BU-DN",
-      "MD-D-U",
-      "MD-MD-MD",
+      "MD-DN-ST",
+      "MD-MU-DN",
+      "MD-ST-ST",
+      "MD-U-D",
+      "MU-BU-DN",
       "MU-DN-BU",
-      "MU-MD-MU",
+      "MU-DN-MU",
+      "MU-DN-ST",
+      "MU-MD-U",
+      "MU-MU-U",
+      "MU-ST-MD",
+      "MU-U-ST",
+      "ST-BD-BD",
       "ST-BD-BU",
-      "ST-H-U",
+      "ST-D-U",
+      "ST-DN-BU",
+      "ST-H-DN",
       "ST-IH-DN",
-      "ST-MD-MU",
+      "ST-ST-H",
+      "ST-ST-MD",
+      "ST-ST-U",
+      "ST-U-BD",
+      "ST-U-BU",
       "ST-U-H",
+      "U-BU-BD",
+      "U-BU-MD",
+      "U-BU-ST",
+      "U-D-DN",
+      "U-DN-BD",
+      "U-DN-DF",
+      "U-DN-H",
       "U-GS-DN",
-      "U-H-MD",
-      "U-IH-ST",
+      "U-H-DN",
       "U-IH-U",
-      "U-ST-IH"
+      "U-MD-ST",
+      "U-MU-MD",
+      "U-ST-IH",
+      "U-ST-U",
+      "U-U-ST"
     ]
   },
+  "pattern_count": {
+    "long": 22,
+    "short": 90
+  },
+  "backtest_summary": {
+    "total_trades": 450,
+    "win_rate": 93.8,
+    "pnl_pct": 1534.8,
+    "max_drawdown_pct": 31.9,
+    "profit_factor": 6.42,
+    "mc_pvalue": 0.0,
+    "portfolio_mc_pass": true
+  },
   "pattern_details": {
+    "BD-BU-BU_SHORT": {
+      "key": "BD-BU-BU_SHORT",
+      "pattern": "BD-BU-BU",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.0,
+      "trades": 25,
+      "wr": 88.0,
+      "edge": 22.8,
+      "mc_p": 0.0016,
+      "baseline_wr": 65.2
+    },
     "BD-BD-BU_LONG": {
       "key": "BD-BD-BU_LONG",
       "pattern": "BD-BD-BU",
       "direction": "LONG",
-      "tp": 1.8,
+      "tp": 1.6,
       "sl": 3.5,
-      "trades": 51,
-      "wr": 88.2,
-      "edge": 22.2,
+      "trades": 43,
+      "wr": 97.7,
+      "edge": 29.0,
       "mc_p": 0.0,
-      "baseline_wr": 66.0
+      "baseline_wr": 68.6
     },
-    "DN-IH-U_SHORT": {
-      "key": "DN-IH-U_SHORT",
-      "pattern": "DN-IH-U",
+    "ST-ST-U_SHORT": {
+      "key": "ST-ST-U_SHORT",
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 106,
+      "wr": 88.7,
+      "edge": 22.0,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "ST-U-BD_SHORT": {
+      "key": "ST-U-BD_SHORT",
+      "pattern": "ST-U-BD",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 49,
+      "wr": 91.8,
+      "edge": 22.9,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "BU-BD-D_SHORT": {
+      "key": "BU-BD-D_SHORT",
+      "pattern": "BU-BD-D",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.0,
+      "trades": 27,
+      "wr": 92.6,
+      "edge": 25.9,
+      "mc_p": 0.0004,
+      "baseline_wr": 66.7
+    },
+    "U-BU-ST_SHORT": {
+      "key": "U-BU-ST_SHORT",
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 56,
+      "wr": 92.9,
+      "edge": 23.9,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "DN-ST-BD_SHORT": {
+      "key": "DN-ST-BD_SHORT",
+      "pattern": "DN-ST-BD",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 52,
+      "wr": 94.2,
+      "edge": 25.3,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "U-BU-MD_SHORT": {
+      "key": "U-BU-MD_SHORT",
+      "pattern": "U-BU-MD",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 35,
+      "wr": 91.4,
+      "edge": 22.5,
+      "mc_p": 0.0002,
+      "baseline_wr": 69.0
+    },
+    "BU-U-DN_SHORT": {
+      "key": "BU-U-DN_SHORT",
+      "pattern": "BU-U-DN",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 93,
+      "wr": 92.5,
+      "edge": 23.5,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "BD-U-DN_SHORT": {
+      "key": "BD-U-DN_SHORT",
+      "pattern": "BD-U-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 98,
+      "wr": 88.8,
+      "edge": 22.1,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "ST-DN-IH_LONG": {
+      "key": "ST-DN-IH_LONG",
+      "pattern": "ST-DN-IH",
+      "direction": "LONG",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 32,
+      "wr": 90.6,
+      "edge": 22.0,
+      "mc_p": 0.0002,
+      "baseline_wr": 68.6
+    },
+    "DN-DF-DN_SHORT": {
+      "key": "DN-DF-DN_SHORT",
+      "pattern": "DN-DF-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 31,
+      "wr": 90.3,
+      "edge": 23.7,
+      "mc_p": 0.0006,
+      "baseline_wr": 66.7
+    },
+    "IH-DN-DN_SHORT": {
+      "key": "IH-DN-DN_SHORT",
+      "pattern": "IH-DN-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 33,
+      "wr": 90.9,
+      "edge": 24.2,
+      "mc_p": 0.0002,
+      "baseline_wr": 66.7
+    },
+    "DN-MD-DN_SHORT": {
+      "key": "DN-MD-DN_SHORT",
+      "pattern": "DN-MD-DN",
       "direction": "SHORT",
       "tp": 2.5,
       "sl": 4.0,
-      "trades": 51,
-      "wr": 88.2,
-      "edge": 26.7,
+      "trades": 49,
+      "wr": 87.8,
+      "edge": 26.2,
       "mc_p": 0.0,
       "baseline_wr": 61.5
+    },
+    "MD-DN-ST_SHORT": {
+      "key": "MD-DN-ST_SHORT",
+      "pattern": "MD-DN-ST",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 39,
+      "wr": 89.7,
+      "edge": 23.1,
+      "mc_p": 0.0004,
+      "baseline_wr": 66.7
+    },
+    "H-MD-DN_LONG": {
+      "key": "H-MD-DN_LONG",
+      "pattern": "H-MD-DN",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 2.0,
+      "trades": 39,
+      "wr": 89.7,
+      "edge": 23.1,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "MU-U-ST_SHORT": {
+      "key": "MU-U-ST_SHORT",
+      "pattern": "MU-U-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 3.5,
+      "trades": 50,
+      "wr": 88.0,
+      "edge": 22.0,
+      "mc_p": 0.0002,
+      "baseline_wr": 66.0
+    },
+    "GS-ST-U_SHORT": {
+      "key": "GS-ST-U_SHORT",
+      "pattern": "GS-ST-U",
+      "direction": "SHORT",
+      "tp": 0.7,
+      "sl": 1.5,
+      "trades": 30,
+      "wr": 93.3,
+      "edge": 25.2,
+      "mc_p": 0.0,
+      "baseline_wr": 68.2
+    },
+    "BU-U-ST_SHORT": {
+      "key": "BU-U-ST_SHORT",
+      "pattern": "BU-U-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 49,
+      "wr": 93.9,
+      "edge": 24.9,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "IH-U-DN_SHORT": {
+      "key": "IH-U-DN_SHORT",
+      "pattern": "IH-U-DN",
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 4.0,
+      "trades": 28,
+      "wr": 82.1,
+      "edge": 25.0,
+      "mc_p": 0.0016,
+      "baseline_wr": 57.1
+    },
+    "U-IH-U_SHORT": {
+      "key": "U-IH-U_SHORT",
+      "pattern": "U-IH-U",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.5,
+      "trades": 38,
+      "wr": 84.2,
+      "edge": 25.9,
+      "mc_p": 0.0004,
+      "baseline_wr": 58.3
+    },
+    "MU-BU-DN_SHORT": {
+      "key": "MU-BU-DN_SHORT",
+      "pattern": "MU-BU-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 27,
+      "wr": 88.9,
+      "edge": 22.2,
+      "mc_p": 0.0026,
+      "baseline_wr": 66.7
+    },
+    "MU-ST-U_LONG": {
+      "key": "MU-ST-U_LONG",
+      "pattern": "MU-ST-U",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 42,
+      "wr": 90.5,
+      "edge": 24.9,
+      "mc_p": 0.0,
+      "baseline_wr": 65.6
+    },
+    "IH-U-U_SHORT": {
+      "key": "IH-U-U_SHORT",
+      "pattern": "IH-U-U",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 35,
+      "wr": 88.6,
+      "edge": 27.0,
+      "mc_p": 0.0002,
+      "baseline_wr": 61.5
+    },
+    "MU-U-BU_LONG": {
+      "key": "MU-U-BU_LONG",
+      "pattern": "MU-U-BU",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 27,
+      "wr": 88.9,
+      "edge": 23.3,
+      "mc_p": 0.0006,
+      "baseline_wr": 65.6
+    },
+    "U-MD-ST_SHORT": {
+      "key": "U-MD-ST_SHORT",
+      "pattern": "U-MD-ST",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 42,
+      "wr": 83.3,
+      "edge": 21.8,
+      "mc_p": 0.0004,
+      "baseline_wr": 61.5
+    },
+    "H-ST-DN_LONG": {
+      "key": "H-ST-DN_LONG",
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 29,
+      "wr": 96.6,
+      "edge": 27.6,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "ST-MU-U_LONG": {
+      "key": "ST-MU-U_LONG",
+      "pattern": "ST-MU-U",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 59,
+      "wr": 91.5,
+      "edge": 24.9,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "U-U-ST_SHORT": {
+      "key": "U-U-ST_SHORT",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 197,
+      "wr": 91.4,
+      "edge": 22.4,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
     },
     "DN-U-H_SHORT": {
       "key": "DN-U-H_SHORT",
       "pattern": "DN-U-H",
       "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 45,
+      "wr": 93.3,
+      "edge": 24.4,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "U-GS-DN_SHORT": {
+      "key": "U-GS-DN_SHORT",
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.0,
+      "trades": 32,
+      "wr": 96.9,
+      "edge": 31.7,
+      "mc_p": 0.0,
+      "baseline_wr": 65.2
+    },
+    "U-H-DN_SHORT": {
+      "key": "U-H-DN_SHORT",
+      "pattern": "U-H-DN",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 47,
+      "wr": 95.7,
+      "edge": 30.2,
+      "mc_p": 0.0,
+      "baseline_wr": 65.6
+    },
+    "BU-BU-U_SHORT": {
+      "key": "BU-BU-U_SHORT",
+      "pattern": "BU-BU-U",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 31,
+      "wr": 93.5,
+      "edge": 24.6,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "BD-U-MU_SHORT": {
+      "key": "BD-U-MU_SHORT",
+      "pattern": "BD-U-MU",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 29,
+      "wr": 96.6,
+      "edge": 27.6,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "ST-U-H_SHORT": {
+      "key": "ST-U-H_SHORT",
+      "pattern": "ST-U-H",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 31,
+      "wr": 93.5,
+      "edge": 24.9,
+      "mc_p": 0.0,
+      "baseline_wr": 68.6
+    },
+    "U-ST-U_SHORT": {
+      "key": "U-ST-U_SHORT",
+      "pattern": "U-ST-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 173,
+      "wr": 88.4,
+      "edge": 21.8,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "ST-D-U_SHORT": {
+      "key": "ST-D-U_SHORT",
+      "pattern": "ST-D-U",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 35,
+      "wr": 91.4,
+      "edge": 25.9,
+      "mc_p": 0.0,
+      "baseline_wr": 65.6
+    },
+    "DN-BD-ST_SHORT": {
+      "key": "DN-BD-ST_SHORT",
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 41,
+      "wr": 87.8,
+      "edge": 26.3,
+      "mc_p": 0.0002,
+      "baseline_wr": 61.5
+    },
+    "ST-ST-MD_SHORT": {
+      "key": "ST-ST-MD_SHORT",
+      "pattern": "ST-ST-MD",
+      "direction": "SHORT",
       "tp": 3.0,
       "sl": 4.0,
-      "trades": 39,
-      "wr": 87.2,
-      "edge": 30.0,
-      "mc_p": 0.0,
+      "trades": 26,
+      "wr": 80.8,
+      "edge": 23.6,
+      "mc_p": 0.0052,
       "baseline_wr": 57.1
+    },
+    "BU-DN-H_SHORT": {
+      "key": "BU-DN-H_SHORT",
+      "pattern": "BU-DN-H",
+      "direction": "SHORT",
+      "tp": 0.7,
+      "sl": 1.0,
+      "trades": 43,
+      "wr": 83.7,
+      "edge": 24.9,
+      "mc_p": 0.0002,
+      "baseline_wr": 58.8
+    },
+    "D-ST-U_SHORT": {
+      "key": "D-ST-U_SHORT",
+      "pattern": "D-ST-U",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 26,
+      "wr": 88.5,
+      "edge": 26.9,
+      "mc_p": 0.0004,
+      "baseline_wr": 61.5
+    },
+    "D-U-MU_SHORT": {
+      "key": "D-U-MU_SHORT",
+      "pattern": "D-U-MU",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 25,
+      "wr": 96.0,
+      "edge": 27.4,
+      "mc_p": 0.0,
+      "baseline_wr": 68.6
+    },
+    "MD-BU-DN_SHORT": {
+      "key": "MD-BU-DN_SHORT",
+      "pattern": "MD-BU-DN",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 3.0,
+      "trades": 26,
+      "wr": 88.5,
+      "edge": 26.0,
+      "mc_p": 0.0012,
+      "baseline_wr": 62.5
+    },
+    "U-DN-DF_SHORT": {
+      "key": "U-DN-DF_SHORT",
+      "pattern": "U-DN-DF",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 29,
+      "wr": 93.1,
+      "edge": 24.1,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "DN-DN-GS_SHORT": {
+      "key": "DN-DN-GS_SHORT",
+      "pattern": "DN-DN-GS",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 25,
+      "wr": 84.0,
+      "edge": 22.5,
+      "mc_p": 0.0036,
+      "baseline_wr": 61.5
     },
     "BU-MU-DN_SHORT": {
       "key": "BU-MU-DN_SHORT",
       "pattern": "BU-MU-DN",
       "direction": "SHORT",
-      "tp": 2.5,
+      "tp": 1.8,
       "sl": 3.0,
-      "trades": 37,
-      "wr": 86.5,
-      "edge": 31.9,
+      "trades": 31,
+      "wr": 93.5,
+      "edge": 31.0,
       "mc_p": 0.0,
-      "baseline_wr": 54.5
+      "baseline_wr": 62.5
     },
-    "U-ST-IH_SHORT": {
-      "key": "U-ST-IH_SHORT",
-      "pattern": "U-ST-IH",
-      "direction": "SHORT",
+    "U-D-ST_LONG": {
+      "key": "U-D-ST_LONG",
+      "pattern": "U-D-ST",
+      "direction": "LONG",
       "tp": 1.8,
       "sl": 4.0,
       "trades": 35,
@@ -134,29 +712,281 @@
       "mc_p": 0.0,
       "baseline_wr": 69.0
     },
+    "MU-DN-MU_SHORT": {
+      "key": "MU-DN-MU_SHORT",
+      "pattern": "MU-DN-MU",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 3.5,
+      "trades": 36,
+      "wr": 80.6,
+      "edge": 22.2,
+      "mc_p": 0.0022,
+      "baseline_wr": 58.3
+    },
+    "U-DN-BD_SHORT": {
+      "key": "U-DN-BD_SHORT",
+      "pattern": "U-DN-BD",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 81,
+      "wr": 88.9,
+      "edge": 23.3,
+      "mc_p": 0.0,
+      "baseline_wr": 65.6
+    },
+    "MD-MU-ST_LONG": {
+      "key": "MD-MU-ST_LONG",
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "tp": 1.8,
+      "sl": 3.5,
+      "trades": 26,
+      "wr": 92.3,
+      "edge": 26.3,
+      "mc_p": 0.0,
+      "baseline_wr": 66.0
+    },
+    "MU-U-U_LONG": {
+      "key": "MU-U-U_LONG",
+      "pattern": "MU-U-U",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 81,
+      "wr": 88.9,
+      "edge": 22.2,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "U-ST-IH_SHORT": {
+      "key": "U-ST-IH_SHORT",
+      "pattern": "U-ST-IH",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.0,
+      "trades": 25,
+      "wr": 92.0,
+      "edge": 26.8,
+      "mc_p": 0.0002,
+      "baseline_wr": 65.2
+    },
     "DN-BU-BU_SHORT": {
       "key": "DN-BU-BU_SHORT",
       "pattern": "DN-BU-BU",
       "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 3.5,
+      "trades": 37,
+      "wr": 91.9,
+      "edge": 25.9,
+      "mc_p": 0.0,
+      "baseline_wr": 66.0
+    },
+    "ST-DN-BU_SHORT": {
+      "key": "ST-DN-BU_SHORT",
+      "pattern": "ST-DN-BU",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 2.5,
+      "trades": 52,
+      "wr": 80.8,
+      "edge": 22.6,
+      "mc_p": 0.0004,
+      "baseline_wr": 58.1
+    },
+    "BU-BD-U_SHORT": {
+      "key": "BU-BD-U_SHORT",
+      "pattern": "BU-BD-U",
+      "direction": "SHORT",
+      "tp": 3.0,
+      "sl": 4.0,
+      "trades": 29,
+      "wr": 79.3,
+      "edge": 22.2,
+      "mc_p": 0.0054,
+      "baseline_wr": 57.1
+    },
+    "ST-U-BU_SHORT": {
+      "key": "ST-U-BU_SHORT",
+      "pattern": "ST-U-BU",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 41,
+      "wr": 87.8,
+      "edge": 22.2,
+      "mc_p": 0.0002,
+      "baseline_wr": 65.6
+    },
+    "DN-MD-BD_SHORT": {
+      "key": "DN-MD-BD_SHORT",
+      "pattern": "DN-MD-BD",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 25,
+      "wr": 88.0,
+      "edge": 22.4,
+      "mc_p": 0.0014,
+      "baseline_wr": 65.6
+    },
+    "MD-BD-U_SHORT": {
+      "key": "MD-BD-U_SHORT",
+      "pattern": "MD-BD-U",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 35,
+      "wr": 91.4,
+      "edge": 22.5,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "U-DN-H_SHORT": {
+      "key": "U-DN-H_SHORT",
+      "pattern": "U-DN-H",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 50,
+      "wr": 90.0,
+      "edge": 24.4,
+      "mc_p": 0.0,
+      "baseline_wr": 65.6
+    },
+    "H-DN-U_SHORT": {
+      "key": "H-DN-U_SHORT",
+      "pattern": "H-DN-U",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 34,
+      "wr": 85.3,
+      "edge": 23.8,
+      "mc_p": 0.0004,
+      "baseline_wr": 61.5
+    },
+    "MD-ST-ST_SHORT": {
+      "key": "MD-ST-ST_SHORT",
+      "pattern": "MD-ST-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 37,
+      "wr": 91.9,
+      "edge": 22.9,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "DN-MD-MD_LONG": {
+      "key": "DN-MD-MD_LONG",
+      "pattern": "DN-MD-MD",
+      "direction": "LONG",
       "tp": 2.0,
       "sl": 4.0,
-      "trades": 42,
-      "wr": 95.2,
-      "edge": 28.6,
-      "mc_p": 0.0,
+      "trades": 25,
+      "wr": 92.0,
+      "edge": 25.3,
+      "mc_p": 0.0002,
       "baseline_wr": 66.7
+    },
+    "MU-DN-ST_SHORT": {
+      "key": "MU-DN-ST_SHORT",
+      "pattern": "MU-DN-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 56,
+      "wr": 92.9,
+      "edge": 23.9,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
     },
     "U-MU-H_LONG": {
       "key": "U-MU-H_LONG",
       "pattern": "U-MU-H",
       "direction": "LONG",
       "tp": 1.8,
-      "sl": 3.5,
-      "trades": 38,
-      "wr": 94.7,
-      "edge": 28.7,
+      "sl": 2.0,
+      "trades": 33,
+      "wr": 78.8,
+      "edge": 26.2,
+      "mc_p": 0.0018,
+      "baseline_wr": 52.6
+    },
+    "ST-ST-D_LONG": {
+      "key": "ST-ST-D_LONG",
+      "pattern": "ST-ST-D",
+      "direction": "LONG",
+      "tp": 1.4,
+      "sl": 2.0,
+      "trades": 28,
+      "wr": 82.1,
+      "edge": 23.3,
+      "mc_p": 0.0022,
+      "baseline_wr": 58.8
+    },
+    "U-D-DN_SHORT": {
+      "key": "U-D-DN_SHORT",
+      "pattern": "U-D-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 51,
+      "wr": 92.2,
+      "edge": 25.5,
       "mc_p": 0.0,
-      "baseline_wr": 66.0
+      "baseline_wr": 66.7
+    },
+    "DN-DN-IH_SHORT": {
+      "key": "DN-DN-IH_SHORT",
+      "pattern": "DN-DN-IH",
+      "direction": "SHORT",
+      "tp": 2.5,
+      "sl": 4.0,
+      "trades": 43,
+      "wr": 90.7,
+      "edge": 29.2,
+      "mc_p": 0.0,
+      "baseline_wr": 61.5
+    },
+    "U-MU-MD_SHORT": {
+      "key": "U-MU-MD_SHORT",
+      "pattern": "U-MU-MD",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 28,
+      "wr": 89.3,
+      "edge": 22.6,
+      "mc_p": 0.0018,
+      "baseline_wr": 66.7
+    },
+    "MU-MD-U_SHORT": {
+      "key": "MU-MD-U_SHORT",
+      "pattern": "MU-MD-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 27,
+      "wr": 88.9,
+      "edge": 22.2,
+      "mc_p": 0.002,
+      "baseline_wr": 66.7
+    },
+    "D-MU-DN_SHORT": {
+      "key": "D-MU-DN_SHORT",
+      "pattern": "D-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 33,
+      "wr": 93.9,
+      "edge": 25.3,
+      "mc_p": 0.0,
+      "baseline_wr": 68.6
     },
     "BU-BU-DN_SHORT": {
       "key": "BU-BU-DN_SHORT",
@@ -164,107 +994,107 @@
       "direction": "SHORT",
       "tp": 2.0,
       "sl": 4.0,
-      "trades": 52,
-      "wr": 90.4,
-      "edge": 23.7,
+      "trades": 32,
+      "wr": 96.9,
+      "edge": 30.2,
       "mc_p": 0.0,
       "baseline_wr": 66.7
     },
-    "ST-BD-BU_SHORT": {
-      "key": "ST-BD-BU_SHORT",
-      "pattern": "ST-BD-BU",
+    "GS-U-DN_SHORT": {
+      "key": "GS-U-DN_SHORT",
+      "pattern": "GS-U-DN",
       "direction": "SHORT",
-      "tp": 2.1,
+      "tp": 2.0,
       "sl": 4.0,
-      "trades": 25,
-      "wr": 96.0,
-      "edge": 30.4,
+      "trades": 29,
+      "wr": 93.1,
+      "edge": 26.4,
       "mc_p": 0.0,
-      "baseline_wr": 65.6
+      "baseline_wr": 66.7
     },
-    "U-H-MU_LONG": {
-      "key": "U-H-MU_LONG",
-      "pattern": "U-H-MU",
-      "direction": "LONG",
-      "tp": 1.6,
-      "sl": 2.0,
+    "IH-DN-U_SHORT": {
+      "key": "IH-DN-U_SHORT",
+      "pattern": "IH-DN-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
       "trades": 37,
-      "wr": 83.8,
-      "edge": 28.2,
-      "mc_p": 0.0,
-      "baseline_wr": 55.6
-    },
-    "ST-IH-DN_SHORT": {
-      "key": "ST-IH-DN_SHORT",
-      "pattern": "ST-IH-DN",
-      "direction": "SHORT",
-      "tp": 2.5,
-      "sl": 4.0,
-      "trades": 28,
-      "wr": 92.9,
-      "edge": 31.3,
-      "mc_p": 0.0,
-      "baseline_wr": 61.5
-    },
-    "U-IH-U_SHORT": {
-      "key": "U-IH-U_SHORT",
-      "pattern": "U-IH-U",
-      "direction": "SHORT",
-      "tp": 3.0,
-      "sl": 4.0,
-      "trades": 45,
-      "wr": 84.4,
-      "edge": 27.3,
-      "mc_p": 0.0002,
-      "baseline_wr": 57.1
-    },
-    "ST-DN-GS_LONG": {
-      "key": "ST-DN-GS_LONG",
-      "pattern": "ST-DN-GS",
-      "direction": "LONG",
-      "tp": 0.5,
-      "sl": 1.0,
-      "trades": 35,
-      "wr": 88.6,
-      "edge": 21.9,
-      "mc_p": 0.0002,
+      "wr": 89.2,
+      "edge": 22.5,
+      "mc_p": 0.0004,
       "baseline_wr": 66.7
     },
-    "MD-DN-D_LONG": {
-      "key": "MD-DN-D_LONG",
-      "pattern": "MD-DN-D",
-      "direction": "LONG",
-      "tp": 2.1,
-      "sl": 4.0,
-      "trades": 28,
-      "wr": 89.3,
-      "edge": 23.7,
-      "mc_p": 0.0002,
-      "baseline_wr": 65.6
-    },
-    "U-IH-ST_SHORT": {
-      "key": "U-IH-ST_SHORT",
-      "pattern": "U-IH-ST",
+    "DN-MU-MU_SHORT": {
+      "key": "DN-MU-MU_SHORT",
+      "pattern": "DN-MU-MU",
       "direction": "SHORT",
       "tp": 1.6,
       "sl": 3.5,
-      "trades": 26,
-      "wr": 92.3,
-      "edge": 23.7,
-      "mc_p": 0.0002,
+      "trades": 47,
+      "wr": 93.6,
+      "edge": 25.0,
+      "mc_p": 0.0,
       "baseline_wr": 68.6
+    },
+    "BD-BU-U_SHORT": {
+      "key": "BD-BU-U_SHORT",
+      "pattern": "BD-BU-U",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 33,
+      "wr": 93.9,
+      "edge": 28.4,
+      "mc_p": 0.0,
+      "baseline_wr": 65.6
+    },
+    "U-BU-BD_SHORT": {
+      "key": "U-BU-BD_SHORT",
+      "pattern": "U-BU-BD",
+      "direction": "SHORT",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 34,
+      "wr": 88.2,
+      "edge": 22.7,
+      "mc_p": 0.0006,
+      "baseline_wr": 65.6
+    },
+    "U-MD-BD_LONG": {
+      "key": "U-MD-BD_LONG",
+      "pattern": "U-MD-BD",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 26,
+      "wr": 96.2,
+      "edge": 29.5,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
     },
     "DN-ST-BU_SHORT": {
       "key": "DN-ST-BU_SHORT",
       "pattern": "DN-ST-BU",
       "direction": "SHORT",
-      "tp": 2.5,
+      "tp": 3.0,
       "sl": 4.0,
-      "trades": 60,
-      "wr": 83.3,
-      "edge": 21.8,
-      "mc_p": 0.0002,
-      "baseline_wr": 61.5
+      "trades": 33,
+      "wr": 87.9,
+      "edge": 30.7,
+      "mc_p": 0.0,
+      "baseline_wr": 57.1
+    },
+    "ST-ST-H_SHORT": {
+      "key": "ST-ST-H_SHORT",
+      "pattern": "ST-ST-H",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 3.0,
+      "trades": 25,
+      "wr": 88.0,
+      "edge": 25.5,
+      "mc_p": 0.0032,
+      "baseline_wr": 62.5
     },
     "H-ST-ST_SHORT": {
       "key": "H-ST-ST_SHORT",
@@ -272,27 +1102,39 @@
       "direction": "SHORT",
       "tp": 0.7,
       "sl": 1.5,
-      "trades": 31,
-      "wr": 90.3,
-      "edge": 22.1,
-      "mc_p": 0.0002,
+      "trades": 30,
+      "wr": 90.0,
+      "edge": 21.8,
+      "mc_p": 0.0008,
       "baseline_wr": 68.2
     },
-    "ST-U-DF_LONG": {
-      "key": "ST-U-DF_LONG",
-      "pattern": "ST-U-DF",
-      "direction": "LONG",
-      "tp": 1.8,
-      "sl": 4.0,
-      "trades": 26,
-      "wr": 92.3,
-      "edge": 23.3,
-      "mc_p": 0.0002,
-      "baseline_wr": 69.0
+    "ST-H-DN_SHORT": {
+      "key": "ST-H-DN_SHORT",
+      "pattern": "ST-H-DN",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 32,
+      "wr": 93.8,
+      "edge": 25.1,
+      "mc_p": 0.0,
+      "baseline_wr": 68.6
     },
-    "ST-MD-MU_SHORT": {
-      "key": "ST-MD-MU_SHORT",
-      "pattern": "ST-MD-MU",
+    "DN-D-BD_SHORT": {
+      "key": "DN-D-BD_SHORT",
+      "pattern": "DN-D-BD",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 3.0,
+      "trades": 25,
+      "wr": 84.0,
+      "edge": 24.0,
+      "mc_p": 0.004,
+      "baseline_wr": 60.0
+    },
+    "H-DN-ST_SHORT": {
+      "key": "H-DN-ST_SHORT",
+      "pattern": "H-DN-ST",
       "direction": "SHORT",
       "tp": 1.8,
       "sl": 4.0,
@@ -302,45 +1144,57 @@
       "mc_p": 0.0002,
       "baseline_wr": 69.0
     },
-    "IH-ST-ST_SHORT": {
-      "key": "IH-ST-ST_SHORT",
-      "pattern": "IH-ST-ST",
+    "DN-IH-MD_SHORT": {
+      "key": "DN-IH-MD_SHORT",
+      "pattern": "DN-IH-MD",
       "direction": "SHORT",
-      "tp": 1.8,
-      "sl": 3.5,
+      "tp": 1.2,
+      "sl": 2.5,
       "trades": 26,
-      "wr": 92.3,
-      "edge": 26.3,
-      "mc_p": 0.0002,
-      "baseline_wr": 66.0
+      "wr": 96.2,
+      "edge": 28.6,
+      "mc_p": 0.0,
+      "baseline_wr": 67.6
     },
-    "U-GS-DN_SHORT": {
-      "key": "U-GS-DN_SHORT",
-      "pattern": "U-GS-DN",
-      "direction": "SHORT",
-      "tp": 3.0,
-      "sl": 3.0,
-      "trades": 26,
-      "wr": 84.6,
-      "edge": 34.6,
-      "mc_p": 0.0004,
-      "baseline_wr": 50.0
-    },
-    "BD-U-H_SHORT": {
-      "key": "BD-U-H_SHORT",
-      "pattern": "BD-U-H",
+    "ST-BD-BU_SHORT": {
+      "key": "ST-BD-BU_SHORT",
+      "pattern": "ST-BD-BU",
       "direction": "SHORT",
       "tp": 1.4,
       "sl": 3.0,
       "trades": 25,
       "wr": 92.0,
       "edge": 23.8,
-      "mc_p": 0.0004,
+      "mc_p": 0.0008,
       "baseline_wr": 68.2
     },
-    "DN-IH-MD_SHORT": {
-      "key": "DN-IH-MD_SHORT",
-      "pattern": "DN-IH-MD",
+    "BD-DN-BU_SHORT": {
+      "key": "BD-DN-BU_SHORT",
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 30,
+      "wr": 93.3,
+      "edge": 24.4,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "BU-DN-BU_SHORT": {
+      "key": "BU-DN-BU_SHORT",
+      "pattern": "BU-DN-BU",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 4.0,
+      "trades": 37,
+      "wr": 91.9,
+      "edge": 25.2,
+      "mc_p": 0.0,
+      "baseline_wr": 66.7
+    },
+    "MD-U-D_SHORT": {
+      "key": "MD-U-D_SHORT",
+      "pattern": "MD-U-D",
       "direction": "SHORT",
       "tp": 1.8,
       "sl": 4.0,
@@ -350,141 +1204,21 @@
       "mc_p": 0.0004,
       "baseline_wr": 69.0
     },
-    "D-D-U_SHORT": {
-      "key": "D-D-U_SHORT",
-      "pattern": "D-D-U",
+    "MD-MU-DN_SHORT": {
+      "key": "MD-MU-DN_SHORT",
+      "pattern": "MD-MU-DN",
       "direction": "SHORT",
-      "tp": 1.6,
-      "sl": 3.0,
-      "trades": 25,
-      "wr": 92.0,
-      "edge": 26.8,
-      "mc_p": 0.0004,
-      "baseline_wr": 65.2
-    },
-    "D-DN-BD_SHORT": {
-      "key": "D-DN-BD_SHORT",
-      "pattern": "D-DN-BD",
-      "direction": "SHORT",
-      "tp": 1.6,
-      "sl": 3.5,
-      "trades": 28,
-      "wr": 92.9,
-      "edge": 24.2,
-      "mc_p": 0.0004,
-      "baseline_wr": 68.6
-    },
-    "DN-BU-MD_SHORT": {
-      "key": "DN-BU-MD_SHORT",
-      "pattern": "DN-BU-MD",
-      "direction": "SHORT",
-      "tp": 2.1,
+      "tp": 2.0,
       "sl": 4.0,
-      "trades": 32,
-      "wr": 87.5,
-      "edge": 21.9,
-      "mc_p": 0.0006,
-      "baseline_wr": 65.6
-    },
-    "IH-DN-MD_LONG": {
-      "key": "IH-DN-MD_LONG",
-      "pattern": "IH-DN-MD",
-      "direction": "LONG",
-      "tp": 1.0,
-      "sl": 1.5,
-      "trades": 36,
-      "wr": 83.3,
-      "edge": 23.3,
+      "trades": 31,
+      "wr": 90.3,
+      "edge": 23.7,
       "mc_p": 0.0008,
-      "baseline_wr": 60.0
+      "baseline_wr": 66.7
     },
-    "MU-BD-ST_LONG": {
-      "key": "MU-BD-ST_LONG",
-      "pattern": "MU-BD-ST",
-      "direction": "LONG",
-      "tp": 1.8,
-      "sl": 3.0,
-      "trades": 26,
-      "wr": 88.5,
-      "edge": 26.0,
-      "mc_p": 0.001,
-      "baseline_wr": 62.5
-    },
-    "DN-H-BD_SHORT": {
-      "key": "DN-H-BD_SHORT",
-      "pattern": "DN-H-BD",
-      "direction": "SHORT",
-      "tp": 2.1,
-      "sl": 4.0,
-      "trades": 25,
-      "wr": 88.0,
-      "edge": 22.4,
-      "mc_p": 0.0012,
-      "baseline_wr": 65.6
-    },
-    "MU-MD-ST_LONG": {
-      "key": "MU-MD-ST_LONG",
-      "pattern": "MU-MD-ST",
-      "direction": "LONG",
-      "tp": 2.5,
-      "sl": 4.0,
-      "trades": 28,
-      "wr": 85.7,
-      "edge": 24.2,
-      "mc_p": 0.0014,
-      "baseline_wr": 61.5
-    },
-    "MU-DN-BU_SHORT": {
-      "key": "MU-DN-BU_SHORT",
-      "pattern": "MU-DN-BU",
-      "direction": "SHORT",
-      "tp": 2.5,
-      "sl": 4.0,
-      "trades": 34,
-      "wr": 85.3,
-      "edge": 23.8,
-      "mc_p": 0.0014,
-      "baseline_wr": 61.5
-    },
-    "D-D-DN_SHORT": {
-      "key": "D-D-DN_SHORT",
-      "pattern": "D-D-DN",
-      "direction": "SHORT",
-      "tp": 2.1,
-      "sl": 3.0,
-      "trades": 26,
-      "wr": 84.6,
-      "edge": 25.8,
-      "mc_p": 0.0014,
-      "baseline_wr": 58.8
-    },
-    "BD-MD-DN_LONG": {
-      "key": "BD-MD-DN_LONG",
-      "pattern": "BD-MD-DN",
-      "direction": "LONG",
-      "tp": 2.5,
-      "sl": 4.0,
-      "trades": 27,
-      "wr": 85.2,
-      "edge": 23.6,
-      "mc_p": 0.0016,
-      "baseline_wr": 61.5
-    },
-    "DN-MD-GS_LONG": {
-      "key": "DN-MD-GS_LONG",
-      "pattern": "DN-MD-GS",
-      "direction": "LONG",
-      "tp": 1.2,
-      "sl": 2.0,
-      "trades": 25,
-      "wr": 88.0,
-      "edge": 25.5,
-      "mc_p": 0.0016,
-      "baseline_wr": 62.5
-    },
-    "U-H-MD_SHORT": {
-      "key": "U-H-MD_SHORT",
-      "pattern": "U-H-MD",
+    "DN-ST-D_SHORT": {
+      "key": "DN-ST-D_SHORT",
+      "pattern": "DN-ST-D",
       "direction": "SHORT",
       "tp": 2.0,
       "sl": 4.0,
@@ -494,425 +1228,738 @@
       "mc_p": 0.0018,
       "baseline_wr": 66.7
     },
-    "MD-MD-ST_LONG": {
-      "key": "MD-MD-ST_LONG",
-      "pattern": "MD-MD-ST",
-      "direction": "LONG",
-      "tp": 1.2,
-      "sl": 1.0,
-      "trades": 39,
-      "wr": 69.2,
-      "edge": 23.8,
-      "mc_p": 0.0024,
-      "baseline_wr": 45.5
+    "DN-BD-BU_SHORT": {
+      "key": "DN-BD-BU_SHORT",
+      "pattern": "DN-BD-BU",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 3.0,
+      "trades": 46,
+      "wr": 89.1,
+      "edge": 26.6,
+      "mc_p": 0.0,
+      "baseline_wr": 62.5
     },
-    "IH-MD-U_SHORT": {
-      "key": "IH-MD-U_SHORT",
-      "pattern": "IH-MD-U",
+    "IH-MU-DN_LONG": {
+      "key": "IH-MU-DN_LONG",
+      "pattern": "IH-MU-DN",
+      "direction": "LONG",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 27,
+      "wr": 92.6,
+      "edge": 24.0,
+      "mc_p": 0.0,
+      "baseline_wr": 68.6
+    },
+    "DN-GS-ST_SHORT": {
+      "key": "DN-GS-ST_SHORT",
+      "pattern": "DN-GS-ST",
+      "direction": "SHORT",
+      "tp": 1.2,
+      "sl": 2.5,
+      "trades": 26,
+      "wr": 92.3,
+      "edge": 24.7,
+      "mc_p": 0.0004,
+      "baseline_wr": 67.6
+    },
+    "ST-BD-BD_SHORT": {
+      "key": "ST-BD-BD_SHORT",
+      "pattern": "ST-BD-BD",
       "direction": "SHORT",
       "tp": 2.0,
       "sl": 4.0,
       "trades": 26,
       "wr": 88.5,
       "edge": 21.8,
-      "mc_p": 0.0028,
+      "mc_p": 0.0026,
       "baseline_wr": 66.7
     },
-    "GS-ST-U_SHORT": {
-      "key": "GS-ST-U_SHORT",
-      "pattern": "GS-ST-U",
-      "direction": "SHORT",
-      "tp": 1.0,
-      "sl": 1.5,
-      "trades": 30,
-      "wr": 83.3,
-      "edge": 23.3,
-      "mc_p": 0.003,
-      "baseline_wr": 60.0
-    },
-    "ST-H-U_SHORT": {
-      "key": "ST-H-U_SHORT",
-      "pattern": "ST-H-U",
-      "direction": "SHORT",
-      "tp": 2.5,
-      "sl": 4.0,
-      "trades": 25,
-      "wr": 84.0,
-      "edge": 22.5,
-      "mc_p": 0.004,
-      "baseline_wr": 61.5
-    },
-    "IH-MU-DN_SHORT": {
-      "key": "IH-MU-DN_SHORT",
-      "pattern": "IH-MU-DN",
-      "direction": "SHORT",
-      "tp": 2.5,
-      "sl": 4.0,
-      "trades": 25,
-      "wr": 84.0,
-      "edge": 22.5,
-      "mc_p": 0.004,
-      "baseline_wr": 61.5
-    },
-    "MD-D-U_SHORT": {
-      "key": "MD-D-U_SHORT",
-      "pattern": "MD-D-U",
-      "direction": "SHORT",
-      "tp": 2.1,
-      "sl": 3.0,
-      "trades": 27,
-      "wr": 81.5,
-      "edge": 22.7,
-      "mc_p": 0.0042,
-      "baseline_wr": 58.8
-    },
-    "MU-MD-MU_SHORT": {
-      "key": "MU-MD-MU_SHORT",
-      "pattern": "MU-MD-MU",
-      "direction": "SHORT",
-      "tp": 3.0,
-      "sl": 4.0,
-      "trades": 26,
-      "wr": 80.8,
-      "edge": 23.6,
-      "mc_p": 0.0048,
-      "baseline_wr": 57.1
-    },
-    "ST-U-H_SHORT": {
-      "key": "ST-U-H_SHORT",
-      "pattern": "ST-U-H",
-      "direction": "SHORT",
-      "tp": 3.0,
-      "sl": 4.0,
-      "trades": 29,
-      "wr": 79.3,
-      "edge": 22.2,
-      "mc_p": 0.0052,
-      "baseline_wr": 57.1
-    },
-    "MD-BU-DN_SHORT": {
-      "key": "MD-BU-DN_SHORT",
-      "pattern": "MD-BU-DN",
-      "direction": "SHORT",
-      "tp": 3.0,
-      "sl": 4.0,
-      "trades": 26,
-      "wr": 80.8,
-      "edge": 23.6,
-      "mc_p": 0.0054,
-      "baseline_wr": 57.1
-    },
-    "MD-MD-MD_SHORT": {
-      "key": "MD-MD-MD_SHORT",
-      "pattern": "MD-MD-MD",
-      "direction": "SHORT",
-      "tp": 3.0,
-      "sl": 2.5,
-      "trades": 25,
-      "wr": 72.0,
-      "edge": 26.5,
-      "mc_p": 0.0064,
-      "baseline_wr": 45.5
-    },
-    "MU-U-H_LONG": {
-      "key": "MU-U-H_LONG",
-      "pattern": "MU-U-H",
+    "MU-MD-ST_LONG": {
+      "key": "MU-MD-ST_LONG",
+      "pattern": "MU-MD-ST",
       "direction": "LONG",
-      "tp": 2.5,
-      "sl": 3.0,
-      "trades": 27,
-      "wr": 77.8,
-      "edge": 23.2,
-      "mc_p": 0.0078,
-      "baseline_wr": 54.5
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 25,
+      "wr": 96.0,
+      "edge": 27.0,
+      "mc_p": 0.0002,
+      "baseline_wr": 69.0
     },
-    "H-U-BD_SHORT": {
-      "key": "H-U-BD_SHORT",
-      "pattern": "H-U-BD",
+    "DN-MD-MU_SHORT": {
+      "key": "DN-MD-MU_SHORT",
+      "pattern": "DN-MD-MU",
+      "direction": "SHORT",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 36,
+      "wr": 91.7,
+      "edge": 23.0,
+      "mc_p": 0.0002,
+      "baseline_wr": 68.6
+    },
+    "DF-U-U_SHORT": {
+      "key": "DF-U-U_SHORT",
+      "pattern": "DF-U-U",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 31,
+      "wr": 93.5,
+      "edge": 25.4,
+      "mc_p": 0.0,
+      "baseline_wr": 68.2
+    },
+    "MD-DN-BU_LONG": {
+      "key": "MD-DN-BU_LONG",
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "tp": 1.6,
+      "sl": 3.5,
+      "trades": 29,
+      "wr": 96.6,
+      "edge": 27.9,
+      "mc_p": 0.0,
+      "baseline_wr": 68.6
+    },
+    "DN-IH-ST_SHORT": {
+      "key": "DN-IH-ST_SHORT",
+      "pattern": "DN-IH-ST",
       "direction": "SHORT",
       "tp": 1.8,
-      "sl": 2.0,
+      "sl": 4.0,
       "trades": 25,
-      "wr": 76.0,
-      "edge": 23.4,
-      "mc_p": 0.0088,
-      "baseline_wr": 52.6
+      "wr": 92.0,
+      "edge": 23.0,
+      "mc_p": 0.0004,
+      "baseline_wr": 69.0
+    },
+    "BD-DN-MU_LONG": {
+      "key": "BD-DN-MU_LONG",
+      "pattern": "BD-DN-MU",
+      "direction": "LONG",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 27,
+      "wr": 96.3,
+      "edge": 27.3,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "ST-IH-DN_SHORT": {
+      "key": "ST-IH-DN_SHORT",
+      "pattern": "ST-IH-DN",
+      "direction": "SHORT",
+      "tp": 1.2,
+      "sl": 2.5,
+      "trades": 38,
+      "wr": 89.5,
+      "edge": 21.9,
+      "mc_p": 0.0,
+      "baseline_wr": 67.6
+    },
+    "MU-ST-MD_SHORT": {
+      "key": "MU-ST-MD_SHORT",
+      "pattern": "MU-ST-MD",
+      "direction": "SHORT",
+      "tp": 1.2,
+      "sl": 2.5,
+      "trades": 27,
+      "wr": 92.6,
+      "edge": 25.0,
+      "mc_p": 0.0004,
+      "baseline_wr": 67.6
+    },
+    "BU-BD-DN_LONG": {
+      "key": "BU-BD-DN_LONG",
+      "pattern": "BU-BD-DN",
+      "direction": "LONG",
+      "tp": 2.1,
+      "sl": 4.0,
+      "trades": 35,
+      "wr": 88.6,
+      "edge": 23.0,
+      "mc_p": 0.0004,
+      "baseline_wr": 65.6
+    },
+    "MU-DN-BU_SHORT": {
+      "key": "MU-DN-BU_SHORT",
+      "pattern": "MU-DN-BU",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 25,
+      "wr": 92.0,
+      "edge": 23.0,
+      "mc_p": 0.0008,
+      "baseline_wr": 69.0
+    },
+    "MD-ST-MD_LONG": {
+      "key": "MD-ST-MD_LONG",
+      "pattern": "MD-ST-MD",
+      "direction": "LONG",
+      "tp": 1.2,
+      "sl": 1.5,
+      "trades": 32,
+      "wr": 78.1,
+      "edge": 22.6,
+      "mc_p": 0.0056,
+      "baseline_wr": 55.6
+    },
+    "DN-BU-MD_SHORT": {
+      "key": "DN-BU-MD_SHORT",
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "tp": 1.2,
+      "sl": 2.0,
+      "trades": 38,
+      "wr": 86.8,
+      "edge": 24.3,
+      "mc_p": 0.0002,
+      "baseline_wr": 62.5
+    },
+    "D-DN-ST_SHORT": {
+      "key": "D-DN-ST_SHORT",
+      "pattern": "D-DN-ST",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 3.5,
+      "trades": 32,
+      "wr": 90.6,
+      "edge": 24.6,
+      "mc_p": 0.0002,
+      "baseline_wr": 66.0
+    },
+    "MU-MU-U_SHORT": {
+      "key": "MU-MU-U_SHORT",
+      "pattern": "MU-MU-U",
+      "direction": "SHORT",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 25,
+      "wr": 92.0,
+      "edge": 23.0,
+      "mc_p": 0.0006,
+      "baseline_wr": 69.0
+    },
+    "MD-BD-DN_LONG": {
+      "key": "MD-BD-DN_LONG",
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "tp": 1.8,
+      "sl": 4.0,
+      "trades": 26,
+      "wr": 96.2,
+      "edge": 27.2,
+      "mc_p": 0.0,
+      "baseline_wr": 69.0
+    },
+    "D-D-DN_SHORT": {
+      "key": "D-D-DN_SHORT",
+      "pattern": "D-D-DN",
+      "direction": "SHORT",
+      "tp": 1.2,
+      "sl": 2.5,
+      "trades": 25,
+      "wr": 92.0,
+      "edge": 24.4,
+      "mc_p": 0.0006,
+      "baseline_wr": 67.6
+    },
+    "IH-ST-ST_SHORT": {
+      "key": "IH-ST-ST_SHORT",
+      "pattern": "IH-ST-ST",
+      "direction": "SHORT",
+      "tp": 1.4,
+      "sl": 3.0,
+      "trades": 26,
+      "wr": 96.2,
+      "edge": 28.0,
+      "mc_p": 0.0,
+      "baseline_wr": 68.2
+    },
+    "IH-DN-MD_LONG": {
+      "key": "IH-DN-MD_LONG",
+      "pattern": "IH-DN-MD",
+      "direction": "LONG",
+      "tp": 0.7,
+      "sl": 1.5,
+      "trades": 32,
+      "wr": 90.6,
+      "edge": 22.4,
+      "mc_p": 0.0004,
+      "baseline_wr": 68.2
     }
   },
+  "tp_sl_mode": "per_pattern",
   "patterns_tpsl": {
+    "BD-BU-BU": [
+      1.6,
+      3.0
+    ],
     "BD-BD-BU": [
+      1.6,
+      3.5
+    ],
+    "ST-ST-U": [
+      2.0,
+      4.0
+    ],
+    "ST-U-BD": [
+      1.8,
+      4.0
+    ],
+    "BU-BD-D": [
+      1.0,
+      2.0
+    ],
+    "U-BU-ST": [
+      1.8,
+      4.0
+    ],
+    "DN-ST-BD": [
+      1.8,
+      4.0
+    ],
+    "U-BU-MD": [
+      1.8,
+      4.0
+    ],
+    "BU-U-DN": [
+      1.8,
+      4.0
+    ],
+    "BD-U-DN": [
+      2.0,
+      4.0
+    ],
+    "ST-DN-IH": [
+      1.6,
+      3.5
+    ],
+    "DN-DF-DN": [
+      2.0,
+      4.0
+    ],
+    "IH-DN-DN": [
+      2.0,
+      4.0
+    ],
+    "DN-MD-DN": [
+      2.5,
+      4.0
+    ],
+    "MD-DN-ST": [
+      2.0,
+      4.0
+    ],
+    "H-MD-DN": [
+      1.0,
+      2.0
+    ],
+    "MU-U-ST": [
       1.8,
       3.5
     ],
-    "DN-IH-U": [
-      2.5,
-      4.0
+    "GS-ST-U": [
+      0.7,
+      1.5
     ],
-    "DN-U-H": [
-      3.0,
-      4.0
-    ],
-    "BU-MU-DN": [
-      2.5,
-      3.0
-    ],
-    "U-ST-IH": [
+    "BU-U-ST": [
       1.8,
       4.0
     ],
-    "DN-BU-BU": [
+    "IH-U-DN": [
+      3.0,
+      4.0
+    ],
+    "U-IH-U": [
+      2.5,
+      3.5
+    ],
+    "MU-BU-DN": [
       2.0,
+      4.0
+    ],
+    "MU-ST-U": [
+      2.1,
+      4.0
+    ],
+    "IH-U-U": [
+      2.5,
+      4.0
+    ],
+    "MU-U-BU": [
+      2.1,
+      4.0
+    ],
+    "U-MD-ST": [
+      2.5,
+      4.0
+    ],
+    "H-ST-DN": [
+      1.8,
+      4.0
+    ],
+    "ST-MU-U": [
+      2.0,
+      4.0
+    ],
+    "U-U-ST": [
+      1.8,
+      4.0
+    ],
+    "DN-U-H": [
+      1.8,
+      4.0
+    ],
+    "U-GS-DN": [
+      1.6,
+      3.0
+    ],
+    "U-H-DN": [
+      2.1,
+      4.0
+    ],
+    "BU-BU-U": [
+      1.8,
+      4.0
+    ],
+    "BD-U-MU": [
+      1.8,
+      4.0
+    ],
+    "ST-U-H": [
+      1.6,
+      3.5
+    ],
+    "U-ST-U": [
+      2.0,
+      4.0
+    ],
+    "ST-D-U": [
+      2.1,
+      4.0
+    ],
+    "DN-BD-ST": [
+      2.5,
+      4.0
+    ],
+    "ST-ST-MD": [
+      3.0,
+      4.0
+    ],
+    "BU-DN-H": [
+      0.7,
+      1.0
+    ],
+    "D-ST-U": [
+      2.5,
+      4.0
+    ],
+    "D-U-MU": [
+      1.6,
+      3.5
+    ],
+    "MD-BU-DN": [
+      1.8,
+      3.0
+    ],
+    "U-DN-DF": [
+      1.8,
+      4.0
+    ],
+    "DN-DN-GS": [
+      2.5,
+      4.0
+    ],
+    "BU-MU-DN": [
+      1.8,
+      3.0
+    ],
+    "U-D-ST": [
+      1.8,
+      4.0
+    ],
+    "MU-DN-MU": [
+      2.5,
+      3.5
+    ],
+    "U-DN-BD": [
+      2.1,
+      4.0
+    ],
+    "MD-MU-ST": [
+      1.8,
+      3.5
+    ],
+    "MU-U-U": [
+      2.0,
+      4.0
+    ],
+    "U-ST-IH": [
+      1.6,
+      3.0
+    ],
+    "DN-BU-BU": [
+      1.8,
+      3.5
+    ],
+    "ST-DN-BU": [
+      1.8,
+      2.5
+    ],
+    "BU-BD-U": [
+      3.0,
+      4.0
+    ],
+    "ST-U-BU": [
+      2.1,
+      4.0
+    ],
+    "DN-MD-BD": [
+      2.1,
+      4.0
+    ],
+    "MD-BD-U": [
+      1.8,
+      4.0
+    ],
+    "U-DN-H": [
+      2.1,
+      4.0
+    ],
+    "H-DN-U": [
+      2.5,
+      4.0
+    ],
+    "MD-ST-ST": [
+      1.8,
+      4.0
+    ],
+    "DN-MD-MD": [
+      2.0,
+      4.0
+    ],
+    "MU-DN-ST": [
+      1.8,
       4.0
     ],
     "U-MU-H": [
       1.8,
+      2.0
+    ],
+    "ST-ST-D": [
+      1.4,
+      2.0
+    ],
+    "U-D-DN": [
+      2.0,
+      4.0
+    ],
+    "DN-DN-IH": [
+      2.5,
+      4.0
+    ],
+    "U-MU-MD": [
+      2.0,
+      4.0
+    ],
+    "MU-MD-U": [
+      2.0,
+      4.0
+    ],
+    "D-MU-DN": [
+      1.6,
       3.5
     ],
     "BU-BU-DN": [
       2.0,
       4.0
     ],
-    "ST-BD-BU": [
-      2.1,
+    "GS-U-DN": [
+      2.0,
       4.0
     ],
-    "U-H-MU": [
-      1.6,
-      2.0
-    ],
-    "ST-IH-DN": [
-      2.5,
+    "IH-DN-U": [
+      2.0,
       4.0
     ],
-    "U-IH-U": [
-      3.0,
-      4.0
-    ],
-    "ST-DN-GS": [
-      0.5,
-      1.0
-    ],
-    "MD-DN-D": [
-      2.1,
-      4.0
-    ],
-    "U-IH-ST": [
+    "DN-MU-MU": [
       1.6,
       3.5
     ],
-    "DN-ST-BU": [
-      2.5,
+    "BD-BU-U": [
+      2.1,
       4.0
+    ],
+    "U-BU-BD": [
+      2.1,
+      4.0
+    ],
+    "U-MD-BD": [
+      2.0,
+      4.0
+    ],
+    "DN-ST-BU": [
+      3.0,
+      4.0
+    ],
+    "ST-ST-H": [
+      1.8,
+      3.0
     ],
     "H-ST-ST": [
       0.7,
       1.5
     ],
-    "ST-U-DF": [
-      1.8,
-      4.0
-    ],
-    "ST-MD-MU": [
-      1.8,
-      4.0
-    ],
-    "IH-ST-ST": [
-      1.8,
+    "ST-H-DN": [
+      1.6,
       3.5
     ],
-    "U-GS-DN": [
-      3.0,
+    "DN-D-BD": [
+      2.0,
       3.0
     ],
-    "BD-U-H": [
+    "H-DN-ST": [
+      1.8,
+      4.0
+    ],
+    "DN-IH-MD": [
+      1.2,
+      2.5
+    ],
+    "ST-BD-BU": [
       1.4,
       3.0
     ],
-    "DN-IH-MD": [
+    "BD-DN-BU": [
       1.8,
       4.0
     ],
-    "D-D-U": [
-      1.6,
+    "BU-DN-BU": [
+      2.0,
+      4.0
+    ],
+    "MD-U-D": [
+      1.8,
+      4.0
+    ],
+    "MD-MU-DN": [
+      2.0,
+      4.0
+    ],
+    "DN-ST-D": [
+      2.0,
+      4.0
+    ],
+    "DN-BD-BU": [
+      1.8,
       3.0
     ],
-    "D-DN-BD": [
+    "IH-MU-DN": [
       1.6,
       3.5
     ],
-    "DN-BU-MD": [
-      2.1,
-      4.0
+    "DN-GS-ST": [
+      1.2,
+      2.5
     ],
-    "IH-DN-MD": [
-      1.0,
-      1.5
-    ],
-    "MU-BD-ST": [
-      1.8,
-      3.0
-    ],
-    "DN-H-BD": [
-      2.1,
+    "ST-BD-BD": [
+      2.0,
       4.0
     ],
     "MU-MD-ST": [
-      2.5,
+      1.8,
+      4.0
+    ],
+    "DN-MD-MU": [
+      1.6,
+      3.5
+    ],
+    "DF-U-U": [
+      1.4,
+      3.0
+    ],
+    "MD-DN-BU": [
+      1.6,
+      3.5
+    ],
+    "DN-IH-ST": [
+      1.8,
+      4.0
+    ],
+    "BD-DN-MU": [
+      1.8,
+      4.0
+    ],
+    "ST-IH-DN": [
+      1.2,
+      2.5
+    ],
+    "MU-ST-MD": [
+      1.2,
+      2.5
+    ],
+    "BU-BD-DN": [
+      2.1,
       4.0
     ],
     "MU-DN-BU": [
-      2.5,
+      1.8,
+      4.0
+    ],
+    "MD-ST-MD": [
+      1.2,
+      1.5
+    ],
+    "DN-BU-MD": [
+      1.2,
+      2.0
+    ],
+    "D-DN-ST": [
+      1.8,
+      3.5
+    ],
+    "MU-MU-U": [
+      1.8,
+      4.0
+    ],
+    "MD-BD-DN": [
+      1.8,
       4.0
     ],
     "D-D-DN": [
-      2.1,
-      3.0
-    ],
-    "BD-MD-DN": [
-      2.5,
-      4.0
-    ],
-    "DN-MD-GS": [
       1.2,
-      2.0
-    ],
-    "U-H-MD": [
-      2.0,
-      4.0
-    ],
-    "MD-MD-ST": [
-      1.2,
-      1.0
-    ],
-    "IH-MD-U": [
-      2.0,
-      4.0
-    ],
-    "GS-ST-U": [
-      1.0,
-      1.5
-    ],
-    "ST-H-U": [
-      2.5,
-      4.0
-    ],
-    "IH-MU-DN": [
-      2.5,
-      4.0
-    ],
-    "MD-D-U": [
-      2.1,
-      3.0
-    ],
-    "MU-MD-MU": [
-      3.0,
-      4.0
-    ],
-    "ST-U-H": [
-      3.0,
-      4.0
-    ],
-    "MD-BU-DN": [
-      3.0,
-      4.0
-    ],
-    "MD-MD-MD": [
-      3.0,
       2.5
     ],
-    "MU-U-H": [
-      2.5,
+    "IH-ST-ST": [
+      1.4,
       3.0
     ],
-    "H-U-BD": [
-      1.8,
-      2.0
+    "IH-DN-MD": [
+      0.7,
+      1.5
     ]
   },
-  "summary": {
-    "total": 47,
-    "long": 13,
-    "short": 34
+  "tp_distribution": {
+    "min": 0.7,
+    "median": 1.8,
+    "max": 3.0,
+    "mean": 1.85
   },
-  "walk_forward": {
-    "n_folds": 3,
-    "folds": [
-      {
-        "fold": 1,
-        "is_bars": 19440,
-        "oos_bars": 19440,
-        "is_patterns": 69,
-        "is_long": 63,
-        "is_short": 6,
-        "oos_trades": 104,
-        "oos_wr": 58.7,
-        "oos_pnl": 17.2,
-        "oos_mdd": 50.8,
-        "oos_pf": 1.09,
-        "oos_positive": true
-      },
-      {
-        "fold": 2,
-        "is_bars": 38880,
-        "oos_bars": 19440,
-        "is_patterns": 194,
-        "is_long": 155,
-        "is_short": 39,
-        "oos_trades": 108,
-        "oos_wr": 67.6,
-        "oos_pnl": 19.2,
-        "oos_mdd": 57.6,
-        "oos_pf": 1.06,
-        "oos_positive": true
-      },
-      {
-        "fold": 3,
-        "is_bars": 58320,
-        "oos_bars": 19440,
-        "is_patterns": 196,
-        "is_long": 74,
-        "is_short": 122,
-        "oos_trades": 84,
-        "oos_wr": 84.5,
-        "oos_pnl": 252.9,
-        "oos_mdd": 25.9,
-        "oos_pf": 3.3,
-        "oos_positive": true
-      }
-    ],
-    "positive_folds": 3,
-    "total_oos_pnl": 289.3,
-    "total_oos_trades": 296,
-    "stable_pattern_count": 21,
-    "stable_patterns": [
-      "DN-DN-H_LONG",
-      "DN-DN-ST_LONG",
-      "DN-MD-DN_LONG",
-      "DN-MU-DN_LONG",
-      "DN-U-MU_LONG",
-      "MD-DN-DN_LONG",
-      "MD-U-U_SHORT",
-      "MU-DN-MU_LONG",
-      "MU-DN-U_LONG",
-      "MU-ST-U_LONG",
-      "MU-U-MD_LONG",
-      "MU-U-U_LONG",
-      "ST-BD-U_SHORT",
-      "ST-MU-U_LONG",
-      "U-BD-DN_LONG",
-      "U-DN-ST_LONG",
-      "U-MD-DN_LONG",
-      "U-MU-ST_LONG",
-      "U-MU-U_LONG",
-      "U-U-MU_LONG",
-      "U-U-ST_SHORT"
-    ]
+  "sl_distribution": {
+    "min": 1.0,
+    "median": 4.0,
+    "max": 4.0,
+    "mean": 3.54
   },
   "timing": {
     "classify_sec": 3.3,
-    "scan_sec": 83.4,
-    "wf_sec": 488.4,
-    "total_sec": 575.1
+    "scan_sec": 79.5,
+    "total_sec": 82.9
   },
-  "tp_sl_mode": "per_pattern"
+  "post_filter_applied": true
 }

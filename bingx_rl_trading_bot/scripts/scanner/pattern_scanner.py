@@ -56,7 +56,7 @@ logger = logging.getLogger('pattern_scanner')
 # ============================================================
 FEE_PCT = 0.10          # 0.05% entry + 0.05% exit
 LEVERAGE = 3            # Position leverage
-MAX_BARS = 500          # Max bars to hold trade before timeout
+MAX_BARS = 288          # Max bars to hold trade (24h at 5m); v1.28.24: 500→288 (24h study)
 MC_SIMS = 5000          # Monte Carlo simulations
 DEFAULT_UNI_TP = 2.0    # Universal TP % (v1.28.2: WF frontier optimal)
 DEFAULT_UNI_SL = 3.0    # Universal SL %

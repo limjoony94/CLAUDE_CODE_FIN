@@ -515,8 +515,8 @@ API_MAX_DELAY = 30
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
 EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
-EXPECTED_AVG_WIN = 6.04   # v1.28.11: 47pat (SL>=1.0%) TP mean 2.05% × 3x - 0.10%
-EXPECTED_AVG_LOSS = 10.09  # v1.28.11: 47pat (SL>=1.0%) SL mean 3.33% × 3x + 0.10%
+EXPECTED_AVG_WIN = 5.44   # v1.28.24: 112pat (288bars) TP mean 1.85% × 3x - 0.10%
+EXPECTED_AVG_LOSS = 10.73  # v1.28.24: 112pat (288bars) SL mean 3.54% × 3x + 0.10%
 EXPECTED_EDGE = 15.0      # v1.27.3: genuine edge ~10-20% (was 50% — inflated by look-ahead)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5

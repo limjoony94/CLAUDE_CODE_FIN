@@ -97,16 +97,13 @@ def _ensure_required_keys(state: Dict[str, Any], defaults: Dict[str, Any]) -> Di
 
 
 def _check_daily_reset(state: Dict[str, Any]) -> Dict[str, Any]:
-    """Check if daily stats should be reset (new trading day)."""
+    """Check if daily stats should be reset (new trading day). Used at load time (no save)."""
     today = datetime.now().strftime('%Y-%m-%d')
     last_date = state.get('last_trade_date', '')
 
     if last_date and last_date != today:
         logger.info(f"New day detected ({last_date} -> {today}), resetting daily stats")
-        state['daily_pnl'] = 0.0
-        state['daily_trades'] = 0
-        state['consecutive_losses'] = 0
-        state['last_trade_date'] = today
+        _reset_daily_fields(state, today)
 
     return state
 
@@ -257,6 +254,14 @@ def cleanup_old_backups(state_file: str, max_backups: int = MAX_STATE_BACKUPS) -
         logger.debug(f"Failed to cleanup old backups: {e}")
 
 
+def _reset_daily_fields(state: Dict[str, Any], today: str) -> None:
+    """Reset daily stat fields (shared by load-time and runtime reset)."""
+    state['daily_pnl'] = 0.0
+    state['daily_trades'] = 0
+    state['consecutive_losses'] = 0
+    state['last_trade_date'] = today
+
+
 def reset_daily_stats_if_needed(state: Dict[str, Any]) -> bool:
     """
     Reset daily statistics if it's a new trading day.
@@ -273,10 +278,7 @@ def reset_daily_stats_if_needed(state: Dict[str, Any]) -> bool:
     if last_date != today:
         if last_date:
             logger.info(f"📅 New day detected ({last_date} → {today}), resetting daily stats")
-        state['daily_pnl'] = 0.0
-        state['daily_trades'] = 0
-        state['consecutive_losses'] = 0
-        state['last_trade_date'] = today
+        _reset_daily_fields(state, today)
         save_state(state)
         return True
 

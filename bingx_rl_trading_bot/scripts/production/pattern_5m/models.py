@@ -171,7 +171,7 @@ class PerformanceMetrics:
         self.total_trades += 1
         self.total_pnl_pct += pnl_pct
 
-        if pnl_pct > 0:
+        if pnl_pct >= 0:
             self.winning_trades += 1
             self.recent_wins.append(pnl_pct)
         else:

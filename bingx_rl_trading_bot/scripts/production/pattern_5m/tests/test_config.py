@@ -118,7 +118,7 @@ class TestConfigValidation:
 
     def test_validate_valid_config(self, valid_config):
         """Valid config should pass validation."""
-        assert validate_config(valid_config) is True
+        validate_config(valid_config)  # should not raise
 
     def test_missing_required_field_symbol(self):
         """Missing 'symbol' should raise ValueError."""
@@ -328,7 +328,7 @@ class TestConfigIntegration:
             yaml.dump(valid_config, f)
 
         config = load_config(temp_config_file)
-        assert validate_config(config) is True
+        validate_config(config)  # should not raise
 
     def test_load_invalid_config_validates_with_error(self, temp_config_file):
         """Config with invalid value should fail validation."""

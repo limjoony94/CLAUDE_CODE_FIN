@@ -70,15 +70,12 @@ def _merge_config(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, A
     return result
 
 
-def validate_config(config: Dict[str, Any]) -> bool:
+def validate_config(config: Dict[str, Any]) -> None:
     """
     Validate configuration for required fields and valid values.
 
     Args:
         config: Configuration dictionary to validate
-
-    Returns:
-        True if validation passes
 
     Raises:
         ValueError: If validation fails
@@ -116,7 +113,6 @@ def validate_config(config: Dict[str, Any]) -> bool:
         raise ValueError(error_msg)
 
     logger.info("✅ Config validation passed")
-    return True
 
 
 def get_strategy_config(config: Dict[str, Any]) -> Dict[str, Any]:

@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.10 | **Bot**: Pattern 5m (50패턴, 15L+35S) | **Updated**: 2026-02-17
+> **Version**: v1.28.11 | **Bot**: Pattern 5m (47패턴, 13L+34S) | **Updated**: 2026-02-17
 
 ---
 
@@ -44,7 +44,7 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.28.9
+## 📊 현재 전략: Pattern 5m v1.28.11
 
 ### 핵심 파라미터
 
@@ -56,31 +56,29 @@
 | Leverage | 3x |
 | Timeframe | 5m |
 | Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
-| Quality Filter | **Edge>=21.8pp + WR>=60% + MC<0.01 + BH FDR + min_trades>=25** |
-| Patterns | **50** (15L + 35S), edge mean 25.0pp, WR mean 85.5% |
+| Quality Filter | **Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + BH FDR + min_trades>=25** |
+| Patterns | **47** (13L + 34S), edge mean 24.9pp, WR mean 86.8% |
 | Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause |
 
 ### 270일 In-Sample 검증 결과
 
-| 지표 | Static 51 (v1.27.2) | **Dynamic 50 (v1.28.9)** |
+| 지표 | Static 51 (v1.27.2) | **Dynamic 47 (v1.28.11)** |
 |------|---------------------|--------------------------|
-| Patterns | 51 (32L+19S) | **50 (15L+35S)** |
-| Filter | MC<0.01 + edge>=10pp | **MC<0.01 + BH FDR + edge>=21.8pp + WR>=60%** |
-| WR mean | 84.9% | **85.5%** |
-| Edge mean | ~15pp | **25.0pp** |
-| Trades | 339 | **1,580** |
+| Patterns | 51 (32L+19S) | **47 (13L+34S)** |
+| Filter | MC<0.01 + edge>=10pp | **MC<0.01 + BH FDR + edge>=21.8pp + WR>=60% + SL>=1.0%** |
+| WR mean | 84.9% | **86.8%** |
+| Edge mean | ~15pp | **24.9pp** |
+| Trades | 339 | **1,485** |
 | TP/SL | Per-pattern (legacy) | **Per-pattern (PP grid search)** |
 
-### LONG Patterns (15) — v1.28.9 Dynamic
+### LONG Patterns (13) — v1.28.11 Dynamic
 
 | Pattern | TP/SL | Edge | WR | Trades |
 |---------|-------|------|-----|--------|
 | BD-BD-BU | 1.8/3.5 | 22.2pp | 88.2% | 51 |
 | BD-MD-DN | 2.5/4.0 | 23.6pp | 85.2% | 27 |
 | DN-MD-GS | 1.2/2.0 | 25.5pp | 88.0% | 25 |
-| H-MU-MD | 0.7/0.5 | 27.3pp | 69.0% | 29 |
 | IH-DN-MD | 1.0/1.5 | 23.3pp | 83.3% | 36 |
-| IH-ST-MU | 1.4/0.7 | 30.7pp | 64.0% | 25 |
 | MD-DN-D | 2.1/4.0 | 23.7pp | 89.3% | 28 |
 | MD-MD-ST | 1.2/1.0 | 23.8pp | 69.2% | 39 |
 | MU-BD-ST | 1.8/3.0 | 26.0pp | 88.5% | 26 |
@@ -91,7 +89,7 @@
 | U-H-MU | 1.6/2.0 | 28.2pp | 83.8% | 37 |
 | U-MU-H | 1.8/3.5 | 28.7pp | 94.7% | 38 |
 
-### SHORT Patterns (35) — v1.28.9 Dynamic
+### SHORT Patterns (34) — v1.28.11 Dynamic
 
 | Pattern | TP/SL | Edge | WR | Trades |
 |---------|-------|------|-----|--------|
@@ -119,7 +117,6 @@
 | MD-MD-MD | 3.0/2.5 | 26.5pp | 72.0% | 25 |
 | MU-DN-BU | 2.5/4.0 | 23.8pp | 85.3% | 34 |
 | MU-MD-MU | 3.0/4.0 | 23.6pp | 80.8% | 26 |
-| MU-MU-BD | 1.0/0.7 | 22.2pp | 63.4% | 41 |
 | ST-BD-BU | 2.1/4.0 | 30.4pp | 96.0% | 25 |
 | ST-H-U | 2.5/4.0 | 22.5pp | 84.0% | 25 |
 | ST-IH-DN | 2.5/4.0 | 31.3pp | 92.9% | 28 |
@@ -308,7 +305,8 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.28.10** | 02-17 | **Safety patch — 4 critical trading logic gaps**: (1) SL/TP 미배치 감지+재배치 (`orders.py`: `_verify_single_tp_order` 추가, sl_order_id=None 처리, price guard) (2) 시장가 청산 실패 시 TP+SL 모두 재배치+save_state (`position_close.py`) (3) config.py validation 키 `_LONG`/`_SHORT` suffix 제거 — 50개 false warning 수정 (4) Direction mismatch 감지+즉시복구 3곳 추가 (`check_position_status`/`sync_position_with_exchange`/`recover_from_crash`), actual exit price 사용. 비즈니스 로직 변경 없음, 안전성 강화만. ← **현재** |
+| **v1.28.11** | 02-17 | **SL<1.0% pattern removal**: SL threshold study (`sl_threshold_study.py`) 기반 3패턴 제거 (H-MU-MD SL 0.5%, IH-ST-MU SL 0.7%, MU-MU-BD SL 0.7%). WF OOS 검증: 50pat 686.4% → 47pat 702.7% (+16.3%), WR 84.3%→88.1%. SL eff 0.43~0.63% (spread 차감 후) = 실전 즉사. EXPECTED_AVG_WIN 6.04, EXPECTED_AVG_LOSS 10.09. SL min 1.0%, TP min 0.5. ← **현재** |
+| v1.28.10 | 02-17 | **Safety patch — 4 critical trading logic gaps**: (1) SL/TP 미배치 감지+재배치 (`orders.py`: `_verify_single_tp_order` 추가, sl_order_id=None 처리, price guard) (2) 시장가 청산 실패 시 TP+SL 모두 재배치+save_state (`position_close.py`) (3) config.py validation 키 `_LONG`/`_SHORT` suffix 제거 — 50개 false warning 수정 (4) Direction mismatch 감지+즉시복구 3곳 추가 (`check_position_status`/`sync_position_with_exchange`/`recover_from_crash`), actual exit price 사용. 비즈니스 로직 변경 없음, 안전성 강화만. |
 | v1.28.9 | 02-16 | **Edge>=21.8pp + WR>=60% quality filter**: 257→50 patterns (15L+35S). Edge sensitivity 9시나리오 분석 후 edge+WR 이중 필터. WR min 63.4%, mean 85.5%, edge mean 25.0pp, trades 1,580. EXPECTED_AVG_WIN 5.96, EXPECTED_AVG_LOSS 9.60. 257패턴 backup: `dynamic_patterns_257_backup.json` |
 | v1.28.8 | 02-16 | **Logging system improvement**: lock.py 로거명 수정 (`__name__`→`'pattern_5m'`), 17곳 generic Exception `logger.error`→`logger.exception` (traceback 추가), 5곳 critical path DEBUG 로깅 추가 (signals/position_open/position_monitor). 9개 파일 수정, 비즈니스 로직 변경 없음. |
 | v1.28.7 | 02-16 | **Production code review + dual-direction bug fix**: (1) bot.py early exit return False on failure (2) save_metrics atomic write (3) signals.py if/elif fix — 5/6 dual-direction patterns were trading wrong direction (4) scanner dedup logic (5) dead import cleanup (6) config mutable return fix. 256패턴 (83L+173S) after dedup. |

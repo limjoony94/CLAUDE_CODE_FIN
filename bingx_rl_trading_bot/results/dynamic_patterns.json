@@ -16,18 +16,16 @@
     "n_before_correction": 263,
     "n_after_correction": 263,
     "min_wr": 60.0,
-    "post_filter": "edge>=21.8pp + WR>=60.0%",
+    "post_filter": "edge>=21.8pp + WR>=60.0% + SL>=1.0%",
     "n_before_filter": 257,
-    "n_after_filter": 50
+    "n_after_filter": 47
   },
   "patterns": {
     "long": [
       "BD-BD-BU",
       "BD-MD-DN",
       "DN-MD-GS",
-      "H-MU-MD",
       "IH-DN-MD",
-      "IH-ST-MU",
       "MD-DN-D",
       "MD-MD-ST",
       "MU-BD-ST",
@@ -63,7 +61,6 @@
       "MD-MD-MD",
       "MU-DN-BU",
       "MU-MD-MU",
-      "MU-MU-BD",
       "ST-BD-BU",
       "ST-H-U",
       "ST-IH-DN",
@@ -581,18 +578,6 @@
       "mc_p": 0.0048,
       "baseline_wr": 57.1
     },
-    "H-MU-MD_LONG": {
-      "key": "H-MU-MD_LONG",
-      "pattern": "H-MU-MD",
-      "direction": "LONG",
-      "tp": 0.7,
-      "sl": 0.5,
-      "trades": 29,
-      "wr": 69.0,
-      "edge": 27.3,
-      "mc_p": 0.005,
-      "baseline_wr": 41.7
-    },
     "ST-U-H_SHORT": {
       "key": "ST-U-H_SHORT",
       "pattern": "ST-U-H",
@@ -616,18 +601,6 @@
       "edge": 23.6,
       "mc_p": 0.0054,
       "baseline_wr": 57.1
-    },
-    "IH-ST-MU_LONG": {
-      "key": "IH-ST-MU_LONG",
-      "pattern": "IH-ST-MU",
-      "direction": "LONG",
-      "tp": 1.4,
-      "sl": 0.7,
-      "trades": 25,
-      "wr": 64.0,
-      "edge": 30.7,
-      "mc_p": 0.006,
-      "baseline_wr": 33.3
     },
     "MD-MD-MD_SHORT": {
       "key": "MD-MD-MD_SHORT",
@@ -664,18 +637,6 @@
       "edge": 23.4,
       "mc_p": 0.0088,
       "baseline_wr": 52.6
-    },
-    "MU-MU-BD_SHORT": {
-      "key": "MU-MU-BD_SHORT",
-      "pattern": "MU-MU-BD",
-      "direction": "SHORT",
-      "tp": 1.0,
-      "sl": 0.7,
-      "trades": 41,
-      "wr": 63.4,
-      "edge": 22.2,
-      "mc_p": 0.0092,
-      "baseline_wr": 41.2
     }
   },
   "patterns_tpsl": {
@@ -847,10 +808,6 @@
       3.0,
       4.0
     ],
-    "H-MU-MD": [
-      0.7,
-      0.5
-    ],
     "ST-U-H": [
       3.0,
       4.0
@@ -858,10 +815,6 @@
     "MD-BU-DN": [
       3.0,
       4.0
-    ],
-    "IH-ST-MU": [
-      1.4,
-      0.7
     ],
     "MD-MD-MD": [
       3.0,
@@ -874,16 +827,12 @@
     "H-U-BD": [
       1.8,
       2.0
-    ],
-    "MU-MU-BD": [
-      1.0,
-      0.7
     ]
   },
   "summary": {
-    "total": 50,
-    "long": 15,
-    "short": 35
+    "total": 47,
+    "long": 13,
+    "short": 34
   },
   "walk_forward": {
     "n_folds": 3,

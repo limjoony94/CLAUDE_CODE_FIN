@@ -86,7 +86,13 @@ def sync_position_with_exchange(
                 record_closed_position(exchange, state, config, actual_exit['price'],
                                       actual_exit['reason'], cache, metrics)
             else:
-                record_closed_position(exchange, state, config, state_position['entry_price'],
+                # Use current ticker as fallback (more accurate than entry_price which gives PnL=0%)
+                try:
+                    ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
+                    fallback_price = ticker['last']
+                except Exception:
+                    fallback_price = state_position['entry_price']
+                record_closed_position(exchange, state, config, fallback_price,
                                       'EXTERNAL', cache, metrics)
             return True
 

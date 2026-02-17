@@ -304,6 +304,11 @@ def _run_bot_main(
                         _process_existing_position(
                             exchange, state, config, cache, circuit_breaker, metrics
                         )
+                    else:
+                        # Position closed in this trading window — check for new entry on same candle
+                        _process_no_position(
+                            exchange, state, config, cache, circuit_breaker, metrics
+                        )
                 else:
                     _process_no_position(
                         exchange, state, config, cache, circuit_breaker, metrics

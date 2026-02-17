@@ -24,7 +24,7 @@ from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance
 from .indicators import get_volatility_multiplier
 from .state import save_state
 from .utils import extract_pattern_name
-from .orders import place_tp_sl_orders
+from .orders import place_tp_sl_orders, _EXCHANGE_MANAGED
 
 logger = logging.getLogger('pattern_5m')
 
@@ -535,6 +535,9 @@ def refill_position(
         old_cost = old_entry * remaining_qty
         new_cost = actual_fill_price * actual_refill_qty
         total_qty = remaining_qty + actual_refill_qty
+        if total_qty <= 0:
+            logger.error(f"Invalid total_qty={total_qty} after refill — aborting")
+            return False
         new_avg_entry = (old_cost + new_cost) / total_qty
 
         logger.info(f"New average entry: ${new_avg_entry:.1f} (was ${old_entry:.1f})")
@@ -611,12 +614,14 @@ def _cancel_existing_tp_sl(
     """Cancel existing TP/SL orders before placing new ones."""
     orders_to_cancel = []
 
-    if position.get('sl_order_id'):
-        orders_to_cancel.append(position['sl_order_id'])
+    sl_id = position.get('sl_order_id')
+    if sl_id and sl_id != _EXCHANGE_MANAGED:
+        orders_to_cancel.append(sl_id)
 
     # Cancel single TP order (non-scale-out mode)
-    if position.get('tp_order_id'):
-        orders_to_cancel.append(position['tp_order_id'])
+    tp_id = position.get('tp_order_id')
+    if tp_id and tp_id != _EXCHANGE_MANAGED:
+        orders_to_cancel.append(tp_id)
 
     # Cancel scale-out TP orders
     for stage in position.get('scale_out_stages', []):

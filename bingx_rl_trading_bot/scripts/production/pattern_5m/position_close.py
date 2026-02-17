@@ -212,7 +212,7 @@ def recover_position_to_state(
     dir_mult = 1 if direction == 'LONG' else -1
 
     # Preserve pattern_name from previous state if available (before overwriting)
-    old_position = state.get('position', {})
+    old_position = state.get('position') or {}
     old_pattern_name = extract_pattern_name(old_position.get('reason', '')) or old_position.get('pattern_name')
 
     # Try to read TP/SL from existing exchange orders (preserves per-pattern values)

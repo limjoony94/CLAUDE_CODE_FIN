@@ -204,16 +204,12 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             except (ValueError, TypeError):
                 logger.warning(f"Could not parse generated_at: {generated_at}")
 
-        # Inject patterns into config
+        # Extract patterns (but DON'T inject into config yet — validate TP/SL first)
         long_patterns = patterns['long']
         short_patterns = patterns['short']
-        config['strategy']['long_patterns'] = long_patterns
-        config['strategy']['short_patterns'] = short_patterns
-
         total = len(long_patterns) + len(short_patterns)
-        logger.info(f"Dynamic patterns loaded: {len(long_patterns)}L + {len(short_patterns)}S = {total}")
 
-        # Mode-specific TP/SL injection
+        # Mode-specific TP/SL validation (BEFORE injecting patterns)
         if tp_sl_mode == 'universal':
             uni_tp = data.get('universal_tp')
             uni_sl = data.get('universal_sl')
@@ -261,6 +257,11 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             config['_dynamic_tpsl_per_pattern'] = True
             config['_dynamic_patterns_tpsl'] = patterns_tpsl
             logger.info(f"Per-pattern TP/SL loaded: {len(patterns_tpsl)} patterns")
+
+        # TP/SL validated — NOW inject patterns into config
+        config['strategy']['long_patterns'] = long_patterns
+        config['strategy']['short_patterns'] = short_patterns
+        logger.info(f"Dynamic patterns loaded: {len(long_patterns)}L + {len(short_patterns)}S = {total}")
 
         bs = data.get('backtest_summary', {})
         if bs:

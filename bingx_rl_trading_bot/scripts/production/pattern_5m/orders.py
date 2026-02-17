@@ -14,6 +14,9 @@ from .utils import extract_pattern_name
 
 logger = logging.getLogger('pattern_5m')
 
+# Sentinel value: TP/SL order exists on exchange but local ID is unknown (crash recovery)
+_EXCHANGE_MANAGED = "EXCHANGE_MANAGED"
+
 
 def place_tp_sl_orders(
     exchange: ccxt.bingx,
@@ -363,9 +366,10 @@ def _verify_single_tp_order(
 ) -> bool:
     """Verify and re-place missing single TP order (non-scale-out mode).
 
-    Handles two cases:
+    Handles three cases:
     - tp_order_id exists but order is missing from exchange
     - tp_order_id was never set (initial placement failed)
+    - tp_order_id is EXCHANGE_MANAGED (confirmed on exchange, ID unknown)
     """
     tp_order_id = position.get('tp_order_id')
     tp_price = position.get('tp_price')
@@ -373,6 +377,10 @@ def _verify_single_tp_order(
 
     if not tp_price or tp_price <= 0:
         logger.warning("Cannot verify TP order: tp_price is missing or invalid")
+        return False
+
+    # Skip if already confirmed on exchange (crash recovery, unknown ID)
+    if tp_order_id == _EXCHANGE_MANAGED:
         return False
 
     needs_tp = False
@@ -401,7 +409,19 @@ def _verify_single_tp_order(
             logger.info(f"TP order {'placed' if not tp_order_id else 're-placed'}: {tp_order.get('id')}")
             state_changed = True
         except ccxt.ExchangeError as e:
-            logger.error(f"Failed to place TP order (exchange error): {e}")
+            error_msg = str(e)
+            if '110407' in error_msg:
+                # TP order already exists on exchange — mark as confirmed
+                position['tp_order_id'] = _EXCHANGE_MANAGED
+                logger.info("TP order confirmed on exchange (crash recovery — ID unknown, marking as managed)")
+                state_changed = True
+            elif '110413' in error_msg:
+                # TP price already exceeded — let position_monitor handle closure
+                position['tp_order_id'] = _EXCHANGE_MANAGED
+                logger.warning("TP price already exceeded current price — skipping TP placement, position_monitor will handle")
+                state_changed = True
+            else:
+                logger.error(f"Failed to place TP order (exchange error): {e}")
         except Exception as e:
             logger.exception(f"Failed to place TP order: {e}")
 
@@ -462,9 +482,10 @@ def _verify_sl_order(
 ) -> bool:
     """Verify and re-place missing SL order.
 
-    Handles two cases:
+    Handles three cases:
     - sl_order_id exists but order is missing from exchange (cancelled/expired)
     - sl_order_id was never set (initial placement failed) — CRITICAL safety gap
+    - sl_order_id is EXCHANGE_MANAGED (confirmed on exchange, ID unknown)
     """
     sl_order_id = position.get('sl_order_id')
     sl_price = position.get('sl_price')
@@ -472,6 +493,10 @@ def _verify_sl_order(
 
     if not sl_price or sl_price <= 0:
         logger.error("Cannot verify SL order: sl_price is missing or invalid — position UNPROTECTED")
+        return False
+
+    # Skip if already confirmed on exchange (crash recovery, unknown ID)
+    if sl_order_id == _EXCHANGE_MANAGED:
         return False
 
     needs_sl = False
@@ -500,7 +525,14 @@ def _verify_sl_order(
             logger.info(f"SL order {'placed' if not sl_order_id else 're-placed'}: {sl_order.get('id')}")
             state_changed = True
         except ccxt.ExchangeError as e:
-            logger.error(f"Failed to place SL order (exchange error): {e}")
+            error_msg = str(e)
+            if '110406' in error_msg:
+                # SL order already exists on exchange — mark as confirmed
+                position['sl_order_id'] = _EXCHANGE_MANAGED
+                logger.info("SL order confirmed on exchange (crash recovery — ID unknown, marking as managed)")
+                state_changed = True
+            else:
+                logger.error(f"Failed to place SL order (exchange error): {e}")
         except Exception as e:
             logger.exception(f"Failed to place SL order: {e}")
 

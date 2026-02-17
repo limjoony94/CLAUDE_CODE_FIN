@@ -134,7 +134,15 @@ def _place_single_tp_order(
     except ccxt.InsufficientFunds as e:
         logger.warning(f"TP order failed (insufficient funds): {e}")
     except ccxt.ExchangeError as e:
-        logger.warning(f"TP order failed (exchange error): {e}")
+        error_msg = str(e)
+        if '110407' in error_msg:
+            position['tp_order_id'] = _EXCHANGE_MANAGED
+            logger.info("TP order already exists on exchange — marking as managed")
+        elif '110413' in error_msg:
+            position['tp_order_id'] = _EXCHANGE_MANAGED
+            logger.warning("TP price already exceeded — marking as managed, position_monitor will handle")
+        else:
+            logger.warning(f"TP order failed (exchange error): {e}")
     except Exception as e:
         logger.warning(f"TP order failed: {e}")
 
@@ -165,7 +173,12 @@ def _place_sl_order(
     except ccxt.InsufficientFunds as e:
         logger.warning(f"SL order failed (insufficient funds): {e}")
     except ccxt.ExchangeError as e:
-        logger.warning(f"SL order failed (exchange error): {e}")
+        error_msg = str(e)
+        if '110406' in error_msg:
+            position['sl_order_id'] = _EXCHANGE_MANAGED
+            logger.info("SL order already exists on exchange — marking as managed")
+        else:
+            logger.warning(f"SL order failed (exchange error): {e}")
     except Exception as e:
         logger.warning(f"SL order failed: {e}")
 

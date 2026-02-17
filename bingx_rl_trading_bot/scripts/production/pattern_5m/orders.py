@@ -599,8 +599,8 @@ def cancel_remaining_orders(
                 except Exception as e:
                     logger.warning(f"Failed to cancel Scale-out TP order: {e}")
 
-        # Cancel regular TP order
-        if tp_order_id and tp_order_id in open_order_ids:
+        # Cancel regular TP order (skip sentinel — exchange manages it)
+        if tp_order_id and tp_order_id != _EXCHANGE_MANAGED and tp_order_id in open_order_ids:
             try:
                 exchange.cancel_order(tp_order_id, symbol)
                 logger.info(f"🗑️ Cancelled TP order: {tp_order_id}")
@@ -611,8 +611,8 @@ def cancel_remaining_orders(
             except Exception as e:
                 logger.warning(f"⚠️ Failed to cancel TP order {tp_order_id}: {e}")
 
-        # Cancel SL order
-        if sl_order_id and sl_order_id in open_order_ids:
+        # Cancel SL order (skip sentinel — exchange manages it)
+        if sl_order_id and sl_order_id != _EXCHANGE_MANAGED and sl_order_id in open_order_ids:
             try:
                 exchange.cancel_order(sl_order_id, symbol)
                 logger.info(f"🗑️ Cancelled SL order: {sl_order_id}")

@@ -112,12 +112,17 @@ def record_closed_position(
         cancel_remaining_orders(exchange, state, config)
 
     direction = 1 if position['direction'] == 'LONG' else -1
-    pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100 * config['leverage']
-    pnl_pct -= 2 * FEE_PCT * config['leverage']
 
-    # Calculate price-basis PnL (without leverage) for log clarity
-    price_pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100
-    price_pnl_pct -= 2 * FEE_PCT
+    if not position.get('entry_price') or position['entry_price'] <= 0:
+        logger.error(f"Invalid entry_price={position.get('entry_price')} — cannot calculate PnL, recording 0%")
+        pnl_pct = 0.0
+        price_pnl_pct = 0.0
+    else:
+        pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100 * config['leverage']
+        pnl_pct -= 2 * FEE_PCT * config['leverage']
+        # Calculate price-basis PnL (without leverage) for log clarity
+        price_pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100
+        price_pnl_pct -= 2 * FEE_PCT
 
     # Extract pattern name from reason
     pattern_name = extract_pattern_name(position.get('reason', '')) or 'N/A'
@@ -206,6 +211,10 @@ def recover_position_to_state(
     quantity = float(exchange_pos.get('contracts', 0))
     dir_mult = 1 if direction == 'LONG' else -1
 
+    # Preserve pattern_name from previous state if available (before overwriting)
+    old_position = state.get('position', {})
+    old_pattern_name = extract_pattern_name(old_position.get('reason', '')) or old_position.get('pattern_name')
+
     # Try to read TP/SL from existing exchange orders (preserves per-pattern values)
     tp_from_exchange, sl_from_exchange = _read_tpsl_from_exchange_orders(
         exchange, config.get('symbol', 'BTC-USDT'), direction
@@ -221,18 +230,20 @@ def recover_position_to_state(
             f"TP/SL from exchange orders: TP=${tp_price:.1f}, SL=${sl_price:.1f}"
         )
     else:
-        # Fallback: calculate from config defaults (may use wrong TP/SL in per-pattern mode)
+        # Fallback: calculate from config defaults (pass pattern for per-pattern lookup)
         tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
-            entry_price, dir_mult, strategy, vol_mult=1.0, config=config
+            entry_price, dir_mult, strategy, vol_mult=1.0, pattern=old_pattern_name, config=config
         )
         logger.info(
             f"Recovered {direction} position: entry=${entry_price:.1f} | "
-            f"TP/SL from config defaults: TP=${tp_price:.1f}, SL=${sl_price:.1f}"
+            f"TP/SL from config{f' (pattern={old_pattern_name})' if old_pattern_name else ' defaults'}: "
+            f"TP=${tp_price:.1f}, SL=${sl_price:.1f}"
         )
 
     # Setup scale-out if enabled
     scale_out_stages = setup_scale_out(strategy, entry_price, quantity, dir_mult, tp_pct_adjusted)
 
+    reason = f"Recovered from exchange ({old_pattern_name})" if old_pattern_name else 'Recovered from exchange'
     state['position'] = {
         'direction': direction,
         'entry_price': entry_price,
@@ -244,7 +255,8 @@ def recover_position_to_state(
         'scale_out_enabled': bool(scale_out_stages),
         'scale_out_stages': scale_out_stages,
         'entry_time': datetime.now().isoformat(),
-        'reason': 'Recovered from exchange',
+        'reason': reason,
+        'pattern_name': old_pattern_name or None,
         'recovered': True,
         'needs_tpsl': True,
     }

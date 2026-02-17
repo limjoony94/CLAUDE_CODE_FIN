@@ -1,14 +1,9 @@
 """
 Pattern 5m Bot - 3-Candle Pattern Trading Strategy
 
-A production trading bot that uses validated 3-candle patterns for entry signals.
-Based on walk-forward validated patterns with:
-- 9 LONG patterns (best: MU-U-DN)
-- 4 SHORT patterns (best: MU-ST-ST)
-
-Backtest Results (104 days, 3x leverage):
-- Combined (9 patterns): +219.4% compound
-- vs Buy & Hold: +302.0% excess return
+A production trading bot that uses validated 3-candle patterns for BTC-USDT entry signals.
+Dynamic pattern selection via scanner CLI with per-pattern TP/SL grid search.
+Quality filter: Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + BH FDR.
 """
 
 from .bot import run_bot

@@ -7,6 +7,7 @@ import os
 import glob
 import json
 import logging
+import time
 from datetime import datetime
 from typing import Optional
 
@@ -38,14 +39,12 @@ class FlushingFileHandler(logging.FileHandler):
 
     def __init__(self, *args, flush_interval: float = 5.0, **kwargs):
         super().__init__(*args, **kwargs)
-        import time as _time
-        self._last_flush = _time.time()
+        self._last_flush = time.time()
         self._flush_interval = flush_interval
-        self._time = _time
 
     def emit(self, record: logging.LogRecord) -> None:
         super().emit(record)
-        now = self._time.time()
+        now = time.time()
         if record.levelno >= logging.WARNING or (now - self._last_flush) >= self._flush_interval:
             self.flush()
             self._last_flush = now
@@ -128,8 +127,7 @@ def setup_logging(
 
 def _cleanup_old_logs(log_dir: str, bot_name: str, retention_days: int) -> None:
     """Remove log files older than retention_days."""
-    import time as _time
-    cutoff = _time.time() - (retention_days * 86400)
+    cutoff = time.time() - (retention_days * 86400)
     pattern = os.path.join(log_dir, f"{bot_name}_*.log")
     for filepath in glob.glob(pattern):
         try:

@@ -16,9 +16,6 @@ from ..constants import BOT_NAME, BOT_VERSION, LOCK_FILE
 
 logger = logging.getLogger('pattern_5m')
 
-# Global lock handle
-_lock_file_handle = None
-
 
 class FileLock(ABC):
     """Abstract base class for file locking."""

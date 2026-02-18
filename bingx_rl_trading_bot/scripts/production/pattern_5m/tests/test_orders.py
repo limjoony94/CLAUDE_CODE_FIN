@@ -21,6 +21,10 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.orders import (
     _verify_single_tp_order,
     _verify_sl_order,
     _cancel_existing_tpsl_orders,
+    adjust_tpsl_to_config,
+    cancel_remaining_orders,
+    place_tp_sl_orders,
+    verify_tp_sl_orders,
 )
 
 
@@ -315,3 +319,334 @@ class TestExchangeManagedSentinel:
         ]
         _cancel_existing_tpsl_orders(exchange, long_position, 'BTC/USDT:USDT')
         exchange.cancel_order.assert_called_once_with('tp_real', 'BTC/USDT:USDT')
+
+
+# ── place_tp_sl_orders (orchestrator) ──────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+class TestPlaceTpSlOrders:
+    """Test place_tp_sl_orders() orchestration logic."""
+
+    def _make_state(self, scale_out=False):
+        position = {
+            'direction': 'LONG',
+            'quantity': 0.01,
+            'remaining_quantity': 0.01,
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+            'tp_order_id': None,
+            'sl_order_id': None,
+            'scale_out_enabled': scale_out,
+            'scale_out_stages': [
+                {'stage': 1, 'quantity': 0.005, 'tp_price': 50500.0, 'filled': False, 'order_id': None},
+            ] if scale_out else [],
+        }
+        return {'position': position}
+
+    def test_no_position_returns_early(self, mock_save):
+        """No position → no orders placed."""
+        exchange = MagicMock()
+        place_tp_sl_orders(exchange, {'position': None}, {'symbol': 'BTC/USDT:USDT'})
+        exchange.create_order.assert_not_called()
+        mock_save.assert_not_called()
+
+    def test_single_tp_sl_placed(self, mock_save):
+        """Normal path → TP + SL orders placed + state saved."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'order_123'}
+        state = self._make_state()
+        config = {'symbol': 'BTC/USDT:USDT'}
+
+        place_tp_sl_orders(exchange, state, config)
+
+        # 2 calls: one TP, one SL
+        assert exchange.create_order.call_count == 2
+        mock_save.assert_called_once()
+
+    def test_scale_out_path(self, mock_save):
+        """Scale-out enabled → stage TP orders + SL."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'order_123'}
+        state = self._make_state(scale_out=True)
+        config = {'symbol': 'BTC/USDT:USDT'}
+
+        place_tp_sl_orders(exchange, state, config)
+
+        # 1 scale-out TP + 1 SL = 2 calls
+        assert exchange.create_order.call_count == 2
+        mock_save.assert_called_once()
+
+    def test_network_error_handled(self, mock_save):
+        """NetworkError → no crash, no save."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.NetworkError('timeout')
+        state = self._make_state()
+        config = {'symbol': 'BTC/USDT:USDT'}
+
+        place_tp_sl_orders(exchange, state, config)  # should not raise
+
+
+# ── verify_tp_sl_orders ────────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+class TestVerifyTpSlOrders:
+    """Test verify_tp_sl_orders() periodic health check."""
+
+    def _make_state(self, tp_id='tp_1', sl_id='sl_1'):
+        return {
+            'position': {
+                'direction': 'LONG',
+                'quantity': 0.01,
+                'remaining_quantity': 0.01,
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+                'tp_order_id': tp_id,
+                'sl_order_id': sl_id,
+                'scale_out_enabled': False,
+                'scale_out_stages': [],
+            }
+        }
+
+    def test_no_position_returns_early(self, mock_save):
+        """No position → nothing to verify."""
+        exchange = MagicMock()
+        verify_tp_sl_orders(exchange, {'position': None}, {'symbol': 'BTC/USDT:USDT'})
+        exchange.fetch_open_orders.assert_not_called()
+
+    def test_orders_present_no_change(self, mock_save):
+        """Both orders on exchange → no re-placement, no save."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_1'}, {'id': 'sl_1'},
+        ]
+        state = self._make_state()
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        # No create_order calls since both exist
+        exchange.create_order.assert_not_called()
+        mock_save.assert_not_called()
+
+    def test_missing_tp_replaces_and_saves(self, mock_save):
+        """TP missing from exchange → re-places, saves."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'sl_1'},  # Only SL present
+        ]
+        exchange.create_order.return_value = {'id': 'tp_new'}
+        state = self._make_state()
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        exchange.create_order.assert_called_once()
+        mock_save.assert_called_once()
+        assert state['position']['tp_order_id'] == 'tp_new'
+
+    def test_missing_sl_replaces_and_saves(self, mock_save):
+        """SL missing from exchange → re-places, saves."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_1'},  # Only TP present
+        ]
+        exchange.create_order.return_value = {'id': 'sl_new'}
+        state = self._make_state()
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        exchange.create_order.assert_called_once()
+        mock_save.assert_called_once()
+        assert state['position']['sl_order_id'] == 'sl_new'
+
+    def test_network_error_handled(self, mock_save):
+        """Network error fetching orders → no crash."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = ccxt.NetworkError('timeout')
+        state = self._make_state()
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        mock_save.assert_not_called()
+
+
+# ── adjust_tpsl_to_config ──────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+class TestAdjustTpslToConfig:
+    """Test adjust_tpsl_to_config() startup reconciliation."""
+
+    def test_no_position_returns_false(self, mock_save):
+        """No position → returns False."""
+        result = adjust_tpsl_to_config(MagicMock(), {'position': None}, {})
+        assert result is False
+
+    def test_dynamic_mode_skips(self, mock_save):
+        """Dynamic TP/SL mode → skip adjustment."""
+        state = {'position': {'direction': 'LONG'}}
+        config = {'_dynamic_tpsl_universal': True}
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is False
+
+    def test_dynamic_per_pattern_mode_skips(self, mock_save):
+        """Dynamic per-pattern mode → skip adjustment."""
+        state = {'position': {'direction': 'LONG'}}
+        config = {'_dynamic_tpsl_per_pattern': True}
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is False
+
+    def test_no_pattern_in_reason_skips(self, mock_save):
+        """No extractable pattern → skip."""
+        state = {'position': {'reason': 'manual entry', 'direction': 'LONG'}}
+        result = adjust_tpsl_to_config(MagicMock(), state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is False
+
+    def test_prices_within_tolerance_skips(self, mock_save):
+        """TP/SL within $1 tolerance → no adjustment."""
+        if not PATTERN_OPTIMAL_TPSL:
+            pytest.skip("No patterns configured")
+        pat = next(iter(PATTERN_OPTIMAL_TPSL))
+        tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pat]
+        entry = 100000.0
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': entry,
+                'reason': f'Pattern: {pat} (LONG)',
+                'tp_price': round(entry * (1 + tp_pct / 100), 1),
+                'sl_price': round(entry * (1 - sl_pct / 100), 1),
+            }
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is False
+        mock_save.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_adjustment_done_when_prices_differ(
+        self, mock_cancel, mock_tp, mock_sl, mock_save
+    ):
+        """TP/SL differ > $1 → cancels old, places new."""
+        if not PATTERN_OPTIMAL_TPSL:
+            pytest.skip("No patterns configured")
+        pat = next(iter(PATTERN_OPTIMAL_TPSL))
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 100000.0,
+                'quantity': 0.01,
+                'remaining_quantity': 0.01,
+                'reason': f'Pattern: {pat} (LONG)',
+                'tp_price': 999999.0,  # Way off
+                'sl_price': 1.0,       # Way off
+                'tp_order_id': 'old_tp',
+                'sl_order_id': 'old_sl',
+            }
+        }
+        exchange = MagicMock()
+        result = adjust_tpsl_to_config(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is True
+        mock_cancel.assert_called_once()
+        mock_tp.assert_called_once()
+        mock_sl.assert_called_once()
+        mock_save.assert_called()
+
+
+# ── cancel_remaining_orders ────────────────────────────────
+
+
+class TestCancelRemainingOrders:
+    """Test cancel_remaining_orders() full cancellation."""
+
+    def test_no_position_returns_early(self):
+        """No position → no API calls."""
+        exchange = MagicMock()
+        cancel_remaining_orders(exchange, {}, {'symbol': 'BTC/USDT:USDT'})
+        exchange.fetch_open_orders.assert_not_called()
+
+    def test_no_order_ids_returns_early(self):
+        """Position but no order IDs → no API calls."""
+        exchange = MagicMock()
+        state = {'position': {'tp_order_id': None, 'sl_order_id': None}}
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        exchange.fetch_open_orders.assert_not_called()
+
+    def test_tp_and_sl_cancelled(self):
+        """Both TP/SL on exchange → both cancelled."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_1'}, {'id': 'sl_1'},
+        ]
+        state = {
+            'position': {
+                'tp_order_id': 'tp_1',
+                'sl_order_id': 'sl_1',
+            }
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert exchange.cancel_order.call_count == 2
+
+    def test_sentinel_tp_skipped(self):
+        """EXCHANGE_MANAGED TP → not cancelled."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
+        state = {
+            'position': {
+                'tp_order_id': _EXCHANGE_MANAGED,
+                'sl_order_id': 'sl_1',
+            }
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        exchange.cancel_order.assert_called_once_with('sl_1', 'BTC/USDT:USDT')
+
+    def test_sentinel_sl_skipped(self):
+        """EXCHANGE_MANAGED SL → not cancelled."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'tp_1'}]
+        state = {
+            'position': {
+                'tp_order_id': 'tp_1',
+                'sl_order_id': _EXCHANGE_MANAGED,
+            }
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        exchange.cancel_order.assert_called_once_with('tp_1', 'BTC/USDT:USDT')
+
+    def test_scale_out_orders_cancelled(self):
+        """Scale-out stage orders → cancelled."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'so_1'}, {'id': 'so_2'},
+        ]
+        state = {
+            'position': {
+                'tp_order_id': None,
+                'sl_order_id': None,
+                'scale_out_stages': [
+                    {'order_id': 'so_1', 'filled': False},
+                    {'order_id': 'so_2', 'filled': False},
+                ],
+            }
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert exchange.cancel_order.call_count == 2
+
+    def test_filled_scale_out_not_cancelled(self):
+        """Already filled scale-out stage → not cancelled."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'so_2'}]
+        state = {
+            'position': {
+                'tp_order_id': None,
+                'sl_order_id': None,
+                'scale_out_stages': [
+                    {'order_id': 'so_1', 'filled': True},
+                    {'order_id': 'so_2', 'filled': False},
+                ],
+            }
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        exchange.cancel_order.assert_called_once_with('so_2', 'BTC/USDT:USDT')
+
+    def test_network_error_handled(self):
+        """Network error → no crash."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = ccxt.NetworkError('timeout')
+        state = {
+            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})  # no raise

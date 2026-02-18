@@ -24,7 +24,7 @@ from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance
 from .indicators import get_volatility_multiplier
 from .state import save_state
 from .utils import extract_pattern_name
-from .orders import place_tp_sl_orders, cancel_remaining_orders, _EXCHANGE_MANAGED
+from .orders import place_tp_sl_orders, cancel_remaining_orders
 
 logger = logging.getLogger('pattern_5m')
 

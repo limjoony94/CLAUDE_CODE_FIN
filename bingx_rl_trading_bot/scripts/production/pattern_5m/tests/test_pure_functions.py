@@ -1,12 +1,18 @@
 """Tests for pure functions — calculate_pnl, extract_pattern_name, setup_scale_out,
-get_current_pattern, get_volatility_multiplier, _infer_exit_reason, calculate_indicators."""
+get_current_pattern, get_volatility_multiplier, _infer_exit_reason, calculate_indicators,
+calculate_tp_sl, _infer_exit_from_price, PerformanceMetrics, APICache, CircuitBreaker,
+_deep_copy_config, _merge_config, validate_config."""
 
+import time
 import pytest
 import pandas as pd
 import numpy as np
 
 from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import calculate_pnl
-from bingx_rl_trading_bot.scripts.production.pattern_5m.position_open import setup_scale_out
+from bingx_rl_trading_bot.scripts.production.pattern_5m.position_open import (
+    setup_scale_out,
+    calculate_tp_sl,
+)
 from bingx_rl_trading_bot.scripts.production.pattern_5m.utils import extract_pattern_name
 from bingx_rl_trading_bot.scripts.production.pattern_5m.indicators import (
     calculate_indicators,
@@ -15,11 +21,28 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.indicators import (
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor import (
     _infer_exit_reason,
+    _infer_exit_from_price,
+)
+from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
+    APICache,
+    CircuitBreaker,
+    PerformanceMetrics,
+)
+from bingx_rl_trading_bot.scripts.production.pattern_5m.config import (
+    _deep_copy_config,
+    _merge_config,
+    validate_config,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
     FEE_PCT,
     PRICE_TOLERANCE_PCT,
     AVG_BODY_WINDOW,
+    SLIPPAGE_BUFFER_PCT,
+    PRICE_ROUND_DECIMALS,
+    TP_LOWER_MULT,
+    TP_UPPER_MULT,
+    SL_LOWER_MULT,
+    SL_UPPER_MULT,
 )
 
 
@@ -482,3 +505,519 @@ class TestCalculateIndicators:
         result = calculate_indicators(df, {'strategy': {}})
         for code in result['type_code']:
             assert code in valid_codes
+
+
+# ── calculate_tp_sl ─────────────────────────────────────────
+
+
+class TestCalculateTpSl:
+    """Test calculate_tp_sl() — TP/SL price calculation with priority chain."""
+
+    def _strategy(self, tp=2.0, sl=3.0):
+        return {'tp_pct': tp, 'sl_pct': sl}
+
+    def test_strategy_defaults_long(self):
+        """LONG with strategy defaults: TP above entry, SL below."""
+        tp, sl, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(), vol_mult=1.0
+        )
+        assert tp > 50000.0
+        assert sl < 50000.0
+        assert tp_pct == pytest.approx(2.0 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+        assert sl_pct == pytest.approx(3.0 - SLIPPAGE_BUFFER_PCT, abs=0.001)
+
+    def test_strategy_defaults_short(self):
+        """SHORT with strategy defaults: TP below entry, SL above."""
+        tp, sl, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=-1, strategy=self._strategy(), vol_mult=1.0
+        )
+        assert tp < 50000.0
+        assert sl > 50000.0
+
+    def test_slippage_buffer_applied(self):
+        """TP gets wider (+ buffer), SL gets tighter (- buffer)."""
+        tp, sl, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(tp=2.0, sl=3.0), vol_mult=1.0
+        )
+        # TP: 2.0 + 0.02 = 2.02%
+        assert tp_pct == pytest.approx(2.02, abs=0.001)
+        # SL: 3.0 - 0.02 = 2.98%
+        assert sl_pct == pytest.approx(2.98, abs=0.001)
+
+    def test_sl_floor_guard(self):
+        """Very small SL should be floored at 0.1%."""
+        tp, sl, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(sl=0.01), vol_mult=1.0
+        )
+        assert sl_pct == pytest.approx(0.1, abs=0.001)
+
+    def test_vol_mult_scales(self):
+        """Volatility multiplier should scale TP/SL proportionally."""
+        _, _, tp1, sl1 = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(), vol_mult=1.0
+        )
+        _, _, tp2, sl2 = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(), vol_mult=1.5
+        )
+        # vol_mult 1.5: TP = 2.0*1.5 + 0.02 = 3.02 vs 2.02
+        assert tp2 > tp1
+        assert sl2 > sl1
+
+    def test_pattern_optimal_tpsl(self):
+        """Pattern in PATTERN_OPTIMAL_TPSL → uses pattern-specific values."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import PATTERN_OPTIMAL_TPSL
+        # Pick any pattern that exists
+        if PATTERN_OPTIMAL_TPSL:
+            pat_name = next(iter(PATTERN_OPTIMAL_TPSL))
+            expected_tp, expected_sl = PATTERN_OPTIMAL_TPSL[pat_name]
+            _, _, tp_pct, sl_pct = calculate_tp_sl(
+                50000.0, direction=1, strategy=self._strategy(),
+                vol_mult=1.0, pattern=pat_name
+            )
+            assert tp_pct == pytest.approx(expected_tp + SLIPPAGE_BUFFER_PCT, abs=0.001)
+
+    def test_dynamic_per_pattern_priority(self):
+        """Dynamic per-pattern mode takes highest priority."""
+        config = {
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {'BD-BD-BU': [1.8, 3.5]},
+        }
+        tp, sl, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(),
+            vol_mult=1.0, pattern='BD-BD-BU', config=config
+        )
+        assert tp_pct == pytest.approx(1.8 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+        assert sl_pct == pytest.approx(3.5 - SLIPPAGE_BUFFER_PCT, abs=0.001)
+
+    def test_dynamic_universal_priority(self):
+        """Dynamic universal mode overrides static patterns."""
+        config = {
+            '_dynamic_tpsl_universal': True,
+            '_dynamic_tp': 2.5,
+            '_dynamic_sl': 3.5,
+        }
+        _, _, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(),
+            vol_mult=1.0, pattern='BD-BD-BU', config=config
+        )
+        assert tp_pct == pytest.approx(2.5 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+
+    def test_regime_tp_sl_priority(self):
+        """Regime TP/SL overrides pattern optimal (but not dynamic)."""
+        _, _, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(),
+            vol_mult=1.0, pattern=None, regime_tp_sl=(1.5, 2.5)
+        )
+        assert tp_pct == pytest.approx(1.5 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+        assert sl_pct == pytest.approx(2.5 - SLIPPAGE_BUFFER_PCT, abs=0.001)
+
+    def test_dynamic_per_pattern_fallback(self):
+        """Pattern not in dynamic dict → falls back to strategy defaults."""
+        config = {
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {'OTHER-PAT': [1.0, 2.0]},
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+        }
+        _, _, tp_pct, sl_pct = calculate_tp_sl(
+            50000.0, direction=1, strategy={'tp_pct': 2.0, 'sl_pct': 3.0},
+            vol_mult=1.0, pattern='MISSING-PAT', config=config
+        )
+        # Falls back to strategy.tp_pct=2.0
+        assert tp_pct == pytest.approx(2.0 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+
+    def test_price_rounding(self):
+        """Output prices should be rounded to PRICE_ROUND_DECIMALS."""
+        tp, sl, _, _ = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(), vol_mult=1.0
+        )
+        # PRICE_ROUND_DECIMALS=1, so tp and sl should have at most 1 decimal
+        assert tp == round(tp, PRICE_ROUND_DECIMALS)
+        assert sl == round(sl, PRICE_ROUND_DECIMALS)
+
+    def test_exact_values_long(self):
+        """Verify exact calculation for LONG."""
+        tp, sl, _, _ = calculate_tp_sl(
+            50000.0, direction=1, strategy=self._strategy(tp=2.0, sl=3.0), vol_mult=1.0
+        )
+        # tp_pct = 2.02, sl_pct = 2.98
+        expected_tp = round(50000.0 * (1 + 2.02 / 100), PRICE_ROUND_DECIMALS)
+        expected_sl = round(50000.0 * (1 - 2.98 / 100), PRICE_ROUND_DECIMALS)
+        assert tp == pytest.approx(expected_tp, abs=0.1)
+        assert sl == pytest.approx(expected_sl, abs=0.1)
+
+
+# ── _infer_exit_from_price ──────────────────────────────────
+
+
+class TestInferExitFromPrice:
+    """Test _infer_exit_from_price() — directional TP/SL proximity with multipliers."""
+
+    def test_long_tp_hit(self):
+        """LONG: exit >= tp * TP_LOWER_MULT → 'TP'."""
+        pos = {'tp_price': 51000.0, 'sl_price': 49000.0, 'direction': 'LONG'}
+        assert _infer_exit_from_price(51000.0, pos) == 'TP'
+
+    def test_long_sl_hit(self):
+        """LONG: exit <= sl * SL_UPPER_MULT → 'SL'."""
+        pos = {'tp_price': 51000.0, 'sl_price': 49000.0, 'direction': 'LONG'}
+        assert _infer_exit_from_price(49000.0, pos) == 'SL'
+
+    def test_short_tp_hit(self):
+        """SHORT: exit <= tp * TP_UPPER_MULT → 'TP'."""
+        pos = {'tp_price': 49000.0, 'sl_price': 51000.0, 'direction': 'SHORT'}
+        assert _infer_exit_from_price(49000.0, pos) == 'TP'
+
+    def test_short_sl_hit(self):
+        """SHORT: exit >= sl * SL_LOWER_MULT → 'SL'."""
+        pos = {'tp_price': 49000.0, 'sl_price': 51000.0, 'direction': 'SHORT'}
+        assert _infer_exit_from_price(51000.0, pos) == 'SL'
+
+    def test_long_unknown(self):
+        """LONG: price between TP and SL → 'UNKNOWN'."""
+        pos = {'tp_price': 51000.0, 'sl_price': 49000.0, 'direction': 'LONG'}
+        assert _infer_exit_from_price(50000.0, pos) == 'UNKNOWN'
+
+    def test_short_unknown(self):
+        """SHORT: price between TP and SL → 'UNKNOWN'."""
+        pos = {'tp_price': 49000.0, 'sl_price': 51000.0, 'direction': 'SHORT'}
+        assert _infer_exit_from_price(50000.0, pos) == 'UNKNOWN'
+
+    def test_zero_tp(self):
+        """tp_price=0 → cannot match TP."""
+        pos = {'tp_price': 0, 'sl_price': 49000.0, 'direction': 'LONG'}
+        # SL could match or UNKNOWN
+        assert _infer_exit_from_price(50000.0, pos) == 'UNKNOWN'
+
+    def test_zero_sl(self):
+        """sl_price=0 → cannot match SL."""
+        pos = {'tp_price': 51000.0, 'sl_price': 0, 'direction': 'LONG'}
+        assert _infer_exit_from_price(50000.0, pos) == 'UNKNOWN'
+
+    def test_long_near_tp_boundary(self):
+        """LONG: price just above tp * TP_LOWER_MULT → 'TP'."""
+        tp = 51000.0
+        boundary = tp * TP_LOWER_MULT
+        pos = {'tp_price': tp, 'sl_price': 49000.0, 'direction': 'LONG'}
+        assert _infer_exit_from_price(boundary, pos) == 'TP'
+
+    def test_missing_direction(self):
+        """Empty direction → falls into else (SHORT) branch."""
+        pos = {'tp_price': 51000.0, 'sl_price': 49000.0, 'direction': ''}
+        # Empty string != 'LONG' → else branch (SHORT logic)
+        # SHORT TP check: 51000 <= 51000 * 1.001 → True → 'TP'
+        assert _infer_exit_from_price(51000.0, pos) == 'TP'
+
+
+# ── PerformanceMetrics ──────────────────────────────────────
+
+
+class TestPerformanceMetrics:
+    """Test PerformanceMetrics dataclass methods."""
+
+    def test_initial_state(self):
+        """Newly created metrics should have zero trades."""
+        m = PerformanceMetrics()
+        assert m.total_trades == 0
+        assert m.winning_trades == 0
+        assert m.losing_trades == 0
+        assert m.total_pnl_pct == 0.0
+
+    def test_update_winning_trade(self):
+        """Winning trade updates correctly."""
+        m = PerformanceMetrics()
+        m.update_trade(5.0)
+        assert m.total_trades == 1
+        assert m.winning_trades == 1
+        assert m.losing_trades == 0
+        assert m.total_pnl_pct == pytest.approx(5.0)
+        assert m.actual_win_rate == pytest.approx(100.0)
+
+    def test_update_losing_trade(self):
+        """Losing trade updates correctly."""
+        m = PerformanceMetrics()
+        m.update_trade(-3.0)
+        assert m.total_trades == 1
+        assert m.losing_trades == 1
+        assert m.total_pnl_pct == pytest.approx(-3.0)
+        assert m.actual_win_rate == pytest.approx(0.0)
+
+    def test_win_rate_calculation(self):
+        """Win rate: 3 wins + 1 loss = 75%."""
+        m = PerformanceMetrics()
+        for pnl in [5.0, 3.0, -2.0, 4.0]:
+            m.update_trade(pnl)
+        assert m.actual_win_rate == pytest.approx(75.0)
+        assert m.total_pnl_pct == pytest.approx(10.0)
+
+    def test_avg_win_loss(self):
+        """Average win/loss from recent deques."""
+        m = PerformanceMetrics()
+        m.update_trade(6.0)
+        m.update_trade(4.0)
+        m.update_trade(-2.0)
+        m.update_trade(-4.0)
+        assert m.actual_avg_win == pytest.approx(5.0)
+        assert m.actual_avg_loss == pytest.approx(3.0)
+
+    def test_to_dict_roundtrip(self):
+        """to_dict → from_dict preserves all fields."""
+        m = PerformanceMetrics()
+        m.update_trade(5.0)
+        m.update_trade(-3.0)
+        m.session_start = '2026-01-01T00:00:00'
+
+        d = m.to_dict()
+        m2 = PerformanceMetrics.from_dict(d)
+
+        assert m2.total_trades == m.total_trades
+        assert m2.winning_trades == m.winning_trades
+        assert m2.losing_trades == m.losing_trades
+        assert m2.total_pnl_pct == pytest.approx(m.total_pnl_pct)
+        assert m2.actual_win_rate == pytest.approx(m.actual_win_rate)
+        assert m2.session_start == m.session_start
+        assert list(m2.recent_wins) == list(m.recent_wins)
+        assert list(m2.recent_losses) == list(m.recent_losses)
+
+    def test_from_dict_missing_keys(self):
+        """from_dict with empty dict → safe defaults."""
+        m = PerformanceMetrics.from_dict({})
+        assert m.total_trades == 0
+        assert m.total_pnl_pct == 0.0
+
+    def test_update_api_latency(self):
+        """API latency EMA updates correctly."""
+        m = PerformanceMetrics()
+        m.update_api_latency(100.0)
+        assert m.api_call_count == 1
+        assert m.avg_api_latency_ms == pytest.approx(10.0)  # alpha=0.1
+        m.update_api_latency(100.0)
+        assert m.api_call_count == 2
+
+    def test_comparison_report_insufficient(self):
+        """Too few trades → returns insufficient message."""
+        m = PerformanceMetrics()
+        report = m.get_comparison_report()
+        assert 'Insufficient' in report
+
+    def test_comparison_report_with_trades(self):
+        """Enough trades → returns formatted report."""
+        m = PerformanceMetrics()
+        for _ in range(20):
+            m.update_trade(2.0)
+        report = m.get_comparison_report()
+        assert 'Win Rate' in report
+        assert 'Total Trades' in report
+
+
+# ── APICache ────────────────────────────────────────────────
+
+
+class TestAPICache:
+    """Test APICache get/set/invalidate."""
+
+    def test_initial_empty(self):
+        """New cache has no data."""
+        cache = APICache()
+        assert cache.get_ticker() is None
+        assert cache.get_balance() is None
+        assert cache.get_positions() is None
+
+    def test_set_and_get_ticker(self):
+        """Set ticker → get within TTL returns it."""
+        cache = APICache()
+        cache.set_ticker({'last': 50000.0})
+        result = cache.get_ticker(ttl=5.0)
+        assert result == {'last': 50000.0}
+
+    def test_expired_ticker(self):
+        """Expired ticker → returns None."""
+        cache = APICache()
+        cache.set_ticker({'last': 50000.0})
+        cache.ticker_time = time.time() - 10  # Expired
+        assert cache.get_ticker(ttl=5.0) is None
+
+    def test_set_and_get_balance(self):
+        """Set balance → get returns it."""
+        cache = APICache()
+        cache.set_balance({'USDT': {'free': 1000.0}})
+        assert cache.get_balance(ttl=5.0) is not None
+
+    def test_set_and_get_positions(self):
+        """Set positions (including empty list) → get returns it."""
+        cache = APICache()
+        cache.set_positions([])
+        assert cache.get_positions(ttl=5.0) == []
+
+    def test_invalidate_all(self):
+        """invalidate_all clears everything."""
+        cache = APICache()
+        cache.set_ticker({'last': 50000.0})
+        cache.set_balance({'USDT': {'free': 1000.0}})
+        cache.set_positions([{'side': 'long'}])
+        cache.invalidate_all()
+        assert cache.get_ticker() is None
+        assert cache.get_balance() is None
+        assert cache.get_positions() is None
+
+
+# ── CircuitBreaker ──────────────────────────────────────────
+
+
+class TestCircuitBreaker:
+    """Test CircuitBreaker state transitions."""
+
+    def test_initial_can_execute(self):
+        """Fresh circuit breaker allows execution."""
+        cb = CircuitBreaker()
+        assert cb.can_execute() is True
+
+    def test_opens_after_threshold(self):
+        """Exceeding failure_threshold opens the breaker."""
+        cb = CircuitBreaker()
+        for _ in range(cb.failure_threshold):
+            cb.record_failure()
+        assert cb.is_open is True
+
+    def test_open_blocks_execution(self):
+        """Open breaker blocks can_execute."""
+        cb = CircuitBreaker()
+        for _ in range(cb.failure_threshold):
+            cb.record_failure()
+        assert cb.can_execute() is False
+
+    def test_success_resets(self):
+        """record_success resets everything."""
+        cb = CircuitBreaker()
+        for _ in range(cb.failure_threshold):
+            cb.record_failure()
+        cb.record_success()
+        assert cb.is_open is False
+        assert cb.failure_count == 0
+        assert cb.backoff_level == 0
+
+    def test_get_wait_time_closed(self):
+        """Closed breaker → wait time = 0."""
+        cb = CircuitBreaker()
+        assert cb.get_wait_time() == 0
+
+    def test_get_wait_time_open(self):
+        """Open breaker → wait time > 0."""
+        cb = CircuitBreaker()
+        for _ in range(cb.failure_threshold):
+            cb.record_failure()
+        assert cb.get_wait_time() > 0
+
+    def test_backoff_level_increases(self):
+        """Repeated failures increase backoff level."""
+        cb = CircuitBreaker()
+        # First round: opens circuit breaker
+        for _ in range(cb.failure_threshold):
+            cb.record_failure()
+        assert cb.backoff_level == 0  # First open
+        # Additional failure while open → backoff_level increases
+        cb.record_failure()
+        assert cb.backoff_level == 1
+
+
+# ── _deep_copy_config / _merge_config ───────────────────────
+
+
+class TestConfigHelpers:
+    """Test config deep copy and merge utilities."""
+
+    def test_deep_copy_simple(self):
+        """Deep copy preserves values."""
+        src = {'a': 1, 'b': 'two'}
+        copy = _deep_copy_config(src)
+        assert copy == src
+        assert copy is not src
+
+    def test_deep_copy_nested(self):
+        """Deep copy isolates nested dicts."""
+        src = {'outer': {'inner': 42}}
+        copy = _deep_copy_config(src)
+        copy['outer']['inner'] = 99
+        assert src['outer']['inner'] == 42
+
+    def test_deep_copy_list(self):
+        """Deep copy isolates lists."""
+        src = {'items': [1, 2, 3]}
+        copy = _deep_copy_config(src)
+        copy['items'].append(4)
+        assert len(src['items']) == 3
+
+    def test_merge_override_scalar(self):
+        """Merge overrides scalar values."""
+        base = {'a': 1, 'b': 2}
+        override = {'b': 99}
+        result = _merge_config(base, override)
+        assert result == {'a': 1, 'b': 99}
+
+    def test_merge_deep_dict(self):
+        """Merge recursively merges nested dicts."""
+        base = {'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0}}
+        override = {'strategy': {'tp_pct': 1.5}}
+        result = _merge_config(base, override)
+        assert result['strategy']['tp_pct'] == 1.5
+        assert result['strategy']['sl_pct'] == 3.0  # Preserved
+
+    def test_merge_adds_new_keys(self):
+        """Merge adds keys not in base."""
+        base = {'a': 1}
+        override = {'b': 2}
+        result = _merge_config(base, override)
+        assert result == {'a': 1, 'b': 2}
+
+    def test_merge_does_not_mutate_base(self):
+        """Merge should not modify the base dict."""
+        base = {'strategy': {'tp_pct': 2.0}}
+        _merge_config(base, {'strategy': {'tp_pct': 1.0}})
+        assert base['strategy']['tp_pct'] == 2.0
+
+
+# ── validate_config ─────────────────────────────────────────
+
+
+class TestValidateConfig:
+    """Test validate_config() — config validation."""
+
+    def _valid_config(self):
+        return {
+            'symbol': 'BTC/USDT:USDT',
+            'timeframe': '5m',
+            'leverage': 3,
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+            'risk': {'max_daily_loss_pct': 10.0},
+        }
+
+    def test_valid_config_passes(self):
+        """Valid config should not raise."""
+        validate_config(self._valid_config())
+
+    def test_missing_symbol_raises(self):
+        """Missing symbol → ValueError."""
+        cfg = self._valid_config()
+        del cfg['symbol']
+        with pytest.raises(ValueError, match='symbol'):
+            validate_config(cfg)
+
+    def test_zero_leverage_raises(self):
+        """leverage=0 → ValueError."""
+        cfg = self._valid_config()
+        cfg['leverage'] = 0
+        with pytest.raises(ValueError, match='leverage'):
+            validate_config(cfg)
+
+    def test_missing_tp_pct_raises(self):
+        """Missing strategy.tp_pct → ValueError."""
+        cfg = self._valid_config()
+        del cfg['strategy']['tp_pct']
+        with pytest.raises(ValueError, match='tp_pct'):
+            validate_config(cfg)
+
+    def test_negative_sl_pct_raises(self):
+        """Negative strategy.sl_pct → ValueError."""
+        cfg = self._valid_config()
+        cfg['strategy']['sl_pct'] = -1.0
+        with pytest.raises(ValueError, match='sl_pct'):
+            validate_config(cfg)

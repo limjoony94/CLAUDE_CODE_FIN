@@ -1,4 +1,4 @@
-"""Tests for exchange.py — API retry, caching, circuit breaker integration.
+"""Tests for exchange.py — API retry, caching, circuit breaker, exchange setup.
 
 Uses mock objects to avoid real exchange calls.
 """
@@ -16,6 +16,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.exchange import (
     fetch_positions_cached,
     set_shutdown_checker,
     _interruptible_api_sleep,
+    verify_position_mode,
+    set_margin_mode,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
     APICache,
@@ -265,3 +267,93 @@ class TestInterruptibleApiSleep:
             # (may have slept at most once before checking)
         finally:
             set_shutdown_checker(lambda: False)
+
+
+# ── verify_position_mode ─────────────────────────────────────
+
+
+class TestVerifyPositionMode:
+    """Test verify_position_mode() exchange setup."""
+
+    def test_one_way_success(self):
+        """One-way mode set successfully → returns True."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        exchange.set_position_mode.return_value = None
+        config = {'symbol': 'BTC/USDT:USDT', 'position_mode': 'one-way'}
+        assert verify_position_mode(exchange, config) is True
+
+    def test_already_one_way(self):
+        """Position mode already one-way → returns True."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        exchange.set_position_mode.side_effect = ccxt.ExchangeError('No need to change')
+        config = {'symbol': 'BTC/USDT:USDT', 'position_mode': 'one-way'}
+        assert verify_position_mode(exchange, config) is True
+
+    def test_both_positions_exist(self):
+        """Both LONG and SHORT positions → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},
+            {'side': 'short', 'contracts': 0.01},
+        ]
+        config = {'symbol': 'BTC/USDT:USDT'}
+        assert verify_position_mode(exchange, config) is False
+
+    def test_network_error(self):
+        """Network error → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.NetworkError('timeout')
+        config = {'symbol': 'BTC/USDT:USDT'}
+        assert verify_position_mode(exchange, config) is False
+
+    def test_exchange_error_not_same(self):
+        """Exchange error that is NOT 'no need to change' → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        exchange.set_position_mode.side_effect = ccxt.ExchangeError('permission denied')
+        config = {'symbol': 'BTC/USDT:USDT', 'position_mode': 'one-way'}
+        assert verify_position_mode(exchange, config) is False
+
+
+# ── set_margin_mode ──────────────────────────────────────────
+
+
+class TestSetMarginMode:
+    """Test set_margin_mode() exchange setup."""
+
+    def test_set_crossed_success(self):
+        """Set CROSSED margin mode → returns True."""
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'margin_mode': 'crossed'}
+        assert set_margin_mode(exchange, config) is True
+        exchange.set_margin_mode.assert_called_once_with('CROSSED', 'BTC/USDT:USDT')
+
+    def test_already_set(self):
+        """Margin mode already set → returns True."""
+        exchange = MagicMock()
+        exchange.set_margin_mode.side_effect = ccxt.ExchangeError('No need to change')
+        config = {'symbol': 'BTC/USDT:USDT', 'margin_mode': 'crossed'}
+        assert set_margin_mode(exchange, config) is True
+
+    def test_exchange_error(self):
+        """Exchange error → returns False."""
+        exchange = MagicMock()
+        exchange.set_margin_mode.side_effect = ccxt.ExchangeError('invalid symbol')
+        config = {'symbol': 'BTC/USDT:USDT', 'margin_mode': 'crossed'}
+        assert set_margin_mode(exchange, config) is False
+
+    def test_network_error(self):
+        """Network error → returns False."""
+        exchange = MagicMock()
+        exchange.set_margin_mode.side_effect = ccxt.NetworkError('timeout')
+        config = {'symbol': 'BTC/USDT:USDT', 'margin_mode': 'crossed'}
+        assert set_margin_mode(exchange, config) is False
+
+    def test_default_margin_mode(self):
+        """No margin_mode in config → defaults to CROSSED."""
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        set_margin_mode(exchange, config)
+        exchange.set_margin_mode.assert_called_once_with('CROSSED', 'BTC/USDT:USDT')

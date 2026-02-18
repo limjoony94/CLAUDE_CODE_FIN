@@ -537,3 +537,188 @@ class TestSyncPositionWithExchange:
         config = {'symbol': 'BTC/USDT:USDT'}
         result = sync_position_with_exchange(exchange, state, config, cache)
         assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    def test_state_closed_ticker_fallback(self, mock_record):
+        """State has pos, exchange doesn't, no trade → ticker fallback."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        exchange.fetch_my_trades.return_value = []
+        exchange.fetch_ticker.return_value = {'last': 50500.0}
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    def test_state_closed_ticker_fails_entry_fallback(self, mock_record):
+        """State has pos, exchange doesn't, ticker fails → entry_price fallback."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        exchange.fetch_my_trades.return_value = []
+        exchange.fetch_ticker.side_effect = Exception('no ticker')
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+        # Fallback to entry_price
+        assert mock_record.call_args[0][3] == 50000.0
+
+    def test_exchange_error_returns_false(self):
+        """ExchangeError during sync → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.ExchangeError('invalid')
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is False
+
+    def test_generic_exception_returns_false(self):
+        """Generic exception during sync → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = RuntimeError('unexpected')
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is False
+
+
+# ── get_actual_exit_price additional paths ────────────────────
+
+
+class TestGetActualExitPriceExtended:
+    """Test get_actual_exit_price error paths."""
+
+    def test_invalid_entry_time_still_works(self):
+        """Invalid entry_time → entry_ts=0, still finds trades."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 51000.0, 'timestamp': 100},
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_time': 'invalid-datetime',
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+            }
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is not None
+
+    def test_network_error_returns_none(self):
+        """NetworkError → returns None."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.side_effect = ccxt.NetworkError('timeout')
+        state = {
+            'position': {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+    def test_exchange_error_returns_none(self):
+        """ExchangeError → returns None."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.side_effect = ccxt.ExchangeError('invalid')
+        state = {
+            'position': {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+    def test_generic_exception_returns_none(self):
+        """Generic exception → returns None."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.side_effect = RuntimeError('unexpected')
+        state = {
+            'position': {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+
+# ── check_position_status additional paths ────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.save_state')
+class TestCheckPositionStatusExtended:
+    """Test check_position_status direction mismatch and scale-out paths."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_direction_mismatch_recovers(self, mock_handle, mock_recover, mock_save, mock_sleep):
+        """State=LONG but exchange=SHORT → close old + recover new."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'short', 'contracts': 0.01, 'entryPrice': 49000.0},
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'entry_time': '2026-01-01T00:00:00',
+                'tp_price': 51000.0, 'sl_price': 49000.0,
+                'scale_out_enabled': False,
+            }
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        mock_handle.assert_called_once()
+        mock_recover.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_exchange_error_returns_false(self, mock_save, mock_sleep):
+        """ExchangeError → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.ExchangeError('invalid')
+        state = {
+            'position': {'direction': 'LONG', 'entry_price': 50000.0}
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_generic_exception_returns_false(self, mock_save, mock_sleep):
+        """Generic exception → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = RuntimeError('unexpected')
+        state = {
+            'position': {'direction': 'LONG', 'entry_price': 50000.0}
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_scale_out_enabled_checks_fills(self, mock_record, mock_save, mock_sleep):
+        """Scale-out enabled + position open → checks scale-out fills."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.005},  # Partial fill
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'scale_out_enabled': True,
+                'scale_out_stages': [
+                    {'stage': 1, 'quantity': 0.005, 'filled': False, 'order_id': 'so1'},
+                ],
+            }
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False  # Position still open

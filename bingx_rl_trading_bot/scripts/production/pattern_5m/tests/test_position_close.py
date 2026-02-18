@@ -756,3 +756,243 @@ class TestRecalculatePositionOrders:
         result = recalculate_position_orders(MagicMock(), state, config, 0.02)
         assert result is False
         mock_save.assert_called()  # State saved even on failure
+
+    def test_sl_not_confirmed_returns_false(
+        self, mock_scale, mock_calc, mock_cancel, mock_place, mock_save
+    ):
+        """SL not confirmed after place → returns False with warning."""
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+        # place_tp_sl_orders doesn't set sl_order_id
+        mock_place.return_value = None
+
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'vol_mult': 1.0, 'reason': '',
+                'sl_order_id': None,
+            }
+        }
+        config = {'symbol': 'BTC/USDT:USDT', 'strategy': {}}
+        result = recalculate_position_orders(MagicMock(), state, config, 0.02)
+        assert result is False
+
+
+# ── close_position_market error paths ─────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.cancel_remaining_orders')
+class TestClosePositionMarketErrors:
+    """Test close_position_market error handling paths."""
+
+    def _make_state(self):
+        return {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'tp_price': 51000.0, 'sl_price': 49000.0,
+            }
+        }
+
+    def test_insufficient_funds(self, mock_cancel, mock_place, mock_record):
+        """InsufficientFunds → False, TP/SL re-placed."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.InsufficientFunds('no funds')
+        result = close_position_market(
+            exchange, self._make_state(), {'symbol': 'BTC/USDT:USDT'},
+            APICache(), 'early_exit', PerformanceMetrics()
+        )
+        assert result is False
+        mock_place.assert_called_once()
+
+    def test_invalid_order(self, mock_cancel, mock_place, mock_record):
+        """InvalidOrder → False, TP/SL re-placed."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.InvalidOrder('invalid')
+        result = close_position_market(
+            exchange, self._make_state(), {'symbol': 'BTC/USDT:USDT'},
+            APICache(), 'early_exit', PerformanceMetrics()
+        )
+        assert result is False
+
+    def test_network_error(self, mock_cancel, mock_place, mock_record):
+        """NetworkError → False, TP/SL re-placed."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.NetworkError('timeout')
+        result = close_position_market(
+            exchange, self._make_state(), {'symbol': 'BTC/USDT:USDT'},
+            APICache(), 'early_exit', PerformanceMetrics()
+        )
+        assert result is False
+
+    def test_exchange_error(self, mock_cancel, mock_place, mock_record):
+        """ExchangeError → False, TP/SL re-placed."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('rejected')
+        result = close_position_market(
+            exchange, self._make_state(), {'symbol': 'BTC/USDT:USDT'},
+            APICache(), 'early_exit', PerformanceMetrics()
+        )
+        assert result is False
+
+    def test_generic_exception(self, mock_cancel, mock_place, mock_record):
+        """Generic exception → False, TP/SL re-placed."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = RuntimeError('unexpected')
+        result = close_position_market(
+            exchange, self._make_state(), {'symbol': 'BTC/USDT:USDT'},
+            APICache(), 'early_exit', PerformanceMetrics()
+        )
+        assert result is False
+
+    def test_restore_tpsl_fails(self, mock_cancel, mock_place, mock_record):
+        """TP/SL re-placement also fails → still returns False."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.InsufficientFunds('no funds')
+        mock_place.side_effect = Exception('restore failed')
+        result = close_position_market(
+            exchange, self._make_state(), {'symbol': 'BTC/USDT:USDT'},
+            APICache(), 'early_exit', PerformanceMetrics()
+        )
+        assert result is False
+
+
+# ── recover_from_crash additional paths ───────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recalculate_position_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.detect_ghost_positions')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_positions_cached')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_ticker_cached')
+class TestRecoverFromCrashExtended:
+    """Test recover_from_crash additional error paths."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
+    def test_case2_ticker_exception_fallback(
+        self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
+        mock_record, mock_recover, mock_recalc
+    ):
+        """Case 2: ticker fails → fallback to entry_price."""
+        mock_fetch_pos.return_value = []
+        mock_exit.return_value = None
+        mock_ticker.side_effect = Exception('no ticker')
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'entry_time': '2026-02-18T10:00:00',
+            }
+        }
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = recover_from_crash(MagicMock(), state, config, APICache())
+        assert result is True
+        assert mock_record.call_args[0][3] == 50000.0
+
+    def test_exchange_error_returns_false(
+        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        mock_record, mock_recover, mock_recalc
+    ):
+        """ExchangeError during fetch → returns False."""
+        mock_fetch_pos.side_effect = ccxt.ExchangeError('invalid')
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = recover_from_crash(MagicMock(), state, config, APICache())
+        assert result is False
+
+    def test_generic_exception_returns_false(
+        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        mock_record, mock_recover, mock_recalc
+    ):
+        """Generic exception → returns False."""
+        mock_fetch_pos.side_effect = RuntimeError('unexpected')
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = recover_from_crash(MagicMock(), state, config, APICache())
+        assert result is False
+
+    def test_case4_scale_out_mismatch(
+        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        mock_record, mock_recover, mock_recalc
+    ):
+        """Scale-out stages sum != exchange qty → recalculate."""
+        mock_fetch_pos.return_value = [
+            {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0},
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01,
+                'scale_out_stages': [
+                    {'quantity': 0.003, 'filled': False},
+                    {'quantity': 0.003, 'filled': False},
+                ],
+            }
+        }
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = recover_from_crash(MagicMock(), state, config, APICache())
+        assert result is True
+        mock_recalc.assert_called_once()
+
+
+# ── _update_confidence_log_outcome ────────────────────────
+
+
+class TestUpdateConfidenceLogOutcome:
+    """Test _update_confidence_log_outcome() CSV update logic."""
+
+    def test_nonexistent_file_no_crash(self, tmp_path):
+        """Non-existent CSV → no-op."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
+            _update_confidence_log_outcome,
+        )
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
+            str(tmp_path / 'nonexistent.csv'),
+        ):
+            _update_confidence_log_outcome('2026-02-18T10:00:00', 'WIN', 2.5)
+
+    def test_updates_trailing_comma_row(self, tmp_path):
+        """Row ending with comma → appends outcome."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
+            _update_confidence_log_outcome,
+        )
+        csv_file = tmp_path / 'confidence.csv'
+        csv_file.write_text('time,pattern,confidence,outcome\n2026-02-18T10:00:00,BD-BD-BU,0.85,\n')
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            _update_confidence_log_outcome('2026-02-18T10:00:00', 'WIN', 2.5)
+        content = csv_file.read_text()
+        assert 'WIN:+2.50%' in content
+
+    def test_no_trailing_comma_no_update(self, tmp_path):
+        """No row with trailing comma → no update."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
+            _update_confidence_log_outcome,
+        )
+        csv_file = tmp_path / 'confidence.csv'
+        csv_file.write_text('time,pattern,confidence,outcome\n2026-02-18,BD-BD-BU,0.85,WIN:+1.00%\n')
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            _update_confidence_log_outcome('2026-02-18T10:00:00', 'LOSS', -1.5)
+        content = csv_file.read_text()
+        assert 'LOSS' not in content
+
+    def test_exception_no_crash(self, tmp_path):
+        """Exception during update → no crash (warning logged)."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
+            _update_confidence_log_outcome,
+        )
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
+            str(tmp_path / 'confidence.csv'),
+        ):
+            with patch('builtins.open', side_effect=PermissionError('denied')):
+                _update_confidence_log_outcome('2026-02-18T10:00:00', 'WIN', 2.5)

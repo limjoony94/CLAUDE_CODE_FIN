@@ -715,6 +715,24 @@ class TestPlaceScaleOutOrders:
         _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
         assert 'order_id' not in stages[0]
 
+    def test_generic_exception_continues(self):
+        """Generic exception on a stage → continues to next."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = RuntimeError('weird')
+        position = {'direction': 'LONG'}
+        stages = [{'stage': 1, 'quantity': 0.01, 'tp_price': 51000.0}]
+        _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
+        assert 'order_id' not in stages[0]
+
+    def test_insufficient_funds_continues(self):
+        """InsufficientFunds on a stage → continues."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.InsufficientFunds('no funds')
+        position = {'direction': 'LONG'}
+        stages = [{'stage': 1, 'quantity': 0.01, 'tp_price': 51000.0}]
+        _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
+        assert 'order_id' not in stages[0]
+
 
 # ── _verify_scale_out_orders Tests ───────────────────────────
 
@@ -907,3 +925,300 @@ class TestCancelRemainingOrdersErrors:
             'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_generic_exception_on_fetch_handled(self):
+        """Generic exception on fetch_open_orders → no crash."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = RuntimeError('weird')
+        state = {
+            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_tp_generic_exception_on_cancel(self):
+        """Generic exception on TP cancel → continues."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'tp_1'}]
+        exchange.cancel_order.side_effect = RuntimeError('weird')
+        state = {
+            'position': {'tp_order_id': 'tp_1', 'sl_order_id': None},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_sl_order_not_found(self):
+        """SL OrderNotFound → silent."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
+        exchange.cancel_order.side_effect = ccxt.OrderNotFound('gone')
+        state = {
+            'position': {'tp_order_id': None, 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_sl_exchange_error_on_cancel(self):
+        """SL ExchangeError → continues."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
+        exchange.cancel_order.side_effect = ccxt.ExchangeError('err')
+        state = {
+            'position': {'tp_order_id': None, 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_sl_generic_exception_on_cancel(self):
+        """SL generic exception → continues."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
+        exchange.cancel_order.side_effect = RuntimeError('weird')
+        state = {
+            'position': {'tp_order_id': None, 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_scale_out_exchange_error_on_cancel(self):
+        """Scale-out ExchangeError → continues."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'so_1'}]
+        exchange.cancel_order.side_effect = ccxt.ExchangeError('err')
+        state = {
+            'position': {
+                'tp_order_id': None, 'sl_order_id': None,
+                'scale_out_stages': [{'order_id': 'so_1', 'filled': False}],
+            },
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_scale_out_generic_exception_on_cancel(self):
+        """Scale-out generic exception → continues."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'so_1'}]
+        exchange.cancel_order.side_effect = RuntimeError('weird')
+        state = {
+            'position': {
+                'tp_order_id': None, 'sl_order_id': None,
+                'scale_out_stages': [{'order_id': 'so_1', 'filled': False}],
+            },
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+
+# ── place_tp_sl_orders additional error paths ────────────────
+
+
+class TestPlaceTpSlOrdersExchangeErrors:
+    """Test ExchangeError and generic Exception in place_tp_sl_orders."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    def test_exchange_error_no_crash(self, mock_tp, mock_sl, mock_save):
+        """ExchangeError → caught, no crash."""
+        mock_tp.side_effect = ccxt.ExchangeError('order rejected')
+        exchange = MagicMock()
+        state = {'position': {
+            'direction': 'LONG', 'quantity': 0.01,
+            'tp_price': 51000.0, 'sl_price': 49000.0,
+        }}
+        place_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    def test_generic_exception_no_crash(self, mock_tp, mock_sl, mock_save):
+        """Generic exception → caught, no crash."""
+        mock_tp.side_effect = RuntimeError('unexpected')
+        exchange = MagicMock()
+        state = {'position': {
+            'direction': 'LONG', 'quantity': 0.01,
+            'tp_price': 51000.0, 'sl_price': 49000.0,
+        }}
+        place_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+
+# ── adjust_tpsl_to_config additional paths ────────────────────
+
+
+class TestAdjustTpslToConfigExtended:
+    """Test adjust_tpsl_to_config SHORT direction and error paths."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_short_direction_calculates_correctly(self, mock_cancel, mock_tp, mock_sl, mock_save):
+        """SHORT direction → TP below, SL above entry."""
+        # Pick a known pattern
+        pattern = list(PATTERN_OPTIMAL_TPSL.keys())[0]
+        tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pattern]
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = []
+        state = {'position': {
+            'direction': 'SHORT', 'entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'tp_price': 0, 'sl_price': 0,
+            'reason': f'Pattern: {pattern} (SHORT)',
+        }}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = adjust_tpsl_to_config(exchange, state, config)
+        assert result is True
+
+    def test_pattern_not_in_optimal_returns_false(self):
+        """Unknown pattern → returns False."""
+        exchange = MagicMock()
+        state = {'position': {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'quantity': 0.01,
+            'reason': 'Pattern: ZZ-ZZ-ZZ (LONG)',
+        }}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = adjust_tpsl_to_config(exchange, state, config)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_generic_exception_returns_false(self, mock_cancel):
+        """Generic exception during adjust → returns False."""
+        mock_cancel.side_effect = RuntimeError('unexpected')
+        pattern = list(PATTERN_OPTIMAL_TPSL.keys())[0]
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = []
+        state = {'position': {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'tp_price': 0, 'sl_price': 0,
+            'reason': f'Pattern: {pattern} (LONG)',
+        }}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = adjust_tpsl_to_config(exchange, state, config)
+        assert result is False
+
+
+# ── _cancel_existing_tpsl_orders edge cases ───────────────────
+
+
+class TestCancelExistingTpslOrdersExtended:
+    """Test _cancel_existing_tpsl_orders scale-out and error paths."""
+
+    def test_scale_out_orders_cancelled(self):
+        """Scale-out unfilled orders → cancelled."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'so_1'}, {'id': 'so_2'}]
+        position = {
+            'tp_order_id': None, 'sl_order_id': None,
+            'scale_out_stages': [
+                {'order_id': 'so_1', 'filled': False},
+                {'order_id': 'so_2', 'filled': True},  # Filled → not cancelled
+            ],
+        }
+        _cancel_existing_tpsl_orders(exchange, position, 'BTC/USDT:USDT')
+        exchange.cancel_order.assert_called_once_with('so_1', 'BTC/USDT:USDT')
+
+    def test_exception_during_cancel(self):
+        """Exception during cancel → caught, no crash."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = Exception('fail')
+        position = {'tp_order_id': 'tp_1', 'sl_order_id': None}
+        _cancel_existing_tpsl_orders(exchange, position, 'BTC/USDT:USDT')
+
+
+# ── _verify_single_tp_order exchange error codes ──────────────
+
+
+class TestVerifyTpOrderExchangeErrorCodes:
+    """Test _verify_single_tp_order with specific BingX error codes."""
+
+    def test_110407_marks_exchange_managed(self):
+        """110407 (TP exists) → marks tp_order_id as EXCHANGE_MANAGED."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('110407 TP already exists')
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'tp_order_id': None, 'tp_price': 51000.0}
+        result = _verify_single_tp_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is True
+        assert position['tp_order_id'] == _EXCHANGE_MANAGED
+
+    def test_110413_marks_exchange_managed(self):
+        """110413 (TP exceeded) → marks tp_order_id as EXCHANGE_MANAGED."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('110413 TP price exceeded')
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'tp_order_id': None, 'tp_price': 51000.0}
+        result = _verify_single_tp_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is True
+        assert position['tp_order_id'] == _EXCHANGE_MANAGED
+
+    def test_other_exchange_error_no_change(self):
+        """Other ExchangeError → logs, no state change."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('999 unknown')
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'tp_order_id': None, 'tp_price': 51000.0}
+        result = _verify_single_tp_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+
+    def test_generic_exception_no_crash(self):
+        """Generic exception → no crash."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = RuntimeError('weird')
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'tp_order_id': None, 'tp_price': 51000.0}
+        result = _verify_single_tp_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+
+    def test_tp_price_missing_returns_false(self):
+        """tp_price missing → returns False immediately."""
+        exchange = MagicMock()
+        position = {'direction': 'LONG', 'quantity': 0.01, 'tp_order_id': None}
+        result = _verify_single_tp_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+        exchange.create_order.assert_not_called()
+
+    def test_exchange_managed_skips(self):
+        """tp_order_id == EXCHANGE_MANAGED → skips verification."""
+        exchange = MagicMock()
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'tp_order_id': _EXCHANGE_MANAGED, 'tp_price': 51000.0}
+        result = _verify_single_tp_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+        exchange.create_order.assert_not_called()
+
+
+# ── _verify_sl_order error paths ──────────────────────────────
+
+
+class TestVerifySlOrderErrors:
+    """Test _verify_sl_order exchange error and generic exception."""
+
+    def test_other_exchange_error(self):
+        """Non-110406 ExchangeError → logs error, no state change."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('999 unknown')
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'sl_order_id': None, 'sl_price': 49000.0}
+        result = _verify_sl_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+
+    def test_generic_exception(self):
+        """Generic exception → no crash, returns False."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = RuntimeError('weird')
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'sl_order_id': None, 'sl_price': 49000.0}
+        result = _verify_sl_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+
+    def test_sl_price_missing_returns_false(self):
+        """sl_price missing → returns False immediately."""
+        exchange = MagicMock()
+        position = {'direction': 'LONG', 'quantity': 0.01, 'sl_order_id': None}
+        result = _verify_sl_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+        exchange.create_order.assert_not_called()
+
+    def test_exchange_managed_skips(self):
+        """sl_order_id == EXCHANGE_MANAGED → skips verification."""
+        exchange = MagicMock()
+        position = {'direction': 'LONG', 'quantity': 0.01,
+                     'sl_order_id': _EXCHANGE_MANAGED, 'sl_price': 49000.0}
+        result = _verify_sl_order(exchange, position, 'BTC/USDT:USDT', {})
+        assert result is False
+        exchange.create_order.assert_not_called()

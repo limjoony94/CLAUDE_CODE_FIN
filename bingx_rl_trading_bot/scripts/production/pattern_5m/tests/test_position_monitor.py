@@ -1,0 +1,539 @@
+"""Tests for position_monitor.py — exit inference, scale-out fills,
+position sync, and status checking."""
+
+import pytest
+import ccxt
+from unittest.mock import MagicMock, patch, call
+
+from bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor import (
+    _infer_exit_reason,
+    _infer_exit_from_price,
+    _check_scale_out_fills,
+    get_actual_exit_price,
+    check_position_status,
+    sync_position_with_exchange,
+)
+from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
+    PRICE_TOLERANCE_PCT,
+    TP_LOWER_MULT,
+    TP_UPPER_MULT,
+    SL_LOWER_MULT,
+    SL_UPPER_MULT,
+)
+from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
+    APICache,
+)
+
+
+# ── _infer_exit_reason (trade history based) ─────────────────
+
+
+class TestInferExitReason:
+    """Test _infer_exit_reason() proximity to TP/SL."""
+
+    def test_tp_hit_within_tolerance(self):
+        """Price very close to TP → 'TP'."""
+        position = {'tp_price': 51000.0, 'sl_price': 49000.0}
+        result = _infer_exit_reason(51000.0, position)
+        assert result == 'TP'
+
+    def test_sl_hit_within_tolerance(self):
+        """Price very close to SL → 'SL'."""
+        position = {'tp_price': 51000.0, 'sl_price': 49000.0}
+        result = _infer_exit_reason(49000.0, position)
+        assert result == 'SL'
+
+    def test_market_exit(self):
+        """Price far from both TP and SL → 'MARKET'."""
+        position = {'tp_price': 51000.0, 'sl_price': 49000.0}
+        result = _infer_exit_reason(50000.0, position)
+        assert result == 'MARKET'
+
+    def test_near_tp_within_tolerance(self):
+        """Price within PRICE_TOLERANCE_PCT of TP → 'TP'."""
+        position = {'tp_price': 51000.0, 'sl_price': 49000.0}
+        # Within 0.3% of TP
+        near_tp = 51000.0 * (1 - PRICE_TOLERANCE_PCT * 0.5)
+        result = _infer_exit_reason(near_tp, position)
+        assert result == 'TP'
+
+    def test_zero_tp_sl(self):
+        """TP/SL = 0 → 'MARKET'."""
+        position = {'tp_price': 0, 'sl_price': 0}
+        result = _infer_exit_reason(50000.0, position)
+        assert result == 'MARKET'
+
+    def test_missing_tp_sl_keys(self):
+        """Missing TP/SL keys → 'MARKET'."""
+        result = _infer_exit_reason(50000.0, {})
+        assert result == 'MARKET'
+
+
+# ── _infer_exit_from_price (current price based) ────────────
+
+
+class TestInferExitFromPrice:
+    """Test _infer_exit_from_price() directional proximity."""
+
+    def test_long_tp_hit(self):
+        """LONG: exit >= TP * TP_LOWER_MULT → 'TP'."""
+        position = {
+            'direction': 'LONG',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+        }
+        # Price at or above TP zone
+        result = _infer_exit_from_price(51000.0, position)
+        assert result == 'TP'
+
+    def test_long_sl_hit(self):
+        """LONG: exit <= SL * SL_UPPER_MULT → 'SL'."""
+        position = {
+            'direction': 'LONG',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+        }
+        result = _infer_exit_from_price(49000.0, position)
+        assert result == 'SL'
+
+    def test_long_unknown(self):
+        """LONG: price between TP and SL → 'UNKNOWN'."""
+        position = {
+            'direction': 'LONG',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+        }
+        result = _infer_exit_from_price(50000.0, position)
+        assert result == 'UNKNOWN'
+
+    def test_short_tp_hit(self):
+        """SHORT: exit <= TP * TP_UPPER_MULT → 'TP'."""
+        position = {
+            'direction': 'SHORT',
+            'tp_price': 49000.0,
+            'sl_price': 51000.0,
+        }
+        result = _infer_exit_from_price(49000.0, position)
+        assert result == 'TP'
+
+    def test_short_sl_hit(self):
+        """SHORT: exit >= SL * SL_LOWER_MULT → 'SL'."""
+        position = {
+            'direction': 'SHORT',
+            'tp_price': 49000.0,
+            'sl_price': 51000.0,
+        }
+        result = _infer_exit_from_price(51000.0, position)
+        assert result == 'SL'
+
+    def test_short_unknown(self):
+        """SHORT: price between TP and SL → 'UNKNOWN'."""
+        position = {
+            'direction': 'SHORT',
+            'tp_price': 49000.0,
+            'sl_price': 51000.0,
+        }
+        result = _infer_exit_from_price(50000.0, position)
+        assert result == 'UNKNOWN'
+
+    def test_zero_tp_returns_unknown(self):
+        """TP = 0 → cannot match TP, returns 'UNKNOWN' or 'SL'."""
+        position = {
+            'direction': 'LONG',
+            'tp_price': 0,
+            'sl_price': 49000.0,
+        }
+        result = _infer_exit_from_price(50000.0, position)
+        assert result in ('UNKNOWN', 'SL')
+
+    def test_zero_sl_returns_tp_or_unknown(self):
+        """SL = 0 → cannot match SL."""
+        position = {
+            'direction': 'LONG',
+            'tp_price': 51000.0,
+            'sl_price': 0,
+        }
+        result = _infer_exit_from_price(51000.0, position)
+        assert result == 'TP'
+
+
+# ── _check_scale_out_fills ───────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.save_state')
+class TestCheckScaleOutFills:
+    """Test _check_scale_out_fills() stage fill detection."""
+
+    def _make_position(self, qty=0.01, stages=None):
+        return {
+            'quantity': qty,
+            'remaining_quantity': qty,
+            'scale_out_stages': stages or [],
+            'rotation_enabled': False,
+        }
+
+    def test_no_reduction_no_fill(self, mock_save):
+        """Exchange qty unchanged → no fills detected."""
+        position = self._make_position(
+            qty=0.01,
+            stages=[{'stage': 1, 'quantity': 0.005, 'filled': False}],
+        )
+        state = {'position': position}
+        current_pos = {'contracts': 0.01}
+
+        _check_scale_out_fills(state, position, current_pos)
+
+        mock_save.assert_not_called()
+
+    def test_stage_filled_on_qty_reduction(self, mock_save):
+        """Exchange qty drops below threshold → stage marked filled."""
+        position = self._make_position(
+            qty=0.01,
+            stages=[{'stage': 1, 'quantity': 0.005, 'filled': False}],
+        )
+        state = {'position': position}
+        # Exchange shows reduced qty (stage 1 filled: 0.01 - 0.005 = 0.005)
+        current_pos = {'contracts': 0.005}
+
+        _check_scale_out_fills(state, position, current_pos)
+
+        assert position['scale_out_stages'][0]['filled'] is True
+        assert position['remaining_quantity'] == 0.005
+        mock_save.assert_called_once()
+
+    def test_rotation_sets_partial(self, mock_save):
+        """Stage 1 filled + rotation_enabled → is_partial=True."""
+        position = self._make_position(
+            qty=0.01,
+            stages=[{'stage': 1, 'quantity': 0.005, 'filled': False}],
+        )
+        position['rotation_enabled'] = True
+        state = {'position': position}
+        current_pos = {'contracts': 0.005}
+
+        _check_scale_out_fills(state, position, current_pos)
+
+        assert position['is_partial'] is True
+
+    def test_already_filled_not_refilled(self, mock_save):
+        """Already filled stage → not re-processed."""
+        position = self._make_position(
+            qty=0.01,
+            stages=[{'stage': 1, 'quantity': 0.005, 'filled': True}],
+        )
+        position['remaining_quantity'] = 0.005  # Already reduced from prior fill
+        state = {'position': position}
+        current_pos = {'contracts': 0.005}
+
+        _check_scale_out_fills(state, position, current_pos)
+
+        # Should not re-save since no new fills and qty already synced
+        mock_save.assert_not_called()
+
+
+# ── get_actual_exit_price ────────────────────────────────────
+
+
+class TestGetActualExitPrice:
+    """Test get_actual_exit_price() trade history lookup."""
+
+    def test_no_position_returns_none(self):
+        """No position in state → returns None."""
+        result = get_actual_exit_price(MagicMock(), {}, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+    def test_trade_found(self):
+        """Close-side trade after entry → returns price + reason."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.return_value = [
+            {
+                'side': 'sell',
+                'price': 51000.0,
+                'timestamp': 1700000000000,  # 2023-11 — well after entry
+            },
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_time': '2020-01-01T00:00:00',
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+            }
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is not None
+        assert result['price'] == 51000.0
+        assert result['reason'] == 'TP'
+
+    def test_no_matching_trade(self):
+        """No trade matching close side → returns None."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'buy', 'price': 50000.0, 'timestamp': 2000000},
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_time': '2020-01-01T00:00:00',
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+            }
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+    def test_network_error_returns_none(self):
+        """Network error → returns None."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.side_effect = ccxt.NetworkError('timeout')
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_time': '2020-01-01T00:00:00',
+            }
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+    def test_short_exit_buy_side(self):
+        """SHORT position → looks for 'buy' trades."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'buy', 'price': 49000.0, 'timestamp': 1700000000000},
+        ]
+        state = {
+            'position': {
+                'direction': 'SHORT',
+                'entry_time': '2020-01-01T00:00:00',
+                'tp_price': 49000.0,
+                'sl_price': 51000.0,
+            }
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is not None
+        assert result['price'] == 49000.0
+
+    def test_trade_before_entry_ignored(self):
+        """Trade before entry_time → ignored."""
+        exchange = MagicMock()
+        exchange.fetch_my_trades.return_value = [
+            {
+                'side': 'sell',
+                'price': 51000.0,
+                'timestamp': 100,  # Very old timestamp
+            },
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_time': '2026-01-01T00:00:00',
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+            }
+        }
+        result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert result is None
+
+
+# ── check_position_status ────────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.save_state')
+class TestCheckPositionStatus:
+    """Test check_position_status() — closed position detection."""
+
+    def test_no_position_returns_false(self, mock_save, mock_sleep):
+        """No position in state → returns False."""
+        result = check_position_status(
+            MagicMock(), {'position': None}, {'symbol': 'BTC/USDT:USDT'},
+            APICache()
+        )
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_position_still_open(self, mock_record, mock_save, mock_sleep):
+        """Position still on exchange → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},
+        ]
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 50000.0,
+                'quantity': 0.01,
+                'remaining_quantity': 0.01,
+                'scale_out_enabled': False,
+            }
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+        mock_record.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_position_closed_detected(self, mock_record, mock_save, mock_sleep):
+        """Position gone from exchange → detected as closed."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []  # No positions
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 51000.0, 'timestamp': 2000000},
+        ]
+        exchange.fetch_ticker.return_value = {'last': 51000.0}
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 50000.0,
+                'entry_time': '2020-01-01T00:00:00',
+                'quantity': 0.01,
+                'remaining_quantity': 0.01,
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+                'scale_out_enabled': False,
+            }
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+
+    def test_network_error_returns_false(self, mock_save, mock_sleep):
+        """Network error → returns False (safe default)."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.NetworkError('timeout')
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 50000.0,
+            }
+        }
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+
+
+# ── sync_position_with_exchange ──────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+       new=MagicMock())
+class TestSyncPositionWithExchange:
+    """Test sync_position_with_exchange() — 4-way reconciliation."""
+
+    def _make_state_with_position(self):
+        return {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 50000.0,
+                'entry_time': '2026-01-01T00:00:00',
+                'quantity': 0.01,
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+            },
+            'total_trades': 5,
+            'winning_trades': 3,
+            'total_pnl': 10.0,
+            'daily_trades': 1,
+            'daily_pnl': 2.0,
+            'consecutive_losses': 0,
+            'last_trade': None,
+            'last_signal_time': None,
+        }
+
+    def test_both_match_no_sync(self):
+        """State and exchange agree → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},
+        ]
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    def test_state_has_exchange_doesnt(self, mock_record):
+        """State has position, exchange doesn't → records close."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []  # Empty
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 51000.0, 'timestamp': 2000000},
+        ]
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+        mock_record.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
+    def test_exchange_has_state_doesnt(self, mock_recover):
+        """Exchange has position, state doesn't → recovers."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0},
+        ]
+        state = {'position': None}
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+        mock_recover.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
+    def test_exchange_has_short_state_doesnt(self, mock_recover):
+        """Exchange has SHORT, state empty → recovers as SHORT."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'short', 'contracts': 0.01, 'entryPrice': 50000.0},
+        ]
+        state = {'position': None}
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+        mock_recover.assert_called_once()
+        # Check that direction 'SHORT' was passed
+        assert mock_recover.call_args[0][3] == 'SHORT'
+
+    def test_network_error_returns_false(self):
+        """Network error during sync → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.NetworkError('timeout')
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
+    def test_direction_mismatch(self, mock_recover, mock_record):
+        """State=LONG but exchange has SHORT → close old + recover new."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'short', 'contracts': 0.01, 'entryPrice': 49000.0},
+        ]
+        exchange.fetch_my_trades.return_value = []
+        state = self._make_state_with_position()
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+        mock_record.assert_called_once()
+        mock_recover.assert_called_once()
+
+    def test_no_position_either_side(self):
+        """No position in state or exchange → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        state = {'position': None}
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is False

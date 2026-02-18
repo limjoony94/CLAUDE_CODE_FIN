@@ -810,3 +810,47 @@ class TestHandlePositionClosed:
         assert result is True
         call_args = mock_record.call_args
         assert call_args[0][4] == 'SL_AFTER_1_STAGES'
+
+
+# ── sync_position_with_exchange — actual_exit truthy ────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+       new=MagicMock())
+class TestSyncPositionActualExitTruthy:
+    """Cover line 86: actual_exit is truthy → record_closed_position with actual price."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price',
+           return_value={'price': 51500.0, 'reason': 'TP'})
+    def test_actual_exit_truthy_calls_record(self, mock_exit, mock_record):
+        """get_actual_exit_price returns truthy → uses actual price (line 86)."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []  # no exchange position
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 50000.0,
+                'entry_time': '2026-01-01T00:00:00',
+                'quantity': 0.01,
+                'tp_price': 51000.0,
+                'sl_price': 49000.0,
+            },
+            'total_trades': 5,
+            'winning_trades': 3,
+            'total_pnl': 10.0,
+            'daily_trades': 1,
+            'daily_pnl': 2.0,
+            'consecutive_losses': 0,
+            'last_trade': None,
+            'last_signal_time': None,
+        }
+        cache = APICache()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = sync_position_with_exchange(exchange, state, config, cache)
+        assert result is True
+        mock_record.assert_called_once()
+        # Verify actual exit price was used
+        call_args = mock_record.call_args
+        assert call_args[0][3] == 51500.0  # exit_price
+        assert call_args[0][4] == 'TP'  # exit_reason

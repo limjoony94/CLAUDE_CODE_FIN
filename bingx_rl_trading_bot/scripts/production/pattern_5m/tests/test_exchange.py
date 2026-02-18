@@ -662,3 +662,19 @@ class TestApiCallCBPaths:
         with pytest.raises(RuntimeError):
             _api_call_with_retry(func, circuit_breaker=cb)
         assert cb.failure_count >= 1
+
+
+# ── zero attempts edge case (line 246) ────────────────────────
+
+
+class TestApiCallZeroAttempts:
+    """Test _api_call_with_retry with 0 configured max attempts."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange.API_MAX_ATTEMPTS', 0)
+    def test_zero_attempts_raises_runtime_error(self, mock_sleep):
+        """API_MAX_ATTEMPTS=0 → RuntimeError (line 246)."""
+        func = MagicMock()
+        with pytest.raises(RuntimeError, match='0 attempts'):
+            _api_call_with_retry(func)
+        func.assert_not_called()

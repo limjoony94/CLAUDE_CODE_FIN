@@ -17,6 +17,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import (
     check_consecutive_loss_limit,
     check_daily_loss_limit,
     check_early_exit_signal,
+    _save_confidence_to_csv,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
     CandleType,
@@ -881,9 +882,10 @@ class TestCalculateContextNanAtr:
     """Test calculate_context when atr_pct is NaN."""
 
     def test_nan_atr_pct_defaults_to_zero(self, make_ohlcv_df):
-        """NaN atr_pct → treated as 0."""
+        """NaN atr_pct on last complete candle → treated as 0 (line 106)."""
         df = make_ohlcv_df(n_bars=50)
-        df.at[df.index[-1], 'atr_pct'] = float('nan')
+        # current = df.iloc[-2] (last complete candle), so set -2 to NaN
+        df.at[df.index[-2], 'atr_pct'] = float('nan')
         ctx = calculate_context(df)
         # Should not crash; vol classification still works
         assert 'vol' in ctx
@@ -983,3 +985,44 @@ class TestSaveConfidenceToCsv:
         ):
             # Should not raise
             self.func(1700000000000, 'BD-BD-BU', 'LONG', 0.5, {})
+
+
+# ── check_entry_signal context filter reject (lines 383-393) ──
+
+
+class TestCheckEntrySignalContextFilter:
+    """Test check_entry_signal with PATTERN_CONTEXT_FILTERS active."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.signals.check_context_filter',
+           return_value=(False, 0.0, 'RSI in wrong zone'))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.signals.calculate_context',
+           return_value={'rsi': 75.0, 'rsi_zone': 'OB', 'vol': 'H', 'trend': 'U'})
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.signals.PATTERN_CONTEXT_FILTERS',
+           {'BD-BD-BU': {'rsi_zone': 'OS'}})  # non-empty dict
+    def test_context_filter_rejects_signal(self, mock_ctx, mock_check, make_classified_df):
+        """PATTERN_CONTEXT_FILTERS active + filter rejects → (None, None) (lines 383-393)."""
+        if not VALIDATED_LONG_PATTERNS:
+            pytest.skip("No validated LONG patterns")
+        pattern = VALIDATED_LONG_PATTERNS[0]
+        df = make_classified_df(pattern=pattern)
+        state = {'last_signal_candle_timestamp': None}
+        config = {'strategy': {}}
+        signal, reason = check_entry_signal(df, state, config)
+        assert signal is None
+        assert reason is None
+
+
+class TestSaveConfidenceToCsvException:
+    """Test _save_confidence_to_csv exception path (lines 493-494)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.signals.os.path.exists',
+           side_effect=PermissionError('no access'))
+    def test_exception_caught_no_crash(self, mock_exists):
+        """Exception inside try → warning logged, no crash."""
+        _save_confidence_to_csv(
+            timestamp=1700000000000,
+            pattern='BD-BD-BU',
+            signal='LONG',
+            confidence=0.85,
+            conf_components={'clarity': 0.9, 'historical': 0.8, 'regime': 0.7},
+        )

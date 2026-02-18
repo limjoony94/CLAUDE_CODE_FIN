@@ -986,15 +986,17 @@ class TestUpdateConfidenceLogOutcome:
         assert 'LOSS' not in content
 
     def test_exception_no_crash(self, tmp_path):
-        """Exception during update → no crash (warning logged)."""
+        """Exception during file read → no crash (lines 695-696)."""
         from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
             _update_confidence_log_outcome,
         )
+        csv_file = tmp_path / 'confidence.csv'
+        csv_file.write_text('header\ndata,\n')  # file exists
         with patch(
             'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
-            str(tmp_path / 'confidence.csv'),
+            str(csv_file),
         ):
-            with patch('builtins.open', side_effect=PermissionError('denied')):
+            with patch('os.path.getsize', side_effect=OSError('disk error')):
                 _update_confidence_log_outcome('2026-02-18T10:00:00', 'WIN', 2.5)
 
     def test_large_file_seek_branch(self, tmp_path):

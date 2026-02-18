@@ -365,6 +365,22 @@ class TestGetVolatilityMultiplier:
         mult = get_volatility_multiplier(df, self._vol_config(lookback=10))
         assert mult == 1.0
 
+    def test_mostly_nan_atr_returns_1(self):
+        """Most recent ATR are NaN → too few valid after dropna → 1.0 (line 205)."""
+        # lookback=10, need < 5 valid (lookback//2). 8 NaN + 1 valid + 1 current
+        atr_vals = [float('nan')] * 8 + [100.0] + [150.0]
+        df = self._make_atr_df(10, atr_vals)
+        mult = get_volatility_multiplier(df, self._vol_config(lookback=10))
+        assert mult == 1.0
+
+    def test_high_mid_volatility_third_bucket(self):
+        """Percentile in (0.6, 0.9] → multiplier=1.15 (line 225)."""
+        # ATR range: 100-200, current=175 → percentile=0.75 (0.6 < p ≤ 0.9)
+        atr_vals = list(np.linspace(100, 200, 9)) + [175.0]
+        df = self._make_atr_df(10, atr_vals)
+        mult = get_volatility_multiplier(df, self._vol_config(lookback=10))
+        assert mult == 1.15
+
 
 # ── _infer_exit_reason ───────────────────────────────────────
 

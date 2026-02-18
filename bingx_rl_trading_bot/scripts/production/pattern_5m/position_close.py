@@ -155,7 +155,7 @@ def record_closed_position(
     state['daily_trades'] += 1
     state['daily_pnl'] += pnl_pct
 
-    if pnl_pct > 0:
+    if pnl_pct >= 0:
         state['winning_trades'] += 1
         state['consecutive_losses'] = 0
     else:
@@ -180,7 +180,7 @@ def record_closed_position(
         logger.info(f"📊 Metrics saved: {metrics.total_trades} trades, {metrics.actual_win_rate:.1f}% WR")
 
     # Update confidence log with trade outcome
-    outcome = "WIN" if pnl_pct > 0 else "LOSS"
+    outcome = "WIN" if pnl_pct >= 0 else "LOSS"
     _update_confidence_log_outcome(position.get('entry_time'), outcome, pnl_pct)
 
     # Invalidate position cache (don't set empty — forces fresh fetch next time)
@@ -489,17 +489,8 @@ def close_position_market(
 
     # TP/SL was cancelled but market close failed — re-place both to protect position
     try:
-        from .orders import _place_sl_order, _place_single_tp_order
-        close_side = 'sell' if direction == 'LONG' else 'buy'
-        sl_price = position.get('sl_price')
-        tp_price = position.get('tp_price')
-        if sl_price and quantity > 0:
-            logger.warning(f"⚠️ Re-placing SL @ ${sl_price} after failed market close")
-            _place_sl_order(exchange, position, symbol, close_side, quantity, sl_price)
-        if tp_price and quantity > 0:
-            logger.warning(f"⚠️ Re-placing TP @ ${tp_price} after failed market close")
-            _place_single_tp_order(exchange, position, symbol, close_side, quantity, tp_price)
-        save_state(state)
+        logger.warning("⚠️ Re-placing TP/SL after failed market close")
+        place_tp_sl_orders(exchange, state, config)
     except Exception as restore_e:
         logger.error(f"Failed to re-place TP/SL after market close failure: {restore_e}")
 

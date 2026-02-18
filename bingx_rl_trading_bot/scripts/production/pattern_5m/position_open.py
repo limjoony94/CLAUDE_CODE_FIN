@@ -24,7 +24,7 @@ from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance
 from .indicators import get_volatility_multiplier
 from .state import save_state
 from .utils import extract_pattern_name
-from .orders import place_tp_sl_orders, _EXCHANGE_MANAGED
+from .orders import place_tp_sl_orders, cancel_remaining_orders, _EXCHANGE_MANAGED
 
 logger = logging.getLogger('pattern_5m')
 
@@ -587,7 +587,7 @@ def refill_position(
         logger.info(f"✅ Position refilled: entries={position['total_entries']}, avg=${new_avg_entry:.1f}")
 
         # Cancel old TP/SL and place new orders
-        _cancel_existing_tp_sl(exchange, position, symbol)
+        cancel_remaining_orders(exchange, state, config)
         place_tp_sl_orders(exchange, state, config)
 
         return True
@@ -604,39 +604,3 @@ def refill_position(
     except Exception as e:
         logger.exception(f"Failed to refill position: {e}")
         return False
-
-
-def _cancel_existing_tp_sl(
-    exchange: ccxt.bingx,
-    position: Dict[str, Any],
-    symbol: str,
-) -> None:
-    """Cancel existing TP/SL orders before placing new ones."""
-    orders_to_cancel = []
-
-    sl_id = position.get('sl_order_id')
-    if sl_id and sl_id != _EXCHANGE_MANAGED:
-        orders_to_cancel.append(sl_id)
-
-    # Cancel single TP order (non-scale-out mode)
-    tp_id = position.get('tp_order_id')
-    if tp_id and tp_id != _EXCHANGE_MANAGED:
-        orders_to_cancel.append(tp_id)
-
-    # Cancel scale-out TP orders
-    for stage in position.get('scale_out_stages', []):
-        if stage.get('order_id') and not stage.get('filled'):
-            orders_to_cancel.append(stage['order_id'])
-
-    for order_id in orders_to_cancel:
-        try:
-            exchange.cancel_order(order_id, symbol)
-            logger.debug(f"Cancelled order {order_id}")
-        except ccxt.OrderNotFound:
-            pass  # Already cancelled or filled
-        except ccxt.NetworkError as e:
-            logger.warning(f"Failed to cancel order {order_id} (network error): {e}")
-        except ccxt.ExchangeError as e:
-            logger.warning(f"Failed to cancel order {order_id} (exchange error): {e}")
-        except Exception as e:
-            logger.warning(f"Failed to cancel order {order_id}: {e}")

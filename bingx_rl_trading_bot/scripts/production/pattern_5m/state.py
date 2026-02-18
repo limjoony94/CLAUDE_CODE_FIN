@@ -400,6 +400,13 @@ def sync_metrics_with_state(metrics: PerformanceMetrics, state: Dict[str, Any]) 
         state['total_pnl'] = metrics.total_pnl_pct
         save_state(state)
 
+        # Also update .bak with corrected data (save_state's _create_backup
+        # copies the OLD corrupted main → .bak BEFORE writing, so .bak still has bad data)
+        try:
+            shutil.copy2(STATE_FILE, STATE_FILE + '.bak')
+        except Exception:
+            logger.debug("Could not update .bak after state restoration")
+
         logger.info(
             f"✅ State restored from metrics: {metrics.total_trades} trades, {metrics.actual_win_rate:.1f}% WR"
         )

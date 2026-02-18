@@ -1,4 +1,5 @@
-"""Tests for state.py — state save/load, backups, daily reset, crash recovery."""
+"""Tests for state.py — state save/load, backups, daily reset, crash recovery,
+metrics persistence, sync_metrics_with_state."""
 
 import pytest
 import json
@@ -6,6 +7,7 @@ import os
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
+from unittest.mock import patch
 
 from bingx_rl_trading_bot.scripts.production.pattern_5m.state import (
     load_state,
@@ -14,6 +16,9 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.state import (
     _check_daily_reset,
     cleanup_old_backups,
     reset_daily_stats_if_needed,
+    save_metrics,
+    load_metrics,
+    sync_metrics_with_state,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import PerformanceMetrics
 
@@ -317,3 +322,195 @@ class TestEdgeCases:
 
         assert loaded['position']['symbol'] == 'BTC-USDT'
         assert loaded['position']['entry_price'] == 50000.0
+
+
+# ── Metrics Persistence ──────────────────────────────────────
+
+
+class TestMetricsPersistence:
+    """Test save_metrics() / load_metrics() roundtrip."""
+
+    @pytest.fixture
+    def temp_metrics_file(self, tmp_path):
+        return str(tmp_path / "test_metrics.json")
+
+    def test_save_load_roundtrip(self, temp_metrics_file):
+        """Saved metrics should load back identically."""
+        m = PerformanceMetrics()
+        m.update_trade(5.0)
+        m.update_trade(-3.0)
+        m.session_start = "2026-01-01T00:00:00"
+
+        save_metrics(m, temp_metrics_file)
+        loaded = load_metrics(temp_metrics_file)
+
+        assert loaded is not None
+        assert loaded.total_trades == 2
+        assert loaded.winning_trades == 1
+        assert loaded.total_pnl_pct == pytest.approx(2.0)
+        assert loaded.session_start == "2026-01-01T00:00:00"
+
+    def test_load_nonexistent(self, temp_metrics_file):
+        """Loading nonexistent file should return None."""
+        assert load_metrics(temp_metrics_file) is None
+
+    def test_load_corrupted_json(self, temp_metrics_file):
+        """Corrupted JSON should return None."""
+        with open(temp_metrics_file, 'w') as f:
+            f.write("{ bad json }")
+        assert load_metrics(temp_metrics_file) is None
+
+    def test_save_creates_directory(self, tmp_path):
+        """save_metrics should create parent directory."""
+        nested = str(tmp_path / "nested" / "dir" / "metrics.json")
+        m = PerformanceMetrics()
+        save_metrics(m, nested)
+        assert os.path.exists(nested)
+
+    def test_atomic_write(self, temp_metrics_file):
+        """save_metrics uses atomic write — no partial files on success."""
+        m = PerformanceMetrics()
+        m.update_trade(10.0)
+        save_metrics(m, temp_metrics_file)
+
+        # File should be valid JSON
+        with open(temp_metrics_file, 'r') as f:
+            data = json.load(f)
+        assert data['total_trades'] == 1
+
+    def test_empty_metrics_roundtrip(self, temp_metrics_file):
+        """Empty metrics should save/load without error."""
+        m = PerformanceMetrics()
+        save_metrics(m, temp_metrics_file)
+        loaded = load_metrics(temp_metrics_file)
+        assert loaded is not None
+        assert loaded.total_trades == 0
+        assert loaded.total_pnl_pct == 0.0
+
+
+# ── sync_metrics_with_state ──────────────────────────────────
+
+
+class TestSyncMetricsWithState:
+    """Test sync_metrics_with_state() — bidirectional smart sync (v1.28.17)."""
+
+    def test_already_in_sync(self):
+        """Equal trade counts → return metrics unchanged."""
+        m = PerformanceMetrics()
+        m.total_trades = 10
+        m.winning_trades = 7
+        m.total_pnl_pct = 20.0
+        state = {'total_trades': 10, 'winning_trades': 7, 'total_pnl': 20.0}
+
+        result = sync_metrics_with_state(m, state)
+
+        assert result is m
+        assert result.total_trades == 10
+
+    def test_state_ahead_trusts_state(self):
+        """State has more trades → metrics updated from state."""
+        m = PerformanceMetrics()
+        m.total_trades = 5
+        m.winning_trades = 3
+        m.total_pnl_pct = 10.0
+
+        state = {
+            'total_trades': 10,
+            'winning_trades': 7,
+            'total_pnl': 25.0,
+        }
+
+        result = sync_metrics_with_state(m, state)
+
+        assert result.total_trades == 10
+        assert result.winning_trades == 7
+        assert result.losing_trades == 3
+        assert result.actual_win_rate == pytest.approx(70.0)
+        assert result.total_pnl_pct == 25.0
+
+    def test_state_ahead_zero_trades(self):
+        """State has trades, metrics has 0 → metrics synced to state."""
+        m = PerformanceMetrics()
+        # metrics is fresh (0 trades)
+        state = {'total_trades': 5, 'winning_trades': 4, 'total_pnl': 12.0}
+
+        result = sync_metrics_with_state(m, state)
+
+        assert result.total_trades == 5
+        assert result.winning_trades == 4
+        assert result.actual_win_rate == pytest.approx(80.0)
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.state.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.state.shutil.copy2')
+    def test_state_behind_trusts_metrics(self, mock_copy2, mock_save_state):
+        """State has fewer trades (corruption) → state restored from metrics."""
+        m = PerformanceMetrics()
+        m.total_trades = 40
+        m.winning_trades = 25
+        m.total_pnl_pct = 8.40
+
+        state = {
+            'total_trades': 5,  # corrupted!
+            'winning_trades': 2,
+            'total_pnl': 1.0,
+        }
+
+        result = sync_metrics_with_state(m, state)
+
+        # Metrics should be unchanged
+        assert result.total_trades == 40
+        assert result.winning_trades == 25
+        assert result.total_pnl_pct == 8.40
+
+        # State should be updated to match metrics
+        assert state['total_trades'] == 40
+        assert state['winning_trades'] == 25
+        assert state['total_pnl'] == 8.40
+
+        # save_state should have been called to persist corrected state
+        mock_save_state.assert_called_once_with(state)
+        # .bak should be updated
+        mock_copy2.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.state.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.state.shutil.copy2',
+           side_effect=Exception("disk error"))
+    def test_state_behind_bak_failure_graceful(self, mock_copy2, mock_save_state):
+        """State corruption + .bak update failure → no crash."""
+        m = PerformanceMetrics()
+        m.total_trades = 20
+        m.winning_trades = 15
+        m.total_pnl_pct = 5.0
+
+        state = {'total_trades': 3, 'winning_trades': 1, 'total_pnl': 0.5}
+
+        # Should not raise even if copy2 fails
+        result = sync_metrics_with_state(m, state)
+
+        assert result.total_trades == 20
+        assert state['total_trades'] == 20
+        mock_save_state.assert_called_once()
+
+    def test_state_ahead_win_rate_calculation(self):
+        """State-ahead sync: actual_win_rate correctly computed."""
+        m = PerformanceMetrics()
+        m.total_trades = 0
+        state = {'total_trades': 100, 'winning_trades': 85, 'total_pnl': 50.0}
+
+        result = sync_metrics_with_state(m, state)
+
+        assert result.actual_win_rate == pytest.approx(85.0)
+        assert result.losing_trades == 15
+
+    def test_state_missing_keys_defaults(self):
+        """State with missing winning_trades/total_pnl → defaults to 0."""
+        m = PerformanceMetrics()
+        m.total_trades = 0
+        state = {'total_trades': 5}  # no winning_trades, no total_pnl
+
+        result = sync_metrics_with_state(m, state)
+
+        assert result.total_trades == 5
+        assert result.winning_trades == 0
+        assert result.losing_trades == 5
+        assert result.total_pnl_pct == 0.0

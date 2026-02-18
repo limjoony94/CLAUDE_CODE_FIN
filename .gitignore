@@ -33,7 +33,9 @@ bingx_rl_trading_bot/logs/
 # Runtime files
 *.lock
 *_state.json.backup_*
+*_state.json.bak
 *.local_backup
+bingx_rl_trading_bot/results/pattern_5m_bot_state.json
 
 # Large data files
 bingx_rl_trading_bot/data/*.csv

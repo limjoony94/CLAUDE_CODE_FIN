@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.28.32"  # v1.28.32: PnL=0 win consistency + private import cleanup + cancel dedup + sync .bak fix
+BOT_VERSION = "1.28.33"  # v1.28.33: dead constants cleanup (regime, rotation, logging format, unused defaults)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -57,56 +57,6 @@ class CandleType(Enum):
     MED_UP = "U"
     MED_DOWN = "DN"
 
-
-# ============================================================
-# Market Regime Detection (v1.18)
-# Research: regime_adaptive_research.py, regime_adaptive_validation.py
-# WF 5/5 (vs v1.17: 0/5), Total PnL: +415% (vs v1.17: -1081%)
-# ============================================================
-
-class MarketRegime(Enum):
-    """Market regime classification."""
-    BULL = "BULL"
-    BEAR = "BEAR"
-    SIDEWAYS = "SIDEWAYS"
-    UNKNOWN = "UNKNOWN"
-
-# Regime detection parameters
-# DEPRECATED: Regime disabled since v1.19.0 (tight TP/SL proved regime-independent)
-REGIME_DETECTION_ENABLED = False  # v1.19.0: Disabled - tight TP/SL is regime-independent
-REGIME_LOOKBACK_BARS = 100          # 100 bars = ~8.3 hours
-REGIME_TREND_THRESHOLD = 1.5        # % price change for BULL/BEAR (optimized from 2.0)
-REGIME_VOL_THRESHOLD = 0.15         # ATR% threshold for HIGH/LOW volatility
-
-# Regime-specific patterns and TP/SL (v1.18)
-# DEPRECATED: Regime disabled since v1.19.0 - kept for reference only
-# Each regime has its own optimal patterns based on backtest validation
-REGIME_PATTERNS = {
-    "BULL": {
-        # Counter-trend SHORT patterns work best in BULL market
-        "MU-ST-DN": ("SHORT", 3.0, 1.5),   # EV=+5.25%, WR=100%
-        "IH-DN-DN": ("SHORT", 2.5, 1.5),   # EV=+5.08%, WR=83.3%
-        "BU-U-DN": ("SHORT", 1.5, 2.0),    # EV=+1.86%, WR=87.5%
-    },
-    "BEAR": {
-        # Mix of trend-following SHORT and counter-trend LONG
-        "BD-ST-DN": ("SHORT", 1.5, 1.5),   # EV=+2.41%, WR=75.0%
-        "BU-U-DN": ("SHORT", 3.0, 1.5),    # EV=+1.97%, WR=55.6%
-        "U-ST-U": ("LONG", 1.5, 3.0),      # EV=+1.80%, WR=75.0% (bounce)
-        "DN-DN-BD": ("SHORT", 2.0, 2.5),   # EV=+1.93%, WR=53.3%
-    },
-    "SIDEWAYS": {
-        # Range-bound patterns (most common regime: 85.8% of time)
-        "BD-BD-BD": ("SHORT", 3.0, 2.5),   # EV=+1.84%, WR=61.3%
-        "ST-BD-DN": ("LONG", 3.0, 3.0),    # EV=+1.53%, WR=62.2%
-        "MU-ST-DN": ("SHORT", 3.0, 2.0),   # EV=+1.52%, WR=57.1%
-        "DN-DN-BD": ("SHORT", 1.5, 2.0),   # EV=+0.42%, WR=50.0%
-    },
-}
-
-# Default regime to use when detection fails
-# DEPRECATED: Regime disabled since v1.19.0 - kept for reference only
-DEFAULT_REGIME = MarketRegime.SIDEWAYS
 
 # ============================================================
 # Validated Patterns (v1.27.0: Uniform TP 70%)
@@ -378,11 +328,6 @@ DEFAULT_SL_PCT = 1.0  # v1.19.0: Tight SL (was 3.0)
 TP1_RATIO = 0.8   # First TP at 80% of full TP
 TP1_QTY_PCT = 50  # Close 50% at TP1
 
-# Leverage
-DEFAULT_LEVERAGE = 3
-
-# Position sizing
-DEFAULT_POSITION_PCT = 5.0  # % of balance per trade
 
 
 # ============================================================
@@ -423,14 +368,6 @@ EARLY_EXIT_MIN_PROFIT_PCT = EARLY_EXIT_CONFIG['min_profit_pct']
 
 # Min data bars for classification
 MIN_BARS_FOR_CLASSIFICATION = 25  # Need 20 for avg_body + 5 buffer
-
-
-# ============================================================
-# Logging
-# ============================================================
-
-LOG_FORMAT = "%(asctime)s [%(levelname)s] %(message)s"
-LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 
 # ============================================================
@@ -531,9 +468,6 @@ QUANTITY_ROUND_DECIMALS = 4
 # ROTATION SETTINGS
 # ============================================================
 ROTATION_ENABLED = False  # Disabled for pattern bot
-ROTATION_MAX_SIZE = 1.0
-ROTATION_MIN_PARTIAL_PCT = 0.6
-ROTATION_REFILL_TO_FULL = True
 
 # ============================================================
 # DEFAULT CONFIGURATION

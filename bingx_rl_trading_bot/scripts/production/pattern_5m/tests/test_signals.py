@@ -15,6 +15,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import (
     check_entry_signal,
     check_cooldown,
     check_consecutive_loss_limit,
+    check_daily_loss_limit,
+    check_early_exit_signal,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
     CandleType,
@@ -28,6 +30,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
     CONFIDENCE_WEIGHT_HISTORICAL,
     CONFIDENCE_WEIGHT_REGIME,
     CONTEXT_PREFERRED_BONUS,
+    EARLY_EXIT_CONFIRM_CANDLES,
+    EARLY_EXIT_MIN_PROFIT_PCT,
 )
 
 
@@ -615,3 +619,233 @@ class TestAddCandleClassification:
         df.drop(columns=['candle_type', 'type_code', 'pattern_3'], inplace=True)
         result = add_candle_classification(df, config=None)
         assert 'candle_type' in result.columns
+
+
+# ── check_daily_loss_limit ──────────────────────────────────
+
+
+class TestCheckDailyLossLimit:
+    """Test check_daily_loss_limit() — daily loss threshold."""
+
+    def _today(self):
+        return datetime.now().strftime('%Y-%m-%d')
+
+    def test_no_loss(self):
+        """No daily loss → not limited."""
+        state = {'daily_pnl': 0.0, 'last_trade_date': self._today()}
+        config = {'risk': {'max_daily_loss_pct': 10.0}}
+        assert check_daily_loss_limit(state, config) is False
+
+    def test_profit_day(self):
+        """Positive PnL → not limited."""
+        state = {'daily_pnl': 5.0, 'last_trade_date': self._today()}
+        config = {'risk': {'max_daily_loss_pct': 10.0}}
+        assert check_daily_loss_limit(state, config) is False
+
+    def test_below_limit(self):
+        """Loss below threshold → not limited."""
+        state = {'daily_pnl': -9.9, 'last_trade_date': self._today()}
+        config = {'risk': {'max_daily_loss_pct': 10.0}}
+        assert check_daily_loss_limit(state, config) is False
+
+    def test_at_limit(self):
+        """Loss exactly at threshold → limited."""
+        state = {'daily_pnl': -10.0, 'last_trade_date': self._today()}
+        config = {'risk': {'max_daily_loss_pct': 10.0}}
+        assert check_daily_loss_limit(state, config) is True
+
+    def test_above_limit(self):
+        """Loss beyond threshold → limited."""
+        state = {'daily_pnl': -15.0, 'last_trade_date': self._today()}
+        config = {'risk': {'max_daily_loss_pct': 10.0}}
+        assert check_daily_loss_limit(state, config) is True
+
+    def test_default_config(self):
+        """Missing risk config → uses default 10%."""
+        state = {'daily_pnl': -11.0, 'last_trade_date': self._today()}
+        assert check_daily_loss_limit(state, {}) is True
+
+    def test_custom_threshold(self):
+        """Custom max_daily_loss_pct = 13%."""
+        state = {'daily_pnl': -12.0, 'last_trade_date': self._today()}
+        config = {'risk': {'max_daily_loss_pct': 13.0}}
+        assert check_daily_loss_limit(state, config) is False
+
+
+# ── check_early_exit_signal ─────────────────────────────────
+
+
+class TestCheckEarlyExitSignal:
+    """Test check_early_exit_signal() — reversal candle early exit."""
+
+    @pytest.fixture
+    def long_position(self):
+        """LONG position with profit."""
+        return {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'reversal_count': 0,
+            'last_counted_candle_ts': None,
+        }
+
+    @pytest.fixture
+    def short_position(self):
+        """SHORT position with profit."""
+        return {
+            'direction': 'SHORT',
+            'entry_price': 50000.0,
+            'reversal_count': 0,
+            'last_counted_candle_ts': None,
+        }
+
+    @pytest.fixture
+    def config_3x(self):
+        """Standard config with 3x leverage."""
+        return {'leverage': 3}
+
+    def _make_df(self, type_codes, timestamps=None):
+        """Helper: create DataFrame with type_code column."""
+        n = len(type_codes)
+        if timestamps is None:
+            timestamps = list(range(1000, 1000 + n * 300000, 300000))
+        df = pd.DataFrame({
+            'open': [50000.0] * n,
+            'high': [50100.0] * n,
+            'low': [49900.0] * n,
+            'close': [50050.0] * n,
+            'type_code': type_codes,
+            'timestamp': timestamps,
+        })
+        return df
+
+    def test_disabled_returns_false(self, long_position, config_3x):
+        """Early exit disabled → no exit."""
+        df = self._make_df(['U', 'BD', 'BD', 'BD', 'BD'])
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.signals.EARLY_EXIT_CONFIG',
+            {'enabled': False},
+        ):
+            should_exit, count, reason, ts = check_early_exit_signal(
+                long_position, df, 50500.0, config_3x
+            )
+        assert should_exit is False
+
+    def test_insufficient_data(self, long_position, config_3x):
+        """Less than 2 bars → no exit."""
+        df = self._make_df(['BD'])
+        should_exit, count, reason, ts = check_early_exit_signal(
+            long_position, df, 50500.0, config_3x
+        )
+        assert should_exit is False
+
+    def test_no_type_code_column(self, long_position, config_3x):
+        """Missing type_code column → no exit."""
+        df = pd.DataFrame({'open': [50000.0, 50000.0], 'close': [50000.0, 50000.0]})
+        should_exit, count, reason, ts = check_early_exit_signal(
+            long_position, df, 50500.0, config_3x
+        )
+        assert should_exit is False
+
+    def test_long_reversal_count_increments(self, long_position, config_3x):
+        """LONG: BD candle → reversal count +1."""
+        df = self._make_df(['U', 'U', 'BD', 'BD'])
+        # current_price above entry to ensure profit check doesn't block
+        price = 50100.0  # 0.2% profit * 3x = 0.6% > 0.3%
+        should_exit, count, reason, ts = check_early_exit_signal(
+            long_position, df, price, config_3x
+        )
+        assert should_exit is False
+        assert count == 1  # BD counted
+
+    def test_long_3bd_triggers_exit(self, config_3x):
+        """LONG: 3 consecutive BD + profit → early exit."""
+        position = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'reversal_count': 2,  # Already 2 BDs counted
+            'last_counted_candle_ts': None,
+        }
+        # iloc[-2] is the last completed candle → BD must be there
+        df = self._make_df(['U', 'U', 'BD', 'U'])
+        price = 50100.0  # 0.2% * 3x = 0.6% > 0.3% min profit
+        should_exit, count, reason, ts = check_early_exit_signal(
+            position, df, price, config_3x
+        )
+        assert should_exit is True
+        assert count == EARLY_EXIT_CONFIRM_CANDLES
+        assert reason is not None
+
+    def test_short_3bu_triggers_exit(self, config_3x):
+        """SHORT: 3 consecutive BU + profit → early exit."""
+        position = {
+            'direction': 'SHORT',
+            'entry_price': 50000.0,
+            'reversal_count': 2,  # Already 2 BUs counted
+            'last_counted_candle_ts': None,
+        }
+        # iloc[-2] is the last completed candle → BU must be there
+        df = self._make_df(['U', 'U', 'BU', 'U'])
+        price = 49900.0  # 0.2% * 3x = 0.6% > 0.3% min profit
+        should_exit, count, reason, ts = check_early_exit_signal(
+            position, df, price, config_3x
+        )
+        assert should_exit is True
+        assert count == EARLY_EXIT_CONFIRM_CANDLES
+
+    def test_no_exit_insufficient_profit(self, config_3x):
+        """3 BDs but PnL < min_profit_pct → no exit."""
+        position = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'reversal_count': 2,
+            'last_counted_candle_ts': None,
+        }
+        # BD at iloc[-2] (last completed candle)
+        df = self._make_df(['U', 'U', 'BD', 'U'])
+        price = 50000.0  # breakeven → PnL ≈ 0%
+        should_exit, count, reason, ts = check_early_exit_signal(
+            position, df, price, config_3x
+        )
+        assert should_exit is False
+
+    def test_non_reversal_resets_count(self, long_position, config_3x):
+        """Non-reversal candle → count resets to 0."""
+        long_position['reversal_count'] = 2
+        df = self._make_df(['U', 'U', 'U', 'U'])  # U is not BD
+        should_exit, count, reason, ts = check_early_exit_signal(
+            long_position, df, 50100.0, config_3x
+        )
+        assert should_exit is False
+        assert count == 0
+
+    def test_same_candle_no_double_count(self, long_position, config_3x):
+        """Same candle timestamp → don't re-count."""
+        long_position['last_counted_candle_ts'] = 1300000
+        df = self._make_df(['U', 'U', 'U', 'BD'], timestamps=[1000, 1300000, 1300000, 1300000])
+        should_exit, count, reason, ts = check_early_exit_signal(
+            long_position, df, 50100.0, config_3x
+        )
+        assert should_exit is False
+        assert count == 0  # Not re-counted
+
+    def test_invalid_direction(self, config_3x):
+        """Unknown direction → no exit."""
+        position = {
+            'direction': 'UNKNOWN',
+            'entry_price': 50000.0,
+            'reversal_count': 0,
+            'last_counted_candle_ts': None,
+        }
+        df = self._make_df(['U', 'U', 'BD', 'BD'])
+        should_exit, count, reason, ts = check_early_exit_signal(
+            position, df, 50100.0, config_3x
+        )
+        assert should_exit is False
+
+    def test_zero_price_no_exit(self, long_position, config_3x):
+        """current_price=0 → no exit."""
+        df = self._make_df(['U', 'U', 'BD', 'BD'])
+        should_exit, count, reason, ts = check_early_exit_signal(
+            long_position, df, 0.0, config_3x
+        )
+        assert should_exit is False

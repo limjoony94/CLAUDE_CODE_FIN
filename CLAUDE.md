@@ -76,13 +76,137 @@
 | PnL/MDD | 59.6x | 36.9x | **82.1x** |
 | TP/SL | Per-pattern (legacy) | Per-pattern (PP grid) | **Per-pattern (PP grid)** |
 
-### Pattern Summary — v1.28.24 Dynamic (112 patterns)
+### LONG Patterns (22) — Dynamic 112
 
-> 전체 패턴 상세는 `results/dynamic_patterns.json` 참조
+| Pattern | TP/SL | Edge | WR | Trades |
+|---------|-------|------|-----|--------|
+| BD-BD-BU | 1.6/3.5 | 29.0 | 97.7 | 43 |
+| BD-DN-MU | 1.8/4.0 | 27.3 | 96.3 | 27 |
+| BU-BD-DN | 2.1/4.0 | 23.0 | 88.6 | 35 |
+| DN-MD-MD | 2.0/4.0 | 25.3 | 92.0 | 25 |
+| H-MD-DN | 1.0/2.0 | 23.1 | 89.7 | 39 |
+| H-ST-DN | 1.8/4.0 | 27.6 | 96.6 | 29 |
+| IH-DN-MD | 0.7/1.5 | 22.4 | 90.6 | 32 |
+| IH-MU-DN | 1.6/3.5 | 24.0 | 92.6 | 27 |
+| MD-BD-DN | 1.8/4.0 | 27.2 | 96.2 | 26 |
+| MD-DN-BU | 1.6/3.5 | 27.9 | 96.6 | 29 |
+| MD-MU-ST | 1.8/3.5 | 26.3 | 92.3 | 26 |
+| MD-ST-MD | 1.2/1.5 | 22.6 | 78.1 | 32 |
+| MU-MD-ST | 1.8/4.0 | 27.0 | 96.0 | 25 |
+| MU-ST-U | 2.1/4.0 | 24.9 | 90.5 | 42 |
+| MU-U-BU | 2.1/4.0 | 23.3 | 88.9 | 27 |
+| MU-U-U | 2.0/4.0 | 22.2 | 88.9 | 81 |
+| ST-DN-IH | 1.6/3.5 | 22.0 | 90.6 | 32 |
+| ST-MU-U | 2.0/4.0 | 24.9 | 91.5 | 59 |
+| ST-ST-D | 1.4/2.0 | 23.3 | 82.1 | 28 |
+| U-D-ST | 1.8/4.0 | 25.3 | 94.3 | 35 |
+| U-MD-BD | 2.0/4.0 | 29.5 | 96.2 | 26 |
+| U-MU-H | 1.8/2.0 | 26.2 | 78.8 | 33 |
 
-**LONG (22)**: BD-BD-BU, BD-DN-MU, BU-BD-DN, DN-MD-MD, H-MD-DN, H-ST-DN, IH-DN-MD, IH-MU-DN, MD-BD-DN, MD-DN-BU, MD-MU-ST, MD-ST-MD, MU-MD-ST, MU-ST-U, MU-U-BU, MU-U-U, ST-DN-IH, ST-MU-U, ST-ST-D, U-D-ST, U-MD-BD, U-MU-H
+### SHORT Patterns (90) — Dynamic 112
 
-**SHORT (90)**: BD-BU-BU, BD-BU-U, BD-DN-BU, BD-U-DN, BD-U-MU, BU-BD-D, BU-BD-U, BU-BU-DN, BU-BU-U, BU-DN-BU, BU-DN-H, BU-MU-DN, BU-U-DN, BU-U-ST, D-D-DN, D-DN-ST, D-MU-DN, D-ST-U, D-U-MU, DF-U-U, DN-BD-BU, DN-BD-ST, DN-BU-BU, DN-BU-MD, DN-D-BD, DN-DF-DN, DN-DN-GS, DN-DN-IH, DN-GS-ST, DN-IH-MD, DN-IH-ST, DN-MD-BD, DN-MD-DN, DN-MD-MU, DN-MU-MU, DN-ST-BD, DN-ST-BU, DN-ST-D, DN-U-H, GS-ST-U, GS-U-DN, H-DN-ST, H-DN-U, H-ST-ST, IH-DN-DN, IH-DN-U, IH-ST-ST, IH-U-DN, IH-U-U, MD-BD-U, MD-BU-DN, MD-DN-ST, MD-MU-DN, MD-ST-ST, MD-U-D, MU-BU-DN, MU-DN-BU, MU-DN-MU, MU-DN-ST, MU-MD-U, MU-MU-U, MU-ST-MD, MU-U-ST, ST-BD-BD, ST-BD-BU, ST-D-U, ST-DN-BU, ST-H-DN, ST-IH-DN, ST-ST-H, ST-ST-MD, ST-ST-U, ST-U-BD, ST-U-BU, ST-U-H, U-BU-BD, U-BU-MD, U-BU-ST, U-D-DN, U-DN-BD, U-DN-DF, U-DN-H, U-GS-DN, U-H-DN, U-IH-U, U-MD-ST, U-MU-MD, U-ST-IH, U-ST-U, U-U-ST
+| Pattern | TP/SL | Edge | WR | Trades |
+|---------|-------|------|-----|--------|
+| BD-BU-BU | 1.6/3.0 | 22.8 | 88.0 | 25 |
+| BD-BU-U | 2.1/4.0 | 28.4 | 93.9 | 33 |
+| BD-DN-BU | 1.8/4.0 | 24.4 | 93.3 | 30 |
+| BD-U-DN | 2.0/4.0 | 22.1 | 88.8 | 98 |
+| BD-U-MU | 1.8/4.0 | 27.6 | 96.6 | 29 |
+| BU-BD-D | 1.0/2.0 | 25.9 | 92.6 | 27 |
+| BU-BD-U | 3.0/4.0 | 22.2 | 79.3 | 29 |
+| BU-BU-DN | 2.0/4.0 | 30.2 | 96.9 | 32 |
+| BU-BU-U | 1.8/4.0 | 24.6 | 93.5 | 31 |
+| BU-DN-BU | 2.0/4.0 | 25.2 | 91.9 | 37 |
+| BU-DN-H | 0.7/1.0 | 24.9 | 83.7 | 43 |
+| BU-MU-DN | 1.8/3.0 | 31.0 | 93.5 | 31 |
+| BU-U-DN | 1.8/4.0 | 23.5 | 92.5 | 93 |
+| BU-U-ST | 1.8/4.0 | 24.9 | 93.9 | 49 |
+| D-D-DN | 1.2/2.5 | 24.4 | 92.0 | 25 |
+| D-DN-ST | 1.8/3.5 | 24.6 | 90.6 | 32 |
+| D-MU-DN | 1.6/3.5 | 25.3 | 93.9 | 33 |
+| D-ST-U | 2.5/4.0 | 26.9 | 88.5 | 26 |
+| D-U-MU | 1.6/3.5 | 27.4 | 96.0 | 25 |
+| DF-U-U | 1.4/3.0 | 25.4 | 93.5 | 31 |
+| DN-BD-BU | 1.8/3.0 | 26.6 | 89.1 | 46 |
+| DN-BD-ST | 2.5/4.0 | 26.3 | 87.8 | 41 |
+| DN-BU-BU | 1.8/3.5 | 25.9 | 91.9 | 37 |
+| DN-BU-MD | 1.2/2.0 | 24.3 | 86.8 | 38 |
+| DN-D-BD | 2.0/3.0 | 24.0 | 84.0 | 25 |
+| DN-DF-DN | 2.0/4.0 | 23.7 | 90.3 | 31 |
+| DN-DN-GS | 2.5/4.0 | 22.5 | 84.0 | 25 |
+| DN-DN-IH | 2.5/4.0 | 29.2 | 90.7 | 43 |
+| DN-GS-ST | 1.2/2.5 | 24.7 | 92.3 | 26 |
+| DN-IH-MD | 1.2/2.5 | 28.6 | 96.2 | 26 |
+| DN-IH-ST | 1.8/4.0 | 23.0 | 92.0 | 25 |
+| DN-MD-BD | 2.1/4.0 | 22.4 | 88.0 | 25 |
+| DN-MD-DN | 2.5/4.0 | 26.2 | 87.8 | 49 |
+| DN-MD-MU | 1.6/3.5 | 23.0 | 91.7 | 36 |
+| DN-MU-MU | 1.6/3.5 | 25.0 | 93.6 | 47 |
+| DN-ST-BD | 1.8/4.0 | 25.3 | 94.2 | 52 |
+| DN-ST-BU | 3.0/4.0 | 30.7 | 87.9 | 33 |
+| DN-ST-D | 2.0/4.0 | 22.2 | 88.9 | 27 |
+| DN-U-H | 1.8/4.0 | 24.4 | 93.3 | 45 |
+| GS-ST-U | 0.7/1.5 | 25.2 | 93.3 | 30 |
+| GS-U-DN | 2.0/4.0 | 26.4 | 93.1 | 29 |
+| H-DN-ST | 1.8/4.0 | 23.9 | 92.9 | 28 |
+| H-DN-U | 2.5/4.0 | 23.8 | 85.3 | 34 |
+| H-ST-ST | 0.7/1.5 | 21.8 | 90.0 | 30 |
+| IH-DN-DN | 2.0/4.0 | 24.2 | 90.9 | 33 |
+| IH-DN-U | 2.0/4.0 | 22.5 | 89.2 | 37 |
+| IH-ST-ST | 1.4/3.0 | 28.0 | 96.2 | 26 |
+| IH-U-DN | 3.0/4.0 | 25.0 | 82.1 | 28 |
+| IH-U-U | 2.5/4.0 | 27.0 | 88.6 | 35 |
+| MD-BD-U | 1.8/4.0 | 22.5 | 91.4 | 35 |
+| MD-BU-DN | 1.8/3.0 | 26.0 | 88.5 | 26 |
+| MD-DN-ST | 2.0/4.0 | 23.1 | 89.7 | 39 |
+| MD-MU-DN | 2.0/4.0 | 23.7 | 90.3 | 31 |
+| MD-ST-ST | 1.8/4.0 | 22.9 | 91.9 | 37 |
+| MD-U-D | 1.8/4.0 | 23.0 | 92.0 | 25 |
+| MU-BU-DN | 2.0/4.0 | 22.2 | 88.9 | 27 |
+| MU-DN-BU | 1.8/4.0 | 23.0 | 92.0 | 25 |
+| MU-DN-MU | 2.5/3.5 | 22.2 | 80.6 | 36 |
+| MU-DN-ST | 1.8/4.0 | 23.9 | 92.9 | 56 |
+| MU-MD-U | 2.0/4.0 | 22.2 | 88.9 | 27 |
+| MU-MU-U | 1.8/4.0 | 23.0 | 92.0 | 25 |
+| MU-ST-MD | 1.2/2.5 | 25.0 | 92.6 | 27 |
+| MU-U-ST | 1.8/3.5 | 22.0 | 88.0 | 50 |
+| ST-BD-BD | 2.0/4.0 | 21.8 | 88.5 | 26 |
+| ST-BD-BU | 1.4/3.0 | 23.8 | 92.0 | 25 |
+| ST-D-U | 2.1/4.0 | 25.9 | 91.4 | 35 |
+| ST-DN-BU | 1.8/2.5 | 22.6 | 80.8 | 52 |
+| ST-H-DN | 1.6/3.5 | 25.1 | 93.8 | 32 |
+| ST-IH-DN | 1.2/2.5 | 21.9 | 89.5 | 38 |
+| ST-ST-H | 1.8/3.0 | 25.5 | 88.0 | 25 |
+| ST-ST-MD | 3.0/4.0 | 23.6 | 80.8 | 26 |
+| ST-ST-U | 2.0/4.0 | 22.0 | 88.7 | 106 |
+| ST-U-BD | 1.8/4.0 | 22.9 | 91.8 | 49 |
+| ST-U-BU | 2.1/4.0 | 22.2 | 87.8 | 41 |
+| ST-U-H | 1.6/3.5 | 24.9 | 93.5 | 31 |
+| U-BU-BD | 2.1/4.0 | 22.7 | 88.2 | 34 |
+| U-BU-MD | 1.8/4.0 | 22.5 | 91.4 | 35 |
+| U-BU-ST | 1.8/4.0 | 23.9 | 92.9 | 56 |
+| U-D-DN | 2.0/4.0 | 25.5 | 92.2 | 51 |
+| U-DN-BD | 2.1/4.0 | 23.3 | 88.9 | 81 |
+| U-DN-DF | 1.8/4.0 | 24.1 | 93.1 | 29 |
+| U-DN-H | 2.1/4.0 | 24.4 | 90.0 | 50 |
+| U-GS-DN | 1.6/3.0 | 31.7 | 96.9 | 32 |
+| U-H-DN | 2.1/4.0 | 30.2 | 95.7 | 47 |
+| U-IH-U | 2.5/3.5 | 25.9 | 84.2 | 38 |
+| U-MD-ST | 2.5/4.0 | 21.8 | 83.3 | 42 |
+| U-MU-MD | 2.0/4.0 | 22.6 | 89.3 | 28 |
+| U-ST-IH | 1.6/3.0 | 26.8 | 92.0 | 25 |
+| U-ST-U | 2.0/4.0 | 21.8 | 88.4 | 173 |
+| U-U-ST | 1.8/4.0 | 22.4 | 91.4 | 197 |
+
+### WF OOS 검증 (720d, 3-fold Expanding Window)
+
+| Fold | IS 기간 | IS 패턴 | OOS 기간 | OOS Trades | OOS WR | OOS PnL | OOS MDD |
+|------|---------|---------|----------|------------|--------|---------|---------|
+| 1 | 0-180d | 23 (9L+14S) | 180-360d | 200 | 64.0% | +62.4% | 83.7% |
+| 2 | 0-360d | 40 (22L+18S) | 360-540d | 166 | 77.7% | +331.2% | 34.2% |
+| 3 | 0-540d | 58 (34L+24S) | 540-720d | 172 | 81.4% | +463.5% | 39.0% |
+
+**Verdict: 3/3 PASS** | Total OOS PnL: +857.1% | Avg OOS WR: 74.4% | Stable patterns: 1
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -143,8 +267,8 @@ python scripts/scanner/pattern_scanner.py                           # 기본 (PP
 python scripts/scanner/pattern_scanner.py --edge-threshold 10 --correction bh --wf-folds 3
 ```
 
-**현재 적용**: Scanner 출력 257패턴 → Edge>=21.8pp + WR>=60% 후처리 필터 → 50패턴.
-257패턴 원본: `results/dynamic_patterns_257_backup.json`
+**현재 적용**: Scanner 출력 (per_pattern, edge>=10pp, MC<0.01) → Edge>=21.8pp + WR>=60% + SL>=1.0% 후처리 → **112패턴 (22L+90S)**.
+WF 3/3 PASS (720d expanding window, OOS PnL +857.1%). Backup: `results/dynamic_patterns_257_backup.json`
 
 ---
 

@@ -14,6 +14,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.state import (
     save_state,
     _create_default_state,
     _check_daily_reset,
+    _try_timestamped_backups,
+    _create_backup,
     cleanup_old_backups,
     reset_daily_stats_if_needed,
     save_metrics,
@@ -514,3 +516,210 @@ class TestSyncMetricsWithState:
         assert result.winning_trades == 0
         assert result.losing_trades == 5
         assert result.total_pnl_pct == 0.0
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.state.save_state')
+    def test_state_corruption_metrics_wins(self, mock_save):
+        """State < metrics (corruption) → metrics trusted, state updated."""
+        m = PerformanceMetrics()
+        m.total_trades = 40
+        m.winning_trades = 25
+        m.total_pnl_pct = 8.4
+        m.actual_win_rate = 62.5
+        state = {'total_trades': 5, 'winning_trades': 3, 'total_pnl': 1.0}
+
+        result = sync_metrics_with_state(m, state)
+
+        # Metrics should be unchanged
+        assert result.total_trades == 40
+        assert result.winning_trades == 25
+        # State should be updated to match metrics
+        assert state['total_trades'] == 40
+        assert state['winning_trades'] == 25
+        assert state['total_pnl'] == 8.4
+        mock_save.assert_called()
+
+
+# ── _try_timestamped_backups Tests ───────────────────────────
+
+
+class TestTryTimestampedBackups:
+    """Test _try_timestamped_backups() recovery from timestamped backup files."""
+
+    def test_no_backups_returns_none(self, tmp_path):
+        """No backup files → returns None."""
+        state_file = str(tmp_path / "state.json")
+        default = _create_default_state()
+        result = _try_timestamped_backups(state_file, default)
+        assert result is None
+
+    def test_valid_backup_recovers(self, tmp_path):
+        """Valid timestamped backup → recovers state."""
+        state_file = str(tmp_path / "state.json")
+        # Create a timestamped backup
+        backup = state_file + ".backup_20260218_120000"
+        backup_state = {'total_trades': 30, 'winning_trades': 20, 'total_pnl': 5.0}
+        with open(backup, 'w') as f:
+            json.dump(backup_state, f)
+
+        default = _create_default_state()
+        result = _try_timestamped_backups(state_file, default)
+        assert result is not None
+        assert result['total_trades'] == 30
+
+    def test_invalid_backup_skipped(self, tmp_path):
+        """Invalid JSON backup → skipped, returns None."""
+        state_file = str(tmp_path / "state.json")
+        backup = state_file + ".backup_20260218_120000"
+        with open(backup, 'w') as f:
+            f.write("not valid json")
+
+        default = _create_default_state()
+        result = _try_timestamped_backups(state_file, default)
+        assert result is None
+
+    def test_backup_without_total_trades_skipped(self, tmp_path):
+        """Backup missing total_trades → skipped."""
+        state_file = str(tmp_path / "state.json")
+        backup = state_file + ".backup_20260218_120000"
+        with open(backup, 'w') as f:
+            json.dump({'daily_pnl': 0.0}, f)
+
+        default = _create_default_state()
+        result = _try_timestamped_backups(state_file, default)
+        assert result is None
+
+    def test_newest_backup_preferred(self, tmp_path):
+        """Multiple backups → newest (by mtime) is preferred."""
+        import time as _time
+        state_file = str(tmp_path / "state.json")
+
+        old_backup = state_file + ".backup_20260218_100000"
+        with open(old_backup, 'w') as f:
+            json.dump({'total_trades': 10, 'winning_trades': 5}, f)
+        _time.sleep(0.05)
+
+        new_backup = state_file + ".backup_20260218_120000"
+        with open(new_backup, 'w') as f:
+            json.dump({'total_trades': 30, 'winning_trades': 20}, f)
+
+        default = _create_default_state()
+        result = _try_timestamped_backups(state_file, default)
+        assert result is not None
+        assert result['total_trades'] == 30
+
+
+# ── _create_backup Tests ─────────────────────────────────────
+
+
+class TestCreateBackup:
+    """Test _create_backup() timestamped backup creation."""
+
+    def test_creates_timestamped_file(self, tmp_path):
+        """Creates backup file with timestamp suffix."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            json.dump({'total_trades': 10}, f)
+
+        _create_backup(state_file)
+
+        # Find backup file
+        backups = [f for f in os.listdir(tmp_path) if 'backup_' in f]
+        assert len(backups) == 1
+        # Verify content matches
+        with open(str(tmp_path / backups[0])) as f:
+            data = json.load(f)
+        assert data['total_trades'] == 10
+
+    def test_io_error_no_crash(self, tmp_path):
+        """IOError during backup → no crash."""
+        state_file = str(tmp_path / "nonexistent_dir" / "state.json")
+        _create_backup(state_file)  # Should not raise
+
+
+# ── save_state Edge Cases ────────────────────────────────────
+
+
+class TestSaveStateEdgeCases:
+    """Test save_state() edge cases and error paths."""
+
+    def test_trade_close_creates_timestamped_backup(self, tmp_path):
+        """is_trade_close=True → creates timestamped backup."""
+        state_file = str(tmp_path / "state.json")
+        state = _create_default_state()
+        state['total_trades'] = 5
+
+        # First save to create the file
+        save_state(state, state_file, create_backup=False)
+        # Second save as trade close
+        save_state(state, state_file, create_backup=True, is_trade_close=True)
+
+        backups = [f for f in os.listdir(tmp_path) if 'backup_' in f]
+        assert len(backups) == 1
+
+    def test_trade_close_sets_last_trade_date(self, tmp_path):
+        """is_trade_close=True → sets last_trade_date to today."""
+        state_file = str(tmp_path / "state.json")
+        state = _create_default_state()
+        state['last_trade_date'] = '2025-01-01'
+
+        save_state(state, state_file, is_trade_close=True)
+
+        with open(state_file) as f:
+            saved = json.load(f)
+        assert saved['last_trade_date'] == datetime.now().strftime('%Y-%m-%d')
+
+    def test_bak_backup_created(self, tmp_path):
+        """Existing state file → .bak backup created."""
+        state_file = str(tmp_path / "state.json")
+        state = _create_default_state()
+        save_state(state, state_file)
+        save_state(state, state_file)
+
+        assert os.path.exists(state_file + '.bak')
+
+
+# ── load_state Recovery Chain ────────────────────────────────
+
+
+class TestLoadStateRecovery:
+    """Test load_state() recovery chain (main → .bak → timestamped → default)."""
+
+    def test_corrupted_main_recovers_from_bak(self, tmp_path):
+        """Main file corrupted → recovers from .bak."""
+        state_file = str(tmp_path / "state.json")
+        # Create corrupted main
+        with open(state_file, 'w') as f:
+            f.write("not json")
+        # Create valid .bak
+        bak_state = _create_default_state()
+        bak_state['total_trades'] = 15
+        with open(state_file + '.bak', 'w') as f:
+            json.dump(bak_state, f)
+
+        result = load_state(state_file)
+        assert result['total_trades'] == 15
+
+    def test_all_corrupted_returns_default(self, tmp_path):
+        """All files corrupted → returns default state."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            f.write("corrupt")
+        with open(state_file + '.bak', 'w') as f:
+            f.write("also corrupt")
+
+        result = load_state(state_file)
+        assert result['total_trades'] == 0
+        assert result['position'] is None
+
+    def test_no_bak_tries_timestamped(self, tmp_path):
+        """No .bak file → tries timestamped backups."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            f.write("corrupt")
+        # Create timestamped backup
+        backup = state_file + ".backup_20260218_120000"
+        with open(backup, 'w') as f:
+            json.dump({'total_trades': 25, 'winning_trades': 15}, f)
+
+        result = load_state(state_file)
+        assert result['total_trades'] == 25

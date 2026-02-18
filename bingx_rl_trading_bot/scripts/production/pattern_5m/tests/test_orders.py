@@ -18,8 +18,10 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.orders import (
     _EXCHANGE_MANAGED,
     _place_single_tp_order,
     _place_sl_order,
+    _place_scale_out_orders,
     _verify_single_tp_order,
     _verify_sl_order,
+    _verify_scale_out_orders,
     _cancel_existing_tpsl_orders,
     adjust_tpsl_to_config,
     cancel_remaining_orders,
@@ -650,3 +652,258 @@ class TestCancelRemainingOrders:
             'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})  # no raise
+
+
+# ── _place_scale_out_orders Tests ────────────────────────────
+
+
+class TestPlaceScaleOutOrders:
+    """Test _place_scale_out_orders() staged TP order placement."""
+
+    def test_single_stage_success(self):
+        """Single stage → places one TP order with closePosition."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'so_tp_1'}
+        position = {'direction': 'LONG'}
+        stages = [{'stage': 1, 'quantity': 0.005, 'tp_price': 51000.0}]
+        _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
+        exchange.create_order.assert_called_once()
+        assert stages[0]['order_id'] == 'so_tp_1'
+        # Last stage gets closePosition=True
+        call_params = exchange.create_order.call_args[1]['params']
+        assert call_params.get('closePosition') is True
+
+    def test_two_stages_success(self):
+        """Two stages → first without closePosition, last with it."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = [
+            {'id': 'so_tp_1'},
+            {'id': 'so_tp_2'},
+        ]
+        position = {'direction': 'LONG'}
+        stages = [
+            {'stage': 1, 'quantity': 0.003, 'tp_price': 51000.0},
+            {'stage': 2, 'quantity': 0.007, 'tp_price': 52000.0},
+        ]
+        _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
+        assert exchange.create_order.call_count == 2
+        assert stages[0]['order_id'] == 'so_tp_1'
+        assert stages[1]['order_id'] == 'so_tp_2'
+
+    def test_insufficient_funds_continues(self):
+        """InsufficientFunds on first stage → continues to second."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = [
+            ccxt.InsufficientFunds('no funds'),
+            {'id': 'so_tp_2'},
+        ]
+        position = {'direction': 'SHORT'}
+        stages = [
+            {'stage': 1, 'quantity': 0.003, 'tp_price': 49000.0},
+            {'stage': 2, 'quantity': 0.007, 'tp_price': 48000.0},
+        ]
+        _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'buy', stages)
+        assert stages[1]['order_id'] == 'so_tp_2'
+        assert 'order_id' not in stages[0]
+
+    def test_exchange_error_continues(self):
+        """ExchangeError on a stage → continues to next."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('invalid')
+        position = {'direction': 'LONG'}
+        stages = [{'stage': 1, 'quantity': 0.01, 'tp_price': 51000.0}]
+        _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
+        assert 'order_id' not in stages[0]
+
+
+# ── _verify_scale_out_orders Tests ───────────────────────────
+
+
+class TestVerifyScaleOutOrders:
+    """Test _verify_scale_out_orders() staged TP order verification."""
+
+    def test_all_orders_present(self):
+        """All stage orders exist → no re-placement, returns False."""
+        exchange = MagicMock()
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': 'so_1', 'quantity': 0.005, 'tp_price': 51000.0},
+            {'stage': 2, 'order_id': 'so_2', 'quantity': 0.005, 'tp_price': 52000.0},
+        ]
+        open_orders = {'so_1': {}, 'so_2': {}}
+        result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, open_orders)
+        assert result is False
+        exchange.create_order.assert_not_called()
+
+    def test_missing_order_re_placed(self):
+        """Stage order missing from exchange → re-placed."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'so_1_new'}
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': 'so_1', 'quantity': 0.005, 'tp_price': 51000.0},
+        ]
+        open_orders = {}  # order missing
+        result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, open_orders)
+        assert result is True
+        assert stages[0]['order_id'] == 'so_1_new'
+
+    def test_never_placed_order_created(self):
+        """Stage with order_id=None → creates new order."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'so_new'}
+        position = {'direction': 'SHORT', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': None, 'quantity': 0.005, 'tp_price': 49000.0},
+        ]
+        result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
+        assert result is True
+        assert stages[0]['order_id'] == 'so_new'
+
+    def test_filled_stage_skipped(self):
+        """Filled stage → not re-placed even if order_id missing."""
+        exchange = MagicMock()
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': None, 'filled': True, 'quantity': 0.005, 'tp_price': 51000.0},
+        ]
+        result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
+        assert result is False
+        exchange.create_order.assert_not_called()
+
+    def test_exchange_error_handled(self):
+        """ExchangeError on re-placement → no crash, returns False for that stage."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('error')
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': None, 'quantity': 0.005, 'tp_price': 51000.0},
+        ]
+        result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
+        assert result is False
+
+    def test_last_stage_gets_close_position(self):
+        """Last stage → closePosition=True in order params."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'so_new'}
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': None, 'quantity': 0.005, 'tp_price': 51000.0},
+        ]
+        _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
+        call_params = exchange.create_order.call_args[1]['params']
+        assert call_params.get('closePosition') is True
+
+
+# ── Error Path Tests for place_tp_sl_orders ──────────────────
+
+
+class TestPlaceTpSlOrdersErrors:
+    """Test error handling paths in place_tp_sl_orders."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    def test_network_error_no_crash(self, mock_tp, mock_sl, mock_save):
+        """NetworkError during placement → no crash."""
+        mock_tp.side_effect = ccxt.NetworkError('timeout')
+        exchange = MagicMock()
+        state = {'position': {
+            'direction': 'LONG', 'quantity': 0.01, 'tp_price': 51000.0,
+            'sl_price': 49000.0,
+        }}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        # place_tp_sl_orders catches NetworkError internally
+        place_tp_sl_orders(exchange, state, config)
+
+    def test_tp_110407_marks_exchange_managed(self):
+        """TP order 110407 error → marks as EXCHANGE_MANAGED."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('110407 TP already exists')
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        _place_single_tp_order(exchange, position, 'BTC/USDT:USDT', 'sell', 0.01, 51000.0)
+        assert position['tp_order_id'] == _EXCHANGE_MANAGED
+
+    def test_tp_110413_marks_exchange_managed(self):
+        """TP order 110413 error → marks as EXCHANGE_MANAGED."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('110413 TP price exceeded')
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        _place_single_tp_order(exchange, position, 'BTC/USDT:USDT', 'sell', 0.01, 51000.0)
+        assert position['tp_order_id'] == _EXCHANGE_MANAGED
+
+    def test_sl_110406_marks_exchange_managed(self):
+        """SL order 110406 error → marks as EXCHANGE_MANAGED."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.ExchangeError('110406 SL already exists')
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        _place_sl_order(exchange, position, 'BTC/USDT:USDT', 'sell', 0.01, 49000.0)
+        assert position['sl_order_id'] == _EXCHANGE_MANAGED
+
+    def test_tp_insufficient_funds_no_crash(self):
+        """InsufficientFunds on TP → no crash, no order_id."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.InsufficientFunds('no funds')
+        position = {'direction': 'LONG'}
+        _place_single_tp_order(exchange, position, 'BTC/USDT:USDT', 'sell', 0.01, 51000.0)
+        assert 'tp_order_id' not in position
+
+    def test_sl_insufficient_funds_no_crash(self):
+        """InsufficientFunds on SL → no crash, no order_id."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = ccxt.InsufficientFunds('no funds')
+        position = {'direction': 'LONG'}
+        _place_sl_order(exchange, position, 'BTC/USDT:USDT', 'sell', 0.01, 49000.0)
+        assert 'sl_order_id' not in position
+
+
+# ── cancel_remaining_orders Error Path Tests ─────────────────
+
+
+class TestCancelRemainingOrdersErrors:
+    """Test error handling paths in cancel_remaining_orders."""
+
+    def test_order_not_found_handled(self):
+        """OrderNotFound on cancel → continues silently."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'tp_1'}]
+        exchange.cancel_order.side_effect = ccxt.OrderNotFound('already gone')
+        state = {
+            'position': {'tp_order_id': 'tp_1', 'sl_order_id': None},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_exchange_error_on_cancel_handled(self):
+        """ExchangeError on individual cancel → continues to next."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_1'}, {'id': 'sl_1'}
+        ]
+        exchange.cancel_order.side_effect = ccxt.ExchangeError('cannot cancel')
+        state = {
+            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        assert exchange.cancel_order.call_count == 2
+
+    def test_scale_out_order_not_found(self):
+        """OrderNotFound on scale-out cancel → continues."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{'id': 'so_1'}]
+        exchange.cancel_order.side_effect = ccxt.OrderNotFound('gone')
+        state = {
+            'position': {
+                'tp_order_id': None, 'sl_order_id': None,
+                'scale_out_stages': [{'order_id': 'so_1', 'filled': False}],
+            },
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_exchange_error_on_fetch_handled(self):
+        """ExchangeError on fetch_open_orders → no crash."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = ccxt.ExchangeError('invalid')
+        state = {
+            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+        }
+        cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})

@@ -1,6 +1,7 @@
 """Tests for state.py — state save/load, backups, daily reset, crash recovery,
 metrics persistence, sync_metrics_with_state."""
 
+import builtins
 import pytest
 import json
 import os
@@ -16,6 +17,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.state import (
     _check_daily_reset,
     _try_timestamped_backups,
     _create_backup,
+    _atomic_replace_with_retry,
     cleanup_old_backups,
     reset_daily_stats_if_needed,
     save_metrics,
@@ -220,6 +222,19 @@ class TestDailyReset:
         assert was_reset is True
         assert sample_state['daily_pnl'] == 0.0
         assert sample_state['daily_trades'] == 0
+
+    def test_reset_daily_stats_same_day_no_reset(self, sample_state):
+        """reset_daily_stats_if_needed() returns False when same day."""
+        today = datetime.now().strftime('%Y-%m-%d')
+        sample_state['last_trade_date'] = today
+        sample_state['daily_pnl'] = 5.0
+        sample_state['daily_trades'] = 2
+
+        was_reset = reset_daily_stats_if_needed(sample_state)
+
+        assert was_reset is False
+        assert sample_state['daily_pnl'] == 5.0  # unchanged
+        assert sample_state['daily_trades'] == 2  # unchanged
 
 
 # ── Backup Management ─────────────────────────────────────────
@@ -929,3 +944,237 @@ class TestLoadMetricsErrors:
         ):
             result = load_metrics(metrics_file)
         assert result is None
+
+
+# ── .new file recovery in load_state ──────────────────────────
+
+
+class TestLoadStateNewFileRecovery:
+    """Test load_state recovery from .new file (lines 43-58)."""
+
+    def test_corrupted_main_recovers_from_new_file(self, tmp_path):
+        """Main file corrupted + .new file exists → recovers from .new."""
+        state_file = str(tmp_path / "state.json")
+        new_file = state_file + '.new'
+
+        # Create corrupted main file
+        with open(state_file, 'w') as f:
+            f.write("{corrupted json")
+
+        # Create valid .new file
+        valid_state = _create_default_state()
+        valid_state['total_trades'] = 42
+        with open(new_file, 'w') as f:
+            json.dump(valid_state, f)
+
+        result = load_state(state_file)
+        assert result['total_trades'] == 42
+
+    def test_new_file_promoted_to_main(self, tmp_path):
+        """After recovery, .new file replaces main file."""
+        state_file = str(tmp_path / "state.json")
+        new_file = state_file + '.new'
+
+        with open(state_file, 'w') as f:
+            f.write("bad json")
+
+        valid_state = _create_default_state()
+        valid_state['total_trades'] = 99
+        with open(new_file, 'w') as f:
+            json.dump(valid_state, f)
+
+        load_state(state_file)
+        # .new should be promoted to main (replaced)
+        with open(state_file) as f:
+            loaded = json.load(f)
+        assert loaded['total_trades'] == 99
+
+    def test_new_file_promote_permission_error(self, tmp_path):
+        """PermissionError promoting .new → still recovers from .new."""
+        state_file = str(tmp_path / "state.json")
+        new_file = state_file + '.new'
+
+        with open(state_file, 'w') as f:
+            f.write("bad")
+
+        valid_state = _create_default_state()
+        valid_state['total_trades'] = 55
+        with open(new_file, 'w') as f:
+            json.dump(valid_state, f)
+
+        with patch('os.replace', side_effect=PermissionError("locked")):
+            result = load_state(state_file)
+        assert result['total_trades'] == 55
+
+    def test_new_file_also_corrupted_falls_through(self, tmp_path):
+        """Both main and .new corrupted → falls through to .bak."""
+        state_file = str(tmp_path / "state.json")
+        new_file = state_file + '.new'
+        bak_file = state_file + '.bak'
+
+        with open(state_file, 'w') as f:
+            f.write("bad main")
+        with open(new_file, 'w') as f:
+            f.write("bad new")
+
+        # Provide valid .bak
+        valid_state = _create_default_state()
+        valid_state['total_trades'] = 77
+        with open(bak_file, 'w') as f:
+            json.dump(valid_state, f)
+
+        result = load_state(state_file)
+        assert result['total_trades'] == 77
+
+    def test_corrupted_main_no_new_no_bak(self, tmp_path):
+        """Main corrupted, no .new, no .bak → timestamped or default."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            f.write("bad")
+
+        result = load_state(state_file)
+        # Falls through to default state
+        assert result['total_trades'] == 0
+
+
+# ── _atomic_replace_with_retry ────────────────────────────────
+
+
+class TestAtomicReplaceWithRetry:
+    """Test _atomic_replace_with_retry (lines 169-181)."""
+
+    def test_success_on_first_try(self, tmp_path):
+        """Replace succeeds on first attempt."""
+        src = str(tmp_path / "src.json")
+        dst = str(tmp_path / "dst.json")
+        with open(src, 'w') as f:
+            f.write('{"ok": true}')
+        _atomic_replace_with_retry(src, dst)
+        assert os.path.exists(dst)
+        assert not os.path.exists(src)
+
+    def test_retry_then_success(self, tmp_path):
+        """PermissionError on first 2 tries, success on 3rd."""
+        src = str(tmp_path / "src.json")
+        dst = str(tmp_path / "dst.json")
+        with open(src, 'w') as f:
+            f.write('{"ok": true}')
+
+        call_count = [0]
+        original_replace = os.replace
+
+        def flaky_replace(s, d):
+            call_count[0] += 1
+            if call_count[0] <= 2:
+                raise PermissionError("locked")
+            return original_replace(s, d)
+
+        with patch('os.replace', side_effect=flaky_replace):
+            with patch('time.sleep'):  # skip actual waiting
+                _atomic_replace_with_retry(src, dst, max_retries=3)
+
+        assert call_count[0] == 3
+
+    def test_all_retries_exhausted_raises(self, tmp_path):
+        """All retries fail → raises PermissionError."""
+        src = str(tmp_path / "src.json")
+        dst = str(tmp_path / "dst.json")
+        with open(src, 'w') as f:
+            f.write('test')
+
+        with patch('os.replace', side_effect=PermissionError("locked")):
+            with patch('time.sleep'):
+                with pytest.raises(PermissionError):
+                    _atomic_replace_with_retry(src, dst, max_retries=3)
+
+
+# ── save_state .new fallback edge case ────────────────────────
+
+
+class TestSaveStateNewFallback:
+    """Test save_state .new fallback failure (lines 247-248)."""
+
+    def test_new_fallback_also_fails(self, tmp_path):
+        """Both atomic and .new fallback fail → no crash, lines 247-248 covered."""
+        state_file = str(tmp_path / "state.json")
+        state = _create_default_state()
+
+        # Make atomic write fail (triggers .new fallback),
+        # then make .new open() also fail → exercises lines 247-248
+        original_open = builtins.open
+        call_count = [0]
+
+        def failing_open(path, *args, **kwargs):
+            # Let mkstemp's fdopen work (it uses os.fdopen, not builtins.open)
+            # Block only the .new fallback write
+            if str(path).endswith('.new'):
+                raise PermissionError("disk full")
+            return original_open(path, *args, **kwargs)
+
+        with patch(
+            'tempfile.mkstemp',
+            side_effect=PermissionError("can't create temp"),
+        ):
+            with patch('builtins.open', side_effect=failing_open):
+                # Should not raise even when everything fails
+                save_state(state, state_file)
+
+        # Neither main nor .new should exist
+        assert not os.path.exists(state_file + '.new')
+
+
+# ── save_metrics PermissionError → .new fallback ─────────────
+
+
+class TestSaveMetricsPermissionError:
+    """Test save_metrics PermissionError → .new fallback (lines 361-368)."""
+
+    def test_atomic_perm_error_falls_back_to_new(self, tmp_path):
+        """PermissionError on atomic write → writes .new file."""
+        metrics_file = str(tmp_path / "metrics.json")
+        metrics = PerformanceMetrics()
+        metrics.total_trades = 10
+        metrics.total_wins = 7
+
+        # First call succeeds (create dummy file), then mock to fail
+        # Write a dummy file first so the directory exists
+        with open(metrics_file, 'w') as f:
+            json.dump({}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.state._atomic_replace_with_retry',
+            side_effect=PermissionError("OneDrive locked"),
+        ):
+            save_metrics(metrics, metrics_file)
+
+        # .new file should exist with metrics data
+        new_file = metrics_file + '.new'
+        assert os.path.exists(new_file)
+        with open(new_file) as f:
+            data = json.load(f)
+        assert data['total_trades'] == 10
+
+    def test_perm_error_new_also_fails(self, tmp_path):
+        """PermissionError + .new fallback also fails → no crash."""
+        metrics_file = str(tmp_path / "metrics.json")
+        metrics = PerformanceMetrics()
+        with open(metrics_file, 'w') as f:
+            json.dump({}, f)
+
+        # _atomic_replace_with_retry fails with PermissionError,
+        # then builtins.open for .new also fails
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.state._atomic_replace_with_retry',
+            side_effect=PermissionError("locked"),
+        ):
+            # Mock only the fallback open to fail
+            original_open = open
+
+            def mock_open_new(path, *args, **kwargs):
+                if str(path).endswith('.new'):
+                    raise PermissionError("can't write .new")
+                return original_open(path, *args, **kwargs)
+
+            with patch('builtins.open', side_effect=mock_open_new):
+                # Should not crash
+                save_metrics(metrics, metrics_file)

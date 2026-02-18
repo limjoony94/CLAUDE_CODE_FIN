@@ -9,6 +9,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor import 
     _infer_exit_reason,
     _infer_exit_from_price,
     _check_scale_out_fills,
+    _handle_position_closed,
     get_actual_exit_price,
     check_position_status,
     sync_position_with_exchange,
@@ -722,3 +723,90 @@ class TestCheckPositionStatusExtended:
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is False  # Position still open
+
+
+# ── _handle_position_closed (lines 343, 348-349, 358-363) ────
+
+
+class TestHandlePositionClosed:
+    """Test _handle_position_closed exit detection and scale-out reason adjustment."""
+
+    @pytest.fixture
+    def base_position(self):
+        return {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+            'scale_out_enabled': False,
+        }
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price',
+           return_value={'price': 51000.0, 'reason': 'TP'})
+    def test_actual_exit_found_on_first_try(self, mock_exit, mock_record, mock_sleep,
+                                             base_position):
+        """get_actual_exit_price succeeds → uses actual exit (lines 343, 348-349)."""
+        exchange = MagicMock()
+        state = {'position': base_position}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+
+        result = _handle_position_closed(exchange, state, config, base_position, cache, None)
+        assert result is True
+        mock_record.assert_called_once()
+        # Check that it used TP as exit reason
+        call_args = mock_record.call_args
+        assert call_args[0][3] == 51000.0  # exit_price
+        assert call_args[0][4] == 'TP'  # exit_reason
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price',
+           return_value={'price': 51000.0, 'reason': 'TP'})
+    def test_scaleout_all_stages_filled(self, mock_exit, mock_record, mock_sleep):
+        """scale_out_enabled + all stages filled → TP_SCALEOUT (lines 358-361)."""
+        position = {
+            'direction': 'SHORT', 'entry_price': 50000.0,
+            'tp_price': 49000.0, 'sl_price': 51000.0,
+            'scale_out_enabled': True,
+            'scale_out_stages': [
+                {'stage': 1, 'quantity': 0.005, 'filled': True},
+                {'stage': 2, 'quantity': 0.005, 'filled': True},
+            ],
+        }
+        exchange = MagicMock()
+        state = {'position': position}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+
+        result = _handle_position_closed(exchange, state, config, position, cache, None)
+        assert result is True
+        call_args = mock_record.call_args
+        assert call_args[0][4] == 'TP_SCALEOUT'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price',
+           return_value={'price': 51000.0, 'reason': 'SL'})
+    def test_scaleout_partial_sl(self, mock_exit, mock_record, mock_sleep):
+        """scale_out_enabled + partial fills + SL → SL_AFTER_1_STAGES (lines 362-363)."""
+        position = {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'tp_price': 51000.0, 'sl_price': 49000.0,
+            'scale_out_enabled': True,
+            'scale_out_stages': [
+                {'stage': 1, 'quantity': 0.005, 'filled': True},
+                {'stage': 2, 'quantity': 0.005, 'filled': False},
+            ],
+        }
+        exchange = MagicMock()
+        state = {'position': position}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+
+        result = _handle_position_closed(exchange, state, config, position, cache, None)
+        assert result is True
+        call_args = mock_record.call_args
+        assert call_args[0][4] == 'SL_AFTER_1_STAGES'

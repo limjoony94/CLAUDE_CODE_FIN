@@ -1222,3 +1222,60 @@ class TestVerifySlOrderErrors:
         result = _verify_sl_order(exchange, position, 'BTC/USDT:USDT', {})
         assert result is False
         exchange.create_order.assert_not_called()
+
+
+# ── verify_tp_sl_orders error paths (lines 350, 368-371) ────
+
+
+class TestVerifyTpSlOrdersErrorPaths:
+    """Test verify_tp_sl_orders scale-out branch and exception handling."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._verify_sl_order',
+           return_value=False)
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._verify_scale_out_orders',
+           return_value=True)
+    def test_scale_out_branch_called(self, mock_vso, mock_vsl, mock_save):
+        """scale_out_enabled + stages → calls _verify_scale_out_orders (line 350)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = []
+        state = {'position': {
+            'scale_out_enabled': True,
+            'scale_out_stages': [{'stage': 1, 'order_id': 'so_1'}],
+            'tp_order_id': None, 'sl_order_id': None,
+        }}
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+        mock_vso.assert_called_once()
+        mock_save.assert_called_once()
+
+    def test_exchange_error_caught(self):
+        """ExchangeError on fetch_open_orders → caught (lines 368-369)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = ccxt.ExchangeError('invalid')
+        state = {'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+    def test_generic_exception_caught(self):
+        """Generic exception on fetch_open_orders → caught (lines 370-371)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = RuntimeError('unexpected')
+        state = {'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}
+        verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
+
+
+# ── _verify_scale_out_orders generic exception (lines 484-485) ──
+
+
+class TestVerifyScaleOutOrdersGenericException:
+    """Test _verify_scale_out_orders generic exception on re-placement."""
+
+    def test_generic_exception_on_replace(self):
+        """RuntimeError on create_order → logger.exception, returns False (lines 484-485)."""
+        exchange = MagicMock()
+        exchange.create_order.side_effect = RuntimeError('unexpected')
+        position = {'direction': 'LONG', 'quantity': 0.01}
+        stages = [
+            {'stage': 1, 'order_id': None, 'quantity': 0.005, 'tp_price': 51000.0},
+        ]
+        result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
+        assert result is False

@@ -996,3 +996,108 @@ class TestUpdateConfidenceLogOutcome:
         ):
             with patch('builtins.open', side_effect=PermissionError('denied')):
                 _update_confidence_log_outcome('2026-02-18T10:00:00', 'WIN', 2.5)
+
+    def test_large_file_seek_branch(self, tmp_path):
+        """File > 4096 bytes → seeks to tail, skips partial line (lines 671-674)."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
+            _update_confidence_log_outcome,
+        )
+        csv_file = tmp_path / 'confidence.csv'
+        header = 'time,pattern,confidence,outcome\n'
+        # Fill with >4096 bytes of completed rows
+        filled_row = '2026-02-18T10:00:00,BD-BD-BU,0.85,WIN:+1.00%\n'
+        rows_needed = (4096 // len(filled_row)) + 10
+        filler = filled_row * rows_needed
+        # Last row has trailing comma (empty outcome)
+        filler += '2026-02-18T12:00:00,MU-U-H,0.90,\n'
+        csv_file.write_text(header + filler)
+        assert csv_file.stat().st_size > 4096
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            _update_confidence_log_outcome('2026-02-18T12:00:00', 'LOSS', -3.5)
+        content = csv_file.read_text()
+        assert 'LOSS:-3.50%' in content
+
+    def test_empty_file_no_crash(self, tmp_path):
+        """Empty file (0 tail lines) → early return (line 682)."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
+            _update_confidence_log_outcome,
+        )
+        csv_file = tmp_path / 'confidence.csv'
+        csv_file.write_text('')
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            _update_confidence_log_outcome('2026-02-18T10:00:00', 'WIN', 2.5)
+        assert csv_file.read_text() == ''
+
+
+# ── record_closed_position hold time error (lines 162-163) ──
+
+
+class TestRecordClosedPositionHoldTime:
+    """Test hold time ValueError/TypeError in record_closed_position."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._update_confidence_log_outcome')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_metrics')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.cancel_remaining_orders')
+    def test_invalid_entry_time_no_crash(self, mock_cancel, mock_save, mock_metrics, mock_log):
+        """Invalid entry_time string → ValueError caught (lines 162-163)."""
+        exchange = MagicMock()
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'reason': 'Pattern: BD-BD-BU (LONG)',
+                'entry_time': 'not-a-date',  # triggers ValueError in fromisoformat
+                'tp_price': 51000.0, 'sl_price': 49000.0,
+            },
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        }
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        cache = APICache()
+        metrics = PerformanceMetrics()
+        record_closed_position(exchange, state, config, 51000.0, 'TP', cache, metrics)
+        mock_save.assert_called()
+        mock_save.assert_called()
+
+
+# ── recover_position_to_state needs_tpsl (lines 293-294) ────
+
+
+class TestRecoverPositionNeedsTpsl:
+    """Test recover_position_to_state sets needs_tpsl=False after order placement."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders',
+           return_value=(None, None))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl',
+           return_value=(51000.0, 49000.0, 2.0, 2.0))
+    def test_tp_order_placed_clears_needs_tpsl(self, mock_calc, mock_read, mock_setup,
+                                                mock_place, mock_save):
+        """After successful TP/SL placement → needs_tpsl=False (lines 293-294)."""
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'strategy': {
+            'tp_pct': 2.0, 'sl_pct': 2.0,
+        }}
+        state = {'position': None}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.01}
+
+        def set_tp_order_id(exch, st, cfg):
+            st['position']['tp_order_id'] = 'tp_123'
+        mock_place.side_effect = set_tp_order_id
+
+        recover_position_to_state(state, config, exchange_pos, 'LONG', exchange)
+        # save_state called twice: once for initial recovery, once for needs_tpsl=False
+        assert mock_save.call_count == 2
+        assert state['position']['needs_tpsl'] is False

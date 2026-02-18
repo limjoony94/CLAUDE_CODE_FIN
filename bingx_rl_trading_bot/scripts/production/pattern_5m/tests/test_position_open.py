@@ -995,11 +995,13 @@ class TestSetLeverageValueError:
 class TestRefillPositionInvalidQty:
     """Test refill_position with invalid total_qty after refill."""
 
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.fetch_ticker_cached',
+           return_value={'last': 50000.0})
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price',
            return_value=(50100.0, 0.0))  # qty=0 → total_qty will be remaining only
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
-    def test_zero_total_qty_returns_false(self, mock_save, mock_fill, mock_lev):
+    def test_zero_total_qty_returns_false(self, mock_save, mock_fill, mock_lev, mock_ticker):
         """total_qty <= 0 after refill → returns False."""
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ref1'}
@@ -1008,6 +1010,7 @@ class TestRefillPositionInvalidQty:
                 'direction': 'LONG', 'entry_price': 50000.0,
                 'avg_entry_price': 50000.0,
                 'quantity': 0.01, 'remaining_quantity': 0.0,  # remaining=0
+                'is_partial': True,
             }
         }
         config = {
@@ -1020,3 +1023,131 @@ class TestRefillPositionInvalidQty:
             APICache(), None, None, None
         )
         assert result is False
+
+
+# ── open_position vol_mult branch (lines 159-161) ──────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.setup_scale_out',
+       return_value=[])
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.calculate_tp_sl',
+       return_value=(51000.0, 49000.0, 2.0, 2.0))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price',
+       return_value=(50050.0, 0.01))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size',
+       return_value=(0.01, 1000.0, 50000.0))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position',
+       return_value=True)
+class TestOpenPositionVolMultBranch:
+    """Test open_position vol_mult != 1.0 logging (lines 159-161)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_volatility_multiplier',
+           return_value=1.25)
+    def test_vol_mult_logged_when_not_one(
+        self, mock_vol, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """df provided + vol_mult != 1.0 → vol-adaptive log (lines 159-161)."""
+        import pandas as pd
+        exchange = MagicMock()
+        exchange.create_market_order.return_value = {'id': 'ord_1'}
+        state = {'position': None}
+        config = {
+            'symbol': 'BTC/USDT:USDT', 'leverage': 3,
+            'exchange_leverage': 3,
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+            'position_size_pct': 95,
+        }
+        df = pd.DataFrame({'close': [50000.0]})
+        result = open_position(
+            exchange, state, config, 'LONG',
+            'Pattern: BD-BD-BU (LONG)', APICache(),
+            df=df
+        )
+        assert result is True
+        mock_vol.assert_called_once_with(df, config)
+
+
+# ── open_position regime_tp_sl branch (line 176) ───────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.setup_scale_out',
+       return_value=[])
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.calculate_tp_sl',
+       return_value=(51000.0, 49000.0, 2.0, 2.0))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price',
+       return_value=(50050.0, 0.01))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size',
+       return_value=(0.01, 1000.0, 50000.0))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position',
+       return_value=True)
+class TestOpenPositionRegimeTpSl:
+    """Test open_position regime_tp_sl logging (line 176)."""
+
+    def test_regime_tp_sl_logged(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """state has regime_tp_sl → regime-specific log (line 176)."""
+        exchange = MagicMock()
+        exchange.create_market_order.return_value = {'id': 'ord_1'}
+        state = {
+            'position': None,
+            'regime_tp_sl': (1.5, 2.0),
+            'current_regime': 'TRENDING',
+        }
+        config = {
+            'symbol': 'BTC/USDT:USDT', 'leverage': 3,
+            'exchange_leverage': 3,
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+            'position_size_pct': 95,
+        }
+        result = open_position(
+            exchange, state, config, 'LONG',
+            'Pattern: BD-BD-BU (LONG)', APICache()
+        )
+        assert result is True
+
+
+# ── open_position hedge mode switch failure (lines 248-249) ────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.setup_scale_out')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.calculate_tp_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size',
+       return_value=(0.01, 1000.0, 50000.0))
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position',
+       return_value=True)
+class TestOpenPositionHedgeModeFailure:
+    """Test open_position hedge mode switch failure (lines 248-249)."""
+
+    def test_mode_switch_exception_logged(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Hedge mode error + set_position_mode fails → logs error (lines 248-249)."""
+        exchange = MagicMock()
+        exchange.create_market_order.side_effect = ccxt.ExchangeError('Hedge mode 109400')
+        exchange.set_position_mode.side_effect = RuntimeError('API failure')
+        config = {
+            'symbol': 'BTC/USDT:USDT', 'leverage': 3,
+            'exchange_leverage': 3,
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+            'position_size_pct': 95,
+        }
+        result = open_position(
+            exchange, {'position': None}, config, 'LONG',
+            'Pattern: BD-BD-BU (LONG)', APICache()
+        )
+        assert result is False
+        exchange.set_position_mode.assert_called_once()

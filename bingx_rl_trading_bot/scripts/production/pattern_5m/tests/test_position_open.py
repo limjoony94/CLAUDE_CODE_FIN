@@ -918,3 +918,105 @@ class TestRefillPosition:
         assert result is True
         # new_avg = (49900*0.01 + 50100*0.01) / 0.02 = 50000.0
         assert state['position']['avg_entry_price'] == pytest.approx(50000.0, abs=1.0)
+
+
+# ── get_position_size generic exception (line 75-77) ──────────────
+
+
+class TestGetPositionSizeGenericException:
+    """Test get_position_size generic exception handler."""
+
+    def test_generic_exception_returns_none(self):
+        """Generic exception → returns (None, None, None)."""
+        exchange = MagicMock()
+        exchange.fetch_balance.side_effect = RuntimeError('unexpected')
+        result = get_position_size(
+            exchange, {'symbol': 'BTC/USDT:USDT', 'risk': {'leverage': 3}}, APICache()
+        )
+        assert result == (None, None, None)
+
+
+# ── _get_actual_fill_price error paths (lines 332-337) ────────────
+
+
+class TestGetActualFillPriceErrors:
+    """Test _get_actual_fill_price exception handlers."""
+
+    def _call(self, exchange):
+        order = {'average': 0, 'filled': 0.01}
+        return _get_actual_fill_price(
+            exchange, order, 'LONG', 'BTC/USDT:USDT', 50000.0, 0.01,
+            APICache(), None, None
+        )
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_exchange_error_returns_estimated(self):
+        """ExchangeError on positions → falls back to fetch_my_trades, which also fails."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.ExchangeError('rejected')
+        exchange.fetch_my_trades.side_effect = ccxt.ExchangeError('rejected')
+        price, qty = self._call(exchange)
+        assert price == 50000.0
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_generic_exception_returns_estimated(self):
+        """Generic exception → returns estimated price."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = RuntimeError('weird')
+        exchange.fetch_my_trades.side_effect = RuntimeError('weird')
+        price, qty = self._call(exchange)
+        assert price == 50000.0
+
+
+# ── _set_leverage error paths (lines 299-300) ─────────────────────
+
+
+class TestSetLeverageValueError:
+    """Test _set_leverage ValueError/TypeError handler."""
+
+    def test_value_error_no_crash(self):
+        """ValueError during set_leverage → no crash."""
+        exchange = MagicMock()
+        exchange.set_leverage.side_effect = ValueError('invalid')
+        _set_leverage(exchange, 'BTC/USDT:USDT', 3)
+
+    def test_type_error_no_crash(self):
+        """TypeError during set_leverage → no crash."""
+        exchange = MagicMock()
+        exchange.set_leverage.side_effect = TypeError('bad type')
+        _set_leverage(exchange, 'BTC/USDT:USDT', 3)
+
+
+# ── refill_position invalid total_qty (lines 539-540) ────────────
+
+
+class TestRefillPositionInvalidQty:
+    """Test refill_position with invalid total_qty after refill."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price',
+           return_value=(50100.0, 0.0))  # qty=0 → total_qty will be remaining only
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
+    def test_zero_total_qty_returns_false(self, mock_save, mock_fill, mock_lev):
+        """total_qty <= 0 after refill → returns False."""
+        exchange = MagicMock()
+        exchange.create_market_order.return_value = {'id': 'ref1'}
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'avg_entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.0,  # remaining=0
+            }
+        }
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            'risk': {'leverage': 3},
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+        }
+        result = refill_position(
+            exchange, state, config, 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False

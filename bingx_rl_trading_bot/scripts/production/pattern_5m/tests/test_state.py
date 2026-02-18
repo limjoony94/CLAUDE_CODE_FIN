@@ -723,3 +723,206 @@ class TestLoadStateRecovery:
 
         result = load_state(state_file)
         assert result['total_trades'] == 25
+
+
+# ── load_state IOError / generic Exception paths ──────────────────
+
+
+class TestLoadStateIOErrors:
+    """Test load_state() IOError and generic Exception handlers (lines 56-59)."""
+
+    def test_ioerror_on_main_falls_through(self, tmp_path):
+        """IOError reading main file → tries backup chain."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            f.write('{"total_trades": 5}')
+
+        with patch('builtins.open', side_effect=IOError('disk error')):
+            result = load_state(state_file)
+        assert result['total_trades'] == 0  # default
+
+    def test_generic_exception_on_main_falls_through(self, tmp_path):
+        """Generic Exception reading main file → tries backup chain."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            f.write('{"total_trades": 5}')
+
+        with patch('builtins.open', side_effect=RuntimeError('unexpected')):
+            result = load_state(state_file)
+        assert result['total_trades'] == 0  # default
+
+
+# ── _try_timestamped_backups Exception handler ────────────────────
+
+
+class TestTryTimestampedBackupsException:
+    """Test _try_timestamped_backups generic Exception (lines 144-145)."""
+
+    def test_listdir_exception_returns_none(self, tmp_path):
+        """os.listdir exception → returns None."""
+        state_file = str(tmp_path / "state.json")
+        with patch('os.listdir', side_effect=RuntimeError('unexpected')):
+            result = _try_timestamped_backups(state_file, _create_default_state())
+        assert result is None
+
+
+# ── save_state .bak failure + atomic write failure ────────────────
+
+
+class TestSaveStateBakFailure:
+    """Test save_state .bak creation failure (lines 179-180)."""
+
+    def test_bak_copy_failure_continues(self, tmp_path):
+        """shutil.copy2 failure for .bak → continues to save."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            json.dump({'total_trades': 0}, f)
+
+        state = _create_default_state()
+        state['total_trades'] = 10
+        with patch('shutil.copy2', side_effect=PermissionError('denied')):
+            save_state(state, state_file)
+
+        with open(state_file, 'r') as f:
+            saved = json.load(f)
+        assert saved['total_trades'] == 10
+
+
+class TestSaveStateAtomicWriteFailure:
+    """Test save_state atomic write failure → fallback (lines 200-209)."""
+
+    def test_atomic_replace_fails_uses_fallback(self, tmp_path):
+        """os.replace failure → fallback to direct write."""
+        state_file = str(tmp_path / "state.json")
+        state = _create_default_state()
+        state['total_trades'] = 42
+
+        with patch('os.replace', side_effect=OSError('rename failed')):
+            save_state(state, state_file)
+
+        with open(state_file, 'r') as f:
+            saved = json.load(f)
+        assert saved['total_trades'] == 42
+
+
+# ── _create_backup generic Exception (lines 221-222) ─────────────
+
+
+class TestCreateBackupGenericException:
+    """Test _create_backup generic Exception handler."""
+
+    def test_generic_exception_no_crash(self, tmp_path):
+        """Generic exception during backup → no crash."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            json.dump({'total_trades': 0}, f)
+
+        with patch('shutil.copy2', side_effect=RuntimeError('unexpected')):
+            _create_backup(state_file)  # should not raise
+
+
+# ── cleanup_old_backups Exception handlers (lines 251-254) ────────
+
+
+class TestCleanupOldBackupsExceptions:
+    """Test cleanup_old_backups exception handlers."""
+
+    def test_remove_failure_continues(self, tmp_path):
+        """os.remove failure on old backup → continues."""
+        state_file = str(tmp_path / "state.json")
+        with open(state_file, 'w') as f:
+            json.dump({}, f)
+        # Create 3 backups (max_backups=1 → should try to remove 2)
+        for i in range(3):
+            bak = str(tmp_path / f"state.json.backup_2026021{i}_120000")
+            with open(bak, 'w') as f:
+                f.write('{}')
+
+        with patch('os.remove', side_effect=PermissionError('denied')):
+            cleanup_old_backups(state_file, max_backups=1)  # should not raise
+
+    def test_listdir_exception_no_crash(self, tmp_path):
+        """os.listdir exception → no crash."""
+        state_file = str(tmp_path / "state.json")
+        with patch('os.listdir', side_effect=RuntimeError('unexpected')):
+            cleanup_old_backups(state_file)  # should not raise
+
+
+# ── save_metrics error paths (lines 316-325) ──────────────────────
+
+
+class TestSaveMetricsErrors:
+    """Test save_metrics atomic write failure + exception handlers."""
+
+    def test_atomic_replace_fails_raises_caught(self, tmp_path):
+        """os.replace failure → IOError caught."""
+        metrics_file = str(tmp_path / "metrics.json")
+        metrics = PerformanceMetrics()
+        metrics.total_trades = 5
+
+        with patch('os.replace', side_effect=OSError('rename failed')):
+            save_metrics(metrics, metrics_file)  # should not raise
+
+    def test_serialize_type_error(self, tmp_path):
+        """Non-serializable metrics → TypeError caught."""
+        metrics_file = str(tmp_path / "metrics.json")
+        metrics = PerformanceMetrics()
+        # Inject non-serializable data
+        metrics.extra_bad = object()
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.state.PerformanceMetrics.to_dict',
+            side_effect=TypeError('not serializable')
+        ):
+            save_metrics(metrics, metrics_file)  # should not raise
+
+    def test_generic_exception(self, tmp_path):
+        """Generic exception → caught."""
+        metrics_file = str(tmp_path / "metrics.json")
+        metrics = PerformanceMetrics()
+
+        with patch('tempfile.mkstemp', side_effect=RuntimeError('unexpected')):
+            save_metrics(metrics, metrics_file)  # should not raise
+
+
+# ── load_metrics error paths (lines 347-352) ──────────────────────
+
+
+class TestLoadMetricsErrors:
+    """Test load_metrics IOError, KeyError/TypeError/ValueError, generic Exception."""
+
+    def test_ioerror_returns_none(self, tmp_path):
+        """IOError reading file → returns None."""
+        metrics_file = str(tmp_path / "metrics.json")
+        with open(metrics_file, 'w') as f:
+            json.dump({'total_trades': 5}, f)
+
+        with patch('builtins.open', side_effect=IOError('disk error')):
+            result = load_metrics(metrics_file)
+        assert result is None
+
+    def test_key_error_returns_none(self, tmp_path):
+        """Incomplete metrics data → KeyError → returns None."""
+        metrics_file = str(tmp_path / "metrics.json")
+        with open(metrics_file, 'w') as f:
+            json.dump({}, f)  # missing required keys
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.state.PerformanceMetrics.from_dict',
+            side_effect=KeyError('total_trades')
+        ):
+            result = load_metrics(metrics_file)
+        assert result is None
+
+    def test_generic_exception_returns_none(self, tmp_path):
+        """Generic Exception → returns None."""
+        metrics_file = str(tmp_path / "metrics.json")
+        with open(metrics_file, 'w') as f:
+            json.dump({'total_trades': 5}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.state.PerformanceMetrics.from_dict',
+            side_effect=RuntimeError('unexpected')
+        ):
+            result = load_metrics(metrics_file)
+        assert result is None

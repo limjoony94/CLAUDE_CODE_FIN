@@ -595,3 +595,70 @@ class TestHealthCheck:
 
         result = health_check(exchange, config, cache, cb, metrics, '/nonexistent.json')
         assert result['status'] == 'degraded'
+
+    def test_state_file_io_error(self):
+        """IOError on getmtime → state_file shows error."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        with patch('os.path.exists', return_value=True), \
+             patch('os.path.getmtime', side_effect=OSError('disk fail')):
+            result = health_check(exchange, config, cache, cb, metrics, '/some/state.json')
+        assert result['checks']['state_file']['status'] == 'error'
+        assert 'I/O error' in result['checks']['state_file']['message']
+
+    def test_state_file_generic_exception(self):
+        """Generic exception on state file check → state_file shows error."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        with patch('os.path.exists', return_value=True), \
+             patch('os.path.getmtime', side_effect=ValueError('bad')):
+            result = health_check(exchange, config, cache, cb, metrics, '/some/state.json')
+        assert result['checks']['state_file']['status'] == 'error'
+
+
+# ── api_call_with_retry CB paths (lines 221, 233, 242, 246) ──
+
+
+class TestApiCallCBPaths:
+    """Test circuit breaker record_failure on various exception types."""
+
+    @pytest.fixture(autouse=True)
+    def mock_sleep(self):
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+        ) as m:
+            yield m
+
+    def test_rate_limit_records_cb_failure(self):
+        """RateLimitExceeded with CB → CB.record_failure called."""
+        cb = CircuitBreaker()
+        func = MagicMock(side_effect=ccxt.RateLimitExceeded('limit'))
+        with pytest.raises(ccxt.RateLimitExceeded):
+            _api_call_with_retry(func, circuit_breaker=cb)
+        assert cb.failure_count >= 1
+
+    def test_exchange_error_records_cb_failure(self):
+        """ExchangeError with CB → CB.record_failure, then re-raise."""
+        cb = CircuitBreaker()
+        func = MagicMock(side_effect=ccxt.ExchangeError('bad'))
+        with pytest.raises(ccxt.ExchangeError):
+            _api_call_with_retry(func, circuit_breaker=cb)
+        assert cb.failure_count >= 1
+
+    def test_generic_error_records_cb_failure(self):
+        """Generic error with CB → CB.record_failure called."""
+        cb = CircuitBreaker()
+        func = MagicMock(side_effect=RuntimeError('oops'))
+        with pytest.raises(RuntimeError):
+            _api_call_with_retry(func, circuit_breaker=cb)
+        assert cb.failure_count >= 1

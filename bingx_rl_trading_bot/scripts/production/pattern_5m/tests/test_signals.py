@@ -828,6 +828,29 @@ class TestCheckEarlyExitSignal:
         assert should_exit is False
         assert count == 0  # Not re-counted
 
+    def test_datetime_index_timestamp(self, config_3x):
+        """DatetimeIndex → candle_ts from index[-2]."""
+        position = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'reversal_count': 2,
+            'last_counted_candle_ts': None,
+        }
+        dates = pd.date_range('2025-01-01', periods=4, freq='5min')
+        df = pd.DataFrame({
+            'open': [50000.0] * 4,
+            'high': [50100.0] * 4,
+            'low': [49900.0] * 4,
+            'close': [50050.0] * 4,
+            'type_code': ['U', 'U', 'BD', 'U'],
+        }, index=dates)
+        df.index.name = 'timestamp'
+        should_exit, count, reason, ts = check_early_exit_signal(
+            position, df, 50100.0, config_3x
+        )
+        # Should reach the DatetimeIndex branch for candle_ts
+        assert isinstance(should_exit, bool)
+
     def test_invalid_direction(self, config_3x):
         """Unknown direction → no exit."""
         position = {
@@ -849,3 +872,114 @@ class TestCheckEarlyExitSignal:
             long_position, df, 0.0, config_3x
         )
         assert should_exit is False
+
+
+# ── calculate_context: NaN ATR (line 106) ────────────────────
+
+
+class TestCalculateContextNanAtr:
+    """Test calculate_context when atr_pct is NaN."""
+
+    def test_nan_atr_pct_defaults_to_zero(self, make_ohlcv_df):
+        """NaN atr_pct → treated as 0."""
+        df = make_ohlcv_df(n_bars=50)
+        df.at[df.index[-1], 'atr_pct'] = float('nan')
+        ctx = calculate_context(df)
+        # Should not crash; vol classification still works
+        assert 'vol' in ctx
+
+
+# ── calculate_candle_clarity edge cases (lines 209, 231) ─────
+
+
+class TestCandleClarityEdgeCases:
+    """Test calculate_candle_clarity with missing candle_type and zero-body HAMMER."""
+
+    def test_candle_type_none_returns_half(self):
+        """candle_type is None → return 0.5."""
+        row = {
+            'open': 50000.0, 'close': 50020.0,
+            'high': 50050.0, 'low': 49950.0,
+            'candle_type': None,
+        }
+        df = pd.DataFrame({'atr_pct': [0.5]})
+        result = calculate_candle_clarity(row, df)
+        assert result == 0.5
+
+    def test_hammer_zero_body_returns_half(self):
+        """HAMMER with body_abs == 0 → return 0.5."""
+        row = {
+            'open': 50000.0, 'close': 50000.0,  # zero body
+            'high': 50050.0, 'low': 49900.0,
+            'candle_type': CandleType.HAMMER,
+        }
+        df = pd.DataFrame({'atr_pct': [0.5]})
+        result = calculate_candle_clarity(row, df)
+        assert result == 0.5
+
+
+# ── _save_confidence_to_csv edge cases (lines 469, 473, 475, 477, 493-494) ──
+
+
+class TestSaveConfidenceToCsv:
+    """Test _save_confidence_to_csv with various timestamp types and errors."""
+
+    def setup_method(self):
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import (
+            _save_confidence_to_csv,
+        )
+        self.func = _save_confidence_to_csv
+
+    def test_int_timestamp(self, tmp_path):
+        """Integer timestamp → formatted as datetime string."""
+        csv_file = tmp_path / "conf.csv"
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.signals.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            self.func(1700000000000, 'BD-BD-BU', 'LONG', 0.75, {'clarity': 0.8})
+        content = csv_file.read_text()
+        assert 'BD-BD-BU' in content
+        assert 'LONG' in content
+
+    def test_datetime_timestamp(self, tmp_path):
+        """datetime object → strftime branch."""
+        csv_file = tmp_path / "conf.csv"
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.signals.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            self.func(datetime(2025, 6, 1, 12, 0), 'U-U-U', 'SHORT', 0.5, {})
+        content = csv_file.read_text()
+        assert '2025-06-01' in content
+
+    def test_string_timestamp(self, tmp_path):
+        """String timestamp → str() fallback."""
+        csv_file = tmp_path / "conf.csv"
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.signals.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            self.func('2025-06-01T12:00:00', 'BD-BD-BU', 'LONG', 0.6, {})
+        content = csv_file.read_text()
+        assert '2025-06-01' in content
+
+    def test_new_file_creates_header(self, tmp_path):
+        """Non-existing file → header row written first."""
+        csv_file = tmp_path / "subdir" / "conf.csv"
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.signals.CONFIDENCE_LOG_FILE',
+            str(csv_file),
+        ):
+            self.func(1700000000000, 'BD-BD-BU', 'LONG', 0.5, {})
+        content = csv_file.read_text()
+        assert content.startswith('timestamp,pattern,signal,confidence')
+
+    def test_exception_does_not_crash(self, tmp_path):
+        """Write failure → warning logged, no crash."""
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.signals.CONFIDENCE_LOG_FILE',
+            '/nonexistent/path/that/causes/error/conf.csv',
+        ):
+            # Should not raise
+            self.func(1700000000000, 'BD-BD-BU', 'LONG', 0.5, {})

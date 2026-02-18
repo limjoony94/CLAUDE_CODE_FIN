@@ -640,3 +640,202 @@ class TestLoadDynamicPatterns:
         # Should still load patterns despite staleness warning
         assert result['_dynamic_tpsl_universal'] is True
         assert len(result['strategy']['long_patterns']) == 2
+
+
+# ── load_config IOError / generic Exception (lines 39-42) ─────────
+
+
+class TestLoadConfigErrors:
+    """Test load_config IOError and generic exception handlers."""
+
+    def test_ioerror_uses_defaults(self, tmp_path):
+        """IOError reading config → uses defaults."""
+        config_file = str(tmp_path / "config.yaml")
+        with open(config_file, 'w') as f:
+            f.write("symbol: BTC/USDT:USDT")
+
+        from unittest.mock import patch
+        with patch('builtins.open', side_effect=IOError('disk error')):
+            result = load_config(config_file)
+        # Should return default config
+        assert 'strategy' in result
+
+    def test_generic_exception_uses_defaults(self, tmp_path):
+        """Generic exception → uses defaults."""
+        config_file = str(tmp_path / "config.yaml")
+        with open(config_file, 'w') as f:
+            f.write("symbol: BTC/USDT:USDT")
+
+        from unittest.mock import patch
+        with patch('builtins.open', side_effect=RuntimeError('unexpected')):
+            result = load_config(config_file)
+        assert 'strategy' in result
+
+
+# ── load_dynamic_patterns validation edge cases ───────────────────
+
+
+class TestDynamicPatternsValidation:
+    """Test TP/SL validation branches in load_dynamic_patterns."""
+
+    def _write_json(self, path, data):
+        with open(path, 'w') as f:
+            json.dump(data, f)
+
+    def _make_base_config(self):
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import DEFAULT_CONFIG
+        import copy
+        c = copy.deepcopy(DEFAULT_CONFIG)
+        c['strategy']['pattern_source'] = 'dynamic'
+        return c
+
+    def test_invalid_tpsl_format_warns(self, tmp_path, monkeypatch):
+        """patterns_tpsl with invalid format → warns but loads."""
+        data = {
+            'patterns': {'long': ['A-B-C'], 'short': ['D-E-F']},
+            'tp_sl_mode': 'per_pattern',
+            'patterns_tpsl': {
+                'A-B-C': 'not_a_list',  # invalid format
+                'D-E-F': [1.0, 2.0],
+            },
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(self._make_base_config())
+        assert 'D-E-F' in result.get('_dynamic_patterns_tpsl', {})
+
+    def test_negative_tpsl_warns(self, tmp_path, monkeypatch):
+        """TP or SL <= 0 → warns."""
+        data = {
+            'patterns': {'long': ['A-B-C'], 'short': []},
+            'tp_sl_mode': 'per_pattern',
+            'patterns_tpsl': {
+                'A-B-C': [0.0, 2.0],  # TP=0
+            },
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(self._make_base_config())
+        assert result.get('_dynamic_tpsl_per_pattern') is True
+
+    def test_suspicious_tpsl_warns(self, tmp_path, monkeypatch):
+        """TP > 10% → warns as suspicious."""
+        data = {
+            'patterns': {'long': ['A-B-C'], 'short': []},
+            'tp_sl_mode': 'per_pattern',
+            'patterns_tpsl': {
+                'A-B-C': [15.0, 2.0],  # TP=15% suspicious
+            },
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(self._make_base_config())
+        assert result.get('_dynamic_tpsl_per_pattern') is True
+
+    def test_missing_tpsl_entries_warns(self, tmp_path, monkeypatch):
+        """Pattern without tpsl entry → warns about missing."""
+        data = {
+            'patterns': {'long': ['A-B-C', 'D-E-F'], 'short': []},
+            'tp_sl_mode': 'per_pattern',
+            'patterns_tpsl': {
+                'A-B-C': [1.5, 2.0],
+                # D-E-F missing
+            },
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(self._make_base_config())
+        assert result.get('_dynamic_tpsl_per_pattern') is True
+
+    def test_generated_at_invalid_format(self, tmp_path, monkeypatch):
+        """Invalid generated_at → warns but loads."""
+        data = {
+            'patterns': {'long': ['A-B-C'], 'short': []},
+            'generated_at': 'not-a-date',
+            'universal_tp': 2.0,
+            'universal_sl': 3.0,
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        c = self._make_base_config()
+        c['tp_sl_mode'] = 'universal'
+        result = load_dynamic_patterns(c)
+        assert len(result['strategy']['long_patterns']) == 1
+
+    def test_backtest_summary_logged(self, tmp_path, monkeypatch):
+        """backtest_summary present → logged."""
+        data = {
+            'patterns': {'long': ['A-B-C'], 'short': []},
+            'universal_tp': 2.0,
+            'universal_sl': 3.0,
+            'backtest_summary': {'total_trades': 100, 'win_rate': 85.0, 'pnl_pct': 500.0},
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        c = self._make_base_config()
+        c['tp_sl_mode'] = 'universal'
+        result = load_dynamic_patterns(c)
+        assert len(result['strategy']['long_patterns']) == 1
+
+    def test_json_decode_error_fallback(self, tmp_path, monkeypatch):
+        """JSONDecodeError → returns config unchanged."""
+        f = str(tmp_path / 'pat.json')
+        with open(f, 'w') as fh:
+            fh.write('not json')  # Will cause JSONDecodeError
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        c = self._make_base_config()
+        result = load_dynamic_patterns(c)
+        assert 'strategy' in result
+
+    def test_generic_exception_fallback(self, tmp_path, monkeypatch):
+        """Generic exception during load → returns config unchanged (line 289-291)."""
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, {'patterns': {'long': [], 'short': []}})
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        # Patch json.load to raise a generic exception after file opens
+        from unittest.mock import patch as _patch
+        c = self._make_base_config()
+        with _patch('bingx_rl_trading_bot.scripts.production.pattern_5m.config.json.load',
+                     side_effect=ValueError('unexpected')):
+            result = load_dynamic_patterns(c)
+        assert 'strategy' in result
+
+    def test_many_invalid_tpsl_truncated(self, tmp_path, monkeypatch):
+        """>5 invalid tpsl entries → truncated warning with 'and N more'."""
+        patterns_long = [f'A-B-{chr(65+i)}' for i in range(8)]
+        tpsl = {p: 'invalid' for p in patterns_long}  # 8 invalid entries
+        data = {
+            'patterns': {'long': patterns_long, 'short': []},
+            'tp_sl_mode': 'per_pattern',
+            'patterns_tpsl': tpsl,
+        }
+        f = str(tmp_path / 'pat.json')
+        self._write_json(f, data)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(self._make_base_config())
+        # Should load without crash; all 8 patterns invalid → "and 3 more" logged
+        assert 'strategy' in result

@@ -11,13 +11,17 @@ from unittest.mock import MagicMock, patch
 
 from bingx_rl_trading_bot.scripts.production.pattern_5m.exchange import (
     _api_call_with_retry,
+    _sync_server_time,
+    create_exchange,
     fetch_ticker_cached,
     fetch_balance_cached,
     fetch_positions_cached,
+    fetch_ohlcv,
     set_shutdown_checker,
     _interruptible_api_sleep,
     verify_position_mode,
     set_margin_mode,
+    health_check,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
     APICache,
@@ -357,3 +361,237 @@ class TestSetMarginMode:
         config = {'symbol': 'BTC/USDT:USDT'}
         set_margin_mode(exchange, config)
         exchange.set_margin_mode.assert_called_once_with('CROSSED', 'BTC/USDT:USDT')
+
+    def test_generic_exception_returns_false(self):
+        """Generic exception → returns False."""
+        exchange = MagicMock()
+        exchange.set_margin_mode.side_effect = RuntimeError('unexpected')
+        config = {'symbol': 'BTC/USDT:USDT', 'margin_mode': 'crossed'}
+        assert set_margin_mode(exchange, config) is False
+
+
+# ── _sync_server_time ──────────────────────────────────────
+
+
+class TestSyncServerTime:
+    """Test _sync_server_time() time synchronization."""
+
+    def test_no_time_difference(self):
+        """Time difference = 0 → no adjustment."""
+        exchange = MagicMock()
+        exchange.options = {'timeDifference': 0}
+        _sync_server_time(exchange)
+        exchange.load_time_difference.assert_called_once()
+
+    def test_with_time_difference(self):
+        """Non-zero time diff → milliseconds adjusted."""
+        exchange = MagicMock()
+        exchange.options = {'timeDifference': 500}
+        original_ms = MagicMock(return_value=1000000)
+        exchange.milliseconds = original_ms
+
+        _sync_server_time(exchange)
+
+        # milliseconds should be replaced
+        assert exchange.milliseconds != original_ms
+        # New function returns original - diff
+        adjusted = exchange.milliseconds()
+        assert adjusted == 1000000 - 500
+
+    def test_network_error_no_crash(self):
+        """Network error → silently handled."""
+        exchange = MagicMock()
+        exchange.load_time_difference.side_effect = ccxt.NetworkError('fail')
+        _sync_server_time(exchange)  # should not raise
+
+    def test_exchange_error_no_crash(self):
+        """Exchange error → silently handled."""
+        exchange = MagicMock()
+        exchange.load_time_difference.side_effect = ccxt.ExchangeError('fail')
+        _sync_server_time(exchange)  # should not raise
+
+    def test_generic_exception_no_crash(self):
+        """Generic exception → silently handled."""
+        exchange = MagicMock()
+        exchange.load_time_difference.side_effect = RuntimeError('fail')
+        _sync_server_time(exchange)  # should not raise
+
+
+# ── create_exchange ────────────────────────────────────────
+
+
+class TestSetupExchange:
+    """Test create_exchange() factory function."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._sync_server_time')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange.ccxt.bingx')
+    @patch('builtins.open')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange.yaml.safe_load')
+    def test_creates_exchange_instance(self, mock_yaml, mock_open, mock_bingx_cls, mock_sync):
+        """Creates ccxt.bingx with correct config."""
+        mock_yaml.return_value = {
+            'bingx': {'mainnet': {'api_key': 'KEY', 'secret_key': 'SECRET'}}
+        }
+        mock_instance = MagicMock()
+        mock_bingx_cls.return_value = mock_instance
+
+        result = create_exchange('fake_keys.yaml')
+
+        assert result is mock_instance
+        mock_bingx_cls.assert_called_once()
+        call_kwargs = mock_bingx_cls.call_args[0][0]
+        assert call_kwargs['apiKey'] == 'KEY'
+        assert call_kwargs['secret'] == 'SECRET'
+        mock_sync.assert_called_once_with(mock_instance)
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._sync_server_time')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange.ccxt.bingx')
+    @patch('builtins.open')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange.yaml.safe_load')
+    def test_missing_keys_defaults_to_none(self, mock_yaml, mock_open, mock_bingx_cls, mock_sync):
+        """Missing api_key/secret → defaults to None."""
+        mock_yaml.return_value = {'bingx': {'mainnet': {}}}
+        mock_bingx_cls.return_value = MagicMock()
+
+        create_exchange('keys.yaml')
+
+        call_kwargs = mock_bingx_cls.call_args[0][0]
+        assert call_kwargs['apiKey'] is None
+        assert call_kwargs['secret'] is None
+
+
+# ── verify_position_mode (additional error paths) ──────────
+
+
+class TestVerifyPositionModeExtended:
+    """Test verify_position_mode() — additional uncovered error paths."""
+
+    def test_exchange_error_during_fetch(self):
+        """ExchangeError during fetch_positions → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.ExchangeError('fail')
+        config = {'symbol': 'BTC/USDT:USDT'}
+        assert verify_position_mode(exchange, config) is False
+
+    def test_generic_exception(self):
+        """Generic exception → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = RuntimeError('crash')
+        config = {'symbol': 'BTC/USDT:USDT'}
+        assert verify_position_mode(exchange, config) is False
+
+
+# ── fetch_ohlcv ──────────────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep')
+class TestFetchOhlcv:
+    """Test fetch_ohlcv() wrapper."""
+
+    def test_returns_data(self, mock_sleep):
+        """Successful fetch → returns OHLCV list."""
+        exchange = MagicMock()
+        data = [[1, 50000, 50100, 49900, 50050, 100]]
+        exchange.fetch_ohlcv.return_value = data
+        result = fetch_ohlcv(exchange, 'BTC/USDT:USDT', '5m', limit=10)
+        assert result == data
+        exchange.fetch_ohlcv.assert_called_once()
+
+
+# ── health_check ─────────────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+       new=MagicMock())
+class TestHealthCheck:
+    """Test health_check() comprehensive bot health check."""
+
+    def test_healthy_status(self):
+        """All checks pass → status='healthy'."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+        metrics.total_trades = 10
+        metrics.actual_win_rate = 80.0
+        metrics.total_pnl_pct = 5.0
+
+        import tempfile, json
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+            json.dump({'total_trades': 10}, f)
+            sf = f.name
+        try:
+            result = health_check(exchange, config, cache, cb, metrics, sf)
+            assert result['status'] == 'healthy'
+            assert result['checks']['api_connectivity']['status'] == 'ok'
+            assert result['checks']['circuit_breaker']['status'] == 'ok'
+            assert result['checks']['metrics']['total_trades'] == 10
+            assert result['checks']['state_file']['status'] == 'ok'
+        finally:
+            import os
+            os.unlink(sf)
+
+    def test_network_error_degrades(self):
+        """API network error → status='degraded'."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.side_effect = ccxt.NetworkError('fail')
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = health_check(exchange, config, cache, cb, metrics, '/nonexistent/state.json')
+        assert result['status'] == 'degraded'
+        assert result['checks']['api_connectivity']['status'] == 'error'
+
+    def test_circuit_breaker_open_degrades(self):
+        """Open circuit breaker → status='degraded'."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        cb.is_open = True
+        metrics = PerformanceMetrics()
+
+        result = health_check(exchange, config, cache, cb, metrics, '/nonexistent.json')
+        assert result['status'] == 'degraded'
+        assert result['checks']['circuit_breaker']['status'] == 'tripped'
+
+    def test_missing_state_file(self):
+        """State file doesn't exist → state_file check shows 'missing'."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = health_check(exchange, config, cache, cb, metrics, '/nonexistent_state_file.json')
+        assert result['checks']['state_file']['status'] == 'missing'
+
+    def test_exchange_error_degrades(self):
+        """Exchange error on ticker → status='degraded'."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.side_effect = ccxt.ExchangeError('fail')
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = health_check(exchange, config, cache, cb, metrics, '/nonexistent.json')
+        assert result['status'] == 'degraded'
+
+    def test_generic_error_degrades(self):
+        """Generic error on ticker → status='degraded'."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.side_effect = RuntimeError('fail')
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = health_check(exchange, config, cache, cb, metrics, '/nonexistent.json')
+        assert result['status'] == 'degraded'

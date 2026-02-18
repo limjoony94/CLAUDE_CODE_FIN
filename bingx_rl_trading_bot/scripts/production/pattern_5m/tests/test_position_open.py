@@ -11,6 +11,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_open import (
     get_position_size,
     _set_leverage,
     _get_actual_fill_price,
+    _verify_no_existing_position,
+    refill_position,
     open_position,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
@@ -21,6 +23,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
     APICache,
+    CircuitBreaker,
+    PerformanceMetrics,
 )
 
 
@@ -597,3 +601,320 @@ class TestOpenPosition:
         assert result is True
         # Initial place + up to 2 retries = 3 calls
         assert mock_place.call_count == 3
+
+    def test_hedge_mode_error_auto_recovers(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Hedge mode error → attempts to switch to one-way mode."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+
+        exchange = MagicMock()
+        exchange.create_market_order.side_effect = ccxt.ExchangeError('Hedge mode 109400')
+
+        result = open_position(
+            exchange, {'position': None}, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is False
+        exchange.set_position_mode.assert_called_once()
+
+    def test_exchange_error_non_hedge(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Non-hedge ExchangeError → returns False without mode switch."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+
+        exchange = MagicMock()
+        exchange.create_market_order.side_effect = ccxt.ExchangeError('other error')
+
+        result = open_position(
+            exchange, {'position': None}, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is False
+        exchange.set_position_mode.assert_not_called()
+
+    def test_generic_exception_returns_false(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Unexpected exception → returns False."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+
+        exchange = MagicMock()
+        exchange.create_market_order.side_effect = RuntimeError('unexpected')
+
+        result = open_position(
+            exchange, {'position': None}, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is False
+
+
+# ── _verify_no_existing_position ────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+       new=MagicMock())
+class TestVerifyNoExistingPosition:
+    """Test _verify_no_existing_position() safety check."""
+
+    def test_no_positions_returns_true(self):
+        """Empty positions list → returns True."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = []
+        cache = APICache()
+
+        result = _verify_no_existing_position(
+            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
+        )
+        assert result is True
+
+    def test_zero_contracts_returns_true(self):
+        """Positions with 0 contracts → returns True."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'contracts': 0, 'side': 'long'},
+        ]
+        cache = APICache()
+
+        result = _verify_no_existing_position(
+            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
+        )
+        assert result is True
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.sync_position_with_exchange')
+    def test_existing_position_returns_false(self, mock_sync):
+        """Active contracts → syncs state and returns False."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'contracts': 0.01, 'side': 'long'},
+        ]
+        cache = APICache()
+        state = {}
+
+        result = _verify_no_existing_position(
+            exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
+        )
+
+        assert result is False
+        mock_sync.assert_called_once()
+
+    def test_network_error_returns_false(self):
+        """Network error → blocks opening (safety)."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.NetworkError('fail')
+        cache = APICache()
+
+        result = _verify_no_existing_position(
+            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
+        )
+        assert result is False
+
+    def test_exchange_error_returns_false(self):
+        """Exchange error → blocks opening (safety)."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = ccxt.ExchangeError('fail')
+        cache = APICache()
+
+        result = _verify_no_existing_position(
+            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
+        )
+        assert result is False
+
+    def test_generic_error_returns_false(self):
+        """Generic exception → blocks opening (safety)."""
+        exchange = MagicMock()
+        exchange.fetch_positions.side_effect = RuntimeError('fail')
+        cache = APICache()
+
+        result = _verify_no_existing_position(
+            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
+        )
+        assert result is False
+
+
+# ── refill_position ─────────────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.cancel_remaining_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.setup_scale_out')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.calculate_tp_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+       new=MagicMock())
+class TestRefillPosition:
+    """Test refill_position() scale-in flow."""
+
+    def _make_config(self):
+        return {
+            'symbol': 'BTC/USDT:USDT',
+            'leverage': 3,
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+        }
+
+    def _make_state(self, **overrides):
+        pos = {
+            'direction': 'LONG',
+            'quantity': 0.02,
+            'remaining_quantity': 0.01,
+            'is_partial': True,
+            'entry_price': 50000.0,
+            'avg_entry_price': 50000.0,
+            'reason': 'Pattern: BD-BD-U (LONG)',
+        }
+        pos.update(overrides)
+        return {'position': pos}
+
+    def test_successful_refill(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """Full successful refill → position updated, TP/SL re-placed."""
+        mock_fill.return_value = (50100.0, 0.01)
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 3.0)
+        mock_scale.return_value = []
+
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50100.0}
+        exchange.create_market_order.return_value = {'id': 'refill_1'}
+        state = self._make_state()
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'refill signal',
+            APICache(), None, None, None
+        )
+
+        assert result is True
+        assert state['position']['is_partial'] is False
+        assert state['position']['remaining_quantity'] == pytest.approx(0.02, abs=0.001)
+        mock_cancel.assert_called_once()
+        mock_place.assert_called_once()
+
+    def test_no_position_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """No position in state → returns False."""
+        result = refill_position(
+            MagicMock(), {'position': None}, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_not_partial_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """Position not partial → returns False."""
+        state = self._make_state()
+        state['position']['is_partial'] = False
+
+        result = refill_position(
+            MagicMock(), state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_zero_refill_qty_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """refill quantity <= 0 → returns False."""
+        state = self._make_state(quantity=0.01, remaining_quantity=0.01)
+
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000.0}
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_network_error_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """Network error during refill → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.side_effect = ccxt.NetworkError('fail')
+        state = self._make_state()
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_insufficient_funds_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """InsufficientFunds → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000.0}
+        exchange.create_market_order.side_effect = ccxt.InsufficientFunds('low')
+        state = self._make_state()
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_exchange_error_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """ExchangeError → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000.0}
+        exchange.create_market_order.side_effect = ccxt.ExchangeError('fail')
+        state = self._make_state()
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_generic_exception_returns_false(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """Unexpected exception → returns False."""
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50000.0}
+        exchange.create_market_order.side_effect = RuntimeError('unexpected')
+        state = self._make_state()
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+        assert result is False
+
+    def test_avg_entry_zero_fallback(
+        self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
+    ):
+        """avg_entry_price=0 → falls back to entry_price."""
+        mock_fill.return_value = (50100.0, 0.01)
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 3.0)
+        mock_scale.return_value = []
+
+        exchange = MagicMock()
+        exchange.fetch_ticker.return_value = {'last': 50100.0}
+        exchange.create_market_order.return_value = {'id': 'ref'}
+        state = self._make_state(avg_entry_price=0, entry_price=49900.0)
+
+        result = refill_position(
+            exchange, state, self._make_config(), 'reason',
+            APICache(), None, None, None
+        )
+
+        assert result is True
+        # new_avg = (49900*0.01 + 50100*0.01) / 0.02 = 50000.0
+        assert state['position']['avg_entry_price'] == pytest.approx(50000.0, abs=1.0)

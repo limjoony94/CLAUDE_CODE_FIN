@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.38 | **Bot**: Pattern 5m (112패턴, 22L+90S) | **Updated**: 2026-02-18
+> **Version**: v1.28.41 | **Bot**: Pattern 5m (59패턴, 12L+47S) | **Updated**: 2026-02-19
 
 ---
 
@@ -44,169 +44,117 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.28.24
+## 📊 현재 전략: Pattern 5m v1.28.40
 
 ### 핵심 파라미터
 
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | **Per-pattern 최적화** (scanner PP grid search) |
+| TP/SL | **Per-pattern 최적화** (scanner MAE/MFE percentile) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Leverage | 3x |
 | Timeframe | 5m |
 | Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
+| Discovery | **MAE/MFE** (TP=MFE percentile, SL=MAE percentile) |
 | Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
-| Quality Filter | **Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + BH FDR + min_trades>=25** |
-| Patterns | **112** (22L + 90S), edge mean 24.7pp, WR mean 90.5% |
+| Quality Filter | **Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25** |
+| Patterns | **59** (12L + 47S), edge mean 23.9pp, WR mean 86.7% |
 | Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause |
 
 ### 270일 In-Sample 검증 결과
 
-| 지표 | Static 51 (v1.27.2) | Dynamic 47 (v1.28.11) | **Dynamic 112 (v1.28.24)** |
+| 지표 | Static 51 (v1.27.2) | PP 112 (v1.28.24) | **MAE/MFE 59 (v1.28.40)** |
 |------|---------------------|------------------------|---------------------------|
-| Patterns | 51 (32L+19S) | 47 (13L+34S) | **112 (22L+90S)** |
-| Scanner MAX_BARS | 500 | 500 | **288 (24h)** |
-| Filter | MC<0.01 + edge>=10pp | MC<0.01 + BH FDR + E>=21.8 + WR>=60% + SL>=1.0% | **동일** |
-| WR mean | 84.9% | 86.8% | **90.5%** |
-| Edge mean | ~15pp | 24.9pp | **24.7pp** |
-| Portfolio Trades | 339 | 339 | **358** |
-| Portfolio PnL | +966% | +894% | **+1,398%** |
-| Portfolio MDD | 16.2% | 24.2% | **17.0%** |
-| PnL/MDD | 59.6x | 36.9x | **82.1x** |
-| TP/SL | Per-pattern (legacy) | Per-pattern (PP grid) | **Per-pattern (PP grid)** |
+| Patterns | 51 (32L+19S) | 112 (22L+90S) | **59 (12L+47S)** |
+| Discovery | PP grid | PP grid | **MAE/MFE percentile** |
+| WR mean | 84.9% | 90.5% | **86.7%** |
+| Edge mean | ~15pp | 24.7pp | **23.9pp** |
+| Portfolio Trades | 339 | 358 | **321** |
+| Portfolio PnL | +966% | +1,398% | **+949%** |
+| Portfolio MDD | 16.2% | 17.0% | **22.4%** |
+| PnL/MDD | 59.6x | 82.1x | **42.4x** |
+| TP range | 0.5-3.0 | 0.5-3.0 | **1.0-3.3** |
+| SL range | 1.0-4.0 | 1.0-4.0 | **1.7-4.2** |
 
-### LONG Patterns (22) — Dynamic 112
-
-| Pattern | TP/SL | Edge | WR | Trades |
-|---------|-------|------|-----|--------|
-| BD-BD-BU | 1.6/3.5 | 29.0 | 97.7 | 43 |
-| BD-DN-MU | 1.8/4.0 | 27.3 | 96.3 | 27 |
-| BU-BD-DN | 2.1/4.0 | 23.0 | 88.6 | 35 |
-| DN-MD-MD | 2.0/4.0 | 25.3 | 92.0 | 25 |
-| H-MD-DN | 1.0/2.0 | 23.1 | 89.7 | 39 |
-| H-ST-DN | 1.8/4.0 | 27.6 | 96.6 | 29 |
-| IH-DN-MD | 0.7/1.5 | 22.4 | 90.6 | 32 |
-| IH-MU-DN | 1.6/3.5 | 24.0 | 92.6 | 27 |
-| MD-BD-DN | 1.8/4.0 | 27.2 | 96.2 | 26 |
-| MD-DN-BU | 1.6/3.5 | 27.9 | 96.6 | 29 |
-| MD-MU-ST | 1.8/3.5 | 26.3 | 92.3 | 26 |
-| MD-ST-MD | 1.2/1.5 | 22.6 | 78.1 | 32 |
-| MU-MD-ST | 1.8/4.0 | 27.0 | 96.0 | 25 |
-| MU-ST-U | 2.1/4.0 | 24.9 | 90.5 | 42 |
-| MU-U-BU | 2.1/4.0 | 23.3 | 88.9 | 27 |
-| MU-U-U | 2.0/4.0 | 22.2 | 88.9 | 81 |
-| ST-DN-IH | 1.6/3.5 | 22.0 | 90.6 | 32 |
-| ST-MU-U | 2.0/4.0 | 24.9 | 91.5 | 59 |
-| ST-ST-D | 1.4/2.0 | 23.3 | 82.1 | 28 |
-| U-D-ST | 1.8/4.0 | 25.3 | 94.3 | 35 |
-| U-MD-BD | 2.0/4.0 | 29.5 | 96.2 | 26 |
-| U-MU-H | 1.8/2.0 | 26.2 | 78.8 | 33 |
-
-### SHORT Patterns (90) — Dynamic 112
+### LONG Patterns (12) — MAE/MFE 59
 
 | Pattern | TP/SL | Edge | WR | Trades |
 |---------|-------|------|-----|--------|
-| BD-BU-BU | 1.6/3.0 | 22.8 | 88.0 | 25 |
-| BD-BU-U | 2.1/4.0 | 28.4 | 93.9 | 33 |
-| BD-DN-BU | 1.8/4.0 | 24.4 | 93.3 | 30 |
-| BD-U-DN | 2.0/4.0 | 22.1 | 88.8 | 98 |
-| BD-U-MU | 1.8/4.0 | 27.6 | 96.6 | 29 |
-| BU-BD-D | 1.0/2.0 | 25.9 | 92.6 | 27 |
-| BU-BD-U | 3.0/4.0 | 22.2 | 79.3 | 29 |
-| BU-BU-DN | 2.0/4.0 | 30.2 | 96.9 | 32 |
-| BU-BU-U | 1.8/4.0 | 24.6 | 93.5 | 31 |
-| BU-DN-BU | 2.0/4.0 | 25.2 | 91.9 | 37 |
-| BU-DN-H | 0.7/1.0 | 24.9 | 83.7 | 43 |
-| BU-MU-DN | 1.8/3.0 | 31.0 | 93.5 | 31 |
-| BU-U-DN | 1.8/4.0 | 23.5 | 92.5 | 93 |
-| BU-U-ST | 1.8/4.0 | 24.9 | 93.9 | 49 |
-| D-D-DN | 1.2/2.5 | 24.4 | 92.0 | 25 |
-| D-DN-ST | 1.8/3.5 | 24.6 | 90.6 | 32 |
-| D-MU-DN | 1.6/3.5 | 25.3 | 93.9 | 33 |
-| D-ST-U | 2.5/4.0 | 26.9 | 88.5 | 26 |
-| D-U-MU | 1.6/3.5 | 27.4 | 96.0 | 25 |
-| DF-U-U | 1.4/3.0 | 25.4 | 93.5 | 31 |
-| DN-BD-BU | 1.8/3.0 | 26.6 | 89.1 | 46 |
-| DN-BD-ST | 2.5/4.0 | 26.3 | 87.8 | 41 |
-| DN-BU-BU | 1.8/3.5 | 25.9 | 91.9 | 37 |
-| DN-BU-MD | 1.2/2.0 | 24.3 | 86.8 | 38 |
-| DN-D-BD | 2.0/3.0 | 24.0 | 84.0 | 25 |
-| DN-DF-DN | 2.0/4.0 | 23.7 | 90.3 | 31 |
-| DN-DN-GS | 2.5/4.0 | 22.5 | 84.0 | 25 |
-| DN-DN-IH | 2.5/4.0 | 29.2 | 90.7 | 43 |
-| DN-GS-ST | 1.2/2.5 | 24.7 | 92.3 | 26 |
-| DN-IH-MD | 1.2/2.5 | 28.6 | 96.2 | 26 |
-| DN-IH-ST | 1.8/4.0 | 23.0 | 92.0 | 25 |
-| DN-MD-BD | 2.1/4.0 | 22.4 | 88.0 | 25 |
-| DN-MD-DN | 2.5/4.0 | 26.2 | 87.8 | 49 |
-| DN-MD-MU | 1.6/3.5 | 23.0 | 91.7 | 36 |
-| DN-MU-MU | 1.6/3.5 | 25.0 | 93.6 | 47 |
-| DN-ST-BD | 1.8/4.0 | 25.3 | 94.2 | 52 |
-| DN-ST-BU | 3.0/4.0 | 30.7 | 87.9 | 33 |
-| DN-ST-D | 2.0/4.0 | 22.2 | 88.9 | 27 |
-| DN-U-H | 1.8/4.0 | 24.4 | 93.3 | 45 |
-| GS-ST-U | 0.7/1.5 | 25.2 | 93.3 | 30 |
-| GS-U-DN | 2.0/4.0 | 26.4 | 93.1 | 29 |
-| H-DN-ST | 1.8/4.0 | 23.9 | 92.9 | 28 |
-| H-DN-U | 2.5/4.0 | 23.8 | 85.3 | 34 |
-| H-ST-ST | 0.7/1.5 | 21.8 | 90.0 | 30 |
-| IH-DN-DN | 2.0/4.0 | 24.2 | 90.9 | 33 |
-| IH-DN-U | 2.0/4.0 | 22.5 | 89.2 | 37 |
-| IH-ST-ST | 1.4/3.0 | 28.0 | 96.2 | 26 |
-| IH-U-DN | 3.0/4.0 | 25.0 | 82.1 | 28 |
-| IH-U-U | 2.5/4.0 | 27.0 | 88.6 | 35 |
-| MD-BD-U | 1.8/4.0 | 22.5 | 91.4 | 35 |
-| MD-BU-DN | 1.8/3.0 | 26.0 | 88.5 | 26 |
-| MD-DN-ST | 2.0/4.0 | 23.1 | 89.7 | 39 |
-| MD-MU-DN | 2.0/4.0 | 23.7 | 90.3 | 31 |
-| MD-ST-ST | 1.8/4.0 | 22.9 | 91.9 | 37 |
-| MD-U-D | 1.8/4.0 | 23.0 | 92.0 | 25 |
-| MU-BU-DN | 2.0/4.0 | 22.2 | 88.9 | 27 |
-| MU-DN-BU | 1.8/4.0 | 23.0 | 92.0 | 25 |
-| MU-DN-MU | 2.5/3.5 | 22.2 | 80.6 | 36 |
-| MU-DN-ST | 1.8/4.0 | 23.9 | 92.9 | 56 |
-| MU-MD-U | 2.0/4.0 | 22.2 | 88.9 | 27 |
-| MU-MU-U | 1.8/4.0 | 23.0 | 92.0 | 25 |
-| MU-ST-MD | 1.2/2.5 | 25.0 | 92.6 | 27 |
-| MU-U-ST | 1.8/3.5 | 22.0 | 88.0 | 50 |
-| ST-BD-BD | 2.0/4.0 | 21.8 | 88.5 | 26 |
-| ST-BD-BU | 1.4/3.0 | 23.8 | 92.0 | 25 |
-| ST-D-U | 2.1/4.0 | 25.9 | 91.4 | 35 |
-| ST-DN-BU | 1.8/2.5 | 22.6 | 80.8 | 52 |
-| ST-H-DN | 1.6/3.5 | 25.1 | 93.8 | 32 |
-| ST-IH-DN | 1.2/2.5 | 21.9 | 89.5 | 38 |
-| ST-ST-H | 1.8/3.0 | 25.5 | 88.0 | 25 |
-| ST-ST-MD | 3.0/4.0 | 23.6 | 80.8 | 26 |
-| ST-ST-U | 2.0/4.0 | 22.0 | 88.7 | 106 |
-| ST-U-BD | 1.8/4.0 | 22.9 | 91.8 | 49 |
-| ST-U-BU | 2.1/4.0 | 22.2 | 87.8 | 41 |
-| ST-U-H | 1.6/3.5 | 24.9 | 93.5 | 31 |
-| U-BU-BD | 2.1/4.0 | 22.7 | 88.2 | 34 |
-| U-BU-MD | 1.8/4.0 | 22.5 | 91.4 | 35 |
-| U-BU-ST | 1.8/4.0 | 23.9 | 92.9 | 56 |
-| U-D-DN | 2.0/4.0 | 25.5 | 92.2 | 51 |
-| U-DN-BD | 2.1/4.0 | 23.3 | 88.9 | 81 |
-| U-DN-DF | 1.8/4.0 | 24.1 | 93.1 | 29 |
-| U-DN-H | 2.1/4.0 | 24.4 | 90.0 | 50 |
-| U-GS-DN | 1.6/3.0 | 31.7 | 96.9 | 32 |
-| U-H-DN | 2.1/4.0 | 30.2 | 95.7 | 47 |
-| U-IH-U | 2.5/3.5 | 25.9 | 84.2 | 38 |
-| U-MD-ST | 2.5/4.0 | 21.8 | 83.3 | 42 |
-| U-MU-MD | 2.0/4.0 | 22.6 | 89.3 | 28 |
-| U-ST-IH | 1.6/3.0 | 26.8 | 92.0 | 25 |
-| U-ST-U | 2.0/4.0 | 21.8 | 88.4 | 173 |
-| U-U-ST | 1.8/4.0 | 22.4 | 91.4 | 197 |
+| BD-BD-BU | 1.67/3.14 | 30.0 | 95.2 | 42 |
+| BD-DN-MU | 1.78/3.57 | 23.3 | 90.0 | 30 |
+| DN-ST-H | 1.85/3.61 | 22.8 | 88.9 | 27 |
+| H-ST-DN | 1.74/3.49 | 21.8 | 88.6 | 35 |
+| H-U-MU | 1.36/2.96 | 27.5 | 96.0 | 25 |
+| IH-DN-MD | 1.01/1.79 | 24.1 | 88.0 | 25 |
+| MD-BD-DN | 1.93/3.32 | 21.9 | 85.2 | 27 |
+| MD-DN-BU | 1.55/3.08 | 24.1 | 90.6 | 32 |
+| MD-DN-DN | 1.95/3.7 | 22.0 | 87.5 | 88 |
+| MD-MU-ST | 1.62/3.19 | 23.3 | 89.7 | 29 |
+| U-MD-H | 1.35/3.08 | 24.6 | 94.1 | 34 |
+| U-MU-H | 1.8/1.96 | 26.7 | 78.8 | 33 |
+
+### SHORT Patterns (47) — MAE/MFE 59
+
+| Pattern | TP/SL | Edge | WR | Trades |
+|---------|-------|------|-----|--------|
+| BD-BU-U | 1.45/3.25 | 22.2 | 91.4 | 58 |
+| BD-DN-BU | 1.59/3.17 | 22.6 | 89.2 | 37 |
+| BD-ST-U | 3.01/4.14 | 22.1 | 80.0 | 35 |
+| BU-BD-U | 3.26/4.06 | 24.5 | 80.0 | 25 |
+| BU-BU-U | 1.81/3.33 | 22.7 | 87.5 | 32 |
+| BU-IH-U | 1.55/2.52 | 22.7 | 84.6 | 26 |
+| BU-MU-DN | 2.05/2.1 | 27.5 | 78.1 | 32 |
+| D-MU-DN | 2.56/3.15 | 28.8 | 84.0 | 25 |
+| D-ST-U | 1.58/3.4 | 22.0 | 90.2 | 41 |
+| D-U-MU | 1.47/3.0 | 22.5 | 89.7 | 29 |
+| DF-U-U | 1.74/3.08 | 28.1 | 92.0 | 25 |
+| DN-BD-BU | 2.18/3.01 | 28.8 | 86.8 | 38 |
+| DN-BD-ST | 2.33/3.94 | 21.9 | 84.8 | 46 |
+| DN-BU-BU | 1.91/3.47 | 27.2 | 91.7 | 36 |
+| DN-BU-MD | 1.44/2.53 | 22.0 | 85.7 | 35 |
+| DN-BU-ST | 2.52/4.07 | 23.2 | 85.0 | 40 |
+| DN-DN-IH | 2.32/3.65 | 24.0 | 85.1 | 47 |
+| DN-GS-ST | 1.36/2.26 | 25.6 | 88.0 | 25 |
+| DN-IH-MD | 1.11/2.33 | 21.9 | 89.7 | 29 |
+| DN-MU-H | 1.49/3.26 | 23.7 | 92.3 | 26 |
+| DN-MU-MU | 1.76/2.85 | 23.0 | 84.8 | 46 |
+| DN-ST-BU | 3.25/3.7 | 25.6 | 78.8 | 33 |
+| GS-U-DN | 2.03/3.72 | 22.0 | 86.7 | 30 |
+| H-DN-U | 3.0/3.88 | 23.6 | 80.0 | 30 |
+| IH-ST-ST | 1.45/2.33 | 24.1 | 85.7 | 28 |
+| IH-U-DN | 2.89/3.55 | 23.7 | 78.8 | 33 |
+| IH-U-U | 2.73/3.55 | 21.8 | 78.4 | 37 |
+| MD-BU-DN | 1.81/3.15 | 25.0 | 88.5 | 26 |
+| MD-MU-U | 1.05/1.66 | 23.6 | 84.8 | 66 |
+| MD-ST-ST | 1.51/3.47 | 23.5 | 93.2 | 44 |
+| MU-DN-ST | 1.5/3.24 | 22.9 | 91.3 | 69 |
+| MU-ST-MD | 1.34/3.08 | 22.3 | 92.0 | 25 |
+| ST-BD-BU | 1.47/2.82 | 22.3 | 88.0 | 25 |
+| ST-BU-ST | 2.58/4.22 | 21.9 | 84.0 | 25 |
+| ST-D-U | 1.12/2.57 | 22.0 | 91.7 | 60 |
+| ST-DN-BU | 1.82/3.33 | 22.8 | 87.5 | 48 |
+| ST-H-DN | 1.96/3.01 | 24.6 | 85.2 | 27 |
+| ST-IH-DN | 1.7/2.72 | 26.5 | 88.0 | 25 |
+| ST-MU-ST | 1.29/1.96 | 23.0 | 83.3 | 48 |
+| ST-ST-U | 2.24/3.94 | 22.1 | 85.9 | 92 |
+| ST-U-BD | 2.0/3.74 | 23.5 | 88.6 | 44 |
+| U-D-DN | 2.17/3.77 | 22.8 | 86.3 | 51 |
+| U-DN-BD | 2.22/3.79 | 22.8 | 85.9 | 78 |
+| U-DN-H | 2.97/3.67 | 23.7 | 78.9 | 38 |
+| U-GS-DN | 1.75/2.79 | 28.5 | 90.0 | 30 |
+| U-H-DN | 2.14/3.32 | 23.8 | 84.6 | 52 |
+| U-IH-U | 2.53/3.15 | 22.9 | 78.4 | 37 |
 
 ### WF OOS 검증 (720d, 3-fold Expanding Window)
 
-| Fold | IS 기간 | IS 패턴 | OOS 기간 | OOS Trades | OOS WR | OOS PnL | OOS MDD |
-|------|---------|---------|----------|------------|--------|---------|---------|
-| 1 | 0-180d | 23 (9L+14S) | 180-360d | 200 | 64.0% | +62.4% | 83.7% |
-| 2 | 0-360d | 40 (22L+18S) | 360-540d | 166 | 77.7% | +331.2% | 34.2% |
-| 3 | 0-540d | 58 (34L+24S) | 540-720d | 172 | 81.4% | +463.5% | 39.0% |
+| Fold | IS 기간 | OOS 기간 | OOS Trades | OOS WR | OOS PnL | OOS MDD |
+|------|---------|----------|------------|--------|---------|---------|
+| 1 | 0-180d | 180-360d | 156 | 69.2% | +80.7% | 36.9% |
+| 2 | 0-360d | 360-540d | 131 | 72.5% | +112.1% | 39.6% |
+| 3 | 0-540d | 540-720d | 154 | 79.9% | +127.7% | 37.0% |
 
-**Verdict: 3/3 PASS** | Total OOS PnL: +857.1% | Avg OOS WR: 74.4% | Stable patterns: 1
+**Verdict: 3/3 PASS** | Total OOS PnL: +320.5% | Avg OOS WR: 73.9%
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -258,17 +206,19 @@
 | 모드 | 설정값 | 패턴 소스 | TP/SL |
 |------|--------|-----------|-------|
 | Static (fallback) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
-| **Dynamic PP (현재)** | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | **PP grid search** |
+| Dynamic PP | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | PP grid search |
+| **Dynamic MAE/MFE (현재)** | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | **MAE/MFE percentile** |
 
 **Scanner CLI 사용법**:
 ```bash
 cd bingx_rl_trading_bot
-python scripts/scanner/pattern_scanner.py                           # 기본 (PP 모드, 270d)
-python scripts/scanner/pattern_scanner.py --edge-threshold 10 --correction bh --wf-folds 3
+python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 21.8   # MAE/MFE (현재)
+python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 21.8 --wf-folds 3  # + WF
+python scripts/scanner/pattern_scanner.py                           # PP 모드 (이전)
 ```
 
-**현재 적용**: Scanner 출력 (per_pattern, edge>=10pp, MC<0.01) → Edge>=21.8pp + WR>=60% + SL>=1.0% 후처리 → **112패턴 (22L+90S)**.
-WF 3/3 PASS (720d expanding window, OOS PnL +857.1%). Backup: `results/dynamic_patterns_257_backup.json`
+**현재 적용**: MAE/MFE discovery (edge>=21.8pp, MC<0.01) → **59패턴 (12L+47S)**.
+WF 3/3 PASS (720d expanding window, OOS PnL +320.5%). Backup: `results/dynamic_patterns_pp112_backup.json`
 
 ---
 
@@ -389,7 +339,10 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 | v1.28.16 | 02-18 | **Test fix + dead code cleanup**: (1) `test_patterns.py`: `test_stats_win_rates_reasonable` 실패 수정 — WR 45.2% 패턴(U-MD-MD, R:R 2.14 보상 구조)이 50% 하한에 걸림, 유효 범위 0-100%로 수정 (2) `exchange.py`: 미사용 `api_retry` 데코레이터 제거 + dead import (`wraps`, `TypeVar`) 정리 + `raise e` → `raise` (traceback 보존) (3) `pattern_5m_bot.py`: 오래된 docstring 업데이트 (v1.24 시절 패턴+백테스트 결과 제거). **214 tests all pass**. | |
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
-| **v1.28.38** | 02-18 | **Scanner fee calculation bug fix**: `bt_signals()`에서 수수료가 레버리지 미반영 — `FEE_PCT`(0.10%) 대신 `FEE_PCT * LEVERAGE`(0.30%) 사용해야 함. BingX 수수료는 notional(레버리지 적용 금액)에 부과되므로 capital-space PnL에서 `fee × leverage` 차감 필요. 기존: 트레이드당 0.20% 수수료 과소 차감 → PnL 낙관적 왜곡. Production `calculate_pnl()`과 정확히 일치하도록 수정. 패턴 선택(edge=WR-baseline)에는 영향 없음. ← **현재** |
+| **v1.28.41** | 02-19 | **Atomic write retry + .new fallback for OneDrive PermissionError**: `os.replace()` 실패 시 OneDrive 동기화 잠금 대기하는 `_atomic_replace_with_retry()` 추가 (exponential backoff 0.1/0.2/0.4s, 3회). Non-atomic fallback(`open(state_file,'w')`) → `.new` 파일 쓰기로 변경 (corruption 방지). `load_state()` 복구 체인 확장: main → `.new` → `.bak` → timestamped → default. `save_metrics()`도 동일 패턴 적용. 1002 tests passed. ← **현재** |
+| **v1.28.40** | 02-19 | **Deploy MAE/MFE 59 patterns to production**: PP 112패턴 → MAE/MFE 59패턴 (12L+47S) 교체. `--discovery-method mae_mfe --edge-threshold 21.8` 스캔. MAE/MFE는 실제 가격 행동(MFE/MAE percentile)에서 TP/SL 도출 → 더 적응적. WF 3/3 PASS (OOS +320.5%). IS: WR 87.2%, PnL +949%, MDD 22.4%. TP 1.0~3.3%, SL 1.7~4.2%. PP 112 백업: `dynamic_patterns_pp112_backup.json`. |
+| v1.28.39 | 02-19 | **Scanner MAE/MFE discovery method**: `--discovery-method mae_mfe` 옵션 추가. MFE percentile → TP, MAE percentile → SL 도출 (fixed grid 대신 실제 가격 행동 기반). 연구에서 WF OOS 2.4배 향상 (grid +617% → MAE/MFE +1,511%). `compute_excursions()`, `derive_tp_sl()`, `grid_search_mae_mfe()`, `_mae_mfe_worker()` (병렬), `scan_patterns_mae_mfe()` 추가. WF `scan_universe_range()` mae_mfe 모드 지원. 출력 JSON `tp_sl_mode: "per_pattern"` 봇 100% 호환. 270d 스캔: 267패턴, WR 93.0%, PnL +1,440%. 955 tests passed. |
+| v1.28.38 | 02-18 | **Scanner fee calculation bug fix**: `bt_signals()`에서 수수료가 레버리지 미반영 — `FEE_PCT`(0.10%) 대신 `FEE_PCT * LEVERAGE`(0.30%) 사용해야 함. BingX 수수료는 notional(레버리지 적용 금액)에 부과되므로 capital-space PnL에서 `fee × leverage` 차감 필요. 기존: 트레이드당 0.20% 수수료 과소 차감 → PnL 낙관적 왜곡. Production `calculate_pnl()`과 정확히 일치하도록 수정. 패턴 선택(edge=WR-baseline)에는 영향 없음. |
 | v1.28.37 | 02-18 | **Extract calculate_pnl() + test pure functions**: (1) `position_close.py`: PnL 계산을 `calculate_pnl()` 순수 함수로 추출 (entry/exit/direction/leverage → pnl_pct, price_pnl_pct). (2) `test_pure_functions.py` 신규: `calculate_pnl` 9개 + `extract_pattern_name` 8개 + `setup_scale_out` 9개 = 26 tests. (3) `test_config.py`: `load_dynamic_patterns()` 17개 tests 추가 (universal/per_pattern/auto-inference/fallback/staleness). 379 tests total. |
 | v1.28.36 | 02-18 | **Dynamic pattern confidence scoring**: `calculate_pattern_confidence()`가 static `PATTERN_STATS`(51패턴)만 참조 → 112 dynamic 패턴 중 61개가 WR=50% 기본값 → `historical` component=0.0. 수정: `config.py`에서 `pattern_details` → `_dynamic_pattern_stats` dict 주입, `signals.py`에서 priority lookup (dynamic > static > default 50%). `check_entry_signal()`에 config/direction 전달. 337 tests passed. |
 | v1.28.35 | 02-18 | **Fix edge metric — unify actual/expected definition**: `actual_edge`가 PnL/maxDD (ratio)로 계산되고 `EXPECTED_EDGE`는 WR margin (pp)으로 정의되어 성능 리포트에서 15.0 vs 1.4 비교 = 사과vs오렌지. 둘 다 "per-trade expected PnL%"로 통일: `actual_edge = total_pnl / total_trades`, `EXPECTED_EDGE = WR×avg_win - (1-WR)×avg_loss = 0.27%`. Display format `:.1f` → `:.2f%`. 214 tests passed. |

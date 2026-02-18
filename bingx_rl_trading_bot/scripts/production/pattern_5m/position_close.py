@@ -83,6 +83,30 @@ def detect_ghost_positions(
         logger.exception(f"❌ Ghost position detection failed: {e}")
 
 
+def calculate_pnl(
+    entry_price: float,
+    exit_price: float,
+    direction: int,
+    leverage: int,
+) -> Tuple[float, float]:
+    """
+    Calculate leveraged and price-basis PnL percentage.
+
+    Args:
+        entry_price: Entry price (must be > 0)
+        exit_price: Exit price
+        direction: 1 for LONG, -1 for SHORT
+        leverage: Leverage multiplier
+
+    Returns:
+        Tuple of (pnl_pct_leveraged, pnl_pct_price)
+    """
+    price_move = direction * (exit_price / entry_price - 1) * 100
+    pnl_pct = price_move * leverage - 2 * FEE_PCT * leverage
+    price_pnl_pct = price_move - 2 * FEE_PCT
+    return pnl_pct, price_pnl_pct
+
+
 def record_closed_position(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -118,11 +142,12 @@ def record_closed_position(
         pnl_pct = 0.0
         price_pnl_pct = 0.0
     else:
-        pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100 * config['leverage']
-        pnl_pct -= 2 * FEE_PCT * config['leverage']
-        # Calculate price-basis PnL (without leverage) for log clarity
-        price_pnl_pct = direction * (exit_price / position['entry_price'] - 1) * 100
-        price_pnl_pct -= 2 * FEE_PCT
+        pnl_pct, price_pnl_pct = calculate_pnl(
+            entry_price=position['entry_price'],
+            exit_price=exit_price,
+            direction=direction,
+            leverage=config['leverage'],
+        )
 
     # Extract pattern name from reason
     pattern_name = extract_pattern_name(position.get('reason', '')) or 'N/A'

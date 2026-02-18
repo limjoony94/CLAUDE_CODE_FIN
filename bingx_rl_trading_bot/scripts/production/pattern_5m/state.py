@@ -8,6 +8,7 @@ import json
 import logging
 import shutil
 import tempfile
+import time
 from datetime import datetime
 from typing import Dict, Any, Optional
 
@@ -38,6 +39,24 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
                 return state
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse state JSON: {e}")
+
+            # Try .new file first (written by save_state fallback)
+            new_file = state_file + '.new'
+            if os.path.exists(new_file):
+                try:
+                    with open(new_file, 'r') as f:
+                        state = json.load(f)
+                    logger.warning(f"Recovered state from .new file")
+                    try:
+                        os.replace(new_file, state_file)
+                    except PermissionError:
+                        logger.debug("Could not promote .new to main (PermissionError)")
+                    state = _ensure_required_keys(state, default_state)
+                    state = _check_daily_reset(state)
+                    return state
+                except Exception:
+                    logger.debug("Failed to recover from .new file")
+
             # Try to recover from .bak file
             bak_file = state_file + '.bak'
             if os.path.exists(bak_file):
@@ -147,6 +166,21 @@ def _try_timestamped_backups(state_file: str, default_state: Dict[str, Any]) -> 
     return None
 
 
+def _atomic_replace_with_retry(src: str, dst: str, max_retries: int = 3) -> None:
+    """os.replace() with exponential backoff retry for OneDrive file locking."""
+    for attempt in range(max_retries):
+        try:
+            os.replace(src, dst)
+            return
+        except PermissionError:
+            if attempt < max_retries - 1:
+                wait = 0.1 * (2 ** attempt)  # 0.1s, 0.2s, 0.4s
+                logger.debug(f"os.replace retry {attempt+1}/{max_retries}, waiting {wait:.1f}s")
+                time.sleep(wait)
+            else:
+                raise
+
+
 def save_state(
     state: Dict[str, Any],
     state_file: str = STATE_FILE,
@@ -196,7 +230,7 @@ def save_state(
             with os.fdopen(fd, 'w') as f:
                 json.dump(state, f, indent=2, default=str)
             # fd is now closed by os.fdopen — do NOT close again
-            os.replace(tmp_path, state_file)
+            _atomic_replace_with_retry(tmp_path, state_file)
         except Exception:
             # fd already closed by os.fdopen's with block
             if os.path.exists(tmp_path):
@@ -204,9 +238,14 @@ def save_state(
             raise
     except Exception as e:
         logger.exception(f"Failed to save state atomically: {e}")
-        # Fallback to non-atomic write
-        with open(state_file, 'w') as f:
-            json.dump(state, f, indent=2, default=str)
+        # Fallback: write to .new file (load_state can recover from it)
+        new_file = state_file + '.new'
+        try:
+            with open(new_file, 'w') as f:
+                json.dump(state, f, indent=2, default=str)
+            logger.warning(f"State saved to {new_file} (recovery pending)")
+        except Exception as e2:
+            logger.error(f"Failed to save state even to .new: {e2}")
 
 
 def _create_backup(state_file: str) -> None:
@@ -312,11 +351,21 @@ def save_metrics(metrics: PerformanceMetrics, metrics_file: str = METRICS_FILE) 
         try:
             with os.fdopen(fd, 'w') as f:
                 json.dump(metrics_data, f, indent=2)
-            os.replace(tmp_path, metrics_file)
+            _atomic_replace_with_retry(tmp_path, metrics_file)
         except Exception:
             if os.path.exists(tmp_path):
                 os.remove(tmp_path)
             raise
+    except PermissionError as e:
+        # Fallback: write to .new file for OneDrive locking
+        logger.warning(f"Failed to save metrics atomically (PermissionError): {e}")
+        new_file = metrics_file + '.new'
+        try:
+            with open(new_file, 'w') as f:
+                json.dump(metrics_data, f, indent=2)
+            logger.warning(f"Metrics saved to {new_file} (recovery pending)")
+        except Exception as e2:
+            logger.error(f"Failed to save metrics even to .new: {e2}")
     except (IOError, OSError) as e:
         logger.warning(f"Failed to save metrics (I/O error): {e}")
     except (TypeError, ValueError) as e:

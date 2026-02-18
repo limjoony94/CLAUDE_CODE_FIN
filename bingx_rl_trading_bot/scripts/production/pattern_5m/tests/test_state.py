@@ -792,15 +792,18 @@ class TestSaveStateAtomicWriteFailure:
     """Test save_state atomic write failure → fallback (lines 200-209)."""
 
     def test_atomic_replace_fails_uses_fallback(self, tmp_path):
-        """os.replace failure → fallback to direct write."""
+        """os.replace failure → fallback writes to .new file."""
         state_file = str(tmp_path / "state.json")
+        new_file = state_file + '.new'
         state = _create_default_state()
         state['total_trades'] = 42
 
         with patch('os.replace', side_effect=OSError('rename failed')):
             save_state(state, state_file)
 
-        with open(state_file, 'r') as f:
+        # Fallback writes to .new, not state_file directly
+        assert not os.path.exists(state_file)
+        with open(new_file, 'r') as f:
             saved = json.load(f)
         assert saved['total_trades'] == 42
 

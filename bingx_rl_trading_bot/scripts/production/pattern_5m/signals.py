@@ -248,7 +248,9 @@ def calculate_candle_clarity(row: pd.Series, avg_body_20: float) -> float:
 def calculate_pattern_confidence(
     df: pd.DataFrame,
     pattern: str,
-    idx: int = -2
+    idx: int = -2,
+    config: Optional[Dict[str, Any]] = None,
+    direction: Optional[str] = None,
 ) -> Tuple[float, Dict[str, float]]:
     """
     Calculate overall pattern confidence score.
@@ -262,6 +264,8 @@ def calculate_pattern_confidence(
         df: DataFrame with candle classification
         pattern: 3-candle pattern string
         idx: Index of the current (third) candle
+        config: Optional bot config (for dynamic pattern stats)
+        direction: Optional signal direction ('LONG'/'SHORT') for dynamic WR lookup
 
     Returns:
         Tuple of (confidence_score, component_dict)
@@ -284,9 +288,16 @@ def calculate_pattern_confidence(
     clarity = sum(clarity_scores) / 3
 
     # Component 2: Historical win rate (normalized: 50%=0, 70%=1)
-    # PATTERN_STATS WR is in percentage (57-98), convert to ratio for normalization
-    pattern_stats = PATTERN_STATS.get(pattern, {})
-    hist_wr = pattern_stats.get("wr", 50.0)
+    # Priority: dynamic pattern_details > static PATTERN_STATS > default 50%
+    hist_wr = 50.0
+    dynamic_stats = (config or {}).get('_dynamic_pattern_stats', {})
+    if dynamic_stats and direction:
+        dyn_entry = dynamic_stats.get((pattern, direction))
+        if dyn_entry:
+            hist_wr = dyn_entry.get('wr', 50.0)
+    if hist_wr == 50.0:
+        # Fallback to static PATTERN_STATS
+        hist_wr = PATTERN_STATS.get(pattern, {}).get("wr", 50.0)
     historical = min(1.0, max(0.0, (hist_wr / 100.0 - 0.50) / 0.20))
 
     # Component 3: Regime alignment (placeholder - use neutral 0.6 for now)
@@ -382,7 +393,9 @@ def check_entry_signal(
                 return None, None
 
         state['last_signal_candle_timestamp'] = current_timestamp
-        confidence, conf_components = calculate_pattern_confidence(df, pattern)
+        confidence, conf_components = calculate_pattern_confidence(
+            df, pattern, config=config, direction=signal
+        )
 
         # Add context bonus to confidence
         confidence = min(1.0, confidence + ctx_bonus)

@@ -357,6 +357,56 @@ class TestCalculatePatternConfidence:
         _, comps = calculate_pattern_confidence(df, 'UNKNOWN-PATTERN')
         assert comps['historical'] == 0.0  # (50/100 - 0.50) / 0.20 = 0.0
 
+    def test_dynamic_pattern_stats_used(self, make_classified_df):
+        """Dynamic pattern stats should be used when available."""
+        df = make_classified_df(pattern='U-U-U')
+        config = {
+            '_dynamic_pattern_stats': {
+                ('DYN-PAT', 'SHORT'): {'wr': 90.0, 'trades': 50, 'edge': 25.0},
+            }
+        }
+        _, comps = calculate_pattern_confidence(
+            df, 'DYN-PAT', config=config, direction='SHORT'
+        )
+        # (90/100 - 0.50) / 0.20 = 2.0, clamped to 1.0
+        assert comps['historical'] == 1.0
+
+    def test_dynamic_stats_fallback_to_static(self, make_classified_df):
+        """Missing dynamic entry falls back to static PATTERN_STATS."""
+        df = make_classified_df(pattern='U-U-U')
+        config = {
+            '_dynamic_pattern_stats': {}  # no entries
+        }
+        with patch('bingx_rl_trading_bot.scripts.production.pattern_5m.signals.PATTERN_STATS',
+                   {'STATIC-PAT': {'wr': 75.0}}):
+            _, comps = calculate_pattern_confidence(
+                df, 'STATIC-PAT', config=config, direction='LONG'
+            )
+            # (75/100 - 0.50) / 0.20 = 1.25, clamped to 1.0
+            assert comps['historical'] == 1.0
+
+    def test_dynamic_stats_direction_mismatch(self, make_classified_df):
+        """Wrong direction in dynamic stats → fallback to static."""
+        df = make_classified_df(pattern='U-U-U')
+        config = {
+            '_dynamic_pattern_stats': {
+                ('DIR-PAT', 'SHORT'): {'wr': 90.0},
+            }
+        }
+        _, comps = calculate_pattern_confidence(
+            df, 'DIR-PAT', config=config, direction='LONG'  # LONG ≠ SHORT
+        )
+        # Not found in dynamic (wrong direction) or static → default 50% → 0.0
+        assert comps['historical'] == 0.0
+
+    def test_no_config_backward_compatible(self, make_classified_df):
+        """No config/direction args → backward compatible with static lookup."""
+        df = make_classified_df(pattern='U-U-U')
+        # Without config and direction, should still work (uses PATTERN_STATS only)
+        conf, comps = calculate_pattern_confidence(df, 'UNKNOWN-PAT')
+        assert 0.0 <= conf <= 1.0
+        assert comps['historical'] == 0.0
+
 
 # ── check_entry_signal ───────────────────────────────────────
 

@@ -259,6 +259,23 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
         config['strategy']['short_patterns'] = short_patterns
         logger.info(f"Dynamic patterns loaded: {len(long_patterns)}L + {len(short_patterns)}S = {total}")
 
+        # Inject per-pattern stats for confidence scoring (WR, trades, edge)
+        pattern_details = data.get('pattern_details', {})
+        if pattern_details:
+            # Build {(pattern, direction): {wr, trades, edge}} lookup
+            dynamic_stats = {}
+            for key, details in pattern_details.items():
+                pat = details.get('pattern', '')
+                direction = details.get('direction', '')
+                if pat and direction:
+                    dynamic_stats[(pat, direction)] = {
+                        'wr': details.get('wr', 50.0),
+                        'trades': details.get('trades', 0),
+                        'edge': details.get('edge', 0.0),
+                    }
+            config['_dynamic_pattern_stats'] = dynamic_stats
+            logger.info(f"Dynamic pattern stats loaded: {len(dynamic_stats)} entries for confidence scoring")
+
         bs = data.get('backtest_summary', {})
         if bs:
             logger.info(f"Backtest: {bs.get('total_trades', '?')} trades, "

@@ -241,7 +241,9 @@ def _api_call_with_retry(
             if circuit_breaker:
                 circuit_breaker.record_failure()
 
-    raise last_exception
+    if last_exception is not None:
+        raise last_exception
+    raise RuntimeError("API call failed with 0 attempts configured")
 
 
 def fetch_ticker_cached(

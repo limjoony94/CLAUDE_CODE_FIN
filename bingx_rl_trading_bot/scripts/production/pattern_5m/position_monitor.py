@@ -193,21 +193,14 @@ def get_actual_exit_price(
 
 
 def _infer_exit_reason(filled_price: float, position: Dict) -> str:
-    """Infer exit reason from filled price."""
+    """Infer exit reason from filled price proximity to TP/SL."""
     tp = position.get('tp_price', 0)
     sl = position.get('sl_price', 0)
-    direction = position.get('direction', '')
 
-    if direction == 'LONG':
-        if tp and abs(filled_price - tp) / tp < PRICE_TOLERANCE_PCT:
-            return 'TP'
-        elif sl and abs(filled_price - sl) / sl < PRICE_TOLERANCE_PCT:
-            return 'SL'
-    elif direction == 'SHORT':
-        if tp and abs(filled_price - tp) / tp < PRICE_TOLERANCE_PCT:
-            return 'TP'
-        elif sl and abs(filled_price - sl) / sl < PRICE_TOLERANCE_PCT:
-            return 'SL'
+    if tp and abs(filled_price - tp) / tp < PRICE_TOLERANCE_PCT:
+        return 'TP'
+    if sl and abs(filled_price - sl) / sl < PRICE_TOLERANCE_PCT:
+        return 'SL'
 
     return 'MARKET'
 

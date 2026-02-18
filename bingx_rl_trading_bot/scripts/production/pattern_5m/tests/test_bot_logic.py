@@ -29,6 +29,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import (
     _log_position_status,
     _log_waiting_status,
     _maybe_run_health_check,
+    _maybe_sync_position,
     _wait_for_candle_settle,
     _log_pattern_summary,
     _run_health_check,
@@ -1125,3 +1126,113 @@ class TestRunHealthCheck:
         """Exception during health check → caught, no crash."""
         mock_hc.side_effect = RuntimeError('fail')
         _run_health_check(MagicMock(), {}, APICache(), CircuitBreaker(), PerformanceMetrics(), 's.json')
+
+
+# ── _maybe_sync_position no-sync path ────────────────────────
+
+
+class TestMaybeSyncPositionNoSync:
+    """Test _maybe_sync_position when sync is NOT needed (line 441)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._should_sync_now',
+           return_value=False)
+    def test_no_sync_returns_same_time(self, mock_sync):
+        """Sync not needed → returns original last_sync_time (line 441)."""
+        exchange = MagicMock()
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+        original_time = 1000.0
+        result = _maybe_sync_position(exchange, state, config, cache, cb, metrics, original_time)
+        assert result == original_time
+
+
+# ── _process_existing_position — early exit failure + exception ────
+
+
+class TestProcessExistingPositionFailPaths:
+    """Test early exit failure and exception paths (lines 496-499)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.close_position_market',
+           return_value=False)
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_early_exit_signal',
+           return_value=(True, 3, '3-BD reversal', 1234567890000))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached',
+           return_value={'last': 50200.0})
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    def test_early_exit_close_fails(self, mock_fetch, mock_tick, mock_early, mock_close, mock_save):
+        """Early exit triggered but close_position_market fails → return False (line 496)."""
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        state = {'position': {
+            'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 2,
+        }}
+        result = _process_existing_position(
+            MagicMock(), state, {'symbol': 'BTC/USDT:USDT', 'leverage': 3},
+            APICache(), CircuitBreaker(), PerformanceMetrics()
+        )
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_early_exit_signal',
+           side_effect=RuntimeError('unexpected'))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached',
+           return_value={'last': 50200.0})
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    def test_early_exit_exception(self, mock_fetch, mock_tick, mock_early):
+        """Exception during early exit check → caught, returns False (lines 498-499)."""
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        state = {'position': {
+            'direction': 'LONG', 'entry_price': 50000,
+        }}
+        result = _process_existing_position(
+            MagicMock(), state, {'symbol': 'BTC/USDT:USDT', 'leverage': 3},
+            APICache(), CircuitBreaker(), PerformanceMetrics()
+        )
+        assert result is False
+
+
+# ── _fetch_and_calculate_indicators — generic exception ────
+
+
+class TestFetchIndicatorsGenericException:
+    """Test _fetch_and_calculate_indicators generic exception (lines 592-594)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
+    def test_generic_exception_returns_none(self, mock_fetch, mock_calc):
+        """Generic exception → returns None (lines 592-594)."""
+        mock_fetch.return_value = [[1, 2, 3, 4, 5, 6]] * 30  # 30 candles
+        mock_calc.side_effect = ValueError('bad data')
+        result = _fetch_and_calculate_indicators(
+            MagicMock(), {'symbol': 'BTC/USDT:USDT', 'timeframe': '5m'}
+        )
+        assert result is None
+
+
+# ── _log_position_status / _log_waiting_status — generic exceptions ────
+
+
+class TestLogPositionStatusGenericException:
+    """Test _log_position_status generic exception (lines 636-637)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached',
+           side_effect=ValueError('bad ticker'))
+    def test_generic_exception_no_crash(self, mock_ticker):
+        """Generic exception → caught, no crash (lines 636-637)."""
+        position = {'direction': 'LONG', 'entry_price': 50000.0}
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        _log_position_status(position, config, APICache(), MagicMock())
+
+
+class TestLogWaitingStatusGenericException:
+    """Test _log_waiting_status generic exception (lines 662-663)."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached',
+           side_effect=ValueError('bad ticker'))
+    def test_generic_exception_no_crash(self, mock_ticker):
+        """Generic exception → caught, no crash (lines 662-663)."""
+        state = {}
+        metrics = PerformanceMetrics()
+        _log_waiting_status(state, metrics, APICache(), MagicMock(), {'symbol': 'BTC/USDT:USDT'})

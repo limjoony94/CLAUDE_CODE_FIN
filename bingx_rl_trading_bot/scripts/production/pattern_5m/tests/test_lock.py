@@ -517,3 +517,80 @@ class TestCheckWindowsProcessCtypes:
         """tasklist shows pythonw.exe → True."""
         mock_run.return_value = MagicMock(stdout='"pythonw.exe","1234","Console","1","12,345 K"')
         assert _check_windows_process(1234) is True
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.utils.lock.subprocess.run')
+    def test_ctypes_fallback_handle_found(self, mock_run):
+        """subprocess fails → ctypes OpenProcess returns handle → CloseHandle + True (lines 172-173)."""
+        mock_run.side_effect = Exception('tasklist fail')
+        mock_kernel32 = MagicMock()
+        mock_kernel32.OpenProcess.return_value = 9999  # non-zero → process exists
+        mock_ctypes = MagicMock()
+        mock_ctypes.windll.kernel32 = mock_kernel32
+        with patch.dict('sys.modules', {'ctypes': mock_ctypes}):
+            with patch('bingx_rl_trading_bot.scripts.production.pattern_5m.utils.lock.ctypes', mock_ctypes, create=True):
+                result = _check_windows_process(1234)
+        assert result is True
+        mock_kernel32.CloseHandle.assert_called_once_with(9999)
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.utils.lock.subprocess.run')
+    def test_ctypes_fallback_exception(self, mock_run):
+        """subprocess fails → ctypes also fails → False (lines 175-176)."""
+        mock_run.side_effect = Exception('tasklist fail')
+        with patch.dict('sys.modules', {'ctypes': None}):
+            result = _check_windows_process(1234)
+        assert result is False
+
+
+class TestCleanupFileExceptPath:
+    """Test _cleanup_file exception handling (lines 49-50)."""
+
+    def test_remove_raises_oserror(self, tmp_path):
+        """os.remove fails → swallowed by except (lines 49-50)."""
+        lock = WindowsFileLock()
+        filepath = str(tmp_path / 'test.lock')
+        with open(filepath, 'w') as f:
+            f.write('data')
+        with patch('os.remove', side_effect=OSError('permission denied')):
+            lock._cleanup_file(filepath)  # should not raise
+
+
+class TestWindowsAcquireErrorPaths:
+    """Test WindowsFileLock acquire error branches (lines 73-74, 79-80)."""
+
+    def test_ioerror_after_open_and_lock(self, tmp_path):
+        """IOError in _write_lock_info after lock acquired → close handle + return False (lines 73-74).
+
+        open() succeeds → msvcrt.locking() succeeds → _write_lock_info() raises OSError
+        → outer except (IOError, OSError) catches → handle closed.
+        """
+        lock = WindowsFileLock()
+        mock_handle = MagicMock()
+        filepath = str(tmp_path / 'test.lock')
+        mock_msvcrt = MagicMock()
+        mock_msvcrt.LK_NBLCK = 2
+        with patch.dict('sys.modules', {'msvcrt': mock_msvcrt}):
+            with patch('builtins.open', return_value=mock_handle):
+                with patch.object(lock, '_write_lock_info', side_effect=OSError('disk full')):
+                    result = lock.acquire(filepath)
+        assert result is False
+        mock_handle.close.assert_called()
+
+    def test_generic_exception_after_open_and_lock(self, tmp_path):
+        """Generic exception in _write_lock_info → close + False (lines 79-80).
+
+        open() succeeds → msvcrt.locking() succeeds → _write_lock_info() raises RuntimeError
+        → outer except Exception catches → handle closed.
+        """
+        lock = WindowsFileLock()
+        mock_handle = MagicMock()
+        filepath = str(tmp_path / 'test.lock')
+        mock_msvcrt = MagicMock()
+        mock_msvcrt.LK_NBLCK = 2
+        with patch.dict('sys.modules', {'msvcrt': mock_msvcrt}):
+            with patch('builtins.open', return_value=mock_handle):
+                with patch.object(lock, '_write_lock_info', side_effect=RuntimeError('unexpected')):
+                    result = lock.acquire(filepath)
+        assert result is False
+        mock_handle.close.assert_called()
+
+

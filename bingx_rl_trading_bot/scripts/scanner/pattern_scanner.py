@@ -126,6 +126,8 @@ def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bar
     Exit: intrabar high/low check (distance-based).
     Timeout trades are DROPPED (not counted).
     """
+    # Fee as % of capital: price-space fee × leverage (fee is on notional)
+    fee = FEE_PCT * LEVERAGE
     trades = []
     for idx in signal_bars:
         if idx + 1 >= n_bars:
@@ -155,14 +157,14 @@ def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bar
                 bo = opens[j]
                 dist_tp = abs(tpp - bo)
                 dist_sl = abs(slp - bo)
-                pnl = (tp_pct if dist_tp <= dist_sl else -sl_pct) * LEVERAGE - FEE_PCT
+                pnl = (tp_pct if dist_tp <= dist_sl else -sl_pct) * LEVERAGE - fee
                 trades.append((eb, j, pnl))
                 break
             elif ht:
-                trades.append((eb, j, tp_pct * LEVERAGE - FEE_PCT))
+                trades.append((eb, j, tp_pct * LEVERAGE - fee))
                 break
             elif hs:
-                trades.append((eb, j, -sl_pct * LEVERAGE - FEE_PCT))
+                trades.append((eb, j, -sl_pct * LEVERAGE - fee))
                 break
         # Timeout trades are dropped (no append)
 

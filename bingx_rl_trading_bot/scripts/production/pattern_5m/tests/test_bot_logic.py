@@ -33,6 +33,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import (
     _wait_for_candle_settle,
     _log_pattern_summary,
     _run_health_check,
+    _run_bot_main,
+    run_bot,
     signal_handler,
     CandleTiming,
 )
@@ -1236,3 +1238,668 @@ class TestLogWaitingStatusGenericException:
         state = {}
         metrics = PerformanceMetrics()
         _log_waiting_status(state, metrics, APICache(), MagicMock(), {'symbol': 'BTC/USDT:USDT'})
+
+
+# ── _run_bot_main integration tests ────────────────────────────
+
+
+def _shutdown_after_one_iter(*args, **kwargs):
+    """Side effect for _interruptible_sleep that sets shutdown_requested=True."""
+    import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+    bot_mod.shutdown_requested = True
+
+
+BOT = 'bingx_rl_trading_bot.scripts.production.pattern_5m.bot'
+
+
+class TestRunBotMainNoPosition:
+    """Test _run_bot_main loop with no position (maintenance window path)."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._log_waiting_status')
+    @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
+    @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': 0, 'daily_trades': 0})
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_maintenance_window_no_position(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_timing, mock_dll, mock_cll, mock_msync, mock_mhc, mock_lws,
+        mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """Loop runs once in maintenance window (no position) then shuts down."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+
+        # Maintenance window (not in trading window)
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=False,
+            candle_id=100,
+            seconds_into_candle=60.0,
+            seconds_until_close=240.0,
+        )
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            # Verify graceful shutdown saves
+            mock_ss.assert_called()
+            mock_sm.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainTradingWindowNoPosition:
+    """Test _run_bot_main loop in trading window with no position."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._process_no_position')
+    @patch(f'{BOT}._wait_for_candle_settle')
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': 0, 'daily_trades': 0})
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_trading_window_processes_no_position(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_timing, mock_dll, mock_cll, mock_settle, mock_pnp,
+        mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """Trading window + no position → _process_no_position called."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=True,
+            candle_id=100,
+            seconds_into_candle=5.0,
+            seconds_until_close=295.0,
+        )
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_pnp.assert_called_once()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainTradingWindowWithPosition:
+    """Test _run_bot_main in trading window with existing position."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._process_existing_position')
+    @patch(f'{BOT}.check_position_status', return_value=False)
+    @patch(f'{BOT}._wait_for_candle_settle')
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={
+        'position': {'direction': 'LONG', 'entry_price': 50000},
+        'daily_pnl': 0, 'daily_trades': 0,
+    })
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_trading_window_processes_existing_position(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_timing, mock_dll, mock_cll, mock_settle, mock_cps, mock_pep,
+        mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """Trading window + has position + not closed → _process_existing_position called."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=True,
+            candle_id=100,
+            seconds_into_candle=5.0,
+            seconds_until_close=295.0,
+        )
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_pep.assert_called_once()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainPositionClosedInTradingWindow:
+    """Test position closed during trading window → tries new entry."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._process_no_position')
+    @patch(f'{BOT}.check_position_status', return_value=True)
+    @patch(f'{BOT}._wait_for_candle_settle')
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={
+        'position': {'direction': 'LONG', 'entry_price': 50000},
+        'daily_pnl': 0, 'daily_trades': 0,
+    })
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_position_closed_then_new_entry_attempted(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_timing, mock_dll, mock_cll, mock_settle, mock_cps, mock_pnp,
+        mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """Position closed in trading window → _process_no_position for new entry."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=True,
+            candle_id=100,
+            seconds_into_candle=5.0,
+            seconds_until_close=295.0,
+        )
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_pnp.assert_called_once()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainDailyLossLimit:
+    """Test daily loss limit triggers pause."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=True)
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': -15, 'daily_trades': 5})
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_daily_loss_pauses_then_continues(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_dll, mock_sleep, mock_ss, mock_sm
+    ):
+        """Daily loss limit hit → pause sleep called, then shutdown."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_dll.assert_called()
+            mock_sleep.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainConsecutiveLossLimit:
+    """Test consecutive loss limit triggers pause."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=True)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={
+        'position': None, 'daily_pnl': 0, 'daily_trades': 0, 'consecutive_losses': 4,
+    })
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_consecutive_loss_pauses(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_dll, mock_cll, mock_sleep, mock_ss, mock_sm
+    ):
+        """Consecutive loss limit hit + no position → pause then shutdown."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_cll.assert_called()
+            mock_sleep.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainNetworkError:
+    """Test network error in main loop → caught, retries."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}.check_daily_loss_limit', side_effect=__import__('ccxt').NetworkError('timeout'))
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': 0, 'daily_trades': 0})
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_network_error_caught(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_dll, mock_sleep, mock_ss, mock_sm
+    ):
+        """NetworkError in loop body → caught, sleep, shutdown."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_sleep.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainExchangeError:
+    """Test ExchangeError in main loop."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}.check_daily_loss_limit', side_effect=__import__('ccxt').ExchangeError('invalid'))
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': 0, 'daily_trades': 0})
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_exchange_error_caught(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_dll, mock_sleep, mock_ss, mock_sm
+    ):
+        """ExchangeError → caught, sleep, shutdown."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_sleep.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainGenericException:
+    """Test generic Exception in main loop."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}.check_daily_loss_limit', side_effect=RuntimeError('unexpected'))
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': 0, 'daily_trades': 0})
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_generic_exception_caught(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_dll, mock_sleep, mock_ss, mock_sm
+    ):
+        """Generic Exception → caught, sleep, shutdown."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_sleep.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainNewMetrics:
+    """Test _run_bot_main when load_metrics returns None (new metrics created)."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._log_waiting_status')
+    @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
+    @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state')
+    @patch(f'{BOT}.load_state', return_value={'position': None, 'daily_pnl': 0, 'daily_trades': 0})
+    @patch(f'{BOT}.load_metrics', return_value=None)
+    @patch(f'{BOT}.create_exchange')
+    def test_none_metrics_creates_new(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_dll, mock_cll, mock_timing, mock_msync, mock_mhc, mock_lws,
+        mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """load_metrics returns None → new PerformanceMetrics created (lines 243-245)."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+        mock_sync_m.side_effect = lambda m, s: m  # pass through
+
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=False, candle_id=1,
+            seconds_into_candle=60.0, seconds_until_close=240.0,
+        )
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            # sync_metrics_with_state was called with a PerformanceMetrics instance
+            mock_sync_m.assert_called_once()
+            args = mock_sync_m.call_args[0]
+            assert isinstance(args[0], PerformanceMetrics)
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotMainMaintenanceWithPosition:
+    """Test maintenance window with position — TP/SL verify + log status."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._log_position_status')
+    @patch(f'{BOT}.verify_tp_sl_orders')
+    @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
+    @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
+    @patch(f'{BOT}.check_position_status', return_value=False)
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state', return_value={
+        'position': {'direction': 'LONG', 'entry_price': 50000},
+        'daily_pnl': 0, 'daily_trades': 0,
+    })
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_maintenance_with_position_verifies_tpsl(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_timing, mock_dll, mock_cll, mock_cps, mock_msync, mock_mhc,
+        mock_vtpsl, mock_lps, mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """Maintenance + position → verify_tp_sl_orders + _log_position_status called."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=False, candle_id=100,
+            seconds_into_candle=60.0, seconds_until_close=240.0,
+        )
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_vtpsl.assert_called_once()
+            mock_lps.assert_called_once()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+# ── run_bot entry point ────────────────────────────
+
+
+class TestRunBotMainMaintenancePositionClosed:
+    """Test maintenance window where position gets closed (line 326)."""
+
+    @patch(f'{BOT}.save_metrics')
+    @patch(f'{BOT}.save_state')
+    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
+    @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
+    @patch(f'{BOT}._log_waiting_status')
+    @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
+    @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
+    @patch(f'{BOT}.check_position_status', return_value=True)
+    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
+    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
+    @patch(f'{BOT}._get_candle_timing')
+    @patch(f'{BOT}.adjust_tpsl_to_config')
+    @patch(f'{BOT}.recover_from_crash')
+    @patch(f'{BOT}._verify_exchange_settings')
+    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.load_state')
+    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
+    @patch(f'{BOT}.create_exchange')
+    def test_maintenance_position_closed_updates_has_position(
+        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
+        mock_timing, mock_dll, mock_cll, mock_cps, mock_msync, mock_mhc,
+        mock_lws, mock_csd, mock_sleep, mock_ss, mock_sm
+    ):
+        """Maintenance + position closed → has_position updated (line 326)."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
+        original = bot_mod.shutdown_requested
+        bot_mod.shutdown_requested = False
+        mock_exch.return_value = MagicMock()
+
+        # State starts with position, then check_position_status returns True (closed),
+        # and state['position'] is cleared by the mock side effect
+        state_dict = {
+            'position': {'direction': 'LONG', 'entry_price': 50000},
+            'daily_pnl': 0, 'daily_trades': 0,
+        }
+
+        def cps_side_effect(*args, **kwargs):
+            # Simulate position being closed — clear position from state
+            state_dict['position'] = None
+            return True
+
+        mock_ls.return_value = state_dict
+        mock_cps.side_effect = cps_side_effect
+
+        mock_timing.return_value = CandleTiming(
+            in_trading_window=False, candle_id=100,
+            seconds_into_candle=60.0, seconds_until_close=240.0,
+        )
+
+        try:
+            _run_bot_main(
+                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
+                state_path='state.json',
+                metrics_path='metrics.json',
+            )
+            mock_cps.assert_called_once()
+            # _log_waiting_status called (not _log_position_status) because position was cleared
+            mock_lws.assert_called()
+        finally:
+            bot_mod.shutdown_requested = original
+
+
+class TestRunBotEntryPoint:
+    """Test run_bot() entry point (lines 169-217)."""
+
+    @patch(f'{BOT}._run_bot_main')
+    @patch(f'{BOT}.set_shutdown_checker')
+    @patch(f'{BOT}.signal.signal')
+    @patch(f'{BOT}.acquire_lock', return_value=True)
+    @patch(f'{BOT}.release_lock')
+    @patch(f'{BOT}._log_pattern_summary')
+    @patch(f'{BOT}.setup_logging')
+    @patch(f'{BOT}.validate_config')
+    @patch(f'{BOT}.load_dynamic_patterns', side_effect=lambda c: c)
+    @patch(f'{BOT}.load_config')
+    @patch(f'{BOT}.os.chdir')
+    def test_normal_run(
+        self, mock_chdir, mock_lc, mock_ldp, mock_vc, mock_sl, mock_lps,
+        mock_rl, mock_al, mock_sig, mock_ssc, mock_rbm
+    ):
+        """Normal run_bot flow: config → lock → run → release."""
+        mock_lc.return_value = {
+            'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3,
+            'debug_mode': False, 'json_logging': False,
+        }
+        run_bot('test_config.yaml')
+        mock_al.assert_called_once()
+        mock_rbm.assert_called_once()
+        mock_rl.assert_called_once()
+
+    @patch(f'{BOT}.sys.exit', side_effect=SystemExit(1))
+    @patch(f'{BOT}.acquire_lock', return_value=False)
+    @patch(f'{BOT}._log_pattern_summary')
+    @patch(f'{BOT}.setup_logging')
+    @patch(f'{BOT}.validate_config')
+    @patch(f'{BOT}.load_dynamic_patterns', side_effect=lambda c: c)
+    @patch(f'{BOT}.load_config')
+    @patch(f'{BOT}.os.chdir')
+    def test_lock_failure_exits(
+        self, mock_chdir, mock_lc, mock_ldp, mock_vc, mock_sl, mock_lps,
+        mock_al, mock_exit
+    ):
+        """Failed lock acquisition → sys.exit(1) (line 199)."""
+        mock_lc.return_value = {
+            'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3,
+            'debug_mode': False, 'json_logging': False,
+        }
+        with pytest.raises(SystemExit):
+            run_bot('test_config.yaml')
+        mock_exit.assert_called_once_with(1)
+
+    @patch(f'{BOT}.release_lock')
+    @patch(f'{BOT}._run_bot_main', side_effect=KeyboardInterrupt())
+    @patch(f'{BOT}.set_shutdown_checker')
+    @patch(f'{BOT}.signal.signal')
+    @patch(f'{BOT}.acquire_lock', return_value=True)
+    @patch(f'{BOT}._log_pattern_summary')
+    @patch(f'{BOT}.setup_logging')
+    @patch(f'{BOT}.validate_config')
+    @patch(f'{BOT}.load_dynamic_patterns', side_effect=lambda c: c)
+    @patch(f'{BOT}.load_config')
+    @patch(f'{BOT}.os.chdir')
+    def test_keyboard_interrupt_releases_lock(
+        self, mock_chdir, mock_lc, mock_ldp, mock_vc, mock_sl, mock_lps,
+        mock_al, mock_sig, mock_ssc, mock_rbm, mock_rl
+    ):
+        """KeyboardInterrupt → caught, lock released (lines 210-217)."""
+        mock_lc.return_value = {
+            'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3,
+            'debug_mode': False, 'json_logging': False,
+        }
+        run_bot('test_config.yaml')
+        mock_rl.assert_called_once()
+
+    @patch(f'{BOT}.release_lock')
+    @patch(f'{BOT}._run_bot_main', side_effect=RuntimeError('fatal'))
+    @patch(f'{BOT}.set_shutdown_checker')
+    @patch(f'{BOT}.signal.signal')
+    @patch(f'{BOT}.acquire_lock', return_value=True)
+    @patch(f'{BOT}._log_pattern_summary')
+    @patch(f'{BOT}.setup_logging')
+    @patch(f'{BOT}.validate_config')
+    @patch(f'{BOT}.load_dynamic_patterns', side_effect=lambda c: c)
+    @patch(f'{BOT}.load_config')
+    @patch(f'{BOT}.os.chdir')
+    def test_fatal_error_releases_lock_and_reraises(
+        self, mock_chdir, mock_lc, mock_ldp, mock_vc, mock_sl, mock_lps,
+        mock_al, mock_sig, mock_ssc, mock_rbm, mock_rl
+    ):
+        """Fatal error → lock released, exception re-raised (lines 212-214)."""
+        mock_lc.return_value = {
+            'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3,
+            'debug_mode': False, 'json_logging': False,
+        }
+        with pytest.raises(RuntimeError, match='fatal'):
+            run_bot('test_config.yaml')
+        mock_rl.assert_called_once()

@@ -21,8 +21,17 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import (
     _get_candle_timing,
     _interruptible_sleep,
     _calculate_sleep_duration,
+    _should_sync_now,
+    _verify_exchange_settings,
+    _process_no_position,
+    _process_existing_position,
+    _fetch_and_calculate_indicators,
+    _log_position_status,
+    _log_waiting_status,
+    _maybe_run_health_check,
     CandleTiming,
 )
+from bingx_rl_trading_bot.scripts.production.pattern_5m.models import APICache, CircuitBreaker
 
 
 # ── Helper Fixtures ───────────────────────────────────────────
@@ -570,3 +579,412 @@ class TestCandleAlignedTiming:
         duration = _calculate_sleep_duration(has_position=False, last_processed_candle_id=1000)
 
         assert duration > 0
+
+
+# ── _should_sync_now Tests ───────────────────────────────────
+
+
+class TestShouldSyncNow:
+    """Test _should_sync_now() clock-aligned interval logic."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.datetime')
+    def test_first_run_always_syncs(self, mock_dt):
+        """last_sync_time=0 → always returns True."""
+        mock_dt.now.return_value = datetime(2026, 2, 18, 12, 3, 0)
+        assert _should_sync_now(0, 5) is True
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.datetime')
+    def test_at_interval_boundary(self, mock_dt):
+        """Current minute at 5-min boundary + enough time elapsed → True."""
+        mock_dt.now.return_value = datetime(2026, 2, 18, 12, 10, 0)
+        mock_dt.fromtimestamp.return_value = datetime(2026, 2, 18, 12, 5, 0)
+        assert _should_sync_now(time.time() - 300, 5) is True
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.datetime')
+    def test_not_at_interval_boundary(self, mock_dt):
+        """Current minute NOT at 5-min boundary → False."""
+        mock_dt.now.return_value = datetime(2026, 2, 18, 12, 7, 0)
+        assert _should_sync_now(time.time() - 300, 5) is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.datetime')
+    def test_duplicate_prevention_same_minute(self, mock_dt):
+        """Same hour and minute as last sync → False (prevent duplicate)."""
+        mock_dt.now.return_value = datetime(2026, 2, 18, 12, 10, 30)
+        mock_dt.fromtimestamp.return_value = datetime(2026, 2, 18, 12, 10, 5)
+        assert _should_sync_now(time.time() - 25, 5) is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.datetime')
+    def test_30min_interval(self, mock_dt):
+        """30-minute interval at minute 0 or 30 → True."""
+        mock_dt.now.return_value = datetime(2026, 2, 18, 13, 0, 0)
+        mock_dt.fromtimestamp.return_value = datetime(2026, 2, 18, 12, 30, 0)
+        assert _should_sync_now(time.time() - 1800, 30) is True
+
+
+# ── _verify_exchange_settings Tests ──────────────────────────
+
+
+class TestVerifyExchangeSettings:
+    """Test _verify_exchange_settings() exchange setup."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.set_margin_mode')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.verify_position_mode')
+    def test_success(self, mock_verify, mock_margin):
+        """Both checks pass → no exception."""
+        mock_verify.return_value = True
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        _verify_exchange_settings(exchange, config)
+        mock_verify.assert_called_once()
+        mock_margin.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.set_margin_mode')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.verify_position_mode')
+    def test_position_mode_failure_raises(self, mock_verify, mock_margin):
+        """Position mode check fails → raises RuntimeError."""
+        mock_verify.return_value = False
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        with pytest.raises(RuntimeError, match='Position mode'):
+            _verify_exchange_settings(exchange, config)
+
+
+# ── _fetch_and_calculate_indicators Tests ────────────────────
+
+
+class TestFetchAndCalculateIndicators:
+    """Test _fetch_and_calculate_indicators() data fetching."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
+    def test_successful_fetch(self, mock_ohlcv, mock_calc):
+        """Normal OHLCV data → returns DataFrame."""
+        ohlcv_data = [[i * 300000, 50000 + i, 50050 + i, 49950 + i, 50010 + i, 100]
+                       for i in range(50)]
+        mock_ohlcv.return_value = ohlcv_data
+        mock_calc.side_effect = lambda df, cfg: df
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'timeframe': '5m'}
+        result = _fetch_and_calculate_indicators(exchange, config)
+        assert result is not None
+        assert len(result) == 50
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
+    def test_insufficient_data_returns_none(self, mock_ohlcv):
+        """Fewer than 20 candles → returns None."""
+        mock_ohlcv.return_value = [[i, 50000, 50050, 49950, 50010, 100] for i in range(10)]
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'timeframe': '5m'}
+        result = _fetch_and_calculate_indicators(exchange, config)
+        assert result is None
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
+    def test_empty_ohlcv_returns_none(self, mock_ohlcv):
+        """Empty OHLCV list → returns None."""
+        mock_ohlcv.return_value = []
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'timeframe': '5m'}
+        result = _fetch_and_calculate_indicators(exchange, config)
+        assert result is None
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
+    def test_network_error_returns_none(self, mock_ohlcv):
+        """Network error during fetch → returns None."""
+        import ccxt
+        mock_ohlcv.side_effect = ccxt.NetworkError('timeout')
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'timeframe': '5m'}
+        result = _fetch_and_calculate_indicators(exchange, config)
+        assert result is None
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ohlcv')
+    def test_exchange_error_returns_none(self, mock_ohlcv):
+        """Exchange error during fetch → returns None."""
+        import ccxt
+        mock_ohlcv.side_effect = ccxt.ExchangeError('invalid')
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'timeframe': '5m'}
+        result = _fetch_and_calculate_indicators(exchange, config)
+        assert result is None
+
+
+# ── _process_no_position Tests ───────────────────────────────
+
+
+class TestProcessNoPosition:
+    """Test _process_no_position() entry signal checking."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.open_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_entry_signal')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_cooldown')
+    def test_signal_detected_opens_position(self, mock_cool, mock_fetch, mock_signal, mock_open):
+        """Signal detected → calls open_position, returns True on success."""
+        mock_cool.return_value = True
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        mock_signal.return_value = ('LONG', 'Pattern: BD-BD-BU (LONG)')
+        mock_open.return_value = True
+
+        exchange = MagicMock()
+        state = {}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        assert result is True
+        mock_open.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_cooldown')
+    def test_cooldown_blocks(self, mock_cool, mock_fetch):
+        """Cooldown active → returns False without checking signal."""
+        mock_cool.return_value = False
+
+        exchange = MagicMock()
+        state = {}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        assert result is False
+        mock_fetch.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_entry_signal')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_cooldown')
+    def test_no_signal_returns_false(self, mock_cool, mock_fetch, mock_signal):
+        """No signal detected → returns False."""
+        mock_cool.return_value = True
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        mock_signal.return_value = (None, None)
+
+        exchange = MagicMock()
+        state = {}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_cooldown')
+    def test_fetch_failure_returns_false(self, mock_cool, mock_fetch):
+        """Indicator fetch fails → returns False."""
+        mock_cool.return_value = True
+        mock_fetch.return_value = None
+
+        exchange = MagicMock()
+        state = {}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.open_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_entry_signal')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_cooldown')
+    def test_open_position_failure_returns_false(self, mock_cool, mock_fetch, mock_signal, mock_open):
+        """Signal detected but open_position fails → returns False."""
+        mock_cool.return_value = True
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        mock_signal.return_value = ('SHORT', 'Pattern: DN-BU-BU (SHORT)')
+        mock_open.return_value = False
+
+        exchange = MagicMock()
+        state = {}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        assert result is False
+
+
+# ── _process_existing_position Tests (extended) ──────────────
+
+
+class TestProcessExistingPositionExtended:
+    """Extended tests for _process_existing_position() early exit flow."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.close_position_market')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_early_exit_signal')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    def test_early_exit_triggers_close(
+        self, mock_fetch, mock_ticker, mock_early, mock_close, mock_save
+    ):
+        """Early exit triggered → close_position_market called."""
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        mock_ticker.return_value = {'last': 50200.0}
+        mock_early.return_value = (True, 3, '3-BD reversal', 1234567890000)
+        mock_close.return_value = True
+
+        state = {'position': {
+            'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 2,
+        }}
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_existing_position(exchange, state, config, cache, cb, metrics)
+        assert result is True
+        mock_close.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_early_exit_signal')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    def test_no_early_exit_returns_false(self, mock_fetch, mock_ticker, mock_early):
+        """No early exit signal → returns False."""
+        mock_fetch.return_value = pd.DataFrame({'close': [50000]})
+        mock_ticker.return_value = {'last': 50100.0}
+        mock_early.return_value = (False, 0, None, None)
+
+        state = {'position': {
+            'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 0,
+        }}
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_existing_position(exchange, state, config, cache, cb, metrics)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
+    def test_fetch_failure_returns_false(self, mock_fetch):
+        """Indicator fetch fails → returns False without error."""
+        mock_fetch.return_value = None
+
+        state = {'position': {'direction': 'LONG', 'entry_price': 50000}}
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _process_existing_position(exchange, state, config, cache, cb, metrics)
+        assert result is False
+
+
+# ── _log_position_status Tests ───────────────────────────────
+
+
+class TestLogPositionStatus:
+    """Test _log_position_status() logging helper."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
+    def test_normal_long_position(self, mock_ticker):
+        """Logs PnL and TP/SL progress for LONG position."""
+        mock_ticker.return_value = {'last': 51000.0}
+        position = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'tp_price': 52000.0,
+            'sl_price': 49000.0,
+            'reason': 'Pattern: BD-BD-BU (LONG)',
+        }
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        cache = APICache()
+        exchange = MagicMock()
+        # Should not raise
+        _log_position_status(position, config, cache, exchange)
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
+    def test_network_error_handled(self, mock_ticker):
+        """Network error → does not raise."""
+        import ccxt
+        mock_ticker.side_effect = ccxt.NetworkError('timeout')
+        position = {'direction': 'LONG', 'entry_price': 50000.0}
+        config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
+        cache = APICache()
+        exchange = MagicMock()
+        _log_position_status(position, config, cache, exchange)  # Should not raise
+
+
+# ── _log_waiting_status Tests ────────────────────────────────
+
+
+class TestLogWaitingStatus:
+    """Test _log_waiting_status() logging helper."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
+    def test_normal_waiting(self, mock_ticker):
+        """Logs waiting status with daily stats."""
+        mock_ticker.return_value = {'last': 50000.0}
+        state = {'daily_pnl': -1.5, 'daily_trades': 3}
+        metrics = PerformanceMetrics()
+        metrics.total_trades = 40
+        metrics.actual_win_rate = 72.5
+        cache = APICache()
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        _log_waiting_status(state, metrics, cache, exchange, config)  # Should not raise
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.fetch_ticker_cached')
+    def test_network_error_handled(self, mock_ticker):
+        """Network error → does not raise."""
+        import ccxt
+        mock_ticker.side_effect = ccxt.NetworkError('timeout')
+        state = {}
+        metrics = PerformanceMetrics()
+        cache = APICache()
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        _log_waiting_status(state, metrics, cache, exchange, config)  # Should not raise
+
+
+# ── _maybe_run_health_check Tests ────────────────────────────
+
+
+class TestMaybeRunHealthCheck:
+    """Test _maybe_run_health_check() clock-aligned wrapper."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._run_health_check')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._should_sync_now')
+    def test_runs_when_due(self, mock_sync, mock_hc):
+        """When _should_sync_now=True → runs health check, returns new time."""
+        mock_sync.return_value = True
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        result = _maybe_run_health_check(
+            exchange, config, cache, cb, metrics, 'state.json', 0, 30
+        )
+        assert result > 0
+        mock_hc.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._run_health_check')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._should_sync_now')
+    def test_skips_when_not_due(self, mock_sync, mock_hc):
+        """When _should_sync_now=False → skips, returns same time."""
+        mock_sync.return_value = False
+        exchange = MagicMock()
+        config = {'symbol': 'BTC/USDT:USDT'}
+        cache = APICache()
+        cb = CircuitBreaker()
+        metrics = PerformanceMetrics()
+
+        old_time = 1234567890.0
+        result = _maybe_run_health_check(
+            exchange, config, cache, cb, metrics, 'state.json', old_time, 30
+        )
+        assert result == old_time
+        mock_hc.assert_not_called()

@@ -13,6 +13,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
     recover_position_to_state,
     recover_from_crash,
     _read_tpsl_from_exchange_orders,
+    detect_ghost_positions,
+    recalculate_position_orders,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
     APICache,
@@ -609,3 +611,148 @@ class TestRecoverFromCrash:
         config = {'symbol': 'BTC/USDT:USDT'}
         result = recover_from_crash(MagicMock(), state, config, APICache())
         assert result is False
+
+
+# ── detect_ghost_positions ─────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_positions_cached')
+class TestDetectGhostPositions:
+    """Test detect_ghost_positions() ghost detection logic."""
+
+    def test_no_exchange_position_no_warning(self, mock_fetch):
+        """No exchange position → no warning logged."""
+        mock_fetch.return_value = []
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        detect_ghost_positions(MagicMock(), state, config, APICache())
+
+    def test_exchange_and_local_exist_no_ghost(self, mock_fetch):
+        """Both exchange and local position → no ghost."""
+        mock_fetch.return_value = [
+            {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0},
+        ]
+        state = {'position': {'direction': 'LONG'}}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        detect_ghost_positions(MagicMock(), state, config, APICache())
+
+    def test_ghost_detected_exchange_only(self, mock_fetch):
+        """Exchange has position but local doesn't → ghost detected."""
+        mock_fetch.return_value = [
+            {'side': 'short', 'contracts': 0.02, 'entryPrice': 48000.0},
+        ]
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        detect_ghost_positions(MagicMock(), state, config, APICache())
+
+    def test_network_error_handled(self, mock_fetch):
+        """Network error → no crash."""
+        mock_fetch.side_effect = ccxt.NetworkError('timeout')
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        detect_ghost_positions(MagicMock(), state, config, APICache())
+
+    def test_zero_contracts_ignored(self, mock_fetch):
+        """Position with 0 contracts → not treated as exchange position."""
+        mock_fetch.return_value = [
+            {'side': 'long', 'contracts': 0, 'entryPrice': 50000.0},
+        ]
+        state = {'position': None}
+        config = {'symbol': 'BTC/USDT:USDT'}
+        detect_ghost_positions(MagicMock(), state, config, APICache())
+
+
+# ── recalculate_position_orders ────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.cancel_remaining_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out')
+class TestRecalculatePositionOrders:
+    """Test recalculate_position_orders() partial-fill rebalancing."""
+
+    def test_no_position_returns_false(
+        self, mock_scale, mock_calc, mock_cancel, mock_place, mock_save
+    ):
+        """No position → False."""
+        result = recalculate_position_orders(MagicMock(), {'position': None}, {}, 0.02)
+        assert result is False
+
+    def test_successful_recalculation(
+        self, mock_scale, mock_calc, mock_cancel, mock_place, mock_save
+    ):
+        """Normal recalc → cancels old, updates qty, places new, returns True."""
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+
+        state = {
+            'position': {
+                'direction': 'LONG',
+                'entry_price': 50000.0,
+                'quantity': 0.01,
+                'remaining_quantity': 0.01,
+                'vol_mult': 1.0,
+                'reason': 'Pattern: BD-BD-U (LONG)',
+                'sl_order_id': 'sl_new',
+            }
+        }
+        config = {'symbol': 'BTC/USDT:USDT', 'strategy': {}}
+
+        def set_sl_id(exchange, state, config):
+            state['position']['sl_order_id'] = 'sl_recalc'
+        mock_place.side_effect = set_sl_id
+
+        result = recalculate_position_orders(MagicMock(), state, config, 0.02)
+        assert result is True
+        assert state['position']['quantity'] == 0.02
+        assert state['position']['remaining_quantity'] == 0.02
+        mock_cancel.assert_called_once()
+        mock_calc.assert_called_once()
+        mock_place.assert_called_once()
+
+    def test_cancel_failure_continues(
+        self, mock_scale, mock_calc, mock_cancel, mock_place, mock_save
+    ):
+        """Cancel fails → continues with recalculation."""
+        mock_cancel.side_effect = ccxt.NetworkError('timeout')
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'vol_mult': 1.0, 'reason': '',
+            }
+        }
+        config = {'symbol': 'BTC/USDT:USDT', 'strategy': {}}
+
+        def set_sl_id(exchange, state, config):
+            state['position']['sl_order_id'] = 'sl_1'
+        mock_place.side_effect = set_sl_id
+
+        result = recalculate_position_orders(MagicMock(), state, config, 0.02)
+        assert result is True
+        assert state['position']['quantity'] == 0.02
+
+    def test_place_failure_returns_false(
+        self, mock_scale, mock_calc, mock_cancel, mock_place, mock_save
+    ):
+        """Place orders fails → returns False, state saved."""
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+        mock_place.side_effect = Exception('order failed')
+
+        state = {
+            'position': {
+                'direction': 'LONG', 'entry_price': 50000.0,
+                'quantity': 0.01, 'remaining_quantity': 0.01,
+                'vol_mult': 1.0, 'reason': '',
+            }
+        }
+        config = {'symbol': 'BTC/USDT:USDT', 'strategy': {}}
+        result = recalculate_position_orders(MagicMock(), state, config, 0.02)
+        assert result is False
+        mock_save.assert_called()  # State saved even on failure

@@ -11,6 +11,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_open import (
     get_position_size,
     _set_leverage,
     _get_actual_fill_price,
+    open_position,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
     SLIPPAGE_BUFFER_PCT,
@@ -414,3 +415,185 @@ class TestGetActualFillPrice:
             APICache(), None, None
         )
         assert price == 50300.0
+
+
+# ── open_position (orchestration) ──────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.setup_scale_out')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.calculate_tp_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position')
+class TestOpenPosition:
+    """Test open_position() full orchestration flow."""
+
+    def _make_config(self):
+        return {
+            'symbol': 'BTC/USDT:USDT',
+            'leverage': 3,
+            'exchange_leverage': 3,
+            'strategy': {'tp_pct': 2.0, 'sl_pct': 3.0},
+            'position_size_pct': 95,
+        }
+
+    def test_successful_long_open(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Full successful LONG open → state updated, orders placed."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+        mock_fill.return_value = (50050.0, 0.01)
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+
+        exchange = MagicMock()
+        exchange.create_market_order.return_value = {'id': 'ord_1'}
+        state = {'position': None}
+        cache = APICache()
+
+        result = open_position(
+            exchange, state, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', cache
+        )
+
+        assert result is True
+        assert state['position']['direction'] == 'LONG'
+        assert state['position']['entry_price'] == 50050.0
+        assert state['position']['tp_price'] == 51000.0
+        assert state['position']['sl_price'] == 49000.0
+        mock_verify.assert_called_once()
+        mock_lev.assert_called_once()
+        exchange.create_market_order.assert_called_once()
+        mock_save.assert_called()
+        mock_place.assert_called()
+
+    def test_existing_position_blocks(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Existing position on exchange → returns False."""
+        mock_verify.return_value = False
+        exchange = MagicMock()
+        state = {'position': None}
+
+        result = open_position(
+            exchange, state, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is False
+        exchange.create_market_order.assert_not_called()
+
+    def test_zero_quantity_returns_false(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Position size = 0 → returns False."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0, 0, 50000.0)
+
+        result = open_position(
+            MagicMock(), {'position': None}, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is False
+
+    def test_network_error_returns_false(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """Network error during market order → returns False."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+
+        exchange = MagicMock()
+        exchange.create_market_order.side_effect = ccxt.NetworkError('timeout')
+
+        result = open_position(
+            exchange, {'position': None}, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is False
+
+    def test_insufficient_funds_returns_false(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """InsufficientFunds → returns False."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+
+        exchange = MagicMock()
+        exchange.create_market_order.side_effect = ccxt.InsufficientFunds('low balance')
+
+        result = open_position(
+            exchange, {'position': None}, self._make_config(), 'SHORT',
+            'Pattern: BU-BU-DN (SHORT)', APICache()
+        )
+
+        assert result is False
+
+    def test_short_position_sets_correct_side(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """SHORT signal → sell side market order."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+        mock_fill.return_value = (49950.0, 0.01)
+        mock_calc.return_value = (49000.0, 51000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+
+        exchange = MagicMock()
+        exchange.create_market_order.return_value = {'id': 'ord_2'}
+        state = {'position': None}
+
+        result = open_position(
+            exchange, state, self._make_config(), 'SHORT',
+            'Pattern: BU-BU-DN (SHORT)', APICache()
+        )
+
+        assert result is True
+        assert state['position']['direction'] == 'SHORT'
+        # Verify sell side was used
+        call_kwargs = exchange.create_market_order.call_args
+        assert call_kwargs[1]['side'] == 'sell' or call_kwargs[0][1] == 'sell'
+
+    def test_sl_retry_on_missing_sl(
+        self, mock_verify, mock_lev, mock_size, mock_fill,
+        mock_calc, mock_scale, mock_save, mock_place
+    ):
+        """SL not placed after first attempt → retries up to 2 times."""
+        mock_verify.return_value = True
+        mock_size.return_value = (0.01, 1000.0, 50000.0)
+        mock_fill.return_value = (50000.0, 0.01)
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+
+        exchange = MagicMock()
+        exchange.create_market_order.return_value = {'id': 'ord_1'}
+        state = {'position': None}
+
+        # sl_order_id stays None through first 2 calls, set on 3rd
+        call_count = [0]
+        def place_with_retry(exch, st, cfg):
+            call_count[0] += 1
+            if call_count[0] >= 3:
+                st['position']['sl_order_id'] = 'sl_retry'
+        mock_place.side_effect = place_with_retry
+
+        result = open_position(
+            exchange, state, self._make_config(), 'LONG',
+            'Pattern: BD-BD-U (LONG)', APICache()
+        )
+
+        assert result is True
+        # Initial place + up to 2 retries = 3 calls
+        assert mock_place.call_count == 3

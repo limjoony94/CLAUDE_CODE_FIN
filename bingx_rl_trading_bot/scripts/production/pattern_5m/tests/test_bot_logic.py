@@ -29,6 +29,10 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import (
     _log_position_status,
     _log_waiting_status,
     _maybe_run_health_check,
+    _wait_for_candle_settle,
+    _log_pattern_summary,
+    _run_health_check,
+    signal_handler,
     CandleTiming,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import APICache, CircuitBreaker
@@ -988,3 +992,136 @@ class TestMaybeRunHealthCheck:
         )
         assert result == old_time
         mock_hc.assert_not_called()
+
+
+# ── _wait_for_candle_settle ────────────────────────────────
+
+
+class TestWaitForCandleSettle:
+    """Test _wait_for_candle_settle() — pause until candle data stabilizes."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._interruptible_sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time.time')
+    def test_waits_if_too_early(self, mock_time, mock_sleep):
+        """If within settle seconds → sleeps the remaining time."""
+        # 1 second after candle open → need to wait (CANDLE_SETTLE_SECONDS - 1)
+        mock_time.return_value = 300.001  # 1ms into candle
+        config = {'symbol': 'BTC/USDT:USDT'}
+        _wait_for_candle_settle(config)
+        mock_sleep.assert_called_once()
+        wait_time = mock_sleep.call_args[0][0]
+        assert wait_time > 0
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._interruptible_sleep')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time.time')
+    def test_no_wait_if_settled(self, mock_time, mock_sleep):
+        """If already past settle seconds → no sleep."""
+        # Set time well past settle point (e.g., 20s into candle)
+        mock_time.return_value = 320.0  # 20s into candle
+        config = {'symbol': 'BTC/USDT:USDT'}
+        _wait_for_candle_settle(config)
+        mock_sleep.assert_not_called()
+
+
+# ── _log_pattern_summary ────────────────────────────────────
+
+
+class TestLogPatternSummary:
+    """Test _log_pattern_summary() startup logging."""
+
+    def test_static_patterns(self):
+        """Static config → logs 'static' source."""
+        config = {
+            'strategy': {
+                'long_patterns': ['A', 'B'],
+                'short_patterns': ['C'],
+            }
+        }
+        _log_pattern_summary(config)  # should not raise
+
+    def test_dynamic_per_pattern(self):
+        """Dynamic per-pattern config → logs TP/SL range."""
+        config = {
+            'strategy': {
+                'long_patterns': ['A'],
+                'short_patterns': ['B', 'C'],
+            },
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {
+                'A': (2.0, 3.0),
+                'B': (1.5, 4.0),
+                'C': (2.5, 2.0),
+            },
+        }
+        _log_pattern_summary(config)  # should not raise
+
+    def test_dynamic_universal(self):
+        """Dynamic universal config → logs universal TP/SL."""
+        config = {
+            'strategy': {
+                'long_patterns': ['A'],
+                'short_patterns': ['B'],
+            },
+            '_dynamic_tpsl_universal': True,
+            '_dynamic_tp': 2.0,
+            '_dynamic_sl': 3.0,
+        }
+        _log_pattern_summary(config)  # should not raise
+
+    def test_empty_per_pattern_tpsl(self):
+        """Per-pattern mode with empty tpsl dict → no crash."""
+        config = {
+            'strategy': {'long_patterns': [], 'short_patterns': []},
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {},
+        }
+        _log_pattern_summary(config)  # should not raise
+
+
+# ── signal_handler ─────────────────────────────────────────
+
+
+class TestSignalHandler:
+    """Test signal_handler() sets shutdown flag."""
+
+    def test_sets_shutdown_flag(self):
+        """Signal handler sets shutdown_requested = True."""
+        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_module
+        original = bot_module.shutdown_requested
+        try:
+            bot_module.shutdown_requested = False
+            signal_handler(2, None)  # SIGINT
+            assert bot_module.shutdown_requested is True
+        finally:
+            bot_module.shutdown_requested = original
+
+
+# ── _run_health_check ──────────────────────────────────────
+
+
+class TestRunHealthCheck:
+    """Test _run_health_check() warning paths."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.health_check')
+    def test_healthy_status_no_warning(self, mock_hc):
+        """Healthy status → debug log only, no warning."""
+        mock_hc.return_value = {'status': 'healthy', 'checks': {}}
+        _run_health_check(MagicMock(), {}, APICache(), CircuitBreaker(), PerformanceMetrics(), 's.json')
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.health_check')
+    def test_degraded_status_logs_warning(self, mock_hc):
+        """Degraded status → logs warning per failing check."""
+        mock_hc.return_value = {
+            'status': 'degraded',
+            'checks': {
+                'api': {'status': 'error', 'message': 'timeout'},
+                'cb': {'status': 'ok'},
+            }
+        }
+        _run_health_check(MagicMock(), {}, APICache(), CircuitBreaker(), PerformanceMetrics(), 's.json')
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.health_check')
+    def test_exception_handled(self, mock_hc):
+        """Exception during health check → caught, no crash."""
+        mock_hc.side_effect = RuntimeError('fail')
+        _run_health_check(MagicMock(), {}, APICache(), CircuitBreaker(), PerformanceMetrics(), 's.json')

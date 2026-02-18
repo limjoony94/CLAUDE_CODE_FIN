@@ -1,13 +1,15 @@
-"""Tests for config.py — YAML parsing, validation, required keys, error handling."""
+"""Tests for config.py — YAML parsing, validation, required keys, dynamic patterns."""
 
 import pytest
 import os
+import json
 import yaml
 from pathlib import Path
 
 from bingx_rl_trading_bot.scripts.production.pattern_5m.config import (
     load_config,
     validate_config,
+    load_dynamic_patterns,
     _deep_copy_config,
     _merge_config,
     get_strategy_config,
@@ -366,3 +368,275 @@ class TestConfigIntegration:
         # Default values preserved
         assert 'strategy' in config
         assert 'risk' in config
+
+
+# ── load_dynamic_patterns ────────────────────────────────────
+
+
+class TestLoadDynamicPatterns:
+    """Test load_dynamic_patterns() — JSON loading, TP/SL modes, fallbacks."""
+
+    @pytest.fixture
+    def base_config(self):
+        """Config with pattern_source: dynamic."""
+        return {
+            'strategy': {
+                'pattern_source': 'dynamic',
+                'tp_pct': 1.0,
+                'sl_pct': 1.0,
+                'long_patterns': [],
+                'short_patterns': [],
+            }
+        }
+
+    @pytest.fixture
+    def universal_json(self):
+        """Valid universal TP/SL JSON data."""
+        return {
+            'tp_sl_mode': 'universal',
+            'universal_tp': 2.0,
+            'universal_sl': 3.0,
+            'patterns': {
+                'long': ['U-MU-H', 'BD-BD-BU'],
+                'short': ['DN-BU-BU', 'ST-BD-BU'],
+            },
+        }
+
+    @pytest.fixture
+    def per_pattern_json(self):
+        """Valid per_pattern TP/SL JSON data."""
+        return {
+            'tp_sl_mode': 'per_pattern',
+            'patterns': {
+                'long': ['U-MU-H'],
+                'short': ['DN-BU-BU', 'ST-BD-BU'],
+            },
+            'patterns_tpsl': {
+                'U-MU-H': [1.8, 3.5],
+                'DN-BU-BU': [2.0, 4.0],
+                'ST-BD-BU': [2.1, 4.0],
+            },
+        }
+
+    def _write_json(self, path, data):
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(data, f)
+
+    # ── Static mode (no-op) ──
+
+    def test_static_mode_returns_unchanged(self):
+        """pattern_source != 'dynamic' → returns config unchanged."""
+        config = {'strategy': {'pattern_source': 'static'}}
+        result = load_dynamic_patterns(config)
+        assert result is config
+
+    def test_missing_pattern_source_returns_unchanged(self):
+        """No pattern_source → defaults to 'static', returns unchanged."""
+        config = {'strategy': {}}
+        result = load_dynamic_patterns(config)
+        assert result is config
+
+    # ── File not found / corrupt ──
+
+    def test_file_not_found_fallback(self, base_config, monkeypatch):
+        """Missing JSON file → fallback to static (returns config without patterns)."""
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE',
+            '/nonexistent/path.json',
+        )
+        result = load_dynamic_patterns(base_config)
+        # Should return config without injecting patterns
+        assert '_dynamic_tpsl_universal' not in result
+        assert '_dynamic_tpsl_per_pattern' not in result
+
+    def test_invalid_json_fallback(self, base_config, tmp_path, monkeypatch):
+        """Corrupt JSON → fallback to static."""
+        bad_file = str(tmp_path / 'bad.json')
+        with open(bad_file, 'w') as f:
+            f.write('{invalid json}')
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE',
+            bad_file,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_tpsl_universal' not in result
+
+    # ── Missing required fields ──
+
+    def test_missing_patterns_key_fallback(self, base_config, tmp_path, monkeypatch):
+        """JSON without 'patterns' key → fallback."""
+        f = str(tmp_path / 'no_patterns.json')
+        self._write_json(f, {'tp_sl_mode': 'universal'})
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_tpsl_universal' not in result
+
+    def test_missing_long_short_fallback(self, base_config, tmp_path, monkeypatch):
+        """patterns without long/short → fallback."""
+        f = str(tmp_path / 'no_ls.json')
+        self._write_json(f, {'tp_sl_mode': 'universal', 'patterns': {'long': ['A']}})
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_tpsl_universal' not in result
+
+    # ── Universal mode ──
+
+    def test_universal_mode_valid(self, base_config, tmp_path, monkeypatch, universal_json):
+        """Valid universal JSON → injects patterns + universal TP/SL."""
+        f = str(tmp_path / 'uni.json')
+        self._write_json(f, universal_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert result['_dynamic_tpsl_universal'] is True
+        assert result['_dynamic_tp'] == 2.0
+        assert result['_dynamic_sl'] == 3.0
+        assert result['strategy']['long_patterns'] == ['U-MU-H', 'BD-BD-BU']
+        assert result['strategy']['short_patterns'] == ['DN-BU-BU', 'ST-BD-BU']
+
+    def test_universal_mode_invalid_tp(self, base_config, tmp_path, monkeypatch):
+        """Universal mode with TP <= 0 → fallback."""
+        f = str(tmp_path / 'bad_tp.json')
+        self._write_json(f, {
+            'tp_sl_mode': 'universal',
+            'universal_tp': 0,
+            'universal_sl': 3.0,
+            'patterns': {'long': ['A'], 'short': ['B']},
+        })
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_tpsl_universal' not in result
+
+    # ── Per-pattern mode ──
+
+    def test_per_pattern_mode_valid(self, base_config, tmp_path, monkeypatch, per_pattern_json):
+        """Valid per_pattern JSON → injects patterns + per-pattern TP/SL."""
+        f = str(tmp_path / 'pp.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert result['_dynamic_tpsl_per_pattern'] is True
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'] == [1.8, 3.5]
+        assert result['strategy']['long_patterns'] == ['U-MU-H']
+        assert len(result['strategy']['short_patterns']) == 2
+
+    def test_per_pattern_empty_tpsl_fallback(self, base_config, tmp_path, monkeypatch):
+        """Per-pattern mode with empty patterns_tpsl → fallback."""
+        f = str(tmp_path / 'empty_tpsl.json')
+        self._write_json(f, {
+            'tp_sl_mode': 'per_pattern',
+            'patterns': {'long': ['A'], 'short': ['B']},
+            'patterns_tpsl': {},
+        })
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_tpsl_per_pattern' not in result
+
+    # ── tp_sl_mode auto-inference ──
+
+    def test_auto_infer_per_pattern(self, base_config, tmp_path, monkeypatch):
+        """Missing tp_sl_mode with patterns_tpsl → auto-infer 'per_pattern'."""
+        f = str(tmp_path / 'auto_pp.json')
+        self._write_json(f, {
+            'patterns': {'long': ['A'], 'short': ['B']},
+            'patterns_tpsl': {'A': [1.0, 2.0], 'B': [1.5, 2.5]},
+        })
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert result['_dynamic_tpsl_per_pattern'] is True
+
+    def test_auto_infer_universal(self, base_config, tmp_path, monkeypatch):
+        """Missing tp_sl_mode with universal_tp/sl → auto-infer 'universal'."""
+        f = str(tmp_path / 'auto_uni.json')
+        self._write_json(f, {
+            'patterns': {'long': ['A'], 'short': ['B']},
+            'universal_tp': 2.0,
+            'universal_sl': 3.0,
+        })
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert result['_dynamic_tpsl_universal'] is True
+
+    def test_unsupported_tp_sl_mode_fallback(self, base_config, tmp_path, monkeypatch):
+        """Unsupported tp_sl_mode → fallback."""
+        f = str(tmp_path / 'bad_mode.json')
+        self._write_json(f, {
+            'tp_sl_mode': 'random_mode',
+            'patterns': {'long': ['A'], 'short': ['B']},
+        })
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_tpsl_universal' not in result
+        assert '_dynamic_tpsl_per_pattern' not in result
+
+    # ── Pattern details / confidence stats ──
+
+    def test_pattern_details_injected(self, base_config, tmp_path, monkeypatch):
+        """pattern_details → _dynamic_pattern_stats dict injected."""
+        f = str(tmp_path / 'details.json')
+        self._write_json(f, {
+            'tp_sl_mode': 'universal',
+            'universal_tp': 2.0,
+            'universal_sl': 3.0,
+            'patterns': {'long': ['A-B-C'], 'short': ['D-E-F']},
+            'pattern_details': {
+                'A-B-C_LONG': {
+                    'pattern': 'A-B-C', 'direction': 'LONG',
+                    'wr': 85.0, 'trades': 30, 'edge': 22.5,
+                },
+                'D-E-F_SHORT': {
+                    'pattern': 'D-E-F', 'direction': 'SHORT',
+                    'wr': 90.0, 'trades': 25, 'edge': 28.0,
+                },
+            },
+        })
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        stats = result['_dynamic_pattern_stats']
+        assert len(stats) == 2
+        assert stats[('A-B-C', 'LONG')]['wr'] == 85.0
+        assert stats[('D-E-F', 'SHORT')]['trades'] == 25
+
+    def test_no_pattern_details_no_stats(self, base_config, tmp_path, monkeypatch, universal_json):
+        """No pattern_details → _dynamic_pattern_stats not injected."""
+        f = str(tmp_path / 'no_details.json')
+        self._write_json(f, universal_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert '_dynamic_pattern_stats' not in result
+
+    # ── Staleness check ──
+
+    def test_stale_json_no_error(self, base_config, tmp_path, monkeypatch, universal_json):
+        """Old generated_at should warn but still load successfully."""
+        universal_json['generated_at'] = '2025-01-01T00:00:00'
+        f = str(tmp_path / 'stale.json')
+        self._write_json(f, universal_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        # Should still load patterns despite staleness warning
+        assert result['_dynamic_tpsl_universal'] is True
+        assert len(result['strategy']['long_patterns']) == 2

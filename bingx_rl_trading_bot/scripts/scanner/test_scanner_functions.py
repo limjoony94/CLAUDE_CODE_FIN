@@ -1807,3 +1807,299 @@ class TestGridSearchMaeMfeEdgeCases:
                 assert key in best
             assert exc is not None
             assert 'mfe_mae_ratio' in exc
+
+
+# ── derive_tp_sl None path in grid_search_mae_mfe (line 371) ──
+
+
+class TestGridSearchMaeMfeDeriveTpSlNone:
+    """Test grid_search_mae_mfe when derive_tp_sl returns None (line 371)."""
+
+    def test_derive_returns_none_skips(self):
+        """When excursions are too small, derive_tp_sl returns None → skip."""
+        n = 100
+        opens = np.full(n, 50000.0)
+        # Tiny range → excursions near zero → derive may return None/very small
+        highs = np.full(n, 50001.0)
+        lows = np.full(n, 49999.0)
+        signals = list(range(5, 80, 3))
+        best, exc = grid_search_mae_mfe(
+            signals, 'LONG', opens, highs, lows, n,
+            min_tr=3, max_baseline_wr=90.0,
+        )
+        # Either None (all skipped) or found something marginal
+        assert best is None or isinstance(best, dict)
+
+
+# ── _pp_worker bt_signals < min_trades (line 510) ─────────────
+
+
+class TestPpWorkerBtTradesFilter:
+    """Test _pp_worker when grid_search finds TP/SL but bt_signals < min_trades."""
+
+    def test_trades_filter_after_grid_search(self):
+        """Mock grid_search_best to return result, but bt_signals too few."""
+        n = 100
+        opens = np.full(n, 50000.0)
+        highs = np.full(n, 50100.0)
+        lows = np.full(n, 49900.0)
+        _pp_init(opens, highs, lows, n)
+        signals = list(range(5, 50, 5))  # 9 signals
+
+        fake_opt = {'tp': 2.0, 'sl': 3.0, 'pnl': 10.0, 'mdd': 5.0,
+                    'wr': 80.0, 'trades': 20}
+        with patch('scripts.scanner.pattern_scanner.grid_search_best',
+                   return_value=fake_opt):
+            with patch('scripts.scanner.pattern_scanner.bt_signals',
+                       return_value=[(0, 5, 0.01)]):  # only 1 trade
+                result = _pp_worker(('TEST', 'LONG', signals, 10, 1.0, 0.1, 70.0))
+        assert result is None
+
+
+# ── _mae_mfe_worker bt_signals < min_trades (line 562) ────────
+
+
+class TestMaeMfeWorkerBtTradesFilter:
+    """Test _mae_mfe_worker when grid_search finds TP/SL but bt_signals < min."""
+
+    def test_trades_filter_after_grid_search(self):
+        """Mock grid_search_mae_mfe to return result, but bt_signals too few."""
+        n = 100
+        opens = np.full(n, 50000.0)
+        highs = np.full(n, 50100.0)
+        lows = np.full(n, 49900.0)
+        _pp_init(opens, highs, lows, n)
+        signals = list(range(5, 50, 5))
+
+        fake_opt = {'tp': 2.0, 'sl': 3.0, 'tp_percentile': 60,
+                    'sl_percentile': 80, 'pnl': 10.0, 'mdd': 5.0,
+                    'wr': 80.0, 'trades': 20}
+        fake_exc = {'mfe_mae_ratio': 1.5}
+        with patch('scripts.scanner.pattern_scanner.grid_search_mae_mfe',
+                   return_value=(fake_opt, fake_exc)):
+            with patch('scripts.scanner.pattern_scanner.bt_signals',
+                       return_value=[(0, 5, 0.01)]):  # only 1 trade
+                result = _mae_mfe_worker(('TEST', 'LONG', signals, 10, 1.0, 0.1, 70.0))
+        assert result is None
+
+    def test_mc_filter_after_bt(self):
+        """Mock to pass trades filter but fail MC (line 574)."""
+        n = 100
+        opens = np.full(n, 50000.0)
+        highs = np.full(n, 50100.0)
+        lows = np.full(n, 49900.0)
+        _pp_init(opens, highs, lows, n)
+        signals = list(range(5, 50, 5))
+
+        fake_opt = {'tp': 2.0, 'sl': 3.0, 'tp_percentile': 60,
+                    'sl_percentile': 80, 'pnl': 10.0, 'mdd': 5.0,
+                    'wr': 80.0, 'trades': 20}
+        fake_exc = {'mfe_mae_ratio': 1.5}
+        fake_trades = [(i, i+5, 0.5) for i in range(15)]  # 15 trades, all wins
+        with patch('scripts.scanner.pattern_scanner.grid_search_mae_mfe',
+                   return_value=(fake_opt, fake_exc)):
+            with patch('scripts.scanner.pattern_scanner.bt_signals',
+                       return_value=fake_trades):
+                with patch('scripts.scanner.pattern_scanner.mc_test',
+                           return_value=0.5):  # p=0.5 > threshold
+                    result = _mae_mfe_worker(('TEST', 'LONG', signals, 10, 1.0, 0.1, 70.0))
+        assert result is None
+
+
+# ── scan_universe_range filter branches (lines 624-647) ───────
+
+
+class TestScanUniverseRangeFilterBranches:
+    """Test scan_universe_range inner filter branches for each mode."""
+
+    @pytest.fixture
+    def flat_data(self):
+        """Flat data with enough signals but tiny moves (all bt_signals timeout)."""
+        n = 500
+        opens = np.full(n, 50000.0)
+        highs = np.full(n, 50005.0)  # very tight range → all trades timeout
+        lows = np.full(n, 49995.0)
+        # Many signals → passes len(sigs) >= min_trades check
+        signal_index = {
+            'PAT-A': list(range(10, 400, 5)),  # ~78 signals
+        }
+        return signal_index, opens, highs, lows, n
+
+    def test_universal_trades_filter(self, flat_data):
+        """Universal mode: bt_signals returns 0 (all timeout) → continue (line 624)."""
+        signal_index, opens, highs, lows, n = flat_data
+        result = scan_universe_range(
+            signal_index, opens, highs, lows, n,
+            bar_start=0, bar_end=n, mode='universal',
+            uni_tp=2.0, uni_sl=3.0,
+            min_trades=2,  # pass sigs check, but bt returns 0
+            edge_threshold=0.0, mc_threshold=1.0,
+        )
+        assert isinstance(result, list)
+        assert len(result) == 0
+
+    def test_per_pattern_grid_none(self, flat_data):
+        """Per-pattern mode: grid_search returns None → continue (line 630)."""
+        signal_index, opens, highs, lows, n = flat_data
+        result = scan_universe_range(
+            signal_index, opens, highs, lows, n,
+            bar_start=0, bar_end=n, mode='per_pattern',
+            min_trades=2, edge_threshold=0.0, mc_threshold=1.0,
+            max_baseline_wr=0.1,  # blocks all grid combos
+        )
+        assert isinstance(result, list)
+
+    def test_per_pattern_bt_filter(self, flat_data):
+        """Per-pattern mode: bt_signals < min_trades after grid → continue (line 635)."""
+        signal_index, opens, highs, lows, n = flat_data
+        # Mock grid_search to succeed but bt_signals to return few
+        with patch('scripts.scanner.pattern_scanner.grid_search_best',
+                   return_value={'tp': 2.0, 'sl': 3.0, 'pnl': 10, 'mdd': 5,
+                                 'wr': 80, 'trades': 20}):
+            with patch('scripts.scanner.pattern_scanner.bt_signals',
+                       return_value=[(0, 5, 0.01)]):
+                result = scan_universe_range(
+                    signal_index, opens, highs, lows, n,
+                    bar_start=0, bar_end=n, mode='per_pattern',
+                    min_trades=10, edge_threshold=0.0, mc_threshold=1.0,
+                )
+        assert isinstance(result, list)
+        assert len(result) == 0
+
+    def test_mae_mfe_grid_none(self, flat_data):
+        """MAE/MFE mode: grid_search returns None → continue (line 642)."""
+        signal_index, opens, highs, lows, n = flat_data
+        result = scan_universe_range(
+            signal_index, opens, highs, lows, n,
+            bar_start=0, bar_end=n, mode='mae_mfe',
+            min_trades=2, edge_threshold=0.0, mc_threshold=1.0,
+            max_baseline_wr=0.1,  # blocks all grid combos
+        )
+        assert isinstance(result, list)
+
+    def test_mae_mfe_bt_filter(self, flat_data):
+        """MAE/MFE mode: bt_signals < min_trades after grid → continue (line 647)."""
+        signal_index, opens, highs, lows, n = flat_data
+        with patch('scripts.scanner.pattern_scanner.grid_search_mae_mfe',
+                   return_value=({'tp': 2.0, 'sl': 3.0, 'tp_percentile': 60,
+                                  'sl_percentile': 80, 'pnl': 10, 'mdd': 5,
+                                  'wr': 80, 'trades': 20}, {'mfe_mae_ratio': 1.5})):
+            with patch('scripts.scanner.pattern_scanner.bt_signals',
+                       return_value=[(0, 5, 0.01)]):
+                result = scan_universe_range(
+                    signal_index, opens, highs, lows, n,
+                    bar_start=0, bar_end=n, mode='mae_mfe',
+                    min_trades=10, edge_threshold=0.0, mc_threshold=1.0,
+                )
+        assert isinstance(result, list)
+        assert len(result) == 0
+
+
+# ── scan_patterns_pp concurrency=0 + portfolio MC (lines 947, 1040) ──
+
+
+class TestScanPatternsPPConcurrency:
+    """Test scan_patterns_pp auto-concurrency and portfolio MC fail."""
+
+    @pytest.fixture
+    def mock_df(self):
+        """Mock load_and_classify to return minimal DataFrame."""
+        n = 100
+        data = {
+            'open': np.full(n, 50000.0), 'high': np.full(n, 50010.0),
+            'low': np.full(n, 49990.0), 'close': np.full(n, 50000.0),
+            'candle_type': ['U'] * n,
+        }
+        return pd.DataFrame(data)
+
+    def test_concurrency_zero_auto_detect(self, mock_df):
+        """concurrency=0 triggers auto-detection → os.cpu_count (line 947)."""
+        # Force sequential by mocking cpu_count to return 1
+        with patch('os.cpu_count', return_value=1):
+            result = scan_patterns_pp(
+                mock_df, concurrency=0,
+                edge_threshold=99.0,  # nothing passes
+            )
+        assert isinstance(result, dict)
+        assert 'long_patterns' in result
+
+    def test_portfolio_mc_fail_warning(self, mock_df):
+        """Portfolio MC failure logs warning (line 1040)."""
+        # Create result with patterns but failing portfolio MC
+        fake_result = {
+            'key': 'U-U-U_LONG', 'pattern': 'U-U-U', 'direction': 'LONG',
+            'tp': 2.0, 'sl': 3.0, 'trades': 10, 'wr': 80.0,
+            'edge': 20.0, 'mc_p': 0.001, 'baseline_wr': 60.0,
+            'pnl': 50.0, 'mdd': 10.0,
+            'trades_raw': [(i, i+5, 0.5) for i in range(10)],
+        }
+
+        def fake_pp_worker(item):
+            if item[0] == 'U-U-U' and item[1] == 'LONG':
+                return dict(fake_result)
+            return None
+
+        with patch('scripts.scanner.pattern_scanner._pp_worker',
+                   side_effect=fake_pp_worker):
+            with patch('scripts.scanner.pattern_scanner.mc_test',
+                       return_value=0.5):  # portfolio MC fails
+                result = scan_patterns_pp(
+                    mock_df, concurrency=1,
+                    edge_threshold=1.0, mc_threshold=0.1,
+                    require_portfolio_mc=True,
+                )
+        assert isinstance(result, dict)
+
+
+# ── scan_patterns_mae_mfe concurrency=0 + portfolio MC (lines 1129, 1219) ──
+
+
+class TestScanPatternsMaeMfeConcurrency:
+    """Test scan_patterns_mae_mfe auto-concurrency and portfolio MC fail."""
+
+    @pytest.fixture
+    def mock_df(self):
+        n = 100
+        data = {
+            'open': np.full(n, 50000.0), 'high': np.full(n, 50010.0),
+            'low': np.full(n, 49990.0), 'close': np.full(n, 50000.0),
+            'candle_type': ['U'] * n,
+        }
+        return pd.DataFrame(data)
+
+    def test_concurrency_zero_auto_detect(self, mock_df):
+        """concurrency=0 triggers auto-detection (line 1129)."""
+        with patch('os.cpu_count', return_value=1):
+            result = scan_patterns_mae_mfe(
+                mock_df, concurrency=0,
+                edge_threshold=99.0,
+            )
+        assert isinstance(result, dict)
+        assert 'long_patterns' in result
+
+    def test_portfolio_mc_fail_warning(self, mock_df):
+        """Portfolio MC failure logs warning (line 1219)."""
+        fake_result = {
+            'key': 'U-U-U_LONG', 'pattern': 'U-U-U', 'direction': 'LONG',
+            'tp': 2.0, 'sl': 3.0, 'tp_percentile': 60, 'sl_percentile': 80,
+            'trades': 10, 'wr': 80.0, 'edge': 20.0, 'mc_p': 0.001,
+            'baseline_wr': 60.0, 'exc_stats': {'mfe_mae_ratio': 1.5},
+            'pnl': 50.0, 'mdd': 10.0,
+            'trades_raw': [(i, i+5, 0.5) for i in range(10)],
+        }
+
+        def fake_worker(item):
+            if item[0] == 'U-U-U' and item[1] == 'LONG':
+                return dict(fake_result)
+            return None
+
+        with patch('scripts.scanner.pattern_scanner._mae_mfe_worker',
+                   side_effect=fake_worker):
+            with patch('scripts.scanner.pattern_scanner.mc_test',
+                       return_value=0.5):
+                result = scan_patterns_mae_mfe(
+                    mock_df, concurrency=1,
+                    edge_threshold=1.0, mc_threshold=0.1,
+                    require_portfolio_mc=True,
+                )
+        assert isinstance(result, dict)

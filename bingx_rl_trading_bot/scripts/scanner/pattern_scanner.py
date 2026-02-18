@@ -9,6 +9,8 @@ Discovery methods:
 - universal: Fixed TP/SL for all patterns (v1.28.0 original)
 - per_pattern: Grid search optimal TP/SL per pattern (v1.28.6, default)
   PP discovery: +487% avg OOS vs Universal +18% (fair_discovery_comparison.py)
+- mae_mfe: Derive TP/SL from MAE/MFE percentiles per pattern (v1.28.39)
+  MAE/MFE discovery: WF OOS 2.4x vs grid search (mae_mfe_discovery.py)
 
 v2.1 Enhancements:
 - Multiple testing correction (BH FDR / Bonferroni)
@@ -69,6 +71,10 @@ TP_GRID = [0.5, 0.7, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.1, 2.5, 3.0]
 SL_GRID = [0.5, 0.7, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
 MAX_BASELINE_WR = 70.0  # Skip combos where distance effect dominates (R:R >= 0.43)
 MC_SEEDS = [42, 123, 7777]  # Multi-seed for robustness
+
+# MAE/MFE percentile grids (v1.28.39: MAE/MFE discovery method)
+TP_PERCENTILES = [40, 50, 60, 70, 80]
+SL_PERCENTILES = [70, 75, 80, 85, 90, 95]
 
 DEFAULT_DATA_FILE = os.path.join(_PROJECT_ROOT, 'data', 'btc_5m_270days_reclassified.csv')
 DEFAULT_OUTPUT_FILE = os.path.join(_PROJECT_ROOT, 'results', 'dynamic_patterns.json')
@@ -281,6 +287,141 @@ def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars,
     return best
 
 
+def compute_excursions(signal_bars, direction, opens, highs, lows, n_bars,
+                       max_bars=MAX_BARS):
+    """Compute MFE and MAE for each trade (without TP/SL, natural path).
+
+    Returns list of dicts with mfe_pct, mae_pct, bars_to_mfe, final_pnl_pct.
+    """
+    excursions = []
+    for idx in signal_bars:
+        if idx + 1 >= n_bars:
+            continue
+        entry = opens[idx + 1]
+        if entry <= 0:
+            continue
+
+        mfe = 0.0
+        mae = 0.0
+        bars_to_mfe = 0
+
+        end_bar = min(idx + 2 + max_bars, n_bars)
+        for j in range(idx + 2, end_bar):
+            if direction == 'LONG':
+                favorable = highs[j] - entry
+                adverse = entry - lows[j]
+            else:
+                favorable = entry - lows[j]
+                adverse = highs[j] - entry
+
+            if favorable > mfe:
+                mfe = favorable
+                bars_to_mfe = j - (idx + 1)
+            if adverse > mae:
+                mae = adverse
+
+        mfe_pct = mfe / entry * 100
+        mae_pct = mae / entry * 100
+
+        last_bar = min(idx + 1 + max_bars, n_bars - 1)
+        if direction == 'LONG':
+            final_pnl = (opens[last_bar] - entry) / entry * 100
+        else:
+            final_pnl = (entry - opens[last_bar]) / entry * 100
+
+        excursions.append({
+            'signal_bar': idx,
+            'entry': entry,
+            'mfe_pct': round(mfe_pct, 4),
+            'mae_pct': round(mae_pct, 4),
+            'bars_to_mfe': bars_to_mfe,
+            'final_pnl_pct': round(final_pnl, 4),
+        })
+
+    return excursions
+
+
+def derive_tp_sl(excursions, tp_percentile, sl_percentile):
+    """Derive TP/SL from MFE/MAE percentiles."""
+    if not excursions:
+        return None, None
+    mfes = [e['mfe_pct'] for e in excursions]
+    maes = [e['mae_pct'] for e in excursions]
+    tp = round(float(np.percentile(mfes, tp_percentile)), 2)
+    sl = round(float(np.percentile(maes, sl_percentile)), 2)
+    return tp, sl
+
+
+def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
+                         max_bars=MAX_BARS, min_tr=20,
+                         max_baseline_wr=MAX_BASELINE_WR):
+    """Grid search over MFE/MAE percentiles to find best TP/SL by PnL/MDD."""
+    excursions = compute_excursions(signal_bars, direction, opens, highs, lows,
+                                    n_bars, max_bars)
+    if len(excursions) < min_tr:
+        return None, None
+
+    best = None
+    best_score = -9999
+
+    for tp_p in TP_PERCENTILES:
+        for sl_p in SL_PERCENTILES:
+            tp, sl = derive_tp_sl(excursions, tp_p, sl_p)
+            if tp is None or sl is None:
+                continue
+            if tp < 0.1 or sl < 0.3:
+                continue
+
+            bwr = sl / (tp + sl) * 100
+            if bwr > max_baseline_wr:
+                continue
+
+            trades = bt_signals(signal_bars, direction, tp, sl,
+                                opens, highs, lows, n_bars)
+            if len(trades) < min_tr:
+                continue
+
+            pnls = [t[2] for t in trades]
+            cum = 0; peak = 0; mdd_val = 0; w = 0
+            for p in pnls:
+                cum += p
+                if cum > peak: peak = cum
+                dd = peak - cum
+                if dd > mdd_val: mdd_val = dd
+                if p > 0: w += 1
+
+            wr = w / len(pnls) * 100
+            score = (cum / mdd_val) if mdd_val > 0 else cum
+
+            if score > best_score:
+                best_score = score
+                best = {
+                    'tp': tp, 'sl': sl,
+                    'tp_percentile': tp_p, 'sl_percentile': sl_p,
+                    'trades': len(trades), 'wr': round(wr, 1),
+                    'pnl': round(cum, 1), 'mdd': round(mdd_val, 1),
+                }
+
+    # Excursion stats for profiling
+    mfes = np.array([e['mfe_pct'] for e in excursions])
+    maes = np.array([e['mae_pct'] for e in excursions])
+    bars_mfe = np.array([e['bars_to_mfe'] for e in excursions])
+
+    exc_stats = {
+        'n_signals': len(excursions),
+        'mfe_median': round(float(np.median(mfes)), 3),
+        'mfe_mean': round(float(np.mean(mfes)), 3),
+        'mae_median': round(float(np.median(maes)), 3),
+        'mae_mean': round(float(np.mean(maes)), 3),
+        'mae_p90': round(float(np.percentile(maes, 90)), 3),
+        'bars_to_mfe_median': round(float(np.median(bars_mfe)), 1),
+        'mfe_mae_ratio': round(float(np.median(mfes) / np.median(maes))
+                               if np.median(maes) > 0 else 0, 3),
+    }
+
+    return best, exc_stats
+
+
 def portfolio_1pos(all_trades):
     """1-position-at-a-time filter: sort by entry, skip overlapping."""
     if not all_trades:
@@ -392,6 +533,61 @@ def _pp_worker(args_tuple):
     }
 
 
+def _mae_mfe_worker(args_tuple):
+    """Worker for parallel MAE/MFE grid search.
+
+    Returns result dict or None if pattern doesn't pass filters.
+    """
+    (pat_name, direction, sigs_list,
+     min_trades, edge_threshold, mc_threshold, max_baseline_wr) = args_tuple
+
+    opens = _shared_data['opens']
+    highs = _shared_data['highs']
+    lows = _shared_data['lows']
+    n_bars = _shared_data['n_bars']
+
+    if len(sigs_list) < min_trades:
+        return None
+
+    opt, exc_stats = grid_search_mae_mfe(
+        sigs_list, direction, opens, highs, lows, n_bars,
+        max_bars=MAX_BARS, min_tr=min_trades,
+        max_baseline_wr=max_baseline_wr)
+    if opt is None:
+        return None
+
+    tp, sl = opt['tp'], opt['sl']
+    trades = bt_signals(sigs_list, direction, tp, sl, opens, highs, lows, n_bars)
+    if len(trades) < min_trades:
+        return None
+
+    pnls = [t[2] for t in trades]
+    wr = len([p for p in pnls if p > 0]) / len(pnls) * 100
+    baseline_wr = sl / (tp + sl) * 100
+    edge = wr - baseline_wr
+
+    if edge < edge_threshold:
+        return None
+
+    p = mc_test(pnls)
+    if p >= mc_threshold:
+        return None
+
+    key = f"{pat_name}_{direction}"
+    return {
+        'key': key,
+        'pattern': pat_name, 'direction': direction,
+        'tp': tp, 'sl': sl,
+        'tp_percentile': opt['tp_percentile'],
+        'sl_percentile': opt['sl_percentile'],
+        'trades': len(trades), 'wr': round(wr, 1),
+        'edge': round(edge, 1), 'mc_p': round(p, 4),
+        'baseline_wr': round(baseline_wr, 1),
+        'exc_stats': exc_stats,
+        'trades_raw': trades,
+    }
+
+
 # ============================================================
 # Range-Based Scanning (for Walk-Forward)
 # ============================================================
@@ -430,6 +626,18 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                 opt = grid_search_best(sigs, direction, opens, highs, lows,
                                        trade_boundary, min_tr=min_trades,
                                        max_baseline_wr=max_baseline_wr)
+                if opt is None:
+                    continue
+                tp, sl = opt['tp'], opt['sl']
+                trades = bt_signals(sigs, direction, tp, sl,
+                                    opens, highs, lows, trade_boundary)
+                if len(trades) < min_trades:
+                    continue
+            elif mode == 'mae_mfe':
+                opt, _ = grid_search_mae_mfe(
+                    sigs, direction, opens, highs, lows,
+                    trade_boundary, max_bars=MAX_BARS,
+                    min_tr=min_trades, max_baseline_wr=max_baseline_wr)
                 if opt is None:
                     continue
                 tp, sl = opt['tp'], opt['sl']
@@ -872,6 +1080,185 @@ def scan_patterns_pp(
     }
 
 
+def scan_patterns_mae_mfe(
+    df: pd.DataFrame,
+    edge_threshold: float = DEFAULT_EDGE_THRESHOLD,
+    mc_threshold: float = DEFAULT_MC_THRESHOLD,
+    min_trades: int = DEFAULT_MIN_TRADES,
+    signal_index: dict = None,
+    concurrency: int = 0,
+    max_baseline_wr: float = MAX_BASELINE_WR,
+    correction_method: str = 'none',
+    fdr_q: float = 0.05,
+    require_portfolio_mc: bool = False,
+) -> dict:
+    """MAE/MFE Discovery: derive TP/SL from excursion percentiles per pattern.
+
+    Uses MFE percentile -> TP, MAE percentile -> SL instead of fixed grid search.
+    Output format identical to scan_patterns_pp() for bot compatibility.
+    """
+    types = df['candle_type'].tolist()
+    n = len(types)
+    opens = df['open'].values
+    highs = df['high'].values
+    lows = df['low'].values
+
+    if signal_index is None:
+        signal_index = build_signal_index(types, n)
+    logger.info(f"Built signal index: {len(signal_index)} unique patterns found")
+
+    # Build work items (same structure as PP)
+    work_items = []
+    for pat_name in signal_index:
+        for direction in ['LONG', 'SHORT']:
+            sigs = signal_index[pat_name]
+            work_items.append(
+                (pat_name, direction, sigs, min_trades,
+                 edge_threshold, mc_threshold, max_baseline_wr)
+            )
+
+    n_tested = sum(1 for item in work_items if len(item[2]) >= min_trades)
+    logger.info(f"Pattern-direction combos to test: {n_tested} "
+                f"(of {len(work_items)} total)")
+
+    selected = {}
+    pattern_details = []
+
+    # Determine concurrency
+    if concurrency == 0:
+        n_workers = min(os.cpu_count() or 1, 8)
+    else:
+        n_workers = concurrency
+
+    if n_workers > 1:
+        logger.info(f"Parallel MAE/MFE search: {n_workers} workers")
+        with ProcessPoolExecutor(
+            max_workers=n_workers,
+            initializer=_pp_init,
+            initargs=(opens, highs, lows, n),
+        ) as executor:
+            futures = {executor.submit(_mae_mfe_worker, item): item
+                       for item in work_items}
+            iterator = as_completed(futures)
+            if _tqdm_cls:
+                iterator = _tqdm_cls(iterator, total=len(futures),
+                                     desc="MAE/MFE Search")
+            for future in iterator:
+                result = future.result()
+                if result is not None:
+                    key = result['key']
+                    trades_raw = result.pop('trades_raw')
+                    selected[key] = result
+                    pattern_details.append({
+                        'key': key, 'trades_raw': trades_raw,
+                    })
+    else:
+        logger.info("Sequential MAE/MFE search")
+        _shared_data['opens'] = opens
+        _shared_data['highs'] = highs
+        _shared_data['lows'] = lows
+        _shared_data['n_bars'] = n
+
+        iterator = work_items
+        if _tqdm_cls:
+            iterator = _tqdm_cls(iterator, desc="MAE/MFE Search")
+        for item in iterator:
+            result = _mae_mfe_worker(item)
+            if result is not None:
+                key = result['key']
+                trades_raw = result.pop('trades_raw')
+                selected[key] = result
+                pattern_details.append({
+                    'key': key, 'trades_raw': trades_raw,
+                })
+
+    logger.info(f"Patterns passing filters: {len(selected)} "
+                f"(tested: {n_tested})")
+
+    # Apply multiple testing correction
+    selected, correction_meta = apply_multiple_testing_correction(
+        selected, n_tested, method=correction_method, fdr_q=fdr_q
+    )
+
+    # Rebuild pattern_details after correction
+    surviving_keys = set(selected.keys())
+    pattern_details = [pd_item for pd_item in pattern_details
+                       if pd_item['key'] in surviving_keys]
+
+    # Deduplicate dual-direction patterns: keep direction with better edge
+    pat_by_name = {}
+    for k, v in selected.items():
+        pn = v['pattern']
+        if pn not in pat_by_name or v['edge'] > pat_by_name[pn]['edge']:
+            pat_by_name[pn] = v
+        else:
+            logger.info(f"Dedup: {pn} keeping {pat_by_name[pn]['direction']} "
+                        f"(edge {pat_by_name[pn]['edge']}pp) over "
+                        f"{v['direction']} (edge {v['edge']}pp)")
+    deduped = {f"{v['pattern']}_{v['direction']}": v
+               for v in pat_by_name.values()}
+    n_removed = len(selected) - len(deduped)
+    if n_removed:
+        logger.info(f"Removed {n_removed} dual-direction duplicates")
+        selected = deduped
+        surviving_keys = set(selected.keys())
+        pattern_details = [pd_item for pd_item in pattern_details
+                           if pd_item['key'] in surviving_keys]
+
+    # Portfolio 1-pos filter + stats
+    all_trades = []
+    for pd_item in pattern_details:
+        all_trades.extend(pd_item['trades_raw'])
+    portfolio_trades = portfolio_1pos(all_trades)
+    portfolio_stats = calc_stats(portfolio_trades)
+    portfolio_mc = (mc_test([t[2] for t in portfolio_trades])
+                    if portfolio_trades else 1.0)
+
+    portfolio_mc_pass = portfolio_mc < mc_threshold
+    if require_portfolio_mc and not portfolio_mc_pass:
+        logger.warning(f"Portfolio MC FAILED: p={portfolio_mc:.4f} "
+                       f">= {mc_threshold}")
+
+    # Organize by direction
+    long_patterns = sorted([v['pattern'] for v in selected.values()
+                            if v['direction'] == 'LONG'])
+    short_patterns = sorted([v['pattern'] for v in selected.values()
+                             if v['direction'] == 'SHORT'])
+
+    # Build patterns_tpsl dict (same format as PP for bot compatibility)
+    patterns_tpsl = {}
+    for v in selected.values():
+        patterns_tpsl[v['pattern']] = [v['tp'], v['sl']]
+
+    # TP/SL distribution
+    tps = [v['tp'] for v in selected.values()]
+    sls = [v['sl'] for v in selected.values()]
+
+    logger.info(f"Selected: {len(long_patterns)}L + {len(short_patterns)}S "
+                f"= {len(selected)} patterns")
+    logger.info(f"Portfolio: {portfolio_stats['trades']} trades, "
+                f"WR {portfolio_stats['wr']}%, PnL {portfolio_stats['pnl']}%")
+
+    return {
+        'long_patterns': long_patterns,
+        'short_patterns': short_patterns,
+        'patterns_tpsl': patterns_tpsl,
+        'portfolio_stats': portfolio_stats,
+        'portfolio_mc': round(portfolio_mc, 4),
+        'portfolio_mc_pass': portfolio_mc_pass,
+        'pattern_details': {k: v for k, v in selected.items()},
+        'tp_distribution': {
+            'min': min(tps), 'median': round(float(np.median(tps)), 1),
+            'mean': round(float(np.mean(tps)), 1), 'max': max(tps),
+        } if tps else {},
+        'sl_distribution': {
+            'min': min(sls), 'median': round(float(np.median(sls)), 1),
+            'mean': round(float(np.mean(sls)), 1), 'max': max(sls),
+        } if sls else {},
+        'correction_meta': correction_meta,
+    }
+
+
 def build_output_json(
     scan_result: dict,
     data_file: str,
@@ -898,7 +1285,8 @@ def build_output_json(
             'mc_threshold': mc_threshold,
             'min_trades': min_trades,
             'max_baseline_wr': (MAX_BASELINE_WR
-                                if discovery_method == 'per_pattern' else None),
+                                if discovery_method in ('per_pattern', 'mae_mfe')
+                                else None),
         },
         'patterns': {
             'long': scan_result['long_patterns'],
@@ -936,6 +1324,13 @@ def build_output_json(
         output['patterns_tpsl'] = scan_result['patterns_tpsl']
         output['tp_distribution'] = scan_result['tp_distribution']
         output['sl_distribution'] = scan_result['sl_distribution']
+    elif discovery_method == 'mae_mfe':
+        output['tp_sl_mode'] = 'per_pattern'  # Bot-compatible output
+        output['patterns_tpsl'] = scan_result['patterns_tpsl']
+        output['tp_distribution'] = scan_result['tp_distribution']
+        output['sl_distribution'] = scan_result['sl_distribution']
+        output['selection_criteria']['tp_percentile_grid'] = TP_PERCENTILES
+        output['selection_criteria']['sl_percentile_grid'] = SL_PERCENTILES
 
     # Walk-forward results
     if wf_result:
@@ -960,7 +1355,7 @@ def main():
                         help='Path to OHLCV CSV file')
     parser.add_argument('--output', default=DEFAULT_OUTPUT_FILE,
                         help='Output JSON file path')
-    parser.add_argument('--discovery-method', choices=['universal', 'per_pattern'],
+    parser.add_argument('--discovery-method', choices=['universal', 'per_pattern', 'mae_mfe'],
                         default='per_pattern',
                         help='Discovery method (default: per_pattern)')
     parser.add_argument('--tp', type=float, default=DEFAULT_UNI_TP,
@@ -1007,6 +1402,12 @@ def main():
     if args.discovery_method == 'universal':
         logger.info(f"TP: {args.tp}% | SL: {args.sl}% | "
                      f"Edge >= {args.edge_threshold}pp | MC < {args.mc_threshold}")
+    elif args.discovery_method == 'mae_mfe':
+        logger.info(f"MAE/MFE: TP pctiles {TP_PERCENTILES} | "
+                     f"SL pctiles {SL_PERCENTILES} | "
+                     f"Max baseline WR: {args.max_baseline_wr}%")
+        logger.info(f"Edge >= {args.edge_threshold}pp | "
+                     f"MC < {args.mc_threshold} (3-seed)")
     else:
         logger.info(f"Grid: TP {TP_GRID} | SL {SL_GRID} | "
                      f"Max baseline WR: {args.max_baseline_wr}%")
@@ -1044,6 +1445,19 @@ def main():
             mc_threshold=args.mc_threshold,
             min_trades=args.min_trades,
             signal_index=signal_index,
+            correction_method=args.correction,
+            fdr_q=args.fdr_q,
+            require_portfolio_mc=args.require_portfolio_mc,
+        )
+    elif args.discovery_method == 'mae_mfe':
+        result = scan_patterns_mae_mfe(
+            df,
+            edge_threshold=args.edge_threshold,
+            mc_threshold=args.mc_threshold,
+            min_trades=args.min_trades,
+            signal_index=signal_index,
+            concurrency=args.concurrency,
+            max_baseline_wr=args.max_baseline_wr,
             correction_method=args.correction,
             fdr_q=args.fdr_q,
             require_portfolio_mc=args.require_portfolio_mc,
@@ -1128,7 +1542,7 @@ def main():
         print(f"  Correction: {args.correction} "
               f"({sc.get('n_before_correction', '?')} "
               f"-> {sc.get('n_after_correction', '?')})")
-    if args.discovery_method == 'per_pattern' and 'tp_distribution' in output:
+    if args.discovery_method in ('per_pattern', 'mae_mfe') and 'tp_distribution' in output:
         tp_d = output['tp_distribution']
         sl_d = output['sl_distribution']
         if tp_d:

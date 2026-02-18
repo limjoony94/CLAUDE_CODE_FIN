@@ -191,10 +191,9 @@ class PerformanceMetrics:
         if self.recent_losses:
             self.actual_avg_loss = sum(self.recent_losses) / len(self.recent_losses)
 
-        # Calculate edge (simplified)
+        # Calculate edge: per-trade expected PnL% (same unit as EXPECTED_EDGE)
         if self.total_trades >= MIN_TRADES_FOR_COMPARISON:
-            max_dd = max(self.recent_losses) if self.recent_losses else 1
-            self.actual_edge = self.total_pnl_pct / (max_dd + 0.1)
+            self.actual_edge = self.total_pnl_pct / self.total_trades
 
         self.last_updated = datetime.now().isoformat()
 
@@ -220,7 +219,7 @@ class PerformanceMetrics:
 Win Rate:           {self.expected_win_rate:.1f}%       {self.actual_win_rate:.1f}%      {wr_diff:+.1f}%
 Avg Win:            {self.expected_avg_win:.2f}%      {self.actual_avg_win:.2f}%     {self.actual_avg_win - self.expected_avg_win:+.2f}%
 Avg Loss:           {self.expected_avg_loss:.2f}%      {self.actual_avg_loss:.2f}%     {self.actual_avg_loss - self.expected_avg_loss:+.2f}%
-Edge:               {self.expected_edge:.1f}       {self.actual_edge:.1f}      {self.actual_edge - self.expected_edge:+.1f}
+Edge/Trade:         {self.expected_edge:.2f}%      {self.actual_edge:.2f}%     {self.actual_edge - self.expected_edge:+.2f}%
 ───────────────────────────────────────────────────────────────
 Total Trades:       {self.total_trades}
 Total PnL:          {self.total_pnl_pct:+.2f}%

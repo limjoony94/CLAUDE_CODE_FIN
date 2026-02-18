@@ -11,7 +11,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.28.34"  # v1.28.34: untrack state.json from git — prevent git-induced state corruption
+BOT_VERSION = "1.28.35"  # v1.28.35: fix edge metric — unify actual/expected to per-trade PnL%
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -454,7 +454,7 @@ API_MAX_DELAY = 30
 EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
 EXPECTED_AVG_WIN = 5.44   # v1.28.24: 112pat (288bars) TP mean 1.85% × 3x - 0.10%
 EXPECTED_AVG_LOSS = 10.73  # v1.28.24: 112pat (288bars) SL mean 3.54% × 3x + 0.10%
-EXPECTED_EDGE = 15.0      # v1.27.3: genuine edge ~10-20% (was 50% — inflated by look-ahead)
+EXPECTED_EDGE = 0.27      # Per-trade expected PnL%: WR×avg_win - (1-WR)×avg_loss = 0.68×5.44 - 0.32×10.73
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 

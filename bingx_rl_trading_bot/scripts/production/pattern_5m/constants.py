@@ -416,7 +416,7 @@ MAX_EXIT_PRICE_RETRIES = 3
 # ============================================================
 # INTERVAL CONSTANTS
 # ============================================================
-MAX_OHLCV_CANDLES = 150  # v1.18.2: Increased from 100 for regime detection (needs 114+)
+MAX_OHLCV_CANDLES = 600  # v1.28.42: 150→600 for ATR-scale rolling median (window=576)
 CACHE_TTL_SECONDS = 5               # Used in models.py APICache
 
 # Time-based intervals (v1.25.1: replaces iteration-based in main loop)

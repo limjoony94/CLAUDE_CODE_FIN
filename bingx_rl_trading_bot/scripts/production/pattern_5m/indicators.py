@@ -138,8 +138,9 @@ def calculate_indicators(df: pd.DataFrame, config: Dict[str, Any]) -> pd.DataFra
     strategy = config.get('strategy', {})
     has_context_filters = bool(strategy.get('context_filters', {}))
     has_vol_adaptive = strategy.get('vol_adaptive', {}).get('enabled', False)
+    has_atr_scale = strategy.get('atr_scale', {}).get('enabled', False)
 
-    if has_context_filters or has_vol_adaptive:
+    if has_context_filters or has_vol_adaptive or has_atr_scale:
         # RSI (14-period)
         delta = df['close'].diff()
         gain = delta.where(delta > 0, 0).rolling(14).mean()
@@ -188,6 +189,29 @@ def get_volatility_multiplier(df: pd.DataFrame, config: Dict[str, Any]) -> float
         Multiplier value (default 1.0)
     """
     strategy = config.get('strategy', {})
+
+    # ATR-ratio scaling (priority over vol_adaptive)
+    atr_scale = strategy.get('atr_scale', {})
+    if atr_scale.get('enabled', False):
+        window = atr_scale.get('window', 576)
+        clamp_lo = atr_scale.get('clamp_lo', 0.6)
+        clamp_hi = atr_scale.get('clamp_hi', 1.7)
+
+        if 'atr' not in df.columns or len(df) < window:
+            return 1.0
+        atr_series = df['atr'].iloc[-window:].dropna()
+        if len(atr_series) < window // 2:
+            return 1.0
+        current_atr = df['atr'].iloc[-1]
+        if pd.isna(current_atr):
+            return 1.0
+        median_atr = atr_series.median()
+        if median_atr <= 0:
+            return 1.0
+        ratio = current_atr / median_atr
+        return max(clamp_lo, min(clamp_hi, ratio))
+
+    # Legacy: vol_adaptive percentile-tier
     vol_adaptive = strategy.get('vol_adaptive', {})
 
     if not vol_adaptive.get('enabled', False):

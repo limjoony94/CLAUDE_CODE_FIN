@@ -16,6 +16,11 @@ risk:
 rotation:
   enabled: false
 strategy:
+  atr_scale:
+    enabled: true
+    window: 576       # rolling median window (576봉 = 2일)
+    clamp_lo: 0.6     # minimum ratio
+    clamp_hi: 1.7     # maximum ratio
   cooldown_candles: 0
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)

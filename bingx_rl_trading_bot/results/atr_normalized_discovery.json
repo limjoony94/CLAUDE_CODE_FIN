@@ -1,0 +1,158 @@
+{
+  "study": "ATR-Normalized TP/SL Discovery",
+  "date": "2026-02-18",
+  "atr_period": 60,
+  "atr_stats": {
+    "period": 60,
+    "min": 0.0147,
+    "p25": 0.0931,
+    "median": 0.1312,
+    "mean": 0.147,
+    "p75": 0.184,
+    "p95": 0.2934,
+    "max": 1.1214
+  },
+  "tp_mult_grid": [
+    0.5,
+    0.75,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0,
+    4.0,
+    5.0
+  ],
+  "sl_mult_grid": [
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0,
+    4.0,
+    5.0,
+    6.0
+  ],
+  "max_bars_options": [
+    36,
+    72,
+    144,
+    288
+  ],
+  "parameters": {
+    "edge_threshold": 21.8,
+    "mc_threshold": 0.01,
+    "min_trades": 25,
+    "post_filter": "WR>=60.0% + avg_SL>=1.0%"
+  },
+  "discovery_270d": {
+    "ATR_MB36_3h": {
+      "max_bars": 36,
+      "hours": 3.0,
+      "n_raw": 16,
+      "n_filtered": 2,
+      "n_long": 0,
+      "n_short": 2,
+      "portfolio_stats": {
+        "pnl": 56.0,
+        "trades": 46,
+        "wr": 78.3,
+        "mdd": 3.9,
+        "pf": 3.35
+      },
+      "patterns": [
+        {
+          "key": "DN-U-GS_SHORT",
+          "pattern": "DN-U-GS",
+          "direction": "SHORT",
+          "tp_mult": 5.0,
+          "sl_mult": 6.0,
+          "avg_tp_pct": 0.911,
+          "avg_sl_pct": 1.094,
+          "trades": 25,
+          "wr": 84.0,
+          "edge": 29.5
+        },
+        {
+          "key": "GS-U-DN_SHORT",
+          "pattern": "GS-U-DN",
+          "direction": "SHORT",
+          "tp_mult": 5.0,
+          "sl_mult": 6.0,
+          "avg_tp_pct": 0.862,
+          "avg_sl_pct": 1.035,
+          "trades": 26,
+          "wr": 76.9,
+          "edge": 22.4
+        }
+      ],
+      "elapsed": 16.3
+    },
+    "ATR_MB72_6h": {
+      "max_bars": 72,
+      "hours": 6.0,
+      "n_raw": 9,
+      "n_filtered": 1,
+      "n_long": 0,
+      "n_short": 1,
+      "portfolio_stats": {
+        "pnl": 37.9,
+        "trades": 35,
+        "wr": 77.1,
+        "mdd": 3.7,
+        "pf": 2.88
+      },
+      "patterns": [
+        {
+          "key": "DN-U-GS_SHORT",
+          "pattern": "DN-U-GS",
+          "direction": "SHORT",
+          "tp_mult": 5.0,
+          "sl_mult": 6.0,
+          "avg_tp_pct": 0.911,
+          "avg_sl_pct": 1.094,
+          "trades": 37,
+          "wr": 78.4,
+          "edge": 23.9
+        }
+      ],
+      "elapsed": 19.9
+    },
+    "ATR_MB144_12h": {
+      "max_bars": 144,
+      "hours": 12.0,
+      "n_raw": 7,
+      "n_filtered": 0,
+      "n_long": 0,
+      "n_short": 0,
+      "portfolio_stats": {
+        "pnl": 0,
+        "trades": 0,
+        "wr": 0,
+        "mdd": 0,
+        "pf": 0
+      },
+      "patterns": [],
+      "elapsed": 23.4
+    },
+    "ATR_MB288_24h": {
+      "max_bars": 288,
+      "hours": 24.0,
+      "n_raw": 7,
+      "n_filtered": 0,
+      "n_long": 0,
+      "n_short": 0,
+      "portfolio_stats": {
+        "pnl": 0,
+        "trades": 0,
+        "wr": 0,
+        "mdd": 0,
+        "pf": 0
+      },
+      "patterns": [],
+      "elapsed": 25.4
+    }
+  },
+  "wf_720d": {},
+  "elapsed_seconds": 87.7
+}

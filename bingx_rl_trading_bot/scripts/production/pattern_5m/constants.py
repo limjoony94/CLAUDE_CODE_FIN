@@ -4,6 +4,7 @@ All configurable values and pattern definitions.
 """
 
 import os
+import tempfile
 from enum import Enum
 from typing import List
 
@@ -32,7 +33,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_THIS_DIR)))
 # ============================================================
 CONFIG_FILE = os.path.join(PROJECT_ROOT, "config", "pattern_5m_config.yaml")
 STATE_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot_state.json")
-LOCK_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot.lock")
+LOCK_FILE = os.path.join(tempfile.gettempdir(), "pattern_5m_bot.lock")
 METRICS_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_metrics.json")
 DYNAMIC_PATTERNS_FILE = os.path.join(PROJECT_ROOT, "results", "dynamic_patterns.json")
 LOG_DIR = os.path.join(PROJECT_ROOT, "logs")
@@ -452,9 +453,9 @@ API_MAX_DELAY = 30
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
 EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
-EXPECTED_AVG_WIN = 5.44   # v1.28.24: 112pat (288bars) TP mean 1.85% × 3x - 0.10%
-EXPECTED_AVG_LOSS = 10.73  # v1.28.24: 112pat (288bars) SL mean 3.54% × 3x + 0.10%
-EXPECTED_EDGE = 0.27      # Per-trade expected PnL%: WR×avg_win - (1-WR)×avg_loss = 0.68×5.44 - 0.32×10.73
+EXPECTED_AVG_WIN = 5.63   # v1.28.40: MAE/MFE 59pat TP mean 1.91% × 3x - 0.10%
+EXPECTED_AVG_LOSS = 9.64  # v1.28.40: MAE/MFE 59pat SL mean 3.18% × 3x + 0.10%
+EXPECTED_EDGE = 0.75      # Per-trade expected PnL%: WR×avg_win - (1-WR)×avg_loss = 0.68×5.63 - 0.32×9.64
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 

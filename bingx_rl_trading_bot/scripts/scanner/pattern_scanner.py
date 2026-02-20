@@ -1272,6 +1272,7 @@ def build_output_json(
     correction_meta: dict = None,
     wf_result: dict = None,
     timing: dict = None,
+    is_days: int = 0,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
@@ -1287,6 +1288,7 @@ def build_output_json(
             'max_baseline_wr': (MAX_BASELINE_WR
                                 if discovery_method in ('per_pattern', 'mae_mfe')
                                 else None),
+            'is_days': is_days if is_days > 0 else None,
         },
         'patterns': {
             'long': scan_result['long_patterns'],
@@ -1382,6 +1384,9 @@ def main():
                         help='Walk-forward folds (0=disabled, 3=typical)')
     parser.add_argument('--concurrency', type=int, default=0,
                         help='Parallel workers: 0=auto, 1=sequential, N=N workers')
+    parser.add_argument('--is-days', type=int, default=0,
+                        help='Limit IS training window to N most recent days '
+                             '(0=use all data, e.g. 135 for Edge Decay optimal)')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
@@ -1398,6 +1403,8 @@ def main():
     logger.info("Pattern Scanner v2.1 — Dynamic Walk-Forward Selection")
     logger.info("=" * 60)
     logger.info(f"Data: {args.data}")
+    if args.is_days > 0:
+        logger.info(f"IS Window: {args.is_days} days (most recent)")
     logger.info(f"Discovery: {args.discovery_method}")
     if args.discovery_method == 'universal':
         logger.info(f"TP: {args.tp}% | SL: {args.sl}% | "
@@ -1428,6 +1435,20 @@ def main():
     t0 = time.time()
     df = load_and_classify(args.data)
     timing['classify_sec'] = round(time.time() - t0, 1)
+
+    # Slice to IS window if --is-days specified (keep most recent N days)
+    if args.is_days > 0:
+        bars_per_day = 288  # 5m candles per day
+        max_bars = args.is_days * bars_per_day
+        if max_bars < len(df):
+            original_len = len(df)
+            df = df.iloc[-max_bars:].reset_index(drop=True)
+            logger.info(f"IS window: {args.is_days}d -> "
+                        f"kept last {len(df)} bars "
+                        f"(trimmed {original_len - len(df)} from start)")
+        else:
+            logger.info(f"IS window: {args.is_days}d -> "
+                        f"all {len(df)} bars used (data < requested window)")
 
     # Build signal index (shared between scan and WF)
     types = df['candle_type'].tolist()
@@ -1518,6 +1539,7 @@ def main():
         correction_meta=result.get('correction_meta'),
         wf_result=wf_result,
         timing=timing,
+        is_days=args.is_days,
     )
 
     # Write JSON

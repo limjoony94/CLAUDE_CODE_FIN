@@ -1,11 +1,11 @@
 {
   "phase1_reality_gap": {
     "backtest": {
-      "trades": 402,
-      "wr": 75.12,
-      "avg_win": 2.591,
-      "avg_loss": 4.954,
-      "pnl": 287.2
+      "trades": 355,
+      "wr": 70.42,
+      "avg_win": 2.787,
+      "avg_loss": 5.114,
+      "pnl": 159.8
     },
     "live": {
       "trades": 31,
@@ -14,19 +14,19 @@
       "avg_loss": 5.69,
       "pnl": 22.02
     },
-    "gap_wr_pp": 7.38,
-    "binom_p": 0.224065,
+    "gap_wr_pp": 2.68,
+    "binom_p": 0.437784,
     "live_wr_ci_95": [
       50.1,
       81.4
     ],
     "n_trades_for_statistical_power": 1539,
-    "months_needed": 34
+    "months_needed": 39
   },
   "phase2_break_even_margin": {
     "break_even_wr": 64.78,
     "live_margin_pp": 2.96,
-    "bt_margin_pp": 10.35,
+    "bt_margin_pp": 5.65,
     "scenarios": [
       {
         "wr": 45,
@@ -64,14 +64,14 @@
         "pnl_100": 45.9
       },
       {
+        "wr": 70.4,
+        "pnl_per_trade": 0.4939,
+        "pnl_100": 49.4
+      },
+      {
         "wr": 75,
         "pnl_per_trade": 0.898,
         "pnl_100": 89.8
-      },
-      {
-        "wr": 75.1,
-        "pnl_per_trade": 0.9068,
-        "pnl_100": 90.7
       },
       {
         "wr": 80,
@@ -189,8 +189,8 @@
     "actual_edge_per_trade": 0.7103,
     "break_even_wr": 64.78,
     "margin_pp": 2.96,
-    "degradation_factor": 0.9017,
-    "bt_trades_per_month": 45.0,
+    "degradation_factor": 0.9619,
+    "bt_trades_per_month": 39.0,
     "decay_scenarios": {
       "0pp": {
         "decay_pp_per_month": 0,
@@ -222,30 +222,30 @@
       }
     },
     "n_trades_for_power": 1539,
-    "months_for_power": 34
+    "months_for_power": 39
   },
   "phase6_adversarial": {
     "reversed_directions": {
-      "pnl": -464.1,
-      "wr": 53.5,
-      "direction_edge": 751.2
+      "pnl": -359.8,
+      "wr": 56.1,
+      "direction_edge": 519.6
     },
     "random_directions": {
-      "mean_pnl": -165.9,
-      "std_pnl": 96.4,
-      "p_better_than_original": 0.0,
-      "direction_value": 453.0
+      "mean_pnl": -164.3,
+      "std_pnl": 95.9,
+      "p_better_than_original": 0.005,
+      "direction_value": 324.0
     },
     "time_shuffled": {
-      "mean_pnl": 611.9,
-      "std_pnl": 17.1,
-      "temporal_order_impact": -324.7
+      "mean_pnl": 602.0,
+      "std_pnl": 13.2,
+      "temporal_order_impact": -442.2
     },
     "partial_failure_60pct": {
-      "mean_pnl": 165.9,
-      "std_pnl": 43.2,
+      "mean_pnl": 144.3,
+      "std_pnl": 49.9,
       "prob_loss": 0.0
     }
   },
-  "timestamp": "2026-02-11T21:11:36.639772"
+  "timestamp": "2026-02-20T21:31:22.058012"
 }

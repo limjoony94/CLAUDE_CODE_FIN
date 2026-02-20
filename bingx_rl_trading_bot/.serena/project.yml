@@ -1,4 +1,3 @@
-
 # the encoding used by text files in the project
 # For a list of possible encodings, see https://docs.python.org/3.11/library/codecs.html#standard-encodings
 encoding: "utf-8"
@@ -10,7 +9,12 @@ ignore_all_files_in_gitignore: true
 # same syntax as gitignore, so you can use * and **
 # Was previously called `ignored_dirs`, please update your config if you are using that.
 # Added (renamed) on 2025-04-07
-ignored_paths: []
+ignored_paths:
+  - "archive/**"
+  - "data/**"
+  - "logs/**"
+  - "__pycache__/**"
+  - "*.pyc"
 
 # whether the project is in read-only mode
 # If set to true, all editing tools will be disabled and attempts to use them will result in an error
@@ -60,7 +64,12 @@ excluded_tools: []
 
 # initial prompt for the project. It will always be given to the LLM upon activating the project
 # (contrary to the memories, which are loaded on demand).
-initial_prompt: ""
+initial_prompt: |
+  BTC 5m Pattern Trading Bot (v1.28.42). 59 patterns (12L+47S), MAE/MFE TP/SL, ATR-scaled.
+  Key memories: project_state_v1_28_42, research_protocol_standard, common_pitfalls_and_lessons.
+  Bot is LIVE — never modify production files (scripts/production/pattern_5m/) without explicit approval.
+  Research scripts go in scripts/analysis/. Always use production classify_candle(), LEVERAGE=3, DROP timeouts.
+  Tests: pytest scripts/tests/ (1139+ expected). Config: config/pattern_5m_config.yaml.
 # the name by which the project can be referenced within Serena
 project_name: "bingx_rl_trading_bot"
 
@@ -112,3 +121,7 @@ fixed_tools: []
 # Note that when using the JetBrains backend, language servers are not used and this list is correspondingly ignored.
 languages:
 - python
+
+# override of the corresponding setting in serena_config.yml, see the documentation there.
+# If null or missing, the value from the global config is used.
+symbol_info_budget:

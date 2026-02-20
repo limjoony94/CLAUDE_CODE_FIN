@@ -14,5 +14,49 @@
     "deny": [],
     "defaultMode": "bypassPermissions"
   },
-  "outputStyle": "default"
+  "outputStyle": "default",
+  "prefersReducedMotion": false,
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash .claude/hooks/session-init.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash .claude/hooks/guard-production.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash .claude/hooks/post-bash-validate.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "/bin/bash .claude/hooks/post-commit-remind.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
 }

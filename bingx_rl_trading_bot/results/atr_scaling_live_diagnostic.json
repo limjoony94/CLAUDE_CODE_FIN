@@ -1,0 +1,240 @@
+{
+  "study": "atr_scaling_live_diagnostic",
+  "version": "1.0",
+  "generated_at": "2026-02-21T05:27:56.204783",
+  "elapsed_seconds": 3.8,
+  "position": {
+    "pattern": "MU-MD-ST",
+    "direction": "LONG",
+    "entry_price": 68194.4,
+    "entry_time": "2026-02-18T18:55:06"
+  },
+  "atr_params": {
+    "period": 14,
+    "window": 576,
+    "clamp_lo": 0.6,
+    "clamp_hi": 1.7
+  },
+  "atr_diagnostic": {
+    "candles": 594,
+    "hours": 49.5,
+    "atr_current": 128.9,
+    "atr_median": 107.7,
+    "atr_ratio_mean": 1.16,
+    "atr_ratio_min": 0.6,
+    "atr_ratio_max": 1.7,
+    "price_high": 68313.0,
+    "price_low": 65639.2,
+    "price_range_pct": 4.07
+  },
+  "signals": {
+    "total": 45,
+    "long": 8,
+    "short": 37
+  },
+  "base_summary": {
+    "label": "BASE",
+    "signals": 45,
+    "tp": 9,
+    "sl": 2,
+    "timeout": 23,
+    "pending": 11,
+    "timeout_rate": 67.6,
+    "completed_wr": 81.8,
+    "total_pnl": 26.01,
+    "avg_bars_tp": 75.0,
+    "avg_hours_tp": 6.2,
+    "eff_mult_mean": 1.0,
+    "eff_mult_range": [
+      1.0,
+      1.0
+    ],
+    "tp_pct_range": [
+      1.29,
+      3.26
+    ],
+    "sl_pct_range": [
+      1.96,
+      4.14
+    ]
+  },
+  "atr_summary": {
+    "label": "ATR_SCALED",
+    "signals": 45,
+    "tp": 10,
+    "sl": 0,
+    "timeout": 24,
+    "pending": 11,
+    "timeout_rate": 70.6,
+    "completed_wr": 100.0,
+    "total_pnl": 40.17,
+    "avg_bars_tp": 90.0,
+    "avg_hours_tp": 7.5,
+    "eff_mult_mean": 1.199,
+    "eff_mult_range": [
+      0.642,
+      1.7
+    ],
+    "tp_pct_range": [
+      0.92,
+      3.26
+    ],
+    "sl_pct_range": [
+      1.47,
+      4.79
+    ]
+  },
+  "comparison": {
+    "timeout_rate_delta": 3.0,
+    "completed_wr_delta": 18.2,
+    "total_pnl_delta": 14.16,
+    "tp_hits_delta": 1,
+    "sl_hits_delta": -2
+  },
+  "opposite_exit_scenarios": [
+    {
+      "n_opposite": 1,
+      "exit_time": "2026-02-18T21:20:00.000000000",
+      "exit_price": 66357.0,
+      "pnl_pct": -8.38,
+      "hold_hours": 2.3
+    },
+    {
+      "n_opposite": 2,
+      "exit_time": "2026-02-18T22:05:00.000000000",
+      "exit_price": 66329.1,
+      "pnl_pct": -8.51,
+      "hold_hours": 3.1
+    },
+    {
+      "n_opposite": 3,
+      "exit_time": "2026-02-18T22:10:00.000000000",
+      "exit_price": 66354.0,
+      "pnl_pct": -8.4,
+      "hold_hours": 3.2
+    },
+    {
+      "n_opposite": 5,
+      "exit_time": "2026-02-18T23:00:00.000000000",
+      "exit_price": 66422.2,
+      "pnl_pct": -8.1,
+      "hold_hours": 4.0
+    }
+  ],
+  "hold_info": {
+    "pnl_pct": -2.9,
+    "hold_hours": 49.5,
+    "last_price": 67602.2
+  },
+  "tp_signals_detail": [
+    {
+      "timestamp": "2026-02-18T22:55:00",
+      "pattern": "MU-ST-MD",
+      "direction": "SHORT",
+      "tp_pct": 0.92,
+      "sl_pct": 2.115,
+      "mult": 0.687,
+      "bars": 177,
+      "pnl": 2.4608
+    },
+    {
+      "timestamp": "2026-02-19T08:15:00",
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "tp_pct": 1.302,
+      "sl_pct": 2.595,
+      "mult": 0.819,
+      "bars": 59,
+      "pnl": 3.6046
+    },
+    {
+      "timestamp": "2026-02-19T08:20:00",
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "tp_pct": 1.286,
+      "sl_pct": 2.26,
+      "mult": 0.893,
+      "bars": 62,
+      "pnl": 3.5588
+    },
+    {
+      "timestamp": "2026-02-19T10:15:00",
+      "pattern": "BU-IH-U",
+      "direction": "SHORT",
+      "tp_pct": 1.424,
+      "sl_pct": 2.315,
+      "mult": 0.919,
+      "bars": 40,
+      "pnl": 3.9718
+    },
+    {
+      "timestamp": "2026-02-19T13:50:00",
+      "pattern": "BD-BD-BU",
+      "direction": "LONG",
+      "tp_pct": 2.55,
+      "sl_pct": 4.795,
+      "mult": 1.527,
+      "bars": 187,
+      "pnl": 7.3509
+    },
+    {
+      "timestamp": "2026-02-19T23:40:00",
+      "pattern": "DN-ST-H",
+      "direction": "LONG",
+      "tp_pct": 1.418,
+      "sl_pct": 2.768,
+      "mult": 0.767,
+      "bars": 70,
+      "pnl": 3.9549
+    },
+    {
+      "timestamp": "2026-02-20T02:30:00",
+      "pattern": "BD-DN-MU",
+      "direction": "LONG",
+      "tp_pct": 1.254,
+      "sl_pct": 2.515,
+      "mult": 0.705,
+      "bars": 77,
+      "pnl": 3.4627
+    },
+    {
+      "timestamp": "2026-02-20T03:55:00",
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "tp_pct": 0.966,
+      "sl_pct": 1.467,
+      "mult": 0.749,
+      "bars": 115,
+      "pnl": 2.5973
+    },
+    {
+      "timestamp": "2026-02-20T08:25:00",
+      "pattern": "U-D-DN",
+      "direction": "SHORT",
+      "tp_pct": 2.092,
+      "sl_pct": 3.634,
+      "mult": 0.964,
+      "bars": 62,
+      "pnl": 5.9756
+    },
+    {
+      "timestamp": "2026-02-20T08:55:00",
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "tp_pct": 1.177,
+      "sl_pct": 1.789,
+      "mult": 0.913,
+      "bars": 48,
+      "pnl": 3.2316
+    }
+  ],
+  "conclusion": {
+    "atr_scaling_effective": true,
+    "atr_pnl_improvement": 14.16,
+    "atr_tp_improvement": 1,
+    "timeout_rate_unchanged": false,
+    "opposite_exit_harmful": true,
+    "hold_optimal": true,
+    "recommendation": "ATR scaling (v1.28.42) is effective: +1 TP hits, PnL +14.2%. No additional mechanism needed. Timeout rate is market-driven, not strategy flaw. 90-day OOS test (~2026-04-30) will confirm long-term effect."
+  }
+}

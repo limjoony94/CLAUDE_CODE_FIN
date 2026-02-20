@@ -339,21 +339,25 @@ def _get_actual_fill_price(
     return actual_entry_price, actual_quantity
 
 
-def _cap_sl_to_daily_limit(sl_pct: float, config: Optional[Dict[str, Any]]) -> float:
-    """Cap SL% so a single-trade loss doesn't exceed daily loss limit.
+def _effective_vol_mult(vol_mult: float, base_sl_pct: float, config: Optional[Dict[str, Any]]) -> float:
+    """Compute effective vol_mult so scaled SL never exceeds daily loss limit.
 
-    max_sl_pct = max_daily_loss_pct / leverage
-    e.g. 13% / 3x = 4.33%
+    Caps the multiplier itself (not the SL result) to preserve TP/SL ratio.
+    max_mult = (max_daily_loss_pct / leverage) / base_sl_pct
+    effective = min(vol_mult, max_mult)
+
+    This ensures TP and SL always scale proportionally — no R:R distortion.
     """
-    if not config:
-        return sl_pct
+    if not config or base_sl_pct <= 0:
+        return vol_mult
     leverage = config.get('leverage', 3)
     max_daily_loss = config.get('risk', {}).get('max_daily_loss_pct', 13)
     max_sl_pct = max_daily_loss / leverage
-    if sl_pct > max_sl_pct:
-        logger.info(f"SL capped: {sl_pct:.2f}% → {max_sl_pct:.2f}% (daily limit {max_daily_loss}%/{leverage}x)")
-        return max_sl_pct
-    return sl_pct
+    max_mult = max_sl_pct / base_sl_pct
+    if vol_mult > max_mult:
+        logger.info(f"Vol mult capped: {vol_mult:.3f}x → {max_mult:.3f}x (SL {base_sl_pct:.2f}% × {max_mult:.3f} = {base_sl_pct * max_mult:.2f}%, limit {max_sl_pct:.2f}%)")
+        return max_mult
+    return vol_mult
 
 
 def calculate_tp_sl(
@@ -384,9 +388,9 @@ def calculate_tp_sl(
             base_sl_pct = strategy['sl_pct']
             logger.warning(f"Pattern {pattern} not in dynamic per-pattern dict, using defaults")
 
-        tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
-        sl_pct_adjusted = max(0.1, (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT)
-        sl_pct_adjusted = _cap_sl_to_daily_limit(sl_pct_adjusted, config)
+        eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
+        tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT
+        sl_pct_adjusted = max(0.1, (base_sl_pct * eff_mult) - SLIPPAGE_BUFFER_PCT)
         tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
@@ -397,9 +401,9 @@ def calculate_tp_sl(
         base_sl_pct = config['_dynamic_sl']
         logger.debug(f"Using dynamic universal TP/SL: TP={base_tp_pct}%, SL={base_sl_pct}%")
 
-        tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
-        sl_pct_adjusted = max(0.1, (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT)
-        sl_pct_adjusted = _cap_sl_to_daily_limit(sl_pct_adjusted, config)
+        eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
+        tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT
+        sl_pct_adjusted = max(0.1, (base_sl_pct * eff_mult) - SLIPPAGE_BUFFER_PCT)
         tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
@@ -416,10 +420,10 @@ def calculate_tp_sl(
         base_tp_pct = strategy['tp_pct']
         base_sl_pct = strategy['sl_pct']
 
-    tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
-    sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
+    eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
+    tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
+    sl_pct_adjusted = (base_sl_pct * eff_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
     sl_pct_adjusted = max(0.1, sl_pct_adjusted)  # Floor guard: prevent negative/tiny SL
-    sl_pct_adjusted = _cap_sl_to_daily_limit(sl_pct_adjusted, config)
 
     tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
     sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)

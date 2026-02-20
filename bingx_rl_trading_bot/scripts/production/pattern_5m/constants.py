@@ -473,7 +473,7 @@ ROTATION_ENABLED = False  # Disabled for pattern bot
 # ============================================================
 # MULTI-POSITION SETTINGS (v1.29.0)
 # ============================================================
-DEFAULT_MAX_POSITIONS = 1        # N=1 fallback (config.yaml overrides)
+DEFAULT_MAX_POSITIONS = 5        # N=5 multi-position (config.yaml overrides)
 MAX_ALLOWED_POSITIONS = 10       # Upper guard for validation
 EMERGENCY_SL_BUFFER_PCT = 0.001  # 0.1% buffer beyond worst slot SL
 

@@ -339,6 +339,23 @@ def _get_actual_fill_price(
     return actual_entry_price, actual_quantity
 
 
+def _cap_sl_to_daily_limit(sl_pct: float, config: Optional[Dict[str, Any]]) -> float:
+    """Cap SL% so a single-trade loss doesn't exceed daily loss limit.
+
+    max_sl_pct = max_daily_loss_pct / leverage
+    e.g. 13% / 3x = 4.33%
+    """
+    if not config:
+        return sl_pct
+    leverage = config.get('leverage', 3)
+    max_daily_loss = config.get('risk', {}).get('max_daily_loss_pct', 13)
+    max_sl_pct = max_daily_loss / leverage
+    if sl_pct > max_sl_pct:
+        logger.info(f"SL capped: {sl_pct:.2f}% → {max_sl_pct:.2f}% (daily limit {max_daily_loss}%/{leverage}x)")
+        return max_sl_pct
+    return sl_pct
+
+
 def calculate_tp_sl(
     entry_price: float,
     direction: int,
@@ -369,6 +386,7 @@ def calculate_tp_sl(
 
         tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
         sl_pct_adjusted = max(0.1, (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT)
+        sl_pct_adjusted = _cap_sl_to_daily_limit(sl_pct_adjusted, config)
         tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
@@ -381,6 +399,7 @@ def calculate_tp_sl(
 
         tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT
         sl_pct_adjusted = max(0.1, (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT)
+        sl_pct_adjusted = _cap_sl_to_daily_limit(sl_pct_adjusted, config)
         tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
         return tp_price, sl_price, tp_pct_adjusted, sl_pct_adjusted
@@ -400,6 +419,7 @@ def calculate_tp_sl(
     tp_pct_adjusted = (base_tp_pct * vol_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
     sl_pct_adjusted = (base_sl_pct * vol_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
     sl_pct_adjusted = max(0.1, sl_pct_adjusted)  # Floor guard: prevent negative/tiny SL
+    sl_pct_adjusted = _cap_sl_to_daily_limit(sl_pct_adjusted, config)
 
     tp_price = round(entry_price * (1 + direction * tp_pct_adjusted / 100), PRICE_ROUND_DECIMALS)
     sl_price = round(entry_price * (1 - direction * sl_pct_adjusted / 100), PRICE_ROUND_DECIMALS)

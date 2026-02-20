@@ -279,7 +279,7 @@ def _run_bot_main(
                 continue
 
             # Check consecutive loss limit (v1.27.0)
-            if check_consecutive_loss_limit(state) and not state.get('positions') or {}:
+            if check_consecutive_loss_limit(state) and not (state.get('positions') or {}):
                 consec = state.get('consecutive_losses', 0)
                 logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), pausing {CONSECUTIVE_LOSS_PAUSE_SECONDS}s")
                 _interruptible_sleep(CONSECUTIVE_LOSS_PAUSE_SECONDS)
@@ -557,12 +557,7 @@ def _process_entry_signal(
     Returns:
         True if trading action occurred, False otherwise
     """
-    positions = state.get('positions') or {}
-    max_positions = config.get('max_positions', 1)
-
-    # Skip if all slots full and same direction
-    if len(positions) >= max_positions:
-        return False
+    # Note: No early return for full slots — _route_signal handles SKIP vs CLOSE_OLDEST
 
     # Check cooldown
     if not check_cooldown(state, config):

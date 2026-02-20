@@ -744,11 +744,25 @@ def update_emergency_sl(
     state: Dict[str, Any],
     config: Dict[str, Any],
 ) -> None:
-    """Re-calculate and re-place emergency SL after slot add/remove."""
+    """Re-calculate and re-place emergency SL after slot add/remove.
+
+    Places new SL BEFORE cancelling old one to avoid protection gap.
+    """
     positions = state.get('positions') or {}
     if not positions:
         cancel_emergency_sl(exchange, state, config)
         return
 
-    cancel_emergency_sl(exchange, state, config)
+    old_order_id = state.get('emergency_sl_order_id')
+    # Place new emergency SL first (brief overlap is safer than gap)
     place_emergency_sl(exchange, state, config)
+    # Then cancel old one
+    if old_order_id and old_order_id != _EXCHANGE_MANAGED:
+        try:
+            symbol = config.get('symbol', 'BTC-USDT')
+            exchange.cancel_order(old_order_id, symbol)
+            logger.debug(f"Cancelled old emergency SL {old_order_id}")
+        except (ccxt.OrderNotFound, ccxt.InvalidOrder):
+            logger.debug(f"Old emergency SL already gone: {old_order_id}")
+        except Exception as e:
+            logger.warning(f"Failed to cancel old emergency SL {old_order_id}: {e}")

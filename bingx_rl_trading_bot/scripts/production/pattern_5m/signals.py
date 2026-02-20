@@ -373,6 +373,12 @@ def check_entry_signal(
         logger.debug(f"Pattern {pattern} not in validated patterns (L={len(long_patterns)}, S={len(short_patterns)})")
 
     if signal:
+        # Multi-slot: prevent entering the same pattern twice
+        active_patterns = {s.get('pattern_name') for s in (state.get('positions') or {}).values() if s.get('pattern_name')}
+        if pattern in active_patterns:
+            logger.debug(f"Pattern {pattern} already active in a slot, skipping duplicate entry")
+            return None, None
+
         # Context filter check (skip computation when no filters configured)
         ctx_bonus = 0.0
         if PATTERN_CONTEXT_FILTERS:

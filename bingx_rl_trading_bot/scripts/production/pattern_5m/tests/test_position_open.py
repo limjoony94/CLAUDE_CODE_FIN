@@ -11,7 +11,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_open import (
     get_position_size,
     _set_leverage,
     _get_actual_fill_price,
-    _verify_no_existing_position,
+    _check_slot_available,
     refill_position,
     open_position,
 )
@@ -431,7 +431,7 @@ class TestGetActualFillPrice:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._get_actual_fill_price')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.update_emergency_sl')
 class TestOpenPosition:
     """Test open_position() full orchestration flow."""
 
@@ -445,11 +445,11 @@ class TestOpenPosition:
         }
 
     def test_successful_long_open(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Full successful LONG open → state updated, orders placed."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
         mock_fill.return_value = (50050.0, 0.01)
         mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
@@ -457,7 +457,7 @@ class TestOpenPosition:
 
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ord_1'}
-        state = {'position': None}
+        state = {'positions': {}, 'active_direction': None}
         cache = APICache()
 
         result = open_position(
@@ -466,27 +466,33 @@ class TestOpenPosition:
         )
 
         assert result is True
-        assert state['position']['direction'] == 'LONG'
-        assert state['position']['entry_price'] == 50050.0
-        assert state['position']['tp_price'] == 51000.0
-        assert state['position']['sl_price'] == 49000.0
-        mock_verify.assert_called_once()
+        assert len(state['positions']) == 1
+        slot = next(iter(state['positions'].values()))
+        assert slot['direction'] == 'LONG'
+        assert slot['entry_price'] == 50050.0
+        assert slot['tp_price'] == 51000.0
+        assert slot['sl_price'] == 49000.0
+        mock_esl.assert_called_once()
         mock_lev.assert_called_once()
         exchange.create_market_order.assert_called_once()
         mock_save.assert_called()
         mock_place.assert_called()
 
-    def test_existing_position_blocks(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+    def test_all_slots_full_blocks(
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
-        """Existing position on exchange → returns False."""
-        mock_verify.return_value = False
+        """All slots occupied → returns False."""
         exchange = MagicMock()
-        state = {'position': None}
+        state = {
+            'positions': {'s1': {'direction': 'LONG', 'slot_id': 's1'}},
+            'active_direction': 'LONG',
+        }
+        config = self._make_config()
+        config['max_positions'] = 1  # only 1 slot, already full
 
         result = open_position(
-            exchange, state, self._make_config(), 'LONG',
+            exchange, state, config, 'LONG',
             'Pattern: BD-BD-U (LONG)', APICache()
         )
 
@@ -494,62 +500,62 @@ class TestOpenPosition:
         exchange.create_market_order.assert_not_called()
 
     def test_zero_quantity_returns_false(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Position size = 0 → returns False."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0, 0, 50000.0)
 
         result = open_position(
-            MagicMock(), {'position': None}, self._make_config(), 'LONG',
+            MagicMock(), {'positions': {}, 'active_direction': None}, self._make_config(), 'LONG',
             'Pattern: BD-BD-U (LONG)', APICache()
         )
 
         assert result is False
 
     def test_network_error_returns_false(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Network error during market order → returns False."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
 
         exchange = MagicMock()
         exchange.create_market_order.side_effect = ccxt.NetworkError('timeout')
 
         result = open_position(
-            exchange, {'position': None}, self._make_config(), 'LONG',
+            exchange, {'positions': {}, 'active_direction': None}, self._make_config(), 'LONG',
             'Pattern: BD-BD-U (LONG)', APICache()
         )
 
         assert result is False
 
     def test_insufficient_funds_returns_false(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """InsufficientFunds → returns False."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
 
         exchange = MagicMock()
         exchange.create_market_order.side_effect = ccxt.InsufficientFunds('low balance')
 
         result = open_position(
-            exchange, {'position': None}, self._make_config(), 'SHORT',
+            exchange, {'positions': {}, 'active_direction': None}, self._make_config(), 'SHORT',
             'Pattern: BU-BU-DN (SHORT)', APICache()
         )
 
         assert result is False
 
     def test_short_position_sets_correct_side(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """SHORT signal → sell side market order."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
         mock_fill.return_value = (49950.0, 0.01)
         mock_calc.return_value = (49000.0, 51000.0, 2.0, 2.0)
@@ -557,7 +563,7 @@ class TestOpenPosition:
 
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ord_2'}
-        state = {'position': None}
+        state = {'positions': {}, 'active_direction': None}
 
         result = open_position(
             exchange, state, self._make_config(), 'SHORT',
@@ -565,17 +571,18 @@ class TestOpenPosition:
         )
 
         assert result is True
-        assert state['position']['direction'] == 'SHORT'
+        slot = next(iter(state['positions'].values()))
+        assert slot['direction'] == 'SHORT'
         # Verify sell side was used
         call_kwargs = exchange.create_market_order.call_args
         assert call_kwargs[1]['side'] == 'sell' or call_kwargs[0][1] == 'sell'
 
     def test_sl_retry_on_missing_sl(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """SL not placed after first attempt → retries up to 2 times."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
         mock_fill.return_value = (50000.0, 0.01)
         mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
@@ -583,14 +590,16 @@ class TestOpenPosition:
 
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ord_1'}
-        state = {'position': None}
+        state = {'positions': {}, 'active_direction': None}
 
         # sl_order_id stays None through first 2 calls, set on 3rd
         call_count = [0]
-        def place_with_retry(exch, st, cfg):
+        def place_with_retry(exch, st, cfg, **kwargs):
             call_count[0] += 1
             if call_count[0] >= 3:
-                st['position']['sl_order_id'] = 'sl_retry'
+                pos = kwargs.get('position') or next(iter(st.get('positions', {}).values()), None)
+                if pos:
+                    pos['sl_order_id'] = 'sl_retry'
         mock_place.side_effect = place_with_retry
 
         result = open_position(
@@ -603,18 +612,18 @@ class TestOpenPosition:
         assert mock_place.call_count == 3
 
     def test_hedge_mode_error_auto_recovers(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Hedge mode error → attempts to switch to one-way mode."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
 
         exchange = MagicMock()
         exchange.create_market_order.side_effect = ccxt.ExchangeError('Hedge mode 109400')
 
         result = open_position(
-            exchange, {'position': None}, self._make_config(), 'LONG',
+            exchange, {'positions': {}, 'active_direction': None}, self._make_config(), 'LONG',
             'Pattern: BD-BD-U (LONG)', APICache()
         )
 
@@ -622,18 +631,18 @@ class TestOpenPosition:
         exchange.set_position_mode.assert_called_once()
 
     def test_exchange_error_non_hedge(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Non-hedge ExchangeError → returns False without mode switch."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
 
         exchange = MagicMock()
         exchange.create_market_order.side_effect = ccxt.ExchangeError('other error')
 
         result = open_position(
-            exchange, {'position': None}, self._make_config(), 'LONG',
+            exchange, {'positions': {}, 'active_direction': None}, self._make_config(), 'LONG',
             'Pattern: BD-BD-U (LONG)', APICache()
         )
 
@@ -641,105 +650,68 @@ class TestOpenPosition:
         exchange.set_position_mode.assert_not_called()
 
     def test_generic_exception_returns_false(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Unexpected exception → returns False."""
-        mock_verify.return_value = True
+        mock_esl.return_value = True
         mock_size.return_value = (0.01, 1000.0, 50000.0)
 
         exchange = MagicMock()
         exchange.create_market_order.side_effect = RuntimeError('unexpected')
 
         result = open_position(
-            exchange, {'position': None}, self._make_config(), 'LONG',
+            exchange, {'positions': {}, 'active_direction': None}, self._make_config(), 'LONG',
             'Pattern: BD-BD-U (LONG)', APICache()
         )
 
         assert result is False
 
 
-# ── _verify_no_existing_position ────────────────────────────
+# ── _check_slot_available ────────────────────────────────────
 
 
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
-       new=MagicMock())
-class TestVerifyNoExistingPosition:
-    """Test _verify_no_existing_position() safety check."""
+class TestCheckSlotAvailable:
+    """Test _check_slot_available() slot capacity check."""
 
     def test_no_positions_returns_true(self):
-        """Empty positions list → returns True."""
-        exchange = MagicMock()
-        exchange.fetch_positions.return_value = []
-        cache = APICache()
+        """Empty positions → slot available."""
+        state = {'positions': {}}
+        config = {'max_positions': 5}
+        assert _check_slot_available(state, config) is True
 
-        result = _verify_no_existing_position(
-            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
-        )
-        assert result is True
+    def test_some_slots_used_returns_true(self):
+        """Positions < max → slot available."""
+        state = {'positions': {'s1': {}, 's2': {}}}
+        config = {'max_positions': 5}
+        assert _check_slot_available(state, config) is True
 
-    def test_zero_contracts_returns_true(self):
-        """Positions with 0 contracts → returns True."""
-        exchange = MagicMock()
-        exchange.fetch_positions.return_value = [
-            {'contracts': 0, 'side': 'long'},
-        ]
-        cache = APICache()
+    def test_all_slots_full_returns_false(self):
+        """Positions == max → no slot available."""
+        state = {'positions': {'s1': {}, 's2': {}, 's3': {}}}
+        config = {'max_positions': 3}
+        assert _check_slot_available(state, config) is False
 
-        result = _verify_no_existing_position(
-            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
-        )
-        assert result is True
+    def test_over_capacity_returns_false(self):
+        """Positions > max → no slot available."""
+        state = {'positions': {'s1': {}, 's2': {}, 's3': {}}}
+        config = {'max_positions': 2}
+        assert _check_slot_available(state, config) is False
 
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.sync_position_with_exchange')
-    def test_existing_position_returns_false(self, mock_sync):
-        """Active contracts → syncs state and returns False."""
-        exchange = MagicMock()
-        exchange.fetch_positions.return_value = [
-            {'contracts': 0.01, 'side': 'long'},
-        ]
-        cache = APICache()
-        state = {}
+    def test_default_max_positions_is_one(self):
+        """No max_positions in config → defaults to 1."""
+        state = {'positions': {}}
+        config = {}
+        assert _check_slot_available(state, config) is True
 
-        result = _verify_no_existing_position(
-            exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
-        )
+        state = {'positions': {'s1': {}}}
+        assert _check_slot_available(state, config) is False
 
-        assert result is False
-        mock_sync.assert_called_once()
-
-    def test_network_error_returns_false(self):
-        """Network error → blocks opening (safety)."""
-        exchange = MagicMock()
-        exchange.fetch_positions.side_effect = ccxt.NetworkError('fail')
-        cache = APICache()
-
-        result = _verify_no_existing_position(
-            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
-        )
-        assert result is False
-
-    def test_exchange_error_returns_false(self):
-        """Exchange error → blocks opening (safety)."""
-        exchange = MagicMock()
-        exchange.fetch_positions.side_effect = ccxt.ExchangeError('fail')
-        cache = APICache()
-
-        result = _verify_no_existing_position(
-            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
-        )
-        assert result is False
-
-    def test_generic_error_returns_false(self):
-        """Generic exception → blocks opening (safety)."""
-        exchange = MagicMock()
-        exchange.fetch_positions.side_effect = RuntimeError('fail')
-        cache = APICache()
-
-        result = _verify_no_existing_position(
-            exchange, {}, {'symbol': 'BTC/USDT:USDT'}, cache, None, None
-        )
-        assert result is False
+    def test_none_positions_treated_as_empty(self):
+        """positions=None → treated as empty dict."""
+        state = {'positions': None}
+        config = {'max_positions': 5}
+        assert _check_slot_available(state, config) is True
 
 
 # ── refill_position ─────────────────────────────────────────
@@ -765,6 +737,7 @@ class TestRefillPosition:
 
     def _make_state(self, **overrides):
         pos = {
+            'slot_id': 'test_slot',
             'direction': 'LONG',
             'quantity': 0.02,
             'remaining_quantity': 0.01,
@@ -774,7 +747,7 @@ class TestRefillPosition:
             'reason': 'Pattern: BD-BD-U (LONG)',
         }
         pos.update(overrides)
-        return {'position': pos}
+        return {'positions': {'test_slot': pos}, 'active_direction': 'LONG'}
 
     def test_successful_refill(
         self, mock_fill, mock_calc, mock_scale, mock_save, mock_cancel, mock_place
@@ -795,8 +768,8 @@ class TestRefillPosition:
         )
 
         assert result is True
-        assert state['position']['is_partial'] is False
-        assert state['position']['remaining_quantity'] == pytest.approx(0.02, abs=0.001)
+        assert state['positions']['test_slot']['is_partial'] is False
+        assert state['positions']['test_slot']['remaining_quantity'] == pytest.approx(0.02, abs=0.001)
         mock_cancel.assert_called_once()
         mock_place.assert_called_once()
 
@@ -805,7 +778,7 @@ class TestRefillPosition:
     ):
         """No position in state → returns False."""
         result = refill_position(
-            MagicMock(), {'position': None}, self._make_config(), 'reason',
+            MagicMock(), {'positions': {}}, self._make_config(), 'reason',
             APICache(), None, None, None
         )
         assert result is False
@@ -815,7 +788,7 @@ class TestRefillPosition:
     ):
         """Position not partial → returns False."""
         state = self._make_state()
-        state['position']['is_partial'] = False
+        state['positions']['test_slot']['is_partial'] = False
 
         result = refill_position(
             MagicMock(), state, self._make_config(), 'reason',
@@ -917,7 +890,7 @@ class TestRefillPosition:
 
         assert result is True
         # new_avg = (49900*0.01 + 50100*0.01) / 0.02 = 50000.0
-        assert state['position']['avg_entry_price'] == pytest.approx(50000.0, abs=1.0)
+        assert state['positions']['test_slot']['avg_entry_price'] == pytest.approx(50000.0, abs=1.0)
 
 
 # ── get_position_size generic exception (line 75-77) ──────────────
@@ -1005,14 +978,14 @@ class TestRefillPositionInvalidQty:
         """total_qty <= 0 after refill → returns False."""
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ref1'}
-        state = {
-            'position': {
-                'direction': 'LONG', 'entry_price': 50000.0,
-                'avg_entry_price': 50000.0,
-                'quantity': 0.01, 'remaining_quantity': 0.0,  # remaining=0
-                'is_partial': True,
-            }
+        pos = {
+            'slot_id': 'test_slot',
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'avg_entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.0,  # remaining=0
+            'is_partial': True,
         }
+        state = {'positions': {'test_slot': pos}, 'active_direction': 'LONG'}
         config = {
             'symbol': 'BTC/USDT:USDT',
             'risk': {'leverage': 3},
@@ -1039,22 +1012,21 @@ class TestRefillPositionInvalidQty:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size',
        return_value=(0.01, 1000.0, 50000.0))
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position',
-       return_value=True)
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.update_emergency_sl')
 class TestOpenPositionVolMultBranch:
     """Test open_position vol_mult != 1.0 logging (lines 159-161)."""
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_volatility_multiplier',
            return_value=1.25)
     def test_vol_mult_logged_when_not_one(
-        self, mock_vol, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_vol, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """df provided + vol_mult != 1.0 → vol-adaptive log (lines 159-161)."""
         import pandas as pd
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ord_1'}
-        state = {'position': None}
+        state = {'positions': {}, 'active_direction': None}
         config = {
             'symbol': 'BTC/USDT:USDT', 'leverage': 3,
             'exchange_leverage': 3,
@@ -1085,20 +1057,19 @@ class TestOpenPositionVolMultBranch:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size',
        return_value=(0.01, 1000.0, 50000.0))
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position',
-       return_value=True)
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.update_emergency_sl')
 class TestOpenPositionRegimeTpSl:
     """Test open_position regime_tp_sl logging (line 176)."""
 
     def test_regime_tp_sl_logged(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """state has regime_tp_sl → regime-specific log (line 176)."""
         exchange = MagicMock()
         exchange.create_market_order.return_value = {'id': 'ord_1'}
         state = {
-            'position': None,
+            'positions': {}, 'active_direction': None,
             'regime_tp_sl': (1.5, 2.0),
             'current_regime': 'TRENDING',
         }
@@ -1126,13 +1097,12 @@ class TestOpenPositionRegimeTpSl:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.get_position_size',
        return_value=(0.01, 1000.0, 50000.0))
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._set_leverage')
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open._verify_no_existing_position',
-       return_value=True)
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_open.update_emergency_sl')
 class TestOpenPositionHedgeModeFailure:
     """Test open_position hedge mode switch failure (lines 248-249)."""
 
     def test_mode_switch_exception_logged(
-        self, mock_verify, mock_lev, mock_size, mock_fill,
+        self, mock_esl, mock_lev, mock_size, mock_fill,
         mock_calc, mock_scale, mock_save, mock_place
     ):
         """Hedge mode error + set_position_mode fails → logs error (lines 248-249)."""
@@ -1146,7 +1116,7 @@ class TestOpenPositionHedgeModeFailure:
             'position_size_pct': 95,
         }
         result = open_position(
-            exchange, {'position': None}, config, 'LONG',
+            exchange, {'positions': {}, 'active_direction': None}, config, 'LONG',
             'Pattern: BD-BD-BU (LONG)', APICache()
         )
         assert result is False

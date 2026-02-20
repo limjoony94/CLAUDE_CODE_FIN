@@ -18,23 +18,32 @@ logger = logging.getLogger('pattern_5m')
 _EXCHANGE_MANAGED = "EXCHANGE_MANAGED"
 
 
+def _get_position_side(config: Dict[str, Any], direction: str) -> str:
+    """Get positionSide param for BingX API. Always 'BOTH' (One-Way mode)."""
+    return 'BOTH'
+
+
 def place_tp_sl_orders(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
+    position: Optional[Dict] = None,
 ) -> None:
     """
-    Place TP and SL orders for the current position.
+    Place TP and SL orders for a position slot.
 
     Args:
         exchange: Exchange instance
         state: Bot state dictionary
         config: Bot configuration
+        position: Specific position slot dict (if None, uses first active position)
     """
-    if not state.get('position'):
-        return
+    if position is None:
+        positions = state.get('positions') or {}
+        if not positions:
+            return
+        position = next(iter(positions.values()))
 
-    position = state['position']
     symbol = config['symbol']
 
     try:
@@ -43,18 +52,19 @@ def place_tp_sl_orders(
         tp_price = position['tp_price']
         sl_price = position['sl_price']
         close_side = 'sell' if direction == 'LONG' else 'buy'
+        position_side = _get_position_side(config, direction)
 
         scale_out_enabled = position.get('scale_out_enabled', False)
         scale_out_stages = position.get('scale_out_stages', [])
 
         # Handle scale-out TP orders
         if scale_out_enabled and scale_out_stages:
-            _place_scale_out_orders(exchange, position, symbol, close_side, scale_out_stages)
+            _place_scale_out_orders(exchange, position, symbol, close_side, scale_out_stages, position_side)
         else:
-            _place_single_tp_order(exchange, position, symbol, close_side, quantity, tp_price)
+            _place_single_tp_order(exchange, position, symbol, close_side, quantity, tp_price, position_side)
 
         # Always place SL order
-        _place_sl_order(exchange, position, symbol, close_side, quantity, sl_price)
+        _place_sl_order(exchange, position, symbol, close_side, quantity, sl_price, position_side)
 
         save_state(state)
 
@@ -72,23 +82,20 @@ def _place_scale_out_orders(
     symbol: str,
     close_side: str,
     scale_out_stages: List[Dict],
+    position_side: str = 'BOTH',
 ) -> None:
     """Place staged TP orders for scale-out."""
     logger.info(f"📈 Scale-out: placing {len(scale_out_stages)} staged TP orders")
-    num_stages = len(scale_out_stages)
 
     for idx, stage in enumerate(scale_out_stages):
         try:
             stage_qty = stage['quantity']
             stage_tp_price = stage['tp_price']
-            is_last_stage = (idx == num_stages - 1)
 
             order_params = {
-                'positionSide': 'BOTH',
+                'positionSide': position_side,
                 'stopPrice': stage_tp_price,
             }
-            if is_last_stage:
-                order_params['closePosition'] = True
 
             tp_order = exchange.create_order(
                 symbol=symbol,
@@ -115,6 +122,7 @@ def _place_single_tp_order(
     close_side: str,
     quantity: float,
     tp_price: float,
+    position_side: str = 'BOTH',
 ) -> None:
     """Place a single TP order."""
     try:
@@ -124,9 +132,8 @@ def _place_single_tp_order(
             side=close_side,
             amount=quantity,
             params={
-                'positionSide': 'BOTH',
+                'positionSide': position_side,
                 'stopPrice': tp_price,
-                'closePosition': True,
             }
         )
         position['tp_order_id'] = tp_order.get('id')
@@ -154,6 +161,7 @@ def _place_sl_order(
     close_side: str,
     quantity: float,
     sl_price: float,
+    position_side: str = 'BOTH',
 ) -> None:
     """Place a SL order."""
     try:
@@ -163,9 +171,8 @@ def _place_sl_order(
             side=close_side,
             amount=quantity,
             params={
-                'positionSide': 'BOTH',
+                'positionSide': position_side,
                 'stopPrice': sl_price,
-                'closePosition': True,
             }
         )
         position['sl_order_id'] = sl_order.get('id')
@@ -191,8 +198,8 @@ def adjust_tpsl_to_config(
     """
     Adjust TP/SL orders to match current config on bot startup.
 
-    This function checks if the existing position's TP/SL prices match
-    the current PATTERN_OPTIMAL_TPSL config. If they differ, it cancels
+    Iterates all active position slots and checks if TP/SL prices match
+    the current PATTERN_OPTIMAL_TPSL config. If they differ, cancels
     the old orders and places new ones with updated prices.
 
     Args:
@@ -201,9 +208,10 @@ def adjust_tpsl_to_config(
         config: Bot configuration
 
     Returns:
-        True if adjustment was made, False otherwise
+        True if any adjustment was made, False otherwise
     """
-    if not state.get('position'):
+    positions = state.get('positions') or {}
+    if not positions:
         return False
 
     # Dynamic mode (universal or per-pattern): TP/SL already set at open time, skip adjustment
@@ -211,13 +219,30 @@ def adjust_tpsl_to_config(
         logger.debug("Dynamic TP/SL mode — skipping per-pattern adjustment")
         return False
 
-    position = state['position']
     symbol = config['symbol']
+    any_adjusted = False
 
+    for position in positions.values():
+        adjusted = _adjust_single_position_tpsl(exchange, position, state, config, symbol)
+        any_adjusted = any_adjusted or adjusted
+
+    return any_adjusted
+
+
+def _adjust_single_position_tpsl(
+    exchange: ccxt.bingx,
+    position: Dict,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    symbol: str,
+) -> bool:
+    """Adjust TP/SL for a single position slot."""
     # Extract pattern name from reason field
     pattern_name = extract_pattern_name(position.get('reason', ''))
     if not pattern_name:
-        logger.debug("No pattern found in position reason, skipping TP/SL adjustment")
+        pattern_name = position.get('pattern_name')
+    if not pattern_name:
+        logger.debug("No pattern found in position, skipping TP/SL adjustment")
         return False
 
     # Get expected TP/SL from config
@@ -253,8 +278,8 @@ def adjust_tpsl_to_config(
         logger.debug(f"TP/SL already match config for {pattern_name}")
         return False
 
-    # Log the adjustment
-    logger.info(f"🔧 TP/SL adjustment needed for {pattern_name}:")
+    slot_id = position.get('slot_id', 'unknown')
+    logger.info(f"🔧 TP/SL adjustment needed for {pattern_name} (slot {slot_id}):")
     logger.info(f"   Current: TP=${current_tp:.1f}, SL=${current_sl:.1f}")
     logger.info(f"   Expected: TP=${expected_tp_price:.1f} ({expected_tp_pct}%), SL=${expected_sl_price:.1f} ({expected_sl_pct}%)")
 
@@ -269,15 +294,16 @@ def adjust_tpsl_to_config(
         # Place new orders (use remaining_quantity for scale-out partial fills)
         quantity = position.get('remaining_quantity', position['quantity'])
         close_side = 'sell' if direction == 'LONG' else 'buy'
+        position_side = _get_position_side(config, direction)
 
         # Place TP order
-        _place_single_tp_order(exchange, position, symbol, close_side, quantity, expected_tp_price)
+        _place_single_tp_order(exchange, position, symbol, close_side, quantity, expected_tp_price, position_side)
 
         # Place SL order
-        _place_sl_order(exchange, position, symbol, close_side, quantity, expected_sl_price)
+        _place_sl_order(exchange, position, symbol, close_side, quantity, expected_sl_price, position_side)
 
         save_state(state)
-        logger.info(f"✅ TP/SL adjusted successfully for {pattern_name}")
+        logger.info(f"✅ TP/SL adjusted successfully for {pattern_name} (slot {slot_id})")
         return True
 
     except Exception as e:
@@ -327,38 +353,43 @@ def verify_tp_sl_orders(
     """
     Verify TP/SL orders exist and re-place if missing.
 
+    Iterates all active position slots and verifies each one.
+
     Args:
         exchange: Exchange instance
         state: Bot state dictionary
         config: Bot configuration
     """
-    if not state.get('position'):
+    positions = state.get('positions') or {}
+    if not positions:
         return
 
-    position = state['position']
     symbol = config['symbol']
-    scale_out_enabled = position.get('scale_out_enabled', False)
-    scale_out_stages = position.get('scale_out_stages', [])
 
     try:
         open_orders = exchange.fetch_open_orders(symbol)
         open_order_ids = {o.get('id'): o for o in open_orders}
         state_changed = False
 
-        # Verify TP orders (scale-out or single)
-        if scale_out_enabled and scale_out_stages:
-            state_changed = _verify_scale_out_orders(
-                exchange, position, symbol, scale_out_stages, open_order_ids
-            ) or state_changed
-        else:
-            state_changed = _verify_single_tp_order(
-                exchange, position, symbol, open_order_ids
-            ) or state_changed
+        for position in positions.values():
+            position_side = _get_position_side(config, position['direction'])
+            scale_out_enabled = position.get('scale_out_enabled', False)
+            scale_out_stages = position.get('scale_out_stages', [])
 
-        # Verify SL order
-        state_changed = _verify_sl_order(
-            exchange, position, symbol, open_order_ids
-        ) or state_changed
+            # Verify TP orders (scale-out or single)
+            if scale_out_enabled and scale_out_stages:
+                state_changed = _verify_scale_out_orders(
+                    exchange, position, symbol, scale_out_stages, open_order_ids, position_side
+                ) or state_changed
+            else:
+                state_changed = _verify_single_tp_order(
+                    exchange, position, symbol, open_order_ids, position_side
+                ) or state_changed
+
+            # Verify SL order
+            state_changed = _verify_sl_order(
+                exchange, position, symbol, open_order_ids, position_side
+            ) or state_changed
 
         if state_changed:
             save_state(state)
@@ -376,6 +407,7 @@ def _verify_single_tp_order(
     position: Dict,
     symbol: str,
     open_order_ids: Dict,
+    position_side: str = 'BOTH',
 ) -> bool:
     """Verify and re-place missing single TP order (non-scale-out mode).
 
@@ -413,9 +445,8 @@ def _verify_single_tp_order(
                 side=close_side,
                 amount=position.get('remaining_quantity', position['quantity']),
                 params={
-                    'positionSide': 'BOTH',
+                    'positionSide': position_side,
                     'stopPrice': position['tp_price'],
-                    'closePosition': True,
                 }
             )
             position['tp_order_id'] = tp_order.get('id')
@@ -424,12 +455,10 @@ def _verify_single_tp_order(
         except ccxt.ExchangeError as e:
             error_msg = str(e)
             if '110407' in error_msg:
-                # TP order already exists on exchange — mark as confirmed
                 position['tp_order_id'] = _EXCHANGE_MANAGED
                 logger.info("TP order confirmed on exchange (crash recovery — ID unknown, marking as managed)")
                 state_changed = True
             elif '110413' in error_msg:
-                # TP price already exceeded — let position_monitor handle closure
                 position['tp_order_id'] = _EXCHANGE_MANAGED
                 logger.warning("TP price already exceeded current price — skipping TP placement, position_monitor will handle")
                 state_changed = True
@@ -447,9 +476,9 @@ def _verify_scale_out_orders(
     symbol: str,
     scale_out_stages: List[Dict],
     open_order_ids: Dict,
+    position_side: str = 'BOTH',
 ) -> bool:
     """Verify and re-place missing scale-out TP orders."""
-    num_stages = len(scale_out_stages)
     close_side = 'sell' if position['direction'] == 'LONG' else 'buy'
     state_changed = False
 
@@ -458,16 +487,13 @@ def _verify_scale_out_orders(
             continue
 
         stage_order_id = stage.get('order_id')
-        is_last_stage = (idx == num_stages - 1)
 
         # Re-place if order was never placed (order_id=None) or missing from exchange
         if not stage_order_id or stage_order_id not in open_order_ids:
             action = "was never placed" if not stage_order_id else "missing from exchange"
             logger.warning(f"Stage {stage['stage']} TP order {action}, re-placing...")
             try:
-                order_params = {'positionSide': 'BOTH', 'stopPrice': stage['tp_price']}
-                if is_last_stage:
-                    order_params['closePosition'] = True
+                order_params = {'positionSide': position_side, 'stopPrice': stage['tp_price']}
 
                 tp_order = exchange.create_order(
                     symbol=symbol,
@@ -492,6 +518,7 @@ def _verify_sl_order(
     position: Dict,
     symbol: str,
     open_order_ids: Dict,
+    position_side: str = 'BOTH',
 ) -> bool:
     """Verify and re-place missing SL order.
 
@@ -529,9 +556,8 @@ def _verify_sl_order(
                 side=close_side,
                 amount=position.get('remaining_quantity', position['quantity']),
                 params={
-                    'positionSide': 'BOTH',
+                    'positionSide': position_side,
                     'stopPrice': position['sl_price'],
-                    'closePosition': True,
                 }
             )
             position['sl_order_id'] = sl_order.get('id')
@@ -540,7 +566,6 @@ def _verify_sl_order(
         except ccxt.ExchangeError as e:
             error_msg = str(e)
             if '110406' in error_msg:
-                # SL order already exists on exchange — mark as confirmed
                 position['sl_order_id'] = _EXCHANGE_MANAGED
                 logger.info("SL order confirmed on exchange (crash recovery — ID unknown, marking as managed)")
                 state_changed = True
@@ -556,72 +581,60 @@ def cancel_remaining_orders(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
+    position: Optional[Dict] = None,
 ) -> None:
     """
-    Cancel all remaining orders for the position.
+    Cancel all remaining orders for a position slot (or all slots).
 
     Args:
         exchange: Exchange instance
         state: Bot state dictionary
         config: Bot configuration
+        position: Specific position slot dict. If None, cancels orders for all slots.
     """
-    position = state.get('position')
-    if not position:
+    if position is not None:
+        slots = [position]
+    else:
+        slots = list((state.get('positions') or {}).values())
+
+    if not slots:
         return
 
     symbol = config['symbol']
-    tp_order_id = position.get('tp_order_id')
-    sl_order_id = position.get('sl_order_id')
 
-    # Collect scale-out order IDs
-    scale_out_tp_ids = []
-    for stage in position.get('scale_out_stages', []):
-        if stage.get('order_id') and not stage.get('filled'):
-            scale_out_tp_ids.append(stage['order_id'])
+    # Collect all order IDs to cancel across all target slots
+    orders_to_cancel = []
+    for slot in slots:
+        tp_order_id = slot.get('tp_order_id')
+        sl_order_id = slot.get('sl_order_id')
 
-    if not tp_order_id and not sl_order_id and not scale_out_tp_ids:
+        if tp_order_id and tp_order_id != _EXCHANGE_MANAGED:
+            orders_to_cancel.append(('TP', tp_order_id))
+        if sl_order_id and sl_order_id != _EXCHANGE_MANAGED:
+            orders_to_cancel.append(('SL', sl_order_id))
+
+        for stage in slot.get('scale_out_stages', []):
+            if stage.get('order_id') and not stage.get('filled'):
+                orders_to_cancel.append(('Scale-out TP', stage['order_id']))
+
+    if not orders_to_cancel:
         return
 
     try:
         open_orders = exchange.fetch_open_orders(symbol)
         open_order_ids = {o.get('id') for o in open_orders}
 
-        # Cancel scale-out TP orders
-        for so_tp_id in scale_out_tp_ids:
-            if so_tp_id in open_order_ids:
+        for order_type, order_id in orders_to_cancel:
+            if order_id in open_order_ids:
                 try:
-                    exchange.cancel_order(so_tp_id, symbol)
-                    logger.info(f"🗑️ Cancelled Scale-out TP order: {so_tp_id}")
+                    exchange.cancel_order(order_id, symbol)
+                    logger.info(f"🗑️ Cancelled {order_type} order: {order_id}")
                 except ccxt.OrderNotFound:
-                    logger.debug(f"Scale-out TP order already cancelled: {so_tp_id}")
+                    logger.debug(f"{order_type} order already filled/cancelled: {order_id}")
                 except ccxt.ExchangeError as e:
-                    logger.warning(f"Failed to cancel Scale-out TP order: {e}")
+                    logger.warning(f"⚠️ Failed to cancel {order_type} order {order_id}: {e}")
                 except Exception as e:
-                    logger.warning(f"Failed to cancel Scale-out TP order: {e}")
-
-        # Cancel regular TP order (skip sentinel — exchange manages it)
-        if tp_order_id and tp_order_id != _EXCHANGE_MANAGED and tp_order_id in open_order_ids:
-            try:
-                exchange.cancel_order(tp_order_id, symbol)
-                logger.info(f"🗑️ Cancelled TP order: {tp_order_id}")
-            except ccxt.OrderNotFound:
-                logger.debug(f"TP order already filled/cancelled: {tp_order_id}")
-            except ccxt.ExchangeError as e:
-                logger.warning(f"⚠️ Failed to cancel TP order {tp_order_id}: {e}")
-            except Exception as e:
-                logger.warning(f"⚠️ Failed to cancel TP order {tp_order_id}: {e}")
-
-        # Cancel SL order (skip sentinel — exchange manages it)
-        if sl_order_id and sl_order_id != _EXCHANGE_MANAGED and sl_order_id in open_order_ids:
-            try:
-                exchange.cancel_order(sl_order_id, symbol)
-                logger.info(f"🗑️ Cancelled SL order: {sl_order_id}")
-            except ccxt.OrderNotFound:
-                logger.debug(f"SL order already filled/cancelled: {sl_order_id}")
-            except ccxt.ExchangeError as e:
-                logger.warning(f"⚠️ Failed to cancel SL order {sl_order_id}: {e}")
-            except Exception as e:
-                logger.warning(f"⚠️ Failed to cancel SL order {sl_order_id}: {e}")
+                    logger.warning(f"⚠️ Failed to cancel {order_type} order {order_id}: {e}")
 
     except ccxt.NetworkError as e:
         logger.error(f"Failed to cancel remaining orders (network): {e}")
@@ -629,3 +642,113 @@ def cancel_remaining_orders(
         logger.error(f"Failed to cancel remaining orders (exchange): {e}")
     except Exception as e:
         logger.exception(f"Failed to cancel remaining orders: {e}")
+
+
+# ─── Emergency SL (v1.29.0: whole-position safety net) ───
+
+def _get_worst_sl_price(state: Dict[str, Any]) -> Optional[float]:
+    """Get the worst (most protective) SL price across all active slots.
+
+    LONG: min(all sl_prices) - buffer  (lowest = worst case)
+    SHORT: max(all sl_prices) + buffer (highest = worst case)
+    """
+    from .constants import EMERGENCY_SL_BUFFER_PCT
+
+    positions = state.get('positions') or {}
+    if not positions:
+        return None
+
+    direction = state.get('active_direction')
+    sl_prices = [s.get('sl_price', 0) for s in positions.values() if s.get('sl_price')]
+    if not sl_prices:
+        return None
+
+    if direction == 'LONG':
+        worst = min(sl_prices)
+        return round(worst * (1 - EMERGENCY_SL_BUFFER_PCT), 1)
+    else:  # SHORT
+        worst = max(sl_prices)
+        return round(worst * (1 + EMERGENCY_SL_BUFFER_PCT), 1)
+
+
+def place_emergency_sl(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Place a closePosition emergency SL protecting the entire NET position."""
+    positions = state.get('positions') or {}
+    if not positions:
+        return
+
+    worst_sl = _get_worst_sl_price(state)
+    if not worst_sl:
+        logger.warning("Cannot place emergency SL: no valid SL prices in slots")
+        return
+
+    direction = state.get('active_direction')
+    close_side = 'sell' if direction == 'LONG' else 'buy'
+    symbol = config['symbol']
+
+    try:
+        order = exchange.create_order(
+            symbol=symbol,
+            type='STOP_MARKET',
+            side=close_side,
+            amount=0,  # ignored when closePosition=True
+            params={
+                'positionSide': 'BOTH',
+                'stopPrice': worst_sl,
+                'closePosition': True,
+            }
+        )
+        state['emergency_sl_order_id'] = order.get('id')
+        save_state(state)
+        logger.info(f"🛡️ Emergency SL placed: {order.get('id')} @ ${worst_sl:.1f} (closePosition)")
+    except ccxt.ExchangeError as e:
+        error_msg = str(e)
+        if '110406' in error_msg:
+            state['emergency_sl_order_id'] = _EXCHANGE_MANAGED
+            logger.info("Emergency SL already exists on exchange — marking as managed")
+        else:
+            logger.error(f"Failed to place emergency SL: {e}")
+    except Exception as e:
+        logger.exception(f"Failed to place emergency SL: {e}")
+
+
+def cancel_emergency_sl(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Cancel the emergency SL order."""
+    order_id = state.get('emergency_sl_order_id')
+    if not order_id or order_id == _EXCHANGE_MANAGED:
+        state['emergency_sl_order_id'] = None
+        return
+
+    symbol = config['symbol']
+    try:
+        exchange.cancel_order(order_id, symbol)
+        logger.info(f"🛡️ Emergency SL cancelled: {order_id}")
+    except ccxt.OrderNotFound:
+        logger.debug(f"Emergency SL already gone: {order_id}")
+    except Exception as e:
+        logger.warning(f"Failed to cancel emergency SL {order_id}: {e}")
+    finally:
+        state['emergency_sl_order_id'] = None
+
+
+def update_emergency_sl(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Re-calculate and re-place emergency SL after slot add/remove."""
+    positions = state.get('positions') or {}
+    if not positions:
+        cancel_emergency_sl(exchange, state, config)
+        return
+
+    cancel_emergency_sl(exchange, state, config)
+    place_emergency_sl(exchange, state, config)

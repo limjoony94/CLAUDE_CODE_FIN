@@ -110,28 +110,18 @@ def verify_position_mode(exchange: ccxt.bingx, config: Dict[str, Any]) -> bool:
         True if position mode is correctly set
     """
     symbol = config['symbol']
-    expected_mode = config.get('position_mode', 'one-way').lower()
-    logger.info(f"Verifying position mode (expected: {expected_mode})...")
+    logger.info(f"Verifying position mode (expected: One-Way)...")
 
     try:
-        positions = exchange.fetch_positions([symbol])
-        has_long = any(p.get('side') == 'long' and float(p.get('contracts', 0)) > 0 for p in positions)
-        has_short = any(p.get('side') == 'short' and float(p.get('contracts', 0)) > 0 for p in positions)
-
-        if has_long and has_short:
-            logger.error("🔴 CRITICAL: Both LONG and SHORT positions exist!")
-            return False
-
-        if expected_mode == 'one-way':
-            try:
-                exchange.set_position_mode(hedged=False, symbol=symbol)
-                logger.info("✅ Position mode set to One-Way")
-            except ccxt.ExchangeError as e:
-                if 'No need to change' in str(e) or 'same' in str(e).lower():
-                    logger.info("✅ Position mode already One-Way")
-                else:
-                    logger.warning(f"⚠️ Unexpected error setting position mode: {e}")
-                    return False
+        try:
+            exchange.set_position_mode(hedged=False, symbol=symbol)
+            logger.info(f"✅ Position mode set to One-Way")
+        except ccxt.ExchangeError as e:
+            if 'No need to change' in str(e) or 'same' in str(e).lower():
+                logger.info(f"✅ Position mode already One-Way")
+            else:
+                logger.warning(f"⚠️ Unexpected error setting position mode: {e}")
+                return False
 
         return True
     except ccxt.NetworkError as e:

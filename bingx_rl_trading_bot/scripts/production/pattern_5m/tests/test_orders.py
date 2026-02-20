@@ -332,6 +332,7 @@ class TestPlaceTpSlOrders:
 
     def _make_state(self, scale_out=False):
         position = {
+            'slot_id': 's1',
             'direction': 'LONG',
             'quantity': 0.01,
             'remaining_quantity': 0.01,
@@ -344,12 +345,12 @@ class TestPlaceTpSlOrders:
                 {'stage': 1, 'quantity': 0.005, 'tp_price': 50500.0, 'filled': False, 'order_id': None},
             ] if scale_out else [],
         }
-        return {'position': position}
+        return {'positions': {'s1': position}, 'active_direction': 'LONG'}
 
     def test_no_position_returns_early(self, mock_save):
         """No position → no orders placed."""
         exchange = MagicMock()
-        place_tp_sl_orders(exchange, {'position': None}, {'symbol': 'BTC/USDT:USDT'})
+        place_tp_sl_orders(exchange, {'positions': {}}, {'symbol': 'BTC/USDT:USDT'})
         exchange.create_order.assert_not_called()
         mock_save.assert_not_called()
 
@@ -397,24 +398,24 @@ class TestVerifyTpSlOrders:
     """Test verify_tp_sl_orders() periodic health check."""
 
     def _make_state(self, tp_id='tp_1', sl_id='sl_1'):
-        return {
-            'position': {
-                'direction': 'LONG',
-                'quantity': 0.01,
-                'remaining_quantity': 0.01,
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-                'tp_order_id': tp_id,
-                'sl_order_id': sl_id,
-                'scale_out_enabled': False,
-                'scale_out_stages': [],
-            }
+        pos = {
+            'slot_id': 's1',
+            'direction': 'LONG',
+            'quantity': 0.01,
+            'remaining_quantity': 0.01,
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+            'tp_order_id': tp_id,
+            'sl_order_id': sl_id,
+            'scale_out_enabled': False,
+            'scale_out_stages': [],
         }
+        return {'positions': {'s1': pos}, 'active_direction': 'LONG'}
 
     def test_no_position_returns_early(self, mock_save):
         """No position → nothing to verify."""
         exchange = MagicMock()
-        verify_tp_sl_orders(exchange, {'position': None}, {'symbol': 'BTC/USDT:USDT'})
+        verify_tp_sl_orders(exchange, {'positions': {}}, {'symbol': 'BTC/USDT:USDT'})
         exchange.fetch_open_orders.assert_not_called()
 
     def test_orders_present_no_change(self, mock_save):
@@ -440,7 +441,7 @@ class TestVerifyTpSlOrders:
         verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         exchange.create_order.assert_called_once()
         mock_save.assert_called_once()
-        assert state['position']['tp_order_id'] == 'tp_new'
+        assert state['positions']['s1']['tp_order_id'] == 'tp_new'
 
     def test_missing_sl_replaces_and_saves(self, mock_save):
         """SL missing from exchange → re-places, saves."""
@@ -453,7 +454,7 @@ class TestVerifyTpSlOrders:
         verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         exchange.create_order.assert_called_once()
         mock_save.assert_called_once()
-        assert state['position']['sl_order_id'] == 'sl_new'
+        assert state['positions']['s1']['sl_order_id'] == 'sl_new'
 
     def test_network_error_handled(self, mock_save):
         """Network error fetching orders → no crash."""
@@ -473,26 +474,26 @@ class TestAdjustTpslToConfig:
 
     def test_no_position_returns_false(self, mock_save):
         """No position → returns False."""
-        result = adjust_tpsl_to_config(MagicMock(), {'position': None}, {})
+        result = adjust_tpsl_to_config(MagicMock(), {'positions': {}}, {})
         assert result is False
 
     def test_dynamic_mode_skips(self, mock_save):
         """Dynamic TP/SL mode → skip adjustment."""
-        state = {'position': {'direction': 'LONG'}}
+        state = {'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG'}}, 'active_direction': 'LONG'}
         config = {'_dynamic_tpsl_universal': True}
         result = adjust_tpsl_to_config(MagicMock(), state, config)
         assert result is False
 
     def test_dynamic_per_pattern_mode_skips(self, mock_save):
         """Dynamic per-pattern mode → skip adjustment."""
-        state = {'position': {'direction': 'LONG'}}
+        state = {'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG'}}, 'active_direction': 'LONG'}
         config = {'_dynamic_tpsl_per_pattern': True}
         result = adjust_tpsl_to_config(MagicMock(), state, config)
         assert result is False
 
     def test_no_pattern_in_reason_skips(self, mock_save):
         """No extractable pattern → skip."""
-        state = {'position': {'reason': 'manual entry', 'direction': 'LONG'}}
+        state = {'positions': {'s1': {'slot_id': 's1', 'reason': 'manual entry', 'direction': 'LONG'}}, 'active_direction': 'LONG'}
         result = adjust_tpsl_to_config(MagicMock(), state, {'symbol': 'BTC/USDT:USDT'})
         assert result is False
 
@@ -504,13 +505,14 @@ class TestAdjustTpslToConfig:
         tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pat]
         entry = 100000.0
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'direction': 'LONG',
                 'entry_price': entry,
                 'reason': f'Pattern: {pat} (LONG)',
                 'tp_price': round(entry * (1 + tp_pct / 100), 1),
                 'sl_price': round(entry * (1 - sl_pct / 100), 1),
-            }
+            }},
+            'active_direction': 'LONG',
         }
         result = adjust_tpsl_to_config(MagicMock(), state, {'symbol': 'BTC/USDT:USDT'})
         assert result is False
@@ -527,7 +529,7 @@ class TestAdjustTpslToConfig:
             pytest.skip("No patterns configured")
         pat = next(iter(PATTERN_OPTIMAL_TPSL))
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'direction': 'LONG',
                 'entry_price': 100000.0,
                 'quantity': 0.01,
@@ -537,7 +539,8 @@ class TestAdjustTpslToConfig:
                 'sl_price': 1.0,       # Way off
                 'tp_order_id': 'old_tp',
                 'sl_order_id': 'old_sl',
-            }
+            }},
+            'active_direction': 'LONG',
         }
         exchange = MagicMock()
         result = adjust_tpsl_to_config(exchange, state, {'symbol': 'BTC/USDT:USDT'})
@@ -563,7 +566,7 @@ class TestCancelRemainingOrders:
     def test_no_order_ids_returns_early(self):
         """Position but no order IDs → no API calls."""
         exchange = MagicMock()
-        state = {'position': {'tp_order_id': None, 'sl_order_id': None}}
+        state = {'positions': {'s1': {'slot_id': 's1', 'tp_order_id': None, 'sl_order_id': None}}, 'active_direction': 'LONG'}
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         exchange.fetch_open_orders.assert_not_called()
 
@@ -574,10 +577,11 @@ class TestCancelRemainingOrders:
             {'id': 'tp_1'}, {'id': 'sl_1'},
         ]
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': 'tp_1',
                 'sl_order_id': 'sl_1',
-            }
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert exchange.cancel_order.call_count == 2
@@ -587,10 +591,11 @@ class TestCancelRemainingOrders:
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': _EXCHANGE_MANAGED,
                 'sl_order_id': 'sl_1',
-            }
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         exchange.cancel_order.assert_called_once_with('sl_1', 'BTC/USDT:USDT')
@@ -600,10 +605,11 @@ class TestCancelRemainingOrders:
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = [{'id': 'tp_1'}]
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': 'tp_1',
                 'sl_order_id': _EXCHANGE_MANAGED,
-            }
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         exchange.cancel_order.assert_called_once_with('tp_1', 'BTC/USDT:USDT')
@@ -615,14 +621,15 @@ class TestCancelRemainingOrders:
             {'id': 'so_1'}, {'id': 'so_2'},
         ]
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': None,
                 'sl_order_id': None,
                 'scale_out_stages': [
                     {'order_id': 'so_1', 'filled': False},
                     {'order_id': 'so_2', 'filled': False},
                 ],
-            }
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert exchange.cancel_order.call_count == 2
@@ -632,14 +639,15 @@ class TestCancelRemainingOrders:
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = [{'id': 'so_2'}]
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': None,
                 'sl_order_id': None,
                 'scale_out_stages': [
                     {'order_id': 'so_1', 'filled': True},
                     {'order_id': 'so_2', 'filled': False},
                 ],
-            }
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         exchange.cancel_order.assert_called_once_with('so_2', 'BTC/USDT:USDT')
@@ -649,7 +657,7 @@ class TestCancelRemainingOrders:
         exchange = MagicMock()
         exchange.fetch_open_orders.side_effect = ccxt.NetworkError('timeout')
         state = {
-            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})  # no raise
 
@@ -661,7 +669,7 @@ class TestPlaceScaleOutOrders:
     """Test _place_scale_out_orders() staged TP order placement."""
 
     def test_single_stage_success(self):
-        """Single stage → places one TP order with closePosition."""
+        """Single stage → places one TP order."""
         exchange = MagicMock()
         exchange.create_order.return_value = {'id': 'so_tp_1'}
         position = {'direction': 'LONG'}
@@ -669,12 +677,11 @@ class TestPlaceScaleOutOrders:
         _place_scale_out_orders(exchange, position, 'BTC/USDT:USDT', 'sell', stages)
         exchange.create_order.assert_called_once()
         assert stages[0]['order_id'] == 'so_tp_1'
-        # Last stage gets closePosition=True
         call_params = exchange.create_order.call_args[1]['params']
-        assert call_params.get('closePosition') is True
+        assert call_params.get('positionSide') == 'BOTH'
 
     def test_two_stages_success(self):
-        """Two stages → first without closePosition, last with it."""
+        """Two stages → both placed with amount-based orders."""
         exchange = MagicMock()
         exchange.create_order.side_effect = [
             {'id': 'so_tp_1'},
@@ -800,8 +807,8 @@ class TestVerifyScaleOutOrders:
         result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
         assert result is False
 
-    def test_last_stage_gets_close_position(self):
-        """Last stage → closePosition=True in order params."""
+    def test_last_stage_replaces_order(self):
+        """Last stage with no order_id → re-places with amount-based order."""
         exchange = MagicMock()
         exchange.create_order.return_value = {'id': 'so_new'}
         position = {'direction': 'LONG', 'quantity': 0.01}
@@ -810,7 +817,8 @@ class TestVerifyScaleOutOrders:
         ]
         _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
         call_params = exchange.create_order.call_args[1]['params']
-        assert call_params.get('closePosition') is True
+        assert call_params.get('positionSide') == 'BOTH'
+        assert stages[0]['order_id'] == 'so_new'
 
 
 # ── Error Path Tests for place_tp_sl_orders ──────────────────
@@ -826,10 +834,10 @@ class TestPlaceTpSlOrdersErrors:
         """NetworkError during placement → no crash."""
         mock_tp.side_effect = ccxt.NetworkError('timeout')
         exchange = MagicMock()
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1', 
             'direction': 'LONG', 'quantity': 0.01, 'tp_price': 51000.0,
             'sl_price': 49000.0,
-        }}
+        }}, 'active_direction': 'LONG'}
         config = {'symbol': 'BTC/USDT:USDT'}
         # place_tp_sl_orders catches NetworkError internally
         place_tp_sl_orders(exchange, state, config)
@@ -887,7 +895,7 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'tp_1'}]
         exchange.cancel_order.side_effect = ccxt.OrderNotFound('already gone')
         state = {
-            'position': {'tp_order_id': 'tp_1', 'sl_order_id': None},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': None}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -899,7 +907,7 @@ class TestCancelRemainingOrdersErrors:
         ]
         exchange.cancel_order.side_effect = ccxt.ExchangeError('cannot cancel')
         state = {
-            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert exchange.cancel_order.call_count == 2
@@ -910,10 +918,11 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'so_1'}]
         exchange.cancel_order.side_effect = ccxt.OrderNotFound('gone')
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': None, 'sl_order_id': None,
                 'scale_out_stages': [{'order_id': 'so_1', 'filled': False}],
-            },
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -922,7 +931,7 @@ class TestCancelRemainingOrdersErrors:
         exchange = MagicMock()
         exchange.fetch_open_orders.side_effect = ccxt.ExchangeError('invalid')
         state = {
-            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -931,7 +940,7 @@ class TestCancelRemainingOrdersErrors:
         exchange = MagicMock()
         exchange.fetch_open_orders.side_effect = RuntimeError('weird')
         state = {
-            'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -941,7 +950,7 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'tp_1'}]
         exchange.cancel_order.side_effect = RuntimeError('weird')
         state = {
-            'position': {'tp_order_id': 'tp_1', 'sl_order_id': None},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': None}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -951,7 +960,7 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
         exchange.cancel_order.side_effect = ccxt.OrderNotFound('gone')
         state = {
-            'position': {'tp_order_id': None, 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': None, 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -961,7 +970,7 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
         exchange.cancel_order.side_effect = ccxt.ExchangeError('err')
         state = {
-            'position': {'tp_order_id': None, 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': None, 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -971,7 +980,7 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'sl_1'}]
         exchange.cancel_order.side_effect = RuntimeError('weird')
         state = {
-            'position': {'tp_order_id': None, 'sl_order_id': 'sl_1'},
+            'positions': {'s1': {'slot_id': 's1', 'tp_order_id': None, 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -981,10 +990,11 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'so_1'}]
         exchange.cancel_order.side_effect = ccxt.ExchangeError('err')
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': None, 'sl_order_id': None,
                 'scale_out_stages': [{'order_id': 'so_1', 'filled': False}],
-            },
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -994,10 +1004,11 @@ class TestCancelRemainingOrdersErrors:
         exchange.fetch_open_orders.return_value = [{'id': 'so_1'}]
         exchange.cancel_order.side_effect = RuntimeError('weird')
         state = {
-            'position': {
+            'positions': {'s1': {'slot_id': 's1',
                 'tp_order_id': None, 'sl_order_id': None,
                 'scale_out_stages': [{'order_id': 'so_1', 'filled': False}],
-            },
+            }},
+            'active_direction': 'LONG',
         }
         cancel_remaining_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
@@ -1015,10 +1026,10 @@ class TestPlaceTpSlOrdersExchangeErrors:
         """ExchangeError → caught, no crash."""
         mock_tp.side_effect = ccxt.ExchangeError('order rejected')
         exchange = MagicMock()
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1', 
             'direction': 'LONG', 'quantity': 0.01,
             'tp_price': 51000.0, 'sl_price': 49000.0,
-        }}
+        }}, 'active_direction': 'LONG'}
         place_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
@@ -1028,10 +1039,10 @@ class TestPlaceTpSlOrdersExchangeErrors:
         """Generic exception → caught, no crash."""
         mock_tp.side_effect = RuntimeError('unexpected')
         exchange = MagicMock()
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1', 
             'direction': 'LONG', 'quantity': 0.01,
             'tp_price': 51000.0, 'sl_price': 49000.0,
-        }}
+        }}, 'active_direction': 'LONG'}
         place_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
 
@@ -1052,12 +1063,14 @@ class TestAdjustTpslToConfigExtended:
         tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pattern]
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = []
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1',
             'direction': 'SHORT', 'entry_price': 50000.0,
             'quantity': 0.01, 'remaining_quantity': 0.01,
             'tp_price': 0, 'sl_price': 0,
             'reason': f'Pattern: {pattern} (SHORT)',
-        }}
+        }},
+            'active_direction': 'SHORT',
+        }
         config = {'symbol': 'BTC/USDT:USDT'}
         result = adjust_tpsl_to_config(exchange, state, config)
         assert result is True
@@ -1065,11 +1078,11 @@ class TestAdjustTpslToConfigExtended:
     def test_pattern_not_in_optimal_returns_false(self):
         """Unknown pattern → returns False."""
         exchange = MagicMock()
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1', 
             'direction': 'LONG', 'entry_price': 50000.0,
             'quantity': 0.01,
             'reason': 'Pattern: ZZ-ZZ-ZZ (LONG)',
-        }}
+        }}, 'active_direction': 'LONG'}
         config = {'symbol': 'BTC/USDT:USDT'}
         result = adjust_tpsl_to_config(exchange, state, config)
         assert result is False
@@ -1081,12 +1094,14 @@ class TestAdjustTpslToConfigExtended:
         pattern = list(PATTERN_OPTIMAL_TPSL.keys())[0]
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = []
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1',
             'direction': 'LONG', 'entry_price': 50000.0,
             'quantity': 0.01, 'remaining_quantity': 0.01,
             'tp_price': 0, 'sl_price': 0,
             'reason': f'Pattern: {pattern} (LONG)',
-        }}
+        }},
+            'active_direction': 'LONG',
+        }
         config = {'symbol': 'BTC/USDT:USDT'}
         result = adjust_tpsl_to_config(exchange, state, config)
         assert result is False
@@ -1239,11 +1254,12 @@ class TestVerifyTpSlOrdersErrorPaths:
         """scale_out_enabled + stages → calls _verify_scale_out_orders (line 350)."""
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = []
-        state = {'position': {
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'LONG',
             'scale_out_enabled': True,
             'scale_out_stages': [{'stage': 1, 'order_id': 'so_1'}],
             'tp_order_id': None, 'sl_order_id': None,
-        }}
+        }}, 'active_direction': 'LONG'}
         verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         mock_vso.assert_called_once()
         mock_save.assert_called_once()
@@ -1252,14 +1268,14 @@ class TestVerifyTpSlOrdersErrorPaths:
         """ExchangeError on fetch_open_orders → caught (lines 368-369)."""
         exchange = MagicMock()
         exchange.fetch_open_orders.side_effect = ccxt.ExchangeError('invalid')
-        state = {'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}
+        state = {'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG'}
         verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
     def test_generic_exception_caught(self):
         """Generic exception on fetch_open_orders → caught (lines 370-371)."""
         exchange = MagicMock()
         exchange.fetch_open_orders.side_effect = RuntimeError('unexpected')
-        state = {'position': {'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}
+        state = {'positions': {'s1': {'slot_id': 's1', 'tp_order_id': 'tp_1', 'sl_order_id': 'sl_1'}}, 'active_direction': 'LONG'}
         verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
 
 

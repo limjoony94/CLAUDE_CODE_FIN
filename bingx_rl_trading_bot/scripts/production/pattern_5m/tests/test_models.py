@@ -332,7 +332,8 @@ class TestBotStateSchema:
 
     def test_required_keys_set(self):
         expected = {
-            'position', 'daily_pnl', 'daily_trades', 'consecutive_losses',
-            'total_trades', 'total_pnl', 'winning_trades', 'last_trade_date',
+            'positions', 'active_direction', 'daily_pnl', 'daily_trades',
+            'consecutive_losses', 'total_trades', 'total_pnl', 'winning_trades',
+            'last_trade_date',
         }
         assert BOT_STATE_REQUIRED_KEYS == expected

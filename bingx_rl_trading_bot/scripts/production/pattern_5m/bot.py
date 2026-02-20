@@ -256,8 +256,8 @@ def _run_bot_main(
     # Crash recovery
     recover_from_crash(exchange, state, config, cache, circuit_breaker, metrics)
 
-    # Check if existing position's TP/SL matches current config
-    if state.get('position'):
+    # Check if existing positions' TP/SL match current config
+    if state.get('positions') or {}:
         adjust_tpsl_to_config(exchange, state, config)
 
     # Candle-aligned loop state
@@ -279,7 +279,7 @@ def _run_bot_main(
                 continue
 
             # Check consecutive loss limit (v1.27.0)
-            if check_consecutive_loss_limit(state) and not state.get('position'):
+            if check_consecutive_loss_limit(state) and not state.get('positions') or {}:
                 consec = state.get('consecutive_losses', 0)
                 logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), pausing {CONSECUTIVE_LOSS_PAUSE_SECONDS}s")
                 _interruptible_sleep(CONSECUTIVE_LOSS_PAUSE_SECONDS)
@@ -288,31 +288,28 @@ def _run_bot_main(
                 continue
 
             timing = _get_candle_timing()
-            has_position = bool(state.get('position'))
+            has_position = bool(state.get('positions') or {})
             now = time.time()
 
             # === TRADING WINDOW: First 30s after candle close ===
             if timing.in_trading_window and timing.candle_id != last_processed_candle_id:
                 _wait_for_candle_settle(config)
 
+                # 1. Check all active slots for TP/SL hit
                 if has_position:
-                    # Check if position was closed (TP/SL hit) first
                     position_closed = check_position_status(
                         exchange, state, config, cache, circuit_breaker, metrics
                     )
                     if not position_closed:
-                        _process_existing_position(
+                        # Check early exit for all active slots
+                        _process_existing_positions(
                             exchange, state, config, cache, circuit_breaker, metrics
                         )
-                    else:
-                        # Position closed in this trading window — check for new entry on same candle
-                        _process_no_position(
-                            exchange, state, config, cache, circuit_breaker, metrics
-                        )
-                else:
-                    _process_no_position(
-                        exchange, state, config, cache, circuit_breaker, metrics
-                    )
+
+                # 2. Check for new entry signal (always, if slots available)
+                _process_entry_signal(
+                    exchange, state, config, cache, circuit_breaker, metrics
+                )
 
                 last_processed_candle_id = timing.candle_id
 
@@ -323,7 +320,7 @@ def _run_bot_main(
                         exchange, state, config, cache, circuit_breaker, metrics
                     )
                     if position_closed:
-                        has_position = bool(state.get('position'))
+                        has_position = bool(state.get('positions') or {})
 
                 # Position sync (clock-aligned, every 5 min)
                 last_sync_time = _maybe_sync_position(
@@ -337,14 +334,15 @@ def _run_bot_main(
                 )
 
                 # Time-based maintenance tasks
-                has_position = bool(state.get('position'))
+                has_position = bool(state.get('positions') or {})
                 if has_position:
                     if now - last_tp_sl_verify_time >= TP_SL_VERIFY_INTERVAL_SECONDS:
                         verify_tp_sl_orders(exchange, state, config)
                         last_tp_sl_verify_time = now
 
                     if now - last_log_status_time >= LOG_STATUS_INTERVAL_SECONDS:
-                        _log_position_status(state['position'], config, cache, exchange)
+                        for slot in (state.get('positions') or {}).values():
+                            _log_position_status(slot, config, cache, exchange)
                         last_log_status_time = now
                 else:
                     if now - last_log_status_time >= LOG_STATUS_INTERVAL_SECONDS:
@@ -356,7 +354,7 @@ def _run_bot_main(
                     last_metrics_save_time = now
 
             # Smart sleep — refresh in case position changed during this iteration
-            has_position = bool(state.get('position'))
+            has_position = bool(state.get('positions') or {})
             sleep_duration = _calculate_sleep_duration(has_position, last_processed_candle_id)
             _interruptible_sleep(sleep_duration)
 
@@ -441,7 +439,7 @@ def _maybe_sync_position(
     return last_sync_time
 
 
-def _process_existing_position(
+def _process_existing_positions(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -450,30 +448,34 @@ def _process_existing_position(
     metrics: PerformanceMetrics,
 ) -> bool:
     """
-    Check for early exit signals on an existing position.
+    Check for early exit signals on all active slots.
 
     Called during trading window after candle settle.
     Position status check (TP/SL hit) is handled by caller.
 
     Returns:
-        True if trading action occurred (early exit), False otherwise
+        True if any trading action occurred (early exit), False otherwise
     """
-    position = state['position']
+    positions = state.get('positions') or {}
+    if not positions:
+        return False
 
-    # Fetch indicators for early exit analysis
+    # Fetch indicators once for all slots
     df = _fetch_and_calculate_indicators(exchange, config)
+    if df is None:
+        return False
 
-    if df is not None:
-        try:
-            ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
-            current_price = ticker['last']
+    any_action = False
+    try:
+        ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
+        current_price = ticker['last']
 
-            # Check early exit signal (v1.14.1: returns last_counted_candle_ts)
+        for position in list(positions.values()):  # copy — dict may mutate during iteration
             should_exit, new_reversal_count, exit_reason, last_counted_ts = check_early_exit_signal(
                 position, df, current_price, config
             )
 
-            # Update reversal count and candle timestamp in position state
+            # Update reversal count and candle timestamp in slot state
             state_changed = False
             if position.get('reversal_count', 0) != new_reversal_count:
                 position['reversal_count'] = new_reversal_count
@@ -486,22 +488,60 @@ def _process_existing_position(
 
             # Execute early exit if triggered
             if should_exit and exit_reason:
-                logger.info(f"🚨 Early exit triggered: {exit_reason}")
+                slot_id = position.get('slot_id', '?')
+                logger.info(f"🚨 Early exit triggered for slot {slot_id}: {exit_reason}")
                 success = close_position_market(
-                    exchange, state, config, cache, exit_reason, metrics
+                    exchange, state, config, cache, exit_reason, metrics,
+                    position=position,
                 )
                 if success:
-                    logger.info(f"✅ Early exit completed: {exit_reason}")
-                    return True
-                return False  # Early exit attempted but failed
+                    logger.info(f"✅ Early exit completed for slot {slot_id}: {exit_reason}")
+                    any_action = True
 
-        except Exception as e:
-            logger.warning(f"Early exit check failed: {e}")
+    except Exception as e:
+        logger.warning(f"Early exit check failed: {e}")
 
-    return False
+    return any_action
 
 
-def _process_no_position(
+def _route_signal(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    signal_direction: str,
+) -> str:
+    """
+    Route a trading signal to the appropriate action.
+
+    Returns:
+        'OPEN' — open new slot
+        'CLOSE_OLDEST' — close oldest opposite-direction slot (FIFO)
+        'SKIP' — ignore signal (slots full)
+    """
+    positions = state.get('positions') or {}
+    max_pos = config.get('max_positions', 1)
+
+    if not positions:
+        return 'OPEN'
+
+    active_dir = state.get('active_direction')
+    if signal_direction == active_dir:
+        if len(positions) < max_pos:
+            return 'OPEN'
+        return 'SKIP'
+
+    # Opposite direction
+    return 'CLOSE_OLDEST'
+
+
+def _get_oldest_slot(state: Dict[str, Any]) -> Optional[Dict]:
+    """Get the oldest active slot (by entry_time, FIFO)."""
+    positions = state.get('positions') or {}
+    if not positions:
+        return None
+    return min(positions.values(), key=lambda s: s.get('entry_time', ''))
+
+
+def _process_entry_signal(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -510,13 +550,20 @@ def _process_no_position(
     metrics: PerformanceMetrics,
 ) -> bool:
     """
-    Check for entry signals when no position exists.
+    Check for entry signals and route based on slot availability.
 
-    Called during trading window after candle settle.
+    Called during trading window. Handles OPEN, CLOSE_OLDEST, and SKIP.
 
     Returns:
-        True if trading action occurred (position opened), False otherwise
+        True if trading action occurred, False otherwise
     """
+    positions = state.get('positions') or {}
+    max_positions = config.get('max_positions', 1)
+
+    # Skip if all slots full and same direction
+    if len(positions) >= max_positions:
+        return False
+
     # Check cooldown
     if not check_cooldown(state, config):
         return False
@@ -528,18 +575,36 @@ def _process_no_position(
 
     # Check for entry signal
     signal_result, reason = check_entry_signal(df, state, config)
+    if not signal_result:
+        return False
 
-    if signal_result:
-        logger.info(f"🎯 Signal detected: {signal_result} | {reason}")
+    logger.info(f"🎯 Signal detected: {signal_result} | {reason}")
+
+    action = _route_signal(state, config, signal_result)
+
+    if action == 'OPEN':
         success = open_position(
             exchange, state, config, signal_result, reason,
             cache, circuit_breaker, metrics, df
         )
         if success:
-            logger.info(f"✅ Position opened: {signal_result}")
+            logger.info(f"✅ Position opened: {signal_result} (slot {len(state.get('positions') or {})})")
             return True
         return False
 
+    elif action == 'CLOSE_OLDEST':
+        oldest = _get_oldest_slot(state)
+        if oldest:
+            slot_id = oldest.get('slot_id', '?')
+            logger.info(f"🔄 Closing oldest slot {slot_id} for opposite signal")
+            close_position_market(
+                exchange, state, config, cache, 'OPPOSITE_SIGNAL', metrics,
+                position=oldest,
+            )
+            # Don't open new position on same candle — next cycle
+            return True
+
+    # SKIP: do nothing
     return False
 
 

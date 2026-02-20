@@ -34,6 +34,7 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
         try:
             with open(state_file, 'r') as f:
                 state = json.load(f)
+                state = _migrate_state_v2(state)
                 state = _ensure_required_keys(state, default_state)
                 state = _check_daily_reset(state)
                 return state
@@ -51,6 +52,7 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
                         os.replace(new_file, state_file)
                     except PermissionError:
                         logger.debug("Could not promote .new to main (PermissionError)")
+                    state = _migrate_state_v2(state)
                     state = _ensure_required_keys(state, default_state)
                     state = _check_daily_reset(state)
                     return state
@@ -65,6 +67,7 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
                     with open(bak_file, 'r') as f:
                         state = json.load(f)
                         logger.info(f"Successfully recovered state from backup")
+                        state = _migrate_state_v2(state)
                         state = _ensure_required_keys(state, default_state)
                         state = _check_daily_reset(state)
                         return state
@@ -87,9 +90,12 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
 
 
 def _create_default_state() -> Dict[str, Any]:
-    """Create a new default state dictionary."""
+    """Create a new default state dictionary (v2: multi-position dict)."""
     return {
-        'position': None,
+        'positions': {},  # v1.29.0: {slot_id: position_dict} (was: position: None)
+        'active_direction': None,  # v1.29.0: None / 'LONG' / 'SHORT'
+        'emergency_sl_order_id': None,  # v1.29.0: closePosition SL for entire NET position
+        'state_version': 2,
         'last_signal_time': None,
         'last_signal_candle_timestamp': None,
         'daily_pnl': 0.0,
@@ -103,6 +109,85 @@ def _create_default_state() -> Dict[str, Any]:
         'created_at': datetime.now().isoformat(),
         'updated_at': datetime.now().isoformat(),
     }
+
+
+def _migrate_state_v2(state: Dict[str, Any]) -> Dict[str, Any]:
+    """Migrate to v2 dict format. Handles:
+      - v1 (single position): state['position'] → dict
+      - v2-list (partial impl): state['positions'] = list → dict
+      - v2-dict (current): no-op
+
+    v1 format: state['position'] = dict | None
+    v2 format: state['positions'] = {slot_id: dict, ...}
+    """
+    # v1 → v2: single position to dict
+    if 'position' in state and 'positions' not in state:
+        old_pos = state.pop('position')
+        if old_pos:
+            slot_id = old_pos.get('slot_id', _generate_slot_id())
+            old_pos['slot_id'] = slot_id
+            state['positions'] = {slot_id: old_pos}
+            state['active_direction'] = old_pos.get('direction')
+        else:
+            state['positions'] = {}
+            state['active_direction'] = None
+        state['emergency_sl_order_id'] = state.pop('sl_order_id', None)
+        state['state_version'] = 2
+        logger.info(f"State migrated v1→v2: {len(state['positions'])} active positions")
+
+    # v2-list → v2-dict: convert list format to dict format
+    elif 'positions' in state and isinstance(state['positions'], list):
+        old_list = state['positions']
+        new_dict = {}
+        for slot in old_list:
+            if isinstance(slot, dict):
+                slot_id = slot.get('slot_id', _generate_slot_id())
+                slot['slot_id'] = slot_id
+                new_dict[slot_id] = slot
+        state['positions'] = new_dict
+        if new_dict:
+            first_slot = next(iter(new_dict.values()))
+            state.setdefault('active_direction', first_slot.get('direction'))
+        else:
+            state.setdefault('active_direction', None)
+        state.setdefault('emergency_sl_order_id', None)
+        state['state_version'] = 2
+        logger.info(f"State migrated v2-list→v2-dict: {len(new_dict)} active positions")
+
+    # Ensure v2 fields exist even on v2-dict states
+    state.setdefault('active_direction', None)
+    state.setdefault('emergency_sl_order_id', None)
+
+    # Keep has_position in sync
+    state['has_position'] = len(state.get('positions') or {}) > 0
+    return state
+
+
+def _generate_slot_id() -> str:
+    """Generate a short unique slot ID."""
+    import uuid
+    return uuid.uuid4().hex[:8]
+
+
+def _downgrade_state_v1(state: Dict[str, Any]) -> Dict[str, Any]:
+    """Downgrade v2 (multi position dict) → v1 (single position) for rollback.
+
+    Takes the first active position (if any) and puts it back as scalar.
+    """
+    if 'positions' in state and 'position' not in state:
+        positions = state.pop('positions')
+        if isinstance(positions, dict):
+            values = list(positions.values())
+            state['position'] = values[0] if values else None
+        elif isinstance(positions, list):
+            state['position'] = positions[0] if positions else None
+        else:
+            state['position'] = None
+        state.pop('state_version', None)
+        state.pop('active_direction', None)
+        state.pop('emergency_sl_order_id', None)
+        logger.info(f"State downgraded v2→v1: position={'active' if state['position'] else 'None'}")
+    return state
 
 
 def _ensure_required_keys(state: Dict[str, Any], defaults: Dict[str, Any]) -> Dict[str, Any]:
@@ -155,6 +240,7 @@ def _try_timestamped_backups(state_file: str, default_state: Dict[str, Any]) -> 
                 if 'total_trades' not in state:
                     continue
                 logger.info(f"✅ Recovered state from backup: {os.path.basename(filepath)}")
+                state = _migrate_state_v2(state)
                 state = _ensure_required_keys(state, default_state)
                 state = _check_daily_reset(state)
                 return state

@@ -271,7 +271,9 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
 class BotState(TypedDict, total=False):
     """Schema for bot state dictionary — documents required and optional keys."""
     # Required
-    position: Optional[Dict[str, Any]]
+    positions: Dict[str, Dict[str, Any]]  # v1.29.0: {slot_id: position_dict}
+    active_direction: Optional[str]  # v1.29.0: None / 'LONG' / 'SHORT'
+    emergency_sl_order_id: Optional[str]  # v1.29.0: closePosition SL order ID
     daily_pnl: float
     daily_trades: int
     consecutive_losses: int
@@ -285,10 +287,12 @@ class BotState(TypedDict, total=False):
     last_trade: Optional[Dict[str, Any]]
     created_at: str
     updated_at: str
+    state_version: int  # v1.29.0: 2 = multi-position dict format
 
 
 # Keys that MUST exist in a valid state (used by validate_state)
 BOT_STATE_REQUIRED_KEYS = {
-    'position', 'daily_pnl', 'daily_trades', 'consecutive_losses',
-    'total_trades', 'total_pnl', 'winning_trades', 'last_trade_date',
+    'positions', 'active_direction', 'daily_pnl', 'daily_trades',
+    'consecutive_losses', 'total_trades', 'total_pnl', 'winning_trades',
+    'last_trade_date',
 }

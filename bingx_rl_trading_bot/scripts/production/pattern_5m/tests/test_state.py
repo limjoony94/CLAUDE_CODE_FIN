@@ -39,7 +39,8 @@ def temp_state_file(tmp_path):
 def sample_state():
     """Create a sample state dictionary for testing."""
     return {
-        'position': None,
+        'positions': {},
+        'active_direction': None,
         'last_signal_time': None,
         'last_signal_candle_timestamp': None,
         'daily_pnl': 0.0,
@@ -63,7 +64,8 @@ class TestDefaultState:
         """Default state should have all required fields."""
         state = _create_default_state()
 
-        assert state['position'] is None
+        assert state['positions'] == {}
+        assert state['active_direction'] is None
         assert state['last_signal_time'] is None
         assert state['daily_pnl'] == 0.0
         assert state['daily_trades'] == 0
@@ -99,7 +101,7 @@ class TestStateSaveLoad:
         """Loading nonexistent file should return default state."""
         loaded = load_state(temp_state_file)
 
-        assert loaded['position'] is None
+        assert loaded['positions'] == {}
         assert loaded['total_trades'] == 0
         assert loaded['daily_pnl'] == 0.0
 
@@ -111,7 +113,7 @@ class TestStateSaveLoad:
         loaded = load_state(temp_state_file)
 
         # Should return default state when JSON is corrupt
-        assert loaded['position'] is None
+        assert loaded['positions'] == {}
         assert loaded['total_trades'] == 0
 
     def test_bak_file_created_on_save(self, temp_state_file, sample_state):
@@ -166,7 +168,7 @@ class TestStateSaveLoad:
         # Should fall back to default state
         loaded = load_state(temp_state_file)
 
-        assert loaded['position'] is None
+        assert loaded['positions'] == {}
         assert loaded['total_trades'] == 0
 
     def test_save_updates_timestamp(self, temp_state_file, sample_state):
@@ -327,18 +329,20 @@ class TestEdgeCases:
     def test_state_with_position_data(self, temp_state_file):
         """State with position should persist correctly."""
         state = _create_default_state()
-        state['position'] = {
+        state['positions'] = {'s1': {
+            'slot_id': 's1',
             'symbol': 'BTC-USDT',
-            'side': 'LONG',
+            'direction': 'LONG',
             'entry_price': 50000.0,
             'quantity': 0.01,
-        }
+        }}
+        state['active_direction'] = 'LONG'
 
         save_state(state, temp_state_file, create_backup=False)
         loaded = load_state(temp_state_file)
 
-        assert loaded['position']['symbol'] == 'BTC-USDT'
-        assert loaded['position']['entry_price'] == 50000.0
+        assert loaded['positions']['s1']['symbol'] == 'BTC-USDT'
+        assert loaded['positions']['s1']['entry_price'] == 50000.0
 
 
 # ── Metrics Persistence ──────────────────────────────────────
@@ -724,7 +728,7 @@ class TestLoadStateRecovery:
 
         result = load_state(state_file)
         assert result['total_trades'] == 0
-        assert result['position'] is None
+        assert result['positions'] == {}
 
     def test_no_bak_tries_timestamped(self, tmp_path):
         """No .bak file → tries timestamped backups."""

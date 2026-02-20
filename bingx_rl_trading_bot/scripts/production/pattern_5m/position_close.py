@@ -6,6 +6,7 @@ Functions for closing positions and crash recovery.
 import logging
 import os
 import time
+import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional, Tuple
 
@@ -21,7 +22,7 @@ from .position_open import calculate_tp_sl, setup_scale_out
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_positions_cached, fetch_ticker_cached
 from .state import save_state, save_metrics
-from .orders import place_tp_sl_orders, cancel_remaining_orders
+from .orders import place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl, cancel_emergency_sl
 from .utils import extract_pattern_name
 
 logger = logging.getLogger('pattern_5m')
@@ -55,30 +56,36 @@ def detect_ghost_positions(
         positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
                                            circuit_breaker=circuit_breaker, metrics=metrics)
 
-        exchange_position = None
+        # Build exchange map by direction
+        exchange_map = {}
         for pos in positions:
             contracts = float(pos.get('contracts', 0))
             if contracts > 0:
-                exchange_position = pos
-                break
+                exchange_map[pos.get('side')] = pos
 
-        local_position = state.get('position')
+        # Build set of directions tracked by bot
+        bot_slots = state.get('positions') or {}
+        bot_tracked_sides = set()
+        for slot in bot_slots.values():
+            d = slot.get('direction', '')
+            bot_tracked_sides.add('long' if d == 'LONG' else 'short')
 
-        # Ghost position: exchange has position but local state doesn't
-        if exchange_position and not local_position:
-            direction = 'LONG' if exchange_position.get('side') == 'long' else 'SHORT'
-            qty = float(exchange_position.get('contracts', 0))
-            entry_price = float(exchange_position.get('entryPrice', 0))
+        # Ghost: exchange has position in a direction bot doesn't track
+        for side, ex_pos in exchange_map.items():
+            if side not in bot_tracked_sides:
+                direction = 'LONG' if side == 'long' else 'SHORT'
+                qty = float(ex_pos.get('contracts', 0))
+                entry_price = float(ex_pos.get('entryPrice', 0))
 
-            logger.warning(
-                f"👻 GHOST POSITION DETECTED on exchange:\n"
-                f"   Symbol: {symbol}\n"
-                f"   Direction: {direction}\n"
-                f"   Quantity: {qty}\n"
-                f"   Entry Price: {entry_price}\n"
-                f"   → This position is not tracked in local state\n"
-                f"   → Crash recovery will attempt to reconcile"
-            )
+                logger.warning(
+                    f"👻 GHOST POSITION DETECTED on exchange:\n"
+                    f"   Symbol: {symbol}\n"
+                    f"   Direction: {direction}\n"
+                    f"   Quantity: {qty}\n"
+                    f"   Entry Price: {entry_price}\n"
+                    f"   → This position is not tracked in local state\n"
+                    f"   → Crash recovery will attempt to reconcile"
+                )
     except Exception as e:
         logger.exception(f"❌ Ghost position detection failed: {e}")
 
@@ -115,6 +122,7 @@ def record_closed_position(
     exit_reason: str,
     cache: APICache,
     metrics: Optional[PerformanceMetrics] = None,
+    position: Optional[Dict] = None,
 ) -> None:
     """
     Record a closed position and update statistics.
@@ -127,13 +135,16 @@ def record_closed_position(
         exit_reason: Reason for exit (TP, SL, etc.)
         cache: APICache instance
         metrics: Optional PerformanceMetrics
+        position: Specific slot to close (if None, uses first slot)
     """
-    position = state.get('position')
-    if not position:
-        return
+    if position is None:
+        positions = state.get('positions') or {}
+        if not positions:
+            return
+        position = next(iter(positions.values()))
 
     if exchange:
-        cancel_remaining_orders(exchange, state, config)
+        cancel_remaining_orders(exchange, state, config, position=position)
 
     direction = 1 if position['direction'] == 'LONG' else -1
 
@@ -196,7 +207,29 @@ def record_closed_position(
     }
 
     state['last_signal_time'] = datetime.now().isoformat()
-    state['position'] = None
+
+    # Remove this slot from positions dict
+    slot_id = position.get('slot_id')
+    positions = state.get('positions') or {}
+    if slot_id and slot_id in positions:
+        del positions[slot_id]
+    elif slot_id is None:
+        # Legacy fallback: remove first slot matching direction
+        for sid, s in list(positions.items()):
+            if s.get('direction') == position.get('direction'):
+                del positions[sid]
+                break
+    state['has_position'] = len(positions) > 0
+    # Update active_direction
+    if not positions:
+        state['active_direction'] = None
+
+    # v1.29.0: Update emergency SL after slot removal
+    if exchange and positions:
+        update_emergency_sl(exchange, state, config)
+    elif exchange and not positions:
+        cancel_emergency_sl(exchange, state, config)
+
     save_state(state, is_trade_close=True)
 
     # Save metrics immediately after trade close
@@ -236,9 +269,13 @@ def recover_position_to_state(
     quantity = float(exchange_pos.get('contracts', 0))
     dir_mult = 1 if direction == 'LONG' else -1
 
-    # Preserve pattern_name from previous state if available (before overwriting)
-    old_position = state.get('position') or {}
-    old_pattern_name = extract_pattern_name(old_position.get('reason', '')) or old_position.get('pattern_name')
+    # Try to find pattern_name from existing slots for this direction
+    old_pattern_name = None
+    for slot in (state.get('positions') or {}).values():
+        if slot.get('direction') == direction:
+            old_pattern_name = extract_pattern_name(slot.get('reason', '')) or slot.get('pattern_name')
+            if old_pattern_name:
+                break
 
     # Try to read TP/SL from existing exchange orders (preserves per-pattern values)
     tp_from_exchange, sl_from_exchange = _read_tpsl_from_exchange_orders(
@@ -269,7 +306,9 @@ def recover_position_to_state(
     scale_out_stages = setup_scale_out(strategy, entry_price, quantity, dir_mult, tp_pct_adjusted)
 
     reason = f"Recovered from exchange ({old_pattern_name})" if old_pattern_name else 'Recovered from exchange'
-    state['position'] = {
+    slot_id = uuid.uuid4().hex[:8]
+    recovered_slot = {
+        'slot_id': slot_id,
         'direction': direction,
         'entry_price': entry_price,
         'quantity': quantity,
@@ -285,12 +324,16 @@ def recover_position_to_state(
         'recovered': True,
         'needs_tpsl': True,
     }
+    positions = state.setdefault('positions', {})
+    positions[slot_id] = recovered_slot
+    state['active_direction'] = direction
+    state['has_position'] = True
     save_state(state)
 
     if exchange:
-        place_tp_sl_orders(exchange, state, config)
-        if state['position'].get('tp_order_id') or state['position'].get('sl_order_id') or scale_out_stages:
-            state['position']['needs_tpsl'] = False
+        place_tp_sl_orders(exchange, state, config, position=recovered_slot)
+        if recovered_slot.get('tp_order_id') or recovered_slot.get('sl_order_id') or scale_out_stages:
+            recovered_slot['needs_tpsl'] = False
             save_state(state)
 
 
@@ -351,6 +394,7 @@ def recalculate_position_orders(
     state: Dict[str, Any],
     config: Dict[str, Any],
     new_quantity: float,
+    position: Optional[Dict] = None,
 ) -> bool:
     """
     Recalculate scale-out stages and update TP/SL orders when position quantity changes.
@@ -360,13 +404,16 @@ def recalculate_position_orders(
         state: Bot state dictionary
         config: Bot configuration
         new_quantity: New position quantity from exchange
+        position: Specific slot to recalculate (if None, uses first slot)
 
     Returns:
         True if recalculation was successful
     """
-    position = state.get('position')
-    if not position:
-        return False
+    if position is None:
+        positions = state.get('positions') or {}
+        if not positions:
+            return False
+        position = next(iter(positions.values()))
 
     strategy = config['strategy']
     entry_price = position.get('entry_price', 0)
@@ -375,7 +422,7 @@ def recalculate_position_orders(
 
     # Cancel existing orders FIRST (before modifying scale_out_stages)
     try:
-        cancel_remaining_orders(exchange, state, config)
+        cancel_remaining_orders(exchange, state, config, position=position)
     except Exception as e:
         logger.warning(f"Failed to cancel existing orders: {e}")
 
@@ -413,7 +460,7 @@ def recalculate_position_orders(
         position['needs_tpsl'] = True
         save_state(state)
 
-        place_tp_sl_orders(exchange, state, config)
+        place_tp_sl_orders(exchange, state, config, position=position)
         if position.get('sl_order_id') or scale_out_stages:
             position['needs_tpsl'] = False
             save_state(state)
@@ -429,6 +476,11 @@ def recalculate_position_orders(
         return False
 
 
+def _get_position_side(config: Dict[str, Any], direction: str) -> str:
+    """Return positionSide for BingX API. Always 'BOTH' (One-Way mode)."""
+    return 'BOTH'
+
+
 def close_position_market(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -436,6 +488,7 @@ def close_position_market(
     cache: APICache,
     exit_reason: str = 'MARKET',
     metrics: Optional[PerformanceMetrics] = None,
+    position: Optional[Dict] = None,
 ) -> bool:
     """
     Close position with market order (used for early exit).
@@ -447,14 +500,17 @@ def close_position_market(
         cache: APICache instance
         exit_reason: Reason for closing (e.g., 'EARLY_BD', 'EARLY_BU')
         metrics: Optional PerformanceMetrics
+        position: Specific slot to close (if None, uses first slot)
 
     Returns:
         True if market close was successful
     """
-    position = state.get('position')
-    if not position:
-        logger.warning("No position to close")
-        return False
+    if position is None:
+        positions = state.get('positions') or {}
+        if not positions:
+            logger.warning("No position to close")
+            return False
+        position = next(iter(positions.values()))
 
     symbol = config['symbol']
     direction = position.get('direction', '')
@@ -466,10 +522,11 @@ def close_position_market(
 
     try:
         # Cancel existing TP/SL orders first
-        cancel_remaining_orders(exchange, state, config)
+        cancel_remaining_orders(exchange, state, config, position=position)
 
-        # Determine close side
+        # Determine close side and positionSide
         close_side = 'sell' if direction == 'LONG' else 'buy'
+        position_side = _get_position_side(config, direction)
 
         logger.info(f"🚨 Early exit: closing {direction} {quantity} {symbol} @ market ({exit_reason})")
 
@@ -480,7 +537,7 @@ def close_position_market(
             type='market',
             side=close_side,
             amount=quantity,
-            params={'positionSide': 'BOTH'}  # One-way mode
+            params={'positionSide': position_side}
         )
 
         if order:
@@ -497,7 +554,8 @@ def close_position_market(
 
             # Record the closed position
             record_closed_position(
-                exchange, state, config, fill_price, exit_reason, cache, metrics
+                exchange, state, config, fill_price, exit_reason, cache, metrics,
+                position=position,
             )
             return True
 
@@ -515,7 +573,7 @@ def close_position_market(
     # TP/SL was cancelled but market close failed — re-place both to protect position
     try:
         logger.warning("⚠️ Re-placing TP/SL after failed market close")
-        place_tp_sl_orders(exchange, state, config)
+        place_tp_sl_orders(exchange, state, config, position=position)
     except Exception as restore_e:
         logger.error(f"Failed to re-place TP/SL after market close failure: {restore_e}")
 
@@ -554,82 +612,68 @@ def recover_from_crash(
     detect_ghost_positions(exchange, state, config, cache, circuit_breaker, metrics)
 
     try:
-        positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
-                                           circuit_breaker=circuit_breaker, metrics=metrics)
+        exchange_positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
+                                                     circuit_breaker=circuit_breaker, metrics=metrics)
 
-        exchange_position = None
-        for pos in positions:
+        # Build exchange map by direction
+        exchange_map = {}  # 'long'/'short' → exchange position dict
+        for pos in exchange_positions:
             contracts = float(pos.get('contracts', 0))
             if contracts > 0:
-                exchange_position = pos
-                break
+                exchange_map[pos.get('side')] = pos
 
-        local_position = state.get('position')
+        bot_slots = state.get('positions') or {}
+        recovery_needed = False
 
-        # Case 1: Exchange has position, local doesn't
-        if exchange_position and not local_position:
-            logger.warning("🔧 Recovery: Found orphan position on exchange")
-            direction = 'LONG' if exchange_position.get('side') == 'long' else 'SHORT'
-            recover_position_to_state(state, config, exchange_position, direction, exchange, cache)
-            return True
+        # Check each direction
+        for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
+            dir_slots = {sid: s for sid, s in bot_slots.items() if s.get('direction') == dir_label}
+            exchange_pos = exchange_map.get(dir_key)
 
-        # Case 2: Local has position, exchange doesn't
-        if local_position and not exchange_position:
-            logger.warning("🔧 Recovery: Local position not found on exchange")
-            actual_exit = get_actual_exit_price(exchange, state, config)
-            if actual_exit:
-                record_closed_position(exchange, state, config, actual_exit['price'],
-                                      actual_exit['reason'], cache, metrics)
-            else:
-                # Use current ticker as fallback (more accurate than entry_price which gives PnL=0%)
-                try:
-                    ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
-                    fallback_price = ticker['last']
-                except Exception:
-                    fallback_price = local_position['entry_price']
-                record_closed_position(exchange, state, config, fallback_price,
-                                      'CRASH_RECOVERY', cache, metrics)
-            return True
+            # Case 1: Exchange has position, bot has no slots for this direction → orphan
+            if exchange_pos and not dir_slots:
+                logger.warning(f"🔧 Recovery: Found orphan {dir_label} position on exchange")
+                recover_position_to_state(state, config, exchange_pos, dir_label, exchange, cache)
+                recovery_needed = True
+                continue
 
-        # Case 3: Both exist — check direction mismatch first
-        if exchange_position and local_position:
-            ex_side = exchange_position.get('side', '')  # 'long' or 'short'
-            local_dir = local_position.get('direction', '')  # 'LONG' or 'SHORT'
-            expected_side = 'long' if local_dir == 'LONG' else 'short'
+            # Case 2: Bot has slots, exchange has no position for this direction → closed
+            if dir_slots and not exchange_pos:
+                logger.warning(f"🔧 Recovery: {len(dir_slots)} {dir_label} slot(s) not found on exchange")
+                for slot in list(dir_slots.values()):
+                    actual_exit = get_actual_exit_price(exchange, state, config, position=slot)
+                    if actual_exit:
+                        record_closed_position(exchange, state, config, actual_exit['price'],
+                                              actual_exit['reason'], cache, metrics, position=slot)
+                    else:
+                        try:
+                            ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
+                            fallback_price = ticker['last']
+                        except Exception:
+                            fallback_price = slot['entry_price']
+                        record_closed_position(exchange, state, config, fallback_price,
+                                              'CRASH_RECOVERY', cache, metrics, position=slot)
+                recovery_needed = True
+                continue
 
-            if ex_side != expected_side:
-                actual_dir = 'LONG' if ex_side == 'long' else 'SHORT'
-                logger.error(
-                    f"🔧 Recovery: Direction mismatch (local={local_dir}, exchange={actual_dir}). "
-                    f"Closing local state, recovering exchange position."
-                )
-                actual_exit = get_actual_exit_price(exchange, state, config)
-                exit_price = actual_exit['price'] if actual_exit else local_position['entry_price']
-                record_closed_position(exchange, state, config, exit_price,
-                                      'DIRECTION_MISMATCH', cache, metrics)
-                recover_position_to_state(state, config, exchange_position, actual_dir, exchange, cache)
-                return True
+            # Case 3: Both exist — check quantity mismatch
+            if exchange_pos and dir_slots:
+                ex_qty = float(exchange_pos.get('contracts', 0))
+                local_qty_sum = sum(s.get('quantity', 0) for s in dir_slots.values())
 
-            ex_qty = float(exchange_position.get('contracts', 0))
-            local_qty = local_position.get('quantity', 0)
+                if abs(ex_qty - local_qty_sum) > QTY_TOLERANCE:
+                    logger.warning(
+                        f"🔧 Recovery: {dir_label} qty mismatch "
+                        f"(exchange={ex_qty}, local_sum={local_qty_sum})"
+                    )
+                    # Recalculate the first slot to absorb the difference
+                    recalculate_position_orders(exchange, state, config, ex_qty, position=next(iter(dir_slots.values())))
+                    recovery_needed = True
 
-            if abs(ex_qty - local_qty) > QTY_TOLERANCE:
-                logger.warning(f"🔧 Recovery: Quantity mismatch (exchange={ex_qty}, local={local_qty})")
-                # Recalculate scale-out stages and TP/SL orders with new quantity
-                recalculate_position_orders(exchange, state, config, ex_qty)
-                return True
+        if not recovery_needed:
+            logger.info("✅ Crash recovery check passed - state is consistent")
 
-            # Case 4: Check scale-out stages sum matches position quantity
-            scale_out_stages = local_position.get('scale_out_stages', [])
-            if scale_out_stages:
-                stages_sum = sum(s.get('quantity', 0) for s in scale_out_stages if not s.get('filled', False))
-                if abs(stages_sum - ex_qty) > QTY_TOLERANCE:
-                    logger.warning(f"🔧 Recovery: Scale-out sum mismatch (stages={stages_sum:.4f}, position={ex_qty:.4f})")
-                    recalculate_position_orders(exchange, state, config, ex_qty)
-                    return True
-
-        logger.info("✅ Crash recovery check passed - state is consistent")
-        return False
+        return recovery_needed
 
     except ccxt.NetworkError as e:
         logger.error(f"Crash recovery failed (network error): {e}")

@@ -10,7 +10,7 @@ import logging
 from datetime import datetime
 from typing import Dict, Any, List
 
-from .constants import CONFIG_FILE, DEFAULT_CONFIG, DYNAMIC_PATTERNS_FILE
+from .constants import CONFIG_FILE, DEFAULT_CONFIG, DYNAMIC_PATTERNS_FILE, MAX_ALLOWED_POSITIONS
 
 logger = logging.getLogger('pattern_5m')
 
@@ -102,6 +102,11 @@ def validate_config(config: Dict[str, Any]) -> None:
         errors.append("strategy.tp_pct must be positive")
     if strategy.get('sl_pct', 0) <= 0:
         errors.append("strategy.sl_pct must be positive")
+
+    # Validate max_positions
+    max_pos = config.get('max_positions', 1)
+    if not isinstance(max_pos, int) or max_pos < 1 or max_pos > MAX_ALLOWED_POSITIONS:
+        errors.append(f"max_positions must be 1~{MAX_ALLOWED_POSITIONS}, got {max_pos}")
 
     # Validate risk section
     risk = config.get('risk', {})

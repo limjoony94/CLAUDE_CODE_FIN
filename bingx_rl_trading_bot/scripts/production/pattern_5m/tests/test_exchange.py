@@ -295,20 +295,17 @@ class TestVerifyPositionMode:
         config = {'symbol': 'BTC/USDT:USDT', 'position_mode': 'one-way'}
         assert verify_position_mode(exchange, config) is True
 
-    def test_both_positions_exist(self):
-        """Both LONG and SHORT positions → returns False."""
+    def test_set_position_mode_success(self):
+        """set_position_mode succeeds → returns True."""
         exchange = MagicMock()
-        exchange.fetch_positions.return_value = [
-            {'side': 'long', 'contracts': 0.01},
-            {'side': 'short', 'contracts': 0.01},
-        ]
+        exchange.set_position_mode.return_value = None  # success
         config = {'symbol': 'BTC/USDT:USDT'}
-        assert verify_position_mode(exchange, config) is False
+        assert verify_position_mode(exchange, config) is True
 
     def test_network_error(self):
-        """Network error → returns False."""
+        """Network error on set_position_mode → returns False."""
         exchange = MagicMock()
-        exchange.fetch_positions.side_effect = ccxt.NetworkError('timeout')
+        exchange.set_position_mode.side_effect = ccxt.NetworkError('timeout')
         config = {'symbol': 'BTC/USDT:USDT'}
         assert verify_position_mode(exchange, config) is False
 
@@ -466,17 +463,17 @@ class TestSetupExchange:
 class TestVerifyPositionModeExtended:
     """Test verify_position_mode() — additional uncovered error paths."""
 
-    def test_exchange_error_during_fetch(self):
-        """ExchangeError during fetch_positions → returns False."""
+    def test_exchange_error_during_set_mode(self):
+        """ExchangeError during set_position_mode → returns False."""
         exchange = MagicMock()
-        exchange.fetch_positions.side_effect = ccxt.ExchangeError('fail')
+        exchange.set_position_mode.side_effect = ccxt.ExchangeError('fail')
         config = {'symbol': 'BTC/USDT:USDT'}
         assert verify_position_mode(exchange, config) is False
 
     def test_generic_exception(self):
-        """Generic exception → returns False."""
+        """Generic exception during set_position_mode → returns False."""
         exchange = MagicMock()
-        exchange.fetch_positions.side_effect = RuntimeError('crash')
+        exchange.set_position_mode.side_effect = RuntimeError('crash')
         config = {'symbol': 'BTC/USDT:USDT'}
         assert verify_position_mode(exchange, config) is False
 

@@ -39,6 +39,9 @@ def sync_position_with_exchange(
     """
     Synchronize local state with exchange position.
 
+    Compares bot's position slots against exchange positions per direction.
+    Handles: orphan recovery, external closures, direction mismatches.
+
     Args:
         exchange: Exchange instance
         state: Bot state dictionary
@@ -50,84 +53,72 @@ def sync_position_with_exchange(
     Returns:
         True if sync was needed
     """
-    # Import here to avoid circular dependency
     from .position_close import record_closed_position, recover_position_to_state
 
     symbol = config['symbol']
 
     try:
-        positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
-                                           circuit_breaker=circuit_breaker, metrics=metrics)
+        exchange_positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
+                                                     circuit_breaker=circuit_breaker, metrics=metrics)
 
-        exchange_long = None
-        exchange_short = None
-
-        for pos in positions:
+        exchange_map = {}  # 'long'/'short' → exchange position dict
+        for pos in exchange_positions:
             contracts = float(pos.get('contracts', 0))
             if contracts > 0:
-                if pos.get('side') == 'long':
-                    exchange_long = pos
-                elif pos.get('side') == 'short':
-                    exchange_short = pos
+                exchange_map[pos.get('side')] = pos
 
-        state_position = state.get('position')
+        bot_slots = state.get('positions') or {}
+        bot_long_slots = [s for s in bot_slots.values() if s.get('direction') == 'LONG']
+        bot_short_slots = [s for s in bot_slots.values() if s.get('direction') == 'SHORT']
 
         logger.debug(
-            f"Position sync: exchange_long={'yes' if exchange_long else 'no'}, "
-            f"exchange_short={'yes' if exchange_short else 'no'}, "
-            f"state_position={'yes' if state_position else 'no'}"
+            f"Position sync: exchange_long={'yes' if 'long' in exchange_map else 'no'}, "
+            f"exchange_short={'yes' if 'short' in exchange_map else 'no'}, "
+            f"bot_slots={len(bot_slots)} (L:{len(bot_long_slots)} S:{len(bot_short_slots)})"
         )
 
-        # State has position but exchange doesn't
-        if state_position and not exchange_long and not exchange_short:
-            logger.warning("State has position but exchange doesn't")
-            actual_exit = get_actual_exit_price(exchange, state, config)
-            if actual_exit:
-                record_closed_position(exchange, state, config, actual_exit['price'],
-                                      actual_exit['reason'], cache, metrics)
-            else:
-                # Use current ticker as fallback (more accurate than entry_price which gives PnL=0%)
-                try:
-                    ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
-                    fallback_price = ticker['last']
-                except Exception:
-                    fallback_price = state_position['entry_price']
-                record_closed_position(exchange, state, config, fallback_price,
-                                      'EXTERNAL', cache, metrics)
-            return True
+        sync_needed = False
 
-        # Exchange has position but state doesn't
-        if not state_position:
-            if exchange_long:
-                logger.info("Exchange has LONG position but state doesn't - recovering")
-                recover_position_to_state(state, config, exchange_long, 'LONG', exchange, cache)
-                return True
-            elif exchange_short:
-                logger.info("Exchange has SHORT position but state doesn't - recovering")
-                recover_position_to_state(state, config, exchange_short, 'SHORT', exchange, cache)
-                return True
+        # Check each direction
+        for dir_label, dir_key, bot_dir_slots in [
+            ('LONG', 'long', bot_long_slots),
+            ('SHORT', 'short', bot_short_slots),
+        ]:
+            exchange_pos = exchange_map.get(dir_key)
 
-        # Direction mismatch: state says one direction but exchange has the other
-        if state_position:
-            state_dir = state_position.get('direction', '')
-            expected_exchange = exchange_long if state_dir == 'LONG' else exchange_short
-            opposite_exchange = exchange_short if state_dir == 'LONG' else exchange_long
-            if not expected_exchange and opposite_exchange:
-                opposite_dir = 'SHORT' if state_dir == 'LONG' else 'LONG'
-                logger.error(
-                    f"Direction mismatch: state={state_dir} but exchange has {opposite_dir}. "
-                    f"Closing state position, recovering exchange position."
-                )
-                actual_exit = get_actual_exit_price(exchange, state, config)
-                exit_price = actual_exit['price'] if actual_exit else state_position['entry_price']
-                exit_reason = 'DIRECTION_MISMATCH'
-                record_closed_position(exchange, state, config, exit_price,
-                                      exit_reason, cache, metrics)
-                recover_position_to_state(state, config, opposite_exchange, opposite_dir, exchange, cache)
-                return True
+            # Bot has slots but exchange has no position for this direction → externally closed
+            if bot_dir_slots and not exchange_pos:
+                logger.warning(f"Bot has {len(bot_dir_slots)} {dir_label} slot(s) but exchange has none — closing")
+                for slot in list(bot_dir_slots):
+                    actual_exit = get_actual_exit_price(exchange, state, config, position=slot)
+                    if actual_exit:
+                        record_closed_position(exchange, state, config, actual_exit['price'],
+                                              actual_exit['reason'], cache, metrics, position=slot)
+                    else:
+                        try:
+                            ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
+                            fallback_price = ticker['last']
+                        except Exception:
+                            fallback_price = slot['entry_price']
+                        record_closed_position(exchange, state, config, fallback_price,
+                                              'EXTERNAL', cache, metrics, position=slot)
+                sync_needed = True
 
-        logger.info("Position sync completed - state matches exchange")
-        return False
+        # Check for orphan exchange positions (exchange has position, no bot slots)
+        for dir_label, dir_key, bot_dir_slots in [
+            ('LONG', 'long', bot_long_slots),
+            ('SHORT', 'short', bot_short_slots),
+        ]:
+            exchange_pos = exchange_map.get(dir_key)
+            if exchange_pos and not bot_dir_slots:
+                logger.info(f"Exchange has {dir_label} position but no bot slots — recovering")
+                recover_position_to_state(state, config, exchange_pos, dir_label, exchange, cache)
+                sync_needed = True
+
+        if not sync_needed:
+            logger.info("Position sync completed - state matches exchange")
+
+        return sync_needed
 
     except ccxt.NetworkError as e:
         logger.error(f"Failed to sync position (network error): {e}")
@@ -144,6 +135,7 @@ def get_actual_exit_price(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
+    position: Optional[Dict] = None,
 ) -> Optional[Dict]:
     """
     Get actual exit price from trade history.
@@ -152,14 +144,17 @@ def get_actual_exit_price(
         exchange: Exchange instance
         state: Bot state dictionary
         config: Bot configuration
+        position: Specific position slot (if None, uses first active slot)
 
     Returns:
         Dict with 'price' and 'reason', or None
     """
     symbol = config['symbol']
-    position = state.get('position')
-    if not position:
-        return None
+    if position is None:
+        positions = state.get('positions') or {}
+        if not positions:
+            return None
+        position = next(iter(positions.values()))
 
     try:
         trades = exchange.fetch_my_trades(symbol, limit=20)
@@ -214,7 +209,10 @@ def check_position_status(
     metrics: Optional[PerformanceMetrics] = None,
 ) -> bool:
     """
-    Check if position is still open or has been closed.
+    Check if any position slot has been closed.
+
+    Iterates all active slots, groups by direction, and checks
+    against exchange positions.
 
     Args:
         exchange: Exchange instance
@@ -225,55 +223,47 @@ def check_position_status(
         metrics: Optional PerformanceMetrics
 
     Returns:
-        True if position was closed
+        True if any position was closed
     """
-    if not state.get('position'):
+    bot_slots = state.get('positions') or {}
+    if not bot_slots:
         return False
 
     symbol = config['symbol']
-    position = state['position']
 
     try:
-        positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
-                                           circuit_breaker=circuit_breaker, metrics=metrics)
-        position_side = 'long' if position['direction'] == 'LONG' else 'short'
-        opposite_side = 'short' if position_side == 'long' else 'long'
-        current_pos = None
-        opposite_pos = None
-
-        for pos in positions:
+        exchange_positions = fetch_positions_cached(exchange, symbol, cache, force_refresh=True,
+                                                     circuit_breaker=circuit_breaker, metrics=metrics)
+        exchange_map = {}  # 'long'/'short' → exchange position dict
+        for pos in exchange_positions:
             contracts = float(pos.get('contracts', 0))
             if contracts > 0:
-                if pos.get('side') == position_side:
-                    current_pos = pos
-                elif pos.get('side') == opposite_side:
-                    opposite_pos = pos
+                exchange_map[pos.get('side')] = pos
 
-        # Direction mismatch: expected side empty but opposite side has position
-        if current_pos is None and opposite_pos is not None:
-            from .position_close import recover_position_to_state
-            actual_dir = opposite_side.upper()
-            logger.error(
-                f"Direction mismatch: state={position['direction']} but "
-                f"exchange has {actual_dir} position. "
-                f"Closing state position and recovering exchange position immediately."
-            )
-            # Close the stale local state first
-            _handle_position_closed(exchange, state, config, position, cache, metrics)
-            # Immediately recover the actual exchange position
-            recover_position_to_state(state, config, opposite_pos, actual_dir, exchange, cache)
-            return True
+        any_closed = False
 
-        # Handle scale-out partial fills
-        scale_out_enabled = position.get('scale_out_enabled', False)
-        if scale_out_enabled and current_pos:
-            _check_scale_out_fills(state, position, current_pos)
+        # Group bot slots by direction
+        for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
+            dir_slots = [s for s in bot_slots.values() if s.get('direction') == dir_label]
+            if not dir_slots:
+                continue
 
-        # Position is closed
-        if current_pos is None or float(current_pos.get('contracts', 0)) == 0:
-            return _handle_position_closed(exchange, state, config, position, cache, metrics)
+            exchange_pos = exchange_map.get(dir_key)
 
-        return False
+            # All slots for this direction are closed (exchange has no position)
+            if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
+                for slot in list(dir_slots):
+                    _handle_position_closed(exchange, state, config, slot, cache, metrics)
+                any_closed = True
+                continue
+
+            # Handle scale-out partial fills per slot
+            for slot in dir_slots:
+                scale_out_enabled = slot.get('scale_out_enabled', False)
+                if scale_out_enabled:
+                    _check_scale_out_fills(state, slot, exchange_pos)
+
+        return any_closed
 
     except ccxt.NetworkError as e:
         logger.error(f"Failed to check position status (network error): {e}")
@@ -326,19 +316,19 @@ def _handle_position_closed(
     cache: APICache,
     metrics: Optional[PerformanceMetrics],
 ) -> bool:
-    """Handle position closure detection."""
-    # Import here to avoid circular dependency
+    """Handle position slot closure detection."""
     from .position_close import record_closed_position
 
+    slot_id = position.get('slot_id', 'unknown')
     logger.info(
-        f"🔍 Position closure detected: {position['direction']} "
+        f"🔍 Position closure detected: {position['direction']} slot {slot_id} "
         f"(entry=${position['entry_price']:.1f}), fetching exit details..."
     )
     time.sleep(EXIT_PRICE_INITIAL_DELAY)
 
     actual_exit = None
     for retry in range(MAX_EXIT_PRICE_RETRIES):
-        actual_exit = get_actual_exit_price(exchange, state, config)
+        actual_exit = get_actual_exit_price(exchange, state, config, position=position)
         if actual_exit:
             break
         if retry < MAX_EXIT_PRICE_RETRIES - 1:
@@ -362,7 +352,7 @@ def _handle_position_closed(
         elif exit_reason == 'SL':
             exit_reason = f'SL_AFTER_{filled_stages}_STAGES'
 
-    record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics)
+    record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics, position=position)
     return True
 
 

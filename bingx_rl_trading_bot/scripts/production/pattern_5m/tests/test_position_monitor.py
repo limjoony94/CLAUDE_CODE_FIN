@@ -26,6 +26,27 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
 )
 
 
+# ── Helper: build multi-position state ───────────────────────
+
+def _make_position_state(position_dict, slot_id='s1'):
+    """Build a v1.29+ multi-position state from a single position dict."""
+    pos = dict(position_dict)
+    pos['slot_id'] = slot_id
+    direction = pos.get('direction')
+    return {
+        'positions': {slot_id: pos},
+        'active_direction': direction,
+    }
+
+
+def _make_empty_position_state():
+    """Build a v1.29+ state with no active positions."""
+    return {
+        'positions': {},
+        'active_direction': None,
+    }
+
+
 # ── _infer_exit_reason (trade history based) ─────────────────
 
 
@@ -167,6 +188,7 @@ class TestCheckScaleOutFills:
 
     def _make_position(self, qty=0.01, stages=None):
         return {
+            'slot_id': 's1',
             'quantity': qty,
             'remaining_quantity': qty,
             'scale_out_stages': stages or [],
@@ -179,7 +201,10 @@ class TestCheckScaleOutFills:
             qty=0.01,
             stages=[{'stage': 1, 'quantity': 0.005, 'filled': False}],
         )
-        state = {'position': position}
+        state = {
+            'positions': {'s1': position},
+            'active_direction': None,
+        }
         current_pos = {'contracts': 0.01}
 
         _check_scale_out_fills(state, position, current_pos)
@@ -192,7 +217,10 @@ class TestCheckScaleOutFills:
             qty=0.01,
             stages=[{'stage': 1, 'quantity': 0.005, 'filled': False}],
         )
-        state = {'position': position}
+        state = {
+            'positions': {'s1': position},
+            'active_direction': None,
+        }
         # Exchange shows reduced qty (stage 1 filled: 0.01 - 0.005 = 0.005)
         current_pos = {'contracts': 0.005}
 
@@ -209,7 +237,10 @@ class TestCheckScaleOutFills:
             stages=[{'stage': 1, 'quantity': 0.005, 'filled': False}],
         )
         position['rotation_enabled'] = True
-        state = {'position': position}
+        state = {
+            'positions': {'s1': position},
+            'active_direction': None,
+        }
         current_pos = {'contracts': 0.005}
 
         _check_scale_out_fills(state, position, current_pos)
@@ -223,7 +254,10 @@ class TestCheckScaleOutFills:
             stages=[{'stage': 1, 'quantity': 0.005, 'filled': True}],
         )
         position['remaining_quantity'] = 0.005  # Already reduced from prior fill
-        state = {'position': position}
+        state = {
+            'positions': {'s1': position},
+            'active_direction': None,
+        }
         current_pos = {'contracts': 0.005}
 
         _check_scale_out_fills(state, position, current_pos)
@@ -240,7 +274,8 @@ class TestGetActualExitPrice:
 
     def test_no_position_returns_none(self):
         """No position in state → returns None."""
-        result = get_actual_exit_price(MagicMock(), {}, {'symbol': 'BTC/USDT:USDT'})
+        state = _make_empty_position_state()
+        result = get_actual_exit_price(MagicMock(), state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
     def test_trade_found(self):
@@ -253,14 +288,13 @@ class TestGetActualExitPrice:
                 'timestamp': 1700000000000,  # 2023-11 — well after entry
             },
         ]
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_time': '2020-01-01T00:00:00',
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_time': '2020-01-01T00:00:00',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
         }
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is not None
         assert result['price'] == 51000.0
@@ -272,14 +306,13 @@ class TestGetActualExitPrice:
         exchange.fetch_my_trades.return_value = [
             {'side': 'buy', 'price': 50000.0, 'timestamp': 2000000},
         ]
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_time': '2020-01-01T00:00:00',
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_time': '2020-01-01T00:00:00',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
         }
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
@@ -287,12 +320,11 @@ class TestGetActualExitPrice:
         """Network error → returns None."""
         exchange = MagicMock()
         exchange.fetch_my_trades.side_effect = ccxt.NetworkError('timeout')
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_time': '2020-01-01T00:00:00',
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_time': '2020-01-01T00:00:00',
         }
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
@@ -302,14 +334,14 @@ class TestGetActualExitPrice:
         exchange.fetch_my_trades.return_value = [
             {'side': 'buy', 'price': 49000.0, 'timestamp': 1700000000000},
         ]
-        state = {
-            'position': {
-                'direction': 'SHORT',
-                'entry_time': '2020-01-01T00:00:00',
-                'tp_price': 49000.0,
-                'sl_price': 51000.0,
-            }
+        pos_dict = {
+            'direction': 'SHORT',
+            'entry_time': '2020-01-01T00:00:00',
+            'tp_price': 49000.0,
+            'sl_price': 51000.0,
         }
+        state = _make_position_state(pos_dict, slot_id='s1')
+        # Use position kwarg to pass the specific slot
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is not None
         assert result['price'] == 49000.0
@@ -324,14 +356,13 @@ class TestGetActualExitPrice:
                 'timestamp': 100,  # Very old timestamp
             },
         ]
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_time': '2026-01-01T00:00:00',
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_time': '2026-01-01T00:00:00',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
         }
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
@@ -346,8 +377,9 @@ class TestCheckPositionStatus:
 
     def test_no_position_returns_false(self, mock_save, mock_sleep):
         """No position in state → returns False."""
+        state = _make_empty_position_state()
         result = check_position_status(
-            MagicMock(), {'position': None}, {'symbol': 'BTC/USDT:USDT'},
+            MagicMock(), state, {'symbol': 'BTC/USDT:USDT'},
             APICache()
         )
         assert result is False
@@ -361,15 +393,19 @@ class TestCheckPositionStatus:
         exchange.fetch_positions.return_value = [
             {'side': 'long', 'contracts': 0.01},
         ]
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_price': 50000.0,
-                'quantity': 0.01,
-                'remaining_quantity': 0.01,
-                'scale_out_enabled': False,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'quantity': 0.01,
+            'remaining_quantity': 0.01,
+            'scale_out_enabled': False,
         }
+        state = _make_position_state(pos_dict)
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is False
@@ -386,18 +422,22 @@ class TestCheckPositionStatus:
             {'side': 'sell', 'price': 51000.0, 'timestamp': 2000000},
         ]
         exchange.fetch_ticker.return_value = {'last': 51000.0}
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_price': 50000.0,
-                'entry_time': '2020-01-01T00:00:00',
-                'quantity': 0.01,
-                'remaining_quantity': 0.01,
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-                'scale_out_enabled': False,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'entry_time': '2020-01-01T00:00:00',
+            'quantity': 0.01,
+            'remaining_quantity': 0.01,
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+            'scale_out_enabled': False,
         }
+        state = _make_position_state(pos_dict)
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is True
@@ -406,12 +446,11 @@ class TestCheckPositionStatus:
         """Network error → returns False (safe default)."""
         exchange = MagicMock()
         exchange.fetch_positions.side_effect = ccxt.NetworkError('timeout')
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_price': 50000.0,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_price': 50000.0,
         }
+        state = _make_position_state(pos_dict)
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is False
@@ -423,18 +462,21 @@ class TestCheckPositionStatus:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
        new=MagicMock())
 class TestSyncPositionWithExchange:
-    """Test sync_position_with_exchange() — 4-way reconciliation."""
+    """Test sync_position_with_exchange() — per-direction reconciliation."""
 
     def _make_state_with_position(self):
+        pos_dict = {
+            'slot_id': 's1',
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00',
+            'quantity': 0.01,
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+        }
         return {
-            'position': {
-                'direction': 'LONG',
-                'entry_price': 50000.0,
-                'entry_time': '2026-01-01T00:00:00',
-                'quantity': 0.01,
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-            },
+            'positions': {'s1': pos_dict},
+            'active_direction': 'LONG',
             'total_trades': 5,
             'winning_trades': 3,
             'total_pnl': 10.0,
@@ -479,7 +521,12 @@ class TestSyncPositionWithExchange:
         exchange.fetch_positions.return_value = [
             {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0},
         ]
-        state = {'position': None}
+        state = _make_empty_position_state()
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
         cache = APICache()
         config = {'symbol': 'BTC/USDT:USDT'}
         result = sync_position_with_exchange(exchange, state, config, cache)
@@ -493,7 +540,12 @@ class TestSyncPositionWithExchange:
         exchange.fetch_positions.return_value = [
             {'side': 'short', 'contracts': 0.01, 'entryPrice': 50000.0},
         ]
-        state = {'position': None}
+        state = _make_empty_position_state()
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
         cache = APICache()
         config = {'symbol': 'BTC/USDT:USDT'}
         result = sync_position_with_exchange(exchange, state, config, cache)
@@ -515,25 +567,28 @@ class TestSyncPositionWithExchange:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
     def test_direction_mismatch(self, mock_recover, mock_record):
-        """State=LONG but exchange has SHORT → close old + recover new."""
+        """State=LONG but exchange has SHORT → close LONG slots + recover SHORT."""
         exchange = MagicMock()
         exchange.fetch_positions.return_value = [
             {'side': 'short', 'contracts': 0.01, 'entryPrice': 49000.0},
         ]
         exchange.fetch_my_trades.return_value = []
+        exchange.fetch_ticker.return_value = {'last': 50000.0}
         state = self._make_state_with_position()
         cache = APICache()
         config = {'symbol': 'BTC/USDT:USDT'}
         result = sync_position_with_exchange(exchange, state, config, cache)
         assert result is True
+        # LONG slot closed (exchange has no LONG position)
         mock_record.assert_called_once()
+        # SHORT orphan recovered (exchange has SHORT, no bot SHORT slots)
         mock_recover.assert_called_once()
 
     def test_no_position_either_side(self):
         """No position in state or exchange → returns False."""
         exchange = MagicMock()
         exchange.fetch_positions.return_value = []
-        state = {'position': None}
+        state = _make_empty_position_state()
         cache = APICache()
         config = {'symbol': 'BTC/USDT:USDT'}
         result = sync_position_with_exchange(exchange, state, config, cache)
@@ -600,14 +655,13 @@ class TestGetActualExitPriceExtended:
         exchange.fetch_my_trades.return_value = [
             {'side': 'sell', 'price': 51000.0, 'timestamp': 100},
         ]
-        state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_time': 'invalid-datetime',
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-            }
+        pos_dict = {
+            'direction': 'LONG',
+            'entry_time': 'invalid-datetime',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
         }
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is not None
 
@@ -615,9 +669,8 @@ class TestGetActualExitPriceExtended:
         """NetworkError → returns None."""
         exchange = MagicMock()
         exchange.fetch_my_trades.side_effect = ccxt.NetworkError('timeout')
-        state = {
-            'position': {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
-        }
+        pos_dict = {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
@@ -625,9 +678,8 @@ class TestGetActualExitPriceExtended:
         """ExchangeError → returns None."""
         exchange = MagicMock()
         exchange.fetch_my_trades.side_effect = ccxt.ExchangeError('invalid')
-        state = {
-            'position': {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
-        }
+        pos_dict = {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
@@ -635,9 +687,8 @@ class TestGetActualExitPriceExtended:
         """Generic exception → returns None."""
         exchange = MagicMock()
         exchange.fetch_my_trades.side_effect = RuntimeError('unexpected')
-        state = {
-            'position': {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
-        }
+        pos_dict = {'direction': 'LONG', 'entry_time': '2026-01-01T00:00:00'}
+        state = _make_position_state(pos_dict)
         result = get_actual_exit_price(exchange, state, {'symbol': 'BTC/USDT:USDT'})
         assert result is None
 
@@ -650,30 +701,28 @@ class TestGetActualExitPriceExtended:
 class TestCheckPositionStatusExtended:
     """Test check_position_status direction mismatch and scale-out paths."""
 
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
            new=MagicMock())
-    def test_direction_mismatch_recovers(self, mock_handle, mock_recover, mock_save, mock_sleep):
-        """State=LONG but exchange=SHORT → close old + recover new."""
+    def test_direction_mismatch_recovers(self, mock_handle, mock_save, mock_sleep):
+        """State=LONG but exchange=SHORT → LONG slot closed (no LONG on exchange)."""
         exchange = MagicMock()
         exchange.fetch_positions.return_value = [
             {'side': 'short', 'contracts': 0.01, 'entryPrice': 49000.0},
         ]
-        state = {
-            'position': {
-                'direction': 'LONG', 'entry_price': 50000.0,
-                'quantity': 0.01, 'remaining_quantity': 0.01,
-                'entry_time': '2026-01-01T00:00:00',
-                'tp_price': 51000.0, 'sl_price': 49000.0,
-                'scale_out_enabled': False,
-            }
+        pos_dict = {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'entry_time': '2026-01-01T00:00:00',
+            'tp_price': 51000.0, 'sl_price': 49000.0,
+            'scale_out_enabled': False,
         }
+        state = _make_position_state(pos_dict)
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is True
+        # LONG slot detected as closed (exchange has no LONG position)
         mock_handle.assert_called_once()
-        mock_recover.assert_called_once()
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
            new=MagicMock())
@@ -681,9 +730,8 @@ class TestCheckPositionStatusExtended:
         """ExchangeError → returns False."""
         exchange = MagicMock()
         exchange.fetch_positions.side_effect = ccxt.ExchangeError('invalid')
-        state = {
-            'position': {'direction': 'LONG', 'entry_price': 50000.0}
-        }
+        pos_dict = {'direction': 'LONG', 'entry_price': 50000.0}
+        state = _make_position_state(pos_dict)
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is False
@@ -694,9 +742,8 @@ class TestCheckPositionStatusExtended:
         """Generic exception → returns False."""
         exchange = MagicMock()
         exchange.fetch_positions.side_effect = RuntimeError('unexpected')
-        state = {
-            'position': {'direction': 'LONG', 'entry_price': 50000.0}
-        }
+        pos_dict = {'direction': 'LONG', 'entry_price': 50000.0}
+        state = _make_position_state(pos_dict)
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is False
@@ -710,16 +757,15 @@ class TestCheckPositionStatusExtended:
         exchange.fetch_positions.return_value = [
             {'side': 'long', 'contracts': 0.005},  # Partial fill
         ]
-        state = {
-            'position': {
-                'direction': 'LONG', 'entry_price': 50000.0,
-                'quantity': 0.01, 'remaining_quantity': 0.01,
-                'scale_out_enabled': True,
-                'scale_out_stages': [
-                    {'stage': 1, 'quantity': 0.005, 'filled': False, 'order_id': 'so1'},
-                ],
-            }
+        pos_dict = {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'scale_out_enabled': True,
+            'scale_out_stages': [
+                {'stage': 1, 'quantity': 0.005, 'filled': False, 'order_id': 'so1'},
+            ],
         }
+        state = _make_position_state(pos_dict)
         cache = APICache()
         result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
         assert result is False  # Position still open
@@ -734,6 +780,7 @@ class TestHandlePositionClosed:
     @pytest.fixture
     def base_position(self):
         return {
+            'slot_id': 's1',
             'direction': 'LONG',
             'entry_price': 50000.0,
             'tp_price': 51000.0,
@@ -749,7 +796,7 @@ class TestHandlePositionClosed:
                                              base_position):
         """get_actual_exit_price succeeds → uses actual exit (lines 343, 348-349)."""
         exchange = MagicMock()
-        state = {'position': base_position}
+        state = _make_position_state(base_position, slot_id='s1')
         config = {'symbol': 'BTC/USDT:USDT'}
         cache = APICache()
 
@@ -768,6 +815,7 @@ class TestHandlePositionClosed:
     def test_scaleout_all_stages_filled(self, mock_exit, mock_record, mock_sleep):
         """scale_out_enabled + all stages filled → TP_SCALEOUT (lines 358-361)."""
         position = {
+            'slot_id': 's1',
             'direction': 'SHORT', 'entry_price': 50000.0,
             'tp_price': 49000.0, 'sl_price': 51000.0,
             'scale_out_enabled': True,
@@ -777,7 +825,7 @@ class TestHandlePositionClosed:
             ],
         }
         exchange = MagicMock()
-        state = {'position': position}
+        state = _make_position_state(position, slot_id='s1')
         config = {'symbol': 'BTC/USDT:USDT'}
         cache = APICache()
 
@@ -793,6 +841,7 @@ class TestHandlePositionClosed:
     def test_scaleout_partial_sl(self, mock_exit, mock_record, mock_sleep):
         """scale_out_enabled + partial fills + SL → SL_AFTER_1_STAGES (lines 362-363)."""
         position = {
+            'slot_id': 's1',
             'direction': 'LONG', 'entry_price': 50000.0,
             'tp_price': 51000.0, 'sl_price': 49000.0,
             'scale_out_enabled': True,
@@ -802,7 +851,7 @@ class TestHandlePositionClosed:
             ],
         }
         exchange = MagicMock()
-        state = {'position': position}
+        state = _make_position_state(position, slot_id='s1')
         config = {'symbol': 'BTC/USDT:USDT'}
         cache = APICache()
 
@@ -827,15 +876,18 @@ class TestSyncPositionActualExitTruthy:
         """get_actual_exit_price returns truthy → uses actual price (line 86)."""
         exchange = MagicMock()
         exchange.fetch_positions.return_value = []  # no exchange position
+        pos_dict = {
+            'slot_id': 's1',
+            'direction': 'LONG',
+            'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00',
+            'quantity': 0.01,
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+        }
         state = {
-            'position': {
-                'direction': 'LONG',
-                'entry_price': 50000.0,
-                'entry_time': '2026-01-01T00:00:00',
-                'quantity': 0.01,
-                'tp_price': 51000.0,
-                'sl_price': 49000.0,
-            },
+            'positions': {'s1': pos_dict},
+            'active_direction': 'LONG',
             'total_trades': 5,
             'winning_trades': 3,
             'total_pnl': 10.0,

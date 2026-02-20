@@ -4,6 +4,7 @@ Functions for opening new trading positions.
 """
 
 import time
+import uuid
 import logging
 import pandas as pd
 from datetime import datetime
@@ -24,7 +25,7 @@ from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance
 from .indicators import get_volatility_multiplier
 from .state import save_state
 from .utils import extract_pattern_name
-from .orders import place_tp_sl_orders, cancel_remaining_orders
+from .orders import place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl
 
 logger = logging.getLogger('pattern_5m')
 
@@ -53,10 +54,15 @@ def get_position_size(
         balance = fetch_balance_cached(exchange, cache, force_refresh=True,
                                        circuit_breaker=circuit_breaker, metrics=metrics)
         available = float(balance.get('USDT', {}).get('free', 0))
+        total_equity = float(balance.get('USDT', {}).get('total', available))
 
         size_pct = config['position_size_pct'] / 100
         max_size = config['risk']['max_position_size_usd']
-        position_value = min(available * size_pct, max_size)
+        max_positions = config.get('max_positions', 1)
+
+        # 1/N sizing: each slot gets equity/max_positions
+        per_slot_equity = total_equity * size_pct / max_positions
+        position_value = min(per_slot_equity, available * size_pct, max_size)
 
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True,
                                      circuit_breaker=circuit_breaker, metrics=metrics)
@@ -111,12 +117,15 @@ def open_position(
     strategy = config['strategy']
 
     try:
-        # Check for existing position on exchange
-        if not _verify_no_existing_position(exchange, state, config, cache, circuit_breaker, metrics):
+        # Check slot availability (multi-position)
+        max_positions = config.get('max_positions', 1)
+        active_positions = state.get('positions') or {}
+        if len(active_positions) >= max_positions:
+            logger.info(f"All {max_positions} slots occupied ({len(active_positions)} active), skipping signal")
             return False
 
         # Set leverage
-        _set_leverage(exchange, symbol, exchange_leverage)
+        _set_leverage(exchange, symbol, exchange_leverage, config)
 
         # Calculate position size (also returns current price to avoid double ticker fetch)
         quantity, available, estimated_price = get_position_size(exchange, config, cache, circuit_breaker, metrics)
@@ -134,11 +143,12 @@ def open_position(
         side = 'buy' if signal == 'LONG' else 'sell'
         logger.info(f"Opening {signal} position: {quantity} {symbol} @ ~${estimated_price:.1f}")
 
+        position_side = _get_position_side(config, signal)
         order = exchange.create_market_order(
             symbol=symbol,
             side=side,
             amount=quantity,
-            params={'positionSide': 'BOTH'}
+            params={'positionSide': position_side}
         )
 
         # Get actual fill price
@@ -185,8 +195,10 @@ def open_position(
             strategy, actual_entry_price, actual_quantity, direction, tp_pct_adjusted
         )
 
-        # Update state
-        state['position'] = {
+        # Create new slot and append to positions list
+        slot_id = uuid.uuid4().hex[:8]
+        new_slot = {
+            'slot_id': slot_id,
             'direction': signal,
             'entry_price': actual_entry_price,
             'estimated_entry': estimated_price,
@@ -200,6 +212,7 @@ def open_position(
             'entry_time': datetime.now().isoformat(),
             'reason': reason,
             'order_id': order.get('id'),
+            'pattern_name': pattern,
             # Rotation (순환매) fields
             'rotation_enabled': ROTATION_ENABLED and bool(scale_out_stages),
             'is_partial': False,
@@ -210,24 +223,29 @@ def open_position(
             'market_regime': current_regime,
             'regime_tp_sl': regime_tp_sl,
         }
+        state['positions'][slot_id] = new_slot
+        state['active_direction'] = signal
         state['last_signal_time'] = datetime.now().isoformat()
 
         save_state(state)
-        logger.info(f"Position opened successfully: {order.get('id')}")
+        logger.info(f"Position opened (slot {slot_id}): {order.get('id')} [{len(state['positions'])}/{max_positions} slots]")
 
-        # Place TP/SL orders
-        place_tp_sl_orders(exchange, state, config)
+        # Place TP/SL orders for this slot
+        place_tp_sl_orders(exchange, state, config, position=new_slot)
 
         # CRITICAL: Verify SL was placed — position is unprotected without it
-        if not state['position'].get('sl_order_id'):
-            logger.warning("SL order not placed after open — retrying...")
+        if not new_slot.get('sl_order_id'):
+            logger.warning(f"SL order not placed for slot {slot_id} — retrying...")
             for retry in range(2):
-                place_tp_sl_orders(exchange, state, config)
-                if state['position'].get('sl_order_id'):
+                place_tp_sl_orders(exchange, state, config, position=new_slot)
+                if new_slot.get('sl_order_id'):
                     logger.info(f"SL order placed on retry {retry + 1}")
                     break
-            if not state['position'].get('sl_order_id'):
-                logger.error("CRITICAL: SL order failed after retries — position UNPROTECTED until next verify cycle")
+            if not new_slot.get('sl_order_id'):
+                logger.error(f"CRITICAL: SL order failed for slot {slot_id} — position UNPROTECTED until next verify cycle")
+
+        # v1.29.0: Update emergency SL to cover all active slots
+        update_emergency_sl(exchange, state, config)
 
         return True
 
@@ -239,12 +257,12 @@ def open_position(
         return False
     except ccxt.ExchangeError as e:
         error_msg = str(e)
-        # Auto-recover from Hedge mode error
-        if 'Hedge mode' in error_msg or '109400' in error_msg:
-            logger.warning(f"⚠️ Hedge mode detected, attempting to switch to One-Way mode...")
+        # Auto-recover from position mode mismatch (always One-Way/BOTH)
+        if 'Hedge mode' in error_msg or '109400' in error_msg or 'position mode' in error_msg.lower():
+            logger.warning(f"Position mode mismatch, attempting to switch to One-Way...")
             try:
                 exchange.set_position_mode(hedged=False, symbol=config['symbol'])
-                logger.info("✅ Switched to One-Way mode, please retry the signal")
+                logger.info(f"Switched to One-Way mode, please retry the signal")
             except Exception as mode_err:
                 logger.error(f"Failed to switch position mode: {mode_err}")
         else:
@@ -255,49 +273,32 @@ def open_position(
         return False
 
 
-def _verify_no_existing_position(
-    exchange: ccxt.bingx,
-    state: Dict[str, Any],
-    config: Dict[str, Any],
-    cache: APICache,
-    circuit_breaker: Optional[CircuitBreaker],
-    metrics: Optional[PerformanceMetrics],
-) -> bool:
-    """Verify no position exists before opening new one."""
-    # Import here to avoid circular dependency
-    from .position_monitor import sync_position_with_exchange
-
-    try:
-        positions = fetch_positions_cached(exchange, config['symbol'], cache, force_refresh=True,
-                                           circuit_breaker=circuit_breaker, metrics=metrics)
-        for pos in positions:
-            if abs(float(pos.get('contracts', 0))) > 0:
-                logger.warning("Position already exists on exchange")
-                sync_position_with_exchange(exchange, state, config, cache, circuit_breaker, metrics)
-                return False
-        return True  # Verified: no existing position
-    except ccxt.NetworkError as e:
-        logger.warning(f"Could not verify exchange position (network error): {e}")
-    except ccxt.ExchangeError as e:
-        logger.warning(f"Could not verify exchange position (exchange error): {e}")
-    except Exception as e:
-        logger.warning(f"Could not verify exchange position: {e}")
-    return False  # Cannot verify — block new position for safety
+def _check_slot_available(state: Dict[str, Any], config: Dict[str, Any]) -> bool:
+    """Check if a slot is available for a new position."""
+    max_positions = config.get('max_positions', 1)
+    active = len(state.get('positions') or {})
+    return active < max_positions
 
 
-def _set_leverage(exchange: ccxt.bingx, symbol: str, leverage: int) -> None:
-    """Set leverage for the symbol."""
-    try:
-        exchange.set_leverage(leverage, symbol, params={'side': 'BOTH'})
-    except ccxt.ExchangeError as e:
-        if 'No need to change' in str(e) or 'same' in str(e).lower():
-            logger.debug(f"Leverage already set to {leverage}x")
-        else:
-            logger.warning(f"Set leverage warning (exchange error): {e}")
-    except ccxt.NetworkError as e:
-        logger.warning(f"Set leverage warning (network error): {e}")
-    except (ValueError, TypeError) as e:
-        logger.warning(f"Set leverage warning (invalid value): {e}")
+def _get_position_side(config: Dict[str, Any], signal: str) -> str:
+    """Get positionSide param for BingX API. Always 'BOTH' (One-Way mode)."""
+    return 'BOTH'
+
+
+def _set_leverage(exchange: ccxt.bingx, symbol: str, leverage: int, config: Optional[Dict[str, Any]] = None) -> None:
+    """Set leverage for the symbol (One-Way mode: BOTH side only)."""
+    for side in ['BOTH']:
+        try:
+            exchange.set_leverage(leverage, symbol, params={'side': side})
+        except ccxt.ExchangeError as e:
+            if 'No need to change' in str(e) or 'same' in str(e).lower():
+                logger.debug(f"Leverage already set to {leverage}x (side={side})")
+            else:
+                logger.warning(f"Set leverage warning (side={side}, exchange error): {e}")
+        except ccxt.NetworkError as e:
+            logger.warning(f"Set leverage warning (side={side}, network error): {e}")
+        except (ValueError, TypeError) as e:
+            logger.warning(f"Set leverage warning (side={side}, invalid value): {e}")
 
 
 def _get_actual_fill_price(
@@ -505,14 +506,17 @@ def refill_position(
     """
     symbol = config['symbol']
     strategy = config['strategy']
-    position = state.get('position')
+
+    # Find the slot to refill (by slot_id if provided in reason, else first partial)
+    positions = state.get('positions') or {}
+    position = None
+    for pos in positions.values():
+        if pos.get('is_partial', False):
+            position = pos
+            break
 
     if not position:
-        logger.warning("No position to refill")
-        return False
-
-    if not position.get('is_partial', False):
-        logger.warning("Position is not partial, cannot refill")
+        logger.warning("No partial position to refill")
         return False
 
     try:
@@ -534,11 +538,12 @@ def refill_position(
         side = 'buy' if position['direction'] == 'LONG' else 'sell'
         logger.info(f"🔄 Refilling {position['direction']}: {refill_qty} {symbol} @ ~${estimated_price:.1f}")
 
+        position_side = _get_position_side(config, position['direction'])
         order = exchange.create_market_order(
             symbol=symbol,
             side=side,
             amount=refill_qty,
-            params={'positionSide': 'BOTH'}
+            params={'positionSide': position_side}
         )
 
         # Get actual fill price
@@ -610,9 +615,9 @@ def refill_position(
 
         logger.info(f"✅ Position refilled: entries={position['total_entries']}, avg=${new_avg_entry:.1f}")
 
-        # Cancel old TP/SL and place new orders
-        cancel_remaining_orders(exchange, state, config)
-        place_tp_sl_orders(exchange, state, config)
+        # Cancel old TP/SL and place new orders for this slot
+        cancel_remaining_orders(exchange, state, config, position=position)
+        place_tp_sl_orders(exchange, state, config, position=position)
 
         return True
 

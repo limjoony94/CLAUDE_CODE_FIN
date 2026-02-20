@@ -12,7 +12,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.28.42"  # v1.28.42: ATR-scaled TP/SL (ATR ratio × rolling median, clamp 0.6-1.7)
+BOT_VERSION = "1.29.0"  # v1.29.0: N=5 multi-position (One-Way BOTH, virtual slots)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -471,6 +471,13 @@ QUANTITY_ROUND_DECIMALS = 4
 ROTATION_ENABLED = False  # Disabled for pattern bot
 
 # ============================================================
+# MULTI-POSITION SETTINGS (v1.29.0)
+# ============================================================
+DEFAULT_MAX_POSITIONS = 1        # N=1 fallback (config.yaml overrides)
+MAX_ALLOWED_POSITIONS = 10       # Upper guard for validation
+EMERGENCY_SL_BUFFER_PCT = 0.001  # 0.1% buffer beyond worst slot SL
+
+# ============================================================
 # DEFAULT CONFIGURATION
 # ============================================================
 DEFAULT_CONFIG = {
@@ -478,9 +485,9 @@ DEFAULT_CONFIG = {
     'timeframe': '5m',
     'leverage': 3,
     'exchange_leverage': 10,
-    'position_mode': 'one-way',
     'margin_mode': 'crossed',
     'position_size_pct': 95,
+    'max_positions': DEFAULT_MAX_POSITIONS,
     'strategy': {
         'tp_pct': 1.0,  # v1.19.0: Tight TP (was 1.5)
         'sl_pct': 1.0,  # v1.19.0: Tight SL (was 3.0)

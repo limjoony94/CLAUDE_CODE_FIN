@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.28.41 | **Bot**: Pattern 5m (59패턴, 12L+47S) | **Updated**: 2026-02-19
+> **Version**: v1.29.0 | **Bot**: Pattern 5m (59패턴, 12L+47S) | **Updated**: 2026-02-21
 
 ---
 
@@ -18,6 +18,59 @@
 | 데이터 | `data/btc_5m_270days_reclassified.csv` (270일, Ground Truth) |
 | Dynamic Patterns | `results/dynamic_patterns.json` (scanner 출력) |
 | Scanner | `scripts/scanner/pattern_scanner.py` (Dynamic WF 패턴 선택 CLI) |
+
+---
+
+## 🤖 Auto-Trigger Rules (Claude 자율 판단 기준)
+
+Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으로** 적절한 도구를 선택한다.
+
+### Intent → Command 자동 매핑
+
+| 사용자 의도 (키워드) | 자동 실행 | 비고 |
+|---------------------|----------|------|
+| "봇 상태", "봇 확인", "살아있어?" | `/bot-status` | 프로세스+메트릭+로그 종합 |
+| "성과", "실적", "수익률", "얼마 벌었어" | `/check-live` | 기대치 대비 성과 분석 |
+| "일일 보고", "오늘 어때", "daily" | `/daily-report` | 일일 성과 리포트 생성 |
+| "패턴 스캔", "재스캔", "새 패턴" | `/scan-patterns` | MAE/MFE 스캐너 실행 |
+| "연구", "가설", "백테스트", "분석해줘" | `/research-template` + `trading-researcher` agent | 연구 프로토콜 강제 |
+| "테스트", "tests" | `/run-tests` | pytest 1139+ 검증 |
+| "WF 검증", "walk-forward", "OOS" | `/wf-validate` | Expanding window WF |
+| "배포", "적용", "deploy" | `/deploy-patterns` | 안전 배포 체크리스트 |
+| "문제", "에러", "왜 안돼", "이상해" | `/diagnose` + `root-cause-analyst` agent | 종합 진단 |
+| "긴급", "중지", "emergency", "멈춰" | `/emergency-stop` | 긴급 정지 프로시저 |
+| "리스크", "위험", "MDD", "drawdown" | `trading-risk` agent | 리스크 평가 |
+
+### Intent → Agent 자동 선택
+
+| 작업 유형 | 에이전트 | 선택 이유 |
+|----------|---------|----------|
+| 연구 스크립트 작성/실행 | `trading-researcher` | Standard Research Protocol 강제 |
+| 봇 모니터링/성과 분석 | `trading-monitor` | 기대치 대비 분석 로직 내장 |
+| 리스크 평가/전략 안전성 | `trading-risk` | MDD, WF, MC 전문 |
+| 코드 품질/리팩토링 | `quality-engineer` | 테스트+코드 품질 |
+| 디버깅/장애 분석 | `root-cause-analyst` | 체계적 원인 분석 |
+| 성능 최적화 | `performance-engineer` | 프로파일링 기반 |
+
+### 자동 행동 규칙
+
+1. **코드 변경 후** → 자동으로 `/run-tests` 제안 (production 파일 변경 시 필수)
+2. **전략 파라미터 변경 제안 시** → 자동으로 `/wf-validate` 제안
+3. **연구 스크립트 작성 시** → `trading-researcher` agent 사용 + 연구 프로토콜 검증
+4. **git commit 후 production 파일 포함 시** → CLAUDE.md Version History 업데이트 제안
+5. **비정상 결과 감지 시** (PnL > 5000%, WF 전부 FAIL) → 자동 경고 + 원인 분석 제안
+6. **새 세션 시작 시** → Serena 메모리 확인 (`project_state_v1_28_42`)
+
+### Serena MCP 자동 활용
+
+| 상황 | Serena 액션 |
+|------|------------|
+| 세션 시작 | `activate_project` → `check_onboarding` → 관련 메모리 읽기 |
+| 코드 탐색 요청 | `find_symbol` / `get_symbols_overview` |
+| 함수 수정 | `find_referencing_symbols` → 영향 범위 확인 → `replace_symbol_body` |
+| 중요 발견 | `write_memory` (다음 세션 활용) |
+| 연구 시작 | `read_memory("research_protocol_standard")` |
+| 디버깅 시작 | `read_memory("common_pitfalls_and_lessons")` |
 
 ---
 
@@ -44,7 +97,7 @@
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.28.40
+## 📊 현재 전략: Pattern 5m v1.29.0
 
 ### 핵심 파라미터
 
@@ -55,6 +108,7 @@
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Leverage | 3x |
 | Timeframe | 5m |
+| **Max Positions** | **5** (virtual slots, 1/N sizing, same-direction only) |
 | Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
 | Discovery | **MAE/MFE** (TP=MFE percentile, SL=MAE percentile) |
 | Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
@@ -339,6 +393,7 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 | v1.28.16 | 02-18 | **Test fix + dead code cleanup**: (1) `test_patterns.py`: `test_stats_win_rates_reasonable` 실패 수정 — WR 45.2% 패턴(U-MD-MD, R:R 2.14 보상 구조)이 50% 하한에 걸림, 유효 범위 0-100%로 수정 (2) `exchange.py`: 미사용 `api_retry` 데코레이터 제거 + dead import (`wraps`, `TypeVar`) 정리 + `raise e` → `raise` (traceback 보존) (3) `pattern_5m_bot.py`: 오래된 docstring 업데이트 (v1.24 시절 패턴+백테스트 결과 제거). **214 tests all pass**. | |
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
+| **v1.29.0** | 02-21 | **N=5 멀티포지션 구현 (One-Way BOTH mode)**: 가상 슬롯 기반 멀티포지션 시스템. `state['position']` → `state['positions']` dict (`{slot_id: pos_dict}`). `max_positions: 5` (config), `DEFAULT_MAX_POSITIONS=1`, `MAX_ALLOWED_POSITIONS=10`. Signal routing: `_route_signal()` — OPEN/SKIP/CLOSE_OLDEST. 1/N 사이징 (`get_slot_size`). Emergency SL: `closePosition: True` 전체 보호 (worst SL - buffer). 슬롯별 TP/SL: `amount` 기반 (closePosition 미사용). State v1→v2 자동 마이그레이션 (`_migrate_state_v2`). 반대 신호 → FIFO 가장 오래된 슬롯 청산. 동일 패턴 중복 진입 차단 (`signals.py`). 12개 파일 변경 (constants/state/models/config/orders/position_open/position_close/position_monitor/bot/signals/exchange/config.yaml). `max_positions: 1`로 N=1 동작 100% 호환. **1014 tests passed**. |
 | **v1.28.42** | 02-21 | **ATR-scaled TP/SL + proportional vol_mult cap**: `get_volatility_multiplier()`에 ATR-ratio 스케일링 모드 추가 (기존 `vol_adaptive`보다 우선). `ATR_ratio = ATR(14) / rolling_median(ATR(14), 576봉)`, clamp [0.6, 1.7]. WF 연구: 28 시나리오 전수 검증, `BOTH_a14_w576_0.6-1.7` WF 3/3 PASS, pre-overlap edge +74.5%. SL 스케일링이 핵심 동인 (TP-only FAIL, SL-only PASS). `config.yaml` `strategy.atr_scale` 섹션 추가 (enabled/window/clamp_lo/clamp_hi). `calculate_indicators()`에서 `atr_scale` 활성화 시에도 ATR 계산 트리거. `MAX_OHLCV_CANDLES` 150→600 (ATR-scale window=576 충족). **Proportional cap**: `_effective_vol_mult()` — 멀티플라이어 자체를 `max_sl_pct / base_sl_pct`로 제한, TP/SL 동일 비율 스케일링으로 R:R 비율 보존. Hard SL cap(`_cap_sl_to_daily_limit`)은 R:R 왜곡 최대 +65.6% (49/59 패턴 영향) → proportional cap은 +1.2% 이하. 7가지 캡 전략 심층 분석 (`atr_cap_strategy_study.py`). 1139 tests passed. ← **현재** |
 | v1.28.41 | 02-19 | **Atomic write retry + .new fallback for OneDrive PermissionError**: `os.replace()` 실패 시 OneDrive 동기화 잠금 대기하는 `_atomic_replace_with_retry()` 추가 (exponential backoff 0.1/0.2/0.4s, 3회). Non-atomic fallback(`open(state_file,'w')`) → `.new` 파일 쓰기로 변경 (corruption 방지). `load_state()` 복구 체인 확장: main → `.new` → `.bak` → timestamped → default. `save_metrics()`도 동일 패턴 적용. `LOCK_FILE`을 `results/` (OneDrive 동기화) → `tempfile.gettempdir()` (로컬)으로 이동 — OneDrive가 lock 파일을 잠가 `msvcrt.locking()` 실패하는 문제 해결. `EXPECTED_AVG_WIN/LOSS/EDGE` MAE/MFE 59패턴 값으로 업데이트 (5.63/9.64/0.75). 1014 tests passed. |
 | **v1.28.40** | 02-19 | **Deploy MAE/MFE 59 patterns to production**: PP 112패턴 → MAE/MFE 59패턴 (12L+47S) 교체. `--discovery-method mae_mfe --edge-threshold 21.8` 스캔. MAE/MFE는 실제 가격 행동(MFE/MAE percentile)에서 TP/SL 도출 → 더 적응적. WF 3/3 PASS (OOS +320.5%). IS: WR 87.2%, PnL +949%, MDD 22.4%. TP 1.0~3.3%, SL 1.7~4.2%. PP 112 백업: `dynamic_patterns_pp112_backup.json`. |

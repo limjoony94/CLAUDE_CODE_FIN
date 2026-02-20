@@ -23,8 +23,8 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import (
     _calculate_sleep_duration,
     _should_sync_now,
     _verify_exchange_settings,
-    _process_no_position,
-    _process_existing_position,
+    _process_entry_signal,
+    _process_existing_positions,
     _fetch_and_calculate_indicators,
     _log_position_status,
     _log_waiting_status,
@@ -293,7 +293,7 @@ class TestMainLoopIntegration:
         default_config
     ):
         """Main loop should check early exit when position exists."""
-        from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import _process_existing_position
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import _process_existing_positions
         from bingx_rl_trading_bot.scripts.production.pattern_5m.models import APICache, CircuitBreaker
 
         # Setup mocks
@@ -307,13 +307,17 @@ class TestMainLoopIntegration:
         # Mock ticker for current price
         mock_fetch_ticker.return_value = {'last': 50200.0}
 
-        state = {'position': long_position}
+        long_position['slot_id'] = 'slot_1'
+        state = {
+            'positions': {'slot_1': long_position},
+            'active_direction': 'LONG',
+        }
         cache = APICache()
         circuit_breaker = CircuitBreaker()
         metrics = PerformanceMetrics(session_start=datetime.now().isoformat())
 
         # Run the function (should trigger early exit logic)
-        _process_existing_position(
+        _process_existing_positions(
             mock_exchange, state, default_config, cache, circuit_breaker, metrics
         )
 
@@ -715,11 +719,11 @@ class TestFetchAndCalculateIndicators:
         assert result is None
 
 
-# ── _process_no_position Tests ───────────────────────────────
+# ── _process_entry_signal Tests ───────────────────────────────
 
 
 class TestProcessNoPosition:
-    """Test _process_no_position() entry signal checking."""
+    """Test _process_entry_signal() entry signal checking."""
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.open_position')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.check_entry_signal')
@@ -739,7 +743,7 @@ class TestProcessNoPosition:
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        result = _process_entry_signal(exchange, state, config, cache, cb, metrics)
         assert result is True
         mock_open.assert_called_once()
 
@@ -756,7 +760,7 @@ class TestProcessNoPosition:
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        result = _process_entry_signal(exchange, state, config, cache, cb, metrics)
         assert result is False
         mock_fetch.assert_not_called()
 
@@ -776,7 +780,7 @@ class TestProcessNoPosition:
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        result = _process_entry_signal(exchange, state, config, cache, cb, metrics)
         assert result is False
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
@@ -793,7 +797,7 @@ class TestProcessNoPosition:
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        result = _process_entry_signal(exchange, state, config, cache, cb, metrics)
         assert result is False
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.open_position')
@@ -814,15 +818,15 @@ class TestProcessNoPosition:
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_no_position(exchange, state, config, cache, cb, metrics)
+        result = _process_entry_signal(exchange, state, config, cache, cb, metrics)
         assert result is False
 
 
-# ── _process_existing_position Tests (extended) ──────────────
+# ── _process_existing_positions Tests (extended) ──────────────
 
 
 class TestProcessExistingPositionExtended:
-    """Extended tests for _process_existing_position() early exit flow."""
+    """Extended tests for _process_existing_positions() early exit flow."""
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.save_state')
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.close_position_market')
@@ -838,16 +842,15 @@ class TestProcessExistingPositionExtended:
         mock_early.return_value = (True, 3, '3-BD reversal', 1234567890000)
         mock_close.return_value = True
 
-        state = {'position': {
-            'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 2,
-        }}
+        pos = {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 2}
+        state = {'positions': {'s1': pos}, 'active_direction': 'LONG'}
         exchange = MagicMock()
         config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
         cache = APICache()
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_existing_position(exchange, state, config, cache, cb, metrics)
+        result = _process_existing_positions(exchange, state, config, cache, cb, metrics)
         assert result is True
         mock_close.assert_called_once()
 
@@ -860,16 +863,15 @@ class TestProcessExistingPositionExtended:
         mock_ticker.return_value = {'last': 50100.0}
         mock_early.return_value = (False, 0, None, None)
 
-        state = {'position': {
-            'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 0,
-        }}
+        pos = {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 0}
+        state = {'positions': {'s1': pos}, 'active_direction': 'LONG'}
         exchange = MagicMock()
         config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
         cache = APICache()
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_existing_position(exchange, state, config, cache, cb, metrics)
+        result = _process_existing_positions(exchange, state, config, cache, cb, metrics)
         assert result is False
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot._fetch_and_calculate_indicators')
@@ -877,14 +879,15 @@ class TestProcessExistingPositionExtended:
         """Indicator fetch fails → returns False without error."""
         mock_fetch.return_value = None
 
-        state = {'position': {'direction': 'LONG', 'entry_price': 50000}}
+        pos = {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000}
+        state = {'positions': {'s1': pos}, 'active_direction': 'LONG'}
         exchange = MagicMock()
         config = {'symbol': 'BTC/USDT:USDT', 'leverage': 3}
         cache = APICache()
         cb = CircuitBreaker()
         metrics = PerformanceMetrics()
 
-        result = _process_existing_position(exchange, state, config, cache, cb, metrics)
+        result = _process_existing_positions(exchange, state, config, cache, cb, metrics)
         assert result is False
 
 
@@ -1151,7 +1154,7 @@ class TestMaybeSyncPositionNoSync:
         assert result == original_time
 
 
-# ── _process_existing_position — early exit failure + exception ────
+# ── _process_existing_positions — early exit failure + exception ────
 
 
 class TestProcessExistingPositionFailPaths:
@@ -1168,10 +1171,9 @@ class TestProcessExistingPositionFailPaths:
     def test_early_exit_close_fails(self, mock_fetch, mock_tick, mock_early, mock_close, mock_save):
         """Early exit triggered but close_position_market fails → return False (line 496)."""
         mock_fetch.return_value = pd.DataFrame({'close': [50000]})
-        state = {'position': {
-            'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 2,
-        }}
-        result = _process_existing_position(
+        pos = {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000, 'reversal_count': 2}
+        state = {'positions': {'s1': pos}, 'active_direction': 'LONG'}
+        result = _process_existing_positions(
             MagicMock(), state, {'symbol': 'BTC/USDT:USDT', 'leverage': 3},
             APICache(), CircuitBreaker(), PerformanceMetrics()
         )
@@ -1185,10 +1187,9 @@ class TestProcessExistingPositionFailPaths:
     def test_early_exit_exception(self, mock_fetch, mock_tick, mock_early):
         """Exception during early exit check → caught, returns False (lines 498-499)."""
         mock_fetch.return_value = pd.DataFrame({'close': [50000]})
-        state = {'position': {
-            'direction': 'LONG', 'entry_price': 50000,
-        }}
-        result = _process_existing_position(
+        pos = {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000}
+        state = {'positions': {'s1': pos}, 'active_direction': 'LONG'}
+        result = _process_existing_positions(
             MagicMock(), state, {'symbol': 'BTC/USDT:USDT', 'leverage': 3},
             APICache(), CircuitBreaker(), PerformanceMetrics()
         )
@@ -1311,7 +1312,7 @@ class TestRunBotMainTradingWindowNoPosition:
     @patch(f'{BOT}.save_state')
     @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
     @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
-    @patch(f'{BOT}._process_no_position')
+    @patch(f'{BOT}._process_entry_signal')
     @patch(f'{BOT}._wait_for_candle_settle')
     @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
@@ -1328,7 +1329,7 @@ class TestRunBotMainTradingWindowNoPosition:
         mock_timing, mock_dll, mock_cll, mock_settle, mock_pnp,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
-        """Trading window + no position → _process_no_position called."""
+        """Trading window + no position → _process_entry_signal called."""
         import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
         original = bot_mod.shutdown_requested
         bot_mod.shutdown_requested = False
@@ -1359,7 +1360,7 @@ class TestRunBotMainTradingWindowWithPosition:
     @patch(f'{BOT}.save_state')
     @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
     @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
-    @patch(f'{BOT}._process_existing_position')
+    @patch(f'{BOT}._process_existing_positions')
     @patch(f'{BOT}.check_position_status', return_value=False)
     @patch(f'{BOT}._wait_for_candle_settle')
     @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
@@ -1370,7 +1371,8 @@ class TestRunBotMainTradingWindowWithPosition:
     @patch(f'{BOT}._verify_exchange_settings')
     @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
     @patch(f'{BOT}.load_state', return_value={
-        'position': {'direction': 'LONG', 'entry_price': 50000},
+        'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000}},
+        'active_direction': 'LONG',
         'daily_pnl': 0, 'daily_trades': 0,
     })
     @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
@@ -1380,7 +1382,7 @@ class TestRunBotMainTradingWindowWithPosition:
         mock_timing, mock_dll, mock_cll, mock_settle, mock_cps, mock_pep,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
-        """Trading window + has position + not closed → _process_existing_position called."""
+        """Trading window + has position + not closed → _process_existing_positions called."""
         import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
         original = bot_mod.shutdown_requested
         bot_mod.shutdown_requested = False
@@ -1411,7 +1413,7 @@ class TestRunBotMainPositionClosedInTradingWindow:
     @patch(f'{BOT}.save_state')
     @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
     @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
-    @patch(f'{BOT}._process_no_position')
+    @patch(f'{BOT}._process_entry_signal')
     @patch(f'{BOT}.check_position_status', return_value=True)
     @patch(f'{BOT}._wait_for_candle_settle')
     @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
@@ -1422,7 +1424,8 @@ class TestRunBotMainPositionClosedInTradingWindow:
     @patch(f'{BOT}._verify_exchange_settings')
     @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
     @patch(f'{BOT}.load_state', return_value={
-        'position': {'direction': 'LONG', 'entry_price': 50000},
+        'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000}},
+        'active_direction': 'LONG',
         'daily_pnl': 0, 'daily_trades': 0,
     })
     @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
@@ -1432,7 +1435,7 @@ class TestRunBotMainPositionClosedInTradingWindow:
         mock_timing, mock_dll, mock_cll, mock_settle, mock_cps, mock_pnp,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
-        """Position closed in trading window → _process_no_position for new entry."""
+        """Position closed in trading window → _process_entry_signal for new entry."""
         import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
         original = bot_mod.shutdown_requested
         bot_mod.shutdown_requested = False
@@ -1707,7 +1710,8 @@ class TestRunBotMainMaintenanceWithPosition:
     @patch(f'{BOT}._verify_exchange_settings')
     @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
     @patch(f'{BOT}.load_state', return_value={
-        'position': {'direction': 'LONG', 'entry_price': 50000},
+        'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000}},
+        'active_direction': 'LONG',
         'daily_pnl': 0, 'daily_trades': 0,
     })
     @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
@@ -1775,16 +1779,18 @@ class TestRunBotMainMaintenancePositionClosed:
         bot_mod.shutdown_requested = False
         mock_exch.return_value = MagicMock()
 
-        # State starts with position, then check_position_status returns True (closed),
-        # and state['position'] is cleared by the mock side effect
+        # State starts with positions, then check_position_status returns True (closed),
+        # and state['positions'] is cleared by the mock side effect
         state_dict = {
-            'position': {'direction': 'LONG', 'entry_price': 50000},
+            'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG', 'entry_price': 50000}},
+            'active_direction': 'LONG',
             'daily_pnl': 0, 'daily_trades': 0,
         }
 
         def cps_side_effect(*args, **kwargs):
-            # Simulate position being closed — clear position from state
-            state_dict['position'] = None
+            # Simulate position being closed — clear positions from state
+            state_dict['positions'] = {}
+            state_dict['active_direction'] = None
             return True
 
         mock_ls.return_value = state_dict

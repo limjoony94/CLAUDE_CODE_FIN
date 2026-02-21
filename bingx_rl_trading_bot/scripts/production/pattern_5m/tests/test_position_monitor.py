@@ -24,6 +24,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
 from bingx_rl_trading_bot.scripts.production.pattern_5m.models import (
     APICache,
 )
+from bingx_rl_trading_bot.scripts.production.pattern_5m.orders import _EXCHANGE_MANAGED
 
 
 # ── Helper: build multi-position state ───────────────────────
@@ -906,3 +907,179 @@ class TestSyncPositionActualExitTruthy:
         call_args = mock_record.call_args
         assert call_args[0][3] == 51500.0  # exit_price
         assert call_args[0][4] == 'TP'  # exit_reason
+
+
+# ── Per-slot TP/SL fill detection (v1.29.1) ─────────────────
+
+
+def _make_two_slot_state(qty_each=0.01):
+    """Build state with 2 LONG slots for per-slot fill detection tests."""
+    s1 = {
+        'slot_id': 's1',
+        'direction': 'LONG',
+        'entry_price': 50000.0,
+        'entry_time': '2026-01-01T00:00:00',
+        'quantity': qty_each,
+        'remaining_quantity': qty_each,
+        'tp_price': 51000.0,
+        'sl_price': 49000.0,
+        'tp_order_id': 'tp_s1',
+        'sl_order_id': 'sl_s1',
+        'scale_out_enabled': False,
+    }
+    s2 = {
+        'slot_id': 's2',
+        'direction': 'LONG',
+        'entry_price': 50100.0,
+        'entry_time': '2026-01-01T00:05:00',
+        'quantity': qty_each,
+        'remaining_quantity': qty_each,
+        'tp_price': 51100.0,
+        'sl_price': 49100.0,
+        'tp_order_id': 'tp_s2',
+        'sl_order_id': 'sl_s2',
+        'scale_out_enabled': False,
+    }
+    return {
+        'positions': {'s1': s1, 's2': s2},
+        'active_direction': 'LONG',
+        'total_trades': 0,
+        'winning_trades': 0,
+        'total_pnl': 0.0,
+        'daily_trades': 0,
+        'daily_pnl': 0.0,
+        'consecutive_losses': 0,
+        'last_trade': None,
+        'last_signal_time': None,
+    }
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.save_state')
+class TestPerSlotFillDetection:
+    """Test per-slot TP/SL fill detection in check_position_status()."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_per_slot_tp_fill_detection(self, mock_record, mock_save, mock_sleep):
+        """Slot s1 TP filled (TP order gone, SL still active) → detected and closed."""
+        exchange = MagicMock()
+        # Exchange still has LONG position but qty = s2 only (s1's TP filled)
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},  # only s2 remains
+        ]
+        # s1's SL still active, s2's TP+SL still active. s1's TP is GONE.
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'sl_s1'},
+            {'id': 'tp_s2'},
+            {'id': 'sl_s2'},
+        ]
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 51000.0, 'timestamp': 2000000},
+        ]
+        exchange.fetch_ticker.return_value = {'last': 51000.0}
+
+        state = _make_two_slot_state(qty_each=0.01)
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        # record_closed_position called for s1
+        mock_record.assert_called_once()
+        closed_slot = mock_record.call_args[1].get('position') or mock_record.call_args[0][7]
+        assert closed_slot['slot_id'] == 's1'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_per_slot_sl_fill_detection(self, mock_record, mock_save, mock_sleep):
+        """Slot s1 SL filled (SL order gone, TP still active) → detected and closed."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},
+        ]
+        # s1's TP still active but SL is GONE
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_s1'},
+            {'id': 'tp_s2'},
+            {'id': 'sl_s2'},
+        ]
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 49000.0, 'timestamp': 2000000},
+        ]
+        exchange.fetch_ticker.return_value = {'last': 49000.0}
+
+        state = _make_two_slot_state(qty_each=0.01)
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        mock_record.assert_called_once()
+        closed_slot = mock_record.call_args[1].get('position') or mock_record.call_args[0][7]
+        assert closed_slot['slot_id'] == 's1'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_per_slot_both_orders_gone(self, mock_record, mock_save, mock_sleep):
+        """Slot s1 both TP and SL gone → detected and closed."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},
+        ]
+        # Only s2's orders remain — s1's TP and SL both gone
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_s2'},
+            {'id': 'sl_s2'},
+        ]
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 50500.0, 'timestamp': 2000000},
+        ]
+        exchange.fetch_ticker.return_value = {'last': 50500.0}
+
+        state = _make_two_slot_state(qty_each=0.01)
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        mock_record.assert_called_once()
+        closed_slot = mock_record.call_args[1].get('position') or mock_record.call_args[0][7]
+        assert closed_slot['slot_id'] == 's1'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_per_slot_exchange_managed_skip(self, mock_record, mock_save, mock_sleep):
+        """EXCHANGE_MANAGED slot → skipped in per-slot detection."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},
+        ]
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'tp_s2'},
+            {'id': 'sl_s2'},
+        ]
+
+        state = _make_two_slot_state(qty_each=0.01)
+        # s1 has EXCHANGE_MANAGED TP → should be skipped
+        state['positions']['s1']['tp_order_id'] = _EXCHANGE_MANAGED
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+        mock_record.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_per_slot_no_mismatch_no_detection(self, mock_record, mock_save, mock_sleep):
+        """Exchange qty matches local sum → no per-slot detection triggered."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.02},  # matches s1 + s2
+        ]
+
+        state = _make_two_slot_state(qty_each=0.01)
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+        mock_record.assert_not_called()
+        # fetch_open_orders should NOT be called (no mismatch)
+        exchange.fetch_open_orders.assert_not_called()

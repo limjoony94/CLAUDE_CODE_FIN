@@ -436,6 +436,9 @@ class TestVerifyTpSlOrders:
         exchange.fetch_open_orders.return_value = [
             {'id': 'sl_1'},  # Only SL present
         ]
+        exchange.fetch_positions.return_value = [
+            {'contracts': 0.01, 'side': 'long'},
+        ]
         exchange.create_order.return_value = {'id': 'tp_new'}
         state = self._make_state()
         verify_tp_sl_orders(exchange, state, {'symbol': 'BTC/USDT:USDT'})
@@ -448,6 +451,9 @@ class TestVerifyTpSlOrders:
         exchange = MagicMock()
         exchange.fetch_open_orders.return_value = [
             {'id': 'tp_1'},  # Only TP present
+        ]
+        exchange.fetch_positions.return_value = [
+            {'contracts': 0.01, 'side': 'long'},
         ]
         exchange.create_order.return_value = {'id': 'sl_new'}
         state = self._make_state()
@@ -1295,3 +1301,105 @@ class TestVerifyScaleOutOrdersGenericException:
         ]
         result = _verify_scale_out_orders(exchange, position, 'BTC/USDT:USDT', stages, {})
         assert result is False
+
+
+# ── Verify TP/SL qty mismatch guard ────────────────────────
+
+
+class TestVerifyQtyMismatchGuard:
+    """Test verify_tp_sl_orders skips directions where exchange qty < local sum."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_verify_skips_direction_with_qty_mismatch(self, mock_save):
+        """When exchange qty < local sum for LONG, LONG slots are skipped (no re-placement)."""
+        exchange = MagicMock()
+
+        # Two LONG slots, 0.01 each → local sum = 0.02
+        state = {
+            'positions': {
+                's1': {
+                    'slot_id': 's1', 'direction': 'LONG', 'quantity': 0.01,
+                    'tp_order_id': 'tp1', 'sl_order_id': 'sl1',
+                    'tp_price': 51000.0, 'sl_price': 49000.0,
+                },
+                's2': {
+                    'slot_id': 's2', 'direction': 'LONG', 'quantity': 0.01,
+                    'tp_order_id': 'tp2', 'sl_order_id': 'sl2',
+                    'tp_price': 51000.0, 'sl_price': 49000.0,
+                },
+            },
+            'active_direction': 'LONG',
+        }
+        config = {'symbol': 'BTC/USDT:USDT'}
+
+        # fetch_open_orders: tp1 gone (would normally trigger re-placement)
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'sl1'}, {'id': 'tp2'}, {'id': 'sl2'},
+        ]
+
+        # fetch_positions: exchange has only 0.01 (one slot filled) < 0.02 local
+        exchange.fetch_positions.return_value = [
+            {'contracts': 0.01, 'side': 'long'},
+        ]
+
+        verify_tp_sl_orders(exchange, state, config)
+
+        # create_order should NOT be called (skipped due to qty mismatch)
+        exchange.create_order.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_verify_proceeds_when_qty_matches(self, mock_save):
+        """When exchange qty matches local sum, verify proceeds normally."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'tp1_new'}
+
+        state = {
+            'positions': {
+                's1': {
+                    'slot_id': 's1', 'direction': 'LONG', 'quantity': 0.01,
+                    'tp_order_id': 'tp1', 'sl_order_id': 'sl1',
+                    'tp_price': 51000.0, 'sl_price': 49000.0,
+                },
+            },
+            'active_direction': 'LONG',
+        }
+        config = {'symbol': 'BTC/USDT:USDT'}
+
+        # tp1 missing from open orders
+        exchange.fetch_open_orders.return_value = [{'id': 'sl1'}]
+
+        # exchange qty matches local
+        exchange.fetch_positions.return_value = [
+            {'contracts': 0.01, 'side': 'long'},
+        ]
+
+        verify_tp_sl_orders(exchange, state, config)
+
+        # TP should be re-placed since qty matches
+        assert exchange.create_order.called
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_verify_fetch_positions_failure_no_skip(self, mock_save):
+        """When fetch_positions fails, no directions are skipped (fallback)."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'tp1_new'}
+
+        state = {
+            'positions': {
+                's1': {
+                    'slot_id': 's1', 'direction': 'LONG', 'quantity': 0.01,
+                    'tp_order_id': 'tp1', 'sl_order_id': 'sl1',
+                    'tp_price': 51000.0, 'sl_price': 49000.0,
+                },
+            },
+            'active_direction': 'LONG',
+        }
+        config = {'symbol': 'BTC/USDT:USDT'}
+
+        exchange.fetch_open_orders.return_value = [{'id': 'sl1'}]  # tp1 missing
+        exchange.fetch_positions.side_effect = ccxt.NetworkError('timeout')
+
+        verify_tp_sl_orders(exchange, state, config)
+
+        # Should proceed normally (no skip) → re-place TP
+        assert exchange.create_order.called

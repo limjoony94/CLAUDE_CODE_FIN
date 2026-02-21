@@ -24,6 +24,7 @@ from .constants import (
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_ticker_cached, fetch_positions_cached
 from .state import save_state
+from .orders import _EXCHANGE_MANAGED
 
 logger = logging.getLogger('pattern_5m')
 
@@ -256,6 +257,62 @@ def check_position_status(
                     _handle_position_closed(exchange, state, config, slot, cache, metrics)
                 any_closed = True
                 continue
+
+            # Per-slot TP/SL fill detection (N>1 multi-position)
+            # Exchange has position but with fewer contracts than local sum
+            # → some individual slot TP/SL orders were filled
+            exchange_qty = float(exchange_pos.get('contracts', 0))
+            local_qty_sum = sum(s.get('quantity', 0) for s in dir_slots)
+
+            if exchange_qty < local_qty_sum - 0.0001:
+                try:
+                    open_orders = exchange.fetch_open_orders(symbol)
+                    open_order_ids = {o.get('id') for o in open_orders}
+                except Exception as e:
+                    logger.debug(f"Per-slot fill detection: failed to fetch open orders: {e}")
+                    open_order_ids = None
+
+                if open_order_ids is not None:
+                    for slot in list(dir_slots):
+                        tp_id = slot.get('tp_order_id')
+                        sl_id = slot.get('sl_order_id')
+
+                        # Skip EXCHANGE_MANAGED slots
+                        if tp_id == _EXCHANGE_MANAGED or sl_id == _EXCHANGE_MANAGED:
+                            continue
+
+                        # Need at least one tracked order to detect fill
+                        if not tp_id and not sl_id:
+                            continue
+
+                        tp_on_exchange = tp_id in open_order_ids if tp_id else False
+                        sl_on_exchange = sl_id in open_order_ids if sl_id else False
+
+                        slot_closed = False
+                        if tp_id and not tp_on_exchange and sl_on_exchange:
+                            logger.info(
+                                f"🔍 Per-slot fill: {dir_label} slot {slot.get('slot_id')} "
+                                f"TP order {tp_id} filled (SL {sl_id} still active)"
+                            )
+                            slot_closed = True
+                        elif sl_id and not sl_on_exchange and tp_on_exchange:
+                            logger.info(
+                                f"🔍 Per-slot fill: {dir_label} slot {slot.get('slot_id')} "
+                                f"SL order {sl_id} filled (TP {tp_id} still active)"
+                            )
+                            slot_closed = True
+                        elif tp_id and not tp_on_exchange and sl_id and not sl_on_exchange:
+                            logger.info(
+                                f"🔍 Per-slot fill: {dir_label} slot {slot.get('slot_id')} "
+                                f"both orders gone (TP {tp_id}, SL {sl_id})"
+                            )
+                            slot_closed = True
+
+                        if slot_closed:
+                            _handle_position_closed(
+                                exchange, state, config, slot, cache, metrics
+                            )
+                            any_closed = True
 
             # Handle scale-out partial fills per slot
             for slot in dir_slots:

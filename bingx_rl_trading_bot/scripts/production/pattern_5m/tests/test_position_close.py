@@ -510,18 +510,21 @@ class TestRecoverPositionToState:
 # -- recover_from_crash -----------------------------------------------------
 
 
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recalculate_position_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.update_emergency_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._cancel_all_symbol_orders')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.detect_ghost_positions')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_positions_cached')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_ticker_cached')
 class TestRecoverFromCrash:
-    """Test recover_from_crash() 4-case recovery."""
+    """Test recover_from_crash() 4-phase recovery."""
 
     def test_case1_orphan_exchange_position(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Exchange has position, local doesn't -> recover to state."""
         mock_fetch_pos.return_value = [
@@ -535,11 +538,12 @@ class TestRecoverFromCrash:
         assert result is True
         mock_recover.assert_called_once()
         mock_record.assert_not_called()
+        mock_cancel.assert_called_once()
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case2_local_only_with_trade_history(
         self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Local has position, exchange doesn't, trade history found -> record closed."""
         mock_fetch_pos.return_value = []  # no exchange position
@@ -564,7 +568,7 @@ class TestRecoverFromCrash:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case2_local_only_ticker_fallback(
         self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Local only, no trade history -> uses ticker fallback."""
         mock_fetch_pos.return_value = []
@@ -587,7 +591,7 @@ class TestRecoverFromCrash:
 
     def test_case3_direction_mismatch(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Both exist, directions mismatch -> close local + recover exchange."""
         mock_fetch_pos.return_value = [
@@ -616,11 +620,11 @@ class TestRecoverFromCrash:
         mock_record.assert_called_once()  # close old
         mock_recover.assert_called_once()  # recover new
 
-    def test_case4_quantity_mismatch(
+    def test_case4_quantity_mismatch_absorb(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
-        """Both exist, same direction, qty differs -> recalculate."""
+        """Both exist, same direction, exchange has more qty -> absorb into first slot."""
         mock_fetch_pos.return_value = [
             {'side': 'long', 'contracts': 0.02, 'entryPrice': 50000.0},
         ]
@@ -629,7 +633,7 @@ class TestRecoverFromCrash:
                 's1': {
                     'slot_id': 's1',
                     'direction': 'LONG', 'entry_price': 50000.0,
-                    'quantity': 0.01,
+                    'quantity': 0.01, 'tp_price': 51000.0, 'sl_price': 49000.0,
                 },
             },
             'active_direction': 'LONG',
@@ -637,11 +641,44 @@ class TestRecoverFromCrash:
         config = {'symbol': 'BTC/USDT:USDT'}
         result = recover_from_crash(MagicMock(), state, config, APICache())
         assert result is True
-        mock_recalc.assert_called_once()
+        # Quantity absorbed into the slot
+        assert state['positions']['s1']['quantity'] == 0.02
+        mock_record.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
+    def test_case4_quantity_mismatch_fifo_remove(
+        self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
+    ):
+        """Both exist, same direction, exchange has less qty -> FIFO remove oldest."""
+        mock_fetch_pos.return_value = [
+            {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0},
+        ]
+        mock_exit.return_value = {'price': 49500.0, 'reason': 'SL'}
+        state = {
+            'positions': {
+                's1': {
+                    'slot_id': 's1',
+                    'direction': 'LONG', 'entry_price': 50000.0,
+                    'quantity': 0.01, 'entry_time': '2026-02-18T09:00:00',
+                },
+                's2': {
+                    'slot_id': 's2',
+                    'direction': 'LONG', 'entry_price': 50100.0,
+                    'quantity': 0.01, 'entry_time': '2026-02-18T10:00:00',
+                },
+            },
+            'active_direction': 'LONG',
+        }
+        config = {'symbol': 'BTC/USDT:USDT'}
+        result = recover_from_crash(MagicMock(), state, config, APICache())
+        assert result is True
+        # Oldest slot (s1) should be closed
+        mock_record.assert_called_once()
 
     def test_consistent_state_returns_false(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Both exist, same direction, same qty -> no action."""
         mock_fetch_pos.return_value = [
@@ -666,7 +703,7 @@ class TestRecoverFromCrash:
 
     def test_network_error_returns_false(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Network error during fetch -> False."""
         mock_fetch_pos.side_effect = ccxt.NetworkError('timeout')
@@ -677,7 +714,7 @@ class TestRecoverFromCrash:
 
     def test_no_positions_anywhere_returns_false(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """No exchange position, no local -> no action."""
         mock_fetch_pos.return_value = []
@@ -970,7 +1007,10 @@ class TestClosePositionMarketErrors:
 # -- recover_from_crash additional paths ------------------------------------
 
 
-@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recalculate_position_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.update_emergency_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._cancel_all_symbol_orders')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.detect_ghost_positions')
@@ -982,7 +1022,7 @@ class TestRecoverFromCrashExtended:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case2_ticker_exception_fallback(
         self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Case 2: ticker fails -> fallback to entry_price."""
         mock_fetch_pos.return_value = []
@@ -1005,7 +1045,7 @@ class TestRecoverFromCrashExtended:
 
     def test_exchange_error_returns_false(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """ExchangeError during fetch -> returns False."""
         mock_fetch_pos.side_effect = ccxt.ExchangeError('invalid')
@@ -1016,7 +1056,7 @@ class TestRecoverFromCrashExtended:
 
     def test_generic_exception_returns_false(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Generic exception -> returns False."""
         mock_fetch_pos.side_effect = RuntimeError('unexpected')
@@ -1027,9 +1067,9 @@ class TestRecoverFromCrashExtended:
 
     def test_case4_quantity_mismatch_with_scale_out(
         self, mock_ticker, mock_fetch_pos, mock_ghost,
-        mock_record, mock_recover, mock_recalc
+        mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
-        """Exchange qty != local qty sum -> recalculate (e.g. partial fill changed qty)."""
+        """Exchange qty > local qty sum -> absorb difference (e.g. partial fill changed qty)."""
         mock_fetch_pos.return_value = [
             {'side': 'long', 'contracts': 0.015, 'entryPrice': 50000.0},
         ]
@@ -1038,7 +1078,7 @@ class TestRecoverFromCrashExtended:
                 's1': {
                     'slot_id': 's1',
                     'direction': 'LONG', 'entry_price': 50000.0,
-                    'quantity': 0.01,
+                    'quantity': 0.01, 'tp_price': 51000.0, 'sl_price': 49000.0,
                     'scale_out_stages': [
                         {'quantity': 0.003, 'filled': False},
                         {'quantity': 0.003, 'filled': False},
@@ -1050,7 +1090,8 @@ class TestRecoverFromCrashExtended:
         config = {'symbol': 'BTC/USDT:USDT'}
         result = recover_from_crash(MagicMock(), state, config, APICache())
         assert result is True
-        mock_recalc.assert_called_once()
+        # Diff absorbed into the slot
+        assert state['positions']['s1']['quantity'] == 0.015
 
 
 # -- _update_confidence_log_outcome -----------------------------------------

@@ -371,7 +371,40 @@ def verify_tp_sl_orders(
         open_order_ids = {o.get('id'): o for o in open_orders}
         state_changed = False
 
+        # Guard: skip directions where exchange qty < local sum
+        # (per-slot fill detected — check_position_status will handle)
+        skip_directions = set()
+        try:
+            exchange_positions = exchange.fetch_positions([symbol])
+            exchange_qty_map = {}
+            for pos in exchange_positions:
+                contracts = float(pos.get('contracts', 0))
+                if contracts > 0:
+                    side = pos.get('side')
+                    dir_label = 'LONG' if side == 'long' else 'SHORT'
+                    exchange_qty_map[dir_label] = contracts
+
+            for dir_label in ('LONG', 'SHORT'):
+                local_qty = sum(
+                    p.get('quantity', 0) for p in positions.values()
+                    if p.get('direction') == dir_label
+                )
+                if local_qty <= 0:
+                    continue
+                exchange_qty = exchange_qty_map.get(dir_label, 0)
+                if exchange_qty < local_qty - 0.0001:
+                    skip_directions.add(dir_label)
+                    logger.info(
+                        f"⚠️ Verify: skipping {dir_label} "
+                        f"(exchange={exchange_qty:.4f} < local={local_qty:.4f}) "
+                        f"— check_position_status will handle"
+                    )
+        except Exception as e:
+            logger.debug(f"Verify qty guard: fetch_positions failed: {e}")
+
         for position in positions.values():
+            if position.get('direction') in skip_directions:
+                continue
             position_side = _get_position_side(config, position['direction'])
             scale_out_enabled = position.get('scale_out_enabled', False)
             scale_out_stages = position.get('scale_out_stages', [])
@@ -690,7 +723,6 @@ def place_emergency_sl(
     close_side = 'sell' if direction == 'LONG' else 'buy'
     symbol = config['symbol']
 
-    # BingX requires valid amount even with closePosition=True
     total_qty = round(
         sum(p.get('quantity', 0) for p in positions.values()),
         QUANTITY_ROUND_DECIMALS,
@@ -700,6 +732,8 @@ def place_emergency_sl(
         return
 
     try:
+        # Use amount-based STOP_MARKET (same proven pattern as per-slot SL orders)
+        # Note: closePosition:True + amount causes BingX API rejection
         order = exchange.create_order(
             symbol=symbol,
             type='STOP_MARKET',
@@ -708,12 +742,11 @@ def place_emergency_sl(
             params={
                 'positionSide': 'BOTH',
                 'stopPrice': worst_sl,
-                'closePosition': True,
             }
         )
         state['emergency_sl_order_id'] = order.get('id')
         save_state(state)
-        logger.info(f"🛡️ Emergency SL placed: {order.get('id')} @ ${worst_sl:.1f} (closePosition)")
+        logger.info(f"🛡️ Emergency SL placed: {order.get('id')} @ ${worst_sl:.1f} (qty={total_qty})")
     except ccxt.ExchangeError as e:
         error_msg = str(e)
         if '110406' in error_msg:
@@ -755,7 +788,9 @@ def update_emergency_sl(
 ) -> None:
     """Re-calculate and re-place emergency SL after slot add/remove.
 
-    Places new SL BEFORE cancelling old one to avoid protection gap.
+    Cancels old SL first, then places new one. Brief gap is acceptable
+    because per-slot SLs still protect during the transition. Without
+    closePosition, overlapping STOP_MARKET orders risk double-execution.
     """
     positions = state.get('positions') or {}
     if not positions:
@@ -763,9 +798,7 @@ def update_emergency_sl(
         return
 
     old_order_id = state.get('emergency_sl_order_id')
-    # Place new emergency SL first (brief overlap is safer than gap)
-    place_emergency_sl(exchange, state, config)
-    # Then cancel old one
+    # Cancel old emergency SL first (per-slot SLs still protect during brief gap)
     if old_order_id and old_order_id != _EXCHANGE_MANAGED:
         try:
             symbol = config.get('symbol', 'BTC-USDT')
@@ -775,3 +808,6 @@ def update_emergency_sl(
             logger.debug(f"Old emergency SL already gone: {old_order_id}")
         except Exception as e:
             logger.warning(f"Failed to cancel old emergency SL {old_order_id}: {e}")
+    state['emergency_sl_order_id'] = None
+    # Place new emergency SL
+    place_emergency_sl(exchange, state, config)

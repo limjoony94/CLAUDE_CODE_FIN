@@ -15,12 +15,13 @@ import ccxt
 from .constants import (
     FEE_PCT,
     QTY_TOLERANCE,
+    QUANTITY_ROUND_DECIMALS,
     ROTATION_ENABLED,
     CONFIDENCE_LOG_FILE,
 )
 from .position_open import calculate_tp_sl, setup_scale_out
 from .models import APICache, CircuitBreaker, PerformanceMetrics
-from .exchange import fetch_positions_cached, fetch_ticker_cached
+from .exchange import fetch_positions_cached, fetch_ticker_cached, fetch_balance_cached
 from .state import save_state, save_metrics
 from .orders import place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl, cancel_emergency_sl
 from .utils import extract_pattern_name
@@ -302,39 +303,110 @@ def recover_position_to_state(
             f"TP=${tp_price:.1f}, SL=${sl_price:.1f}"
         )
 
-    # Setup scale-out if enabled
-    scale_out_stages = setup_scale_out(strategy, entry_price, quantity, dir_mult, tp_pct_adjusted)
+    # Determine how many recovery slots to create (N=1 for single-position mode)
+    max_positions = config.get('max_positions', 1)
+    n_slots = _calculate_recovery_slot_count(
+        exchange, cache, config, quantity, entry_price, max_positions, state
+    )
+    per_slot_qty = round(quantity / n_slots, QUANTITY_ROUND_DECIMALS)
 
     reason = f"Recovered from exchange ({old_pattern_name})" if old_pattern_name else 'Recovered from exchange'
-    slot_id = uuid.uuid4().hex[:8]
-    recovered_slot = {
-        'slot_id': slot_id,
-        'direction': direction,
-        'entry_price': entry_price,
-        'quantity': quantity,
-        'remaining_quantity': quantity,
-        'tp_price': tp_price,
-        'sl_price': sl_price,
-        'vol_mult': 1.0,  # Recovery uses default volatility multiplier
-        'scale_out_enabled': bool(scale_out_stages),
-        'scale_out_stages': scale_out_stages,
-        'entry_time': datetime.now().isoformat(),
-        'reason': reason,
-        'pattern_name': old_pattern_name or None,
-        'recovered': True,
-        'needs_tpsl': True,
-    }
     positions = state.setdefault('positions', {})
-    positions[slot_id] = recovered_slot
+    new_slot_ids = []
+
+    for i in range(n_slots):
+        # Last slot gets remainder to avoid rounding loss
+        if i == n_slots - 1:
+            slot_qty = round(quantity - per_slot_qty * (n_slots - 1), QUANTITY_ROUND_DECIMALS)
+        else:
+            slot_qty = per_slot_qty
+
+        scale_out_stages = setup_scale_out(strategy, entry_price, slot_qty, dir_mult, tp_pct_adjusted)
+        slot_id = uuid.uuid4().hex[:8]
+        recovered_slot = {
+            'slot_id': slot_id,
+            'direction': direction,
+            'entry_price': entry_price,
+            'quantity': slot_qty,
+            'remaining_quantity': slot_qty,
+            'tp_price': tp_price,
+            'sl_price': sl_price,
+            'vol_mult': 1.0,
+            'scale_out_enabled': bool(scale_out_stages),
+            'scale_out_stages': scale_out_stages,
+            'entry_time': datetime.now().isoformat(),
+            'reason': reason,
+            'pattern_name': old_pattern_name or None,
+            'recovered': True,
+            'needs_tpsl': True,
+        }
+        positions[slot_id] = recovered_slot
+        new_slot_ids.append(slot_id)
+
     state['active_direction'] = direction
     state['has_position'] = True
+    logger.info(f"Recovery: created {n_slots} slot(s) from {quantity:.4f} total qty")
     save_state(state)
 
     if exchange:
-        place_tp_sl_orders(exchange, state, config, position=recovered_slot)
-        if recovered_slot.get('tp_order_id') or recovered_slot.get('sl_order_id') or scale_out_stages:
-            recovered_slot['needs_tpsl'] = False
-            save_state(state)
+        for sid in new_slot_ids:
+            slot = positions[sid]
+            place_tp_sl_orders(exchange, state, config, position=slot)
+            if slot.get('tp_order_id') or slot.get('sl_order_id') or slot.get('scale_out_stages'):
+                slot['needs_tpsl'] = False
+        save_state(state)
+
+
+def _calculate_recovery_slot_count(
+    exchange: Optional[ccxt.bingx],
+    cache: Optional[APICache],
+    config: Dict[str, Any],
+    quantity: float,
+    entry_price: float,
+    max_positions: int,
+    state: Dict[str, Any],
+) -> int:
+    """Calculate how many virtual slots to create during orphan recovery.
+
+    Uses current equity to estimate expected per-slot quantity,
+    then divides exchange quantity by that estimate.
+    Falls back to 1 slot if calculation fails.
+    """
+    if max_positions <= 1 or not exchange or not cache:
+        return 1
+
+    existing_slots = len(state.get('positions') or {})
+    available_slots = max(1, max_positions - existing_slots)
+
+    try:
+        balance = fetch_balance_cached(exchange, cache, force_refresh=True)
+        total_equity = float(balance.get('USDT', {}).get('total', 0))
+
+        if total_equity <= 0 or entry_price <= 0:
+            return 1
+
+        size_pct = config.get('position_size_pct', 95) / 100
+        leverage = config.get('leverage', 3)
+        per_slot_equity = total_equity * size_pct / max_positions
+        expected_slot_qty = round(
+            (per_slot_equity * leverage) / entry_price,
+            QUANTITY_ROUND_DECIMALS,
+        )
+
+        if expected_slot_qty <= 0:
+            return 1
+
+        n_slots = max(1, min(available_slots, round(quantity / expected_slot_qty)))
+        logger.info(
+            f"Recovery slot calc: qty={quantity:.4f}, "
+            f"expected_per_slot={expected_slot_qty:.4f}, "
+            f"available={available_slots} → {n_slots} slot(s)"
+        )
+        return n_slots
+
+    except Exception as e:
+        logger.warning(f"Could not calculate recovery slot count, using 1: {e}")
+        return 1
 
 
 def _read_tpsl_from_exchange_orders(
@@ -344,6 +416,11 @@ def _read_tpsl_from_exchange_orders(
 ) -> Tuple[Optional[float], Optional[float]]:
     """
     Read TP and SL prices from existing exchange open orders.
+
+    With multi-slot, multiple TP/SL orders may exist. Returns the widest
+    (most protective) pair based on direction:
+    - LONG: highest TP, lowest SL
+    - SHORT: lowest TP, highest SL
 
     Args:
         exchange: Exchange instance (may be None)
@@ -358,8 +435,8 @@ def _read_tpsl_from_exchange_orders(
 
     try:
         open_orders = exchange.fetch_open_orders(symbol)
-        tp_price = None
-        sl_price = None
+        tp_prices = []
+        sl_prices = []
 
         for order in open_orders:
             order_type = (order.get('type') or '').upper()
@@ -373,14 +450,25 @@ def _read_tpsl_from_exchange_orders(
                 continue
 
             if 'TAKE_PROFIT' in order_type:
-                tp_price = stop_price
+                tp_prices.append(stop_price)
             elif 'STOP' in order_type and 'TAKE' not in order_type:
-                sl_price = stop_price
+                sl_prices.append(stop_price)
 
-        # Sanity check: TP and SL must be on correct sides of entry
-        # (skip validation if we don't have both — partial is still useful)
-        if tp_price and sl_price:
-            logger.debug(f"Exchange orders found: TP=${tp_price:.1f}, SL=${sl_price:.1f}")
+        # Select widest pair based on direction for maximum protection
+        tp_price = None
+        sl_price = None
+        if tp_prices:
+            tp_price = max(tp_prices) if direction == 'LONG' else min(tp_prices)
+        if sl_prices:
+            sl_price = min(sl_prices) if direction == 'LONG' else max(sl_prices)
+
+        if tp_prices or sl_prices:
+            tp_str = f"${tp_price:.1f}" if tp_price else "None"
+            sl_str = f"${sl_price:.1f}" if sl_price else "None"
+            logger.debug(
+                f"Exchange orders found: {len(tp_prices)} TP, {len(sl_prices)} SL → "
+                f"TP={tp_str}, SL={sl_str}"
+            )
 
         return tp_price, sl_price
 
@@ -580,6 +668,30 @@ def close_position_market(
     return False
 
 
+def _cancel_all_symbol_orders(exchange: ccxt.bingx, symbol: str) -> int:
+    """Cancel all open orders for a symbol (clean slate for recovery).
+
+    Returns number of orders cancelled.
+    """
+    try:
+        open_orders = exchange.fetch_open_orders(symbol)
+        cancelled = 0
+        for order in open_orders:
+            try:
+                exchange.cancel_order(order['id'], symbol)
+                cancelled += 1
+            except (ccxt.OrderNotFound, ccxt.InvalidOrder):
+                pass
+            except Exception as e:
+                logger.debug(f"Failed to cancel order {order.get('id')}: {e}")
+        if cancelled:
+            logger.info(f"🧹 Cancelled {cancelled} open orders for clean recovery")
+        return cancelled
+    except Exception as e:
+        logger.warning(f"Failed to fetch/cancel orders for recovery: {e}")
+        return 0
+
+
 def recover_from_crash(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -590,6 +702,11 @@ def recover_from_crash(
 ) -> bool:
     """
     Comprehensive crash recovery - reconcile exchange with local state.
+
+    Phase 1: Cancel all open orders (clean slate, prevents orphaned order conflicts)
+    Phase 2: Ghost position detection
+    Phase 3: Reconcile exchange vs local state (cases 1-3)
+    Phase 4: Re-place TP/SL for all surviving slots + emergency SL
 
     Args:
         exchange: Exchange instance
@@ -608,7 +725,15 @@ def recover_from_crash(
     symbol = config['symbol']
     logger.info("🔄 Running crash recovery check...")
 
-    # Phase 3: Ghost position detection (log warnings, don't block)
+    # Phase 1: Cancel all open orders (prevents orphaned TP/SL conflicts)
+    _cancel_all_symbol_orders(exchange, symbol)
+    # Clear stale order IDs from all slots (orders are now cancelled)
+    for slot in (state.get('positions') or {}).values():
+        slot['tp_order_id'] = None
+        slot['sl_order_id'] = None
+    state['emergency_sl_order_id'] = None
+
+    # Phase 2: Ghost position detection (log warnings, don't block)
     detect_ghost_positions(exchange, state, config, cache, circuit_breaker, metrics)
 
     try:
@@ -625,7 +750,7 @@ def recover_from_crash(
         bot_slots = state.get('positions') or {}
         recovery_needed = False
 
-        # Check each direction
+        # Phase 3: Check each direction
         for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
             dir_slots = {sid: s for sid, s in bot_slots.items() if s.get('direction') == dir_label}
             exchange_pos = exchange_map.get(dir_key)
@@ -664,11 +789,86 @@ def recover_from_crash(
                 if abs(ex_qty - local_qty_sum) > QTY_TOLERANCE:
                     logger.warning(
                         f"🔧 Recovery: {dir_label} qty mismatch "
-                        f"(exchange={ex_qty}, local_sum={local_qty_sum})"
+                        f"(exchange={ex_qty:.4f}, local_sum={local_qty_sum:.4f})"
                     )
-                    # Recalculate the first slot to absorb the difference
-                    recalculate_position_orders(exchange, state, config, ex_qty, position=next(iter(dir_slots.values())))
+                    if ex_qty < local_qty_sum:
+                        # Some slots closed externally — remove oldest FIFO
+                        sorted_slots = sorted(dir_slots.items(), key=lambda x: x[1].get('entry_time', ''))
+                        remaining = local_qty_sum
+                        for sid, slot in sorted_slots:
+                            if abs(remaining - ex_qty) <= QTY_TOLERANCE:
+                                break
+                            slot_qty = slot.get('quantity', 0)
+                            if remaining - slot_qty >= ex_qty - QTY_TOLERANCE:
+                                actual_exit = get_actual_exit_price(exchange, state, config, position=slot)
+                                if actual_exit:
+                                    record_closed_position(exchange, state, config, actual_exit['price'],
+                                                          actual_exit['reason'], cache, metrics, position=slot)
+                                else:
+                                    try:
+                                        ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
+                                        fallback_price = ticker['last']
+                                    except Exception:
+                                        fallback_price = slot.get('entry_price', 0)
+                                    record_closed_position(exchange, state, config, fallback_price,
+                                                          'CRASH_RECOVERY', cache, metrics, position=slot)
+                                remaining -= slot_qty
+                            else:
+                                break
+                    else:
+                        # Exchange has more qty — create new slot if room, else absorb
+                        diff = round(ex_qty - local_qty_sum, QUANTITY_ROUND_DECIMALS)
+                        max_pos = config.get('max_positions', 1)
+                        available = max_pos - len(dir_slots)
+
+                        if available > 0 and diff > 0:
+                            # Use TP/SL from existing slots (same direction)
+                            ref_slot = next(iter(dir_slots.values()))
+                            ep = float(exchange_pos.get('entryPrice', ref_slot.get('entry_price', 0)))
+                            tp_p = ref_slot.get('tp_price')
+                            sl_p = ref_slot.get('sl_price')
+                            if not tp_p or not sl_p:
+                                dm = 1 if dir_label == 'LONG' else -1
+                                tp_p, sl_p, _, _ = calculate_tp_sl(
+                                    ep, dm, config['strategy'],
+                                    vol_mult=1.0, config=config,
+                                )
+                            new_sid = uuid.uuid4().hex[:8]
+                            new_slot = {
+                                'slot_id': new_sid,
+                                'direction': dir_label,
+                                'entry_price': ep,
+                                'quantity': diff,
+                                'remaining_quantity': diff,
+                                'tp_price': tp_p,
+                                'sl_price': sl_p,
+                                'vol_mult': 1.0,
+                                'scale_out_enabled': False,
+                                'scale_out_stages': [],
+                                'entry_time': datetime.now().isoformat(),
+                                'reason': 'Recovered from exchange',
+                                'recovered': True,
+                                'needs_tpsl': True,
+                            }
+                            state.setdefault('positions', {})[new_sid] = new_slot
+                            logger.info(f"Created recovery slot {new_sid} for +{diff:.4f} excess qty")
+                        else:
+                            first_slot = next(iter(dir_slots.values()))
+                            orig_rem = first_slot.get('remaining_quantity', first_slot['quantity'])
+                            first_slot['quantity'] = round(first_slot['quantity'] + diff, QUANTITY_ROUND_DECIMALS)
+                            first_slot['remaining_quantity'] = round(orig_rem + diff, QUANTITY_ROUND_DECIMALS)
+                            logger.info(f"Absorbed +{diff} qty into slot {first_slot.get('slot_id')}")
                     recovery_needed = True
+
+        # Phase 4: Re-place TP/SL for all surviving slots (orders were cancelled in Phase 1)
+        remaining_slots = state.get('positions') or {}
+        if remaining_slots:
+            for slot in remaining_slots.values():
+                if not slot.get('tp_order_id') or not slot.get('sl_order_id'):
+                    place_tp_sl_orders(exchange, state, config, position=slot)
+            update_emergency_sl(exchange, state, config)
+
+        save_state(state)
 
         if not recovery_needed:
             logger.info("✅ Crash recovery check passed - state is consistent")

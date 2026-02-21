@@ -253,6 +253,7 @@ def recover_position_to_state(
     direction: str,
     exchange: Optional[ccxt.bingx] = None,
     cache: Optional[APICache] = None,
+    saved_tpsl_pairs: Optional[list] = None,
 ) -> None:
     """
     Recover position from exchange to local state.
@@ -264,6 +265,8 @@ def recover_position_to_state(
         direction: 'LONG' or 'SHORT'
         exchange: Optional exchange instance for placing TP/SL
         cache: Optional APICache instance
+        saved_tpsl_pairs: Optional pre-saved per-slot (tp, sl) tuples from
+            _snapshot_all_tpsl() — used when orders were cancelled before this call
     """
     strategy = config['strategy']
     entry_price = float(exchange_pos.get('entryPrice', 0))
@@ -278,30 +281,43 @@ def recover_position_to_state(
             if old_pattern_name:
                 break
 
-    # Try to read TP/SL from existing exchange orders (preserves per-pattern values)
-    tp_from_exchange, sl_from_exchange = _read_tpsl_from_exchange_orders(
-        exchange, config.get('symbol', 'BTC-USDT'), direction
-    )
-
-    if tp_from_exchange and sl_from_exchange:
-        tp_price = tp_from_exchange
-        sl_price = sl_from_exchange
-        # Estimate tp_pct_adjusted for scale-out calculation
-        tp_pct_adjusted = abs(tp_price / entry_price - 1) * 100 if entry_price > 0 else 1.0
+    # Determine TP/SL source (priority: saved snapshot > exchange orders > config)
+    if saved_tpsl_pairs:
+        # Use first pair as default fallback for slots beyond saved count
+        default_tp, default_sl = saved_tpsl_pairs[0]
+        if not default_sl:
+            _, default_sl, _, _ = calculate_tp_sl(
+                entry_price, dir_mult, strategy, vol_mult=1.0, pattern=old_pattern_name, config=config
+            )
+        tp_pct_adjusted = abs(default_tp / entry_price - 1) * 100 if entry_price > 0 else 1.0
         logger.info(
             f"Recovered {direction} position: entry=${entry_price:.1f} | "
-            f"TP/SL from exchange orders: TP=${tp_price:.1f}, SL=${sl_price:.1f}"
+            f"Using {len(saved_tpsl_pairs)} saved TP/SL pair(s)"
         )
     else:
-        # Fallback: calculate from config defaults (pass pattern for per-pattern lookup)
-        tp_price, sl_price, tp_pct_adjusted, _ = calculate_tp_sl(
-            entry_price, dir_mult, strategy, vol_mult=1.0, pattern=old_pattern_name, config=config
+        # Try to read TP/SL from existing exchange orders (preserves per-pattern values)
+        tp_from_exchange, sl_from_exchange = _read_tpsl_from_exchange_orders(
+            exchange, config.get('symbol', 'BTC-USDT'), direction
         )
-        logger.info(
-            f"Recovered {direction} position: entry=${entry_price:.1f} | "
-            f"TP/SL from config{f' (pattern={old_pattern_name})' if old_pattern_name else ' defaults'}: "
-            f"TP=${tp_price:.1f}, SL=${sl_price:.1f}"
-        )
+
+        if tp_from_exchange and sl_from_exchange:
+            default_tp = tp_from_exchange
+            default_sl = sl_from_exchange
+            tp_pct_adjusted = abs(default_tp / entry_price - 1) * 100 if entry_price > 0 else 1.0
+            logger.info(
+                f"Recovered {direction} position: entry=${entry_price:.1f} | "
+                f"TP/SL from exchange orders: TP=${default_tp:.1f}, SL=${default_sl:.1f}"
+            )
+        else:
+            # Fallback: calculate from config defaults (pass pattern for per-pattern lookup)
+            default_tp, default_sl, tp_pct_adjusted, _ = calculate_tp_sl(
+                entry_price, dir_mult, strategy, vol_mult=1.0, pattern=old_pattern_name, config=config
+            )
+            logger.info(
+                f"Recovered {direction} position: entry=${entry_price:.1f} | "
+                f"TP/SL from config{f' (pattern={old_pattern_name})' if old_pattern_name else ' defaults'}: "
+                f"TP=${default_tp:.1f}, SL=${default_sl:.1f}"
+            )
 
     # Determine how many recovery slots to create (N=1 for single-position mode)
     max_positions = config.get('max_positions', 1)
@@ -321,7 +337,16 @@ def recover_position_to_state(
         else:
             slot_qty = per_slot_qty
 
-        scale_out_stages = setup_scale_out(strategy, entry_price, slot_qty, dir_mult, tp_pct_adjusted)
+        # Per-slot TP/SL from saved snapshot (if available)
+        if saved_tpsl_pairs and i < len(saved_tpsl_pairs):
+            slot_tp = saved_tpsl_pairs[i][0] or default_tp
+            slot_sl = saved_tpsl_pairs[i][1] or default_sl
+        else:
+            slot_tp = default_tp
+            slot_sl = default_sl
+
+        slot_tp_pct = abs(slot_tp / entry_price - 1) * 100 if entry_price > 0 else 1.0
+        scale_out_stages = setup_scale_out(strategy, entry_price, slot_qty, dir_mult, slot_tp_pct)
         slot_id = uuid.uuid4().hex[:8]
         recovered_slot = {
             'slot_id': slot_id,
@@ -329,8 +354,8 @@ def recover_position_to_state(
             'entry_price': entry_price,
             'quantity': slot_qty,
             'remaining_quantity': slot_qty,
-            'tp_price': tp_price,
-            'sl_price': sl_price,
+            'tp_price': slot_tp,
+            'sl_price': slot_sl,
             'vol_mult': 1.0,
             'scale_out_enabled': bool(scale_out_stages),
             'scale_out_stages': scale_out_stages,
@@ -475,6 +500,98 @@ def _read_tpsl_from_exchange_orders(
     except Exception as e:
         logger.debug(f"Could not read TP/SL from exchange orders: {e}")
         return None, None
+
+
+def _snapshot_all_tpsl(
+    exchange: Optional[ccxt.bingx],
+    symbol: str,
+    direction: str,
+) -> list:
+    """Snapshot per-slot TP/SL prices from exchange orders before cancellation.
+
+    Called BEFORE Phase 1 order cancellation to preserve per-pattern TP/SL values.
+    Returns list of (tp_price, sl_price) tuples, one per detected slot.
+    Emergency SL is filtered out (identified by largest amount when SL count > TP count).
+
+    Args:
+        exchange: Exchange instance (may be None)
+        symbol: Trading symbol
+        direction: 'LONG' or 'SHORT'
+
+    Returns:
+        List of (tp_price, sl_price) tuples. Empty list if no TP orders found.
+    """
+    if not exchange:
+        return []
+
+    try:
+        open_orders = exchange.fetch_open_orders(symbol)
+        tp_entries = []  # (price, amount)
+        sl_entries = []  # (price, amount)
+
+        for order in open_orders:
+            order_type = (order.get('type') or '').upper()
+            stop_price = float(
+                order.get('stopPrice')
+                or (order.get('info') or {}).get('stopPrice')
+                or 0
+            )
+            amount = float(order.get('amount', 0))
+            if stop_price <= 0:
+                continue
+
+            if 'TAKE_PROFIT' in order_type:
+                tp_entries.append((stop_price, amount))
+            elif 'STOP' in order_type and 'TAKE' not in order_type:
+                sl_entries.append((stop_price, amount))
+
+        if not tp_entries:
+            return []
+
+        # Filter emergency SL: if more SLs than TPs, remove the one with largest amount
+        per_slot_sls = list(sl_entries)
+        if len(sl_entries) > len(tp_entries):
+            sl_by_amount = sorted(sl_entries, key=lambda x: x[1], reverse=True)
+            emergency = sl_by_amount[0]
+            per_slot_sls = sl_by_amount[1:]
+            logger.debug(
+                f"Snapshot: filtered emergency SL price=${emergency[0]:.1f} "
+                f"amount={emergency[1]:.4f}"
+            )
+
+        # Sort for consistent pairing by "risk profile width"
+        # Pair widest TP with widest SL (both farther from entry)
+        tp_prices = [p for p, _ in tp_entries]
+        sl_prices = [p for p, _ in per_slot_sls]
+
+        if direction == 'SHORT':
+            # SHORT: lower TP = wider (farther below entry), higher SL = wider
+            tp_prices.sort()            # ascending = widest first
+            sl_prices.sort(reverse=True)  # descending = widest first
+        else:
+            # LONG: higher TP = wider (farther above entry), lower SL = wider
+            tp_prices.sort(reverse=True)  # descending = widest first
+            sl_prices.sort()              # ascending = widest first
+
+        # Pair by index (widest-with-widest)
+        n_pairs = min(len(tp_prices), len(sl_prices))
+        pairs = [(tp_prices[i], sl_prices[i]) for i in range(n_pairs)]
+
+        # Append unpaired TPs with None SL
+        for i in range(n_pairs, len(tp_prices)):
+            pairs.append((tp_prices[i], None))
+
+        if pairs:
+            logger.info(
+                f"Snapshot: {len(tp_entries)} TP, {len(sl_entries)} SL orders "
+                f"→ {len(pairs)} pair(s) saved before cancellation"
+            )
+
+        return pairs
+
+    except Exception as e:
+        logger.debug(f"Could not snapshot TP/SL from exchange: {e}")
+        return []
 
 
 def recalculate_position_orders(
@@ -725,6 +842,13 @@ def recover_from_crash(
     symbol = config['symbol']
     logger.info("🔄 Running crash recovery check...")
 
+    # Phase 0: Snapshot per-slot TP/SL from exchange BEFORE cancellation
+    tpsl_snapshots = {}  # direction → list of (tp, sl) pairs
+    for dir_label in ('LONG', 'SHORT'):
+        pairs = _snapshot_all_tpsl(exchange, symbol, dir_label)
+        if pairs:
+            tpsl_snapshots[dir_label] = pairs
+
     # Phase 1: Cancel all open orders (prevents orphaned TP/SL conflicts)
     _cancel_all_symbol_orders(exchange, symbol)
     # Clear stale order IDs from all slots (orders are now cancelled)
@@ -758,7 +882,10 @@ def recover_from_crash(
             # Case 1: Exchange has position, bot has no slots for this direction → orphan
             if exchange_pos and not dir_slots:
                 logger.warning(f"🔧 Recovery: Found orphan {dir_label} position on exchange")
-                recover_position_to_state(state, config, exchange_pos, dir_label, exchange, cache)
+                recover_position_to_state(
+                    state, config, exchange_pos, dir_label, exchange, cache,
+                    saved_tpsl_pairs=tpsl_snapshots.get(dir_label),
+                )
                 recovery_needed = True
                 continue
 

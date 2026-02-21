@@ -13,6 +13,7 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
     recover_position_to_state,
     recover_from_crash,
     _read_tpsl_from_exchange_orders,
+    _snapshot_all_tpsl,
     detect_ghost_positions,
     recalculate_position_orders,
 )
@@ -519,14 +520,16 @@ class TestRecoverPositionToState:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.detect_ghost_positions')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_positions_cached')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_ticker_cached')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._snapshot_all_tpsl')
 class TestRecoverFromCrash:
     """Test recover_from_crash() 4-phase recovery."""
 
     def test_case1_orphan_exchange_position(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Exchange has position, local doesn't -> recover to state."""
+        mock_snapshot.return_value = []
         mock_fetch_pos.return_value = [
             {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0},
         ]
@@ -542,7 +545,7 @@ class TestRecoverFromCrash:
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case2_local_only_with_trade_history(
-        self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_exit, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Local has position, exchange doesn't, trade history found -> record closed."""
@@ -567,7 +570,7 @@ class TestRecoverFromCrash:
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case2_local_only_ticker_fallback(
-        self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_exit, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Local only, no trade history -> uses ticker fallback."""
@@ -590,7 +593,7 @@ class TestRecoverFromCrash:
         assert mock_record.call_args[0][3] == 50200.0
 
     def test_case3_direction_mismatch(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Both exist, directions mismatch -> close local + recover exchange."""
@@ -621,7 +624,7 @@ class TestRecoverFromCrash:
         mock_recover.assert_called_once()  # recover new
 
     def test_case4_quantity_mismatch_absorb(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Both exist, same direction, exchange has more qty -> absorb into first slot."""
@@ -647,7 +650,7 @@ class TestRecoverFromCrash:
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case4_quantity_mismatch_fifo_remove(
-        self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_exit, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Both exist, same direction, exchange has less qty -> FIFO remove oldest."""
@@ -677,7 +680,7 @@ class TestRecoverFromCrash:
         mock_record.assert_called_once()
 
     def test_consistent_state_returns_false(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Both exist, same direction, same qty -> no action."""
@@ -702,7 +705,7 @@ class TestRecoverFromCrash:
         mock_recover.assert_not_called()
 
     def test_network_error_returns_false(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Network error during fetch -> False."""
@@ -713,7 +716,7 @@ class TestRecoverFromCrash:
         assert result is False
 
     def test_no_positions_anywhere_returns_false(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """No exchange position, no local -> no action."""
@@ -1016,12 +1019,13 @@ class TestClosePositionMarketErrors:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.detect_ghost_positions')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_positions_cached')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.fetch_ticker_cached')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._snapshot_all_tpsl')
 class TestRecoverFromCrashExtended:
     """Test recover_from_crash additional error paths."""
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.get_actual_exit_price')
     def test_case2_ticker_exception_fallback(
-        self, mock_exit, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_exit, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Case 2: ticker fails -> fallback to entry_price."""
@@ -1044,7 +1048,7 @@ class TestRecoverFromCrashExtended:
         assert mock_record.call_args[0][3] == 50000.0
 
     def test_exchange_error_returns_false(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """ExchangeError during fetch -> returns False."""
@@ -1055,7 +1059,7 @@ class TestRecoverFromCrashExtended:
         assert result is False
 
     def test_generic_exception_returns_false(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Generic exception -> returns False."""
@@ -1066,7 +1070,7 @@ class TestRecoverFromCrashExtended:
         assert result is False
 
     def test_case4_quantity_mismatch_with_scale_out(
-        self, mock_ticker, mock_fetch_pos, mock_ghost,
+        self, mock_snapshot, mock_ticker, mock_fetch_pos, mock_ghost,
         mock_record, mock_recover, mock_cancel, mock_place_tpsl, mock_update_esl, mock_save
     ):
         """Exchange qty > local qty sum -> absorb difference (e.g. partial fill changed qty)."""
@@ -1272,3 +1276,187 @@ class TestRecoverPositionNeedsTpsl:
         assert mock_save.call_count == 2
         pos = next(iter(state['positions'].values()))
         assert pos['needs_tpsl'] is False
+
+
+# -- _snapshot_all_tpsl -----------------------------------------------------
+
+
+class TestSnapshotAllTpsl:
+    """Test _snapshot_all_tpsl() exchange order snapshotting."""
+
+    def test_short_direction_pairs(self):
+        """SHORT: pairs widest TP (lowest) with widest SL (highest)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': 66160.0, 'amount': 0.0203},
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': 66585.0, 'amount': 0.0203},
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': 66329.0, 'amount': 0.0203},
+            {'type': 'STOP_MARKET', 'stopPrice': 69575.0, 'amount': 0.0203},
+            {'type': 'STOP_MARKET', 'stopPrice': 69136.0, 'amount': 0.0203},
+            {'type': 'STOP_MARKET', 'stopPrice': 69539.0, 'amount': 0.0203},
+            {'type': 'STOP_MARKET', 'stopPrice': 69700.0, 'amount': 0.0609},  # emergency SL
+        ]
+
+        pairs = _snapshot_all_tpsl(exchange, 'BTC/USDT:USDT', 'SHORT')
+
+        assert len(pairs) == 3
+        # SHORT: TP sorted ascending (widest=lowest first), SL sorted descending (widest=highest first)
+        assert pairs[0] == (66160.0, 69575.0)  # widest TP with widest SL
+        assert pairs[1] == (66329.0, 69539.0)
+        assert pairs[2] == (66585.0, 69136.0)  # tightest TP with tightest SL
+
+    def test_long_direction_pairs(self):
+        """LONG: pairs widest TP (highest) with widest SL (lowest)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': 52000.0, 'amount': 0.01},
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': 53000.0, 'amount': 0.01},
+            {'type': 'STOP_MARKET', 'stopPrice': 48000.0, 'amount': 0.01},
+            {'type': 'STOP_MARKET', 'stopPrice': 47000.0, 'amount': 0.01},
+        ]
+
+        pairs = _snapshot_all_tpsl(exchange, 'BTC/USDT:USDT', 'LONG')
+
+        assert len(pairs) == 2
+        # LONG: TP sorted descending (widest=highest first), SL sorted ascending (widest=lowest first)
+        assert pairs[0] == (53000.0, 47000.0)  # widest TP with widest SL
+        assert pairs[1] == (52000.0, 48000.0)
+
+    def test_filters_emergency_sl(self):
+        """Emergency SL (largest amount) is filtered when SL count > TP count."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': 66000.0, 'amount': 0.02},
+            {'type': 'STOP_MARKET', 'stopPrice': 69000.0, 'amount': 0.02},
+            {'type': 'STOP_MARKET', 'stopPrice': 69500.0, 'amount': 0.04},  # emergency
+        ]
+
+        pairs = _snapshot_all_tpsl(exchange, 'BTC/USDT:USDT', 'SHORT')
+
+        assert len(pairs) == 1
+        assert pairs[0] == (66000.0, 69000.0)  # emergency SL filtered
+
+    def test_no_tp_orders_returns_empty(self):
+        """No TP orders -> empty list."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'type': 'STOP_MARKET', 'stopPrice': 69000.0, 'amount': 0.02},
+        ]
+        assert _snapshot_all_tpsl(exchange, 'BTC/USDT:USDT', 'SHORT') == []
+
+    def test_no_exchange_returns_empty(self):
+        """No exchange -> empty list."""
+        assert _snapshot_all_tpsl(None, 'BTC/USDT:USDT', 'SHORT') == []
+
+    def test_exchange_error_returns_empty(self):
+        """Exchange error -> empty list (graceful degradation)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.side_effect = Exception("API error")
+        assert _snapshot_all_tpsl(exchange, 'BTC/USDT:USDT', 'SHORT') == []
+
+    def test_stopPrice_in_info(self):
+        """stopPrice in info dict (BingX format)."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [
+            {'type': 'TAKE_PROFIT_MARKET', 'stopPrice': None, 'info': {'stopPrice': '66000.0'}, 'amount': 0.02},
+            {'type': 'STOP_MARKET', 'stopPrice': None, 'info': {'stopPrice': '69000.0'}, 'amount': 0.02},
+        ]
+
+        pairs = _snapshot_all_tpsl(exchange, 'BTC/USDT:USDT', 'SHORT')
+        assert len(pairs) == 1
+        assert pairs[0] == (66000.0, 69000.0)
+
+
+# -- recover_position_to_state with saved_tpsl_pairs -----------------------
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out')
+class TestRecoverWithSavedTpsl:
+    """Test recover_position_to_state() with pre-saved TP/SL pairs."""
+
+    def test_saved_pairs_distributed_to_slots(
+        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+    ):
+        """saved_tpsl_pairs -> each slot gets individual TP/SL."""
+        mock_scale.return_value = []
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT'}
+        exchange_pos = {'entryPrice': 67744.9, 'contracts': 0.06}
+
+        saved_pairs = [
+            (66160.0, 69575.0),
+            (66329.0, 69539.0),
+            (66585.0, 69136.0),
+        ]
+
+        recover_position_to_state(
+            state, config, exchange_pos, 'SHORT',
+            saved_tpsl_pairs=saved_pairs,
+        )
+
+        positions = list(state['positions'].values())
+        # Should create 1 slot (no exchange/cache for multi-slot calc)
+        assert len(positions) >= 1
+        # First slot gets first pair
+        assert positions[0]['tp_price'] == 66160.0
+        assert positions[0]['sl_price'] == 69575.0
+        # Should NOT call _read_tpsl_from_exchange_orders
+        mock_read.assert_not_called()
+        # Should NOT call calculate_tp_sl
+        mock_calc.assert_not_called()
+
+    def test_saved_pairs_skips_exchange_read(
+        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+    ):
+        """When saved_tpsl_pairs provided, _read_tpsl_from_exchange_orders not called."""
+        mock_scale.return_value = []
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT'}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.01}
+
+        recover_position_to_state(
+            state, config, exchange_pos, 'LONG',
+            saved_tpsl_pairs=[(51000.0, 49000.0)],
+        )
+
+        mock_read.assert_not_called()
+        pos = next(iter(state['positions'].values()))
+        assert pos['tp_price'] == 51000.0
+        assert pos['sl_price'] == 49000.0
+
+    def test_no_saved_pairs_falls_through(
+        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+    ):
+        """No saved_tpsl_pairs -> reads from exchange (existing behavior)."""
+        mock_read.return_value = (51000.0, 49000.0)
+        mock_scale.return_value = []
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT'}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.01}
+
+        recover_position_to_state(state, config, exchange_pos, 'LONG')
+
+        mock_read.assert_called_once()
+
+    def test_saved_pair_with_none_sl_uses_calculated(
+        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+    ):
+        """Saved pair with None SL -> fallback to calculated SL."""
+        mock_calc.return_value = (51000.0, 48000.0, 2.0, 2.0)
+        mock_scale.return_value = []
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT'}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.01}
+
+        recover_position_to_state(
+            state, config, exchange_pos, 'LONG',
+            saved_tpsl_pairs=[(52000.0, None)],
+        )
+
+        pos = next(iter(state['positions'].values()))
+        assert pos['tp_price'] == 52000.0
+        assert pos['sl_price'] == 48000.0  # from calculate_tp_sl fallback

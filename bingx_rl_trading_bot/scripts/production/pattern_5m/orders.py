@@ -690,12 +690,18 @@ def place_emergency_sl(
     close_side = 'sell' if direction == 'LONG' else 'buy'
     symbol = config['symbol']
 
+    # BingX requires valid amount even with closePosition=True
+    total_qty = sum(p.get('quantity', 0) for p in positions.values())
+    if total_qty <= 0:
+        logger.warning("Cannot place emergency SL: total quantity is 0")
+        return
+
     try:
         order = exchange.create_order(
             symbol=symbol,
             type='STOP_MARKET',
             side=close_side,
-            amount=0,  # ignored when closePosition=True
+            amount=total_qty,
             params={
                 'positionSide': 'BOTH',
                 'stopPrice': worst_sl,

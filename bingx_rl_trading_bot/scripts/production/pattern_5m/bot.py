@@ -596,7 +596,16 @@ def _process_entry_signal(
                 exchange, state, config, cache, 'OPPOSITE_SIGNAL', metrics,
                 position=oldest,
             )
-            # Don't open new position on same candle — next cycle
+            # Re-route: if slots now empty, immediately open opposite direction
+            re_action = _route_signal(state, config, signal_result)
+            if re_action == 'OPEN':
+                logger.info(f"🔄 Re-routing: slots empty → immediate {signal_result} entry")
+                success = open_position(
+                    exchange, state, config, signal_result, reason,
+                    cache, circuit_breaker, metrics, df
+                )
+                if success:
+                    logger.info(f"✅ Reverse entry: {signal_result} (slot {len(state.get('positions') or {})})")
             return True
 
     # SKIP: do nothing

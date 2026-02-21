@@ -483,17 +483,28 @@ class TestAdjustTpslToConfig:
         result = adjust_tpsl_to_config(MagicMock(), {'positions': {}}, {})
         assert result is False
 
-    def test_dynamic_mode_skips(self, mock_save):
-        """Dynamic TP/SL mode → skip adjustment."""
-        state = {'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG'}}, 'active_direction': 'LONG'}
-        config = {'_dynamic_tpsl_universal': True}
+    def test_dynamic_universal_no_pattern_needed(self, mock_save):
+        """Dynamic universal mode → no pattern_name needed, skips if prices match."""
+        entry = 50000.0
+        tp_pct, sl_pct = 2.0, 3.0
+        state = {'positions': {'s1': {'slot_id': 's1', 'direction': 'SHORT',
+            'entry_price': entry,
+            'tp_price': round(entry * (1 - tp_pct / 100), 1),
+            'sl_price': round(entry * (1 + sl_pct / 100), 1),
+        }}, 'active_direction': 'SHORT'}
+        config = {'_dynamic_tpsl_universal': True, '_dynamic_tp': tp_pct, '_dynamic_sl': sl_pct,
+                  'symbol': 'BTC/USDT:USDT'}
         result = adjust_tpsl_to_config(MagicMock(), state, config)
         assert result is False
 
-    def test_dynamic_per_pattern_mode_skips(self, mock_save):
-        """Dynamic per-pattern mode → skip adjustment."""
-        state = {'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG'}}, 'active_direction': 'LONG'}
-        config = {'_dynamic_tpsl_per_pattern': True}
+    def test_dynamic_per_pattern_no_pattern_skips(self, mock_save):
+        """Dynamic per-pattern mode, no pattern_name → skip."""
+        state = {'positions': {'s1': {'slot_id': 's1', 'direction': 'LONG',
+            'entry_price': 50000.0, 'tp_price': 0, 'sl_price': 0,
+            'pattern_name': None, 'reason': 'Recovered from exchange',
+        }}, 'active_direction': 'LONG'}
+        config = {'_dynamic_tpsl_per_pattern': True, '_dynamic_patterns_tpsl': {},
+                  'symbol': 'BTC/USDT:USDT'}
         result = adjust_tpsl_to_config(MagicMock(), state, config)
         assert result is False
 
@@ -1111,6 +1122,151 @@ class TestAdjustTpslToConfigExtended:
         config = {'symbol': 'BTC/USDT:USDT'}
         result = adjust_tpsl_to_config(exchange, state, config)
         assert result is False
+
+
+# ── Dynamic mode TP/SL adjustment tests ───────────────────
+
+
+class TestAdjustTpslDynamicMode:
+    """Test adjust_tpsl_to_config with dynamic per-pattern and universal modes."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_dynamic_per_pattern_adjusts_when_prices_differ(
+        self, mock_cancel, mock_tp, mock_sl, mock_save
+    ):
+        """Dynamic per-pattern mode → adjusts TP/SL when prices are wrong."""
+        entry = 67744.9
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'SHORT', 'entry_price': entry,
+            'quantity': 0.0203, 'remaining_quantity': 0.0203,
+            'tp_price': 67053.9,  # Wrong (too tight)
+            'sl_price': 68408.8,  # Wrong (too tight)
+            'pattern_name': 'ST-ST-U',
+            'reason': 'Recovered from exchange',
+            'tp_order_id': 'old_tp', 'sl_order_id': 'old_sl',
+        }}, 'active_direction': 'SHORT'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {
+                'ST-ST-U': [2.24, 3.94],
+            },
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is True
+        mock_cancel.assert_called_once()
+        mock_tp.assert_called_once()
+        mock_sl.assert_called_once()
+        # Verify the new prices are based on per-pattern TP/SL
+        pos = state['positions']['s1']
+        expected_tp = round(entry * (1 - 2.24 / 100), 1)
+        expected_sl = round(entry * (1 + 3.94 / 100), 1)
+        assert pos['tp_price'] == expected_tp
+        assert pos['sl_price'] == expected_sl
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_dynamic_per_pattern_skips_when_prices_match(self, mock_save):
+        """Dynamic per-pattern mode → skips if TP/SL already correct."""
+        entry = 67744.9
+        tp_pct, sl_pct = 2.24, 3.94
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'SHORT', 'entry_price': entry,
+            'tp_price': round(entry * (1 - tp_pct / 100), 1),
+            'sl_price': round(entry * (1 + sl_pct / 100), 1),
+            'pattern_name': 'ST-ST-U',
+        }}, 'active_direction': 'SHORT'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {'ST-ST-U': [tp_pct, sl_pct]},
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is False
+        mock_save.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_dynamic_universal_adjusts_when_prices_differ(
+        self, mock_cancel, mock_tp, mock_sl, mock_save
+    ):
+        """Dynamic universal mode → adjusts TP/SL when prices are wrong."""
+        entry = 50000.0
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'LONG', 'entry_price': entry,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'tp_price': 50100.0,  # Wrong
+            'sl_price': 49900.0,  # Wrong
+        }}, 'active_direction': 'LONG'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_universal': True,
+            '_dynamic_tp': 2.0,
+            '_dynamic_sl': 3.0,
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is True
+        pos = state['positions']['s1']
+        assert pos['tp_price'] == round(entry * 1.02, 1)
+        assert pos['sl_price'] == round(entry * 0.97, 1)
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_dynamic_per_pattern_unknown_pattern_skips(self, mock_save):
+        """Dynamic per-pattern mode, pattern not in dict → skip."""
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'SHORT', 'entry_price': 50000.0,
+            'tp_price': 0, 'sl_price': 0,
+            'pattern_name': 'ZZ-ZZ-ZZ',
+        }}, 'active_direction': 'SHORT'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {'AA-BB-CC': [2.0, 3.0]},
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_dynamic_per_pattern_multiple_slots(
+        self, mock_cancel, mock_tp, mock_sl, mock_save
+    ):
+        """Multiple slots with different patterns → each adjusted independently."""
+        entry = 67744.9
+        state = {'positions': {
+            's1': {'slot_id': 's1', 'direction': 'SHORT', 'entry_price': entry,
+                   'quantity': 0.02, 'remaining_quantity': 0.02,
+                   'tp_price': 67053.9, 'sl_price': 68408.8,
+                   'pattern_name': 'ST-ST-U',
+                   'tp_order_id': 'tp1', 'sl_order_id': 'sl1'},
+            's2': {'slot_id': 's2', 'direction': 'SHORT', 'entry_price': entry,
+                   'quantity': 0.02, 'remaining_quantity': 0.02,
+                   'tp_price': 67053.9, 'sl_price': 68408.8,
+                   'pattern_name': 'H-DN-U',
+                   'tp_order_id': 'tp2', 'sl_order_id': 'sl2'},
+        }, 'active_direction': 'SHORT'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {
+                'ST-ST-U': [2.24, 3.94],
+                'H-DN-U': [3.0, 3.88],
+            },
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is True
+        assert mock_cancel.call_count == 2
+        # Each slot should have different TP/SL
+        s1 = state['positions']['s1']
+        s2 = state['positions']['s2']
+        assert s1['tp_price'] != s2['tp_price']
+        assert s1['sl_price'] != s2['sl_price']
 
 
 # ── _cancel_existing_tpsl_orders edge cases ───────────────────

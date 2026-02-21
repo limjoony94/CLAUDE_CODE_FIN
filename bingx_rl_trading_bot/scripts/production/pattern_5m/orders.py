@@ -199,8 +199,12 @@ def adjust_tpsl_to_config(
     Adjust TP/SL orders to match current config on bot startup.
 
     Iterates all active position slots and checks if TP/SL prices match
-    the current PATTERN_OPTIMAL_TPSL config. If they differ, cancels
-    the old orders and places new ones with updated prices.
+    the expected values from the current config. Supports all modes:
+    - Dynamic per-pattern: uses _dynamic_patterns_tpsl from config
+    - Dynamic universal: uses _dynamic_tp/_dynamic_sl from config
+    - Static: uses PATTERN_OPTIMAL_TPSL from constants
+
+    If they differ, cancels the old orders and places new ones.
 
     Args:
         exchange: Exchange instance
@@ -212,11 +216,6 @@ def adjust_tpsl_to_config(
     """
     positions = state.get('positions') or {}
     if not positions:
-        return False
-
-    # Dynamic mode (universal or per-pattern): TP/SL already set at open time, skip adjustment
-    if config.get('_dynamic_tpsl_universal') or config.get('_dynamic_tpsl_per_pattern'):
-        logger.debug("Dynamic TP/SL mode — skipping per-pattern adjustment")
         return False
 
     symbol = config['symbol']
@@ -236,26 +235,21 @@ def _adjust_single_position_tpsl(
     config: Dict[str, Any],
     symbol: str,
 ) -> bool:
-    """Adjust TP/SL for a single position slot."""
-    # Extract pattern name from reason field
-    pattern_name = extract_pattern_name(position.get('reason', ''))
-    if not pattern_name:
-        pattern_name = position.get('pattern_name')
-    if not pattern_name:
-        logger.debug("No pattern found in position, skipping TP/SL adjustment")
+    """Adjust TP/SL for a single position slot.
+
+    Determines expected TP/SL percentages based on the current config mode
+    (dynamic per-pattern, dynamic universal, or static), then compares
+    against the position's current TP/SL prices and re-places if needed.
+    """
+    # Resolve expected TP/SL percentages based on mode (before accessing entry_price)
+    expected_tp_pct, expected_sl_pct, label = _resolve_expected_tpsl(position, config)
+    if expected_tp_pct is None:
         return False
 
-    # Get expected TP/SL from config
-    if pattern_name not in PATTERN_OPTIMAL_TPSL:
-        logger.debug(f"Pattern {pattern_name} not in PATTERN_OPTIMAL_TPSL, skipping adjustment")
-        return False
-
-    expected_tp_pct, expected_sl_pct = PATTERN_OPTIMAL_TPSL[pattern_name]
-
-    # Calculate expected prices
     entry_price = position['entry_price']
     direction = position['direction']
 
+    # Calculate expected prices
     if direction == 'LONG':
         expected_tp_price = entry_price * (1 + expected_tp_pct / 100)
         expected_sl_price = entry_price * (1 - expected_sl_pct / 100)
@@ -275,11 +269,11 @@ def _adjust_single_position_tpsl(
     sl_diff = abs(current_sl - expected_sl_price)
 
     if tp_diff <= 1.0 and sl_diff <= 1.0:
-        logger.debug(f"TP/SL already match config for {pattern_name}")
+        logger.debug(f"TP/SL already match config for {label}")
         return False
 
     slot_id = position.get('slot_id', 'unknown')
-    logger.info(f"🔧 TP/SL adjustment needed for {pattern_name} (slot {slot_id}):")
+    logger.info(f"🔧 TP/SL adjustment needed for {label} (slot {slot_id}):")
     logger.info(f"   Current: TP=${current_tp:.1f}, SL=${current_sl:.1f}")
     logger.info(f"   Expected: TP=${expected_tp_price:.1f} ({expected_tp_pct}%), SL=${expected_sl_price:.1f} ({expected_sl_pct}%)")
 
@@ -303,12 +297,58 @@ def _adjust_single_position_tpsl(
         _place_sl_order(exchange, position, symbol, close_side, quantity, expected_sl_price, position_side)
 
         save_state(state)
-        logger.info(f"✅ TP/SL adjusted successfully for {pattern_name} (slot {slot_id})")
+        logger.info(f"✅ TP/SL adjusted successfully for {label} (slot {slot_id})")
         return True
 
     except Exception as e:
         logger.exception(f"Failed to adjust TP/SL: {e}")
         return False
+
+
+def _resolve_expected_tpsl(
+    position: Dict,
+    config: Dict[str, Any],
+) -> tuple:
+    """Resolve expected TP/SL percentages based on config mode.
+
+    Returns:
+        (tp_pct, sl_pct, label) or (None, None, None) if pattern not found.
+    """
+    # Dynamic per-pattern mode: lookup from _dynamic_patterns_tpsl
+    if config.get('_dynamic_tpsl_per_pattern'):
+        pattern_name = extract_pattern_name(position.get('reason', ''))
+        if not pattern_name:
+            pattern_name = position.get('pattern_name')
+        if not pattern_name:
+            logger.debug("No pattern found in position, skipping TP/SL adjustment")
+            return None, None, None
+        pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
+        if pattern_name not in pp_tpsl:
+            logger.debug(f"Pattern {pattern_name} not in dynamic per-pattern dict, skipping")
+            return None, None, None
+        tp_pct, sl_pct = pp_tpsl[pattern_name]
+        return tp_pct, sl_pct, pattern_name
+
+    # Dynamic universal mode: use config universal values
+    if config.get('_dynamic_tpsl_universal'):
+        tp_pct = config.get('_dynamic_tp', 0)
+        sl_pct = config.get('_dynamic_sl', 0)
+        if tp_pct <= 0 or sl_pct <= 0:
+            return None, None, None
+        return tp_pct, sl_pct, 'universal'
+
+    # Static mode: use PATTERN_OPTIMAL_TPSL from constants
+    pattern_name = extract_pattern_name(position.get('reason', ''))
+    if not pattern_name:
+        pattern_name = position.get('pattern_name')
+    if not pattern_name:
+        logger.debug("No pattern found in position, skipping TP/SL adjustment")
+        return None, None, None
+    if pattern_name not in PATTERN_OPTIMAL_TPSL:
+        logger.debug(f"Pattern {pattern_name} not in PATTERN_OPTIMAL_TPSL, skipping")
+        return None, None, None
+    tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pattern_name]
+    return tp_pct, sl_pct, pattern_name
 
 
 def _cancel_existing_tpsl_orders(

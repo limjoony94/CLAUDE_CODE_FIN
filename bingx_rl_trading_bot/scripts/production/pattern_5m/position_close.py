@@ -281,6 +281,12 @@ def recover_position_to_state(
             if old_pattern_name:
                 break
 
+    if not old_pattern_name:
+        logger.warning(
+            f"⚠️ Recovery: pattern_name unavailable for {direction} — "
+            f"per-pattern TP/SL adjustment will use defaults until manually restored"
+        )
+
     # Determine TP/SL source (priority: saved snapshot > exchange orders > config)
     if saved_tpsl_pairs:
         # Use first pair as default fallback for slots beyond saved count
@@ -956,11 +962,19 @@ def recover_from_crash(
                             sl_p = ref_slot.get('sl_price')
                             if not tp_p or not sl_p:
                                 dm = 1 if dir_label == 'LONG' else -1
+                                ref_pat = (
+                                    extract_pattern_name(ref_slot.get('reason', ''))
+                                    or ref_slot.get('pattern_name')
+                                )
                                 tp_p, sl_p, _, _ = calculate_tp_sl(
                                     ep, dm, config['strategy'],
-                                    vol_mult=1.0, config=config,
+                                    vol_mult=1.0, pattern=ref_pat, config=config,
                                 )
                             new_sid = uuid.uuid4().hex[:8]
+                            ref_pattern = (
+                                extract_pattern_name(ref_slot.get('reason', ''))
+                                or ref_slot.get('pattern_name')
+                            )
                             new_slot = {
                                 'slot_id': new_sid,
                                 'direction': dir_label,
@@ -973,7 +987,8 @@ def recover_from_crash(
                                 'scale_out_enabled': False,
                                 'scale_out_stages': [],
                                 'entry_time': datetime.now().isoformat(),
-                                'reason': 'Recovered from exchange',
+                                'reason': f'Recovered from exchange ({ref_pattern})' if ref_pattern else 'Recovered from exchange',
+                                'pattern_name': ref_pattern,
                                 'recovered': True,
                                 'needs_tpsl': True,
                             }

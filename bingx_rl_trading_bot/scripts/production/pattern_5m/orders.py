@@ -225,6 +225,11 @@ def adjust_tpsl_to_config(
         adjusted = _adjust_single_position_tpsl(exchange, position, state, config, symbol)
         any_adjusted = any_adjusted or adjusted
 
+    # Always verify emergency SL matches current slot SL prices.
+    # This covers: (1) TP/SL adjustments above, (2) stale emergency SL
+    # from previous session, (3) state corruption recovery scenarios.
+    _verify_emergency_sl(exchange, state, config)
+
     return any_adjusted
 
 
@@ -715,6 +720,62 @@ def cancel_remaining_orders(
         logger.error(f"Failed to cancel remaining orders (exchange): {e}")
     except Exception as e:
         logger.exception(f"Failed to cancel remaining orders: {e}")
+
+
+def _verify_emergency_sl(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Verify emergency SL price matches current slot SL prices.
+
+    Compares the expected worst SL price against the live emergency SL order.
+    Re-places if they differ (e.g., after TP/SL adjustment or state recovery).
+    """
+    positions = state.get('positions') or {}
+    if not positions:
+        return
+
+    expected_price = _get_worst_sl_price(state)
+    if not expected_price:
+        return
+
+    order_id = state.get('emergency_sl_order_id')
+    if not order_id or order_id == _EXCHANGE_MANAGED:
+        # No existing emergency SL or exchange-managed → place fresh
+        logger.info(f"🛡️ Emergency SL missing or exchange-managed — placing at ${expected_price:.1f}")
+        place_emergency_sl(exchange, state, config)
+        return
+
+    # Check if the existing order matches expected price
+    try:
+        symbol = config.get('symbol', 'BTC-USDT')
+        open_orders = exchange.fetch_open_orders(symbol)
+        current_price = None
+        for o in open_orders:
+            if o.get('id') == order_id:
+                current_price = float(o.get('stopPrice', 0) or o.get('price', 0))
+                break
+
+        if current_price is None:
+            # Order not found on exchange — re-place
+            logger.warning(f"🛡️ Emergency SL order {order_id} not found on exchange — re-placing")
+            state['emergency_sl_order_id'] = None
+            place_emergency_sl(exchange, state, config)
+            return
+
+        if abs(current_price - expected_price) > 1.0:
+            logger.info(
+                f"🛡️ Emergency SL price mismatch: current=${current_price:.1f}, "
+                f"expected=${expected_price:.1f} — updating"
+            )
+            update_emergency_sl(exchange, state, config)
+        else:
+            logger.debug(f"Emergency SL verified: ${current_price:.1f} matches expected ${expected_price:.1f}")
+
+    except Exception as e:
+        logger.warning(f"Failed to verify emergency SL, re-placing: {e}")
+        update_emergency_sl(exchange, state, config)
 
 
 # ─── Emergency SL (v1.29.0: whole-position safety net) ───

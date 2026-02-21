@@ -1268,6 +1268,54 @@ class TestAdjustTpslDynamicMode:
         assert s1['tp_price'] != s2['tp_price']
         assert s1['sl_price'] != s2['sl_price']
 
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._verify_emergency_sl')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_sl_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._place_single_tp_order')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._cancel_existing_tpsl_orders')
+    def test_emergency_sl_verified_after_adjustment(
+        self, mock_cancel, mock_tp, mock_sl, mock_save, mock_verify_emg
+    ):
+        """Emergency SL is verified after TP/SL adjustment."""
+        entry = 67744.9
+        exchange = MagicMock()
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'SHORT', 'entry_price': entry,
+            'quantity': 0.02, 'remaining_quantity': 0.02,
+            'tp_price': 67053.9, 'sl_price': 68408.8,
+            'pattern_name': 'ST-ST-U',
+            'tp_order_id': 'tp1', 'sl_order_id': 'sl1',
+        }}, 'active_direction': 'SHORT', 'emergency_sl_order_id': 'old_emg'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {'ST-ST-U': [2.24, 3.94]},
+        }
+        result = adjust_tpsl_to_config(exchange, state, config)
+        assert result is True
+        mock_verify_emg.assert_called_once_with(exchange, state, config)
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders._verify_emergency_sl')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_emergency_sl_verified_even_without_adjustment(self, mock_save, mock_verify_emg):
+        """Emergency SL verified even when no TP/SL adjustment needed."""
+        entry = 67744.9
+        tp_pct, sl_pct = 2.24, 3.94
+        state = {'positions': {'s1': {'slot_id': 's1',
+            'direction': 'SHORT', 'entry_price': entry,
+            'tp_price': round(entry * (1 - tp_pct / 100), 1),
+            'sl_price': round(entry * (1 + sl_pct / 100), 1),
+            'pattern_name': 'ST-ST-U',
+        }}, 'active_direction': 'SHORT'}
+        config = {
+            'symbol': 'BTC/USDT:USDT',
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {'ST-ST-U': [tp_pct, sl_pct]},
+        }
+        result = adjust_tpsl_to_config(MagicMock(), state, config)
+        assert result is False
+        mock_verify_emg.assert_called_once()
+
 
 # ── _cancel_existing_tpsl_orders edge cases ───────────────────
 

@@ -9,7 +9,7 @@ from typing import Dict, Any, List, Optional
 import ccxt
 
 from .state import save_state
-from .constants import PATTERN_OPTIMAL_TPSL
+from .constants import PATTERN_OPTIMAL_TPSL, QUANTITY_ROUND_DECIMALS
 from .utils import extract_pattern_name
 
 logger = logging.getLogger('pattern_5m')
@@ -691,7 +691,10 @@ def place_emergency_sl(
     symbol = config['symbol']
 
     # BingX requires valid amount even with closePosition=True
-    total_qty = sum(p.get('quantity', 0) for p in positions.values())
+    total_qty = round(
+        sum(p.get('quantity', 0) for p in positions.values()),
+        QUANTITY_ROUND_DECIMALS,
+    )
     if total_qty <= 0:
         logger.warning("Cannot place emergency SL: total quantity is 0")
         return

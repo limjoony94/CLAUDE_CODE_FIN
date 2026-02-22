@@ -273,7 +273,8 @@ class BotState(TypedDict, total=False):
     # Required
     positions: Dict[str, Dict[str, Any]]  # v1.29.0: {slot_id: position_dict}
     active_direction: Optional[str]  # v1.29.0: None / 'LONG' / 'SHORT'
-    emergency_sl_order_id: Optional[str]  # v1.29.0: closePosition SL order ID
+    emergency_sl_order_id: Optional[str]  # v1.29.0: One-Way emergency SL
+    emergency_sl_orders: Dict[str, Optional[str]]  # v1.30.0: Hedge per-direction SL
     daily_pnl: float
     daily_trades: int
     consecutive_losses: int
@@ -287,7 +288,7 @@ class BotState(TypedDict, total=False):
     last_trade: Optional[Dict[str, Any]]
     created_at: str
     updated_at: str
-    state_version: int  # v1.29.0: 2 = multi-position dict format
+    state_version: int  # v1.30.0: 3 = hedge-capable format
 
 
 # Keys that MUST exist in a valid state (used by validate_state)

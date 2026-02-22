@@ -9,6 +9,7 @@ json_logging: false
 leverage: 3
 margin_mode: crossed
 max_positions: 5
+position_mode: hedge  # 'one_way' (BOTH) or 'hedge' (LONG/SHORT separate)
 position_size_pct: 95
 risk:
   max_daily_loss_pct: 13   # v1.28.5: 10% → 13% (Per-pattern SL max 4.0% × 3x = 12.1% per loss)

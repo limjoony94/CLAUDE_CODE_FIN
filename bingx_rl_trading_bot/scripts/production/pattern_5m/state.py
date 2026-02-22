@@ -90,12 +90,13 @@ def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
 
 
 def _create_default_state() -> Dict[str, Any]:
-    """Create a new default state dictionary (v2: multi-position dict)."""
+    """Create a new default state dictionary (v3: hedge-capable)."""
     return {
-        'positions': {},  # v1.29.0: {slot_id: position_dict} (was: position: None)
-        'active_direction': None,  # v1.29.0: None / 'LONG' / 'SHORT'
-        'emergency_sl_order_id': None,  # v1.29.0: closePosition SL for entire NET position
-        'state_version': 2,
+        'positions': {},  # v1.29.0: {slot_id: position_dict}
+        'active_direction': None,  # One-Way mode: None / 'LONG' / 'SHORT'
+        'emergency_sl_order_id': None,  # v1.29.0: One-Way emergency SL (kept for compat)
+        'emergency_sl_orders': {},  # v1.30.0: Hedge per-direction {'LONG': id, 'SHORT': id}
+        'state_version': 3,
         'last_signal_time': None,
         'last_signal_candle_timestamp': None,
         'daily_pnl': 0.0,
@@ -157,6 +158,12 @@ def _migrate_state_v2(state: Dict[str, Any]) -> Dict[str, Any]:
     # Ensure v2 fields exist even on v2-dict states
     state.setdefault('active_direction', None)
     state.setdefault('emergency_sl_order_id', None)
+
+    # v2→v3: add hedge emergency SL dict
+    state.setdefault('emergency_sl_orders', {})
+    if state.get('state_version', 2) < 3:
+        state['state_version'] = 3
+        logger.debug("State upgraded to v3 (hedge emergency_sl_orders)")
 
     # Keep has_position in sync
     state['has_position'] = len(state.get('positions') or {}) > 0

@@ -12,7 +12,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.29.0"  # v1.29.0: N=5 multi-position (One-Way BOTH, virtual slots)
+BOT_VERSION = "1.30.0"  # v1.30.0: Hedge mode (LONG/SHORT separate positions)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -476,6 +476,8 @@ ROTATION_ENABLED = False  # Disabled for pattern bot
 DEFAULT_MAX_POSITIONS = 5        # N=5 multi-position (config.yaml overrides)
 MAX_ALLOWED_POSITIONS = 10       # Upper guard for validation
 EMERGENCY_SL_BUFFER_PCT = 0.001  # 0.1% buffer beyond worst slot SL
+VALID_POSITION_MODES = ('one_way', 'hedge')
+DEFAULT_POSITION_MODE = 'one_way'
 
 # ============================================================
 # DEFAULT CONFIGURATION
@@ -488,6 +490,7 @@ DEFAULT_CONFIG = {
     'margin_mode': 'crossed',
     'position_size_pct': 95,
     'max_positions': DEFAULT_MAX_POSITIONS,
+    'position_mode': DEFAULT_POSITION_MODE,  # 'one_way' or 'hedge'
     'strategy': {
         'tp_pct': 1.0,  # v1.19.0: Tight TP (was 1.5)
         'sl_pct': 1.0,  # v1.19.0: Tight SL (was 3.0)

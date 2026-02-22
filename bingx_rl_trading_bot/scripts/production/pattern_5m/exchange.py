@@ -110,15 +110,24 @@ def verify_position_mode(exchange: ccxt.bingx, config: Dict[str, Any]) -> bool:
         True if position mode is correctly set
     """
     symbol = config['symbol']
-    logger.info(f"Verifying position mode (expected: One-Way)...")
+    is_hedge = config.get('position_mode') == 'hedge'
+    mode_label = 'Hedge' if is_hedge else 'One-Way'
+    logger.info(f"Verifying position mode (expected: {mode_label})...")
 
     try:
         try:
-            exchange.set_position_mode(hedged=False, symbol=symbol)
-            logger.info(f"✅ Position mode set to One-Way")
+            exchange.set_position_mode(hedged=is_hedge, symbol=symbol)
+            logger.info(f"✅ Position mode set to {mode_label}")
         except ccxt.ExchangeError as e:
-            if 'No need to change' in str(e) or 'same' in str(e).lower():
-                logger.info(f"✅ Position mode already One-Way")
+            err_str = str(e)
+            if 'No need to change' in err_str or 'same' in err_str.lower():
+                logger.info(f"✅ Position mode already {mode_label}")
+            elif 'position' in err_str.lower() and ('exist' in err_str.lower() or 'open' in err_str.lower()):
+                logger.error(
+                    f"❌ Cannot switch to {mode_label} mode: open positions/orders exist on exchange. "
+                    f"Close ALL positions and cancel ALL orders first, then restart the bot."
+                )
+                return False
             else:
                 logger.warning(f"⚠️ Unexpected error setting position mode: {e}")
                 return False

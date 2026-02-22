@@ -25,7 +25,7 @@ from .exchange import fetch_ticker_cached, fetch_positions_cached, fetch_balance
 from .indicators import get_volatility_multiplier
 from .state import save_state
 from .utils import extract_pattern_name
-from .orders import place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl
+from .orders import place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl, _get_position_side
 
 logger = logging.getLogger('pattern_5m')
 
@@ -224,7 +224,9 @@ def open_position(
             'regime_tp_sl': regime_tp_sl,
         }
         state['positions'][slot_id] = new_slot
-        state['active_direction'] = signal
+        # One-Way mode: track single direction constraint; Hedge: no constraint
+        if config.get('position_mode') != 'hedge':
+            state['active_direction'] = signal
         state['last_signal_time'] = datetime.now().isoformat()
 
         save_state(state)
@@ -257,12 +259,14 @@ def open_position(
         return False
     except ccxt.ExchangeError as e:
         error_msg = str(e)
-        # Auto-recover from position mode mismatch (always One-Way/BOTH)
+        # Auto-recover from position mode mismatch (use config setting)
         if 'Hedge mode' in error_msg or '109400' in error_msg or 'position mode' in error_msg.lower():
-            logger.warning(f"Position mode mismatch, attempting to switch to One-Way...")
+            is_hedge = config.get('position_mode') == 'hedge'
+            target_label = 'Hedge' if is_hedge else 'One-Way'
+            logger.warning(f"Position mode mismatch, attempting to switch to {target_label}...")
             try:
-                exchange.set_position_mode(hedged=False, symbol=config['symbol'])
-                logger.info(f"Switched to One-Way mode, please retry the signal")
+                exchange.set_position_mode(hedged=is_hedge, symbol=config['symbol'])
+                logger.info(f"Switched to {target_label} mode, please retry the signal")
             except Exception as mode_err:
                 logger.error(f"Failed to switch position mode: {mode_err}")
         else:
@@ -280,14 +284,15 @@ def _check_slot_available(state: Dict[str, Any], config: Dict[str, Any]) -> bool
     return active < max_positions
 
 
-def _get_position_side(config: Dict[str, Any], signal: str) -> str:
-    """Get positionSide param for BingX API. Always 'BOTH' (One-Way mode)."""
-    return 'BOTH'
-
-
 def _set_leverage(exchange: ccxt.bingx, symbol: str, leverage: int, config: Optional[Dict[str, Any]] = None) -> None:
-    """Set leverage for the symbol (One-Way mode: BOTH side only)."""
-    for side in ['BOTH']:
+    """Set leverage for the symbol.
+
+    One-Way mode: BOTH side only.
+    Hedge mode: LONG and SHORT sides separately.
+    """
+    is_hedge = (config or {}).get('position_mode') == 'hedge'
+    sides = ['LONG', 'SHORT'] if is_hedge else ['BOTH']
+    for side in sides:
         try:
             exchange.set_leverage(leverage, symbol, params={'side': side})
         except ccxt.ExchangeError as e:

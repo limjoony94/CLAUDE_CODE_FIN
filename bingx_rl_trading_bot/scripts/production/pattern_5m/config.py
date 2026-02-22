@@ -10,7 +10,7 @@ import logging
 from datetime import datetime
 from typing import Dict, Any, List
 
-from .constants import CONFIG_FILE, DEFAULT_CONFIG, DYNAMIC_PATTERNS_FILE, MAX_ALLOWED_POSITIONS
+from .constants import CONFIG_FILE, DEFAULT_CONFIG, DYNAMIC_PATTERNS_FILE, MAX_ALLOWED_POSITIONS, VALID_POSITION_MODES
 
 logger = logging.getLogger('pattern_5m')
 
@@ -107,6 +107,11 @@ def validate_config(config: Dict[str, Any]) -> None:
     max_pos = config.get('max_positions', 1)
     if not isinstance(max_pos, int) or max_pos < 1 or max_pos > MAX_ALLOWED_POSITIONS:
         errors.append(f"max_positions must be 1~{MAX_ALLOWED_POSITIONS}, got {max_pos}")
+
+    # Validate position_mode
+    pos_mode = config.get('position_mode', 'one_way')
+    if pos_mode not in VALID_POSITION_MODES:
+        errors.append(f"position_mode must be one of {VALID_POSITION_MODES}, got '{pos_mode}'")
 
     # Validate risk section
     risk = config.get('risk', {})

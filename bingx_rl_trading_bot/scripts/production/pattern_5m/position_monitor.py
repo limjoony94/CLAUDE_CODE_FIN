@@ -170,8 +170,19 @@ def get_actual_exit_price(
             except (ValueError, TypeError):
                 entry_ts = 0
 
+        # In hedge mode, also filter by positionSide to avoid
+        # confusing a SHORT open with a LONG close (both are 'sell')
+        expected_pos_side = position.get('direction', '').upper()  # 'LONG' or 'SHORT'
+
         for trade in reversed(trades):
             if trade.get('side') == close_side:
+                # Hedge mode: check positionSide matches
+                trade_pos_side = (
+                    (trade.get('info') or {}).get('positionSide', 'BOTH')
+                ).upper()
+                if trade_pos_side != 'BOTH' and trade_pos_side != expected_pos_side:
+                    continue
+
                 trade_ts = trade.get('timestamp', 0)  # CCXT provides epoch ms
                 if trade_ts > entry_ts:
                     filled_price = float(trade.get('price', 0))

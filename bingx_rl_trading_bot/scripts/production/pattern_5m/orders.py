@@ -19,7 +19,13 @@ _EXCHANGE_MANAGED = "EXCHANGE_MANAGED"
 
 
 def _get_position_side(config: Dict[str, Any], direction: str) -> str:
-    """Get positionSide param for BingX API. Always 'BOTH' (One-Way mode)."""
+    """Get positionSide param for BingX API.
+
+    One-Way mode: always 'BOTH'.
+    Hedge mode: 'LONG' or 'SHORT' matching direction.
+    """
+    if config.get('position_mode') == 'hedge':
+        return 'LONG' if direction == 'LONG' else 'SHORT'
     return 'BOTH'
 
 
@@ -722,78 +728,103 @@ def cancel_remaining_orders(
         logger.exception(f"Failed to cancel remaining orders: {e}")
 
 
+def _verify_emergency_sl_for_direction(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    direction: str,
+    open_orders: List[Dict],
+) -> None:
+    """Verify emergency SL for one direction against live orders."""
+    expected_price = _get_worst_sl_price_for_direction(state, direction)
+    if not expected_price:
+        return
+
+    order_id = _get_emergency_sl_id(state, config, direction)
+    if not order_id or order_id == _EXCHANGE_MANAGED:
+        logger.info(f"🛡️ Emergency SL ({direction}) missing — placing at ${expected_price:.1f}")
+        _place_emergency_sl_for_direction(exchange, state, config, direction)
+        return
+
+    current_price = None
+    for o in open_orders:
+        if o.get('id') == order_id:
+            current_price = float(o.get('stopPrice', 0) or o.get('price', 0))
+            break
+
+    if current_price is None:
+        logger.warning(f"🛡️ Emergency SL ({direction}) order {order_id} not found — re-placing")
+        _set_emergency_sl_id(state, config, direction, None)
+        _place_emergency_sl_for_direction(exchange, state, config, direction)
+        return
+
+    if abs(current_price - expected_price) > 1.0:
+        logger.info(
+            f"🛡️ Emergency SL ({direction}) price mismatch: "
+            f"current=${current_price:.1f}, expected=${expected_price:.1f} — updating"
+        )
+        update_emergency_sl(exchange, state, config)
+    else:
+        logger.debug(f"Emergency SL ({direction}) verified: ${current_price:.1f}")
+
+
 def _verify_emergency_sl(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
 ) -> None:
-    """Verify emergency SL price matches current slot SL prices.
+    """Verify emergency SL price(s) match current slot SL prices.
 
-    Compares the expected worst SL price against the live emergency SL order.
-    Re-places if they differ (e.g., after TP/SL adjustment or state recovery).
+    Hedge mode: verifies per-direction.
+    One-Way mode: verifies single emergency SL.
     """
     positions = state.get('positions') or {}
     if not positions:
         return
 
-    expected_price = _get_worst_sl_price(state)
-    if not expected_price:
-        return
-
-    order_id = state.get('emergency_sl_order_id')
-    if not order_id or order_id == _EXCHANGE_MANAGED:
-        # No existing emergency SL or exchange-managed → place fresh
-        logger.info(f"🛡️ Emergency SL missing or exchange-managed — placing at ${expected_price:.1f}")
-        place_emergency_sl(exchange, state, config)
-        return
-
-    # Check if the existing order matches expected price
     try:
         symbol = config.get('symbol', 'BTC-USDT')
         open_orders = exchange.fetch_open_orders(symbol)
-        current_price = None
-        for o in open_orders:
-            if o.get('id') == order_id:
-                current_price = float(o.get('stopPrice', 0) or o.get('price', 0))
-                break
-
-        if current_price is None:
-            # Order not found on exchange — re-place
-            logger.warning(f"🛡️ Emergency SL order {order_id} not found on exchange — re-placing")
-            state['emergency_sl_order_id'] = None
-            place_emergency_sl(exchange, state, config)
-            return
-
-        if abs(current_price - expected_price) > 1.0:
-            logger.info(
-                f"🛡️ Emergency SL price mismatch: current=${current_price:.1f}, "
-                f"expected=${expected_price:.1f} — updating"
-            )
-            update_emergency_sl(exchange, state, config)
-        else:
-            logger.debug(f"Emergency SL verified: ${current_price:.1f} matches expected ${expected_price:.1f}")
-
     except Exception as e:
-        logger.warning(f"Failed to verify emergency SL, re-placing: {e}")
-        update_emergency_sl(exchange, state, config)
+        logger.warning(f"Failed to fetch open orders for emergency SL verify: {e}")
+        return
+
+    if config.get('position_mode') == 'hedge':
+        active_dirs = {p.get('direction') for p in positions.values() if p.get('direction')}
+        for d in active_dirs:
+            try:
+                _verify_emergency_sl_for_direction(exchange, state, config, d, open_orders)
+            except Exception as e:
+                logger.warning(f"Failed to verify emergency SL ({d}), re-placing: {e}")
+                update_emergency_sl(exchange, state, config)
+    else:
+        direction = state.get('active_direction')
+        if not direction:
+            return
+        try:
+            _verify_emergency_sl_for_direction(exchange, state, config, direction, open_orders)
+        except Exception as e:
+            logger.warning(f"Failed to verify emergency SL, re-placing: {e}")
+            update_emergency_sl(exchange, state, config)
 
 
-# ─── Emergency SL (v1.29.0: whole-position safety net) ───
+# ─── Emergency SL (v1.30.0: per-direction safety net for hedge mode) ───
 
-def _get_worst_sl_price(state: Dict[str, Any]) -> Optional[float]:
-    """Get the worst (most protective) SL price across all active slots.
+def _get_worst_sl_price_for_direction(
+    state: Dict[str, Any], direction: str,
+) -> Optional[float]:
+    """Get worst SL price for a specific direction's slots.
 
-    LONG: min(all sl_prices) - buffer  (lowest = worst case)
-    SHORT: max(all sl_prices) + buffer (highest = worst case)
+    LONG: min(sl_prices) - buffer  (lowest = worst case)
+    SHORT: max(sl_prices) + buffer (highest = worst case)
     """
     from .constants import EMERGENCY_SL_BUFFER_PCT
 
     positions = state.get('positions') or {}
-    if not positions:
-        return None
-
-    direction = state.get('active_direction')
-    sl_prices = [s.get('sl_price', 0) for s in positions.values() if s.get('sl_price')]
+    sl_prices = [
+        s.get('sl_price', 0) for s in positions.values()
+        if s.get('sl_price') and s.get('direction') == direction
+    ]
     if not sl_prices:
         return None
 
@@ -805,58 +836,136 @@ def _get_worst_sl_price(state: Dict[str, Any]) -> Optional[float]:
         return round(worst * (1 + EMERGENCY_SL_BUFFER_PCT), 1)
 
 
-def place_emergency_sl(
+def _get_worst_sl_price(state: Dict[str, Any]) -> Optional[float]:
+    """Get worst SL price across all active slots (One-Way compat wrapper)."""
+    direction = state.get('active_direction')
+    if not direction:
+        return None
+    return _get_worst_sl_price_for_direction(state, direction)
+
+
+def _place_emergency_sl_for_direction(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],
+    direction: str,
 ) -> None:
-    """Place a closePosition emergency SL protecting the entire NET position."""
+    """Place a single emergency SL for one direction."""
     positions = state.get('positions') or {}
-    if not positions:
+    dir_slots = [p for p in positions.values() if p.get('direction') == direction]
+    if not dir_slots:
         return
 
-    worst_sl = _get_worst_sl_price(state)
+    worst_sl = _get_worst_sl_price_for_direction(state, direction)
     if not worst_sl:
-        logger.warning("Cannot place emergency SL: no valid SL prices in slots")
+        logger.warning(f"Cannot place emergency SL ({direction}): no valid SL prices")
         return
 
-    direction = state.get('active_direction')
     close_side = 'sell' if direction == 'LONG' else 'buy'
+    position_side = _get_position_side(config, direction)
     symbol = config['symbol']
 
     total_qty = round(
-        sum(p.get('quantity', 0) for p in positions.values()),
+        sum(p.get('quantity', 0) for p in dir_slots),
         QUANTITY_ROUND_DECIMALS,
     )
     if total_qty <= 0:
-        logger.warning("Cannot place emergency SL: total quantity is 0")
+        logger.warning(f"Cannot place emergency SL ({direction}): total quantity is 0")
         return
 
     try:
-        # Use amount-based STOP_MARKET (same proven pattern as per-slot SL orders)
-        # Note: closePosition:True + amount causes BingX API rejection
         order = exchange.create_order(
             symbol=symbol,
             type='STOP_MARKET',
             side=close_side,
             amount=total_qty,
             params={
-                'positionSide': 'BOTH',
+                'positionSide': position_side,
                 'stopPrice': worst_sl,
             }
         )
-        state['emergency_sl_order_id'] = order.get('id')
+        order_id = order.get('id')
+        _set_emergency_sl_id(state, config, direction, order_id)
         save_state(state)
-        logger.info(f"🛡️ Emergency SL placed: {order.get('id')} @ ${worst_sl:.1f} (qty={total_qty})")
+        logger.info(f"🛡️ Emergency SL ({direction}) placed: {order_id} @ ${worst_sl:.1f} (qty={total_qty})")
     except ccxt.ExchangeError as e:
         error_msg = str(e)
         if '110406' in error_msg:
-            state['emergency_sl_order_id'] = _EXCHANGE_MANAGED
-            logger.info("Emergency SL already exists on exchange — marking as managed")
+            _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
+            logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")
         else:
-            logger.error(f"Failed to place emergency SL: {e}")
+            logger.error(f"Failed to place emergency SL ({direction}): {e}")
     except Exception as e:
-        logger.exception(f"Failed to place emergency SL: {e}")
+        logger.exception(f"Failed to place emergency SL ({direction}): {e}")
+
+
+def _set_emergency_sl_id(
+    state: Dict[str, Any], config: Dict[str, Any],
+    direction: str, order_id: Optional[str],
+) -> None:
+    """Store emergency SL order ID in the appropriate state field."""
+    if config.get('position_mode') == 'hedge':
+        sl_orders = state.setdefault('emergency_sl_orders', {})
+        sl_orders[direction] = order_id
+    else:
+        state['emergency_sl_order_id'] = order_id
+
+
+def _get_emergency_sl_id(
+    state: Dict[str, Any], config: Dict[str, Any], direction: str,
+) -> Optional[str]:
+    """Read emergency SL order ID from the appropriate state field."""
+    if config.get('position_mode') == 'hedge':
+        return (state.get('emergency_sl_orders') or {}).get(direction)
+    return state.get('emergency_sl_order_id')
+
+
+def place_emergency_sl(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Place emergency SL(s) protecting all active positions.
+
+    Hedge mode: places one SL per active direction.
+    One-Way mode: places one SL for the single active direction.
+    """
+    positions = state.get('positions') or {}
+    if not positions:
+        return
+
+    if config.get('position_mode') == 'hedge':
+        active_dirs = {p.get('direction') for p in positions.values() if p.get('direction')}
+        for d in active_dirs:
+            _place_emergency_sl_for_direction(exchange, state, config, d)
+    else:
+        direction = state.get('active_direction')
+        if direction:
+            _place_emergency_sl_for_direction(exchange, state, config, direction)
+
+
+def _cancel_emergency_sl_for_direction(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    direction: str,
+) -> None:
+    """Cancel emergency SL for one direction."""
+    order_id = _get_emergency_sl_id(state, config, direction)
+    if not order_id or order_id == _EXCHANGE_MANAGED:
+        _set_emergency_sl_id(state, config, direction, None)
+        return
+
+    symbol = config['symbol']
+    try:
+        exchange.cancel_order(order_id, symbol)
+        logger.info(f"🛡️ Emergency SL ({direction}) cancelled: {order_id}")
+    except ccxt.OrderNotFound:
+        logger.debug(f"Emergency SL ({direction}) already gone: {order_id}")
+    except Exception as e:
+        logger.warning(f"Failed to cancel emergency SL ({direction}) {order_id}: {e}")
+    finally:
+        _set_emergency_sl_id(state, config, direction, None)
 
 
 def cancel_emergency_sl(
@@ -864,21 +973,13 @@ def cancel_emergency_sl(
     state: Dict[str, Any],
     config: Dict[str, Any],
 ) -> None:
-    """Cancel the emergency SL order."""
-    order_id = state.get('emergency_sl_order_id')
-    if not order_id or order_id == _EXCHANGE_MANAGED:
-        state['emergency_sl_order_id'] = None
-        return
-
-    symbol = config['symbol']
-    try:
-        exchange.cancel_order(order_id, symbol)
-        logger.info(f"🛡️ Emergency SL cancelled: {order_id}")
-    except ccxt.OrderNotFound:
-        logger.debug(f"Emergency SL already gone: {order_id}")
-    except Exception as e:
-        logger.warning(f"Failed to cancel emergency SL {order_id}: {e}")
-    finally:
+    """Cancel all emergency SL orders."""
+    if config.get('position_mode') == 'hedge':
+        for direction in ['LONG', 'SHORT']:
+            _cancel_emergency_sl_for_direction(exchange, state, config, direction)
+    else:
+        _cancel_emergency_sl_for_direction(exchange, state, config,
+                                            state.get('active_direction') or 'LONG')
         state['emergency_sl_order_id'] = None
 
 
@@ -887,28 +988,45 @@ def update_emergency_sl(
     state: Dict[str, Any],
     config: Dict[str, Any],
 ) -> None:
-    """Re-calculate and re-place emergency SL after slot add/remove.
+    """Re-calculate and re-place emergency SL(s) after slot add/remove.
 
-    Cancels old SL first, then places new one. Brief gap is acceptable
-    because per-slot SLs still protect during the transition. Without
-    closePosition, overlapping STOP_MARKET orders risk double-execution.
+    Cancels old SL(s) first, then places new ones. Brief gap is acceptable
+    because per-slot SLs still protect during the transition.
     """
     positions = state.get('positions') or {}
     if not positions:
         cancel_emergency_sl(exchange, state, config)
         return
 
-    old_order_id = state.get('emergency_sl_order_id')
-    # Cancel old emergency SL first (per-slot SLs still protect during brief gap)
-    if old_order_id and old_order_id != _EXCHANGE_MANAGED:
-        try:
-            symbol = config.get('symbol', 'BTC-USDT')
-            exchange.cancel_order(old_order_id, symbol)
-            logger.debug(f"Cancelled old emergency SL {old_order_id}")
-        except (ccxt.OrderNotFound, ccxt.InvalidOrder):
-            logger.debug(f"Old emergency SL already gone: {old_order_id}")
-        except Exception as e:
-            logger.warning(f"Failed to cancel old emergency SL {old_order_id}: {e}")
-    state['emergency_sl_order_id'] = None
-    # Place new emergency SL
-    place_emergency_sl(exchange, state, config)
+    if config.get('position_mode') == 'hedge':
+        active_dirs = {p.get('direction') for p in positions.values() if p.get('direction')}
+        # Cancel removed directions
+        for direction in ['LONG', 'SHORT']:
+            if direction not in active_dirs:
+                _cancel_emergency_sl_for_direction(exchange, state, config, direction)
+        # Re-place active directions
+        for direction in active_dirs:
+            old_id = _get_emergency_sl_id(state, config, direction)
+            if old_id and old_id != _EXCHANGE_MANAGED:
+                try:
+                    exchange.cancel_order(old_id, config.get('symbol', 'BTC-USDT'))
+                    logger.debug(f"Cancelled old emergency SL ({direction}) {old_id}")
+                except (ccxt.OrderNotFound, ccxt.InvalidOrder):
+                    logger.debug(f"Old emergency SL ({direction}) already gone: {old_id}")
+                except Exception as e:
+                    logger.warning(f"Failed to cancel old emergency SL ({direction}) {old_id}: {e}")
+            _set_emergency_sl_id(state, config, direction, None)
+            _place_emergency_sl_for_direction(exchange, state, config, direction)
+    else:
+        # One-Way: same as before
+        old_order_id = state.get('emergency_sl_order_id')
+        if old_order_id and old_order_id != _EXCHANGE_MANAGED:
+            try:
+                exchange.cancel_order(old_order_id, config.get('symbol', 'BTC-USDT'))
+                logger.debug(f"Cancelled old emergency SL {old_order_id}")
+            except (ccxt.OrderNotFound, ccxt.InvalidOrder):
+                logger.debug(f"Old emergency SL already gone: {old_order_id}")
+            except Exception as e:
+                logger.warning(f"Failed to cancel old emergency SL {old_order_id}: {e}")
+        state['emergency_sl_order_id'] = None
+        place_emergency_sl(exchange, state, config)

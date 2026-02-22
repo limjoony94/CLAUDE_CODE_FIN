@@ -512,9 +512,12 @@ def _route_signal(
     """
     Route a trading signal to the appropriate action.
 
+    Hedge mode: direction-agnostic, OPEN if slots available, else SKIP.
+    One-Way mode: same-direction OPEN, opposite → CLOSE_OLDEST (FIFO).
+
     Returns:
         'OPEN' — open new slot
-        'CLOSE_OLDEST' — close oldest opposite-direction slot (FIFO)
+        'CLOSE_OLDEST' — close oldest opposite-direction slot (One-Way FIFO)
         'SKIP' — ignore signal (slots full)
     """
     positions = state.get('positions') or {}
@@ -523,6 +526,15 @@ def _route_signal(
     if not positions:
         return 'OPEN'
 
+    is_hedge = config.get('position_mode') == 'hedge'
+
+    if is_hedge:
+        # Hedge mode: mixed directions allowed, just check slot count
+        if len(positions) < max_pos:
+            return 'OPEN'
+        return 'SKIP'
+
+    # One-Way mode: same-direction only + FIFO close on opposite
     active_dir = state.get('active_direction')
     if signal_direction == active_dir:
         if len(positions) < max_pos:

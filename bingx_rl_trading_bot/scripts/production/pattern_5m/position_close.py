@@ -23,7 +23,10 @@ from .position_open import calculate_tp_sl, setup_scale_out
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_positions_cached, fetch_ticker_cached, fetch_balance_cached
 from .state import save_state, save_metrics
-from .orders import place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl, cancel_emergency_sl
+from .orders import (
+    place_tp_sl_orders, cancel_remaining_orders, update_emergency_sl,
+    cancel_emergency_sl, _get_position_side,
+)
 from .utils import extract_pattern_name
 
 logger = logging.getLogger('pattern_5m')
@@ -174,23 +177,27 @@ def record_closed_position(
         except (ValueError, TypeError):
             pass
 
+    # Scale PnL to portfolio basis (1/N sizing)
+    max_positions = config.get('max_positions', 1)
+    portfolio_pnl_pct = pnl_pct / max_positions
+
     logger.info(
         f"🏁 TRADE CLOSED | {position['direction']} {pattern_name} | "
         f"Entry: ${position['entry_price']:.1f} → Exit: ${exit_price:.1f} | "
-        f"PnL: {pnl_pct:+.2f}% (lev) / {price_pnl_pct:+.2f}% (price) | "
+        f"PnL: {pnl_pct:+.2f}% (slot) / {portfolio_pnl_pct:+.2f}% (portfolio) | "
         f"TP: ${position.get('tp_price', 0):.1f} SL: ${position.get('sl_price', 0):.1f} | "
         f"Reason: {exit_reason} | Hold: {hold_minutes}m"
     )
 
-    # Update metrics
+    # Update metrics (portfolio-scaled PnL)
     if metrics:
-        metrics.update_trade(pnl_pct)
+        metrics.update_trade(portfolio_pnl_pct)
 
-    # Update state statistics
+    # Update state statistics (portfolio-scaled PnL)
     state['total_trades'] += 1
-    state['total_pnl'] += pnl_pct
+    state['total_pnl'] += portfolio_pnl_pct
     state['daily_trades'] += 1
-    state['daily_pnl'] += pnl_pct
+    state['daily_pnl'] += portfolio_pnl_pct
 
     if pnl_pct >= 0:
         state['winning_trades'] += 1
@@ -203,6 +210,7 @@ def record_closed_position(
         'entry_price': position['entry_price'],
         'exit_price': exit_price,
         'pnl_pct': pnl_pct,
+        'portfolio_pnl_pct': portfolio_pnl_pct,
         'exit_reason': exit_reason,
         'closed_at': datetime.now().isoformat(),
     }
@@ -374,7 +382,9 @@ def recover_position_to_state(
         positions[slot_id] = recovered_slot
         new_slot_ids.append(slot_id)
 
-    state['active_direction'] = direction
+    # One-Way mode: track direction; Hedge: no single-direction constraint
+    if config.get('position_mode') != 'hedge':
+        state['active_direction'] = direction
     state['has_position'] = True
     logger.info(f"Recovery: created {n_slots} slot(s) from {quantity:.4f} total qty")
     save_state(state)
@@ -470,6 +480,13 @@ def _read_tpsl_from_exchange_orders(
         sl_prices = []
 
         for order in open_orders:
+            # In hedge mode, filter by positionSide to avoid mixing directions
+            order_pos_side = (
+                (order.get('info') or {}).get('positionSide', 'BOTH')
+            ).upper()
+            if order_pos_side != 'BOTH' and order_pos_side != direction:
+                continue
+
             order_type = (order.get('type') or '').upper()
             # CCXT normalizes stopPrice; BingX also provides it in info
             stop_price = float(
@@ -536,6 +553,13 @@ def _snapshot_all_tpsl(
         sl_entries = []  # (price, amount)
 
         for order in open_orders:
+            # In hedge mode, filter by positionSide to avoid mixing directions
+            order_pos_side = (
+                (order.get('info') or {}).get('positionSide', 'BOTH')
+            ).upper()
+            if order_pos_side != 'BOTH' and order_pos_side != direction:
+                continue
+
             order_type = (order.get('type') or '').upper()
             stop_price = float(
                 order.get('stopPrice')
@@ -685,11 +709,6 @@ def recalculate_position_orders(
         logger.exception(f"Failed to update TP/SL orders: {e}")
         save_state(state)
         return False
-
-
-def _get_position_side(config: Dict[str, Any], direction: str) -> str:
-    """Return positionSide for BingX API. Always 'BOTH' (One-Way mode)."""
-    return 'BOTH'
 
 
 def close_position_market(
@@ -862,6 +881,7 @@ def recover_from_crash(
         slot['tp_order_id'] = None
         slot['sl_order_id'] = None
     state['emergency_sl_order_id'] = None
+    state['emergency_sl_orders'] = {}
 
     # Phase 2: Ghost position detection (log warnings, don't block)
     detect_ghost_positions(exchange, state, config, cache, circuit_breaker, metrics)

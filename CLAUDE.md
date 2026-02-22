@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.29.0 | **Bot**: Pattern 5m (59패턴, 12L+47S) | **Updated**: 2026-02-21
+> **Version**: v1.30.0 | **Bot**: Pattern 5m (59패턴, 12L+47S) | **Updated**: 2026-02-22
 
 ---
 
@@ -97,7 +97,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.29.0
+## 📊 현재 전략: Pattern 5m v1.30.0
 
 ### 핵심 파라미터
 
@@ -108,7 +108,8 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Leverage | 3x |
 | Timeframe | 5m |
-| **Max Positions** | **5** (virtual slots, 1/N sizing, same-direction only) |
+| **Max Positions** | **5** (virtual slots, 1/N sizing, **mixed-direction** in Hedge) |
+| **Position Mode** | **Hedge** (LONG/SHORT 독립 포지션, v1.30.0) |
 | Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
 | Discovery | **MAE/MFE** (TP=MFE percentile, SL=MAE percentile) |
 | Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
@@ -252,6 +253,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | Context Filters (v1.14) | RSI/Vol/Trend 인프라 (v2 연구 결과: 유의 효과 없음, 필터 비활성) |
 | Per-Pattern TP/SL (v1.21.0) | MC<0.01 패턴 개별 최적화 |
 | Dynamic Pattern Selection (v1.27.3) | `pattern_source: dynamic` 모드 — scanner CLI가 생성한 Universal TP/SL 패턴 세트 사용 |
+| **Hedge Mode (v1.30.0)** | **LONG/SHORT 독립 포지션** — FIFO 대비 3배 PnL/MDD, 강제청산 제거 |
 
 ### Dynamic Pattern Selection (v1.27.3)
 
@@ -378,7 +380,9 @@ df.rolling(n).xxx()           # ✅
 ### Position Mode
 
 ```python
-params={'positionSide': 'BOTH'}  # One-Way mode
+params={'positionSide': 'LONG'}   # Hedge mode (v1.30.0)
+params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
+# params={'positionSide': 'BOTH'}  # One-Way mode (v1.29.x 이전)
 ```
 
 > 상세: [claudedocs/STANDARD_RESEARCH_PROTOCOL.md](bingx_rl_trading_bot/claudedocs/STANDARD_RESEARCH_PROTOCOL.md)
@@ -393,7 +397,12 @@ params={'positionSide': 'BOTH'}  # One-Way mode
 | v1.28.16 | 02-18 | **Test fix + dead code cleanup**: (1) `test_patterns.py`: `test_stats_win_rates_reasonable` 실패 수정 — WR 45.2% 패턴(U-MD-MD, R:R 2.14 보상 구조)이 50% 하한에 걸림, 유효 범위 0-100%로 수정 (2) `exchange.py`: 미사용 `api_retry` 데코레이터 제거 + dead import (`wraps`, `TypeVar`) 정리 + `raise e` → `raise` (traceback 보존) (3) `pattern_5m_bot.py`: 오래된 docstring 업데이트 (v1.24 시절 패턴+백테스트 결과 제거). **214 tests all pass**. | |
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
-| **v1.29.0** | 02-21 | **N=5 멀티포지션 (One-Way BOTH mode)**: 가상 슬롯 기반 멀티포지션 시스템. `state['position']` → `state['positions']` dict. Signal routing (`_route_signal`: OPEN/SKIP/CLOSE_OLDEST), Emergency SL (closePosition:True 전체 보호), 1/N 사이징 (슬롯당 19% equity), State v2 마이그레이션. `max_positions: 5`, `DEFAULT_MAX_POSITIONS=5`. Max single-trade loss 2.5% (vs N=1 12.6%). 동일 패턴 중복 진입 차단. 12개 파일 변경, 1014 tests passed. ← **현재** |
+| **v1.30.0** | 02-22 | **Production Hedge 모드 전환**: FIFO→Hedge 전환 (config `position_mode: hedge` 활성화). 백테스트 비교: Hedge N=5 +174.0%/MDD 29.6% vs FIFO N=5 +57.1%/MDD 58.8% (3배 PnL/MDD). FIFO CLOSE_OLDEST 1,041회 강제청산 -451.9% 비용 제거. v1.29.4에서 구축한 인프라 활용 (코드 변경 없음). `verify_position_mode(hedged=True)` 자동 실행. LONG/SHORT 독립 포지션 공존, per-direction emergency SL. **1067 tests passed**. ← **현재** |
+| v1.29.4 | 02-22 | **Hedge mode infrastructure**: `position_mode='hedge'` 지원 인프라 전체 구축. `orders.py`: per-direction emergency SL (place/cancel/update/verify) + `_get_position_side()` hedge 라우팅 + helper 함수들. `bot.py`: `_route_signal()` hedge 분기 (direction-agnostic slots). `position_monitor.py`: `get_actual_exit_price` positionSide 필터링. `position_close.py`: direction-aware 청산+recovery. `position_open.py`: hedge positionSide params. `exchange.py`: `verify_position_mode()` hedge/one-way 감지. `state.py`: `emergency_sl_orders` dict. `models.py`: BotState 타입 확장. `config.yaml`: `position_mode` 필드. 인프라만 구축 (미활성). 12개 파일, +614/-132, **1067 tests passed**. |
+| v1.29.3 | 02-22 | **CLOSE_OLDEST immediate re-entry + emergency SL amount fix**: (1) `bot.py`: CLOSE_OLDEST 후 즉시 새 슬롯 진입 — 기존엔 청산만 하고 다음 캔들 대기. (2) `orders.py`: emergency SL `amount` 파라미터를 `closePosition:True` 대신 실제 총수량으로 변경 — BingX amount rounding 이슈 방지. |
+| v1.29.2 | 02-21 | **adjust_tpsl_to_config dynamic per-pattern mode**: `orders.py` `adjust_tpsl_to_config()`이 dynamic per-pattern TP/SL 모드에서도 올바르게 동작하도록 수정 — config에서 패턴별 TP/SL 조회. |
+| v1.29.1 | 02-21 | **Crash recovery per-pattern TP/SL preservation + per-slot fill detection**: (1) `position_close.py`: crash recovery 시 per-pattern TP/SL 가격 보존 (config 기본값 대신 패턴 최적값 사용). (2) `position_monitor.py`: per-slot TP/SL fill detection — exchange qty < local sum 시 open orders 조회하여 개별 슬롯 체결 감지 (N>1 필수). (3) `orders.py`: `verify_tp_sl_orders` qty mismatch guard — 체결 감지 중인 방향은 verify skip (이중 TP 재배치 방지). 8개 테스트 추가. |
+| **v1.29.0** | 02-21 | **N=5 멀티포지션 (One-Way BOTH mode)**: 가상 슬롯 기반 멀티포지션 시스템. `state['position']` → `state['positions']` dict. Signal routing (`_route_signal`: OPEN/SKIP/CLOSE_OLDEST), Emergency SL (closePosition:True 전체 보호), 1/N 사이징 (슬롯당 19% equity), State v2 마이그레이션. `max_positions: 5`, `DEFAULT_MAX_POSITIONS=5`. Max single-trade loss 2.5% (vs N=1 12.6%). 동일 패턴 중복 진입 차단. 12개 파일 변경, 1014 tests passed. |
 | **v1.28.42** | 02-21 | **ATR-scaled TP/SL + proportional vol_mult cap**: `get_volatility_multiplier()`에 ATR-ratio 스케일링 모드 추가 (기존 `vol_adaptive`보다 우선). `ATR_ratio = ATR(14) / rolling_median(ATR(14), 576봉)`, clamp [0.6, 1.7]. WF 연구: 28 시나리오 전수 검증, `BOTH_a14_w576_0.6-1.7` WF 3/3 PASS, pre-overlap edge +74.5%. SL 스케일링이 핵심 동인 (TP-only FAIL, SL-only PASS). `config.yaml` `strategy.atr_scale` 섹션 추가 (enabled/window/clamp_lo/clamp_hi). `calculate_indicators()`에서 `atr_scale` 활성화 시에도 ATR 계산 트리거. `MAX_OHLCV_CANDLES` 150→600 (ATR-scale window=576 충족). **Proportional cap**: `_effective_vol_mult()` — 멀티플라이어 자체를 `max_sl_pct / base_sl_pct`로 제한, TP/SL 동일 비율 스케일링으로 R:R 비율 보존. Hard SL cap(`_cap_sl_to_daily_limit`)은 R:R 왜곡 최대 +65.6% (49/59 패턴 영향) → proportional cap은 +1.2% 이하. 7가지 캡 전략 심층 분석 (`atr_cap_strategy_study.py`). 1139 tests passed. |
 | v1.28.41 | 02-19 | **Atomic write retry + .new fallback for OneDrive PermissionError**: `os.replace()` 실패 시 OneDrive 동기화 잠금 대기하는 `_atomic_replace_with_retry()` 추가 (exponential backoff 0.1/0.2/0.4s, 3회). Non-atomic fallback(`open(state_file,'w')`) → `.new` 파일 쓰기로 변경 (corruption 방지). `load_state()` 복구 체인 확장: main → `.new` → `.bak` → timestamped → default. `save_metrics()`도 동일 패턴 적용. `LOCK_FILE`을 `results/` (OneDrive 동기화) → `tempfile.gettempdir()` (로컬)으로 이동 — OneDrive가 lock 파일을 잠가 `msvcrt.locking()` 실패하는 문제 해결. `EXPECTED_AVG_WIN/LOSS/EDGE` MAE/MFE 59패턴 값으로 업데이트 (5.63/9.64/0.75). 1014 tests passed. |
 | **v1.28.40** | 02-19 | **Deploy MAE/MFE 59 patterns to production**: PP 112패턴 → MAE/MFE 59패턴 (12L+47S) 교체. `--discovery-method mae_mfe --edge-threshold 21.8` 스캔. MAE/MFE는 실제 가격 행동(MFE/MAE percentile)에서 TP/SL 도출 → 더 적응적. WF 3/3 PASS (OOS +320.5%). IS: WR 87.2%, PnL +949%, MDD 22.4%. TP 1.0~3.3%, SL 1.7~4.2%. PP 112 백업: `dynamic_patterns_pp112_backup.json`. |

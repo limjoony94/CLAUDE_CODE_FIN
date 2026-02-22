@@ -452,10 +452,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 68.0  # v1.27.3: genuine forward WR 68.5% (strategy_options_evaluation.py)
-EXPECTED_AVG_WIN = 5.63   # v1.28.40: MAE/MFE 59pat TP mean 1.91% × 3x - 0.10%
-EXPECTED_AVG_LOSS = 9.64  # v1.28.40: MAE/MFE 59pat SL mean 3.18% × 3x + 0.10%
-EXPECTED_EDGE = 0.75      # Per-trade expected PnL%: WR×avg_win - (1-WR)×avg_loss = 0.68×5.63 - 0.32×9.64
+EXPECTED_WIN_RATE = 52.3  # v1.30.0: fifo_vs_hedge 270d overlap, TIMEOUT=market close 포함
+EXPECTED_AVG_WIN = 5.63   # v1.28.40: MAE/MFE 59pat TP mean 1.91% × 3x - 0.10% (TP/SL only)
+EXPECTED_AVG_LOSS = 9.64  # v1.28.40: MAE/MFE 59pat SL mean 3.18% × 3x + 0.10% (TP/SL only)
+EXPECTED_EDGE = 0.07      # v1.30.0: per-trade PnL% = add_pnl/trades = 110.5/1583 (270d overlap, Hedge N=5)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 

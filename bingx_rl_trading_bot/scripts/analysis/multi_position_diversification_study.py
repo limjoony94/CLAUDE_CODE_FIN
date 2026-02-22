@@ -209,7 +209,16 @@ def resolve_trade(sig_bar, is_long, tp_pct, sl_pct, opens, highs, lows, n_bars):
             return (eb, j, tp_pct * LEVERAGE - FEE)
         elif hs:
             return (eb, j, -sl_pct * LEVERAGE - FEE)
-    return None  # timeout → DROP
+
+    # timeout → market close at next bar open (matches production bot behavior)
+    timeout_bar = end if end < n_bars else n_bars - 1
+    exit_price = opens[timeout_bar] if timeout_bar < n_bars else opens[-1]
+    if is_long:
+        pm = (exit_price / entry - 1) * 100
+    else:
+        pm = (1 - exit_price / entry) * 100
+    pnl = pm * LEVERAGE - FEE
+    return (eb, timeout_bar, pnl)
 
 
 def generate_all_trades(patterns, sig_index, opens, highs, lows, n_bars,

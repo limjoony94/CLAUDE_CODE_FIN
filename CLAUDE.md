@@ -92,7 +92,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-10%, MDD ≥25%, WR <60% | EXPECTED_WIN_RATE=68.0 (v1.28.0)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-10%, MDD ≥25%, WR <45% | EXPECTED_WIN_RATE=52.3 (v1.30.0, TIMEOUT 포함)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---

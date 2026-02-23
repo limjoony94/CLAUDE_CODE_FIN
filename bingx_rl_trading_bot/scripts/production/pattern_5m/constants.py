@@ -12,7 +12,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.31.1"  # v1.31.1: Optimal TP/SL (WR Excess maximized grid search)
+BOT_VERSION = "1.33.0"  # v1.33.0: 35pat compact TP/SL + SHORT restoration
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -452,10 +452,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 68.5  # v1.32.0: 22pat(9L+13S) + cap6 + T864 (long_restore_study Phase 3)
-EXPECTED_AVG_WIN = 7.85   # v1.32.0: TP mean ~2.5% × 3x - 0.10%
-EXPECTED_AVG_LOSS = 9.91  # v1.32.0: SL mean ~3.2% × 3x + 0.10%
-EXPECTED_EDGE = 0.215     # v1.32.0: per-trade PnL% (additive 145.8/679, cap6, 270d overlap)
+EXPECTED_WIN_RATE = 68.1  # v1.33.0: 35pat(9L+26S) compact TP/SL + cap6 + T864
+EXPECTED_AVG_WIN = 4.40   # v1.33.0: TP mean ~1.5% × 3x - 0.10% (compact grid)
+EXPECTED_AVG_LOSS = 6.10  # v1.33.0: SL mean ~2.0% × 3x + 0.10% (compact grid)
+EXPECTED_EDGE = 0.221     # v1.33.0: per-trade PnL% (297.1/1343, compact_only, 270d overlap)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 

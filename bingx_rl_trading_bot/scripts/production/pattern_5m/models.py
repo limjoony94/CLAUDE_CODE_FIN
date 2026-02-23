@@ -158,6 +158,9 @@ class PerformanceMetrics:
     recent_wins: deque = field(default_factory=lambda: deque(maxlen=METRICS_WINDOW_SIZE))
     recent_losses: deque = field(default_factory=lambda: deque(maxlen=METRICS_WINDOW_SIZE))
 
+    # v1.34.0: Complete trade history (survives log rotation)
+    trade_history: list = field(default_factory=list)
+
     # Timing stats
     avg_api_latency_ms: float = 0.0
     api_call_count: int = 0
@@ -166,7 +169,7 @@ class PerformanceMetrics:
     session_start: str = ""
     last_updated: str = ""
 
-    def update_trade(self, pnl_pct: float) -> None:
+    def update_trade(self, pnl_pct: float, trade_detail: Optional[Dict[str, Any]] = None) -> None:
         """Update metrics after a trade."""
         self.total_trades += 1
         self.total_pnl_pct += pnl_pct
@@ -177,6 +180,9 @@ class PerformanceMetrics:
         else:
             self.losing_trades += 1
             self.recent_losses.append(abs(pnl_pct))
+
+        if trade_detail:
+            self.trade_history.append(trade_detail)
 
         self._recalculate()
 
@@ -245,6 +251,7 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
             'last_updated': self.last_updated,
             'recent_wins': list(self.recent_wins),
             'recent_losses': list(self.recent_losses),
+            'trade_history': self.trade_history,
         }
 
     @classmethod
@@ -265,6 +272,7 @@ API Latency:        {self.avg_api_latency_ms:.0f}ms (avg)
         metrics.recent_losses = deque(data.get('recent_losses', []), maxlen=METRICS_WINDOW_SIZE)
         metrics.session_start = data.get('session_start', '')
         metrics.last_updated = data.get('last_updated', '')
+        metrics.trade_history = data.get('trade_history', [])
         return metrics
 
 

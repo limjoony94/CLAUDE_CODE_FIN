@@ -189,9 +189,22 @@ def record_closed_position(
         f"Reason: {exit_reason} | Hold: {hold_minutes}m"
     )
 
-    # Update metrics (portfolio-scaled PnL)
+    # Update metrics (portfolio-scaled PnL) + trade history
     if metrics:
-        metrics.update_trade(portfolio_pnl_pct)
+        trade_detail = {
+            'timestamp': datetime.now().isoformat(),
+            'pattern': pattern_name,
+            'direction': position['direction'],
+            'entry_price': position['entry_price'],
+            'exit_price': exit_price,
+            'pnl_slot': round(pnl_pct, 4),
+            'pnl_portfolio': round(portfolio_pnl_pct, 4),
+            'tp_price': position.get('tp_price', 0),
+            'sl_price': position.get('sl_price', 0),
+            'exit_reason': exit_reason,
+            'hold_minutes': hold_minutes,
+        }
+        metrics.update_trade(portfolio_pnl_pct, trade_detail=trade_detail)
 
     # Update state statistics (portfolio-scaled PnL)
     state['total_trades'] += 1

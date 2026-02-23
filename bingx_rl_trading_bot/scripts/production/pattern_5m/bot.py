@@ -43,6 +43,7 @@ from .constants import (
     METRICS_SAVE_INTERVAL_SECONDS,
     VALIDATED_LONG_PATTERNS,
     VALIDATED_SHORT_PATTERNS,
+    DEFAULT_TIMEOUT_BARS,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .config import load_config, validate_config, load_dynamic_patterns
@@ -306,6 +307,12 @@ def _run_bot_main(
                             exchange, state, config, cache, circuit_breaker, metrics
                         )
 
+                # 1b. Check position timeouts (v1.31.0: close stale positions)
+                if state.get('positions') or {}:
+                    _check_position_timeouts(
+                        exchange, state, config, cache, circuit_breaker, metrics
+                    )
+
                 # 2. Check for new entry signal (always, if slots available)
                 _process_entry_signal(
                     exchange, state, config, cache, circuit_breaker, metrics
@@ -504,6 +511,62 @@ def _process_existing_positions(
     return any_action
 
 
+def _check_position_timeouts(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    cache: APICache,
+    circuit_breaker: CircuitBreaker,
+    metrics: PerformanceMetrics,
+) -> bool:
+    """
+    Close positions that exceeded the timeout threshold.
+
+    v1.31.0: Positions held longer than timeout_bars × 5min are closed
+    at market price. This frees stale slots (48h+ trades are net negative).
+
+    Returns:
+        True if any position was closed due to timeout
+    """
+    timeout_bars = config.get('strategy', {}).get('timeout_bars', DEFAULT_TIMEOUT_BARS)
+    if not timeout_bars:
+        return False
+
+    positions = state.get('positions') or {}
+    if not positions:
+        return False
+
+    closed_any = False
+    now = datetime.now()
+    timeout_seconds = timeout_bars * 300  # 5min = 300s per bar
+
+    for slot_id, pos in list(positions.items()):
+        entry_time_str = pos.get('entry_time', '')
+        if not entry_time_str:
+            continue
+        try:
+            entry_dt = datetime.fromisoformat(entry_time_str)
+            held_seconds = (now - entry_dt).total_seconds()
+            if held_seconds >= timeout_seconds:
+                held_hours = held_seconds / 3600
+                timeout_hours = timeout_seconds / 3600
+                pattern = pos.get('pattern_name', '?')
+                direction = pos.get('direction', '?')
+                logger.info(
+                    f"⏰ TIMEOUT: Slot {slot_id} ({pattern} {direction}) "
+                    f"held {held_hours:.1f}h > {timeout_hours:.0f}h limit, closing at market"
+                )
+                close_position_market(
+                    exchange, state, config, cache, 'TIMEOUT', metrics,
+                    position=pos,
+                )
+                closed_any = True
+        except (ValueError, TypeError):
+            continue
+
+    return closed_any
+
+
 def _route_signal(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -529,10 +592,17 @@ def _route_signal(
     is_hedge = config.get('position_mode') == 'hedge'
 
     if is_hedge:
-        # Hedge mode: mixed directions allowed, just check slot count
-        if len(positions) < max_pos:
-            return 'OPEN'
-        return 'SKIP'
+        # Hedge mode: mixed directions allowed, check slot count + direction cap
+        if len(positions) >= max_pos:
+            return 'SKIP'
+        direction_cap = config.get('strategy', {}).get('direction_cap', max_pos)
+        same_dir_count = sum(
+            1 for p in positions.values()
+            if p.get('direction') == signal_direction
+        )
+        if same_dir_count >= direction_cap:
+            return 'SKIP'
+        return 'OPEN'
 
     # One-Way mode: same-direction only + FIFO close on opposite
     active_dir = state.get('active_direction')

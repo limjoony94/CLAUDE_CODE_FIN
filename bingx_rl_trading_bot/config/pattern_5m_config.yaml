@@ -8,7 +8,7 @@ health_check_interval: 50
 json_logging: false
 leverage: 3
 margin_mode: crossed
-max_positions: 5
+max_positions: 9
 position_mode: hedge  # 'one_way' (BOTH) or 'hedge' (LONG/SHORT separate)
 position_size_pct: 95
 risk:
@@ -23,6 +23,8 @@ strategy:
     clamp_lo: 0.6     # minimum ratio
     clamp_hi: 1.7     # maximum ratio
   cooldown_candles: 0
+  direction_cap: 6         # v1.32.0: max same-direction positions (6 of 9 = 67%, 0 = disabled)
+  timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h, 0 = disabled)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)
   # Per-pattern TP/SL in constants.py PATTERN_OPTIMAL_TPSL (tp_pct/sl_pct are fallback defaults)

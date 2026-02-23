@@ -12,7 +12,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.30.0"  # v1.30.0: Hedge mode (LONG/SHORT separate positions)
+BOT_VERSION = "1.31.1"  # v1.31.1: Optimal TP/SL (WR Excess maximized grid search)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -452,10 +452,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 52.3  # v1.30.0: fifo_vs_hedge 270d overlap, TIMEOUT=market close 포함
-EXPECTED_AVG_WIN = 5.63   # v1.28.40: MAE/MFE 59pat TP mean 1.91% × 3x - 0.10% (TP/SL only)
-EXPECTED_AVG_LOSS = 9.64  # v1.28.40: MAE/MFE 59pat SL mean 3.18% × 3x + 0.10% (TP/SL only)
-EXPECTED_EDGE = 0.07      # v1.30.0: per-trade PnL% = add_pnl/trades = 110.5/1583 (270d overlap, Hedge N=5)
+EXPECTED_WIN_RATE = 68.5  # v1.32.0: 22pat(9L+13S) + cap6 + T864 (long_restore_study Phase 3)
+EXPECTED_AVG_WIN = 7.85   # v1.32.0: TP mean ~2.5% × 3x - 0.10%
+EXPECTED_AVG_LOSS = 9.91  # v1.32.0: SL mean ~3.2% × 3x + 0.10%
+EXPECTED_EDGE = 0.215     # v1.32.0: per-trade PnL% (additive 145.8/679, cap6, 270d overlap)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 
@@ -473,11 +473,12 @@ ROTATION_ENABLED = False  # Disabled for pattern bot
 # ============================================================
 # MULTI-POSITION SETTINGS (v1.29.0)
 # ============================================================
-DEFAULT_MAX_POSITIONS = 5        # N=5 multi-position (config.yaml overrides)
+DEFAULT_MAX_POSITIONS = 9        # v1.31.0: N=9 multi-position
 MAX_ALLOWED_POSITIONS = 10       # Upper guard for validation
 EMERGENCY_SL_BUFFER_PCT = 0.001  # 0.1% buffer beyond worst slot SL
 VALID_POSITION_MODES = ('one_way', 'hedge')
 DEFAULT_POSITION_MODE = 'one_way'
+DEFAULT_TIMEOUT_BARS = 864       # v1.31.0: 72h = 864 × 5m bars (0 = disabled)
 
 # ============================================================
 # DEFAULT CONFIGURATION
@@ -495,6 +496,7 @@ DEFAULT_CONFIG = {
         'tp_pct': 1.0,  # v1.19.0: Tight TP (was 1.5)
         'sl_pct': 1.0,  # v1.19.0: Tight SL (was 3.0)
         'cooldown_candles': 0,
+        'timeout_bars': DEFAULT_TIMEOUT_BARS,
         'long_patterns': VALIDATED_LONG_PATTERNS,
         'short_patterns': VALIDATED_SHORT_PATTERNS,
     },

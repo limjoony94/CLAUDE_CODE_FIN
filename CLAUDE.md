@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.31.1 | **Bot**: Pattern 5m (15패턴, 2L+13S, Optimal TP/SL) | **Updated**: 2026-02-23
+> **Version**: v1.32.0 | **Bot**: Pattern 5m (22패턴, 9L+13S, Optimal TP/SL + Direction Cap 6) | **Updated**: 2026-02-23
 
 ---
 
@@ -92,7 +92,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-10%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=68.7 (v1.31.1, Optimal TP/SL+T864)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-10%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=68.5 (v1.32.0, 22pat+cap6+T864)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
@@ -114,7 +114,8 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | Discovery | **MAE/MFE** (TP=MFE percentile, SL=MAE percentile) |
 | Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
 | Quality Filter | **Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25 + WR Excess>5pp** |
-| Patterns | **15** (2L + 13S), WR Excess > 5pp genuine edge filter |
+| Patterns | **22** (9L + 13S), WR Excess > 5pp genuine edge filter + 7 STRONG LONG 복원 (v1.32.0) |
+| **Direction Cap** | **6** (max same-direction positions, 6/9 = 67%, v1.32.0) |
 | **Position Timeout** | **864 bars (72h)** — 48h+ trades are net negative, slot recycling (v1.31.0) |
 | Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause |
 
@@ -257,6 +258,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **Hedge Mode (v1.30.0)** | **LONG/SHORT 독립 포지션** — FIFO 대비 3배 PnL/MDD, 강제청산 제거 |
 | **Position Timeout (v1.31.0)** | **72h(864bars) 초과 포지션 시장가 청산** — 48h+ 거래 net negative, 슬롯 재활용 |
 | **WR Excess Filter (v1.31.0)** | **Random Walk WR 대비 진짜 엣지 > 5pp만 선별** — 레짐 편향 패턴 제거 |
+| **Direction Cap (v1.32.0)** | **Max 6 same-direction positions** — Hedge N=9에서 방향 집중 리스크 제한 (67%) |
 
 ### Dynamic Pattern Selection (v1.27.3)
 
@@ -401,7 +403,8 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
 | (연구) | 02-23 | **ATR-Scaled Backtest Study** (`atr_scaled_backtest_study.py`): Scanner(고정 TP/SL) vs Production(ATR-scaled TP/SL) 조건 비교 4-Phase 연구. **Phase 1**: 15패턴 개별 비교 — ATR scaling이 avg WR +4.5pp, edge +0.876%/trade 개선 (11/15 패턴 향상). **Phase 2**: 59패턴 재평가 — ATR-scaled 필터가 더 엄격 (39 pass vs Fixed 51), 패턴 선별이 달라짐. **Phase 3**: Hedge N=5 포트폴리오 — ATR T864 PnL/MDD **17.18** vs Fixed 10.91, 둘 다 WF 3/3 PASS. ATR scaling이 리스크 조정 성과 +57.5% 향상. **Phase 4**: ATR ratio 분포 — mean 1.0874 (slight expansion), 72.1% within clamps [0.6,1.7]. **결론**: ATR scaling은 Scanner 단계에서도 적용 시 선별 결과가 달라지며, Production 조건과의 정합성이 향상됨. |
-| **v1.31.1** | 02-23 | **Optimal TP/SL (WR Excess maximizing grid search)**: `tpsl_regime_bias_study.py` 5-Phase 연구 결과 적용. Phase 4 grid search로 패턴별 WR Excess 극대화 TP/SL 도출. 15패턴 전체 TP/SL 변경 (TP 1.0-3.5%, SL 2.0-4.0%). **14/15 STRONG** (3-4 phase genuine edge 확인), 1 MODERATE. Phase 5: Optimal T864 PnL +372.7%, MDD 21.7%, PnL/MDD 17.18, WF 3/3 PASS (vs MAE/MFE +271.9%). 12/15 Direction Flip GENUINE, 13/15 Symmetric TP=SL 모든 레벨 >50%. EXPECTED_WR=68.7, EXPECTED_EDGE=1.099. Backup: `dynamic_patterns_15pat_mae_backup.json`. **1067 tests passed**. ← **현재** |
+| **v1.32.0** | 02-23 | **7 STRONG LONG 복원 + Direction Cap 6**: `long_restore_and_direction_cap_study.py` 5-Phase 연구. 59pat→15pat 축소 시 탈락한 10 LONG 중 7개가 Phase 4 WR Excess grid search로 STRONG 재확인 (U-MD-H 4/4, MD-MU-ST 4/4, MD-DN-DN 3/4, H-ST-DN 3/4, H-U-MU 3/4, MD-DN-BU 3/4, MD-BD-DN 3/4). 15→22 패턴 (9L+13S), 방향 비율 87%S→52%L/48%S. Direction cap=6 (`_route_signal()` hedge 분기에 same-direction 제한). 22pat+cap6: trades 679, WR 68.5%, PnL +317.8%, MDD 6.3%, PnL/MDD 50.44, **WF 3/3 PASS**. EXPECTED_WR=68.5, EXPECTED_EDGE=0.215. Trailing stop study → ADOPT: NO (-8.1%). Backup: `dynamic_patterns_15pat_optimal_backup.json`. ← **현재** |
+| **v1.31.1** | 02-23 | **Optimal TP/SL (WR Excess maximizing grid search)**: `tpsl_regime_bias_study.py` 5-Phase 연구 결과 적용. Phase 4 grid search로 패턴별 WR Excess 극대화 TP/SL 도출. 15패턴 전체 TP/SL 변경 (TP 1.0-3.5%, SL 2.0-4.0%). **14/15 STRONG** (3-4 phase genuine edge 확인), 1 MODERATE. Phase 5: Optimal T864 PnL +372.7%, MDD 21.7%, PnL/MDD 17.18, WF 3/3 PASS (vs MAE/MFE +271.9%). 12/15 Direction Flip GENUINE, 13/15 Symmetric TP=SL 모든 레벨 >50%. EXPECTED_WR=68.7, EXPECTED_EDGE=1.099. Backup: `dynamic_patterns_15pat_mae_backup.json`. **1067 tests passed**. |
 | v1.31.0 | 02-23 | **15-pattern WR Excess filter + T864 timeout**: 패턴 59→15 (WR Excess>5pp), TIMEOUT=864 (72h), PnL/MDD 17.03, WF 3/3 PASS. |
 | v1.30.1 | 02-23 | **N=5→9 멀티포지션 확장 (NO_TIMEOUT 전략)**: `max_positions: 5→9`, `DEFAULT_MAX_POSITIONS: 5→9`. timeout_impact_study.py NO_TIMEOUT N-sweep 결과 PnL/MDD 피크 N=9 (PnL +107.1%, MDD 67.1%, PnL/MDD 1.60, WF 3/3). 1/N sizing 20%→11.1%. Hit rate 13.7%→21.2% (+55%). Direction bias 발견: LONG 15% trades/-4.74% PnL vs SHORT 85%/+78.91%. |
 | **v1.30.0** | 02-22 | **Production Hedge 모드 전환**: FIFO→Hedge 전환 (config `position_mode: hedge` 활성화). 백테스트 비교: Hedge N=5 +174.0%/MDD 29.6% vs FIFO N=5 +57.1%/MDD 58.8% (3배 PnL/MDD). FIFO CLOSE_OLDEST 1,041회 강제청산 -451.9% 비용 제거. v1.29.4에서 구축한 인프라 활용 (코드 변경 없음). `verify_position_mode(hedged=True)` 자동 실행. LONG/SHORT 독립 포지션 공존, per-direction emergency SL. **1067 tests passed**. |

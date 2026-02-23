@@ -231,9 +231,10 @@ def apply_multiple_testing_correction(selected, n_tested, method='none',
 
     elif method == 'bh':
         # Benjamini-Hochberg step-up: find largest k where p(k) <= q*k/m
-        m = len(sorted_items)
+        # m = total hypotheses tested (not just selected), for proper FDR control
+        m = max(n_tested, len(sorted_items))
         last_pass_idx = -1
-        for i in range(m - 1, -1, -1):
+        for i in range(len(sorted_items) - 1, -1, -1):
             rank = i + 1
             bh_threshold = fdr_q * rank / m
             if sorted_items[i][1]['mc_p'] <= bh_threshold:
@@ -243,7 +244,7 @@ def apply_multiple_testing_correction(selected, n_tested, method='none',
         filtered = dict(sorted_items[:last_pass_idx + 1]) if last_pass_idx >= 0 else {}
         meta = {
             'correction_method': 'bh', 'n_tested': n_tested,
-            'fdr_q': fdr_q, 'm_positive_edge': m,
+            'fdr_q': fdr_q, 'm_hypotheses': m,
             'n_before_correction': len(selected),
             'n_after_correction': len(filtered),
         }
@@ -1275,10 +1276,11 @@ def build_output_json(
     is_days: int = 0,
     holdout_result: dict = None,
     holdout_days: int = 0,
+    clean_mode: bool = False,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
-        'version': '2.1',
+        'version': '3.0' if clean_mode else '2.1',
         'generated_at': datetime.now().isoformat(timespec='seconds'),
         'data_file': os.path.basename(data_file),
         'data_bars': data_bars,
@@ -1479,9 +1481,22 @@ def main():
     parser.add_argument('--holdout-days', type=int, default=7,
                         help='Reserve last N days as holdout OOS '
                              '(default: 7, 0=disabled)')
+    parser.add_argument('--clean', action='store_true',
+                        help='Clean single-pass protocol: BH FDR as primary filter, '
+                             'theory-derived thresholds, pre-registration manifest')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
+
+    # Clean mode: override parameters to theory-derived values
+    CLEAN_MIN_EDGE_PP = 5.0   # Practical minimum (cost-based)
+    CLEAN_MIN_SL_PCT = 1.0    # Execution risk floor
+    if args.clean:
+        args.edge_threshold = 0.0   # Let BH handle statistical significance
+        args.mc_threshold = 1.0     # No per-pattern pre-filter
+        args.correction = 'bh'      # Mandatory BH FDR
+        if args.holdout_days == 0:
+            args.holdout_days = 7   # Default holdout if not specified
 
     # Setup logging
     log_level = logging.DEBUG if args.verbose else logging.INFO
@@ -1492,9 +1507,51 @@ def main():
     )
 
     logger.info("=" * 60)
-    logger.info("Pattern Scanner v2.1 — Dynamic Walk-Forward Selection")
+    if args.clean:
+        logger.info("Pattern Scanner v3.0 — Clean Single-Pass Protocol")
+    else:
+        logger.info("Pattern Scanner v2.1 — Dynamic Walk-Forward Selection")
     logger.info("=" * 60)
     logger.info(f"Data: {args.data}")
+
+    # Clean mode: write pre-registration manifest BEFORE any data analysis
+    if args.clean:
+        manifest = {
+            'protocol': 'clean_v3.0',
+            'pre_registered_at': datetime.now().isoformat(timespec='seconds'),
+            'rationale': 'Theory-derived thresholds, BH FDR primary filter, '
+                         'single-pass execution',
+            'parameters': {
+                'discovery_method': args.discovery_method,
+                'correction': 'bh',
+                'fdr_q': args.fdr_q,
+                'edge_threshold': 0.0,
+                'mc_threshold': 1.0,
+                'min_trades': args.min_trades,
+                'max_baseline_wr': args.max_baseline_wr,
+                'holdout_days': args.holdout_days,
+                'wf_folds': args.wf_folds,
+                'post_bh_min_edge_pp': CLEAN_MIN_EDGE_PP,
+                'post_bh_min_sl_pct': CLEAN_MIN_SL_PCT,
+            },
+            'theory_basis': {
+                'edge_5pp': 'Cost-based minimum: fees(0.30%) + slippage(0.06%) + '
+                            'safety margin -> ~5pp WR excess needed for positive EV',
+                'sl_1pct': 'Execution risk: SL < 1.0% cannot be reliably filled '
+                           'given BTC spread + slippage',
+                'bh_fdr': 'Controls false discovery rate at q=0.05 across all '
+                          'tested hypotheses simultaneously',
+            },
+        }
+        manifest_file = os.path.join(
+            os.path.dirname(os.path.abspath(args.output)),
+            'clean_scan_manifest.json')
+        os.makedirs(os.path.dirname(manifest_file), exist_ok=True)
+        with open(manifest_file, 'w', encoding='utf-8') as f:
+            json.dump(manifest, f, indent=2, ensure_ascii=False)
+        logger.info(f"Pre-registration manifest: {manifest_file}")
+        logger.info(f"  BH FDR q={args.fdr_q}, post-BH: edge>={CLEAN_MIN_EDGE_PP}pp, "
+                     f"SL>={CLEAN_MIN_SL_PCT}%")
     if args.is_days > 0:
         logger.info(f"IS Window: {args.is_days} days (most recent)")
     logger.info(f"Discovery: {args.discovery_method}")
@@ -1604,6 +1661,34 @@ def main():
         )
     timing['scan_sec'] = round(time.time() - t1, 1)
 
+    # Post-BH practical filters (clean mode only)
+    if args.clean and result.get('pattern_details'):
+        pre_count = len(result['pattern_details'])
+        to_remove = []
+        for key, info in result['pattern_details'].items():
+            edge_val = info.get('edge', 0)
+            sl_val = info.get('sl', 0)
+            if edge_val < CLEAN_MIN_EDGE_PP:
+                to_remove.append((key, f'edge={edge_val:.1f}pp < {CLEAN_MIN_EDGE_PP}pp'))
+            elif sl_val < CLEAN_MIN_SL_PCT:
+                to_remove.append((key, f'SL={sl_val:.1f}% < {CLEAN_MIN_SL_PCT}%'))
+
+        for key, reason in to_remove:
+            result['pattern_details'].pop(key, None)
+            pat_name = key.rsplit('_', 1)[0]
+            direction = key.rsplit('_', 1)[1]
+            pat_list = (result['long_patterns'] if direction == 'LONG'
+                        else result['short_patterns'])
+            if pat_name in pat_list:
+                pat_list.remove(pat_name)
+            if 'patterns_tpsl' in result:
+                result['patterns_tpsl'].pop(pat_name, None)
+            logger.info(f"  Post-BH filter: {key} removed ({reason})")
+
+        post_count = len(result['pattern_details'])
+        logger.info(f"Post-BH practical filter: {pre_count} -> {post_count} patterns "
+                    f"(edge >= {CLEAN_MIN_EDGE_PP}pp, SL >= {CLEAN_MIN_SL_PCT}%)")
+
     # Holdout validation (v1.34.0)
     holdout_result = None
     if df_holdout is not None:
@@ -1684,6 +1769,7 @@ def main():
         is_days=args.is_days,
         holdout_result=holdout_result,
         holdout_days=args.holdout_days,
+        clean_mode=args.clean,
     )
 
     # Write JSON

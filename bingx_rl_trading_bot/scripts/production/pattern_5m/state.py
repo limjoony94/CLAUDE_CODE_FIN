@@ -109,6 +109,7 @@ def _create_default_state() -> Dict[str, Any]:
         'last_trade_date': datetime.now().strftime('%Y-%m-%d'),
         'created_at': datetime.now().isoformat(),
         'updated_at': datetime.now().isoformat(),
+        'peak_equity': 0.0,  # v1.34.0: MDD sizing high watermark
     }
 
 
@@ -204,6 +205,13 @@ def _ensure_required_keys(state: Dict[str, Any], defaults: Dict[str, Any]) -> Di
         logger.warning(f"State missing required keys, filling defaults: {missing}")
         for key in missing:
             state[key] = defaults[key]
+    return state
+
+
+def update_peak_equity(state: Dict[str, Any], current_equity: float) -> Dict[str, Any]:
+    """Update peak equity high watermark for MDD sizing (v1.34.0)."""
+    if current_equity > state.get('peak_equity', 0):
+        state['peak_equity'] = current_equity
     return state
 
 

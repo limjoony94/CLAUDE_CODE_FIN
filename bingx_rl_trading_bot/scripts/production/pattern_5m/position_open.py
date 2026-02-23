@@ -36,6 +36,7 @@ def get_position_size(
     cache: APICache,
     circuit_breaker: Optional[CircuitBreaker] = None,
     metrics: Optional[PerformanceMetrics] = None,
+    state: Optional[Dict[str, Any]] = None,
 ) -> tuple:
     """
     Calculate position size based on available balance.
@@ -46,6 +47,7 @@ def get_position_size(
         cache: APICache instance
         circuit_breaker: Optional CircuitBreaker
         metrics: Optional PerformanceMetrics
+        state: Optional bot state dict (for MDD sizing, v1.34.0)
 
     Returns:
         Tuple of (quantity, available_balance, price) or (None, None, None) on error
@@ -60,8 +62,27 @@ def get_position_size(
         max_size = config['risk']['max_position_size_usd']
         max_positions = config.get('max_positions', 1)
 
+        # MDD dynamic sizing (v1.34.0)
+        mdd_scale = 1.0
+        mdd_cfg = config.get('risk', {}).get('mdd_sizing', {})
+        if mdd_cfg.get('enabled', False) and state:
+            peak = state.get('peak_equity', 0)
+            if peak > 0 and total_equity < peak:
+                dd_pct = (peak - total_equity) / peak * 100
+                full_below = mdd_cfg.get('full_size_below_dd', 5.0)
+                min_above = mdd_cfg.get('min_size_above_dd', 20.0)
+                min_scale = mdd_cfg.get('min_scale', 0.25)
+                if dd_pct <= full_below:
+                    mdd_scale = 1.0
+                elif dd_pct >= min_above:
+                    mdd_scale = min_scale
+                else:
+                    mdd_scale = 1.0 - (1.0 - min_scale) * (dd_pct - full_below) / (min_above - full_below)
+                if mdd_scale < 1.0:
+                    logger.info(f"MDD sizing: DD={dd_pct:.1f}%, scale={mdd_scale:.2f}")
+
         # 1/N sizing: each slot gets equity/max_positions
-        per_slot_equity = total_equity * size_pct / max_positions
+        per_slot_equity = total_equity * size_pct / max_positions * mdd_scale
         position_value = min(per_slot_equity, available * size_pct, max_size)
 
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True,
@@ -128,7 +149,7 @@ def open_position(
         _set_leverage(exchange, symbol, exchange_leverage, config)
 
         # Calculate position size (also returns current price to avoid double ticker fetch)
-        quantity, available, estimated_price = get_position_size(exchange, config, cache, circuit_breaker, metrics)
+        quantity, available, estimated_price = get_position_size(exchange, config, cache, circuit_breaker, metrics, state=state)
         if quantity is None or quantity <= 0:
             logger.warning(f"Invalid position size (qty={quantity}, balance=${available}), skipping")
             return False

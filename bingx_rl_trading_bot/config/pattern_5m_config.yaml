@@ -14,6 +14,11 @@ position_size_pct: 95
 risk:
   max_daily_loss_pct: 13   # v1.28.5: 10% → 13% (Per-pattern SL max 4.0% × 3x = 12.1% per loss)
   max_position_size_usd: 10000
+  mdd_sizing:              # v1.34.0: MDD-based dynamic position sizing
+    enabled: true
+    full_size_below_dd: 5.0   # DD < 5% → full size (scale=1.0)
+    min_size_above_dd: 20.0   # DD >= 20% → minimum size (scale=0.25)
+    min_scale: 0.25           # minimum position scale factor
 rotation:
   enabled: false
 strategy:
@@ -24,6 +29,7 @@ strategy:
     clamp_hi: 1.7     # maximum ratio
   cooldown_candles: 0
   direction_cap: 6         # v1.32.0: max same-direction positions (6 of 9 = 67%, 0 = disabled)
+  rescan_interval_days: 90  # v1.34.0: scan staleness warning threshold (days)
   timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h, 0 = disabled)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)

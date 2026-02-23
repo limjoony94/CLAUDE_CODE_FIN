@@ -10,6 +10,7 @@ v1.25.1: Candle-aligned smart sleep replaces fixed-interval polling.
 
 import os
 import sys
+import json
 import time
 import signal
 import logging
@@ -27,6 +28,7 @@ from .constants import (
     CONFIG_FILE,
     STATE_FILE,
     METRICS_FILE,
+    DYNAMIC_PATTERNS_FILE,
     MAX_OHLCV_CANDLES,
     DEFAULT_SLEEP_INTERVAL,
     DAILY_LOSS_PAUSE_SECONDS,
@@ -53,6 +55,7 @@ from .state import (
     load_metrics,
     save_metrics,
     sync_metrics_with_state,
+    update_peak_equity,
 )
 from .exchange import (
     create_exchange,
@@ -60,6 +63,7 @@ from .exchange import (
     set_margin_mode,
     fetch_ohlcv,
     fetch_ticker_cached,
+    fetch_balance_cached,
     health_check,
     set_shutdown_checker,
 )
@@ -218,6 +222,25 @@ def run_bot(config_file: str = CONFIG_FILE) -> None:
         logger.info("🔒 Lock released, bot stopped")
 
 
+def _check_scan_staleness(config: Dict[str, Any]) -> None:
+    """Check dynamic_patterns.json age, warn if stale (v1.34.0)."""
+    try:
+        with open(DYNAMIC_PATTERNS_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        generated_at = datetime.fromisoformat(data.get('generated_at', ''))
+        age_days = (datetime.now() - generated_at).days
+        interval = config.get('strategy', {}).get('rescan_interval_days', 90)
+        if age_days > interval:
+            logger.warning(
+                f"Pattern scan is {age_days} days old (threshold: {interval}d). "
+                f"Consider re-scanning: python scripts/scanner/pattern_scanner.py"
+            )
+        else:
+            logger.info(f"Pattern scan age: {age_days}d (threshold: {interval}d)")
+    except Exception as e:
+        logger.warning(f"Could not check scan staleness: {e}")
+
+
 def _run_bot_main(
     config: Dict[str, Any],
     state_path: str,
@@ -253,6 +276,9 @@ def _run_bot_main(
 
     # Verify exchange settings
     _verify_exchange_settings(exchange, config)
+
+    # Check scan staleness (v1.34.0)
+    _check_scan_staleness(config)
 
     # Crash recovery
     recover_from_crash(exchange, state, config, cache, circuit_breaker, metrics)
@@ -358,6 +384,15 @@ def _run_bot_main(
 
                 if now - last_metrics_save_time >= METRICS_SAVE_INTERVAL_SECONDS:
                     save_metrics(metrics, metrics_path)
+                    # Update peak equity for MDD sizing (v1.34.0)
+                    try:
+                        bal = fetch_balance_cached(exchange, cache, force_refresh=True,
+                                                   circuit_breaker=circuit_breaker, metrics=metrics)
+                        equity = float(bal.get('USDT', {}).get('total', 0))
+                        if equity > 0:
+                            update_peak_equity(state, equity)
+                    except Exception:
+                        pass  # non-critical, skip on error
                     last_metrics_save_time = now
 
             # Smart sleep — refresh in case position changed during this iteration

@@ -1273,6 +1273,8 @@ def build_output_json(
     wf_result: dict = None,
     timing: dict = None,
     is_days: int = 0,
+    holdout_result: dict = None,
+    holdout_days: int = 0,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
@@ -1338,11 +1340,98 @@ def build_output_json(
     if wf_result:
         output['walk_forward'] = wf_result
 
+    # Holdout validation (v1.34.0)
+    if holdout_result:
+        output['holdout_validation'] = {
+            'holdout_days': holdout_days,
+            'results': holdout_result,
+        }
+        output['selection_criteria']['holdout_days'] = holdout_days
+
     # Timing
     if timing:
         output['timing'] = timing
 
     return output
+
+
+def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout):
+    """Validate selected patterns on holdout data (v1.34.0).
+
+    For each selected pattern, backtest on holdout period and check
+    WR Excess > 0 (genuine edge on unseen data).
+
+    Returns:
+        dict: pattern_key -> {status, wr, rw_wr, wr_excess, trades}
+    """
+    opens_h = df_holdout['open'].values
+    highs_h = df_holdout['high'].values
+    lows_h = df_holdout['low'].values
+
+    # Merge long + short patterns with their direction and TP/SL
+    patterns_tpsl = scan_result.get('patterns_tpsl', {})
+    default_tp = scan_result.get('universal_tp', 2.0)
+    default_sl = scan_result.get('universal_sl', 3.0)
+
+    pattern_schedule = {}
+    for pat_name in scan_result.get('long_patterns', []):
+        pat_key = f"{pat_name}_LONG"
+        tpsl = patterns_tpsl.get(pat_name)
+        if isinstance(tpsl, (list, tuple)) and len(tpsl) >= 2:
+            tp_pct, sl_pct = tpsl[0], tpsl[1]
+        else:
+            tp_pct, sl_pct = default_tp, default_sl
+        pattern_schedule[pat_key] = {
+            'direction': 'LONG', 'pattern': pat_name,
+            'tp_pct': tp_pct, 'sl_pct': sl_pct,
+        }
+    for pat_name in scan_result.get('short_patterns', []):
+        pat_key = f"{pat_name}_SHORT"
+        tpsl = patterns_tpsl.get(pat_name)
+        if isinstance(tpsl, (list, tuple)) and len(tpsl) >= 2:
+            tp_pct, sl_pct = tpsl[0], tpsl[1]
+        else:
+            tp_pct, sl_pct = default_tp, default_sl
+        pattern_schedule[pat_key] = {
+            'direction': 'SHORT', 'pattern': pat_name,
+            'tp_pct': tp_pct, 'sl_pct': sl_pct,
+        }
+
+    results = {}
+    for pat_key, info in pattern_schedule.items():
+        pat_name = info['pattern']
+        direction = info['direction']
+        tp_pct = info['tp_pct']
+        sl_pct = info['sl_pct']
+
+        # Get signal bars in holdout range
+        signal_bars = signal_index_holdout.get(pat_name, [])
+        if not signal_bars:
+            results[pat_key] = {'status': 'SKIP', 'reason': 'no_signals', 'trades': 0}
+            continue
+
+        trades = bt_signals(signal_bars, direction, tp_pct, sl_pct,
+                            opens_h, highs_h, lows_h, n_holdout)
+        n_trades = len(trades)
+        if n_trades < 3:
+            results[pat_key] = {'status': 'SKIP', 'reason': 'insufficient_trades',
+                                'trades': n_trades}
+            continue
+
+        wins = sum(1 for _, _, pnl in trades if pnl > 0)
+        wr = wins / n_trades
+        rw_wr = sl_pct / (tp_pct + sl_pct)  # Random Walk WR
+        wr_excess = wr - rw_wr
+
+        results[pat_key] = {
+            'status': 'PASS' if wr_excess > 0 else 'FAIL',
+            'wr': round(wr * 100, 1),
+            'rw_wr': round(rw_wr * 100, 1),
+            'wr_excess': round(wr_excess * 100, 1),
+            'trades': n_trades,
+        }
+
+    return results
 
 
 # ============================================================
@@ -1387,6 +1476,9 @@ def main():
     parser.add_argument('--is-days', type=int, default=0,
                         help='Limit IS training window to N most recent days '
                              '(0=use all data, e.g. 135 for Edge Decay optimal)')
+    parser.add_argument('--holdout-days', type=int, default=7,
+                        help='Reserve last N days as holdout OOS '
+                             '(default: 7, 0=disabled)')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
@@ -1424,6 +1516,8 @@ def main():
         logger.info(f"Correction: {args.correction} (FDR q={args.fdr_q})")
     if args.wf_folds > 0:
         logger.info(f"Walk-Forward: {args.wf_folds} expanding folds")
+    if args.holdout_days > 0:
+        logger.info(f"Holdout: {args.holdout_days}d OOS validation")
     if args.concurrency != 1:
         n_w = (min(os.cpu_count() or 1, 8)
                if args.concurrency == 0 else args.concurrency)
@@ -1449,6 +1543,18 @@ def main():
         else:
             logger.info(f"IS window: {args.is_days}d -> "
                         f"all {len(df)} bars used (data < requested window)")
+
+    # Holdout split (v1.34.0): reserve last N days for OOS validation
+    df_holdout = None
+    if args.holdout_days > 0:
+        holdout_bars = args.holdout_days * 288
+        if holdout_bars < len(df) - 288:  # ensure IS has at least 1 day
+            df_holdout = df.iloc[-holdout_bars:].reset_index(drop=True)
+            df = df.iloc[:-holdout_bars].reset_index(drop=True)
+            logger.info(f"Holdout split: {args.holdout_days}d ({holdout_bars} bars) reserved, "
+                        f"IS: {len(df)} bars, Holdout: {len(df_holdout)} bars")
+        else:
+            logger.warning(f"Holdout {args.holdout_days}d too large for data ({len(df)} bars), disabled")
 
     # Build signal index (shared between scan and WF)
     types = df['candle_type'].tolist()
@@ -1498,6 +1604,42 @@ def main():
         )
     timing['scan_sec'] = round(time.time() - t1, 1)
 
+    # Holdout validation (v1.34.0)
+    holdout_result = None
+    if df_holdout is not None:
+        logger.info("")
+        logger.info(f"Holdout validation ({args.holdout_days}d)...")
+        types_h = df_holdout['candle_type'].tolist()
+        n_h = len(types_h)
+        signal_index_h = build_signal_index(types_h, n_h)
+        holdout_result = holdout_validate(df_holdout, result, signal_index_h, n_h)
+
+        # Remove FAIL patterns from result
+        fail_keys = [k for k, v in holdout_result.items() if v['status'] == 'FAIL']
+        pass_count = sum(1 for v in holdout_result.values() if v['status'] == 'PASS')
+        skip_count = sum(1 for v in holdout_result.values() if v['status'] == 'SKIP')
+
+        for pat_key in fail_keys:
+            pat_name = pat_key.rsplit('_', 1)[0]
+            direction = pat_key.rsplit('_', 1)[1]
+            logger.warning(f"Holdout FAIL: {pat_key} "
+                           f"(WR={holdout_result[pat_key]['wr']}%, "
+                           f"Excess={holdout_result[pat_key]['wr_excess']}pp)")
+            pat_list = result['long_patterns'] if direction == 'LONG' else result['short_patterns']
+            if pat_name in pat_list:
+                pat_list.remove(pat_name)
+            # Remove from pattern_details and patterns_tpsl
+            if 'pattern_details' in result:
+                result['pattern_details'].pop(pat_key, None)
+            if 'patterns_tpsl' in result:
+                result['patterns_tpsl'].pop(pat_key, None)
+
+        logger.info(f"Holdout: {pass_count} PASS, {len(fail_keys)} FAIL, {skip_count} SKIP")
+        if fail_keys:
+            logger.info(f"Removed {len(fail_keys)} patterns, "
+                        f"remaining: {len(result['long_patterns'])}L + "
+                        f"{len(result['short_patterns'])}S")
+
     # Walk-forward validation (optional)
     wf_result = None
     if args.wf_folds > 0:
@@ -1540,6 +1682,8 @@ def main():
         wf_result=wf_result,
         timing=timing,
         is_days=args.is_days,
+        holdout_result=holdout_result,
+        holdout_days=args.holdout_days,
     )
 
     # Write JSON

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Pattern Scanner CLI v2.1 — Dynamic Walk-Forward Pattern Selection
+Pattern Scanner CLI v2.2 — Dynamic Walk-Forward Pattern Selection
 
 Standalone offline tool that scans historical data to select patterns
 with genuine edge. Supports Universal and Per-Pattern TP/SL discovery.
@@ -12,15 +12,18 @@ Discovery methods:
 - mae_mfe: Derive TP/SL from MAE/MFE percentiles per pattern (v1.28.39)
   MAE/MFE discovery: WF OOS 2.4x vs grid search (mae_mfe_discovery.py)
 
-v2.1 Enhancements:
+v2.2 Enhancements:
+- ATR-scaled TP/SL (default, --no-atr to disable) — Scanner-Production alignment
+  ATR scanner vs Fixed: +64% OOS PnL (atr_scanner_alignment_study.py)
 - Multiple testing correction (BH FDR / Bonferroni)
 - Expanding window walk-forward validation
 - Parallel grid search (ProcessPoolExecutor)
 - Progress bars (tqdm) and timing
 
 Usage:
-  python scripts/scanner/pattern_scanner.py                              # PP discovery (default)
-  python scripts/scanner/pattern_scanner.py --discovery-method universal  # Universal mode
+  python scripts/scanner/pattern_scanner.py                              # PP + ATR (default)
+  python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe   # MAE/MFE + ATR
+  python scripts/scanner/pattern_scanner.py --no-atr                     # Fixed TP/SL (no ATR)
   python scripts/scanner/pattern_scanner.py --correction bh --wf-folds 3  # With corrections + WF
   python scripts/scanner/pattern_scanner.py --concurrency 4 -v           # 4 workers, verbose
 """
@@ -75,6 +78,14 @@ MC_SEEDS = [42, 123, 7777]  # Multi-seed for robustness
 # MAE/MFE percentile grids (v1.28.39: MAE/MFE discovery method)
 TP_PERCENTILES = [40, 50, 60, 70, 80]
 SL_PERCENTILES = [70, 75, 80, 85, 90, 95]
+
+SLIPPAGE_BUFFER = 0.02  # 0.02% slippage buffer for ATR-scaled TP/SL
+
+# ATR scaling defaults (v1.28.42 production params, a14/w576/0.6-1.7)
+DEFAULT_ATR_PERIOD = 14
+DEFAULT_ATR_WINDOW = 576
+DEFAULT_ATR_CLAMP_LO = 0.6
+DEFAULT_ATR_CLAMP_HI = 1.7
 
 DEFAULT_DATA_FILE = os.path.join(_PROJECT_ROOT, 'data', 'btc_5m_270days_reclassified.csv')
 DEFAULT_OUTPUT_FILE = os.path.join(_PROJECT_ROOT, 'results', 'dynamic_patterns.json')
@@ -177,6 +188,95 @@ def bt_signals(signal_bars, direction, tp_pct, sl_pct, opens, highs, lows, n_bar
     return trades
 
 
+def compute_atr_ratio(highs, lows, closes, atr_period=14, window=576):
+    """ATR / rolling_median(ATR) ratio time series.
+
+    Uses EMA-style ATR (Wilder smoothing) for consistency with production.
+    Returns array of same length as input; early values are NaN.
+    """
+    n = len(closes)
+    tr = np.empty(n)
+    tr[0] = highs[0] - lows[0]
+    for i in range(1, n):
+        tr[i] = max(highs[i] - lows[i],
+                     abs(highs[i] - closes[i - 1]),
+                     abs(lows[i] - closes[i - 1]))
+    # Wilder EMA ATR
+    atr = np.full(n, np.nan)
+    if n >= atr_period:
+        atr[atr_period - 1] = tr[:atr_period].mean()
+        for i in range(atr_period, n):
+            atr[i] = (atr[i - 1] * (atr_period - 1) + tr[i]) / atr_period
+    med = pd.Series(atr).rolling(window, min_periods=window).median().values
+    ratio = np.full(n, np.nan)
+    valid = (~np.isnan(atr)) & (~np.isnan(med)) & (med > 0)
+    ratio[valid] = atr[valid] / med[valid]
+    return ratio
+
+
+def bt_signals_atr(signal_bars, direction, tp_pct, sl_pct,
+                    opens, highs, lows, n_bars,
+                    atr_ratio, clamp_lo=0.6, clamp_hi=1.7):
+    """Backtest with ATR-scaled TP/SL per signal.
+
+    Same protocol as bt_signals() but applies ATR ratio scaling
+    to TP/SL at each signal bar. Timeout trades are DROPPED.
+    """
+    fee = FEE_PCT * LEVERAGE
+    is_long = (direction == 'LONG')
+    trades = []
+
+    for idx in signal_bars:
+        if idx + 1 >= n_bars:
+            continue
+        entry = opens[idx + 1]
+        if entry <= 0:
+            continue
+        eb = idx + 1
+
+        # ATR scaling at signal bar
+        if (atr_ratio is not None and idx < len(atr_ratio)
+                and not np.isnan(atr_ratio[idx])):
+            r = max(clamp_lo, min(clamp_hi, atr_ratio[idx]))
+        else:
+            r = 1.0
+
+        eff_tp = tp_pct * r + SLIPPAGE_BUFFER
+        eff_sl = max(0.1, sl_pct * r - SLIPPAGE_BUFFER)
+
+        if is_long:
+            tpp = entry * (1 + eff_tp / 100)
+            slp = entry * (1 - eff_sl / 100)
+        else:
+            tpp = entry * (1 - eff_tp / 100)
+            slp = entry * (1 + eff_sl / 100)
+
+        for j in range(idx + 2, min(idx + 2 + MAX_BARS, n_bars)):
+            if is_long:
+                ht = highs[j] >= tpp
+                hs = lows[j] <= slp
+            else:
+                ht = lows[j] <= tpp
+                hs = highs[j] >= slp
+
+            if ht and hs:
+                bo = opens[j]
+                dist_tp = abs(tpp - bo)
+                dist_sl = abs(slp - bo)
+                pnl = (eff_tp if dist_tp <= dist_sl else -eff_sl) * LEVERAGE - fee
+                trades.append((eb, j, pnl))
+                break
+            elif ht:
+                trades.append((eb, j, eff_tp * LEVERAGE - fee))
+                break
+            elif hs:
+                trades.append((eb, j, -eff_sl * LEVERAGE - fee))
+                break
+        # Timeout → DROP
+
+    return trades
+
+
 def mc_test(pnls, n_sims=MC_SIMS):
     """Multi-seed sign randomization MC test. Returns max p-value (conservative)."""
     if len(pnls) < 5:
@@ -257,7 +357,8 @@ def apply_multiple_testing_correction(selected, n_tested, method='none',
 
 
 def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars,
-                     min_tr=20, max_baseline_wr=MAX_BASELINE_WR):
+                     min_tr=20, max_baseline_wr=MAX_BASELINE_WR,
+                     atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
     """Grid search for best TP/SL by PnL/MDD. Skips combos with baseline WR > max_baseline_wr."""
     best = None
     best_score = -9999
@@ -268,7 +369,12 @@ def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars,
             bwr = sl / (tp + sl) * 100
             if bwr > max_baseline_wr:
                 continue
-            trades = bt_signals(signal_bars, direction, tp, sl, opens, highs, lows, n_bars)
+            if atr_ratio is not None:
+                trades = bt_signals_atr(signal_bars, direction, tp, sl,
+                                        opens, highs, lows, n_bars,
+                                        atr_ratio, clamp_lo, clamp_hi)
+            else:
+                trades = bt_signals(signal_bars, direction, tp, sl, opens, highs, lows, n_bars)
             if len(trades) < min_tr:
                 continue
             pnls = [t[2] for t in trades]
@@ -355,7 +461,8 @@ def derive_tp_sl(excursions, tp_percentile, sl_percentile):
 
 def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
                          max_bars=MAX_BARS, min_tr=20,
-                         max_baseline_wr=MAX_BASELINE_WR):
+                         max_baseline_wr=MAX_BASELINE_WR,
+                         atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
     """Grid search over MFE/MAE percentiles to find best TP/SL by PnL/MDD."""
     excursions = compute_excursions(signal_bars, direction, opens, highs, lows,
                                     n_bars, max_bars)
@@ -377,8 +484,13 @@ def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
             if bwr > max_baseline_wr:
                 continue
 
-            trades = bt_signals(signal_bars, direction, tp, sl,
-                                opens, highs, lows, n_bars)
+            if atr_ratio is not None:
+                trades = bt_signals_atr(signal_bars, direction, tp, sl,
+                                        opens, highs, lows, n_bars,
+                                        atr_ratio, clamp_lo, clamp_hi)
+            else:
+                trades = bt_signals(signal_bars, direction, tp, sl,
+                                    opens, highs, lows, n_bars)
             if len(trades) < min_tr:
                 continue
 
@@ -476,12 +588,16 @@ def calc_stats(trades):
 _shared_data = {}
 
 
-def _pp_init(opens, highs, lows, n_bars):
+def _pp_init(opens, highs, lows, n_bars,
+             atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
     """Initialize shared data in worker processes."""
     _shared_data['opens'] = opens
     _shared_data['highs'] = highs
     _shared_data['lows'] = lows
     _shared_data['n_bars'] = n_bars
+    _shared_data['atr_ratio'] = atr_ratio
+    _shared_data['clamp_lo'] = clamp_lo
+    _shared_data['clamp_hi'] = clamp_hi
 
 
 def _pp_worker(args_tuple):
@@ -496,17 +612,26 @@ def _pp_worker(args_tuple):
     highs = _shared_data['highs']
     lows = _shared_data['lows']
     n_bars = _shared_data['n_bars']
+    atr_ratio = _shared_data.get('atr_ratio')
+    clamp_lo = _shared_data.get('clamp_lo', 0.6)
+    clamp_hi = _shared_data.get('clamp_hi', 1.7)
 
     if len(sigs_list) < min_trades:
         return None
 
     opt = grid_search_best(sigs_list, direction, opens, highs, lows, n_bars,
-                           min_tr=min_trades, max_baseline_wr=max_baseline_wr)
+                           min_tr=min_trades, max_baseline_wr=max_baseline_wr,
+                           atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi)
     if opt is None:
         return None
 
     tp, sl = opt['tp'], opt['sl']
-    trades = bt_signals(sigs_list, direction, tp, sl, opens, highs, lows, n_bars)
+    if atr_ratio is not None:
+        trades = bt_signals_atr(sigs_list, direction, tp, sl,
+                                opens, highs, lows, n_bars,
+                                atr_ratio, clamp_lo, clamp_hi)
+    else:
+        trades = bt_signals(sigs_list, direction, tp, sl, opens, highs, lows, n_bars)
     if len(trades) < min_trades:
         return None
 
@@ -546,6 +671,9 @@ def _mae_mfe_worker(args_tuple):
     highs = _shared_data['highs']
     lows = _shared_data['lows']
     n_bars = _shared_data['n_bars']
+    atr_ratio = _shared_data.get('atr_ratio')
+    clamp_lo = _shared_data.get('clamp_lo', 0.6)
+    clamp_hi = _shared_data.get('clamp_hi', 1.7)
 
     if len(sigs_list) < min_trades:
         return None
@@ -553,12 +681,18 @@ def _mae_mfe_worker(args_tuple):
     opt, exc_stats = grid_search_mae_mfe(
         sigs_list, direction, opens, highs, lows, n_bars,
         max_bars=MAX_BARS, min_tr=min_trades,
-        max_baseline_wr=max_baseline_wr)
+        max_baseline_wr=max_baseline_wr,
+        atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi)
     if opt is None:
         return None
 
     tp, sl = opt['tp'], opt['sl']
-    trades = bt_signals(sigs_list, direction, tp, sl, opens, highs, lows, n_bars)
+    if atr_ratio is not None:
+        trades = bt_signals_atr(sigs_list, direction, tp, sl,
+                                opens, highs, lows, n_bars,
+                                atr_ratio, clamp_lo, clamp_hi)
+    else:
+        trades = bt_signals(sigs_list, direction, tp, sl, opens, highs, lows, n_bars)
     if len(trades) < min_trades:
         return None
 
@@ -599,7 +733,8 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                         min_trades=DEFAULT_MIN_TRADES,
                         edge_threshold=DEFAULT_EDGE_THRESHOLD,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
-                        max_baseline_wr=MAX_BASELINE_WR):
+                        max_baseline_wr=MAX_BASELINE_WR,
+                        atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
     """Scan patterns within [bar_start, bar_end) signal range.
 
     Supports both 'universal' and 'per_pattern' modes.
@@ -617,33 +752,42 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
             if len(sigs) < min_trades:
                 continue
 
+            # Select bt function based on ATR availability
+            def _bt(sig_bars, d, tp_v, sl_v):
+                if atr_ratio is not None:
+                    return bt_signals_atr(sig_bars, d, tp_v, sl_v,
+                                          opens, highs, lows, trade_boundary,
+                                          atr_ratio, clamp_lo, clamp_hi)
+                return bt_signals(sig_bars, d, tp_v, sl_v,
+                                  opens, highs, lows, trade_boundary)
+
             if mode == 'universal':
                 tp, sl = uni_tp, uni_sl
-                trades = bt_signals(sigs, direction, tp, sl,
-                                    opens, highs, lows, trade_boundary)
+                trades = _bt(sigs, direction, tp, sl)
                 if len(trades) < min_trades:
                     continue
             elif mode == 'per_pattern':
                 opt = grid_search_best(sigs, direction, opens, highs, lows,
                                        trade_boundary, min_tr=min_trades,
-                                       max_baseline_wr=max_baseline_wr)
+                                       max_baseline_wr=max_baseline_wr,
+                                       atr_ratio=atr_ratio, clamp_lo=clamp_lo,
+                                       clamp_hi=clamp_hi)
                 if opt is None:
                     continue
                 tp, sl = opt['tp'], opt['sl']
-                trades = bt_signals(sigs, direction, tp, sl,
-                                    opens, highs, lows, trade_boundary)
+                trades = _bt(sigs, direction, tp, sl)
                 if len(trades) < min_trades:
                     continue
             elif mode == 'mae_mfe':
                 opt, _ = grid_search_mae_mfe(
                     sigs, direction, opens, highs, lows,
                     trade_boundary, max_bars=MAX_BARS,
-                    min_tr=min_trades, max_baseline_wr=max_baseline_wr)
+                    min_tr=min_trades, max_baseline_wr=max_baseline_wr,
+                    atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi)
                 if opt is None:
                     continue
                 tp, sl = opt['tp'], opt['sl']
-                trades = bt_signals(sigs, direction, tp, sl,
-                                    opens, highs, lows, trade_boundary)
+                trades = _bt(sigs, direction, tp, sl)
                 if len(trades) < min_trades:
                     continue
             else:
@@ -678,7 +822,9 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
                         min_trades=DEFAULT_MIN_TRADES,
                         edge_threshold=DEFAULT_EDGE_THRESHOLD,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
-                        max_baseline_wr=MAX_BASELINE_WR):
+                        max_baseline_wr=MAX_BASELINE_WR,
+                        closes=None, atr_period=14, atr_window=576,
+                        clamp_lo=0.6, clamp_hi=1.7, use_atr=True):
     """True expanding window walk-forward validation.
 
     Splits data into n_folds+1 equal segments.
@@ -698,6 +844,13 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
         logger.info(f"  WF Fold {fold+1}/{n_folds}: "
                      f"IS=[0, {is_end}), OOS=[{oos_start}, {oos_end})")
 
+        # Compute ATR ratio on IS data only (prevent look-ahead bias)
+        fold_atr = None
+        if use_atr and closes is not None:
+            fold_atr = compute_atr_ratio(
+                highs[:is_end], lows[:is_end], closes[:is_end],
+                atr_period, atr_window)
+
         # Fresh scan on IS range
         is_patterns = scan_universe_range(
             signal_index, opens, highs, lows, n_bars,
@@ -705,6 +858,7 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
             uni_tp=uni_tp, uni_sl=uni_sl,
             min_trades=min_trades, edge_threshold=edge_threshold,
             mc_threshold=mc_threshold, max_baseline_wr=max_baseline_wr,
+            atr_ratio=fold_atr, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
         )
 
         # Track pattern stability
@@ -712,15 +866,28 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
             pattern_appearances[(r['pattern'], r['direction'])] += 1
 
         # OOS backtest with IS-discovered patterns and their TP/SL
-        # Use oos_end as boundary to prevent data leakage into next fold
+        # Compute ATR on full data up to oos_end for OOS evaluation
+        oos_atr = None
+        if use_atr and closes is not None:
+            oos_atr = compute_atr_ratio(
+                highs[:oos_end], lows[:oos_end], closes[:oos_end],
+                atr_period, atr_window)
+
         oos_trades = []
         for r in is_patterns:
             oos_sigs = [s for s in signal_index[r['pattern']]
                         if oos_start <= s < oos_end]
-            oos_trades.extend(bt_signals(
-                oos_sigs, r['direction'], r['tp'], r['sl'],
-                opens, highs, lows, oos_end
-            ))
+            if oos_atr is not None:
+                oos_trades.extend(bt_signals_atr(
+                    oos_sigs, r['direction'], r['tp'], r['sl'],
+                    opens, highs, lows, oos_end,
+                    oos_atr, clamp_lo, clamp_hi
+                ))
+            else:
+                oos_trades.extend(bt_signals(
+                    oos_sigs, r['direction'], r['tp'], r['sl'],
+                    opens, highs, lows, oos_end
+                ))
 
         oos_port = portfolio_1pos(oos_trades)
         oos_stats = calc_stats(oos_port)
@@ -909,6 +1076,7 @@ def scan_patterns_pp(
     correction_method: str = 'none',
     fdr_q: float = 0.05,
     require_portfolio_mc: bool = False,
+    atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
 ) -> dict:
     """Per-Pattern Discovery: grid search optimal TP/SL per pattern.
 
@@ -955,7 +1123,7 @@ def scan_patterns_pp(
         with ProcessPoolExecutor(
             max_workers=n_workers,
             initializer=_pp_init,
-            initargs=(opens, highs, lows, n),
+            initargs=(opens, highs, lows, n, atr_ratio, clamp_lo, clamp_hi),
         ) as executor:
             futures = {executor.submit(_pp_worker, item): item
                        for item in work_items}
@@ -979,6 +1147,9 @@ def scan_patterns_pp(
         _shared_data['highs'] = highs
         _shared_data['lows'] = lows
         _shared_data['n_bars'] = n
+        _shared_data['atr_ratio'] = atr_ratio
+        _shared_data['clamp_lo'] = clamp_lo
+        _shared_data['clamp_hi'] = clamp_hi
 
         iterator = work_items
         if _tqdm_cls:
@@ -1092,6 +1263,7 @@ def scan_patterns_mae_mfe(
     correction_method: str = 'none',
     fdr_q: float = 0.05,
     require_portfolio_mc: bool = False,
+    atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
 ) -> dict:
     """MAE/MFE Discovery: derive TP/SL from excursion percentiles per pattern.
 
@@ -1136,7 +1308,7 @@ def scan_patterns_mae_mfe(
         with ProcessPoolExecutor(
             max_workers=n_workers,
             initializer=_pp_init,
-            initargs=(opens, highs, lows, n),
+            initargs=(opens, highs, lows, n, atr_ratio, clamp_lo, clamp_hi),
         ) as executor:
             futures = {executor.submit(_mae_mfe_worker, item): item
                        for item in work_items}
@@ -1159,6 +1331,9 @@ def scan_patterns_mae_mfe(
         _shared_data['highs'] = highs
         _shared_data['lows'] = lows
         _shared_data['n_bars'] = n
+        _shared_data['atr_ratio'] = atr_ratio
+        _shared_data['clamp_lo'] = clamp_lo
+        _shared_data['clamp_hi'] = clamp_hi
 
         iterator = work_items
         if _tqdm_cls:
@@ -1277,6 +1452,7 @@ def build_output_json(
     holdout_result: dict = None,
     holdout_days: int = 0,
     clean_mode: bool = False,
+    atr_config: dict = None,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
@@ -1350,6 +1526,10 @@ def build_output_json(
         }
         output['selection_criteria']['holdout_days'] = holdout_days
 
+    # ATR config metadata
+    if atr_config:
+        output['atr_config'] = atr_config
+
     # Timing
     if timing:
         output['timing'] = timing
@@ -1357,7 +1537,8 @@ def build_output_json(
     return output
 
 
-def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout):
+def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout,
+                     atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
     """Validate selected patterns on holdout data (v1.34.0).
 
     For each selected pattern, backtest on holdout period and check
@@ -1412,8 +1593,13 @@ def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout):
             results[pat_key] = {'status': 'SKIP', 'reason': 'no_signals', 'trades': 0}
             continue
 
-        trades = bt_signals(signal_bars, direction, tp_pct, sl_pct,
-                            opens_h, highs_h, lows_h, n_holdout)
+        if atr_ratio is not None:
+            trades = bt_signals_atr(signal_bars, direction, tp_pct, sl_pct,
+                                    opens_h, highs_h, lows_h, n_holdout,
+                                    atr_ratio, clamp_lo, clamp_hi)
+        else:
+            trades = bt_signals(signal_bars, direction, tp_pct, sl_pct,
+                                opens_h, highs_h, lows_h, n_holdout)
         n_trades = len(trades)
         if n_trades < 3:
             results[pat_key] = {'status': 'SKIP', 'reason': 'insufficient_trades',
@@ -1442,7 +1628,7 @@ def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout):
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Pattern Scanner v2.1 — Dynamic Walk-Forward Pattern Selection'
+        description='Pattern Scanner v2.2 — Dynamic Walk-Forward Pattern Selection (ATR default)'
     )
     parser.add_argument('--data', default=DEFAULT_DATA_FILE,
                         help='Path to OHLCV CSV file')
@@ -1481,6 +1667,17 @@ def main():
     parser.add_argument('--holdout-days', type=int, default=7,
                         help='Reserve last N days as holdout OOS '
                              '(default: 7, 0=disabled)')
+    # ATR scaling args (default: enabled with production params)
+    parser.add_argument('--no-atr', action='store_true', default=False,
+                        help='Disable ATR scaling (Fixed TP/SL mode)')
+    parser.add_argument('--atr-period', type=int, default=DEFAULT_ATR_PERIOD,
+                        help=f'ATR calculation period (default: {DEFAULT_ATR_PERIOD})')
+    parser.add_argument('--atr-window', type=int, default=DEFAULT_ATR_WINDOW,
+                        help=f'ATR rolling median window (default: {DEFAULT_ATR_WINDOW})')
+    parser.add_argument('--atr-clamp-lo', type=float, default=DEFAULT_ATR_CLAMP_LO,
+                        help=f'ATR ratio min clamp (default: {DEFAULT_ATR_CLAMP_LO})')
+    parser.add_argument('--atr-clamp-hi', type=float, default=DEFAULT_ATR_CLAMP_HI,
+                        help=f'ATR ratio max clamp (default: {DEFAULT_ATR_CLAMP_HI})')
     parser.add_argument('--clean', action='store_true',
                         help='Clean single-pass protocol: BH FDR as primary filter, '
                              'theory-derived thresholds, pre-registration manifest')
@@ -1510,7 +1707,7 @@ def main():
     if args.clean:
         logger.info("Pattern Scanner v3.0 — Clean Single-Pass Protocol")
     else:
-        logger.info("Pattern Scanner v2.1 — Dynamic Walk-Forward Selection")
+        logger.info("Pattern Scanner v2.2 — Dynamic Walk-Forward Selection")
     logger.info("=" * 60)
     logger.info(f"Data: {args.data}")
 
@@ -1575,6 +1772,11 @@ def main():
         logger.info(f"Walk-Forward: {args.wf_folds} expanding folds")
     if args.holdout_days > 0:
         logger.info(f"Holdout: {args.holdout_days}d OOS validation")
+    if not args.no_atr:
+        logger.info(f"ATR scaling: period={args.atr_period}, window={args.atr_window}, "
+                     f"clamp=[{args.atr_clamp_lo}, {args.atr_clamp_hi}]")
+    else:
+        logger.info("ATR scaling: DISABLED (--no-atr)")
     if args.concurrency != 1:
         n_w = (min(os.cpu_count() or 1, 8)
                if args.concurrency == 0 else args.concurrency)
@@ -1618,6 +1820,22 @@ def main():
     n = len(types)
     signal_index = build_signal_index(types, n)
 
+    # Compute ATR ratio for IS data (--no-atr disables)
+    highs_arr = df['high'].values
+    lows_arr = df['low'].values
+    closes_arr = df['close'].values
+    atr_ratio = None
+    if not args.no_atr:
+        atr_ratio = compute_atr_ratio(
+            highs_arr, lows_arr, closes_arr,
+            atr_period=args.atr_period, atr_window=args.atr_window
+        )
+        valid_pct = np.sum(~np.isnan(atr_ratio)) / len(atr_ratio) * 100
+        logger.info(f"ATR ratio computed: period={args.atr_period}, "
+                     f"window={args.atr_window}, "
+                     f"clamp=[{args.atr_clamp_lo}, {args.atr_clamp_hi}], "
+                     f"valid={valid_pct:.1f}%")
+
     # Scan patterns
     t1 = time.time()
     if args.discovery_method == 'universal':
@@ -1645,6 +1863,8 @@ def main():
             correction_method=args.correction,
             fdr_q=args.fdr_q,
             require_portfolio_mc=args.require_portfolio_mc,
+            atr_ratio=atr_ratio, clamp_lo=args.atr_clamp_lo,
+            clamp_hi=args.atr_clamp_hi,
         )
     else:
         result = scan_patterns_pp(
@@ -1658,6 +1878,8 @@ def main():
             correction_method=args.correction,
             fdr_q=args.fdr_q,
             require_portfolio_mc=args.require_portfolio_mc,
+            atr_ratio=atr_ratio, clamp_lo=args.atr_clamp_lo,
+            clamp_hi=args.atr_clamp_hi,
         )
     timing['scan_sec'] = round(time.time() - t1, 1)
 
@@ -1697,7 +1919,17 @@ def main():
         types_h = df_holdout['candle_type'].tolist()
         n_h = len(types_h)
         signal_index_h = build_signal_index(types_h, n_h)
-        holdout_result = holdout_validate(df_holdout, result, signal_index_h, n_h)
+        # Compute ATR on holdout data (uses full data up to holdout for warm-up)
+        holdout_atr = None
+        if atr_ratio is not None:
+            holdout_atr = compute_atr_ratio(
+                df_holdout['high'].values, df_holdout['low'].values,
+                df_holdout['close'].values,
+                args.atr_period, args.atr_window)
+        holdout_result = holdout_validate(
+            df_holdout, result, signal_index_h, n_h,
+            atr_ratio=holdout_atr, clamp_lo=args.atr_clamp_lo,
+            clamp_hi=args.atr_clamp_hi)
 
         # Remove FAIL patterns from result
         fail_keys = [k for k, v in holdout_result.items() if v['status'] == 'FAIL']
@@ -1744,6 +1976,10 @@ def main():
             edge_threshold=args.edge_threshold,
             mc_threshold=args.mc_threshold,
             max_baseline_wr=args.max_baseline_wr,
+            closes=closes_arr if not args.no_atr else None,
+            atr_period=args.atr_period, atr_window=args.atr_window,
+            clamp_lo=args.atr_clamp_lo, clamp_hi=args.atr_clamp_hi,
+            use_atr=not args.no_atr,
         )
         timing['wf_sec'] = round(time.time() - t2, 1)
         logger.info(f"WF Complete: {wf_result['positive_folds']}/{args.wf_folds} "
@@ -1770,6 +2006,13 @@ def main():
         holdout_result=holdout_result,
         holdout_days=args.holdout_days,
         clean_mode=args.clean,
+        atr_config={
+            'enabled': not args.no_atr,
+            'period': args.atr_period,
+            'window': args.atr_window,
+            'clamp_lo': args.atr_clamp_lo,
+            'clamp_hi': args.atr_clamp_hi,
+        } if not args.no_atr else {'enabled': False},
     )
 
     # Write JSON
@@ -1802,6 +2045,11 @@ def main():
                   f"max={tp_d['max']}")
             print(f"  SL: min={sl_d['min']} med={sl_d['median']} "
                   f"max={sl_d['max']}")
+    if not args.no_atr:
+        print(f"  ATR: period={args.atr_period}, window={args.atr_window}, "
+              f"clamp=[{args.atr_clamp_lo}, {args.atr_clamp_hi}]")
+    else:
+        print("  ATR: disabled")
     if wf_result:
         print(f"  Walk-Forward: {wf_result['positive_folds']}/"
               f"{wf_result['n_folds']} positive, "

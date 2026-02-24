@@ -849,7 +849,7 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
         if use_atr and closes is not None:
             fold_atr = compute_atr_ratio(
                 highs[:is_end], lows[:is_end], closes[:is_end],
-                atr_period, atr_window)
+                atr_period, window=atr_window)
 
         # Fresh scan on IS range
         is_patterns = scan_universe_range(
@@ -871,7 +871,7 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
         if use_atr and closes is not None:
             oos_atr = compute_atr_ratio(
                 highs[:oos_end], lows[:oos_end], closes[:oos_end],
-                atr_period, atr_window)
+                atr_period, window=atr_window)
 
         oos_trades = []
         for r in is_patterns:
@@ -1828,7 +1828,7 @@ def main():
     if not args.no_atr:
         atr_ratio = compute_atr_ratio(
             highs_arr, lows_arr, closes_arr,
-            atr_period=args.atr_period, atr_window=args.atr_window
+            atr_period=args.atr_period, window=args.atr_window
         )
         valid_pct = np.sum(~np.isnan(atr_ratio)) / len(atr_ratio) * 100
         logger.info(f"ATR ratio computed: period={args.atr_period}, "
@@ -1925,7 +1925,7 @@ def main():
             holdout_atr = compute_atr_ratio(
                 df_holdout['high'].values, df_holdout['low'].values,
                 df_holdout['close'].values,
-                args.atr_period, args.atr_window)
+                args.atr_period, window=args.atr_window)
         holdout_result = holdout_validate(
             df_holdout, result, signal_index_h, n_h,
             atr_ratio=holdout_atr, clamp_lo=args.atr_clamp_lo,

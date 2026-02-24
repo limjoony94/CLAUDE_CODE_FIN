@@ -2015,10 +2015,22 @@ def main():
         } if not args.no_atr else {'enabled': False},
     )
 
-    # Write JSON
+    # Write JSON (numpy types → native Python for JSON compatibility)
+    class _NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, (np.integer,)):
+                return int(obj)
+            if isinstance(obj, (np.floating,)):
+                return float(obj)
+            if isinstance(obj, (np.bool_,)):
+                return bool(obj)
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return super().default(obj)
+
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
     with open(args.output, 'w', encoding='utf-8') as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
+        json.dump(output, f, indent=2, ensure_ascii=False, cls=_NumpyEncoder)
 
     logger.info(f"Output written to {args.output}")
     logger.info("=" * 60)

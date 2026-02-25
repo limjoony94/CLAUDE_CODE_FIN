@@ -305,14 +305,9 @@ def _run_bot_main(
                 _interruptible_sleep(DAILY_LOSS_PAUSE_SECONDS)
                 continue
 
-            # Check consecutive loss limit (v1.27.0)
-            if check_consecutive_loss_limit(state) and not (state.get('positions') or {}):
-                consec = state.get('consecutive_losses', 0)
-                logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), pausing {CONSECUTIVE_LOSS_PAUSE_SECONDS}s")
-                _interruptible_sleep(CONSECUTIVE_LOSS_PAUSE_SECONDS)
-                state['consecutive_losses'] = 0  # Reset after pause
-                save_state(state)  # Persist reset to prevent re-pause on crash
-                continue
+            # Consecutive loss limit: checked in _process_entry_signal() (v1.35.2)
+            # v1.27.0 original: paused entire loop when no positions open — broken for N=9
+            # v1.35.2: blocks new entries only, existing positions continue to be monitored
 
             timing = _get_candle_timing()
             has_position = bool(state.get('positions') or {})
@@ -675,6 +670,12 @@ def _process_entry_signal(
         True if trading action occurred, False otherwise
     """
     # Note: No early return for full slots — _route_signal handles SKIP vs CLOSE_OLDEST
+
+    # Check consecutive loss limit — block new entries (v1.35.2)
+    if check_consecutive_loss_limit(state):
+        consec = state.get('consecutive_losses', 0)
+        logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), skipping new entry")
+        return False
 
     # Check cooldown
     if not check_cooldown(state, config):

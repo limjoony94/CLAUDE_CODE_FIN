@@ -16,8 +16,8 @@ risk:
   max_position_size_usd: 10000
   mdd_sizing:              # v1.34.0: MDD-based dynamic position sizing
     enabled: true
-    full_size_below_dd: 5.0   # DD < 5% → full size (scale=1.0)
-    min_size_above_dd: 20.0   # DD >= 20% → minimum size (scale=0.25)
+    full_size_below_dd: 3.0   # v1.35.2: 5→3% (faster DD response, edge half-life 30d)
+    min_size_above_dd: 15.0   # v1.35.2: 20→15% (tighter drawdown protection)
     min_scale: 0.25           # minimum position scale factor
 rotation:
   enabled: false
@@ -29,7 +29,7 @@ strategy:
     clamp_hi: 1.7     # maximum ratio
   cooldown_candles: 0
   direction_cap: 8         # v1.35.1: cap6→cap8 (WF 3/3 PASS, PnL/MDD 2.56x, 296d study)
-  rescan_interval_days: 90  # v1.34.0: scan staleness warning threshold (days)
+  rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
   timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h, 0 = disabled)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)

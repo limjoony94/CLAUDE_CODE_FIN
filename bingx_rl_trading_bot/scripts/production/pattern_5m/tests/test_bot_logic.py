@@ -1496,42 +1496,34 @@ class TestRunBotMainDailyLossLimit:
 
 
 class TestRunBotMainConsecutiveLossLimit:
-    """Test consecutive loss limit triggers pause."""
+    """Test consecutive loss limit blocks new entries (v1.35.2: moved to _process_entry_signal)."""
 
-    @patch(f'{BOT}.save_metrics')
-    @patch(f'{BOT}.save_state')
-    @patch(f'{BOT}._interruptible_sleep', side_effect=_shutdown_after_one_iter)
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=True)
-    @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
-    @patch(f'{BOT}.adjust_tpsl_to_config')
-    @patch(f'{BOT}.recover_from_crash')
-    @patch(f'{BOT}._verify_exchange_settings')
-    @patch(f'{BOT}.sync_metrics_with_state', return_value=PerformanceMetrics())
-    @patch(f'{BOT}.load_state', return_value={
-        'position': None, 'daily_pnl': 0, 'daily_trades': 0, 'consecutive_losses': 4,
-    })
-    @patch(f'{BOT}.load_metrics', return_value=PerformanceMetrics())
-    @patch(f'{BOT}.create_exchange')
-    def test_consecutive_loss_pauses(
-        self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_dll, mock_cll, mock_sleep, mock_ss, mock_sm
-    ):
-        """Consecutive loss limit hit + no position → pause then shutdown."""
-        import bingx_rl_trading_bot.scripts.production.pattern_5m.bot as bot_mod
-        original = bot_mod.shutdown_requested
-        bot_mod.shutdown_requested = False
-        mock_exch.return_value = MagicMock()
+    def test_consecutive_loss_blocks_entry(self):
+        """Consecutive loss limit blocks _process_entry_signal from processing."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import _process_entry_signal
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import check_consecutive_loss_limit
 
-        try:
-            _run_bot_main(
+        state = {'consecutive_losses': 4, 'positions': {'slot1': {'direction': 'SHORT'}}}
+        assert check_consecutive_loss_limit(state) is True
+
+        # _process_entry_signal should return False immediately when limit hit
+        with patch(f'{BOT}.check_consecutive_loss_limit', return_value=True):
+            result = _process_entry_signal(
+                exchange=MagicMock(),
+                state=state,
                 config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
-                state_path='state.json',
-                metrics_path='metrics.json',
+                cache=MagicMock(),
+                circuit_breaker=MagicMock(),
+                metrics=PerformanceMetrics(),
             )
-            mock_cll.assert_called()
-            mock_sleep.assert_called()
-        finally:
-            bot_mod.shutdown_requested = original
+            assert result is False
+
+    def test_consecutive_loss_allows_entry_after_win(self):
+        """After a win resets counter, entries should be allowed."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import check_consecutive_loss_limit
+
+        state = {'consecutive_losses': 0}
+        assert check_consecutive_loss_limit(state) is False
 
 
 class TestRunBotMainNetworkError:

@@ -28,7 +28,7 @@ strategy:
     clamp_lo: 0.6     # minimum ratio
     clamp_hi: 1.7     # maximum ratio
   cooldown_candles: 0
-  direction_cap: 6         # v1.32.0: max same-direction positions (6 of 9 = 67%, 0 = disabled)
+  direction_cap: 8         # v1.35.1: cap6→cap8 (WF 3/3 PASS, PnL/MDD 2.56x, 296d study)
   rescan_interval_days: 90  # v1.34.0: scan staleness warning threshold (days)
   timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h, 0 = disabled)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

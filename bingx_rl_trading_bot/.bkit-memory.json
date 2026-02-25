@@ -1,0 +1,43 @@
+{
+  "atr-scanner-alignment": {
+    "phase": "archived",
+    "matchRate": null,
+    "outcome": "B_SCANNER_REPLACE_DEFAULT",
+    "iterationCount": 0,
+    "startedAt": "2026-02-24T20:00:00Z",
+    "completedAt": "2026-02-24T21:18:00Z",
+    "archivedAt": "2026-02-24T22:30:00Z",
+    "archivedTo": "docs/archive/2026-02/atr_scanner_alignment/",
+    "summary": {
+      "type": "research-with-action",
+      "hypotheses": {
+        "H1_atr_scanner": "GO (ATR 20pat vs Fixed 15pat, +1.1pp WR Excess, +5 count)",
+        "H2_portfolio_wf": "GO (ATR WF 3/3 PASS, OOS +108.1% vs Fixed +65.9%)",
+        "H3_param_sweep": "STOP (best +1.4% vs default, 32/32 WF PASS — robust)"
+      },
+      "phases_completed": ["phase_1", "phase_2", "phase_3", "phase_4"],
+      "production_action": "B_SCANNER_REPLACE_DEFAULT — ATR-integrated scanner with default params",
+      "key_findings": "ATR scanner selects different+better patterns, OOS PnL +64% vs Fixed, all 32 param combos WF PASS"
+    }
+  },
+  "mtf_direction_filter": {
+    "phase": "archived",
+    "matchRate": null,
+    "outcome": "STOP",
+    "iterationCount": 0,
+    "startedAt": "2026-02-24T13:00:00Z",
+    "archivedAt": "2026-02-24T19:05:00Z",
+    "archivedTo": "docs/archive/2026-02/mtf_direction_filter/",
+    "summary": {
+      "type": "research-only",
+      "hypotheses": {
+        "H1_1h_direction": "PASS (15 strong, best 70.3%)",
+        "H2_mtf_filter": "PARTIAL (strict +2.5pp, -74% trades)",
+        "H3_tight_tp": "FAIL (edge < baseline)"
+      },
+      "phases_completed": ["phase_1", "phase_2", "phase_3", "phase_3x", "phase_4"],
+      "phases_skipped": ["phase_5_wf", "phase_6_production"],
+      "production_changes": "none"
+    }
+  }
+}

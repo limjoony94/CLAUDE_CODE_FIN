@@ -10,11 +10,11 @@ ignore_all_files_in_gitignore: true
 # Was previously called `ignored_dirs`, please update your config if you are using that.
 # Added (renamed) on 2025-04-07
 ignored_paths:
-  - "archive/**"
-  - "data/**"
-  - "logs/**"
-  - "__pycache__/**"
-  - "*.pyc"
+- "archive/**"
+- "data/**"
+- "logs/**"
+- "__pycache__/**"
+- "*.pyc"
 
 # whether the project is in read-only mode
 # If set to true, all editing tools will be disabled and attempts to use them will result in an error
@@ -122,6 +122,15 @@ fixed_tools: []
 languages:
 - python
 
-# override of the corresponding setting in serena_config.yml, see the documentation there.
-# If null or missing, the value from the global config is used.
+# time budget (seconds) per tool call for the retrieval of additional symbol information
+# such as docstrings or parameter information.
+# This overrides the corresponding setting in the global configuration; see the documentation there.
+# If null or missing, use the setting from the global configuration.
 symbol_info_budget:
+
+# The language backend to use for this project.
+# If not set, the global setting from serena_config.yml is used.
+# Valid values: LSP, JetBrains
+# Note: the backend is fixed at startup. If a project with a different backend
+# is activated post-init, an error will be returned.
+language_backend:

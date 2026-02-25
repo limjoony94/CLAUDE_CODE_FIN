@@ -19,6 +19,11 @@ risk:
     full_size_below_dd: 3.0   # v1.35.2: 5→3% (faster DD response, edge half-life 30d)
     min_size_above_dd: 15.0   # v1.35.2: 20→15% (tighter drawdown protection)
     min_scale: 0.25           # minimum position scale factor
+  regime_sizing:           # v1.35.3: Regime-aware position sizing
+    enabled: true
+    ema_period: 20           # EMA window for trend detection
+    lookback: 5              # slope lookback bars (EMA[now] - EMA[now-5])
+    counter_mult: 0.3        # counter-regime size multiplier (MDD lowest: 6.71%)
 rotation:
   enabled: false
 strategy:

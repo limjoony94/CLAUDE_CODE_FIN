@@ -37,6 +37,8 @@ def get_position_size(
     circuit_breaker: Optional[CircuitBreaker] = None,
     metrics: Optional[PerformanceMetrics] = None,
     state: Optional[Dict[str, Any]] = None,
+    signal: Optional[str] = None,
+    df: Optional[pd.DataFrame] = None,
 ) -> tuple:
     """
     Calculate position size based on available balance.
@@ -48,6 +50,8 @@ def get_position_size(
         circuit_breaker: Optional CircuitBreaker
         metrics: Optional PerformanceMetrics
         state: Optional bot state dict (for MDD sizing, v1.34.0)
+        signal: Optional 'LONG' or 'SHORT' (for regime sizing, v1.35.3)
+        df: Optional DataFrame with close prices (for regime sizing, v1.35.3)
 
     Returns:
         Tuple of (quantity, available_balance, price) or (None, None, None) on error
@@ -81,8 +85,27 @@ def get_position_size(
                 if mdd_scale < 1.0:
                     logger.info(f"MDD sizing: DD={dd_pct:.1f}%, scale={mdd_scale:.2f}")
 
+        # Regime-aware sizing (v1.35.3)
+        regime_scale = 1.0
+        regime_cfg = config.get('risk', {}).get('regime_sizing', {})
+        if regime_cfg.get('enabled', False) and signal and df is not None and len(df) > 0:
+            ema_period = regime_cfg.get('ema_period', 20)
+            lookback = regime_cfg.get('lookback', 5)
+            counter_mult = regime_cfg.get('counter_mult', 0.3)
+            if len(df) >= ema_period + lookback:
+                closes = df['close'].values
+                # EMA calculation
+                ema = pd.Series(closes).ewm(span=ema_period, adjust=False).values
+                # Slope: compare current EMA vs lookback bars ago
+                slope = ema[-1] - ema[-1 - lookback]
+                is_uptrend = slope > 0
+                is_counter = (is_uptrend and signal == 'SHORT') or (not is_uptrend and signal == 'LONG')
+                if is_counter:
+                    regime_scale = counter_mult
+                    logger.info(f"Regime sizing: {'UP' if is_uptrend else 'DOWN'} trend, {signal} is counter-regime, scale={regime_scale:.2f}")
+
         # 1/N sizing: each slot gets equity/max_positions
-        per_slot_equity = total_equity * size_pct / max_positions * mdd_scale
+        per_slot_equity = total_equity * size_pct / max_positions * mdd_scale * regime_scale
         position_value = min(per_slot_equity, available * size_pct, max_size)
 
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True,
@@ -149,7 +172,9 @@ def open_position(
         _set_leverage(exchange, symbol, exchange_leverage, config)
 
         # Calculate position size (also returns current price to avoid double ticker fetch)
-        quantity, available, estimated_price = get_position_size(exchange, config, cache, circuit_breaker, metrics, state=state)
+        quantity, available, estimated_price = get_position_size(
+            exchange, config, cache, circuit_breaker, metrics, state=state, signal=signal, df=df
+        )
         if quantity is None or quantity <= 0:
             logger.warning(f"Invalid position size (qty={quantity}, balance=${available}), skipping")
             return False

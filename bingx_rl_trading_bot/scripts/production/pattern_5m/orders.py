@@ -17,6 +17,39 @@ logger = logging.getLogger('pattern_5m')
 # Sentinel value: TP/SL order exists on exchange but local ID is unknown (crash recovery)
 _EXCHANGE_MANAGED = "EXCHANGE_MANAGED"
 
+# Buffer for SL recalculation when original SL is already breached (v1.35.4)
+_SL_BREACH_BUFFER_PCT = 0.003  # 0.3% from current price
+
+
+def _recalculate_breached_sl(
+    exchange: ccxt.bingx, symbol: str, direction: str, old_sl: float,
+) -> Optional[float]:
+    """Recalculate SL when original price is already past current market price.
+
+    For SHORT: SL (buy stop) must be above current price.
+    For LONG: SL (sell stop) must be below current price.
+    When the stored SL violates this, place SL at current_price ± buffer.
+
+    Returns new SL price, or None if current price cannot be fetched.
+    """
+    try:
+        ticker = exchange.fetch_ticker(symbol)
+        current_price = ticker['last']
+    except Exception as e:
+        logger.error(f"Cannot fetch price for SL recalculation: {e}")
+        return None
+
+    if direction == 'SHORT':
+        new_sl = round(current_price * (1 + _SL_BREACH_BUFFER_PCT), 1)
+    else:
+        new_sl = round(current_price * (1 - _SL_BREACH_BUFFER_PCT), 1)
+
+    logger.warning(
+        f"⚠️ SL BREACHED: {direction} SL ${old_sl:.1f} already past current ${current_price:.1f}. "
+        f"Adjusting to ${new_sl:.1f} ({_SL_BREACH_BUFFER_PCT * 100:.1f}% from current)"
+    )
+    return new_sl
+
 
 def _get_position_side(config: Dict[str, Any], direction: str) -> str:
     """Get positionSide param for BingX API.
@@ -190,6 +223,22 @@ def _place_sl_order(
         if '110406' in error_msg:
             position['sl_order_id'] = _EXCHANGE_MANAGED
             logger.info("SL order already exists on exchange — marking as managed")
+        elif '110412' in error_msg:
+            # SL price already breached — recalculate from current price (v1.35.4)
+            direction = position.get('direction', '')
+            new_sl = _recalculate_breached_sl(exchange, symbol, direction, sl_price)
+            if new_sl:
+                position['sl_price'] = new_sl
+                try:
+                    sl_order = exchange.create_order(
+                        symbol=symbol, type='STOP_MARKET', side=close_side,
+                        amount=quantity,
+                        params={'positionSide': position_side, 'stopPrice': new_sl},
+                    )
+                    position['sl_order_id'] = sl_order.get('id')
+                    logger.info(f"SL order placed (breach-adjusted): {sl_order.get('id')} @ ${new_sl}")
+                except Exception as retry_e:
+                    logger.error(f"SL order retry failed after breach adjustment: {retry_e}")
         else:
             logger.warning(f"SL order failed (exchange error): {e}")
     except Exception as e:
@@ -653,6 +702,24 @@ def _verify_sl_order(
                 position['sl_order_id'] = _EXCHANGE_MANAGED
                 logger.info("SL order confirmed on exchange (crash recovery — ID unknown, marking as managed)")
                 state_changed = True
+            elif '110412' in error_msg:
+                # SL price already breached — recalculate from current price (v1.35.4)
+                direction = position.get('direction', '')
+                new_sl = _recalculate_breached_sl(exchange, symbol, direction, position['sl_price'])
+                if new_sl:
+                    position['sl_price'] = new_sl
+                    try:
+                        close_side = 'sell' if direction == 'LONG' else 'buy'
+                        sl_order = exchange.create_order(
+                            symbol=symbol, type='STOP_MARKET', side=close_side,
+                            amount=position.get('remaining_quantity', position['quantity']),
+                            params={'positionSide': position_side, 'stopPrice': new_sl},
+                        )
+                        position['sl_order_id'] = sl_order.get('id')
+                        logger.info(f"SL order placed (breach-adjusted): {sl_order.get('id')} @ ${new_sl}")
+                        state_changed = True
+                    except Exception as retry_e:
+                        logger.error(f"SL order retry failed after breach adjustment: {retry_e}")
             else:
                 logger.error(f"Failed to place SL order (exchange error): {e}")
         except Exception as e:
@@ -893,6 +960,25 @@ def _place_emergency_sl_for_direction(
         if '110406' in error_msg:
             _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
             logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")
+        elif '110412' in error_msg:
+            # Emergency SL price already breached — recalculate (v1.35.4)
+            new_sl = _recalculate_breached_sl(exchange, symbol, direction, worst_sl)
+            if new_sl:
+                # Update all slots' sl_price so future calculations use the adjusted value
+                for slot in dir_slots:
+                    slot['sl_price'] = new_sl
+                try:
+                    order = exchange.create_order(
+                        symbol=symbol, type='STOP_MARKET', side=close_side,
+                        amount=total_qty,
+                        params={'positionSide': position_side, 'stopPrice': new_sl},
+                    )
+                    order_id = order.get('id')
+                    _set_emergency_sl_id(state, config, direction, order_id)
+                    save_state(state)
+                    logger.info(f"🛡️ Emergency SL ({direction}) placed (breach-adjusted): {order_id} @ ${new_sl:.1f}")
+                except Exception as retry_e:
+                    logger.error(f"Emergency SL retry failed after breach adjustment: {retry_e}")
         else:
             logger.error(f"Failed to place emergency SL ({direction}): {e}")
     except Exception as e:

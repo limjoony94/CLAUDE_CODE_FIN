@@ -633,7 +633,7 @@ def _snapshot_all_tpsl(
         return pairs
 
     except Exception as e:
-        logger.debug(f"Could not snapshot TP/SL from exchange: {e}")
+        logger.warning(f"Could not snapshot TP/SL from exchange for {direction}: {e}")
         return []
 
 

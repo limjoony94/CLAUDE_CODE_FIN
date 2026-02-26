@@ -19,6 +19,10 @@ risk:
     full_size_below_dd: 3.0   # v1.35.2: 5→3% (faster DD response, edge half-life 30d)
     min_size_above_dd: 15.0   # v1.35.2: 20→15% (tighter drawdown protection)
     min_scale: 0.25           # minimum position scale factor
+  aggregate_risk_cap:      # v1.35.5: Aggregate directional SL exposure cap
+    enabled: true
+    counter_cap: 3.0         # counter-regime cap (% portfolio, SHORT in uptrend / LONG in downtrend)
+    with_cap: 7.0            # with-regime cap (% portfolio, SHORT in downtrend / LONG in uptrend)
   regime_sizing:           # v1.35.3: Regime-aware position sizing
     enabled: true
     ema_period: 20           # EMA window for trend detection

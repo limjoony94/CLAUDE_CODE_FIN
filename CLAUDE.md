@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.35.4 | **Bot**: Pattern 5m (51패턴, 16L+35S, ATR Scanner+Holdout+MDD+Cap8+RegimeSizing) | **Updated**: 2026-02-26
+> **Version**: v1.35.5 | **Bot**: Pattern 5m (51패턴, 16L+35S, ATR Scanner+Holdout+MDD+Cap8+AggRiskCap) | **Updated**: 2026-02-26
 
 ---
 
@@ -117,7 +117,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | Patterns | **51** (16L + 35S), ATR scanner v2.2 + WF 3/3 PASS + Holdout validation (v1.35.0) |
 | **Direction Cap** | **8** (max same-direction positions, 8/9 = 89%, v1.35.1 — WF 3/3 PASS, PnL/MDD 2.56x) |
 | **Position Timeout** | **864 bars (72h)** — 48h+ trades are net negative, slot recycling (v1.31.0) |
-| Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause |
+| Risk | Daily loss **13%** (v1.28.5), 3-consecutive-loss pause, **aggregate risk cap** (counter 3%/with 7%, v1.35.5) |
 
 ### 270일 In-Sample 검증 결과
 
@@ -258,6 +258,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **Trade History (v1.34.0)** | **거래 상세 영속화** — metrics.json에 전체 거래 이력 저장 (로그 로테이션 생존) |
 | **ATR Scanner Integration (v1.35.0)** | **Scanner v2.2에 ATR-scaled TP/SL 기본 통합** — Scanner-Production 정합성 확보, `--no-atr`로 Fixed 모드 가능 |
 | **Regime Sizing (v1.35.3)** | **Counter-regime 포지션 축소** — EMA(20) slope로 추세 감지, 역추세 진입 시 ×0.3 사이징 (MDD 6.71%, WF 19/19 PASS) |
+| **Aggregate Risk Cap (v1.35.5)** | **방향별 SL 노출 합산 제한** — counter-regime 3%, with-regime 7% cap. MDD -52% (13.2→6.3%), PnL/MDD +16%, WF 3/3 PASS |
 
 ### Dynamic Pattern Selection (v1.27.3)
 
@@ -407,7 +408,8 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
 | (연구) | 02-23 | **ATR-Scaled Backtest Study** (`atr_scaled_backtest_study.py`): Scanner(고정 TP/SL) vs Production(ATR-scaled TP/SL) 조건 비교 4-Phase 연구. **Phase 1**: 15패턴 개별 비교 — ATR scaling이 avg WR +4.5pp, edge +0.876%/trade 개선 (11/15 패턴 향상). **Phase 2**: 59패턴 재평가 — ATR-scaled 필터가 더 엄격 (39 pass vs Fixed 51), 패턴 선별이 달라짐. **Phase 3**: Hedge N=5 포트폴리오 — ATR T864 PnL/MDD **17.18** vs Fixed 10.91, 둘 다 WF 3/3 PASS. ATR scaling이 리스크 조정 성과 +57.5% 향상. **Phase 4**: ATR ratio 분포 — mean 1.0874 (slight expansion), 72.1% within clamps [0.6,1.7]. **결론**: ATR scaling은 Scanner 단계에서도 적용 시 선별 결과가 달라지며, Production 조건과의 정합성이 향상됨. |
-| **v1.35.4** | 02-26 | **SL breach auto-recalculation**: 3-bug chain 디버깅 (state corruption → snapshot silent fail → stale SL infinite retry). (1) `orders.py`: `_recalculate_breached_sl()` 헬퍼 — BingX 110412 에러(SL price constraint) 감지 시 current_price ± 0.3% 버퍼로 SL 재계산. 3개 SL 배치 경로 모두 적용 (`_place_sl_order`, `_verify_sl_order`, `_place_emergency_sl_for_direction`). (2) `position_close.py`: `_snapshot_all_tpsl()` 실패 로깅 `debug`→`warning` (silent failure 방지). **1192 tests passed**. ← **현재** |
+| **v1.35.5** | 02-26 | **Aggregate directional risk cap**: `aggregate_risk_cap_study.py` 9-시나리오 연구 기반. (1) `bot.py`: `_check_aggregate_risk_cap()` + `_estimate_new_sl_pct()` — 방향별 SL 노출 합산(sum of eff_sl × 1/N × leverage)이 cap 초과 시 진입 차단. EMA(20) regime으로 counter/with 분기. (2) config `aggregate_risk_cap: {enabled: true, counter_cap: 3.0, with_cap: 7.0}`. (3) `state.py`: `consecutive_losses` midnight reset 제거 + `trade_history` 기반 복구 (v1.35.4b). 연구 결과: `dynamic_3_7` MDD -52% (13.2→6.3%), PnL/MDD +16% (23.7→27.5x), WF 3/3 PASS. **1068 tests passed**. ← **현재** |
+| v1.35.4 | 02-26 | **SL breach auto-recalculation**: 3-bug chain 디버깅 (state corruption → snapshot silent fail → stale SL infinite retry). (1) `orders.py`: `_recalculate_breached_sl()` 헬퍼 — BingX 110412 에러(SL price constraint) 감지 시 current_price ± 0.3% 버퍼로 SL 재계산. 3개 SL 배치 경로 모두 적용 (`_place_sl_order`, `_verify_sl_order`, `_place_emergency_sl_for_direction`). (2) `position_close.py`: `_snapshot_all_tpsl()` 실패 로깅 `debug`→`warning` (silent failure 방지). |
 | v1.35.3 | 02-26 | **Regime-aware position sizing**: `uptrend_profit_study_p2.py` 3-Hypothesis 연구. H1 Direction-Specific Edge Threshold STOP (4 thresholds WF FAIL), H2 Data Extension STOP (LONG 악화), **H3 Regime-Aware Sizing GO** (19/19 WF 3/3 PASS). `position_open.py`: EMA(20) slope로 추세 감지, counter-regime 진입(상승장 SHORT, 하락장 LONG) 시 사이즈 ×`counter_mult`. config `regime_sizing` 섹션 추가 (ema_period=20, lookback=5, counter_mult=0.3). mult=0.3: MDD **6.71%** (기존 18.70%), PnL/MDD +21.4%. **1068 tests passed**. |
 | v1.35.2 | 02-26 | **Consecutive loss fix + tighter MDD sizing**: (1) `bot.py`: 연속 손실 pause를 메인 루프→`_process_entry_signal()`로 이동 — v1.27.0의 `and not positions` 조건이 N=9에서 pause 무효화 (다른 슬롯 열려있으면 트리거 안됨). 이제 새 진입만 차단, 기존 포지션 모니터링 계속, win 시 자동 리셋. (2) config MDD sizing 타이트닝: `full_size_below_dd` 5→**3%**, `min_size_above_dd` 20→**15%** — DD 반응속도 ~40% 향상 (edge half-life 30d 기반). (3) `rescan_interval_days` 90→**60d** — edge half-life 30d, first negative 90d → 60d에 경고하면 30d 여유. (4) `trend_filter_study.py`: 상승장 숏 문제 연구 (H1 Momentum/H2 EMA/H3 ConsecBrake/H4 ATR+Mom — 4가설 전부 STOP, WF 2/3 FAIL). **1068 tests passed**. |
 | **v1.35.1** | 02-25 | **Direction Cap 6→8**: `direction_cap_wf_study.py` — 296d(270d CSV+26d API), 3-fold OOS, 7 cap 시나리오(3~9) 비교. **cap8이 유일한 3/3 PASS** (+0.33%/+33.73%/+29.27%). cap8: PnL +63.33%, MDD 24.78%, PnL/MDD **2.56x**. cap6(기존): PnL +24.29%, MDD 22.85%, PnL/MDD 1.06x (2/3 FAIL). no-cap: PnL +63.95%, MDD 28.85%, 2/3 FAIL. cap8은 no-cap과 PnL 동등하면서 MDD -4.07%p 개선. config `direction_cap: 8`. **1067 tests passed**. |

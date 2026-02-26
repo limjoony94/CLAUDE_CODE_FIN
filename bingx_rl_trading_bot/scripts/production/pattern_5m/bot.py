@@ -46,6 +46,7 @@ from .constants import (
     VALIDATED_LONG_PATTERNS,
     VALIDATED_SHORT_PATTERNS,
     DEFAULT_TIMEOUT_BARS,
+    SLIPPAGE_BUFFER_PCT,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .config import load_config, validate_config, load_dynamic_patterns
@@ -67,7 +68,7 @@ from .exchange import (
     health_check,
     set_shutdown_checker,
 )
-from .indicators import calculate_indicators
+from .indicators import calculate_indicators, get_volatility_multiplier
 from .signals import check_entry_signal, check_cooldown, check_daily_loss_limit, check_consecutive_loss_limit, check_early_exit_signal
 from .position import (
     open_position,
@@ -597,6 +598,116 @@ def _check_position_timeouts(
     return closed_any
 
 
+def _estimate_new_sl_pct(
+    config: Dict[str, Any],
+    pattern_name: Optional[str],
+    df: Optional[pd.DataFrame],
+) -> float:
+    """Estimate effective SL% for a new position (pre-entry).
+
+    Uses pattern's base SL from config + ATR vol multiplier + proportional cap.
+    """
+    # Get base SL from dynamic per-pattern config
+    base_sl = config.get('strategy', {}).get('sl_pct', 1.0)
+    if config.get('_dynamic_tpsl_per_pattern') and pattern_name:
+        pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
+        if pattern_name in pp_tpsl:
+            base_sl = pp_tpsl[pattern_name][1]
+    elif config.get('_dynamic_tpsl_universal'):
+        base_sl = config.get('_dynamic_sl', base_sl)
+
+    # ATR vol multiplier
+    vol_mult = 1.0
+    if df is not None:
+        vol_mult = get_volatility_multiplier(df, config)
+
+    # Proportional cap (same logic as _effective_vol_mult in position_open.py)
+    if base_sl > 0:
+        leverage = config.get('leverage', 3)
+        max_daily_loss = config.get('risk', {}).get('max_daily_loss_pct', 13)
+        max_sl_pct = max_daily_loss / leverage
+        max_mult = max_sl_pct / base_sl
+        vol_mult = min(vol_mult, max_mult)
+
+    return max(0.1, base_sl * vol_mult - SLIPPAGE_BUFFER_PCT)
+
+
+def _check_aggregate_risk_cap(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    signal_direction: str,
+    pattern_name: Optional[str],
+    df: Optional[pd.DataFrame],
+) -> bool:
+    """Check if new entry would exceed aggregate directional SL exposure cap.
+
+    v1.35.5: Limits correlated risk from multiple same-direction positions.
+    Uses EMA(20) regime to set tighter cap for counter-regime entries.
+
+    Aggregate SL exposure = sum(sl_dist_pct * (1/N) * leverage) per direction.
+    Research: dynamic_3_7 reduced MDD by 52% (13.2%→6.3%) with WF 3/3 PASS.
+
+    Returns:
+        True if cap would be exceeded (skip entry)
+    """
+    cap_cfg = config.get('risk', {}).get('aggregate_risk_cap', {})
+    if not cap_cfg.get('enabled', False):
+        return False
+
+    counter_cap = cap_cfg.get('counter_cap', 3.0)
+    with_cap = cap_cfg.get('with_cap', 7.0)
+    leverage = config.get('leverage', 3)
+    max_positions = config.get('max_positions', 9)
+
+    # Determine regime from EMA slope (reuse regime_sizing params)
+    regime_cfg = config.get('risk', {}).get('regime_sizing', {})
+    ema_period = regime_cfg.get('ema_period', 20)
+    lookback = regime_cfg.get('lookback', 5)
+
+    is_uptrend = False
+    if df is not None and len(df) >= ema_period + lookback:
+        closes = df['close'].values
+        ema = pd.Series(closes).ewm(span=ema_period, adjust=False).values
+        slope = ema[-1] - ema[-1 - lookback]
+        is_uptrend = slope > 0
+
+    is_counter = (
+        (signal_direction == 'SHORT' and is_uptrend) or
+        (signal_direction == 'LONG' and not is_uptrend)
+    )
+    cap = counter_cap if is_counter else with_cap
+
+    # Compute aggregate SL exposure from existing positions
+    positions = state.get('positions') or {}
+    agg_exposure = 0.0
+    for pos in positions.values():
+        if pos.get('direction') != signal_direction:
+            continue
+        entry = pos.get('entry_price', 0)
+        sl = pos.get('sl_price', 0)
+        if entry <= 0:
+            continue
+        sl_dist_pct = abs(entry - sl) / entry * 100
+        slot_size = 1.0 / max_positions
+        agg_exposure += sl_dist_pct * slot_size * leverage
+
+    # Compute new position's SL exposure
+    new_sl_pct = _estimate_new_sl_pct(config, pattern_name, df)
+    new_exposure = new_sl_pct * (1.0 / max_positions) * leverage
+
+    total = agg_exposure + new_exposure
+    if total > cap:
+        regime_str = 'UP' if is_uptrend else 'DOWN'
+        logger.info(
+            f"🛡️ Aggregate risk cap: {signal_direction} exposure {agg_exposure:.2f}% "
+            f"+ new {new_exposure:.2f}% = {total:.2f}% > cap {cap:.1f}% "
+            f"(regime={regime_str}, {'counter' if is_counter else 'with'})"
+        )
+        return True
+
+    return False
+
+
 def _route_signal(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -696,6 +807,11 @@ def _process_entry_signal(
     action = _route_signal(state, config, signal_result)
 
     if action == 'OPEN':
+        # v1.35.5: Aggregate directional risk cap check
+        pattern_name = extract_pattern_name(reason)
+        if _check_aggregate_risk_cap(state, config, signal_result, pattern_name, df):
+            return False
+
         success = open_position(
             exchange, state, config, signal_result, reason,
             cache, circuit_breaker, metrics, df

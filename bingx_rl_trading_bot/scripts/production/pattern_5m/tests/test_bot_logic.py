@@ -450,11 +450,12 @@ class TestCandleAlignedTiming:
         assert hasattr(timing, 'in_trading_window')
 
     def test_get_candle_timing_values_consistent(self):
-        """seconds_into_candle + seconds_until_close should equal 300 (5 min)."""
+        """seconds_into_candle + seconds_until_close should equal candle duration."""
         timing = _get_candle_timing()
+        expected_seconds = CANDLE_DURATION_MS / 1000
 
         total = timing.seconds_into_candle + timing.seconds_until_close
-        assert abs(total - 300.0) < 1.0  # within 1s tolerance
+        assert abs(total - expected_seconds) < 1.0  # within 1s tolerance
 
     def test_get_candle_timing_trading_window_flag(self):
         """in_trading_window should be True when seconds_into_candle < TRADING_WINDOW_SECONDS."""
@@ -475,18 +476,22 @@ class TestCandleAlignedTiming:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time')
     def test_get_candle_timing_at_candle_start(self, mock_time):
         """At exact candle boundary: seconds_into=0, in_trading_window=True."""
-        # Simulate exact candle boundary (1699999800 * 1000 % 300000 == 0)
-        mock_time.time.return_value = 1699999800.0
+        candle_sec = CANDLE_DURATION_MS / 1000
+        # Pick a timestamp that's exactly on a candle boundary for any timeframe
+        boundary = 1700000000.0 - (1700000000.0 % candle_sec)
+        mock_time.time.return_value = boundary
         timing = _get_candle_timing()
 
         assert timing.seconds_into_candle == 0.0
-        assert timing.seconds_until_close == 300.0
+        assert timing.seconds_until_close == candle_sec
         assert timing.in_trading_window is True
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time')
     def test_get_candle_timing_mid_candle(self, mock_time):
         """At 150s into candle: in_trading_window=False."""
-        mock_time.time.return_value = 1699999800.0 + 150.0
+        candle_sec = CANDLE_DURATION_MS / 1000
+        boundary = 1700000000.0 - (1700000000.0 % candle_sec)
+        mock_time.time.return_value = boundary + 150.0
         timing = _get_candle_timing()
 
         assert abs(timing.seconds_into_candle - 150.0) < 1.0
@@ -1010,8 +1015,10 @@ class TestWaitForCandleSettle:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time.time')
     def test_waits_if_too_early(self, mock_time, mock_sleep):
         """If within settle seconds → sleeps the remaining time."""
-        # 1 second after candle open → need to wait (CANDLE_SETTLE_SECONDS - 1)
-        mock_time.return_value = 300.001  # 1ms into candle
+        # Pick a time exactly at a candle boundary + 1ms (works for any timeframe)
+        candle_sec = CANDLE_DURATION_MS / 1000
+        boundary = 1700000000.0 - (1700000000.0 % candle_sec)
+        mock_time.return_value = boundary + 0.001  # 1ms into candle
         config = {'symbol': 'BTC/USDT:USDT'}
         _wait_for_candle_settle(config)
         mock_sleep.assert_called_once()
@@ -1022,8 +1029,10 @@ class TestWaitForCandleSettle:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.bot.time.time')
     def test_no_wait_if_settled(self, mock_time, mock_sleep):
         """If already past settle seconds → no sleep."""
-        # Set time well past settle point (e.g., 20s into candle)
-        mock_time.return_value = 320.0  # 20s into candle
+        # Set time well past settle point (20s into candle, works for any timeframe)
+        candle_sec = CANDLE_DURATION_MS / 1000
+        boundary = 1700000000.0 - (1700000000.0 % candle_sec)
+        mock_time.return_value = boundary + 20.0  # 20s into candle
         config = {'symbol': 'BTC/USDT:USDT'}
         _wait_for_candle_settle(config)
         mock_sleep.assert_not_called()

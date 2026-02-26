@@ -462,7 +462,8 @@ def derive_tp_sl(excursions, tp_percentile, sl_percentile):
 def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
                          max_bars=MAX_BARS, min_tr=20,
                          max_baseline_wr=MAX_BASELINE_WR,
-                         atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
+                         atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+                         tp_max=None, sl_max=None):
     """Grid search over MFE/MAE percentiles to find best TP/SL by PnL/MDD."""
     excursions = compute_excursions(signal_bars, direction, opens, highs, lows,
                                     n_bars, max_bars)
@@ -478,6 +479,10 @@ def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
             if tp is None or sl is None:
                 continue
             if tp < 0.1 or sl < 0.3:
+                continue
+            if tp_max is not None and tp > tp_max:
+                continue
+            if sl_max is not None and sl > sl_max:
                 continue
 
             bwr = sl / (tp + sl) * 100
@@ -589,7 +594,8 @@ _shared_data = {}
 
 
 def _pp_init(opens, highs, lows, n_bars,
-             atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
+             atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+             tp_max=None, sl_max=None):
     """Initialize shared data in worker processes."""
     _shared_data['opens'] = opens
     _shared_data['highs'] = highs
@@ -598,6 +604,8 @@ def _pp_init(opens, highs, lows, n_bars,
     _shared_data['atr_ratio'] = atr_ratio
     _shared_data['clamp_lo'] = clamp_lo
     _shared_data['clamp_hi'] = clamp_hi
+    _shared_data['tp_max'] = tp_max
+    _shared_data['sl_max'] = sl_max
 
 
 def _pp_worker(args_tuple):
@@ -674,6 +682,8 @@ def _mae_mfe_worker(args_tuple):
     atr_ratio = _shared_data.get('atr_ratio')
     clamp_lo = _shared_data.get('clamp_lo', 0.6)
     clamp_hi = _shared_data.get('clamp_hi', 1.7)
+    tp_max = _shared_data.get('tp_max')
+    sl_max = _shared_data.get('sl_max')
 
     if len(sigs_list) < min_trades:
         return None
@@ -682,7 +692,8 @@ def _mae_mfe_worker(args_tuple):
         sigs_list, direction, opens, highs, lows, n_bars,
         max_bars=MAX_BARS, min_tr=min_trades,
         max_baseline_wr=max_baseline_wr,
-        atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi)
+        atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
+        tp_max=tp_max, sl_max=sl_max)
     if opt is None:
         return None
 
@@ -734,7 +745,8 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                         edge_threshold=DEFAULT_EDGE_THRESHOLD,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
                         max_baseline_wr=MAX_BASELINE_WR,
-                        atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
+                        atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+                        tp_max=None, sl_max=None):
     """Scan patterns within [bar_start, bar_end) signal range.
 
     Supports both 'universal' and 'per_pattern' modes.
@@ -783,7 +795,8 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                     sigs, direction, opens, highs, lows,
                     trade_boundary, max_bars=MAX_BARS,
                     min_tr=min_trades, max_baseline_wr=max_baseline_wr,
-                    atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi)
+                    atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
+                    tp_max=tp_max, sl_max=sl_max)
                 if opt is None:
                     continue
                 tp, sl = opt['tp'], opt['sl']
@@ -824,7 +837,8 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
                         max_baseline_wr=MAX_BASELINE_WR,
                         closes=None, atr_period=14, atr_window=576,
-                        clamp_lo=0.6, clamp_hi=1.7, use_atr=True):
+                        clamp_lo=0.6, clamp_hi=1.7, use_atr=True,
+                        tp_max=None, sl_max=None):
     """True expanding window walk-forward validation.
 
     Splits data into n_folds+1 equal segments.
@@ -859,6 +873,7 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
             min_trades=min_trades, edge_threshold=edge_threshold,
             mc_threshold=mc_threshold, max_baseline_wr=max_baseline_wr,
             atr_ratio=fold_atr, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
+            tp_max=tp_max, sl_max=sl_max,
         )
 
         # Track pattern stability
@@ -1264,6 +1279,7 @@ def scan_patterns_mae_mfe(
     fdr_q: float = 0.05,
     require_portfolio_mc: bool = False,
     atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+    tp_max=None, sl_max=None,
 ) -> dict:
     """MAE/MFE Discovery: derive TP/SL from excursion percentiles per pattern.
 
@@ -1308,7 +1324,8 @@ def scan_patterns_mae_mfe(
         with ProcessPoolExecutor(
             max_workers=n_workers,
             initializer=_pp_init,
-            initargs=(opens, highs, lows, n, atr_ratio, clamp_lo, clamp_hi),
+            initargs=(opens, highs, lows, n, atr_ratio, clamp_lo, clamp_hi,
+                      tp_max, sl_max),
         ) as executor:
             futures = {executor.submit(_mae_mfe_worker, item): item
                        for item in work_items}
@@ -1678,6 +1695,13 @@ def main():
                         help=f'ATR ratio min clamp (default: {DEFAULT_ATR_CLAMP_LO})')
     parser.add_argument('--atr-clamp-hi', type=float, default=DEFAULT_ATR_CLAMP_HI,
                         help=f'ATR ratio max clamp (default: {DEFAULT_ATR_CLAMP_HI})')
+    parser.add_argument('--max-bars', type=int, default=MAX_BARS,
+                        help=f'Max bars to hold trade (default: {MAX_BARS}, '
+                             f'288=24h@5m, 96=24h@15m)')
+    parser.add_argument('--tp-max', type=float, default=None,
+                        help='Max TP %% (filter out wider TPs, e.g. 3.0 for 15m)')
+    parser.add_argument('--sl-max', type=float, default=None,
+                        help='Max SL %% (filter out wider SLs, e.g. 4.0 for 15m)')
     parser.add_argument('--clean', action='store_true',
                         help='Clean single-pass protocol: BH FDR as primary filter, '
                              'theory-derived thresholds, pre-registration manifest')
@@ -1702,6 +1726,12 @@ def main():
         format='%(asctime)s [%(levelname)s] %(message)s',
         datefmt='%H:%M:%S',
     )
+
+    # Override module-level MAX_BARS if --max-bars specified
+    _this = sys.modules[__name__]
+    if args.max_bars != _this.MAX_BARS:
+        logger.info(f"MAX_BARS override: {_this.MAX_BARS} → {args.max_bars}")
+        _this.MAX_BARS = args.max_bars
 
     logger.info("=" * 60)
     if args.clean:
@@ -1777,6 +1807,8 @@ def main():
                      f"clamp=[{args.atr_clamp_lo}, {args.atr_clamp_hi}]")
     else:
         logger.info("ATR scaling: DISABLED (--no-atr)")
+    if args.tp_max is not None or args.sl_max is not None:
+        logger.info(f"TP/SL caps: TP max={args.tp_max}%, SL max={args.sl_max}%")
     if args.concurrency != 1:
         n_w = (min(os.cpu_count() or 1, 8)
                if args.concurrency == 0 else args.concurrency)
@@ -1865,6 +1897,7 @@ def main():
             require_portfolio_mc=args.require_portfolio_mc,
             atr_ratio=atr_ratio, clamp_lo=args.atr_clamp_lo,
             clamp_hi=args.atr_clamp_hi,
+            tp_max=args.tp_max, sl_max=args.sl_max,
         )
     else:
         result = scan_patterns_pp(
@@ -1980,6 +2013,7 @@ def main():
             atr_period=args.atr_period, atr_window=args.atr_window,
             clamp_lo=args.atr_clamp_lo, clamp_hi=args.atr_clamp_hi,
             use_atr=not args.no_atr,
+            tp_max=args.tp_max, sl_max=args.sl_max,
         )
         timing['wf_sec'] = round(time.time() - t2, 1)
         logger.info(f"WF Complete: {wf_result['positive_folds']}/{args.wf_folds} "

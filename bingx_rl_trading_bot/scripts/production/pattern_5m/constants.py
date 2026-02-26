@@ -1,6 +1,9 @@
 """
-Pattern 5m Bot - Constants and Magic Numbers
+Pattern Bot - Constants and Magic Numbers
 All configurable values and pattern definitions.
+
+Multi-timeframe support: Set PATTERN_BOT_TF env var before import.
+Default: '5m'. Example: PATTERN_BOT_TF=15m for 15-minute candle bot.
 """
 
 import os
@@ -9,10 +12,21 @@ from enum import Enum
 from typing import List
 
 # ============================================================
+# MULTI-TIMEFRAME SUPPORT (v1.36.0)
+# ============================================================
+# Set PATTERN_BOT_TF environment variable BEFORE importing this module
+# to run the bot on a different timeframe. Default: '5m' (primary production bot).
+_BOT_TF = os.environ.get('PATTERN_BOT_TF', '5m')
+_TF_MINUTES_MAP = {
+    '1m': 1, '3m': 3, '5m': 5, '15m': 15, '30m': 30, '1h': 60, '4h': 240
+}
+_TF_MIN = _TF_MINUTES_MAP.get(_BOT_TF, 5)
+
+# ============================================================
 # BOT IDENTIFICATION
 # ============================================================
-BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.35.6"  # v1.35.5: aggregate directional risk cap (dynamic_3_7)
+BOT_NAME = f"pattern_{_BOT_TF}_bot"
+BOT_VERSION = "1.36.0"  # v1.36.0: multi-timeframe support (5m+15m mixed strategy)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -29,13 +43,17 @@ _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(_THIS_DIR)))
 
 # ============================================================
-# FILE PATHS (absolute, CWD-independent)
+# FILE PATHS (absolute, CWD-independent, timeframe-aware)
 # ============================================================
-CONFIG_FILE = os.path.join(PROJECT_ROOT, "config", "pattern_5m_config.yaml")
-STATE_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_bot_state.json")
-LOCK_FILE = os.path.join(tempfile.gettempdir(), "pattern_5m_bot.lock")
-METRICS_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_metrics.json")
-DYNAMIC_PATTERNS_FILE = os.path.join(PROJECT_ROOT, "results", "dynamic_patterns.json")
+CONFIG_FILE = os.path.join(PROJECT_ROOT, "config", f"pattern_{_BOT_TF}_config.yaml")
+STATE_FILE = os.path.join(PROJECT_ROOT, "results", f"pattern_{_BOT_TF}_bot_state.json")
+LOCK_FILE = os.path.join(tempfile.gettempdir(), f"pattern_{_BOT_TF}_bot.lock")
+METRICS_FILE = os.path.join(PROJECT_ROOT, "results", f"pattern_{_BOT_TF}_metrics.json")
+# 5m uses 'dynamic_patterns.json' for backward compatibility; others use suffixed name
+if _BOT_TF == '5m':
+    DYNAMIC_PATTERNS_FILE = os.path.join(PROJECT_ROOT, "results", "dynamic_patterns.json")
+else:
+    DYNAMIC_PATTERNS_FILE = os.path.join(PROJECT_ROOT, "results", f"dynamic_patterns_{_BOT_TF}.json")
 LOG_DIR = os.path.join(PROJECT_ROOT, "logs")
 API_KEYS_FILE = os.path.join(PROJECT_ROOT, "config", "api_keys.yaml")
 
@@ -198,7 +216,7 @@ CONFIDENCE_WEIGHT_HISTORICAL = 0.30   # Historical pattern win rate
 CONFIDENCE_WEIGHT_REGIME = 0.30       # DEPRECATED: Regime disabled since v1.19.0 (placeholder)
 
 # Confidence logging file
-CONFIDENCE_LOG_FILE = os.path.join(PROJECT_ROOT, "results", "pattern_5m_confidence_log.csv")
+CONFIDENCE_LOG_FILE = os.path.join(PROJECT_ROOT, "results", f"pattern_{_BOT_TF}_confidence_log.csv")
 
 
 # ============================================================
@@ -396,8 +414,8 @@ QTY_REDUCTION_THRESHOLD = 0.99
 # ============================================================
 # TIMING CONSTANTS
 # ============================================================
-CANDLE_DURATION_MS = 300000  # 5 minutes
-CANDLE_SETTLE_SECONDS = 5  # v1.25.1: Reduced from 15 (BingX delivers BTC 5m in 2-3s)
+CANDLE_DURATION_MS = _TF_MIN * 60 * 1000  # Derived from timeframe (5m=300000, 15m=900000)
+CANDLE_SETTLE_SECONDS = 5  # v1.25.1: Reduced from 15 (BingX delivers BTC candles in 2-5s)
 DEFAULT_SLEEP_INTERVAL = 10  # v1.25.1: Error fallback only (candle-aligned loop replaces polling)
 
 # Candle-aligned loop timing (v1.25.1)
@@ -414,7 +432,7 @@ MAX_EXIT_PRICE_RETRIES = 3
 # ============================================================
 # INTERVAL CONSTANTS
 # ============================================================
-MAX_OHLCV_CANDLES = 600  # v1.28.42: 150→600 for ATR-scale rolling median (window=576)
+MAX_OHLCV_CANDLES = max(200, 600 * 5 // max(_TF_MIN, 1))  # Scale from 5m baseline (5m=600, 15m=200)
 CACHE_TTL_SECONDS = 5               # Used in models.py APICache
 
 # Time-based intervals (v1.25.1: replaces iteration-based in main loop)
@@ -476,14 +494,14 @@ MAX_ALLOWED_POSITIONS = 10       # Upper guard for validation
 EMERGENCY_SL_BUFFER_PCT = 0.001  # 0.1% buffer beyond worst slot SL
 VALID_POSITION_MODES = ('one_way', 'hedge')
 DEFAULT_POSITION_MODE = 'one_way'
-DEFAULT_TIMEOUT_BARS = 864       # v1.31.0: 72h = 864 × 5m bars (0 = disabled)
+DEFAULT_TIMEOUT_BARS = 864 * 5 // max(_TF_MIN, 1)  # 72h scaled to timeframe (5m=864, 15m=288)
 
 # ============================================================
 # DEFAULT CONFIGURATION
 # ============================================================
 DEFAULT_CONFIG = {
     'symbol': 'BTC-USDT',
-    'timeframe': '5m',
+    'timeframe': _BOT_TF,
     'leverage': 3,
     'exchange_leverage': 10,
     'margin_mode': 'crossed',

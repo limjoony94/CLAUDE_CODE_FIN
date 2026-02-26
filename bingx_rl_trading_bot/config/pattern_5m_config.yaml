@@ -37,7 +37,7 @@ strategy:
     clamp_lo: 0.6     # minimum ratio
     clamp_hi: 1.7     # maximum ratio
   cooldown_candles: 0
-  direction_cap: 8         # v1.35.1: cap6→cap8 (WF 3/3 PASS, PnL/MDD 2.56x, 296d study)
+  direction_cap: 7         # v1.36.1: cap8→7 (portfolio study: PnL/MDD 14.43x vs 13.54x, corr loss 3.1% vs 3.5%)
   rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
   timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h, 0 = disabled)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

@@ -395,10 +395,15 @@ def cleanup_old_backups(state_file: str, max_backups: int = MAX_STATE_BACKUPS) -
 
 
 def _reset_daily_fields(state: Dict[str, Any], today: str) -> None:
-    """Reset daily stat fields (shared by load-time and runtime reset)."""
+    """Reset daily stat fields (shared by load-time and runtime reset).
+
+    Note: consecutive_losses is NOT reset here (v1.35.4).
+    It persists across days and only resets on a winning trade.
+    Cross-day loss streaks (e.g. 5 losses on day 1 + 4 on day 2 = 9 total)
+    must be counted correctly for the pause mechanism.
+    """
     state['daily_pnl'] = 0.0
     state['daily_trades'] = 0
-    state['consecutive_losses'] = 0
     state['last_trade_date'] = today
 
 
@@ -548,6 +553,19 @@ def sync_metrics_with_state(metrics: PerformanceMetrics, state: Dict[str, Any]) 
         state['total_trades'] = metrics.total_trades
         state['winning_trades'] = metrics.winning_trades
         state['total_pnl'] = metrics.total_pnl_pct
+
+        # Reconstruct consecutive_losses from trade_history (v1.35.4)
+        trade_history = getattr(metrics, 'trade_history', None) or []
+        consec = 0
+        for t in reversed(trade_history):
+            pnl = t.get('pnl_slot', 0) if isinstance(t, dict) else 0
+            if pnl >= 0:
+                break
+            consec += 1
+        if consec > 0:
+            state['consecutive_losses'] = consec
+            logger.info(f"Reconstructed consecutive_losses={consec} from trade_history")
+
         save_state(state)
 
         # Also update .bak with corrected data (save_state's _create_backup

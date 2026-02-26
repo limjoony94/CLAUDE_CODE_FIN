@@ -661,7 +661,7 @@ def _check_aggregate_risk_cap(
     is_uptrend = False
     if df is not None and len(df) >= ema_period + lookback:
         closes = df['close'].values
-        ema = pd.Series(closes).ewm(span=ema_period, adjust=False).values
+        ema = pd.Series(closes).ewm(span=ema_period, adjust=False).mean().values
         slope = ema[-1] - ema[-1 - lookback]
         is_uptrend = slope > 0
 

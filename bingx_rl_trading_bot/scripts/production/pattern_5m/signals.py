@@ -39,7 +39,6 @@ from .constants import (
     VOL_LOW_QUANTILE,
     VOL_HIGH_QUANTILE,
     TREND_LOOKBACK_BARS,
-    MAX_CONSECUTIVE_LOSSES,
 )
 
 logger = logging.getLogger('pattern_5m')
@@ -536,21 +535,6 @@ def check_daily_loss_limit(state: Dict[str, Any], config: Dict[str, Any]) -> boo
     max_loss = config.get('risk', {}).get('max_daily_loss_pct', 10.0)
     return state.get('daily_pnl', 0) <= -max_loss
 
-
-def check_consecutive_loss_limit(state: Dict[str, Any]) -> bool:
-    """
-    Check if consecutive loss limit has been reached.
-
-    v1.27.0: Pause trading after MAX_CONSECUTIVE_LOSSES consecutive SL hits.
-    Resets on next winning trade or daily reset.
-
-    Args:
-        state: Bot state dictionary
-
-    Returns:
-        True if consecutive loss limit reached (should pause trading)
-    """
-    return state.get('consecutive_losses', 0) >= MAX_CONSECUTIVE_LOSSES
 
 
 def check_early_exit_signal(

@@ -32,8 +32,6 @@ from .constants import (
     MAX_OHLCV_CANDLES,
     DEFAULT_SLEEP_INTERVAL,
     DAILY_LOSS_PAUSE_SECONDS,
-    CONSECUTIVE_LOSS_PAUSE_SECONDS,
-    MAX_CONSECUTIVE_LOSSES,
     CANDLE_SETTLE_SECONDS,
     CANDLE_DURATION_MS,
     POSITION_SYNC_INTERVAL_MINUTES,
@@ -69,7 +67,7 @@ from .exchange import (
     set_shutdown_checker,
 )
 from .indicators import calculate_indicators, get_volatility_multiplier
-from .signals import check_entry_signal, check_cooldown, check_daily_loss_limit, check_consecutive_loss_limit, check_early_exit_signal
+from .signals import check_entry_signal, check_cooldown, check_daily_loss_limit, check_early_exit_signal
 from .position import (
     open_position,
     check_position_status,
@@ -305,10 +303,6 @@ def _run_bot_main(
                 logger.warning(f"⚠️ Daily loss limit reached, pausing {DAILY_LOSS_PAUSE_SECONDS}s")
                 _interruptible_sleep(DAILY_LOSS_PAUSE_SECONDS)
                 continue
-
-            # Consecutive loss limit: checked in _process_entry_signal() (v1.35.2)
-            # v1.27.0 original: paused entire loop when no positions open — broken for N=9
-            # v1.35.2: blocks new entries only, existing positions continue to be monitored
 
             timing = _get_candle_timing()
             has_position = bool(state.get('positions') or {})
@@ -781,12 +775,6 @@ def _process_entry_signal(
         True if trading action occurred, False otherwise
     """
     # Note: No early return for full slots — _route_signal handles SKIP vs CLOSE_OLDEST
-
-    # Check consecutive loss limit — block new entries (v1.35.2)
-    if check_consecutive_loss_limit(state):
-        consec = state.get('consecutive_losses', 0)
-        logger.warning(f"⚠️ {consec} consecutive losses (limit={MAX_CONSECUTIVE_LOSSES}), skipping new entry")
-        return False
 
     # Check cooldown
     if not check_cooldown(state, config):

@@ -12,7 +12,7 @@ from typing import List
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = "pattern_5m_bot"
-BOT_VERSION = "1.35.5"  # v1.35.5: aggregate directional risk cap (dynamic_3_7)
+BOT_VERSION = "1.35.6"  # v1.35.5: aggregate directional risk cap (dynamic_3_7)
 # Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
 # Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
 # Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
@@ -405,8 +405,6 @@ TRADING_WINDOW_SECONDS = 30     # First 30s after candle close = trading window
 POSITION_MONITOR_INTERVAL = 15  # Check position status every 15s during maintenance
 MAX_MAINTENANCE_SLEEP = 120     # Max sleep when no position (maintenance window)
 DAILY_LOSS_PAUSE_SECONDS = 300
-CONSECUTIVE_LOSS_PAUSE_SECONDS = 600  # v1.27.0: 10min pause after 3 consecutive losses
-MAX_CONSECUTIVE_LOSSES = 3            # v1.27.0: pause threshold
 ENTRY_PRICE_FETCH_DELAY = 0.5
 EXIT_PRICE_FETCH_DELAY = 0.5
 EXIT_PRICE_RETRY_DELAY = 0.5

@@ -1263,7 +1263,6 @@ class TestRunBotMainNoPosition:
     @patch(f'{BOT}._log_waiting_status')
     @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
     @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}._get_candle_timing')
     @patch(f'{BOT}.adjust_tpsl_to_config')
@@ -1275,7 +1274,7 @@ class TestRunBotMainNoPosition:
     @patch(f'{BOT}.create_exchange')
     def test_maintenance_window_no_position(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_timing, mock_dll, mock_cll, mock_msync, mock_mhc, mock_lws,
+        mock_timing, mock_dll, mock_msync, mock_mhc, mock_lws,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """Loop runs once in maintenance window (no position) then shuts down."""
@@ -1314,7 +1313,6 @@ class TestRunBotMainTradingWindowNoPosition:
     @patch(f'{BOT}._calculate_sleep_duration', return_value=1.0)
     @patch(f'{BOT}._process_entry_signal')
     @patch(f'{BOT}._wait_for_candle_settle')
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}._get_candle_timing')
     @patch(f'{BOT}.adjust_tpsl_to_config')
@@ -1326,7 +1324,7 @@ class TestRunBotMainTradingWindowNoPosition:
     @patch(f'{BOT}.create_exchange')
     def test_trading_window_processes_no_position(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_timing, mock_dll, mock_cll, mock_settle, mock_pnp,
+        mock_timing, mock_dll, mock_settle, mock_pnp,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """Trading window + no position → _process_entry_signal called."""
@@ -1363,7 +1361,6 @@ class TestRunBotMainTradingWindowWithPosition:
     @patch(f'{BOT}._process_existing_positions')
     @patch(f'{BOT}.check_position_status', return_value=False)
     @patch(f'{BOT}._wait_for_candle_settle')
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}._get_candle_timing')
     @patch(f'{BOT}.adjust_tpsl_to_config')
@@ -1379,7 +1376,7 @@ class TestRunBotMainTradingWindowWithPosition:
     @patch(f'{BOT}.create_exchange')
     def test_trading_window_processes_existing_position(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_timing, mock_dll, mock_cll, mock_settle, mock_cps, mock_pep,
+        mock_timing, mock_dll, mock_settle, mock_cps, mock_pep,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """Trading window + has position + not closed → _process_existing_positions called."""
@@ -1416,7 +1413,6 @@ class TestRunBotMainPositionClosedInTradingWindow:
     @patch(f'{BOT}._process_entry_signal')
     @patch(f'{BOT}.check_position_status', return_value=True)
     @patch(f'{BOT}._wait_for_candle_settle')
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}._get_candle_timing')
     @patch(f'{BOT}.adjust_tpsl_to_config')
@@ -1432,7 +1428,7 @@ class TestRunBotMainPositionClosedInTradingWindow:
     @patch(f'{BOT}.create_exchange')
     def test_position_closed_then_new_entry_attempted(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_timing, mock_dll, mock_cll, mock_settle, mock_cps, mock_pnp,
+        mock_timing, mock_dll, mock_settle, mock_cps, mock_pnp,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """Position closed in trading window → _process_entry_signal for new entry."""
@@ -1493,37 +1489,6 @@ class TestRunBotMainDailyLossLimit:
             mock_sleep.assert_called()
         finally:
             bot_mod.shutdown_requested = original
-
-
-class TestRunBotMainConsecutiveLossLimit:
-    """Test consecutive loss limit blocks new entries (v1.35.2: moved to _process_entry_signal)."""
-
-    def test_consecutive_loss_blocks_entry(self):
-        """Consecutive loss limit blocks _process_entry_signal from processing."""
-        from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import _process_entry_signal
-        from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import check_consecutive_loss_limit
-
-        state = {'consecutive_losses': 4, 'positions': {'slot1': {'direction': 'SHORT'}}}
-        assert check_consecutive_loss_limit(state) is True
-
-        # _process_entry_signal should return False immediately when limit hit
-        with patch(f'{BOT}.check_consecutive_loss_limit', return_value=True):
-            result = _process_entry_signal(
-                exchange=MagicMock(),
-                state=state,
-                config={'symbol': 'BTC/USDT:USDT', 'timeframe': '5m', 'leverage': 3},
-                cache=MagicMock(),
-                circuit_breaker=MagicMock(),
-                metrics=PerformanceMetrics(),
-            )
-            assert result is False
-
-    def test_consecutive_loss_allows_entry_after_win(self):
-        """After a win resets counter, entries should be allowed."""
-        from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import check_consecutive_loss_limit
-
-        state = {'consecutive_losses': 0}
-        assert check_consecutive_loss_limit(state) is False
 
 
 class TestRunBotMainNetworkError:
@@ -1642,7 +1607,6 @@ class TestRunBotMainNewMetrics:
     @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
     @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
     @patch(f'{BOT}._get_candle_timing')
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}.adjust_tpsl_to_config')
     @patch(f'{BOT}.recover_from_crash')
@@ -1653,7 +1617,7 @@ class TestRunBotMainNewMetrics:
     @patch(f'{BOT}.create_exchange')
     def test_none_metrics_creates_new(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_dll, mock_cll, mock_timing, mock_msync, mock_mhc, mock_lws,
+        mock_dll, mock_timing, mock_msync, mock_mhc, mock_lws,
         mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """load_metrics returns None → new PerformanceMetrics created (lines 243-245)."""
@@ -1694,7 +1658,6 @@ class TestRunBotMainMaintenanceWithPosition:
     @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
     @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
     @patch(f'{BOT}.check_position_status', return_value=False)
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}._get_candle_timing')
     @patch(f'{BOT}.adjust_tpsl_to_config')
@@ -1710,7 +1673,7 @@ class TestRunBotMainMaintenanceWithPosition:
     @patch(f'{BOT}.create_exchange')
     def test_maintenance_with_position_verifies_tpsl(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_timing, mock_dll, mock_cll, mock_cps, mock_msync, mock_mhc,
+        mock_timing, mock_dll, mock_cps, mock_msync, mock_mhc,
         mock_vtpsl, mock_lps, mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """Maintenance + position → verify_tp_sl_orders + _log_position_status called."""
@@ -1750,7 +1713,6 @@ class TestRunBotMainMaintenancePositionClosed:
     @patch(f'{BOT}._maybe_run_health_check', return_value=0.0)
     @patch(f'{BOT}._maybe_sync_position', return_value=0.0)
     @patch(f'{BOT}.check_position_status', return_value=True)
-    @patch(f'{BOT}.check_consecutive_loss_limit', return_value=False)
     @patch(f'{BOT}.check_daily_loss_limit', return_value=False)
     @patch(f'{BOT}._get_candle_timing')
     @patch(f'{BOT}.adjust_tpsl_to_config')
@@ -1762,7 +1724,7 @@ class TestRunBotMainMaintenancePositionClosed:
     @patch(f'{BOT}.create_exchange')
     def test_maintenance_position_closed_updates_has_position(
         self, mock_exch, mock_lm, mock_ls, mock_sync_m, mock_ve, mock_rc, mock_adj,
-        mock_timing, mock_dll, mock_cll, mock_cps, mock_msync, mock_mhc,
+        mock_timing, mock_dll, mock_cps, mock_msync, mock_mhc,
         mock_lws, mock_csd, mock_sleep, mock_ss, mock_sm
     ):
         """Maintenance + position closed → has_position updated (line 326)."""

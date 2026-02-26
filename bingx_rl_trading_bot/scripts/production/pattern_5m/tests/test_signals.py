@@ -14,7 +14,6 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.signals import (
     calculate_pattern_confidence,
     check_entry_signal,
     check_cooldown,
-    check_consecutive_loss_limit,
     check_daily_loss_limit,
     check_early_exit_signal,
     _save_confidence_to_csv,
@@ -24,7 +23,6 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
     RSI_OVERSOLD_THRESHOLD,
     RSI_OVERBOUGHT_THRESHOLD,
     TREND_LOOKBACK_BARS,
-    MAX_CONSECUTIVE_LOSSES,
     VALIDATED_LONG_PATTERNS,
     VALIDATED_SHORT_PATTERNS,
     CONFIDENCE_WEIGHT_CLARITY,
@@ -565,39 +563,6 @@ class TestCheckCooldown:
         state = {}
         config = {}
         assert check_cooldown(state, config) is True
-
-
-# ── check_consecutive_loss_limit ─────────────────────────────
-
-
-class TestCheckConsecutiveLossLimit:
-    """Test check_consecutive_loss_limit() threshold."""
-
-    def test_zero_losses(self):
-        """No consecutive losses → returns False."""
-        assert check_consecutive_loss_limit({'consecutive_losses': 0}) is False
-
-    def test_below_threshold(self):
-        """Losses below threshold → returns False."""
-        assert check_consecutive_loss_limit(
-            {'consecutive_losses': MAX_CONSECUTIVE_LOSSES - 1}
-        ) is False
-
-    def test_at_threshold(self):
-        """Losses at threshold → returns True."""
-        assert check_consecutive_loss_limit(
-            {'consecutive_losses': MAX_CONSECUTIVE_LOSSES}
-        ) is True
-
-    def test_above_threshold(self):
-        """Losses above threshold → returns True."""
-        assert check_consecutive_loss_limit(
-            {'consecutive_losses': MAX_CONSECUTIVE_LOSSES + 5}
-        ) is True
-
-    def test_missing_key(self):
-        """Missing 'consecutive_losses' key → defaults to 0 → False."""
-        assert check_consecutive_loss_limit({}) is False
 
 
 # ── add_candle_classification (wrapper) ──────────────────────

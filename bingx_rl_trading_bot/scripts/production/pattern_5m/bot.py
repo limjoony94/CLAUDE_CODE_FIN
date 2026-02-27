@@ -626,6 +626,68 @@ def _estimate_new_sl_pct(
     return max(0.1, base_sl * vol_mult - SLIPPAGE_BUFFER_PCT)
 
 
+def _check_momentum_guard(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    signal_direction: str,
+    df: Optional[pd.DataFrame],
+) -> bool:
+    """Check if recent price momentum makes counter-direction entry risky.
+
+    v1.36.2: Pauses counter-direction entries during strong short-term moves.
+    E.g., if BTC rose >1% in 30min, pause SHORT for 30min.
+
+    Research: entry_improvement_study.py H2 — PnL/MDD 8.19 vs baseline 7.51 (+9%).
+    Blocks only ~2.3% of signals but avoids correlated losses during spikes.
+
+    Returns:
+        True if momentum guard blocks this entry (skip entry)
+    """
+    mg_cfg = config.get('risk', {}).get('momentum_guard', {})
+    if not mg_cfg.get('enabled', False):
+        return False
+
+    lookback_bars = mg_cfg.get('lookback_bars', 6)
+    threshold_pct = mg_cfg.get('threshold_pct', 1.0)
+    cooldown_bars = mg_cfg.get('cooldown_bars', 6)
+
+    if df is None or len(df) < lookback_bars + 1:
+        return False
+
+    closes = df['close'].values
+    current_price = closes[-1]
+    past_price = closes[-(lookback_bars + 1)]
+    if past_price <= 0:
+        return False
+
+    pct_change = (current_price / past_price - 1) * 100
+
+    # Strong upward move → block SHORT
+    if signal_direction == 'SHORT' and pct_change > threshold_pct:
+        logger.info(f"⚡ Momentum guard: BTC {pct_change:+.2f}% in {lookback_bars*5}min "
+                     f"(>{threshold_pct}%), blocking SHORT entry")
+        # Store cooldown expiry in state for future checks
+        state['_momentum_cooldown_short'] = time.time() + cooldown_bars * 300
+        return True
+
+    # Strong downward move → block LONG
+    if signal_direction == 'LONG' and pct_change < -threshold_pct:
+        logger.info(f"⚡ Momentum guard: BTC {pct_change:+.2f}% in {lookback_bars*5}min "
+                     f"(<-{threshold_pct}%), blocking LONG entry")
+        state['_momentum_cooldown_long'] = time.time() + cooldown_bars * 300
+        return True
+
+    # Check if still in cooldown from previous trigger
+    cooldown_key = f'_momentum_cooldown_{signal_direction.lower()}'
+    cooldown_until = state.get(cooldown_key, 0)
+    if time.time() < cooldown_until:
+        remaining = int(cooldown_until - time.time())
+        logger.info(f"⚡ Momentum guard: {signal_direction} still in cooldown ({remaining}s remaining)")
+        return True
+
+    return False
+
+
 def _check_aggregate_risk_cap(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -795,6 +857,10 @@ def _process_entry_signal(
     action = _route_signal(state, config, signal_result)
 
     if action == 'OPEN':
+        # v1.36.2: Momentum guard — pause counter-dir entries during strong moves
+        if _check_momentum_guard(state, config, signal_result, df):
+            return False
+
         # v1.35.5: Aggregate directional risk cap check
         pattern_name = extract_pattern_name(reason)
         if _check_aggregate_risk_cap(state, config, signal_result, pattern_name, df):

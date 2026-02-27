@@ -23,6 +23,11 @@ risk:
     enabled: true
     counter_cap: 3.0         # counter-regime cap (% portfolio, SHORT in uptrend / LONG in downtrend)
     with_cap: 7.0            # with-regime cap (% portfolio, SHORT in downtrend / LONG in uptrend)
+  momentum_guard:          # v1.36.2: Pause counter-dir entries during strong moves
+    enabled: true
+    lookback_bars: 6         # 6 bars = 30min price change window
+    threshold_pct: 1.0       # 1% move triggers guard
+    cooldown_bars: 6         # 6 bars = 30min pause after trigger
   regime_sizing:           # v1.35.3: Regime-aware position sizing
     enabled: true
     ema_period: 20           # EMA window for trend detection

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Pattern Scanner CLI v2.2 — Dynamic Walk-Forward Pattern Selection
+Pattern Scanner CLI v2.3 — Dynamic Walk-Forward Pattern Selection
 
 Standalone offline tool that scans historical data to select patterns
 with genuine edge. Supports Universal and Per-Pattern TP/SL discovery.
@@ -12,7 +12,9 @@ Discovery methods:
 - mae_mfe: Derive TP/SL from MAE/MFE percentiles per pattern (v1.28.39)
   MAE/MFE discovery: WF OOS 2.4x vs grid search (mae_mfe_discovery.py)
 
-v2.2 Enhancements:
+v2.3 Enhancements:
+- Neutral window discovery (default, --no-neutral to disable) — direction-balanced patterns
+  Neutral window auto-finds longest price-flat window to avoid directional bias (v1.36.3)
 - ATR-scaled TP/SL (default, --no-atr to disable) — Scanner-Production alignment
   ATR scanner vs Fixed: +64% OOS PnL (atr_scanner_alignment_study.py)
 - Multiple testing correction (BH FDR / Bonferroni)
@@ -21,8 +23,10 @@ v2.2 Enhancements:
 - Progress bars (tqdm) and timing
 
 Usage:
-  python scripts/scanner/pattern_scanner.py                              # PP + ATR (default)
-  python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe   # MAE/MFE + ATR
+  python scripts/scanner/pattern_scanner.py                              # PP + ATR + Neutral (default)
+  python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe   # MAE/MFE + ATR + Neutral
+  python scripts/scanner/pattern_scanner.py --no-neutral --is-days 270   # Disable neutral window
+  python scripts/scanner/pattern_scanner.py --neutral-tol 2.0            # Wider price tolerance
   python scripts/scanner/pattern_scanner.py --no-atr                     # Fixed TP/SL (no ATR)
   python scripts/scanner/pattern_scanner.py --correction bh --wf-folds 3  # With corrections + WF
   python scripts/scanner/pattern_scanner.py --concurrency 4 -v           # 4 workers, verbose
@@ -122,6 +126,43 @@ def load_and_classify(data_file: str) -> pd.DataFrame:
     df['candle_type'] = types
     logger.info(f"Classified {len(df)} candles into 12 types")
     return df
+
+
+def find_neutral_window(closes, tol_pct=1.0, min_days=90, bars_per_day=288):
+    """Find longest window where start_price ≈ end_price within tolerance.
+
+    Scans all possible start points and finds the farthest end point where
+    the price is within ±tol_pct of the start price. Returns the longest
+    such window to maximize data utilization while ensuring directional balance.
+
+    Args:
+        closes: Array of close prices.
+        tol_pct: Price tolerance in percent (default 1.0 = ±1%).
+        min_days: Minimum window length in days (default 90).
+        bars_per_day: Bars per day (288 for 5m, 96 for 15m).
+
+    Returns:
+        (start_bar, end_bar) tuple, or None if no valid window found.
+    """
+    n = len(closes)
+    min_bars = min_days * bars_per_day
+    best_len, best_start, best_end = 0, 0, 0
+
+    for i in range(0, n - min_bars, bars_per_day):
+        start_price = closes[i]
+        lo = start_price * (1 - tol_pct / 100)
+        hi = start_price * (1 + tol_pct / 100)
+        for j in range(n - 1, i + min_bars - 1, -bars_per_day):
+            if lo <= closes[j] <= hi:
+                length = j - i
+                if length > best_len:
+                    best_len = length
+                    best_start, best_end = i, j
+                break
+
+    if best_len == 0:
+        return None
+    return best_start, best_end
 
 
 def build_signal_index(types, n):
@@ -1470,6 +1511,7 @@ def build_output_json(
     holdout_days: int = 0,
     clean_mode: bool = False,
     atr_config: dict = None,
+    neutral_meta: dict = None,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
@@ -1546,6 +1588,10 @@ def build_output_json(
     # ATR config metadata
     if atr_config:
         output['atr_config'] = atr_config
+
+    # Neutral window metadata (v1.36.3)
+    if neutral_meta:
+        output['neutral_window'] = neutral_meta
 
     # Timing
     if timing:
@@ -1645,7 +1691,7 @@ def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout,
 
 def main():
     parser = argparse.ArgumentParser(
-        description='Pattern Scanner v2.2 — Dynamic Walk-Forward Pattern Selection (ATR default)'
+        description='Pattern Scanner v2.3 — Dynamic Walk-Forward Pattern Selection (ATR + Neutral default)'
     )
     parser.add_argument('--data', default=DEFAULT_DATA_FILE,
                         help='Path to OHLCV CSV file')
@@ -1684,6 +1730,13 @@ def main():
     parser.add_argument('--holdout-days', type=int, default=7,
                         help='Reserve last N days as holdout OOS '
                              '(default: 7, 0=disabled)')
+    # Neutral window args (v1.36.3: direction-balanced discovery)
+    parser.add_argument('--neutral', action='store_true', default=True,
+                        help='Auto-find price-neutral window (default: enabled)')
+    parser.add_argument('--no-neutral', dest='neutral', action='store_false',
+                        help='Disable neutral window (use full data or --is-days)')
+    parser.add_argument('--neutral-tol', type=float, default=1.0,
+                        help='Neutral window price tolerance %% (default: 1.0)')
     # ATR scaling args (default: enabled with production params)
     parser.add_argument('--no-atr', action='store_true', default=False,
                         help='Disable ATR scaling (Fixed TP/SL mode)')
@@ -1737,7 +1790,7 @@ def main():
     if args.clean:
         logger.info("Pattern Scanner v3.0 — Clean Single-Pass Protocol")
     else:
-        logger.info("Pattern Scanner v2.2 — Dynamic Walk-Forward Selection")
+        logger.info("Pattern Scanner v2.3 — Dynamic Walk-Forward Selection")
     logger.info("=" * 60)
     logger.info(f"Data: {args.data}")
 
@@ -1807,6 +1860,10 @@ def main():
                      f"clamp=[{args.atr_clamp_lo}, {args.atr_clamp_hi}]")
     else:
         logger.info("ATR scaling: DISABLED (--no-atr)")
+    if args.neutral:
+        logger.info(f"Neutral window: tol +/-{args.neutral_tol}% (auto-detect)")
+    else:
+        logger.info("Neutral window: disabled")
     if args.tp_max is not None or args.sl_max is not None:
         logger.info(f"TP/SL caps: TP max={args.tp_max}%, SL max={args.sl_max}%")
     if args.concurrency != 1:
@@ -1821,8 +1878,38 @@ def main():
     df = load_and_classify(args.data)
     timing['classify_sec'] = round(time.time() - t0, 1)
 
-    # Slice to IS window if --is-days specified (keep most recent N days)
-    if args.is_days > 0:
+    # Neutral window: find price-balanced window (v1.36.3)
+    neutral_meta = None
+    if args.neutral:
+        closes_all = df['close'].values
+        result_nw = find_neutral_window(closes_all, tol_pct=args.neutral_tol)
+        if result_nw is not None:
+            ns, ne = result_nw
+            drift = (closes_all[ne] / closes_all[ns] - 1) * 100
+            neutral_days = (ne - ns) / 288
+            df = df.iloc[ns:ne + 1].reset_index(drop=True)
+            neutral_meta = {
+                'enabled': True,
+                'tol_pct': args.neutral_tol,
+                'window_days': round(neutral_days, 1),
+                'start_bar': int(ns),
+                'end_bar': int(ne),
+                'start_price': round(float(closes_all[ns]), 2),
+                'end_price': round(float(closes_all[ne]), 2),
+                'drift_pct': round(drift, 2),
+            }
+            logger.info(f"Neutral window: {neutral_days:.0f}d (bars {ns}-{ne}), "
+                        f"price {closes_all[ns]:.0f}->{closes_all[ne]:.0f} "
+                        f"(drift {drift:+.2f}%, tol +/-{args.neutral_tol}%)")
+        else:
+            logger.warning(f"No neutral window found (tol +/-{args.neutral_tol}%, min 90d). "
+                           f"Falling back to full data.")
+            neutral_meta = {'enabled': False, 'reason': 'no_window_found'}
+    else:
+        neutral_meta = {'enabled': False}
+
+    # Slice to IS window if --is-days specified (skip if neutral window is active)
+    if args.is_days > 0 and not (args.neutral and neutral_meta and neutral_meta.get('enabled')):
         bars_per_day = 288  # 5m candles per day
         max_bars = args.is_days * bars_per_day
         if max_bars < len(df):
@@ -2047,6 +2134,7 @@ def main():
             'clamp_lo': args.atr_clamp_lo,
             'clamp_hi': args.atr_clamp_hi,
         } if not args.no_atr else {'enabled': False},
+        neutral_meta=neutral_meta,
     )
 
     # Write JSON (numpy types → native Python for JSON compatibility)
@@ -2096,6 +2184,13 @@ def main():
               f"clamp=[{args.atr_clamp_lo}, {args.atr_clamp_hi}]")
     else:
         print("  ATR: disabled")
+    if neutral_meta and neutral_meta.get('enabled'):
+        print(f"  Neutral: {neutral_meta['window_days']}d, "
+              f"drift {neutral_meta['drift_pct']:+.2f}%")
+    elif args.neutral:
+        print("  Neutral: no window found (fallback to full data)")
+    else:
+        print("  Neutral: disabled")
     if wf_result:
         print(f"  Walk-Forward: {wf_result['positive_folds']}/"
               f"{wf_result['n_folds']} positive, "

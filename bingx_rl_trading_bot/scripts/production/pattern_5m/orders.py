@@ -297,29 +297,45 @@ def _adjust_single_position_tpsl(
 ) -> bool:
     """Adjust TP/SL for a single position slot.
 
-    Determines expected TP/SL percentages based on the current config mode
-    (dynamic per-pattern, dynamic universal, or static), then compares
-    against the position's current TP/SL prices and re-places if needed.
+    Uses calculate_tp_sl() — the single source of truth — to determine expected
+    TP/SL prices (with ATR scaling and slippage buffer), then compares against
+    the position's current TP/SL prices and re-places if needed.
     """
-    # Resolve expected TP/SL percentages based on mode (before accessing entry_price)
-    expected_tp_pct, expected_sl_pct, label = _resolve_expected_tpsl(position, config)
-    if expected_tp_pct is None:
-        return False
+    from .position_open import calculate_tp_sl  # local import to avoid circular
+
+    # Resolve pattern (needed for per-pattern and static modes, optional for universal)
+    pattern = position.get('pattern_name') or extract_pattern_name(position.get('reason', ''))
+
+    # Verify pattern/mode compatibility before proceeding
+    if config.get('_dynamic_tpsl_per_pattern'):
+        if not pattern:
+            logger.debug("No pattern found in position, skipping TP/SL adjustment")
+            return False
+        pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
+        if pattern not in pp_tpsl:
+            logger.debug(f"Pattern {pattern} not in dynamic per-pattern dict, skipping adjustment")
+            return False
+    elif config.get('_dynamic_tpsl_universal'):
+        pass  # Universal mode doesn't require a pattern
+    else:
+        # Static mode: need pattern in PATTERN_OPTIMAL_TPSL
+        if not pattern:
+            logger.debug("No pattern found in position, skipping TP/SL adjustment")
+            return False
+        if pattern not in PATTERN_OPTIMAL_TPSL:
+            logger.debug(f"Pattern {pattern} not in PATTERN_OPTIMAL_TPSL, skipping adjustment")
+            return False
 
     entry_price = position['entry_price']
     direction = position['direction']
+    dir_mult = 1 if direction == 'LONG' else -1
+    vol_mult = position.get('vol_mult', 1.0)
+    strategy = config.get('strategy', {})
 
-    # Calculate expected prices
-    if direction == 'LONG':
-        expected_tp_price = entry_price * (1 + expected_tp_pct / 100)
-        expected_sl_price = entry_price * (1 - expected_sl_pct / 100)
-    else:  # SHORT
-        expected_tp_price = entry_price * (1 - expected_tp_pct / 100)
-        expected_sl_price = entry_price * (1 + expected_sl_pct / 100)
-
-    # Round to appropriate precision
-    expected_tp_price = round(expected_tp_price, 1)
-    expected_sl_price = round(expected_sl_price, 1)
+    # Use single source of truth for TP/SL (applies ATR scaling + slippage buffer)
+    expected_tp_price, expected_sl_price, tp_pct_adj, sl_pct_adj = calculate_tp_sl(
+        entry_price, dir_mult, strategy, vol_mult=vol_mult, pattern=pattern, config=config
+    )
 
     # Check if adjustment is needed (tolerance: $1)
     current_tp = position.get('tp_price', 0)
@@ -329,13 +345,14 @@ def _adjust_single_position_tpsl(
     sl_diff = abs(current_sl - expected_sl_price)
 
     if tp_diff <= 1.0 and sl_diff <= 1.0:
-        logger.debug(f"TP/SL already match config for {label}")
+        logger.debug(f"TP/SL already match config for {pattern} (vol_mult={vol_mult:.4f})")
         return False
 
     slot_id = position.get('slot_id', 'unknown')
-    logger.info(f"🔧 TP/SL adjustment needed for {label} (slot {slot_id}):")
+    logger.info(f"🔧 TP/SL adjustment needed for {pattern} (slot {slot_id}):")
     logger.info(f"   Current: TP=${current_tp:.1f}, SL=${current_sl:.1f}")
-    logger.info(f"   Expected: TP=${expected_tp_price:.1f} ({expected_tp_pct}%), SL=${expected_sl_price:.1f} ({expected_sl_pct}%)")
+    logger.info(f"   Expected: TP=${expected_tp_price:.1f} ({tp_pct_adj:.2f}%), SL=${expected_sl_price:.1f} ({sl_pct_adj:.2f}%)")
+    logger.info(f"   vol_mult={vol_mult:.4f}")
 
     try:
         # Cancel existing orders
@@ -357,7 +374,7 @@ def _adjust_single_position_tpsl(
         _place_sl_order(exchange, position, symbol, close_side, quantity, expected_sl_price, position_side)
 
         save_state(state)
-        logger.info(f"✅ TP/SL adjusted successfully for {label} (slot {slot_id})")
+        logger.info(f"✅ TP/SL adjusted successfully for {pattern} (slot {slot_id})")
         return True
 
     except Exception as e:

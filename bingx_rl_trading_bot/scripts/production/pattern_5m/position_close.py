@@ -294,11 +294,13 @@ def recover_position_to_state(
     quantity = float(exchange_pos.get('contracts', 0))
     dir_mult = 1 if direction == 'LONG' else -1
 
-    # Try to find pattern_name from existing slots for this direction
+    # Try to find pattern_name and vol_mult from existing slots for this direction
     old_pattern_name = None
+    old_vol_mult = 1.0
     for slot in (state.get('positions') or {}).values():
         if slot.get('direction') == direction:
             old_pattern_name = extract_pattern_name(slot.get('reason', '')) or slot.get('pattern_name')
+            old_vol_mult = slot.get('vol_mult', 1.0)
             if old_pattern_name:
                 break
 
@@ -314,7 +316,7 @@ def recover_position_to_state(
         default_tp, default_sl = saved_tpsl_pairs[0]
         if not default_sl:
             _, default_sl, _, _ = calculate_tp_sl(
-                entry_price, dir_mult, strategy, vol_mult=1.0, pattern=old_pattern_name, config=config
+                entry_price, dir_mult, strategy, vol_mult=old_vol_mult, pattern=old_pattern_name, config=config
             )
         tp_pct_adjusted = abs(default_tp / entry_price - 1) * 100 if entry_price > 0 else 1.0
         logger.info(
@@ -338,11 +340,12 @@ def recover_position_to_state(
         else:
             # Fallback: calculate from config defaults (pass pattern for per-pattern lookup)
             default_tp, default_sl, tp_pct_adjusted, _ = calculate_tp_sl(
-                entry_price, dir_mult, strategy, vol_mult=1.0, pattern=old_pattern_name, config=config
+                entry_price, dir_mult, strategy, vol_mult=old_vol_mult, pattern=old_pattern_name, config=config
             )
             logger.info(
                 f"Recovered {direction} position: entry=${entry_price:.1f} | "
-                f"TP/SL from config{f' (pattern={old_pattern_name})' if old_pattern_name else ' defaults'}: "
+                f"TP/SL from config{f' (pattern={old_pattern_name})' if old_pattern_name else ' defaults'}"
+                f" (vol_mult={old_vol_mult:.4f}): "
                 f"TP=${default_tp:.1f}, SL=${default_sl:.1f}"
             )
 
@@ -383,7 +386,7 @@ def recover_position_to_state(
             'remaining_quantity': slot_qty,
             'tp_price': slot_tp,
             'sl_price': slot_sl,
-            'vol_mult': 1.0,
+            'vol_mult': old_vol_mult,
             'scale_out_enabled': bool(scale_out_stages),
             'scale_out_stages': scale_out_stages,
             'entry_time': datetime.now().isoformat(),

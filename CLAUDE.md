@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.36.2 | **Bot**: Pattern 5m (54패턴, 4L+50S, ATR Scanner+Holdout+MDD+Cap7+RegimeSizing+MomentumGuard) | **Updated**: 2026-02-27
+> **Version**: v1.36.5 | **Bot**: Pattern 5m (130패턴, 61L+69S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+RegimeSizing+MomentumGuard) | **Updated**: 2026-02-27
 
 ---
 
@@ -94,121 +94,70 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=83.2 (v1.36.1, 54pat ATR+WF3/3)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=88.8 (v1.36.4, 130pat Neutral+Edge18+WF3/3)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.36.2
+## 📊 현재 전략: Pattern 5m v1.36.4
 
 ### 핵심 파라미터
 
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | **Per-pattern ATR-scaled** (TP 0.84-2.79%, SL 1.67-4.52%, MAE/MFE + ATR scanner v2.2, v1.36.1) |
+| TP/SL | **Per-pattern ATR-scaled** (TP 0.91-2.76%, SL 1.44-4.84%, MAE/MFE + ATR scanner v2.3, v1.36.4) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Leverage | 3x |
 | Timeframe | 5m |
 | **Max Positions** | **9** (virtual slots, 1/N=11.1% sizing, **mixed-direction** in Hedge) |
 | **Position Mode** | **Hedge** (LONG/SHORT 독립 포지션, v1.30.0) |
-| Pattern Source | **Dynamic** (results/dynamic_patterns.json) |
+| Pattern Source | **Dynamic** (results/dynamic_patterns.json, Neutral window ±1%) |
 | Discovery | **MAE/MFE + ATR-scaled** (TP=MFE percentile, SL=MAE percentile, ATR scanner v2.2) |
 | Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
-| Quality Filter | **Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25 + Holdout 7d** |
-| Patterns | **54** (4L + 50S), ATR scanner v2.2 + WF 3/3 PASS + Holdout validation (v1.36.1) |
+| Quality Filter | **Edge>=18pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25 + Holdout 7d** |
+| Patterns | **130** (61L + 69S), ATR scanner v2.3 + Neutral window + WF 3/3 PASS + Holdout validation (v1.36.4) |
 | **Direction Cap** | **7** (max same-direction positions, 7/9 = 78%, v1.36.1 — portfolio study: PnL/MDD 14.43x, corr loss -11%) |
 | **Position Timeout** | **864 bars (72h)** — 48h+ trades are net negative, slot recycling (v1.31.0) |
 | Risk | Daily loss **13%** (v1.28.5), **aggregate risk cap** (counter 3%/with 7%, v1.35.5) |
 
 ### 270일 In-Sample 검증 결과
 
-| 지표 | Static 51 (v1.27.2) | MAE/MFE 59 (v1.28.40) | ATR 51 (v1.35.0) | **ATR 54 (v1.36.1)** |
-|------|---------------------|------------------------|----------------------|----------------------|
-| Patterns | 51 (32L+19S) | 59 (12L+47S) | 51 (16L+35S) | **54 (4L+50S)** |
-| Discovery | PP grid | MAE/MFE | MAE/MFE+ATR | **MAE/MFE+ATR (shifted)** |
-| WR mean | 84.9% | 86.7% | 93.9% | **89.4%** |
-| Edge mean | ~15pp | 23.9pp | 24.5pp | **25.0pp** |
-| Portfolio Trades | 339 | 321 | 294 | **268** |
-| Portfolio PnL | +966% | +949% | +1,214% | **+817%** |
-| Portfolio MDD | 16.2% | 22.4% | 20.4% | **38.2%** |
-| PnL/MDD | 59.6x | 42.4x | 59.5x | **21.4x** |
-| TP range | 0.5-3.0 | 1.0-3.3 | 0.87-2.84 | **0.84-2.79** |
-| SL range | 1.0-4.0 | 1.7-4.2 | 1.44-4.76 | **1.67-4.52** |
+| 지표 | ATR 51 (v1.35.0) | ATR 54 (v1.36.1) | Neutral 51 (v1.36.3) | **Neutral 130 (v1.36.4)** |
+|------|----------------------|----------------------|----------------------|----------------------|
+| Patterns | 51 (16L+35S) | 54 (4L+50S) | 51 (22L+29S) | **130 (61L+69S)** |
+| Discovery | MAE/MFE+ATR | MAE/MFE+ATR (shifted) | MAE/MFE+ATR (neutral) | **MAE/MFE+ATR (neutral, E≥18)** |
+| WR mean | 93.9% | 89.4% | ~95% | **95.0%** |
+| Edge threshold | 21.8pp | 21.8pp | 21.8pp | **18.0pp** |
+| Portfolio Trades | 294 | 268 | ~320 | **320** |
+| Portfolio PnL | +1,214% | +817% | +1,075% | **+1,385%** |
+| Portfolio MDD | 20.4% | 38.2% | 13.5% | **27.8%** |
+| PnL/MDD | 59.5x | 21.4x | 79.6x | **49.8x** |
+| TP range | 0.87-2.84 | 0.84-2.79 | 0.91-2.76 | **0.91-2.76** |
+| SL range | 1.44-4.76 | 1.67-4.52 | 1.44-4.84 | **1.44-4.84** |
 
-### LONG Patterns (4) — ATR Scanner v2.2 (v1.36.1, 270d shifted)
+### Pattern Summary — ATR Scanner v2.3 (v1.36.4, Neutral window, Edge≥18pp)
 
-| Pattern | TP/SL | Edge | WR | Trades |
-|---------|-------|------|-----|--------|
-| BD-BD-BU | 1.70/3.06 | 23.6 | 87.9 | 33 |
-| D-ST-ST | 1.47/3.05 | 25.6 | 93.1 | 29 |
-| DN-MD-ST | 1.71/3.38 | 24.5 | 90.9 | 44 |
-| MU-IH-DN | 1.05/1.75 | 22.7 | 85.2 | 27 |
+**130 패턴 (61L + 69S)** — L/S 47%/53% 방향 균형 (neutral window 효과)
 
-### SHORT Patterns (50) — ATR Scanner v2.2 (v1.36.1, 270d shifted)
+| 통계 | LONG (61) | SHORT (69) | 전체 (130) |
+|------|-----------|------------|------------|
+| TP range | 0.91-2.76% | 0.91-2.76% | 0.91-2.76% |
+| SL range | 1.44-4.84% | 1.44-4.84% | 1.44-4.84% |
+| Edge | 18.0-31.4pp | 18.0-31.8pp | 18.0-31.8pp |
+| Trades/pat | 25-266 | 25-266 | 25-266 |
 
-| Pattern | TP/SL | Edge | WR | Trades |
-|---------|-------|------|-----|--------|
-| BD-BD-ST | 1.75/3.35 | 24.0 | 89.7 | 29 |
-| BD-DN-BU | 1.47/2.97 | 27.4 | 94.3 | 35 |
-| BD-ST-ST | 1.49/3.06 | 22.0 | 89.3 | 28 |
-| BD-U-MD | 1.37/2.77 | 22.7 | 89.7 | 29 |
-| BU-BU-ST | 2.22/3.10 | 25.7 | 84.0 | 25 |
-| BU-DN-BD | 2.05/4.37 | 24.2 | 92.3 | 26 |
-| BU-DN-MU | 1.55/2.92 | 23.6 | 88.9 | 27 |
-| BU-MU-DN | 2.65/2.51 | 31.4 | 80.0 | 25 |
-| BU-MU-U | 1.54/1.67 | 32.6 | 84.6 | 26 |
-| BU-ST-ST | 1.93/4.32 | 27.3 | 96.4 | 28 |
-| BU-U-BU | 1.85/4.27 | 22.5 | 92.3 | 26 |
-| D-BU-DN | 1.64/2.60 | 23.9 | 85.2 | 27 |
-| D-ST-DN | 1.96/4.52 | 27.6 | 97.4 | 38 |
-| D-U-MD | 1.35/1.89 | 29.7 | 88.0 | 25 |
-| D-U-U | 2.12/4.15 | 22.0 | 88.2 | 51 |
-| DF-U-U | 1.40/3.14 | 22.8 | 92.0 | 25 |
-| DN-BD-BU | 1.52/3.15 | 23.5 | 90.9 | 55 |
-| DN-BU-BD | 1.66/3.83 | 22.8 | 92.6 | 27 |
-| DN-BU-BU | 2.30/3.75 | 24.7 | 86.7 | 30 |
-| DN-D-BD | 1.63/2.41 | 25.0 | 84.6 | 26 |
-| DN-DN-D | 1.88/3.18 | 23.4 | 86.2 | 80 |
-| DN-H-BD | 1.73/2.64 | 23.6 | 84.0 | 25 |
-| DN-MU-D | 1.78/3.93 | 23.2 | 92.0 | 25 |
-| DN-MU-ST | 2.36/4.14 | 24.9 | 88.6 | 44 |
-| DN-ST-H | 2.05/3.84 | 24.1 | 89.3 | 28 |
-| GS-DN-U | 2.01/2.57 | 22.0 | 78.1 | 32 |
-| GS-U-DN | 1.33/2.87 | 22.0 | 90.3 | 31 |
-| H-DN-BD | 1.24/2.77 | 27.1 | 96.2 | 26 |
-| H-ST-ST | 1.35/2.48 | 31.4 | 96.2 | 26 |
-| IH-ST-ST | 1.48/2.75 | 27.3 | 92.3 | 26 |
-| MD-DN-BU | 1.56/3.32 | 22.0 | 90.0 | 30 |
-| MD-MD-DN | 1.96/3.04 | 23.2 | 84.0 | 25 |
-| MD-MU-DN | 1.69/3.37 | 22.8 | 89.4 | 47 |
-| MD-ST-ST | 2.12/3.42 | 31.8 | 93.5 | 31 |
-| MU-ST-MD | 1.38/3.10 | 22.8 | 92.0 | 25 |
-| ST-BD-BU | 1.19/2.70 | 22.6 | 92.0 | 25 |
-| ST-BD-ST | 1.65/3.41 | 29.0 | 96.4 | 28 |
-| ST-D-U | 2.09/3.69 | 29.0 | 92.9 | 28 |
-| ST-DN-BU | 1.90/3.40 | 26.8 | 90.9 | 44 |
-| ST-H-DN | 1.80/2.85 | 22.9 | 84.2 | 38 |
-| ST-MD-MU | 1.38/2.36 | 24.0 | 87.1 | 31 |
-| ST-MU-ST | 1.54/2.32 | 22.2 | 82.4 | 34 |
-| ST-U-IH | 1.38/2.81 | 22.2 | 89.3 | 28 |
-| U-BD-BD | 2.79/4.19 | 24.6 | 84.6 | 26 |
-| U-BD-MU | 2.05/4.44 | 23.6 | 92.0 | 25 |
-| U-BU-MD | 2.32/3.60 | 24.0 | 84.8 | 33 |
-| U-BU-U | 2.42/4.49 | 25.5 | 90.5 | 42 |
-| U-D-BU | 0.84/1.92 | 26.7 | 96.3 | 27 |
-| U-GS-DN | 1.58/2.13 | 30.1 | 87.5 | 32 |
-| U-ST-IH | 0.98/1.97 | 22.4 | 89.1 | 46 |
+> 개별 패턴 상세: `results/dynamic_patterns.json` 참조
 
-### WF OOS 검증 (270d IS shifted, 3-fold Expanding Window, ATR Scanner v2.2)
+### WF OOS 검증 (Neutral 257d, 3-fold Expanding Window, ATR Scanner v2.3)
 
 | Fold | IS Bars | OOS Bars | IS Patterns | OOS Trades | OOS WR | OOS PnL |
 |------|---------|----------|-------------|------------|--------|---------|
-| 1 | 18,936 | 18,936 | 17 (8L+9S) | 65 | 89.2% | +207.8% |
-| 2 | 37,872 | 18,936 | 29 (18L+11S) | 95 | 77.9% | +183.3% |
-| 3 | 56,808 | 18,936 | 45 (10L+35S) | 80 | 82.5% | +259.6% |
+| 1 | 18,024 | 18,024 | 37 (28L+9S) | 84 | 88.1% | +241.2% |
+| 2 | 36,048 | 18,024 | 93 (65L+28S) | 95 | 88.4% | +269.3% |
+| 3 | 54,072 | 18,026 | 95 (50L+45S) | 90 | 90.0% | +362.2% |
 
-**Verdict: 3/3 PASS** | Total OOS PnL: +650.7% | Total OOS Trades: 240 | Avg OOS WR: 83.2%
+**Verdict: 3/3 PASS** | Total OOS PnL: +872.7% | Total OOS Trades: 269 | Avg OOS WR: 88.8%
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -264,6 +213,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **ATR Scanner Integration (v1.35.0)** | **Scanner v2.2에 ATR-scaled TP/SL 기본 통합** — Scanner-Production 정합성 확보, `--no-atr`로 Fixed 모드 가능 |
 | **Regime Sizing (v1.35.3)** | **Counter-regime 포지션 축소** — EMA(20) slope로 추세 감지, 역추세 진입 시 ×0.3 사이징 (MDD 6.71%, WF 19/19 PASS) |
 | **Aggregate Risk Cap (v1.35.5)** | **방향별 SL 노출 합산 제한** — counter-regime 3%, with-regime 7% cap. MDD -52% (13.2→6.3%), PnL/MDD +16%, WF 3/3 PASS |
+| **Neutral Window Discovery (v1.36.3)** | **가격 중립 윈도우 자동 탐색** — Scanner가 start≈end price (±1%) 최장 구간 자동 발견. 방향 편향 없는 패턴 발굴 (22L+29S vs 기존 4L+50S). MDD 13.5% (vs 38.2%), PnL/MDD 79.6x (vs 21.4x). `--no-neutral`로 비활성화 가능 |
 | **Momentum Guard (v1.36.2)** | **강한 단기 움직임 시 역방향 진입 일시정지** — BTC >1%/30min 변동 시 역방향 진입 30min 차단. 신호의 ~2.3%만 차단하면서 correlated loss 회피. PnL/MDD 8.19 vs baseline 7.51 (+9%), WF 3/3 PASS |
 
 ### Dynamic Pattern Selection (v1.27.3)
@@ -276,21 +226,23 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | Dynamic PP | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | PP grid search |
 | **Dynamic ATR (현재)** | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | **MAE/MFE + ATR-scaled** |
 
-**Scanner CLI 사용법** (v2.2):
+**Scanner CLI 사용법** (v2.3):
 ```bash
 cd bingx_rl_trading_bot
-# ATR 모드 (기본, v1.35.0~)
-python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 21.8 --is-days 270 --wf-folds 3
-# ATR + Holdout
-python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 21.8 --is-days 270 --wf-folds 3 --holdout-days 7
+# 기본 (neutral window + ATR, v1.36.3~)
+python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 18 --wf-folds 3 --holdout-days 7
+# neutral 비활성화 (기존 방식)
+python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 18 --no-neutral --is-days 270 --wf-folds 3 --holdout-days 7
+# neutral 허용오차 변경
+python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 18 --neutral-tol 2.0
 # Fixed 모드 (ATR 비활성화)
-python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 21.8 --no-atr
+python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 18 --no-atr
 # ATR 커스텀 파라미터
 python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --atr-period 14 --atr-window 576 --atr-clamp-lo 0.6 --atr-clamp-hi 1.7
 ```
 
-**현재 적용**: MAE/MFE + ATR scanner (edge>=21.8pp, MC<0.01, --is-days 270, --wf-folds 3, --holdout-days 7) → **54패턴 (4L+50S)**.
-WF 3/3 PASS (OOS PnL +650.7%, Avg WR 83.2%). ATR config: a14/w576/clamp[0.6,1.7]. Data: 297d (shifted 270d window). Backup: `results/dynamic_patterns_51pat_atr_v1350_backup.json`
+**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **130패턴 (61L+69S)**.
+WF 3/3 PASS, OOS +872.7%. Neutral window ±1% 자동 탐색 (257d). ATR config: a14/w576/clamp[0.6,1.7]. Data: 297d. Backup: `results/dynamic_patterns_51pat_neutral_edge21.8_backup.json`
 
 ---
 
@@ -414,7 +366,10 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 | v1.28.15 | 02-18 | **4 hardening fixes**: (1) `position_close.py`: `recover_from_crash` Case 2 fallback을 `entry_price` → 현재 ticker로 변경 (v1.28.14 sync fix와 동일 패턴) (2) `lock.py`: `_check_windows_process`+`check_duplicate_instances`에 `python3.exe` 추가 — MSYS2 환경에서 봇 프로세스 미감지 수정 (3) `logging_config.py`: dead code `log_signal_conditions` 제거 (engulf bot 시절 잔존, 현재 미사용) (4) `lock.py`: `_write_lock_info`+`_cleanup_file`을 base `FileLock` 클래스로 통합 — WindowsFileLock/UnixFileLock 중복 제거. 비즈니스 로직 변경 없음. |
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
 | (연구) | 02-23 | **ATR-Scaled Backtest Study** (`atr_scaled_backtest_study.py`): Scanner(고정 TP/SL) vs Production(ATR-scaled TP/SL) 조건 비교 4-Phase 연구. **Phase 1**: 15패턴 개별 비교 — ATR scaling이 avg WR +4.5pp, edge +0.876%/trade 개선 (11/15 패턴 향상). **Phase 2**: 59패턴 재평가 — ATR-scaled 필터가 더 엄격 (39 pass vs Fixed 51), 패턴 선별이 달라짐. **Phase 3**: Hedge N=5 포트폴리오 — ATR T864 PnL/MDD **17.18** vs Fixed 10.91, 둘 다 WF 3/3 PASS. ATR scaling이 리스크 조정 성과 +57.5% 향상. **Phase 4**: ATR ratio 분포 — mean 1.0874 (slight expansion), 72.1% within clamps [0.6,1.7]. **결론**: ATR scaling은 Scanner 단계에서도 적용 시 선별 결과가 달라지며, Production 조건과의 정합성이 향상됨. |
-| **v1.36.2** | 02-27 | **Momentum Guard — counter-dir spike protection**: `entry_improvement_study.py` 21시나리오 연구 (H1 Entry Spacing STOP, H2 Momentum Guard GO, H3 Progressive Cap STOP). `bot.py`: `_check_momentum_guard()` — BTC >1%/30min 변동 시 역방향 진입 30min 차단. 신호의 ~2.3%만 차단하면서 correlated loss 회피. PnL/MDD 8.19 vs baseline 7.51 (+9%), ALL 21 scenarios WF 3/3 PASS. config `momentum_guard` 섹션 추가 (lookback_bars=6, threshold_pct=1.0, cooldown_bars=6). **1061 tests passed**. ← **현재** |
+| **v1.36.5** | 02-27 | **ATR scaling bug fix (2 critical paths)**: 전수조사(17 code paths) 기반 2개 크리티컬 버그 수정. (1) `orders.py`: `_adjust_single_position_tpsl()`이 `_resolve_expected_tpsl()`(base TP/SL만 반환) 사용 → `calculate_tp_sl()` (ATR scaling + slippage buffer 포함)로 교체. **매 봇 재시작마다 모든 포지션의 ATR-scaled TP/SL이 base 값으로 덮어쓰기되던 버그**. circular import 회피를 위해 local import 사용. universal mode 패턴 불필요 분기 추가. (2) `position_close.py`: `recover_position_to_state()`에서 `vol_mult=1.0` 하드코딩 → 기존 state에서 `old_vol_mult` 추출하여 보존. crash recovery 시 ATR scaling 손실 방지. (3) `test_orders.py`: 3개 테스트 slippage buffer 반영 업데이트. **1061 tests passed**. ← **현재** |
+| v1.36.4 | 02-27 | **Edge threshold 21.8→18pp (130 patterns)**: Edge sweep 연구 (15/18/20/21.8pp, 모두 WF 3/3 PASS). Neutral window 환경에서 18pp가 최적 균형 — 130패턴(61L+69S), IS PnL +1,385%, MDD 27.8%, WF OOS +872.7% (vs 21.8pp: 51pat, OOS +632.5%). L/S 47%/53% 방향 균형 유지. TP 0.91-2.76%, SL 1.44-4.84%. Holdout 7d: 7 SHORT 패턴 제거. Stable patterns: 7 (3-fold 안정). Backup: `dynamic_patterns_51pat_neutral_edge21.8_backup.json`. |
+| v1.36.3 | 02-27 | **Neutral window pattern discovery + Filter ablation study**: (1) `neutral_window_discovery_study.py` — 270d shifted(4L+50S) 극단적 SHORT 편향 → 가격 중립 윈도우 257d: **51패턴(22L+29S)**, MDD 13.5%, PnL/MDD 79.6x, WF 3/3 PASS. Scanner v2.3: `--neutral` 기본. (2) `neutral_filter_ablation_study.py` — 6필터 full factorial(64조합) ablation. F6:Timeout 필수(+9.68), F2+F3 없으면 WF FAIL. DirCap7은 neutral portfolio에서 no-op(2건 차단). 상위 WF PASS 간 차이 noise(<1%). **결론: 현행 6필터 전부 유지(no change)**. |
+| v1.36.2 | 02-27 | **Momentum Guard — counter-dir spike protection**: `entry_improvement_study.py` 21시나리오 연구 (H1 Entry Spacing STOP, H2 Momentum Guard GO, H3 Progressive Cap STOP). `bot.py`: `_check_momentum_guard()` — BTC >1%/30min 변동 시 역방향 진입 30min 차단. 신호의 ~2.3%만 차단하면서 correlated loss 회피. PnL/MDD 8.19 vs baseline 7.51 (+9%), ALL 21 scenarios WF 3/3 PASS. config `momentum_guard` 섹션 추가 (lookback_bars=6, threshold_pct=1.0, cooldown_bars=6). **1061 tests passed**. |
 | v1.36.1 | 02-27 | **Direction Cap 8→7 + Data Extension Rescan (54pat)**: (1) Live 성과 괴리 분석 (WF OOS 77.3% vs Live 51.3%): BTC +9.1% rally에서 8 SHORT 동시 SL 피격이 근본원인. `live_gap_portfolio_study.py` 4-Hypothesis 연구: H1 Direction Cap **GO** (cap7: PnL/MDD 14.43x, cap8: 13.54x, corr loss 3.1% vs 3.5%), H2 Portfolio SL STOP (무효과), H3 Regime Sizing keep 0.3 (제거 시 corr loss +43%), H4 Combined cap7+mult0.3. (2) config `direction_cap: 8→7`. (3) 데이터 확장: 270d→297d (btc_5m_270days_reclassified.csv, ~2025-05-05→2026-02-26, 85,634 rows). `extend_5m_data.py` 스크립트 추가. (4) 270d shifted rescan (ATR v2.2): **54패턴(4L+50S)**, WF 3/3 PASS, OOS PnL +650.7% (기존 +443.9%), Avg OOS WR 83.2% (기존 77.3%). LONG 16→4 (최근 BTC rally에서 LONG edge 약화 반영), SHORT 35→50. TP 0.84-2.79%, SL 1.67-4.52%. Backup: `dynamic_patterns_51pat_atr_v1350_backup.json`. |
 | v1.36.0 | 02-27 | **Multi-TF infra + 15m 실험 + 15m 비활성화**: (1) `constants.py`: `PATTERN_BOT_TF` 환경변수로 multi-TF 지원. 경로/타이밍 자동 파생 (`CANDLE_DURATION_MS`, `MAX_OHLCV_CANDLES`, `DEFAULT_TIMEOUT_BARS`). 기본값 `5m` 유지. (2) `pattern_15m_bot.py` + `pattern_15m_config.yaml` + `dynamic_patterns_15m.json`: 15m 인프라 구축. 15패턴(10L+5S), WF 3/3 PASS, OOS +2,152%. (3) **15m 비활성화 결정**: 거래 빈도 0.21/day(4~5일에 1회) 부족. (4) **Multi-TF Direction Filter 연구** (`multi_tf_direction_study.py`): 15m/1h/4h EMA(20) 방향으로 5m 필터링/사이징 7가설 검증 — **7/7 STOP**. 5m 패턴이 구조적 역추세(상승장 풀백 SHORT)이므로 상위 TF 방향 필터가 핵심 수익원 억제. 기존 same-TF regime sizing(v1.35.3)이 최적. **1061 tests passed**. |
 | v1.35.6 | 02-27 | **Remove consecutive loss pause (deadlock fix)**: N=9 멀티포지션에서 consecutive_losses가 리셋 불가능한 데드락 발생 (진입 차단 → 승리 불가 → 리셋 불가 → 영구 차단). `check_consecutive_loss_limit()` 함수 및 관련 상수(`MAX_CONSECUTIVE_LOSSES`, `CONSECUTIVE_LOSS_PAUSE_SECONDS`) 완전 제거. bot.py, signals.py, constants.py, 테스트 7개 정리. 대체 보호: aggregate risk cap + regime sizing + MDD sizing + daily loss limit. **1061 tests passed**. |

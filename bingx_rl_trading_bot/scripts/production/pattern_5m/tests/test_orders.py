@@ -1160,22 +1160,27 @@ class TestAdjustTpslDynamicMode:
         mock_cancel.assert_called_once()
         mock_tp.assert_called_once()
         mock_sl.assert_called_once()
-        # Verify the new prices are based on per-pattern TP/SL
+        # Verify the new prices are based on per-pattern TP/SL + slippage buffer
         pos = state['positions']['s1']
-        expected_tp = round(entry * (1 - 2.24 / 100), 1)
-        expected_sl = round(entry * (1 + 3.94 / 100), 1)
+        tp_pct_adj = 2.24 + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
+        sl_pct_adj = 3.94 - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)
+        expected_tp = round(entry * (1 - tp_pct_adj / 100), PRICE_ROUND_DECIMALS)
+        expected_sl = round(entry * (1 + sl_pct_adj / 100), PRICE_ROUND_DECIMALS)
         assert pos['tp_price'] == expected_tp
         assert pos['sl_price'] == expected_sl
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
     def test_dynamic_per_pattern_skips_when_prices_match(self, mock_save):
-        """Dynamic per-pattern mode → skips if TP/SL already correct."""
+        """Dynamic per-pattern mode → skips if TP/SL already correct (with slippage)."""
         entry = 67744.9
         tp_pct, sl_pct = 2.24, 3.94
+        # Prices must include slippage buffer to match calculate_tp_sl() output
+        tp_pct_adj = tp_pct + SLIPPAGE_BUFFER_PCT
+        sl_pct_adj = sl_pct - SLIPPAGE_BUFFER_PCT
         state = {'positions': {'s1': {'slot_id': 's1',
             'direction': 'SHORT', 'entry_price': entry,
-            'tp_price': round(entry * (1 - tp_pct / 100), 1),
-            'sl_price': round(entry * (1 + sl_pct / 100), 1),
+            'tp_price': round(entry * (1 - tp_pct_adj / 100), PRICE_ROUND_DECIMALS),
+            'sl_price': round(entry * (1 + sl_pct_adj / 100), PRICE_ROUND_DECIMALS),
             'pattern_name': 'ST-ST-U',
         }}, 'active_direction': 'SHORT'}
         config = {
@@ -1211,8 +1216,11 @@ class TestAdjustTpslDynamicMode:
         result = adjust_tpsl_to_config(MagicMock(), state, config)
         assert result is True
         pos = state['positions']['s1']
-        assert pos['tp_price'] == round(entry * 1.02, 1)
-        assert pos['sl_price'] == round(entry * 0.97, 1)
+        # calculate_tp_sl applies slippage buffer: TP + buffer, SL - buffer
+        tp_pct_adj = 2.0 + SLIPPAGE_BUFFER_PCT
+        sl_pct_adj = 3.0 - SLIPPAGE_BUFFER_PCT
+        assert pos['tp_price'] == round(entry * (1 + tp_pct_adj / 100), PRICE_ROUND_DECIMALS)
+        assert pos['sl_price'] == round(entry * (1 - sl_pct_adj / 100), PRICE_ROUND_DECIMALS)
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
     def test_dynamic_per_pattern_unknown_pattern_skips(self, mock_save):

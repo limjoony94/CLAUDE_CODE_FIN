@@ -95,7 +95,7 @@ def get_position_size(
             if len(df) >= ema_period + lookback:
                 closes = df['close'].values
                 # EMA calculation
-                ema = pd.Series(closes).ewm(span=ema_period, adjust=False).values
+                ema = pd.Series(closes).ewm(span=ema_period, adjust=False).mean().values
                 # Slope: compare current EMA vs lookback bars ago
                 slope = ema[-1] - ema[-1 - lookback]
                 is_uptrend = slope > 0

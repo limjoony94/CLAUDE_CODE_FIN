@@ -269,6 +269,16 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
         config['strategy']['short_patterns'] = short_patterns
         logger.info(f"Dynamic patterns loaded: {len(long_patterns)}L + {len(short_patterns)}S = {total}")
 
+        # Direction balance check (v1.36.5)
+        if total > 0:
+            long_pct = len(long_patterns) / total * 100
+            if long_pct < 30 or long_pct > 70:
+                logger.warning(
+                    f"⚠️  DIRECTION IMBALANCE: {len(long_patterns)}L/{len(short_patterns)}S "
+                    f"({long_pct:.0f}% LONG). Correlated loss risk elevated — "
+                    f"consider re-scanning with --neutral for balanced discovery."
+                )
+
         # Inject per-pattern stats for confidence scoring (WR, trades, edge)
         pattern_details = data.get('pattern_details', {})
         if pattern_details:

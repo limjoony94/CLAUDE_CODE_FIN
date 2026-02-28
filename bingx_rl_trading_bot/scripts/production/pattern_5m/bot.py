@@ -75,7 +75,10 @@ from .position import (
     recover_from_crash,
     close_position_market,
 )
-from .orders import verify_tp_sl_orders, adjust_tpsl_to_config
+from .orders import (
+    verify_tp_sl_orders, adjust_tpsl_to_config,
+    _get_emergency_sl_id, _place_emergency_sl_for_direction,
+)
 from .utils import extract_pattern_name
 from .utils.lock import acquire_lock, release_lock
 from .utils.logging_config import setup_logging
@@ -329,6 +332,9 @@ def _run_bot_main(
                         exchange, state, config, cache, circuit_breaker, metrics
                     )
 
+                # 1c. Proactive emergency SL health check (v1.36.6)
+                _ensure_emergency_sl_exists(exchange, state, config)
+
                 # 2. Check for new entry signal (always, if slots available)
                 _process_entry_signal(
                     exchange, state, config, cache, circuit_breaker, metrics
@@ -344,6 +350,9 @@ def _run_bot_main(
                     )
                     if position_closed:
                         has_position = bool(state.get('positions') or {})
+
+                # Proactive emergency SL health check (v1.36.6)
+                _ensure_emergency_sl_exists(exchange, state, config)
 
                 # Position sync (clock-aligned, every 5 min)
                 last_sync_time = _maybe_sync_position(
@@ -534,6 +543,25 @@ def _process_existing_positions(
         logger.warning(f"Early exit check failed: {e}")
 
     return any_action
+
+
+def _ensure_emergency_sl_exists(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Proactive check: re-place emergency SL if missing for any active direction."""
+    if config.get('position_mode') != 'hedge':
+        return
+    positions = state.get('positions') or {}
+    if not positions:
+        return
+    active_dirs = {p['direction'] for p in positions.values() if p.get('direction')}
+    for direction in active_dirs:
+        sl_id = _get_emergency_sl_id(state, config, direction)
+        if not sl_id:
+            logger.warning(f"🛡️ Emergency SL ({direction}) absent — re-placing proactively")
+            _place_emergency_sl_for_direction(exchange, state, config, direction)
 
 
 def _check_position_timeouts(
@@ -1009,11 +1037,26 @@ def _log_waiting_status(
         daily_pnl = state.get('daily_pnl', 0)
         daily_trades = state.get('daily_trades', 0)
 
+        # Direction concentration of open positions (v1.36.5)
+        positions = state.get('positions', {})
+        n_long = sum(1 for p in positions.values() if p.get('direction') == 'LONG')
+        n_short = sum(1 for p in positions.values() if p.get('direction') == 'SHORT')
+        pos_info = f" | Pos: {n_long}L/{n_short}S" if positions else ""
+
         logger.info(
             f"⏳ Waiting | BTC: ${current_price:.0f} | "
             f"Daily: {daily_pnl:+.2f}% ({daily_trades} trades) | "
             f"Total: {metrics.total_trades} trades, {metrics.actual_win_rate:.1f}% WR"
+            f"{pos_info}"
         )
+
+        # Consecutive losses warning (v1.36.5)
+        consec = state.get('consecutive_losses', 0)
+        if consec >= 5:
+            logger.warning(
+                f"⚠️  {consec} CONSECUTIVE LOSSES — "
+                f"MDD sizing active, check direction concentration"
+            )
     except ccxt.NetworkError as e:
         logger.debug(f"Could not log waiting status (network error): {e}")
     except Exception as e:

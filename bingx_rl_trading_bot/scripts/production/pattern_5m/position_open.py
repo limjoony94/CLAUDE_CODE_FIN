@@ -376,7 +376,8 @@ def _get_actual_fill_price(
             for pos in positions:
                 if pos.get('side') == pos_side and float(pos.get('contracts', 0)) > 0:
                     actual_entry_price = float(pos.get('entryPrice', estimated_price))
-                    actual_quantity = float(pos.get('contracts', actual_quantity))
+                    exchange_total_qty = float(pos.get('contracts', actual_quantity))
+                    actual_quantity = min(exchange_total_qty, quantity)  # Cap to order qty
                     break
         except ccxt.NetworkError as e:
             logger.warning(f"Could not fetch actual entry price (network error): {e}")

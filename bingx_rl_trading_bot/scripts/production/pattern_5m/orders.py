@@ -223,8 +223,8 @@ def _place_sl_order(
         if '110406' in error_msg:
             position['sl_order_id'] = _EXCHANGE_MANAGED
             logger.info("SL order already exists on exchange — marking as managed")
-        elif '110412' in error_msg:
-            # SL price already breached — recalculate from current price (v1.35.4)
+        elif '110412' in error_msg or '110411' in error_msg:
+            # SL price already breached — recalculate from current price (v1.35.4, v1.36.6: +110411)
             direction = position.get('direction', '')
             new_sl = _recalculate_breached_sl(exchange, symbol, direction, sl_price)
             if new_sl:
@@ -719,8 +719,8 @@ def _verify_sl_order(
                 position['sl_order_id'] = _EXCHANGE_MANAGED
                 logger.info("SL order confirmed on exchange (crash recovery — ID unknown, marking as managed)")
                 state_changed = True
-            elif '110412' in error_msg:
-                # SL price already breached — recalculate from current price (v1.35.4)
+            elif '110412' in error_msg or '110411' in error_msg:
+                # SL price already breached — recalculate from current price (v1.35.4, v1.36.6: +110411)
                 direction = position.get('direction', '')
                 new_sl = _recalculate_breached_sl(exchange, symbol, direction, position['sl_price'])
                 if new_sl:
@@ -966,19 +966,20 @@ def _place_emergency_sl_for_direction(
             params={
                 'positionSide': position_side,
                 'stopPrice': worst_sl,
+                'closePosition': 'true',
             }
         )
         order_id = order.get('id')
         _set_emergency_sl_id(state, config, direction, order_id)
         save_state(state)
-        logger.info(f"🛡️ Emergency SL ({direction}) placed: {order_id} @ ${worst_sl:.1f} (qty={total_qty})")
+        logger.info(f"🛡️ Emergency SL ({direction}) placed: {order_id} @ ${worst_sl:.1f} (closePosition=true, qty={total_qty})")
     except ccxt.ExchangeError as e:
         error_msg = str(e)
         if '110406' in error_msg:
             _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
             logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")
-        elif '110412' in error_msg:
-            # Emergency SL price already breached — recalculate (v1.35.4)
+        elif '110412' in error_msg or '110411' in error_msg:
+            # Emergency SL price already breached — recalculate (v1.35.4, v1.36.6: +110411)
             new_sl = _recalculate_breached_sl(exchange, symbol, direction, worst_sl)
             if new_sl:
                 # Update all slots' sl_price so future calculations use the adjusted value
@@ -988,18 +989,38 @@ def _place_emergency_sl_for_direction(
                     order = exchange.create_order(
                         symbol=symbol, type='STOP_MARKET', side=close_side,
                         amount=total_qty,
-                        params={'positionSide': position_side, 'stopPrice': new_sl},
+                        params={
+                            'positionSide': position_side,
+                            'stopPrice': new_sl,
+                            'closePosition': 'true',
+                        },
                     )
                     order_id = order.get('id')
                     _set_emergency_sl_id(state, config, direction, order_id)
                     save_state(state)
                     logger.info(f"🛡️ Emergency SL ({direction}) placed (breach-adjusted): {order_id} @ ${new_sl:.1f}")
                 except Exception as retry_e:
-                    logger.error(f"Emergency SL retry failed after breach adjustment: {retry_e}")
+                    logger.critical(
+                        f"EMERGENCY SL ({direction}) PLACEMENT FAILED — POSITION UNPROTECTED! "
+                        f"Slots: {len(dir_slots)}, TotalQty: {total_qty}. Error: {retry_e}"
+                    )
+        elif '110424' in error_msg:
+            # Order size > available amount — per-slot SLs already cover position
+            logger.warning(
+                f"Emergency SL ({direction}) rejected (110424 size>available). "
+                f"Per-slot SLs active — marking as exchange-managed."
+            )
+            _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
         else:
-            logger.error(f"Failed to place emergency SL ({direction}): {e}")
+            logger.critical(
+                f"EMERGENCY SL ({direction}) PLACEMENT FAILED — POSITION UNPROTECTED! "
+                f"Slots: {len(dir_slots)}, TotalQty: {total_qty}. Error: {e}"
+            )
     except Exception as e:
-        logger.exception(f"Failed to place emergency SL ({direction}): {e}")
+        logger.critical(
+            f"EMERGENCY SL ({direction}) PLACEMENT FAILED — POSITION UNPROTECTED! "
+            f"Slots: {len(dir_slots)}, TotalQty: {total_qty}. Error: {e}"
+        )
 
 
 def _set_emergency_sl_id(
@@ -1093,8 +1114,8 @@ def update_emergency_sl(
 ) -> None:
     """Re-calculate and re-place emergency SL(s) after slot add/remove.
 
-    Cancels old SL(s) first, then places new ones. Brief gap is acceptable
-    because per-slot SLs still protect during the transition.
+    Place-first, cancel-after: new closePosition SL is placed before
+    cancelling old one, eliminating the protection gap (v1.36.6).
     """
     positions = state.get('positions') or {}
     if not positions:
@@ -1107,9 +1128,13 @@ def update_emergency_sl(
         for direction in ['LONG', 'SHORT']:
             if direction not in active_dirs:
                 _cancel_emergency_sl_for_direction(exchange, state, config, direction)
-        # Re-place active directions
+        # Place-first, cancel-after for active directions
         for direction in active_dirs:
             old_id = _get_emergency_sl_id(state, config, direction)
+            # Place new SL first (closePosition=true, no qty conflict)
+            _set_emergency_sl_id(state, config, direction, None)
+            _place_emergency_sl_for_direction(exchange, state, config, direction)
+            # Then cancel old SL (protection gap = 0)
             if old_id and old_id != _EXCHANGE_MANAGED:
                 try:
                     exchange.cancel_order(old_id, config.get('symbol', 'BTC-USDT'))
@@ -1118,8 +1143,6 @@ def update_emergency_sl(
                     logger.debug(f"Old emergency SL ({direction}) already gone: {old_id}")
                 except Exception as e:
                     logger.warning(f"Failed to cancel old emergency SL ({direction}) {old_id}: {e}")
-            _set_emergency_sl_id(state, config, direction, None)
-            _place_emergency_sl_for_direction(exchange, state, config, direction)
     else:
         # One-Way: same as before
         old_order_id = state.get('emergency_sl_order_id')

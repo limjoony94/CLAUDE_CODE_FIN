@@ -2150,6 +2150,29 @@ def main():
                 return obj.tolist()
             return super().default(obj)
 
+    # Direction balance check (v1.36.5)
+    _n_long = output['pattern_count']['long']
+    _n_short = output['pattern_count']['short']
+    _n_total = _n_long + _n_short
+    if _n_total > 0:
+        _long_pct = _n_long / _n_total * 100
+        if _long_pct < 30 or _long_pct > 70:
+            logger.warning(
+                f"⚠️  DIRECTION IMBALANCE: {_n_long}L/{_n_short}S "
+                f"({_long_pct:.0f}% LONG). "
+                f"Recommend 30-70% balance to avoid correlated losses."
+            )
+        if _n_long < 5:
+            logger.warning(
+                f"⚠️  LOW LONG COUNT: only {_n_long} LONG patterns. "
+                f"Bot will be SHORT-heavy — vulnerable to rallies."
+            )
+        if _n_short < 5:
+            logger.warning(
+                f"⚠️  LOW SHORT COUNT: only {_n_short} SHORT patterns. "
+                f"Bot will be LONG-heavy — vulnerable to drops."
+            )
+
     os.makedirs(os.path.dirname(os.path.abspath(args.output)), exist_ok=True)
     with open(args.output, 'w', encoding='utf-8') as f:
         json.dump(output, f, indent=2, ensure_ascii=False, cls=_NumpyEncoder)

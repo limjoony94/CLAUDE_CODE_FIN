@@ -203,11 +203,18 @@ def _infer_exit_reason(filled_price: float, position: Dict) -> str:
     """Infer exit reason from filled price proximity to TP/SL."""
     tp = position.get('tp_price', 0)
     sl = position.get('sl_price', 0)
+    direction = position.get('direction', '')
 
     if tp and abs(filled_price - tp) / tp < PRICE_TOLERANCE_PCT:
         return 'TP'
     if sl and abs(filled_price - sl) / sl < PRICE_TOLERANCE_PCT:
         return 'SL'
+
+    # If price is beyond SL (worse), likely emergency SL or cascade liquidation
+    if direction == 'LONG' and sl and filled_price < sl:
+        return 'EMERGENCY_SL'
+    if direction == 'SHORT' and sl and filled_price > sl:
+        return 'EMERGENCY_SL'
 
     return 'MARKET'
 
@@ -264,6 +271,12 @@ def check_position_status(
 
             # All slots for this direction are closed (exchange has no position)
             if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
+                if len(dir_slots) > 1:
+                    total_qty = sum(s.get('quantity', 0) for s in dir_slots)
+                    logger.warning(
+                        f"⚠️ CASCADE: {len(dir_slots)} {dir_label} slots closed simultaneously "
+                        f"(qty={total_qty:.4f}). Likely emergency SL or exchange liquidation."
+                    )
                 for slot in list(dir_slots):
                     _handle_position_closed(exchange, state, config, slot, cache, metrics)
                 any_closed = True

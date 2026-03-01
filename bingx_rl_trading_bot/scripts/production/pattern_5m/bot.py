@@ -335,6 +335,9 @@ def _run_bot_main(
                 # 1c. Proactive emergency SL health check (v1.36.6)
                 _ensure_emergency_sl_exists(exchange, state, config)
 
+                # 1e. Record loss for burst brake (v1.37.0)
+                _record_loss_for_burst_brake(state, config)
+
                 # 2. Check for new entry signal (always, if slots available)
                 _process_entry_signal(
                     exchange, state, config, cache, circuit_breaker, metrics
@@ -350,6 +353,7 @@ def _run_bot_main(
                     )
                     if position_closed:
                         has_position = bool(state.get('positions') or {})
+                        _record_loss_for_burst_brake(state, config)  # v1.37.0
 
                 # Proactive emergency SL health check (v1.36.6)
                 _ensure_emergency_sl_exists(exchange, state, config)
@@ -716,6 +720,118 @@ def _check_momentum_guard(
     return False
 
 
+def _record_loss_for_burst_brake(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Record a loss trade in the burst tracker for Loss Burst Brake.
+
+    v1.37.0: After 'threshold' same-direction losses within 'window_bars',
+    block that direction for 'block_bars'. Research: portfolio_exposure_study.py
+    H6b — MDD -36%, burst count -36%, max daily loss -76%.
+
+    Call after any position close event.
+    """
+    brake_cfg = config.get('risk', {}).get('loss_burst_brake', {})
+    if not brake_cfg.get('enabled', False):
+        return
+
+    last_trade = state.get('last_trade')
+    if not last_trade:
+        return
+
+    portfolio_pnl = last_trade.get('portfolio_pnl_pct', last_trade.get('pnl_pct', 0))
+    if portfolio_pnl > 0:
+        return  # not a loss
+
+    direction = last_trade.get('direction', '')
+    if not direction:
+        return
+
+    closed_at = last_trade.get('closed_at', '')
+    if not closed_at:
+        return
+
+    # Avoid double-counting: check if this trade was already recorded
+    last_recorded = state.get('_loss_burst_last_recorded', '')
+    if closed_at == last_recorded:
+        return
+
+    # Record loss timestamp
+    tracker = state.get('_loss_burst_tracker') or {}
+    if direction not in tracker:
+        tracker[direction] = []
+    tracker[direction].append(time.time())
+    state['_loss_burst_tracker'] = tracker
+    state['_loss_burst_last_recorded'] = closed_at
+
+    logger.info(
+        f"🛑 Loss burst tracker: recorded {direction} loss "
+        f"(pnl={portfolio_pnl:+.2f}%, {len(tracker[direction])} recent)"
+    )
+
+
+def _check_loss_burst_brake(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    signal_direction: str,
+) -> bool:
+    """Check if recent same-direction losses should block entry.
+
+    v1.37.0: If 'threshold' same-direction losses occurred within 'window_bars',
+    block that direction for 'block_bars'.
+
+    Returns:
+        True if loss burst brake blocks this entry (skip entry)
+    """
+    brake_cfg = config.get('risk', {}).get('loss_burst_brake', {})
+    if not brake_cfg.get('enabled', False):
+        return False
+
+    threshold = brake_cfg.get('threshold', 2)
+    window_seconds = brake_cfg.get('window_bars', 288) * 300  # bars → seconds
+    block_seconds = brake_cfg.get('block_bars', 144) * 300
+
+    # Check active block
+    blocked_key = f'_loss_burst_blocked_until_{signal_direction.lower()}'
+    blocked_until = state.get(blocked_key, 0)
+    if time.time() < blocked_until:
+        remaining = int(blocked_until - time.time())
+        remaining_min = remaining // 60
+        logger.info(
+            f"🛑 Loss burst brake: {signal_direction} blocked "
+            f"({remaining_min}min remaining)"
+        )
+        return True
+
+    # Count recent same-direction losses within window
+    tracker = state.get('_loss_burst_tracker') or {}
+    dir_losses = tracker.get(signal_direction, [])
+
+    # Clean old entries outside window
+    cutoff = time.time() - window_seconds
+    dir_losses = [ts for ts in dir_losses if ts > cutoff]
+
+    # Update tracker in state
+    if '_loss_burst_tracker' not in state:
+        state['_loss_burst_tracker'] = {}
+    state['_loss_burst_tracker'][signal_direction] = dir_losses
+
+    if len(dir_losses) >= threshold:
+        # Activate block
+        state[blocked_key] = time.time() + block_seconds
+        state['_loss_burst_tracker'][signal_direction] = []  # reset after activation
+        block_hours = block_seconds / 3600
+        window_hours = window_seconds / 3600
+        logger.warning(
+            f"🛑 Loss burst brake ACTIVATED: {len(dir_losses)} {signal_direction} losses "
+            f"in {window_hours:.0f}h → blocking {signal_direction} for {block_hours:.0f}h"
+        )
+        return True
+
+    return False
+
+
 def _check_aggregate_risk_cap(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -887,6 +1003,10 @@ def _process_entry_signal(
     if action == 'OPEN':
         # v1.36.2: Momentum guard — pause counter-dir entries during strong moves
         if _check_momentum_guard(state, config, signal_result, df):
+            return False
+
+        # v1.37.0: Loss burst brake — block direction after burst same-dir losses
+        if _check_loss_burst_brake(state, config, signal_result):
             return False
 
         # v1.35.5: Aggregate directional risk cap check

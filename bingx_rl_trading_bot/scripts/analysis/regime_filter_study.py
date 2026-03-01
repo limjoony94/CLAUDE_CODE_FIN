@@ -71,9 +71,9 @@ WF_FOLDS = [
 
 # Candle Body Flow weights
 CBF_WEIGHTS = {
-    'BIG_UP': 1.0, 'MARUBOZU_UP': 0.8, 'HAMMER': 0.5, 'DRAGONFLY': 0.3, 'MED_UP': 0.2,
-    'MED_DOWN': -0.2, 'SPINNING_TOP': 0.0, 'DOJI': 0.0,
-    'BIG_DOWN': -1.0, 'MARUBOZU_DOWN': -0.8, 'INV_HAMMER': -0.5, 'GRAVESTONE': -0.3,
+    'BU': 1.0, 'MU': 0.8, 'H': 0.5, 'DF': 0.3, 'U': 0.2,
+    'DN': -0.2, 'ST': 0.0, 'D': 0.0,
+    'BD': -1.0, 'MD': -0.8, 'IH': -0.5, 'GS': -0.3,
 }
 
 

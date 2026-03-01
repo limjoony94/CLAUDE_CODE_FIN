@@ -50,6 +50,12 @@ try:
 except ImportError:
     _tqdm_cls = None
 
+try:
+    from scipy.stats import lognorm as _lognorm, kstest as _kstest
+    _HAS_SCIPY = True
+except ImportError:
+    _HAS_SCIPY = False
+
 # Add project root to path for production imports
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(_SCRIPT_DIR))
@@ -84,6 +90,22 @@ TP_PERCENTILES = [40, 50, 60, 70, 80]
 SL_PERCENTILES = [70, 75, 80, 85, 90, 95]
 
 SLIPPAGE_BUFFER = 0.02  # 0.02% slippage buffer for ATR-scaled TP/SL
+
+# Distribution-based TP hit probability grid (v1.37.1: log-normal MFE fit)
+DIST_HIT_PROBS = [0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.92, 0.95]
+
+# N-position portfolio simulator defaults (v1.38: production-aligned backtest)
+DEFAULT_N_SLOTS = 9
+DEFAULT_DIRECTION_CAP = 7
+TIMEOUT_BARS = 864          # 72h position timeout (production v1.31.0)
+DEFAULT_REGIME_MULT = 0.3
+DEFAULT_AGG_RISK_COUNTER = 3.0
+DEFAULT_AGG_RISK_WITH = 7.0
+DEFAULT_MOMENTUM_LOOKBACK = 6
+DEFAULT_MOMENTUM_THRESHOLD = 1.0
+DEFAULT_MOMENTUM_COOLDOWN = 6
+NPOS_EMA_PERIOD = 20
+NPOS_EMA_LOOKBACK = 5
 
 # ATR scaling defaults (v1.28.42 production params, a14/w576/0.6-1.7)
 DEFAULT_ATR_PERIOD = 14
@@ -253,6 +275,20 @@ def compute_atr_ratio(highs, lows, closes, atr_period=14, window=576):
     valid = (~np.isnan(atr)) & (~np.isnan(med)) & (med > 0)
     ratio[valid] = atr[valid] / med[valid]
     return ratio
+
+
+def compute_ema_slope(closes, period=NPOS_EMA_PERIOD, lookback=NPOS_EMA_LOOKBACK):
+    """EMA slope as percent change over lookback bars.
+
+    Source: entry_improvement_study.py:115 (verified WF 19/19 PASS, v1.35.3).
+    """
+    n = len(closes)
+    ema = pd.Series(closes).ewm(span=period, adjust=False).mean().values
+    slope = np.full(n, 0.0)
+    for i in range(lookback, n):
+        if ema[i - lookback] > 0:
+            slope[i] = (ema[i] / ema[i - lookback] - 1) * 100
+    return slope
 
 
 def bt_signals_atr(signal_bars, direction, tp_pct, sl_pct,
@@ -500,25 +536,101 @@ def derive_tp_sl(excursions, tp_percentile, sl_percentile):
     return tp, sl
 
 
+def fit_mfe_distribution(mfes):
+    """Fit log-normal distribution to MFE values.
+
+    Returns dict with params, KS test, fit quality. None if fails or scipy unavailable.
+    """
+    if not _HAS_SCIPY:
+        return None
+    positive = [m for m in mfes if m > 0]
+    if len(positive) < 10:
+        return None
+    try:
+        arr = np.array(positive)
+        shape, loc, scale = _lognorm.fit(arr, floc=0)
+        ks_stat, ks_pval = _kstest(arr, 'lognorm', args=(shape, 0, scale))
+        fit_quality = 'good' if ks_pval > 0.05 else ('acceptable' if ks_pval > 0.01 else 'poor')
+        return {
+            'shape': round(float(shape), 4),
+            'scale': round(float(scale), 4),
+            'ks_stat': round(float(ks_stat), 4),
+            'ks_pval': round(float(ks_pval), 4),
+            'fit_quality': fit_quality,
+            'n_positive': len(positive),
+            'n_zero': len(mfes) - len(positive),
+        }
+    except Exception:
+        return None
+
+
+def derive_tp_from_distribution(dist_params, hit_probs):
+    """Compute TP at target hit probabilities using inverse survival function.
+
+    P(MFE >= TP) = hit_prob  =>  TP = lognorm.isf(hit_prob, shape, loc=0, scale)
+    Returns list of (hit_prob, tp_pct) tuples, deduplicated.
+    """
+    shape = dist_params['shape']
+    scale = dist_params['scale']
+    seen = set()
+    results = []
+    for hp in hit_probs:
+        tp = float(_lognorm.isf(hp, shape, 0, scale))
+        tp = max(0.1, min(10.0, tp))
+        tp = round(tp, 2)
+        if tp not in seen:
+            seen.add(tp)
+            results.append((hp, tp))
+    return results
+
+
 def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
                          max_bars=MAX_BARS, min_tr=20,
                          max_baseline_wr=MAX_BASELINE_WR,
                          atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
-                         tp_max=None, sl_max=None):
-    """Grid search over MFE/MAE percentiles to find best TP/SL by PnL/MDD."""
+                         tp_max=None, sl_max=None,
+                         tp_method='percentile', dist_hit_probs=None):
+    """Grid search over MFE/MAE percentiles (or distribution) to find best TP/SL by PnL/MDD.
+
+    tp_method: 'percentile' (default, empirical MFE percentiles) or
+               'distribution' (log-normal fit + hit probability).
+    """
     excursions = compute_excursions(signal_bars, direction, opens, highs, lows,
                                     n_bars, max_bars)
     if len(excursions) < min_tr:
         return None, None
 
+    mfes_list = [e['mfe_pct'] for e in excursions]
+    maes_raw = np.array([e['mae_pct'] for e in excursions])
+
+    # Build TP candidates based on method
+    dist_info = None
+    tp_candidates = []  # list of (tp_value, tp_percentile_or_None, hit_prob_or_None)
+
+    if tp_method == 'distribution':
+        dist_info = fit_mfe_distribution(mfes_list)
+        if dist_info is not None:
+            hp_list = dist_hit_probs or DIST_HIT_PROBS
+            dist_tps = derive_tp_from_distribution(dist_info, hp_list)
+            for hp, tp_val in dist_tps:
+                tp_candidates.append((tp_val, None, hp))
+        else:
+            # Fallback to percentile if distribution fit fails
+            for tp_p in TP_PERCENTILES:
+                tp_val = round(float(np.percentile(mfes_list, tp_p)), 2)
+                tp_candidates.append((tp_val, tp_p, None))
+    else:
+        for tp_p in TP_PERCENTILES:
+            tp_val, _ = derive_tp_sl(excursions, tp_p, 50)
+            if tp_val is not None:
+                tp_candidates.append((tp_val, tp_p, None))
+
     best = None
     best_score = -9999
 
-    for tp_p in TP_PERCENTILES:
+    for tp, tp_pctile, hit_prob in tp_candidates:
         for sl_p in SL_PERCENTILES:
-            tp, sl = derive_tp_sl(excursions, tp_p, sl_p)
-            if tp is None or sl is None:
-                continue
+            sl = round(float(np.percentile(maes_raw, sl_p)), 2)
             if tp < 0.1 or sl < 0.3:
                 continue
             if tp_max is not None and tp > tp_max:
@@ -556,14 +668,15 @@ def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
                 best_score = score
                 best = {
                     'tp': tp, 'sl': sl,
-                    'tp_percentile': tp_p, 'sl_percentile': sl_p,
+                    'tp_percentile': tp_pctile, 'sl_percentile': sl_p,
+                    'tp_hit_prob': hit_prob,
                     'trades': len(trades), 'wr': round(wr, 1),
                     'pnl': round(cum, 1), 'mdd': round(mdd_val, 1),
                 }
 
     # Excursion stats for profiling
-    mfes = np.array([e['mfe_pct'] for e in excursions])
-    maes = np.array([e['mae_pct'] for e in excursions])
+    mfes = np.array(mfes_list)
+    maes = maes_raw
     bars_mfe = np.array([e['bars_to_mfe'] for e in excursions])
 
     exc_stats = {
@@ -577,8 +690,330 @@ def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
         'mfe_mae_ratio': round(float(np.median(mfes) / np.median(maes))
                                if np.median(maes) > 0 else 0, 3),
     }
+    if dist_info is not None:
+        exc_stats['mfe_distribution'] = dist_info
 
     return best, exc_stats
+
+
+def _check_exit_npos(pos, bar, opens, highs, lows, n_bars, atr_ratio, fee,
+                     clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
+                     timeout_bars=TIMEOUT_BARS):
+    """Check exit for a single N-pos position.
+
+    ATR-scaled TP/SL + slippage buffer + timeout(DROP) + intrabar resolution.
+    Source: entry_improvement_study.py:140 (verified 21 scenarios WF).
+    """
+    entry_bar = pos['entry_bar']
+    if bar < entry_bar:
+        return None
+    entry = opens[entry_bar]
+    if entry <= 0:
+        return None
+
+    tp_pct = pos['tp_pct']
+    sl_pct = pos['sl_pct']
+    direction = pos['direction']
+    sig_bar = pos['signal_bar']
+
+    if atr_ratio is not None and sig_bar < len(atr_ratio) and not np.isnan(atr_ratio[sig_bar]):
+        r = max(clamp_lo, min(clamp_hi, atr_ratio[sig_bar]))
+    else:
+        r = 1.0
+
+    eff_tp = tp_pct * r + SLIPPAGE_BUFFER
+    eff_sl = max(0.1, sl_pct * r - SLIPPAGE_BUFFER)
+
+    if direction == 'LONG':
+        tp_price = entry * (1 + eff_tp / 100)
+        sl_price = entry * (1 - eff_sl / 100)
+    else:
+        tp_price = entry * (1 - eff_tp / 100)
+        sl_price = entry * (1 + eff_sl / 100)
+
+    hold = bar - entry_bar
+    if hold >= timeout_bars:
+        return {'entry_bar': entry_bar, 'exit_bar': bar, 'pnl_slot': 0,
+                'reason': 'TIMEOUT', 'drop': True}
+
+    h, l = highs[bar], lows[bar]
+    if direction == 'LONG':
+        hit_tp = h >= tp_price
+        hit_sl = l <= sl_price
+    else:
+        hit_tp = l <= tp_price
+        hit_sl = h >= sl_price
+
+    if not hit_tp and not hit_sl:
+        return None
+
+    if hit_tp and hit_sl:
+        tp_dist = abs(tp_price - opens[bar])
+        sl_dist = abs(sl_price - opens[bar])
+        if tp_dist <= sl_dist:
+            exit_price, reason = tp_price, 'TP'
+        else:
+            exit_price, reason = sl_price, 'SL'
+    elif hit_tp:
+        exit_price, reason = tp_price, 'TP'
+    else:
+        exit_price, reason = sl_price, 'SL'
+
+    if direction == 'LONG':
+        pnl = (exit_price / entry - 1) * 100 * LEVERAGE
+    else:
+        pnl = (1 - exit_price / entry) * 100 * LEVERAGE
+    pnl -= fee
+
+    return {'entry_bar': entry_bar, 'exit_bar': bar, 'pnl_slot': pnl,
+            'reason': reason, 'drop': False}
+
+
+def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
+                   atr_ratio, ema_slope, start_bar, end_bar,
+                   n_slots=DEFAULT_N_SLOTS, direction_cap=DEFAULT_DIRECTION_CAP,
+                   regime_mult=DEFAULT_REGIME_MULT,
+                   agg_risk_counter=DEFAULT_AGG_RISK_COUNTER,
+                   agg_risk_with=DEFAULT_AGG_RISK_WITH,
+                   momentum_lookback=DEFAULT_MOMENTUM_LOOKBACK,
+                   momentum_threshold=DEFAULT_MOMENTUM_THRESHOLD,
+                   momentum_cooldown=DEFAULT_MOMENTUM_COOLDOWN,
+                   clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
+                   timeout_bars=TIMEOUT_BARS):
+    """N-position portfolio simulator matching production protections.
+
+    Source: entry_improvement_study.py:210 simulate_portfolio()
+    (verified 21 scenarios WF, v1.36.2).
+
+    Args:
+        signal_tuples: list of (signal_bar, pattern, direction, tp_pct, sl_pct)
+        start_bar/end_bar: simulation range
+        All other params: production-aligned defaults
+
+    Returns:
+        (trades_list, stats_dict)
+    """
+    size_pct = 100.0 / n_slots
+    fee = FEE_PCT * LEVERAGE
+
+    positions = []
+    trades = []
+    equity = 100.0
+    peak_equity = 100.0
+
+    max_corr_loss = 0.0
+    max_sim_positions = 0
+    total_blocked = {'momentum': 0, 'agg_risk': 0, 'dir_cap': 0, 'dup_pat': 0, 'max_pos': 0}
+    corr_events = []
+
+    momentum_pause_until = {'LONG': -1, 'SHORT': -1}
+
+    # Filter and sort signals in range
+    signals_in_range = [(s, p, d, tp, sl) for s, p, d, tp, sl in signal_tuples
+                        if start_bar <= s < end_bar]
+    signals_sorted = sorted(signals_in_range, key=lambda x: x[0])
+    sig_idx = 0
+
+    for bar in range(start_bar, end_bar):
+        # 1. Check exits
+        closed_slots = []
+        bar_pnl_sum = 0.0
+        bar_sl_count = 0
+
+        for pos in positions:
+            result = _check_exit_npos(pos, bar, opens, highs, lows, n_bars,
+                                      atr_ratio, fee, clamp_lo, clamp_hi,
+                                      timeout_bars)
+            if result is not None:
+                if result.get('drop', False):
+                    closed_slots.append(pos['slot'])
+                    continue
+                result['pattern'] = pos['pattern']
+                result['direction'] = pos['direction']
+                sm = pos.get('size_mult', 1.0)
+                result['size_mult'] = sm
+                pnl_portfolio = result['pnl_slot'] * (size_pct / 100) * sm
+                result['pnl_portfolio'] = pnl_portfolio
+                trades.append(result)
+                closed_slots.append(pos['slot'])
+                bar_pnl_sum += pnl_portfolio
+                if result['reason'] == 'SL':
+                    bar_sl_count += 1
+
+        positions = [p for p in positions if p['slot'] not in closed_slots]
+
+        if bar_pnl_sum < 0 and bar_sl_count >= 2:
+            loss_pct = abs(bar_pnl_sum)
+            if loss_pct > max_corr_loss:
+                max_corr_loss = loss_pct
+            corr_events.append((bar, bar_sl_count, loss_pct))
+
+        equity += bar_pnl_sum
+        if equity > peak_equity:
+            peak_equity = equity
+
+        # Momentum guard: check for cooldown trigger
+        if momentum_lookback > 0 and momentum_threshold > 0 and bar >= momentum_lookback:
+            price_now = closes[bar]
+            price_ago = closes[bar - momentum_lookback]
+            if price_ago > 0:
+                pct_change = (price_now / price_ago - 1) * 100
+                if pct_change > momentum_threshold:
+                    momentum_pause_until['SHORT'] = bar + momentum_cooldown
+                elif pct_change < -momentum_threshold:
+                    momentum_pause_until['LONG'] = bar + momentum_cooldown
+
+        # 2. Process entries
+        while sig_idx < len(signals_sorted) and signals_sorted[sig_idx][0] == bar:
+            sig_bar, pat, direction, tp_pct, sl_pct = signals_sorted[sig_idx]
+            sig_idx += 1
+
+            if len(positions) >= n_slots:
+                total_blocked['max_pos'] += 1
+                continue
+
+            # Direction cap
+            dir_count = sum(1 for p in positions if p['direction'] == direction)
+            if dir_count >= direction_cap:
+                total_blocked['dir_cap'] += 1
+                continue
+
+            # Duplicate pattern check
+            if any(p['pattern'] == pat for p in positions):
+                total_blocked['dup_pat'] += 1
+                continue
+
+            entry_bar = sig_bar + 1
+            if entry_bar >= n_bars:
+                continue
+
+            # Momentum guard check
+            if momentum_lookback > 0 and bar < momentum_pause_until.get(direction, -1):
+                total_blocked['momentum'] += 1
+                continue
+
+            # Regime sizing
+            sm = 1.0
+            if regime_mult is not None and bar < len(ema_slope):
+                s = ema_slope[bar]
+                if s > 0 and direction == 'SHORT':
+                    sm = regime_mult
+                elif s <= 0 and direction == 'LONG':
+                    sm = regime_mult
+
+            # Aggregate risk cap check
+            if agg_risk_counter > 0 or agg_risk_with > 0:
+                is_uptrend = ema_slope[bar] > 0 if bar < len(ema_slope) else False
+                is_counter = ((is_uptrend and direction == 'SHORT') or
+                              (not is_uptrend and direction == 'LONG'))
+                cap_pct = agg_risk_counter if is_counter else agg_risk_with
+
+                existing_exposure = 0.0
+                for p in positions:
+                    if p['direction'] == direction:
+                        p_sl = p['sl_pct']
+                        p_sig = p['signal_bar']
+                        if (atr_ratio is not None and p_sig < len(atr_ratio)
+                                and not np.isnan(atr_ratio[p_sig])):
+                            p_r = max(clamp_lo, min(clamp_hi, atr_ratio[p_sig]))
+                        else:
+                            p_r = 1.0
+                        p_eff_sl = p_sl * p_r
+                        p_sm = p.get('size_mult', 1.0)
+                        existing_exposure += p_eff_sl * (1.0 / n_slots) * LEVERAGE * p_sm
+
+                new_r = 1.0
+                if (atr_ratio is not None and sig_bar < len(atr_ratio)
+                        and not np.isnan(atr_ratio[sig_bar])):
+                    new_r = max(clamp_lo, min(clamp_hi, atr_ratio[sig_bar]))
+                new_eff_sl = sl_pct * new_r
+                new_exposure = new_eff_sl * (1.0 / n_slots) * LEVERAGE * sm
+
+                if existing_exposure + new_exposure > cap_pct:
+                    total_blocked['agg_risk'] += 1
+                    continue
+
+            positions.append({
+                'slot': f"{pat}_{sig_bar}",
+                'signal_bar': sig_bar,
+                'entry_bar': entry_bar,
+                'direction': direction,
+                'pattern': pat,
+                'tp_pct': tp_pct,
+                'sl_pct': sl_pct,
+                'size_mult': sm,
+            })
+
+        if len(positions) > max_sim_positions:
+            max_sim_positions = len(positions)
+
+    # Force-close remaining
+    for pos in positions:
+        entry_bar = pos['entry_bar']
+        if entry_bar >= n_bars:
+            continue
+        entry = opens[entry_bar]
+        if entry <= 0:
+            continue
+        exit_bar = min(end_bar - 1, n_bars - 1)
+        exit_price = opens[exit_bar]
+        if pos['direction'] == 'LONG':
+            pnl = (exit_price / entry - 1) * 100 * LEVERAGE
+        else:
+            pnl = (1 - exit_price / entry) * 100 * LEVERAGE
+        pnl -= fee
+        sm = pos.get('size_mult', 1.0)
+        trades.append({
+            'entry_bar': entry_bar, 'exit_bar': exit_bar, 'pnl_slot': pnl,
+            'reason': 'OOS_END', 'pattern': pos['pattern'],
+            'direction': pos['direction'], 'size_mult': sm,
+            'pnl_portfolio': pnl * (size_pct / 100) * sm,
+        })
+
+    stats = {
+        'max_corr_loss': round(max_corr_loss, 2),
+        'max_sim_positions': max_sim_positions,
+        'corr_events': len(corr_events),
+        'blocked': total_blocked,
+    }
+    return trades, stats
+
+
+def calc_stats_compound(trades):
+    """Compound equity portfolio metrics (percentage-based MDD).
+
+    Source: entry_improvement_study.py:438 compute_metrics().
+    """
+    if not trades:
+        return {'trades': 0, 'wr': 0.0, 'pnl': 0.0, 'mdd': 0.0,
+                'pnl_mdd': 0.0, 'pnl_per_trade': 0.0}
+
+    wins = [t for t in trades if t['pnl_slot'] > 0]
+    sorted_trades = sorted(trades, key=lambda x: x['entry_bar'])
+
+    equity = 100.0
+    peak = equity
+    max_dd = 0.0
+    for t in sorted_trades:
+        equity += t['pnl_portfolio']
+        if equity > peak:
+            peak = equity
+        dd = (peak - equity) / peak * 100 if peak > 0 else 0
+        if dd > max_dd:
+            max_dd = dd
+
+    total_pnl = equity - 100.0
+    wr = len(wins) / len(trades) * 100 if trades else 0
+    pnl_mdd = total_pnl / max_dd if max_dd > 0 else 0
+
+    return {
+        'trades': len(trades),
+        'wr': round(wr, 1),
+        'pnl': round(total_pnl, 2),
+        'mdd': round(max_dd, 2),
+        'pnl_mdd': round(pnl_mdd, 2),
+        'pnl_per_trade': round(total_pnl / len(trades), 3) if trades else 0,
+    }
 
 
 def portfolio_1pos(all_trades):
@@ -636,7 +1071,8 @@ _shared_data = {}
 
 def _pp_init(opens, highs, lows, n_bars,
              atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
-             tp_max=None, sl_max=None):
+             tp_max=None, sl_max=None,
+             tp_method='percentile', dist_hit_probs=None):
     """Initialize shared data in worker processes."""
     _shared_data['opens'] = opens
     _shared_data['highs'] = highs
@@ -647,6 +1083,8 @@ def _pp_init(opens, highs, lows, n_bars,
     _shared_data['clamp_hi'] = clamp_hi
     _shared_data['tp_max'] = tp_max
     _shared_data['sl_max'] = sl_max
+    _shared_data['tp_method'] = tp_method
+    _shared_data['dist_hit_probs'] = dist_hit_probs
 
 
 def _pp_worker(args_tuple):
@@ -725,6 +1163,8 @@ def _mae_mfe_worker(args_tuple):
     clamp_hi = _shared_data.get('clamp_hi', 1.7)
     tp_max = _shared_data.get('tp_max')
     sl_max = _shared_data.get('sl_max')
+    tp_method = _shared_data.get('tp_method', 'percentile')
+    dist_hit_probs = _shared_data.get('dist_hit_probs')
 
     if len(sigs_list) < min_trades:
         return None
@@ -734,7 +1174,8 @@ def _mae_mfe_worker(args_tuple):
         max_bars=MAX_BARS, min_tr=min_trades,
         max_baseline_wr=max_baseline_wr,
         atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
-        tp_max=tp_max, sl_max=sl_max)
+        tp_max=tp_max, sl_max=sl_max,
+        tp_method=tp_method, dist_hit_probs=dist_hit_probs)
     if opt is None:
         return None
 
@@ -761,7 +1202,7 @@ def _mae_mfe_worker(args_tuple):
         return None
 
     key = f"{pat_name}_{direction}"
-    return {
+    result_dict = {
         'key': key,
         'pattern': pat_name, 'direction': direction,
         'tp': tp, 'sl': sl,
@@ -773,6 +1214,9 @@ def _mae_mfe_worker(args_tuple):
         'exc_stats': exc_stats,
         'trades_raw': trades,
     }
+    if opt.get('tp_hit_prob') is not None:
+        result_dict['tp_hit_prob'] = opt['tp_hit_prob']
+    return result_dict
 
 
 # ============================================================
@@ -787,7 +1231,8 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
                         max_baseline_wr=MAX_BASELINE_WR,
                         atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
-                        tp_max=None, sl_max=None):
+                        tp_max=None, sl_max=None,
+                        tp_method='percentile', dist_hit_probs=None):
     """Scan patterns within [bar_start, bar_end) signal range.
 
     Supports both 'universal' and 'per_pattern' modes.
@@ -837,7 +1282,8 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                     trade_boundary, max_bars=MAX_BARS,
                     min_tr=min_trades, max_baseline_wr=max_baseline_wr,
                     atr_ratio=atr_ratio, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
-                    tp_max=tp_max, sl_max=sl_max)
+                    tp_max=tp_max, sl_max=sl_max,
+                    tp_method=tp_method, dist_hit_probs=dist_hit_probs)
                 if opt is None:
                     continue
                 tp, sl = opt['tp'], opt['sl']
@@ -879,11 +1325,16 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
                         max_baseline_wr=MAX_BASELINE_WR,
                         closes=None, atr_period=14, atr_window=576,
                         clamp_lo=0.6, clamp_hi=1.7, use_atr=True,
-                        tp_max=None, sl_max=None):
+                        tp_max=None, sl_max=None,
+                        tp_method='percentile', dist_hit_probs=None,
+                        use_npos=False, npos_kwargs=None):
     """True expanding window walk-forward validation.
 
     Splits data into n_folds+1 equal segments.
     Fold f: IS=[0, (f+1)*seg), OOS=[(f+1)*seg, (f+2)*seg)
+
+    When use_npos=True, OOS evaluation uses portfolio_npos() instead of
+    portfolio_1pos(). IS pattern selection remains individual (edge/MC).
 
     Returns dict with folds, positive_folds, total_oos_pnl, stable_patterns.
     """
@@ -915,6 +1366,7 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
             mc_threshold=mc_threshold, max_baseline_wr=max_baseline_wr,
             atr_ratio=fold_atr, clamp_lo=clamp_lo, clamp_hi=clamp_hi,
             tp_max=tp_max, sl_max=sl_max,
+            tp_method=tp_method, dist_hit_probs=dist_hit_probs,
         )
 
         # Track pattern stability
@@ -929,40 +1381,82 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
                 highs[:oos_end], lows[:oos_end], closes[:oos_end],
                 atr_period, window=atr_window)
 
-        oos_trades = []
-        for r in is_patterns:
-            oos_sigs = [s for s in signal_index[r['pattern']]
-                        if oos_start <= s < oos_end]
-            if oos_atr is not None:
-                oos_trades.extend(bt_signals_atr(
-                    oos_sigs, r['direction'], r['tp'], r['sl'],
-                    opens, highs, lows, oos_end,
-                    oos_atr, clamp_lo, clamp_hi
-                ))
-            else:
-                oos_trades.extend(bt_signals(
-                    oos_sigs, r['direction'], r['tp'], r['sl'],
-                    opens, highs, lows, oos_end
-                ))
-
-        oos_port = portfolio_1pos(oos_trades)
-        oos_stats = calc_stats(oos_port)
         n_long = sum(1 for r in is_patterns if r['direction'] == 'LONG')
         n_short = sum(1 for r in is_patterns if r['direction'] == 'SHORT')
 
-        fold_result = {
-            'fold': fold + 1,
-            'is_bars': is_end,
-            'oos_bars': oos_end - oos_start,
-            'is_patterns': len(is_patterns),
-            'is_long': n_long, 'is_short': n_short,
-            'oos_trades': oos_stats['trades'],
-            'oos_wr': oos_stats['wr'],
-            'oos_pnl': oos_stats['pnl'],
-            'oos_mdd': oos_stats['mdd'],
-            'oos_pf': oos_stats['pf'],
-            'oos_positive': oos_stats['pnl'] > 0,
-        }
+        if use_npos and closes is not None:
+            # N-pos OOS: collect signal tuples, run portfolio_npos
+            oos_signal_tuples = []
+            for r in is_patterns:
+                for s in signal_index[r['pattern']]:
+                    if oos_start <= s < oos_end:
+                        oos_signal_tuples.append(
+                            (s, r['pattern'], r['direction'], r['tp'], r['sl']))
+
+            oos_ema_slope = compute_ema_slope(closes[:oos_end])
+            nkw = dict(npos_kwargs or {})
+            # Use WF's clamp values if not already in npos_kwargs
+            nkw.setdefault('clamp_lo', clamp_lo)
+            nkw.setdefault('clamp_hi', clamp_hi)
+            oos_trades_npos, oos_npos_stats = portfolio_npos(
+                oos_signal_tuples, opens, highs, lows, closes, oos_end,
+                oos_atr, oos_ema_slope, oos_start, oos_end, **nkw)
+            oos_stats = calc_stats_compound(oos_trades_npos)
+            oos_stats['blocked'] = oos_npos_stats.get('blocked', {})
+            oos_stats['max_corr_loss'] = oos_npos_stats.get('max_corr_loss', 0)
+
+            fold_result = {
+                'fold': fold + 1,
+                'is_bars': is_end,
+                'oos_bars': oos_end - oos_start,
+                'is_patterns': len(is_patterns),
+                'is_long': n_long, 'is_short': n_short,
+                'oos_trades': oos_stats['trades'],
+                'oos_wr': oos_stats['wr'],
+                'oos_pnl': oos_stats['pnl'],
+                'oos_mdd': oos_stats['mdd'],
+                'oos_pnl_mdd': oos_stats.get('pnl_mdd', 0),
+                'oos_positive': oos_stats['pnl'] > 0,
+                'oos_blocked': oos_stats.get('blocked', {}),
+                'oos_max_corr_loss': oos_stats.get('max_corr_loss', 0),
+                'eval_mode': 'npos',
+            }
+        else:
+            # 1-pos OOS (legacy path)
+            oos_trades = []
+            for r in is_patterns:
+                oos_sigs = [s for s in signal_index[r['pattern']]
+                            if oos_start <= s < oos_end]
+                if oos_atr is not None:
+                    oos_trades.extend(bt_signals_atr(
+                        oos_sigs, r['direction'], r['tp'], r['sl'],
+                        opens, highs, lows, oos_end,
+                        oos_atr, clamp_lo, clamp_hi
+                    ))
+                else:
+                    oos_trades.extend(bt_signals(
+                        oos_sigs, r['direction'], r['tp'], r['sl'],
+                        opens, highs, lows, oos_end
+                    ))
+
+            oos_port = portfolio_1pos(oos_trades)
+            oos_stats = calc_stats(oos_port)
+
+            fold_result = {
+                'fold': fold + 1,
+                'is_bars': is_end,
+                'oos_bars': oos_end - oos_start,
+                'is_patterns': len(is_patterns),
+                'is_long': n_long, 'is_short': n_short,
+                'oos_trades': oos_stats['trades'],
+                'oos_wr': oos_stats['wr'],
+                'oos_pnl': oos_stats['pnl'],
+                'oos_mdd': oos_stats['mdd'],
+                'oos_pf': oos_stats.get('pf', 0),
+                'oos_positive': oos_stats['pnl'] > 0,
+                'eval_mode': '1pos',
+            }
+
         folds.append(fold_result)
 
         logger.info(f"    IS: {len(is_patterns)} pat ({n_long}L+{n_short}S) | "
@@ -1321,6 +1815,8 @@ def scan_patterns_mae_mfe(
     require_portfolio_mc: bool = False,
     atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
     tp_max=None, sl_max=None,
+    tp_method: str = 'percentile',
+    dist_hit_probs: list = None,
 ) -> dict:
     """MAE/MFE Discovery: derive TP/SL from excursion percentiles per pattern.
 
@@ -1366,7 +1862,7 @@ def scan_patterns_mae_mfe(
             max_workers=n_workers,
             initializer=_pp_init,
             initargs=(opens, highs, lows, n, atr_ratio, clamp_lo, clamp_hi,
-                      tp_max, sl_max),
+                      tp_max, sl_max, tp_method, dist_hit_probs),
         ) as executor:
             futures = {executor.submit(_mae_mfe_worker, item): item
                        for item in work_items}
@@ -1392,6 +1888,8 @@ def scan_patterns_mae_mfe(
         _shared_data['atr_ratio'] = atr_ratio
         _shared_data['clamp_lo'] = clamp_lo
         _shared_data['clamp_hi'] = clamp_hi
+        _shared_data['tp_method'] = tp_method
+        _shared_data['dist_hit_probs'] = dist_hit_probs
 
         iterator = work_items
         if _tqdm_cls:
@@ -1490,6 +1988,7 @@ def scan_patterns_mae_mfe(
             'mean': round(float(np.mean(sls)), 1), 'max': max(sls),
         } if sls else {},
         'correction_meta': correction_meta,
+        'tp_method': tp_method,
     }
 
 
@@ -1512,6 +2011,7 @@ def build_output_json(
     clean_mode: bool = False,
     atr_config: dict = None,
     neutral_meta: dict = None,
+    npos_meta: dict = None,
 ) -> dict:
     """Build the output JSON structure. Supports both universal and per_pattern modes."""
     output = {
@@ -1570,8 +2070,14 @@ def build_output_json(
         output['patterns_tpsl'] = scan_result['patterns_tpsl']
         output['tp_distribution'] = scan_result['tp_distribution']
         output['sl_distribution'] = scan_result['sl_distribution']
-        output['selection_criteria']['tp_percentile_grid'] = TP_PERCENTILES
         output['selection_criteria']['sl_percentile_grid'] = SL_PERCENTILES
+        # Record TP derivation method
+        tp_method = scan_result.get('tp_method', 'percentile')
+        output['selection_criteria']['tp_method'] = tp_method
+        if tp_method == 'distribution':
+            output['selection_criteria']['dist_hit_probs'] = DIST_HIT_PROBS
+        else:
+            output['selection_criteria']['tp_percentile_grid'] = TP_PERCENTILES
 
     # Walk-forward results
     if wf_result:
@@ -1592,6 +2098,10 @@ def build_output_json(
     # Neutral window metadata (v1.36.3)
     if neutral_meta:
         output['neutral_window'] = neutral_meta
+
+    # N-position portfolio metadata (v1.38)
+    if npos_meta:
+        output['npos_portfolio'] = npos_meta
 
     # Timing
     if timing:
@@ -1755,9 +2265,29 @@ def main():
                         help='Max TP %% (filter out wider TPs, e.g. 3.0 for 15m)')
     parser.add_argument('--sl-max', type=float, default=None,
                         help='Max SL %% (filter out wider SLs, e.g. 4.0 for 15m)')
+    parser.add_argument('--tp-method', choices=['percentile', 'distribution'],
+                        default='percentile',
+                        help='TP derivation method for mae_mfe: percentile (empirical MFE) '
+                             'or distribution (log-normal fit + hit probability)')
     parser.add_argument('--clean', action='store_true',
                         help='Clean single-pass protocol: BH FDR as primary filter, '
                              'theory-derived thresholds, pre-registration manifest')
+    # N-position portfolio simulator (v1.38: production-aligned backtest)
+    parser.add_argument('--npos', action='store_true',
+                        help='N-position portfolio simulator for WF/IS eval '
+                             '(production-aligned: N=9, compound, direction cap, etc.)')
+    parser.add_argument('--n-slots', type=int, default=DEFAULT_N_SLOTS,
+                        help=f'Max simultaneous positions (default: {DEFAULT_N_SLOTS})')
+    parser.add_argument('--direction-cap', type=int, default=DEFAULT_DIRECTION_CAP,
+                        help=f'Max same-direction positions (default: {DEFAULT_DIRECTION_CAP})')
+    parser.add_argument('--regime-mult', type=float, default=DEFAULT_REGIME_MULT,
+                        help=f'Counter-regime sizing multiplier (default: {DEFAULT_REGIME_MULT})')
+    parser.add_argument('--no-regime-sizing', action='store_true',
+                        help='Disable regime-aware sizing in npos mode')
+    parser.add_argument('--no-momentum-guard', action='store_true',
+                        help='Disable momentum guard in npos mode')
+    parser.add_argument('--no-agg-risk-cap', action='store_true',
+                        help='Disable aggregate risk cap in npos mode')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
@@ -1839,9 +2369,14 @@ def main():
         logger.info(f"TP: {args.tp}% | SL: {args.sl}% | "
                      f"Edge >= {args.edge_threshold}pp | MC < {args.mc_threshold}")
     elif args.discovery_method == 'mae_mfe':
-        logger.info(f"MAE/MFE: TP pctiles {TP_PERCENTILES} | "
-                     f"SL pctiles {SL_PERCENTILES} | "
-                     f"Max baseline WR: {args.max_baseline_wr}%")
+        if args.tp_method == 'distribution':
+            logger.info(f"MAE/MFE + Distribution: hit probs {DIST_HIT_PROBS} | "
+                         f"SL pctiles {SL_PERCENTILES} | "
+                         f"Max baseline WR: {args.max_baseline_wr}%")
+        else:
+            logger.info(f"MAE/MFE: TP pctiles {TP_PERCENTILES} | "
+                         f"SL pctiles {SL_PERCENTILES} | "
+                         f"Max baseline WR: {args.max_baseline_wr}%")
         logger.info(f"Edge >= {args.edge_threshold}pp | "
                      f"MC < {args.mc_threshold} (3-seed)")
     else:
@@ -1864,6 +2399,11 @@ def main():
         logger.info(f"Neutral window: tol +/-{args.neutral_tol}% (auto-detect)")
     else:
         logger.info("Neutral window: disabled")
+    if args.npos:
+        logger.info(f"N-pos portfolio: N={args.n_slots}, dir_cap={args.direction_cap}, "
+                     f"regime_mult={args.regime_mult if not args.no_regime_sizing else 'OFF'}, "
+                     f"agg_risk={'OFF' if args.no_agg_risk_cap else f'{DEFAULT_AGG_RISK_COUNTER}/{DEFAULT_AGG_RISK_WITH}'}, "
+                     f"momentum={'OFF' if args.no_momentum_guard else f'{DEFAULT_MOMENTUM_THRESHOLD}%/{DEFAULT_MOMENTUM_COOLDOWN}b'}")
     if args.tp_max is not None or args.sl_max is not None:
         logger.info(f"TP/SL caps: TP max={args.tp_max}%, SL max={args.sl_max}%")
     if args.concurrency != 1:
@@ -1985,6 +2525,7 @@ def main():
             atr_ratio=atr_ratio, clamp_lo=args.atr_clamp_lo,
             clamp_hi=args.atr_clamp_hi,
             tp_max=args.tp_max, sl_max=args.sl_max,
+            tp_method=args.tp_method,
         )
     else:
         result = scan_patterns_pp(
@@ -2077,11 +2618,74 @@ def main():
                         f"remaining: {len(result['long_patterns'])}L + "
                         f"{len(result['short_patterns'])}S")
 
+    # Build npos kwargs (shared between WF and IS npos eval)
+    npos_kwargs = None
+    if args.npos:
+        npos_kwargs = {
+            'n_slots': args.n_slots,
+            'direction_cap': args.direction_cap,
+            'regime_mult': 1.0 if args.no_regime_sizing else args.regime_mult,
+            'agg_risk_counter': 999.0 if args.no_agg_risk_cap else DEFAULT_AGG_RISK_COUNTER,
+            'agg_risk_with': 999.0 if args.no_agg_risk_cap else DEFAULT_AGG_RISK_WITH,
+            'momentum_lookback': 0 if args.no_momentum_guard else DEFAULT_MOMENTUM_LOOKBACK,
+            'momentum_threshold': 999.0 if args.no_momentum_guard else DEFAULT_MOMENTUM_THRESHOLD,
+            'momentum_cooldown': 0 if args.no_momentum_guard else DEFAULT_MOMENTUM_COOLDOWN,
+            'clamp_lo': args.atr_clamp_lo,
+            'clamp_hi': args.atr_clamp_hi,
+            'timeout_bars': TIMEOUT_BARS,
+        }
+
+    # N-pos IS summary (Change 7: full IS data portfolio simulation)
+    npos_is_stats = None
+    if args.npos:
+        logger.info("")
+        logger.info("N-pos IS portfolio simulation...")
+        # Collect all IS signals from selected patterns
+        is_signal_tuples = []
+        patterns_tpsl = result.get('patterns_tpsl', {})
+        default_tp = result.get('universal_tp', DEFAULT_UNI_TP)
+        default_sl = result.get('universal_sl', DEFAULT_UNI_SL)
+        for pat_name in result['long_patterns']:
+            tpsl = patterns_tpsl.get(pat_name, [default_tp, default_sl])
+            for s in signal_index.get(pat_name, []):
+                is_signal_tuples.append((s, pat_name, 'LONG', tpsl[0], tpsl[1]))
+        for pat_name in result['short_patterns']:
+            tpsl = patterns_tpsl.get(pat_name, [default_tp, default_sl])
+            for s in signal_index.get(pat_name, []):
+                is_signal_tuples.append((s, pat_name, 'SHORT', tpsl[0], tpsl[1]))
+
+        if is_signal_tuples:
+            is_ema_slope = compute_ema_slope(closes_arr)
+            is_atr = atr_ratio if atr_ratio is not None else np.ones(n)
+            is_trades, is_raw_stats = portfolio_npos(
+                is_signal_tuples,
+                df['open'].values, df['high'].values, df['low'].values,
+                closes_arr, n, is_atr, is_ema_slope, 0, n,
+                **npos_kwargs,
+            )
+            npos_is_stats = calc_stats_compound(is_trades)
+            npos_is_stats.update(is_raw_stats)
+            logger.info(f"N-pos IS: {npos_is_stats['trades']} trades, "
+                         f"WR {npos_is_stats['wr']}%, PnL {npos_is_stats['pnl']}%, "
+                         f"MDD {npos_is_stats['mdd']}%, "
+                         f"PnL/MDD {npos_is_stats.get('pnl_mdd', 0):.1f}x")
+            if npos_is_stats.get('blocked'):
+                blk = npos_is_stats['blocked']
+                logger.info(f"  Blocked: dir_cap={blk.get('dir_cap',0)}, "
+                             f"momentum={blk.get('momentum',0)}, "
+                             f"agg_risk={blk.get('agg_risk',0)}, "
+                             f"dup_pat={blk.get('dup_pat',0)}, "
+                             f"max_pos={blk.get('max_pos',0)}")
+
     # Walk-forward validation (optional)
     wf_result = None
     if args.wf_folds > 0:
         logger.info("")
-        logger.info(f"Walk-Forward validation ({args.wf_folds} folds)...")
+        wf_label = f"Walk-Forward validation ({args.wf_folds} folds"
+        if args.npos:
+            wf_label += f", N-pos N={args.n_slots}"
+        wf_label += ")..."
+        logger.info(wf_label)
         t2 = time.time()
         opens = df['open'].values
         highs = df['high'].values
@@ -2101,6 +2705,8 @@ def main():
             clamp_lo=args.atr_clamp_lo, clamp_hi=args.atr_clamp_hi,
             use_atr=not args.no_atr,
             tp_max=args.tp_max, sl_max=args.sl_max,
+            tp_method=args.tp_method if args.discovery_method == 'mae_mfe' else 'percentile',
+            use_npos=args.npos, npos_kwargs=npos_kwargs,
         )
         timing['wf_sec'] = round(time.time() - t2, 1)
         logger.info(f"WF Complete: {wf_result['positive_folds']}/{args.wf_folds} "
@@ -2135,6 +2741,16 @@ def main():
             'clamp_hi': args.atr_clamp_hi,
         } if not args.no_atr else {'enabled': False},
         neutral_meta=neutral_meta,
+        npos_meta={
+            'enabled': True,
+            'n_slots': args.n_slots,
+            'direction_cap': args.direction_cap,
+            'regime_mult': npos_kwargs['regime_mult'],
+            'agg_risk_cap': f"{npos_kwargs['agg_risk_counter']}/{npos_kwargs['agg_risk_with']}",
+            'momentum_guard': not args.no_momentum_guard,
+            'timeout_bars': TIMEOUT_BARS,
+            'is_stats': npos_is_stats,
+        } if args.npos else None,
     )
 
     # Write JSON (numpy types → native Python for JSON compatibility)
@@ -2214,8 +2830,14 @@ def main():
         print("  Neutral: no window found (fallback to full data)")
     else:
         print("  Neutral: disabled")
+    if npos_is_stats:
+        print(f"  N-pos IS: {npos_is_stats['trades']} trades, "
+              f"WR {npos_is_stats['wr']}%, PnL {npos_is_stats['pnl']}%, "
+              f"MDD {npos_is_stats['mdd']}%, "
+              f"PnL/MDD {npos_is_stats.get('pnl_mdd', 0):.1f}x")
     if wf_result:
-        print(f"  Walk-Forward: {wf_result['positive_folds']}/"
+        wf_eval = wf_result.get('folds', [{}])[0].get('eval_mode', '1pos') if wf_result.get('folds') else '1pos'
+        print(f"  Walk-Forward ({wf_eval}): {wf_result['positive_folds']}/"
               f"{wf_result['n_folds']} positive, "
               f"OOS PnL {wf_result['total_oos_pnl']}%, "
               f"{wf_result['stable_pattern_count']} stable patterns")

@@ -11,9 +11,11 @@ v1.25.1: Candle-aligned smart sleep replaces fixed-interval polling.
 import os
 import sys
 import json
+import math
 import time
 import signal
 import logging
+import numpy as np
 import pandas as pd
 from collections import namedtuple
 from datetime import datetime
@@ -338,6 +340,9 @@ def _run_bot_main(
                 # 1e. Record loss for burst brake (v1.37.0)
                 _record_loss_for_burst_brake(state, config)
 
+                # 1f. Update rolling WR tracker for adaptive leverage (v1.39.0)
+                _record_trade_for_rolling_wr(state, config)
+
                 # 2. Check for new entry signal (always, if slots available)
                 _process_entry_signal(
                     exchange, state, config, cache, circuit_breaker, metrics
@@ -354,6 +359,7 @@ def _run_bot_main(
                     if position_closed:
                         has_position = bool(state.get('positions') or {})
                         _record_loss_for_burst_brake(state, config)  # v1.37.0
+                        _record_trade_for_rolling_wr(state, config)  # v1.39.0
 
                 # Proactive emergency SL health check (v1.36.6)
                 _ensure_emergency_sl_exists(exchange, state, config)
@@ -720,6 +726,46 @@ def _check_momentum_guard(
     return False
 
 
+def _record_trade_for_rolling_wr(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Record closed trade in rolling WR tracker for adaptive leverage.
+
+    v1.39.0: Called after any position close event (same pattern as
+    _record_loss_for_burst_brake). Reads last_trade from state to avoid
+    double-counting.
+    """
+    al_cfg = config.get('strategy', {}).get('adaptive_leverage', {})
+    if not al_cfg.get('enabled', False):
+        return
+
+    last_trade = state.get('last_trade')
+    if not last_trade:
+        return
+
+    closed_at = last_trade.get('closed_at', '')
+    if not closed_at:
+        return
+
+    # Avoid double-counting
+    last_recorded = state.get('_rolling_wr_last_recorded', '')
+    if closed_at == last_recorded:
+        return
+
+    pnl_pct = last_trade.get('pnl_pct', 0)
+    direction = last_trade.get('direction', '')
+    # Extract pattern and TP/SL info
+    pattern_name = ''
+    tp_pct, sl_pct = 1.0, 1.0
+    # These are set in the last_trade by record_closed_position; fallback to defaults
+    if not pattern_name:
+        pattern_name = 'N/A'
+
+    _update_rolling_wr_tracker(state, pnl_pct, direction, pattern_name, tp_pct, sl_pct)
+    state['_rolling_wr_last_recorded'] = closed_at
+
+
 def _record_loss_for_burst_brake(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -832,6 +878,149 @@ def _check_loss_burst_brake(
     return False
 
 
+def _clamp(value: float, lo: float, hi: float) -> float:
+    """Clamp value between lo and hi."""
+    return max(lo, min(hi, value))
+
+
+def _leverage_wr_confidence(
+    rolling_wr: float, rolling_edge: float,
+    expected_wr: float, ref_edge: float,
+    min_lev: float, max_lev: float,
+) -> float:
+    """H5: WR Confidence × Edge Quality leverage."""
+    if expected_wr <= 0:
+        return min_lev
+    wr_conf = _clamp(rolling_wr / expected_wr, 0, 1)
+    edge_q = _clamp(rolling_edge / ref_edge, 0, 1.5) if ref_edge > 0 else 0.5
+    combined = _clamp(wr_conf * edge_q, 0, 1)
+    return min_lev + (max_lev - min_lev) * combined
+
+
+def _leverage_kelly(
+    rolling_wr: float, avg_win: float, avg_loss: float, max_lev: float,
+) -> float:
+    """H6: Half-Kelly leverage."""
+    if avg_loss <= 0:
+        return max_lev
+    b = avg_win / avg_loss  # R:R ratio
+    f = (rolling_wr * (1 + b) - 1) / b  # Kelly fraction
+    return _clamp(f * 0.5 * max_lev, 1.0, max_lev)
+
+
+def _leverage_breakeven(
+    rolling_wr: float, tp_pct: float, sl_pct: float,
+    min_lev: float, max_lev: float,
+) -> float:
+    """H7: Breakeven-Aware leverage."""
+    if (tp_pct + sl_pct) <= 0:
+        return min_lev
+    be_wr = sl_pct / (tp_pct + sl_pct)
+    margin = rolling_wr - be_wr
+    if margin <= 0:
+        return min_lev
+    max_margin = 0.30
+    return min_lev + (max_lev - min_lev) * _clamp(margin / max_margin, 0, 1)
+
+
+def _leverage_exp_decay(
+    rolling_wr: float, expected_wr: float,
+    min_lev: float, max_lev: float,
+) -> float:
+    """H9: Exponential Decay (Conservative) leverage."""
+    gap = max(expected_wr - rolling_wr, 0)
+    decay = math.exp(-gap / 0.10)  # 10pp gap → 0.37, 20pp → 0.14
+    return min_lev + (max_lev - min_lev) * decay
+
+
+def _compute_adaptive_leverage(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    signal_direction: str,
+    pattern_name: Optional[str],
+) -> float:
+    """Compute dynamic leverage based on rolling WR vs expected.
+
+    v1.39.0: Returns config['leverage'] when adaptive_leverage is disabled.
+    """
+    al_cfg = config.get('strategy', {}).get('adaptive_leverage', {})
+    if not al_cfg.get('enabled', False):
+        return config.get('leverage', 3)
+
+    min_lev = al_cfg.get('min_leverage', 1.0)
+    max_lev = al_cfg.get('max_leverage', 3.0)
+    window = al_cfg.get('window', 10)
+    method = al_cfg.get('method', 'wr_confidence')
+    expected_wr = config.get('_npos_portfolio_wr', al_cfg.get('expected_wr', 73.2) / 100)
+    ref_edge = config.get('_npos_ref_edge', al_cfg.get('ref_edge', 0.126) / 100)
+
+    tracker = state.get('rolling_wr_tracker') or {}
+    recent = tracker.get('recent_trades', [])
+    if len(recent) < 3:  # minimum trades for meaningful WR
+        logger.debug(f"Adaptive leverage: insufficient trades ({len(recent)}), using min={min_lev}")
+        return min_lev
+
+    # Calculate rolling stats from recent trades
+    recent_window = recent[-window:]
+    wins = sum(1 for t in recent_window if t[0] >= 0)
+    rolling_wr = wins / len(recent_window)
+    rolling_edge = np.mean([t[0] for t in recent_window]) / 100  # pct → fraction
+
+    # Get per-pattern R:R for breakeven methods
+    tp_pct, sl_pct = 1.0, 1.0  # defaults
+    if pattern_name:
+        tpsl = config.get('_dynamic_patterns_tpsl', {}).get(pattern_name, [1.0, 1.0])
+        tp_pct, sl_pct = tpsl[0] / 100, tpsl[1] / 100
+
+    if method == 'wr_confidence':
+        result = _leverage_wr_confidence(rolling_wr, rolling_edge, expected_wr, ref_edge, min_lev, max_lev)
+    elif method == 'kelly':
+        wins_pnl = [t[0] for t in recent_window if t[0] > 0]
+        losses_pnl = [t[0] for t in recent_window if t[0] < 0]
+        avg_win = np.mean(wins_pnl) if wins_pnl else 0
+        avg_loss = abs(np.mean(losses_pnl)) if losses_pnl else 1
+        result = _leverage_kelly(rolling_wr, avg_win, avg_loss, max_lev)
+    elif method == 'breakeven':
+        result = _leverage_breakeven(rolling_wr, tp_pct, sl_pct, min_lev, max_lev)
+    elif method == 'combined':
+        wr_score = _leverage_wr_confidence(rolling_wr, rolling_edge, expected_wr, ref_edge, 0, 1)
+        be_score = _leverage_breakeven(rolling_wr, tp_pct, sl_pct, 0, 1)
+        blend = 0.6 * wr_score + 0.4 * be_score
+        result = min_lev + (max_lev - min_lev) * _clamp(blend, 0, 1)
+    elif method == 'exp_decay':
+        result = _leverage_exp_decay(rolling_wr, expected_wr, min_lev, max_lev)
+    else:
+        result = config['leverage']
+
+    logger.info(
+        f"📊 Adaptive leverage: method={method}, rolling_WR={rolling_wr:.1%} "
+        f"(w={len(recent_window)}), edge={rolling_edge:.4f}, → {result:.2f}x"
+    )
+    return result
+
+
+def _update_rolling_wr_tracker(
+    state: Dict[str, Any],
+    pnl_pct: float,
+    direction: str,
+    pattern_name: str,
+    tp_pct: float,
+    sl_pct: float,
+) -> None:
+    """Update rolling WR tracker after position close.
+
+    v1.39.0: Keeps last 50 trades for rolling window calculations.
+    """
+    tracker = state.get('rolling_wr_tracker') or {'recent_trades': []}
+    recent = tracker.get('recent_trades', [])
+    recent.append([pnl_pct, direction, pattern_name, tp_pct, sl_pct])
+    # Keep last 50 trades (5× max window)
+    if len(recent) > 50:
+        recent = recent[-50:]
+    tracker['recent_trades'] = recent
+    state['rolling_wr_tracker'] = tracker
+
+
 def _check_aggregate_risk_cap(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -889,7 +1078,8 @@ def _check_aggregate_risk_cap(
             continue
         sl_dist_pct = abs(entry - sl) / entry * 100
         slot_size = 1.0 / max_positions
-        agg_exposure += sl_dist_pct * slot_size * leverage
+        slot_lev = pos.get('effective_leverage', leverage)
+        agg_exposure += sl_dist_pct * slot_size * slot_lev
 
     # Compute new position's SL exposure
     new_sl_pct = _estimate_new_sl_pct(config, pattern_name, df)
@@ -1014,9 +1204,13 @@ def _process_entry_signal(
         if _check_aggregate_risk_cap(state, config, signal_result, pattern_name, df):
             return False
 
+        # v1.39.0: Compute adaptive leverage before opening
+        adaptive_lev = _compute_adaptive_leverage(state, config, signal_result, pattern_name)
+
         success = open_position(
             exchange, state, config, signal_result, reason,
-            cache, circuit_breaker, metrics, df
+            cache, circuit_breaker, metrics, df,
+            leverage_override=adaptive_lev,
         )
         if success:
             logger.info(f"✅ Position opened: {signal_result} (slot {len(state.get('positions') or {})})")

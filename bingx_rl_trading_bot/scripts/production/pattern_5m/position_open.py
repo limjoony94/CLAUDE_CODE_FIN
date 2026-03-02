@@ -112,7 +112,8 @@ def get_position_size(
                                      circuit_breaker=circuit_breaker, metrics=metrics)
         price = ticker['last']
 
-        quantity = (position_value * config['leverage']) / price
+        effective_leverage = config['leverage']
+        quantity = (position_value * effective_leverage) / price
         quantity = round(quantity, QUANTITY_ROUND_DECIMALS)
 
         return quantity, available, price
@@ -137,6 +138,7 @@ def open_position(
     circuit_breaker: Optional[CircuitBreaker] = None,
     metrics: Optional[PerformanceMetrics] = None,
     df: Optional[pd.DataFrame] = None,
+    leverage_override: Optional[float] = None,
 ) -> bool:
     """
     Open a new trading position.
@@ -151,12 +153,13 @@ def open_position(
         circuit_breaker: Optional CircuitBreaker
         metrics: Optional PerformanceMetrics
         df: Optional DataFrame for volatility calculation
+        leverage_override: Optional adaptive leverage (v1.39.0)
 
     Returns:
         True if position opened successfully
     """
     symbol = config['symbol']
-    leverage = config['leverage']
+    leverage = leverage_override or config['leverage']
     exchange_leverage = config.get('exchange_leverage', leverage)
     strategy = config['strategy']
 
@@ -180,9 +183,10 @@ def open_position(
             return False
 
         # Log balance and position sizing details
-        position_value = quantity * estimated_price / leverage
+        effective_leverage = leverage  # leverage already resolved from leverage_override or config
+        position_value = quantity * estimated_price / effective_leverage
         size_pct = config['position_size_pct']
-        logger.info(f"Balance: ${available:.2f} | Size: ${position_value:.2f} ({size_pct}%) | Notional: ${quantity * estimated_price:.2f} ({leverage}x)")
+        logger.info(f"Balance: ${available:.2f} | Size: ${position_value:.2f} ({size_pct}%) | Notional: ${quantity * estimated_price:.2f} ({effective_leverage:.1f}x)")
 
         # Execute market order
         t_open = time.time()
@@ -268,6 +272,8 @@ def open_position(
             # v1.18: Regime-adaptive fields
             'market_regime': current_regime,
             'regime_tp_sl': regime_tp_sl,
+            # v1.39.0: Per-slot effective leverage for adaptive leverage
+            'effective_leverage': effective_leverage,
         }
         state['positions'][slot_id] = new_slot
         # One-Way mode: track single direction constraint; Hedge: no constraint

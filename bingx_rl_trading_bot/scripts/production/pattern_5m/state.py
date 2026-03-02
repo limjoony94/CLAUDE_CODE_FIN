@@ -110,6 +110,9 @@ def _create_default_state() -> Dict[str, Any]:
         'created_at': datetime.now().isoformat(),
         'updated_at': datetime.now().isoformat(),
         'peak_equity': 0.0,  # v1.34.0: MDD sizing high watermark
+        'rolling_wr_tracker': {  # v1.39.0: Adaptive leverage rolling WR
+            'recent_trades': [],  # list of [pnl_pct, direction, pattern, tp_pct, sl_pct]
+        },
     }
 
 

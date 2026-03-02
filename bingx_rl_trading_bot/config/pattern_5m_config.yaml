@@ -41,6 +41,14 @@ risk:
 rotation:
   enabled: false
 strategy:
+  adaptive_leverage:
+    enabled: true           # v1.39.0: GO — risk study 7/9 metrics superior, MDD -32%, Calmar +39%
+    method: "wr_confidence" # wr_confidence | kelly | breakeven | combined | exp_decay
+    min_leverage: 1.0
+    max_leverage: 3.0
+    window: 12              # v1.39.0: w12 best OOS consistency 0.823, DD stress lev -47%
+    expected_wr: 73.2       # from npos_portfolio IS stats (%)
+    ref_edge: 0.126         # from npos_portfolio IS pnl_per_trade (%)
   atr_scale:
     enabled: true
     window: 576       # rolling median window (576봉 = 2일)

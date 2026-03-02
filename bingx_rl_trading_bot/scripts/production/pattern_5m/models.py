@@ -297,6 +297,8 @@ class BotState(TypedDict, total=False):
     created_at: str
     updated_at: str
     state_version: int  # v1.30.0: 3 = hedge-capable format
+    rolling_wr_tracker: Dict[str, Any]  # v1.39.0: adaptive leverage rolling WR data
+    peak_equity: float  # v1.34.0: MDD sizing high watermark
 
 
 # Keys that MUST exist in a valid state (used by validate_state)

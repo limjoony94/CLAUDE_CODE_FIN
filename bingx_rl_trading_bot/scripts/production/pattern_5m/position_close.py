@@ -157,11 +157,13 @@ def record_closed_position(
         pnl_pct = 0.0
         price_pnl_pct = 0.0
     else:
+        # v1.39.0: Use per-slot effective leverage if available (adaptive leverage)
+        slot_leverage = position.get('effective_leverage', config['leverage'])
         pnl_pct, price_pnl_pct = calculate_pnl(
             entry_price=position['entry_price'],
             exit_price=exit_price,
             direction=direction,
-            leverage=config['leverage'],
+            leverage=slot_leverage,
         )
 
     # Extract pattern name from reason

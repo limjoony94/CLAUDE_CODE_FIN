@@ -296,6 +296,14 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             config['_dynamic_pattern_stats'] = dynamic_stats
             logger.info(f"Dynamic pattern stats loaded: {len(dynamic_stats)} entries for confidence scoring")
 
+        # Inject npos_portfolio expected WR and edge for adaptive leverage (v1.39.0)
+        npos = data.get('npos_portfolio', {})
+        is_stats = npos.get('is_stats', {})
+        if is_stats:
+            config['_npos_portfolio_wr'] = is_stats.get('wr', 73.2) / 100  # fraction
+            config['_npos_ref_edge'] = is_stats.get('pnl_per_trade', 0.126) / 100  # fraction
+            logger.info(f"N-pos portfolio stats: WR={is_stats.get('wr', '?')}%, edge={is_stats.get('pnl_per_trade', '?')}%/trade")
+
         bs = data.get('backtest_summary', {})
         if bs:
             logger.info(f"Backtest: {bs.get('total_trades', '?')} trades, "

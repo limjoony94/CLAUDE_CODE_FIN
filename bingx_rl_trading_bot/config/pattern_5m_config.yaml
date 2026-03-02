@@ -23,8 +23,8 @@ risk:
     enabled: true
     counter_cap: 3.0         # counter-regime cap (% portfolio, SHORT in uptrend / LONG in downtrend)
     with_cap: 7.0            # with-regime cap (% portfolio, SHORT in downtrend / LONG in uptrend)
-  loss_burst_brake:        # v1.37.0: Block direction after burst losses
-    enabled: true
+  loss_burst_brake:        # v1.37.0: Block direction after burst losses — v1.40.1 DISABLED (redundant with momentum_guard, ablation +5.66)
+    enabled: false
     threshold: 2             # number of same-dir losses to trigger brake
     window_bars: 288         # 288 bars = 24h window to count losses
     block_bars: 144          # 144 bars = 12h block duration
@@ -33,12 +33,12 @@ risk:
     lookback_bars: 6         # 6 bars = 30min price change window
     threshold_pct: 1.0       # 1% move triggers guard
     cooldown_bars: 6         # 6 bars = 30min pause after trigger
-  equity_curve_trading:    # v1.40.0: Equity Curve Trading (Combo2-H1)
-    enabled: true
+  equity_curve_trading:    # v1.40.0: Equity Curve Trading (Combo2-H1) — v1.40.1 DISABLED (harmful: PnL -11.4%, MDD unchanged, ablation +1.96)
+    enabled: false
     ema_trades: 30           # SMA lookback in completed trades (per-direction)
     size_mult: 0.5           # size multiplier when direction's cum_pnl < SMA
-  correlation_aware_entry:  # v1.40.0: Correlation-Aware Entry (Combo2-H6)
-    enabled: true
+  correlation_aware_entry:  # v1.40.0: Correlation-Aware Entry (Combo2-H6) — v1.40.1 DISABLED (redundant with regime_sizing, redundancy 71.75)
+    enabled: false
     dir_pct_threshold: 0.70  # same-direction ratio threshold (block counter-regime above this)
   regime_sizing:           # v1.35.3: Regime-aware position sizing
     enabled: true

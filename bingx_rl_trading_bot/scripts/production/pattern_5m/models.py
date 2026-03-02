@@ -298,6 +298,7 @@ class BotState(TypedDict, total=False):
     updated_at: str
     state_version: int  # v1.30.0: 3 = hedge-capable format
     rolling_wr_tracker: Dict[str, Any]  # v1.39.0: adaptive leverage rolling WR data
+    equity_curve_tracker: Dict[str, Any]  # v1.40.0: per-direction equity curve trading
     peak_equity: float  # v1.34.0: MDD sizing high watermark
 
 

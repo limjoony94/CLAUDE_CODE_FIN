@@ -33,6 +33,13 @@ risk:
     lookback_bars: 6         # 6 bars = 30min price change window
     threshold_pct: 1.0       # 1% move triggers guard
     cooldown_bars: 6         # 6 bars = 30min pause after trigger
+  equity_curve_trading:    # v1.40.0: Equity Curve Trading (Combo2-H1)
+    enabled: true
+    ema_trades: 30           # SMA lookback in completed trades (per-direction)
+    size_mult: 0.5           # size multiplier when direction's cum_pnl < SMA
+  correlation_aware_entry:  # v1.40.0: Correlation-Aware Entry (Combo2-H6)
+    enabled: true
+    dir_pct_threshold: 0.70  # same-direction ratio threshold (block counter-regime above this)
   regime_sizing:           # v1.35.3: Regime-aware position sizing
     enabled: true
     ema_period: 20           # EMA window for trend detection

@@ -113,6 +113,10 @@ def _create_default_state() -> Dict[str, Any]:
         'rolling_wr_tracker': {  # v1.39.0: Adaptive leverage rolling WR
             'recent_trades': [],  # list of [pnl_pct, direction, pattern, tp_pct, sl_pct]
         },
+        'equity_curve_tracker': {  # v1.40.0: Per-direction equity curve trading
+            'long_cum_pnls': [],   # cumulative PnL sequence after each LONG trade close
+            'short_cum_pnls': [],  # cumulative PnL sequence after each SHORT trade close
+        },
     }
 
 

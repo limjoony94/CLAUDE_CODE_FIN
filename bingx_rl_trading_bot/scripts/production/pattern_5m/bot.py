@@ -343,6 +343,9 @@ def _run_bot_main(
                 # 1f. Update rolling WR tracker for adaptive leverage (v1.39.0)
                 _record_trade_for_rolling_wr(state, config)
 
+                # 1g. Update equity curve tracker (v1.40.0)
+                _record_trade_for_equity_curve(state, config)
+
                 # 2. Check for new entry signal (always, if slots available)
                 _process_entry_signal(
                     exchange, state, config, cache, circuit_breaker, metrics
@@ -360,6 +363,7 @@ def _run_bot_main(
                         has_position = bool(state.get('positions') or {})
                         _record_loss_for_burst_brake(state, config)  # v1.37.0
                         _record_trade_for_rolling_wr(state, config)  # v1.39.0
+                        _record_trade_for_equity_curve(state, config)  # v1.40.0
 
                 # Proactive emergency SL health check (v1.36.6)
                 _ensure_emergency_sl_exists(exchange, state, config)
@@ -1021,6 +1025,159 @@ def _update_rolling_wr_tracker(
     state['rolling_wr_tracker'] = tracker
 
 
+def _check_equity_curve_sizing(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    direction: str,
+) -> float:
+    """Return size multiplier based on per-direction equity curve vs SMA.
+
+    v1.40.0: Equity Curve Trading (Combo2-H1). When a direction's cumulative
+    PnL falls below its SMA(ema_trades), reduce that direction's position
+    size by size_mult (e.g. 0.5). LONG/SHORT tracked independently.
+
+    Returns 1.0 (normal) or config size_mult when equity < SMA.
+    """
+    ec_cfg = config.get('risk', {}).get('equity_curve_trading', {})
+    if not ec_cfg.get('enabled', False):
+        return 1.0
+
+    ema_trades = ec_cfg.get('ema_trades', 30)
+    size_mult = ec_cfg.get('size_mult', 0.5)
+
+    tracker = state.get('equity_curve_tracker') or {}
+    key = 'long_cum_pnls' if direction == 'LONG' else 'short_cum_pnls'
+    cum_pnls = tracker.get(key, [])
+
+    if len(cum_pnls) < ema_trades:
+        return 1.0  # not enough data yet
+
+    # SMA of last ema_trades values
+    window = cum_pnls[-ema_trades:]
+    sma = sum(window) / ema_trades
+    current = cum_pnls[-1]
+
+    if current < sma:
+        logger.info(
+            f"📉 Equity curve sizing: {direction} cum_pnl={current:.2f}% < SMA({ema_trades})={sma:.2f}% → scale={size_mult}"
+        )
+        return size_mult
+    return 1.0
+
+
+def _check_correlation_aware_entry(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    signal_direction: str,
+    df: Optional[pd.DataFrame],
+) -> bool:
+    """Return True if entry should be BLOCKED (correlation guard).
+
+    v1.40.0: Correlation-Aware Entry (Combo2-H6). Block when same-direction
+    ratio >= threshold AND new entry is counter-regime.
+
+    Returns:
+        True if entry should be blocked
+    """
+    ca_cfg = config.get('risk', {}).get('correlation_aware_entry', {})
+    if not ca_cfg.get('enabled', False):
+        return False
+
+    positions = state.get('positions') or {}
+    if len(positions) < 2:
+        return False
+
+    dir_pct = ca_cfg.get('dir_pct_threshold', 0.70)
+
+    same_dir = sum(1 for p in positions.values() if p.get('direction') == signal_direction)
+    ratio = same_dir / len(positions)
+
+    if ratio < dir_pct:
+        return False
+
+    # Check if counter-regime using existing regime_sizing EMA params
+    regime_cfg = config.get('risk', {}).get('regime_sizing', {})
+    ema_period = regime_cfg.get('ema_period', 20)
+    lookback = regime_cfg.get('lookback', 5)
+
+    if df is not None and len(df) >= ema_period + lookback:
+        closes = df['close'].values
+        ema = pd.Series(closes).ewm(span=ema_period, adjust=False).mean().values
+        slope = ema[-1] - ema[-1 - lookback]
+        is_uptrend = slope > 0
+        is_counter = (
+            (is_uptrend and signal_direction == 'SHORT') or
+            (not is_uptrend and signal_direction == 'LONG')
+        )
+        if is_counter:
+            logger.info(
+                f"🛡️ Correlation guard: {signal_direction} dir_ratio={ratio:.0%} >= {dir_pct:.0%}, "
+                f"counter-regime ({'UP' if is_uptrend else 'DOWN'}) → BLOCK"
+            )
+            return True
+
+    return False
+
+
+def _update_equity_curve_tracker(
+    state: Dict[str, Any],
+    direction: str,
+    portfolio_pnl_pct: float,
+) -> None:
+    """Record cumulative PnL after trade close for equity curve trading.
+
+    v1.40.0: Per-direction tracking — LONG/SHORT independent curves.
+    Each entry is the running cumulative sum of portfolio PnL for that direction.
+    """
+    tracker = state.setdefault('equity_curve_tracker', {
+        'long_cum_pnls': [],
+        'short_cum_pnls': [],
+    })
+    key = 'long_cum_pnls' if direction == 'LONG' else 'short_cum_pnls'
+    cum_pnls = tracker.get(key, [])
+    prev = cum_pnls[-1] if cum_pnls else 0.0
+    cum_pnls.append(round(prev + portfolio_pnl_pct, 4))
+    # Keep last 100 entries (3x+ of max EMA period)
+    if len(cum_pnls) > 100:
+        cum_pnls = cum_pnls[-100:]
+    tracker[key] = cum_pnls
+
+
+def _record_trade_for_equity_curve(
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+) -> None:
+    """Record trade for equity curve tracker after position close.
+
+    v1.40.0: Called from trading/maintenance window after trade exit detection.
+    Similar pattern to _record_loss_for_burst_brake and _record_trade_for_rolling_wr.
+    """
+    ec_cfg = config.get('risk', {}).get('equity_curve_trading', {})
+    if not ec_cfg.get('enabled', False):
+        return
+
+    last_trade = state.get('last_trade')
+    if not last_trade:
+        return
+
+    closed_at = last_trade.get('closed_at', '')
+    if not closed_at:
+        return
+
+    # Avoid double-counting
+    last_recorded = state.get('_equity_curve_last_recorded', '')
+    if closed_at == last_recorded:
+        return
+
+    direction = last_trade.get('direction', '')
+    if not direction:
+        return
+
+    portfolio_pnl = last_trade.get('portfolio_pnl_pct', last_trade.get('pnl_pct', 0))
+    _update_equity_curve_tracker(state, direction, portfolio_pnl)
+    state['_equity_curve_last_recorded'] = closed_at
+
+
 def _check_aggregate_risk_cap(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -1199,6 +1356,10 @@ def _process_entry_signal(
         if _check_loss_burst_brake(state, config, signal_result):
             return False
 
+        # v1.40.0: Correlation-aware entry guard — block counter-regime when dir-concentrated
+        if _check_correlation_aware_entry(state, config, signal_result, df):
+            return False
+
         # v1.35.5: Aggregate directional risk cap check
         pattern_name = extract_pattern_name(reason)
         if _check_aggregate_risk_cap(state, config, signal_result, pattern_name, df):
@@ -1207,10 +1368,14 @@ def _process_entry_signal(
         # v1.39.0: Compute adaptive leverage before opening
         adaptive_lev = _compute_adaptive_leverage(state, config, signal_result, pattern_name)
 
+        # v1.40.0: Equity curve sizing — reduce size when direction's curve < SMA
+        ec_mult = _check_equity_curve_sizing(state, config, signal_result)
+
         success = open_position(
             exchange, state, config, signal_result, reason,
             cache, circuit_breaker, metrics, df,
             leverage_override=adaptive_lev,
+            equity_curve_scale=ec_mult,
         )
         if success:
             logger.info(f"✅ Position opened: {signal_result} (slot {len(state.get('positions') or {})})")

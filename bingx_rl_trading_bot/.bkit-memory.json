@@ -67,6 +67,29 @@
       "production_action": "enabled=true, method=wr_confidence, window=12, rollback=enabled:false"
     }
   },
+  "mdd-reduction": {
+    "phase": "completed",
+    "matchRate": 100,
+    "iterationCount": 0,
+    "startedAt": "2026-03-02T19:00:00Z",
+    "completedAt": "2026-03-02T23:00:00Z",
+    "summary": {
+      "type": "feature-implementation",
+      "versions": "v1.40.0",
+      "techniques": "Combo2 (H1_EqCurve_half_ema30 + H6_CorrAware_dir70)",
+      "research": "mdd_reduction_study.py — 7H/45scenarios/6phases, 66s",
+      "expected_impact": "MDD -47.8% (6.5→3.4%), PnL -3.9%, PnL/MDD +84.1%",
+      "wf_result": "3/3 PASS (F1 +23.0%, F2 +33.6%, F3 +23.7%)",
+      "changes": {
+        "state.py": "equity_curve_tracker default (long_cum_pnls, short_cum_pnls)",
+        "models.py": "BotState equity_curve_tracker type",
+        "bot.py": "_check_equity_curve_sizing + _check_correlation_aware_entry + _update_equity_curve_tracker + _record_trade_for_equity_curve + entry integration",
+        "position_open.py": "equity_curve_scale param (get_position_size + open_position + slot)",
+        "config.yaml": "equity_curve_trading + correlation_aware_entry sections"
+      },
+      "per_direction": "LONG/SHORT 독립 에퀴티 커브 추적"
+    }
+  },
   "pattern_5m": {
     "phase": "archived",
     "matchRate": 100,

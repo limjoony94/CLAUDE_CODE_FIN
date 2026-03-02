@@ -39,6 +39,7 @@ def get_position_size(
     state: Optional[Dict[str, Any]] = None,
     signal: Optional[str] = None,
     df: Optional[pd.DataFrame] = None,
+    equity_curve_scale: float = 1.0,
 ) -> tuple:
     """
     Calculate position size based on available balance.
@@ -52,6 +53,7 @@ def get_position_size(
         state: Optional bot state dict (for MDD sizing, v1.34.0)
         signal: Optional 'LONG' or 'SHORT' (for regime sizing, v1.35.3)
         df: Optional DataFrame with close prices (for regime sizing, v1.35.3)
+        equity_curve_scale: Size multiplier from equity curve trading (v1.40.0)
 
     Returns:
         Tuple of (quantity, available_balance, price) or (None, None, None) on error
@@ -105,7 +107,7 @@ def get_position_size(
                     logger.info(f"Regime sizing: {'UP' if is_uptrend else 'DOWN'} trend, {signal} is counter-regime, scale={regime_scale:.2f}")
 
         # 1/N sizing: each slot gets equity/max_positions
-        per_slot_equity = total_equity * size_pct / max_positions * mdd_scale * regime_scale
+        per_slot_equity = total_equity * size_pct / max_positions * mdd_scale * regime_scale * equity_curve_scale
         position_value = min(per_slot_equity, available * size_pct, max_size)
 
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True,
@@ -139,6 +141,7 @@ def open_position(
     metrics: Optional[PerformanceMetrics] = None,
     df: Optional[pd.DataFrame] = None,
     leverage_override: Optional[float] = None,
+    equity_curve_scale: float = 1.0,
 ) -> bool:
     """
     Open a new trading position.
@@ -154,6 +157,7 @@ def open_position(
         metrics: Optional PerformanceMetrics
         df: Optional DataFrame for volatility calculation
         leverage_override: Optional adaptive leverage (v1.39.0)
+        equity_curve_scale: Size multiplier from equity curve trading (v1.40.0)
 
     Returns:
         True if position opened successfully
@@ -176,7 +180,8 @@ def open_position(
 
         # Calculate position size (also returns current price to avoid double ticker fetch)
         quantity, available, estimated_price = get_position_size(
-            exchange, config, cache, circuit_breaker, metrics, state=state, signal=signal, df=df
+            exchange, config, cache, circuit_breaker, metrics, state=state, signal=signal, df=df,
+            equity_curve_scale=equity_curve_scale,
         )
         if quantity is None or quantity <= 0:
             logger.warning(f"Invalid position size (qty={quantity}, balance=${available}), skipping")
@@ -274,6 +279,8 @@ def open_position(
             'regime_tp_sl': regime_tp_sl,
             # v1.39.0: Per-slot effective leverage for adaptive leverage
             'effective_leverage': effective_leverage,
+            # v1.40.0: Equity curve scale factor
+            'equity_curve_scale': equity_curve_scale,
         }
         state['positions'][slot_id] = new_slot
         # One-Way mode: track single direction constraint; Hedge: no constraint

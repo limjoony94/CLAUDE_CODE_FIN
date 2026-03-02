@@ -2273,9 +2273,12 @@ def main():
                         help='Clean single-pass protocol: BH FDR as primary filter, '
                              'theory-derived thresholds, pre-registration manifest')
     # N-position portfolio simulator (v1.38: production-aligned backtest)
-    parser.add_argument('--npos', action='store_true',
+    parser.add_argument('--npos', action='store_true', default=True,
                         help='N-position portfolio simulator for WF/IS eval '
-                             '(production-aligned: N=9, compound, direction cap, etc.)')
+                             '(production-aligned: N=9, compound, direction cap, etc.) '
+                             '[DEFAULT ON since v1.38.1]')
+    parser.add_argument('--no-npos', action='store_true',
+                        help='Disable N-pos simulator, use legacy 1-pos additive backtest')
     parser.add_argument('--n-slots', type=int, default=DEFAULT_N_SLOTS,
                         help=f'Max simultaneous positions (default: {DEFAULT_N_SLOTS})')
     parser.add_argument('--direction-cap', type=int, default=DEFAULT_DIRECTION_CAP,
@@ -2291,6 +2294,10 @@ def main():
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
+
+    # --no-npos overrides --npos (which is default True)
+    if args.no_npos:
+        args.npos = False
 
     # Clean mode: override parameters to theory-derived values
     CLEAN_MIN_EDGE_PP = 5.0   # Practical minimum (cost-based)

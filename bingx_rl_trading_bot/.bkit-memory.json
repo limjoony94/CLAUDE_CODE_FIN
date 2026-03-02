@@ -39,5 +39,27 @@
       "phases_skipped": ["phase_5_wf", "phase_6_production"],
       "production_changes": "none"
     }
+  },
+  "pattern_5m": {
+    "phase": "archived",
+    "matchRate": 100,
+    "iterationCount": 0,
+    "startedAt": "2026-03-01T00:00:00Z",
+    "completedAt": "2026-03-02T12:00:00Z",
+    "archivedAt": "2026-03-02T12:15:00Z",
+    "archivedTo": "docs/archive/2026-03/pattern_5m/",
+    "summary": {
+      "type": "feature-implementation",
+      "versions": "v1.38.0~v1.38.1",
+      "key_achievement": "N-pos Scanner default — Live WR gap 57% reduced (36.1pp to 15.4pp)",
+      "changes": {
+        "scanner": "portfolio_npos() with 6 production filters, --npos default ON",
+        "new_functions": "portfolio_npos, _check_exit_npos, compute_ema_slope, calc_stats_compound",
+        "cli_args": "--npos, --n-slots, --direction-cap, --regime-mult, --no-regime-sizing, --no-momentum-guard, --no-agg-risk-cap, --no-loss-burst-brake"
+      },
+      "wf_result": "3/3 PASS (Fold1 +22.8%, Fold2 +2.9%, Fold3 +12.1%)",
+      "is_stats": "798 trades, WR 73.2%, PnL +100.25%, MDD 7.06%",
+      "production_action": "Scanner npos default ON, patterns unchanged (130pat 61L+69S)"
+    }
   }
 }

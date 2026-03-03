@@ -43,8 +43,8 @@ risk:
   correlation_aware_entry:  # v1.40.0: Correlation-Aware Entry (Combo2-H6) — v1.40.1 DISABLED (redundant with regime_sizing, redundancy 71.75)
     enabled: false
     dir_pct_threshold: 0.70  # same-direction ratio threshold (block counter-regime above this)
-  regime_sizing:           # v1.35.3: Regime-aware position sizing
-    enabled: true
+  regime_sizing:           # v1.35.3: Regime-aware position sizing — v1.42.0 DISABLED (M2+M4 redundancy -46.94, P3 CascadeSL replaces MDD defense)
+    enabled: false
     ema_period: 20           # EMA window for trend detection
     lookback: 5              # slope lookback bars (EMA[now] - EMA[now-5])
     counter_mult: 0.3        # counter-regime size multiplier (MDD lowest: 6.71%)
@@ -52,7 +52,7 @@ rotation:
   enabled: false
 strategy:
   adaptive_leverage:
-    enabled: true           # v1.39.0: GO — risk study 7/9 metrics superior, MDD -32%, Calmar +39%
+    enabled: false          # v1.42.0 DISABLED — M2+M4 redundancy -46.94, P3 CascadeSL replaces MDD defense. Re-enable: true
     method: "wr_confidence" # wr_confidence | kelly | breakeven | combined | exp_decay
     min_leverage: 1.0
     max_leverage: 3.0

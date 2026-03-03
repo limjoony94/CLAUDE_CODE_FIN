@@ -24,7 +24,7 @@ from .constants import (
 from .models import APICache, CircuitBreaker, PerformanceMetrics
 from .exchange import fetch_ticker_cached, fetch_positions_cached
 from .state import save_state
-from .orders import _EXCHANGE_MANAGED
+from .orders import _EXCHANGE_MANAGED, update_single_sl
 
 logger = logging.getLogger('pattern_5m')
 
@@ -433,8 +433,71 @@ def _handle_position_closed(
         elif exit_reason == 'SL':
             exit_reason = f'SL_AFTER_{filled_stages}_STAGES'
 
+    # v1.41.0: Cascade SL tightening — tighten same-dir SLs before slot removal
+    if exit_reason in ('SL', 'EMERGENCY_SL') or exit_reason.startswith('SL_AFTER_'):
+        _cascade_tighten_sls(exchange, state, config, position)
+
     record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics, position=position)
     return True
+
+
+def _cascade_tighten_sls(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    closed_position: Dict,
+) -> None:
+    """Tighten SL orders on remaining same-direction positions after an SL exit.
+
+    v1.41.0: Correlated loss study H5_Cascade_t75 — reduce SL distance
+    to (1 - tighten_pct/100) of current distance. Cascading: each
+    subsequent SL exit recalculates from current sl_price.
+    """
+    cascade_cfg = config.get('risk', {}).get('cascade_sl_tightening', {})
+    if not cascade_cfg.get('enabled', False):
+        return
+
+    tighten_pct = cascade_cfg.get('tighten_pct', 75)
+    keep_ratio = 1.0 - tighten_pct / 100.0  # e.g. 75% → keep 0.25
+
+    direction = closed_position.get('direction', '')
+    closed_slot = closed_position.get('slot_id', 'unknown')
+    positions = state.get('positions') or {}
+
+    same_dir = [
+        (sid, pos) for sid, pos in positions.items()
+        if pos.get('direction') == direction and sid != closed_slot
+    ]
+
+    if not same_dir:
+        return
+
+    logger.info(
+        f"🔗 CASCADE SL: {direction} SL exit (slot {closed_slot}) — "
+        f"tightening {len(same_dir)} same-dir positions to {keep_ratio:.0%} SL distance"
+    )
+
+    for sid, pos in same_dir:
+        entry = pos.get('entry_price', 0)
+        old_sl = pos.get('sl_price', 0)
+        if entry <= 0 or old_sl <= 0:
+            continue
+
+        old_dist = abs(entry - old_sl)
+        new_dist = old_dist * keep_ratio
+
+        if direction == 'LONG':
+            new_sl = round(entry - new_dist, 1)
+        else:
+            new_sl = round(entry + new_dist, 1)
+
+        logger.info(
+            f"  CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "
+            f"(dist {old_dist:.1f} → {new_dist:.1f})"
+        )
+        update_single_sl(exchange, pos, config, new_sl)
+
+    save_state(state)
 
 
 def _infer_exit_from_price(exit_price: float, position: Dict) -> str:

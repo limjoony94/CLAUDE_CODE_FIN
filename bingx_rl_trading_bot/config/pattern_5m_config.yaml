@@ -28,6 +28,9 @@ risk:
     threshold: 2             # number of same-dir losses to trigger brake
     window_bars: 288         # 288 bars = 24h window to count losses
     block_bars: 144          # 144 bars = 12h block duration
+  cascade_sl_tightening:   # v1.41.0: After SL exit, tighten remaining same-dir SLs
+    enabled: true
+    tighten_pct: 75          # SL distance reduced to 25% of original (75% tightening)
   momentum_guard:          # v1.36.2: Pause counter-dir entries during strong moves
     enabled: true
     lookback_bars: 6         # 6 bars = 30min price change window

@@ -245,6 +245,39 @@ def _place_sl_order(
         logger.warning(f"SL order failed: {e}")
 
 
+def update_single_sl(
+    exchange: ccxt.bingx,
+    position: Dict,
+    config: Dict[str, Any],
+    new_sl_price: float,
+) -> bool:
+    """Cancel existing SL and place a new one at new_sl_price.
+
+    Used by cascade SL tightening (v1.41.0) to atomically update
+    a single slot's SL order after a correlated SL exit.
+
+    Returns True if the new SL was placed (or marked managed).
+    """
+    symbol = config['symbol']
+    direction = position.get('direction', '')
+    close_side = 'sell' if direction == 'LONG' else 'buy'
+    position_side = _get_position_side(config, direction)
+    quantity = position.get('remaining_quantity', position.get('quantity', 0))
+
+    old_sl_id = position.get('sl_order_id')
+    if old_sl_id and old_sl_id != _EXCHANGE_MANAGED:
+        try:
+            exchange.cancel_order(old_sl_id, symbol)
+            logger.info(f"CASCADE: Cancelled old SL {old_sl_id}")
+        except Exception as e:
+            logger.warning(f"CASCADE: Failed to cancel old SL {old_sl_id}: {e}")
+
+    position['sl_order_id'] = None
+    position['sl_price'] = new_sl_price
+    _place_sl_order(exchange, position, symbol, close_side, quantity, new_sl_price, position_side)
+    return position.get('sl_order_id') is not None
+
+
 def adjust_tpsl_to_config(
     exchange: ccxt.bingx,
     state: Dict[str, Any],

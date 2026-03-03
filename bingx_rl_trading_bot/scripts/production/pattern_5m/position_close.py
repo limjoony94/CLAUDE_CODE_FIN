@@ -205,6 +205,9 @@ def record_closed_position(
             'sl_price': position.get('sl_price', 0),
             'exit_reason': exit_reason,
             'hold_minutes': hold_minutes,
+            'effective_leverage': position.get('effective_leverage', config['leverage']),
+            'vol_mult': position.get('vol_mult', 1.0),
+            'equity_curve_scale': position.get('equity_curve_scale', 1.0),
         }
         metrics.update_trade(portfolio_pnl_pct, trade_detail=trade_detail)
 

@@ -495,7 +495,13 @@ def _cascade_tighten_sls(
             f"  CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "
             f"(dist {old_dist:.1f} → {new_dist:.1f})"
         )
-        update_single_sl(exchange, pos, config, new_sl)
+        success = update_single_sl(exchange, pos, config, new_sl)
+        if not success:
+            pos['sl_price'] = old_sl
+            logger.critical(
+                f"  CASCADE slot {sid}: SL update FAILED — reverted to ${old_sl:.1f}. "
+                f"POSITION MAY BE UNPROTECTED until next verify cycle."
+            )
 
     save_state(state)
 

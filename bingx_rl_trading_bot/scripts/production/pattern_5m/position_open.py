@@ -442,9 +442,6 @@ def calculate_tp_sl(
 
     Priority: dynamic_universal > regime_tp_sl > PATTERN_OPTIMAL_TPSL > strategy defaults
     """
-    # v1.43.0: TP multiplier for faster take-profit
-    tp_multiplier = strategy.get('tp_multiplier', 1.0) if strategy else 1.0
-
     # Dynamic Per-Pattern TP/SL mode (highest priority)
     if config and config.get('_dynamic_tpsl_per_pattern'):
         pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
@@ -457,7 +454,6 @@ def calculate_tp_sl(
             base_sl_pct = strategy['sl_pct']
             logger.warning(f"Pattern {pattern} not in dynamic per-pattern dict, using defaults")
 
-        base_tp_pct *= tp_multiplier
         eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
         tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT
         sl_pct_adjusted = max(0.1, (base_sl_pct * eff_mult) - SLIPPAGE_BUFFER_PCT)
@@ -471,7 +467,6 @@ def calculate_tp_sl(
         base_sl_pct = config['_dynamic_sl']
         logger.debug(f"Using dynamic universal TP/SL: TP={base_tp_pct}%, SL={base_sl_pct}%")
 
-        base_tp_pct *= tp_multiplier
         eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
         tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT
         sl_pct_adjusted = max(0.1, (base_sl_pct * eff_mult) - SLIPPAGE_BUFFER_PCT)
@@ -491,7 +486,6 @@ def calculate_tp_sl(
         base_tp_pct = strategy['tp_pct']
         base_sl_pct = strategy['sl_pct']
 
-    base_tp_pct *= tp_multiplier
     eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
     tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT  # TP: add slippage (target further)
     sl_pct_adjusted = (base_sl_pct * eff_mult) - SLIPPAGE_BUFFER_PCT  # SL: subtract slippage (tighter)

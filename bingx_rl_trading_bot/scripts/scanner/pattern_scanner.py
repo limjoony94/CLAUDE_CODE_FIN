@@ -107,11 +107,11 @@ DEFAULT_MOMENTUM_COOLDOWN = 6
 NPOS_EMA_PERIOD = 20
 NPOS_EMA_LOOKBACK = 5
 
-# ATR scaling defaults (v1.28.42 production params, a14/w576/0.6-1.7)
+# ATR scaling defaults (v1.51.0 production params, a14/w576/0.5-1.5)
 DEFAULT_ATR_PERIOD = 14
 DEFAULT_ATR_WINDOW = 576
-DEFAULT_ATR_CLAMP_LO = 0.6
-DEFAULT_ATR_CLAMP_HI = 1.7
+DEFAULT_ATR_CLAMP_LO = 0.5    # v1.47.0: 0.6→0.5
+DEFAULT_ATR_CLAMP_HI = 1.5    # v1.50.0: 1.7→1.5
 
 DEFAULT_DATA_FILE = os.path.join(_PROJECT_ROOT, 'data', 'btc_5m_270days_reclassified.csv')
 DEFAULT_OUTPUT_FILE = os.path.join(_PROJECT_ROOT, 'results', 'dynamic_patterns.json')

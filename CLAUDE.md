@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.51.0 | **Bot**: Pattern 5m (130패턴, 61L+69S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288) | **Updated**: 2026-03-05
+> **Version**: v1.52.0 | **Bot**: Pattern 5m (125패턴, 59L+66S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288) | **Updated**: 2026-03-05
 
 ---
 
@@ -94,7 +94,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=88.8 (v1.36.4, 130pat Neutral+Edge18+WF3/3)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=71.0 (v1.52.0, N-pos OOS, 125pat)
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
@@ -116,7 +116,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | Discovery | **MAE/MFE + ATR-scaled** (TP=MFE percentile, SL=MAE percentile, ATR scanner v2.2) |
 | Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
 | Quality Filter | **Edge>=18pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25 + Holdout 7d** |
-| Patterns | **130** (61L + 69S), ATR scanner v2.3 + Neutral window + WF 3/3 PASS + Holdout validation (v1.36.4) |
+| Patterns | **125** (59L + 66S), ATR scanner v2.3 + Neutral window + WF 3/3 PASS + Holdout validation (v1.52.0 rescan, ATR clamp [0.5,1.5]) |
 | **Direction Cap** | **7** (max same-direction positions, 7/9 = 78%, v1.36.1 — portfolio study: PnL/MDD 14.43x, corr loss -11%) |
 | **Position Timeout** | **288 bars (24h)** — v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치) |
 | Risk | Daily loss **13%** (v1.28.5), **aggregate risk cap** (counter 8%/with 15%, v1.49.0: 5→8% counter) |
@@ -138,26 +138,26 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 
 ### Pattern Summary — ATR Scanner v2.3 (v1.36.4, Neutral window, Edge≥18pp)
 
-**130 패턴 (61L + 69S)** — L/S 47%/53% 방향 균형 (neutral window 효과)
+**125 패턴 (59L + 66S)** — L/S 47%/53% 방향 균형 (neutral window 효과, v1.52.0 ATR clamp [0.5,1.5] rescan)
 
-| 통계 | LONG (61) | SHORT (69) | 전체 (130) |
+| 통계 | LONG (59) | SHORT (66) | 전체 (125) |
 |------|-----------|------------|------------|
-| TP range | 0.91-2.76% | 0.91-2.76% | 0.91-2.76% |
+| TP range | 0.85-2.84% | 0.85-2.84% | 0.85-2.84% |
 | SL range | 1.44-4.84% | 1.44-4.84% | 1.44-4.84% |
 | Edge | 18.0-31.4pp | 18.0-31.8pp | 18.0-31.8pp |
 | Trades/pat | 25-266 | 25-266 | 25-266 |
 
 > 개별 패턴 상세: `results/dynamic_patterns.json` 참조
 
-### WF OOS 검증 (Neutral 257d, 3-fold Expanding Window, ATR Scanner v2.3)
+### WF OOS 검증 (Neutral 257d, 3-fold Expanding Window, N-pos, ATR Scanner v2.3, v1.52.0)
 
 | Fold | IS Bars | OOS Bars | IS Patterns | OOS Trades | OOS WR | OOS PnL |
 |------|---------|----------|-------------|------------|--------|---------|
-| 1 | 18,024 | 18,024 | 37 (28L+9S) | 84 | 88.1% | +241.2% |
-| 2 | 36,048 | 18,024 | 93 (65L+28S) | 95 | 88.4% | +269.3% |
-| 3 | 54,072 | 18,026 | 95 (50L+45S) | 90 | 90.0% | +362.2% |
+| 1 | 18,024 | 18,024 | 32 (24L+8S) | 228 | 71.9% | +14.05% |
+| 2 | 36,048 | 18,024 | 92 (66L+26S) | 270 | 68.1% | +12.39% |
+| 3 | 54,072 | 18,026 | 106 (57L+49S) | 316 | 73.1% | +37.75% |
 
-**Verdict: 3/3 PASS** | Total OOS PnL: +872.7% | Total OOS Trades: 269 | Avg OOS WR: 88.8%
+**Verdict: 3/3 PASS** | Total OOS PnL: +64.2% (N-pos) | Total OOS Trades: 814 | Avg OOS WR: 71.0%
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -257,8 +257,8 @@ python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-thre
 python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-threshold 18 --wf-folds 3 --holdout-days 7 --no-regime-sizing --no-momentum-guard
 ```
 
-**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **130패턴 (61L+69S)**.
-WF 3/3 PASS, OOS +872.7%. Neutral window ±1% 자동 탐색 (257d). ATR config: a14/w576/clamp[0.5,1.5] (v1.47.0: lo 0.6→0.5, v1.50.0: hi 1.7→1.5). Data: 297d. Backup: `results/dynamic_patterns_51pat_neutral_edge21.8_backup.json`
+**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **125패턴 (59L+66S)** (v1.52.0 rescan).
+WF N-pos 3/3 PASS, OOS +64.2%. Neutral window ±1% 자동 탐색 (257d). ATR config: a14/w576/clamp[0.5,1.5]. Data: 297d. Backup: `results/dynamic_patterns_130pat_v1420_backup.json`
 
 ---
 
@@ -383,7 +383,8 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 | v1.28.14 | 02-17 | **2 behavior improvements**: (1) `position_monitor.py`: `sync_position_with_exchange`에서 trade history 실패 시 fallback을 `entry_price`(PnL=0%) → 현재 ticker 가격으로 변경 — 외부 청산 시 PnL 왜곡 방지 (2) `bot.py`: Trading window에서 포지션 종료 감지 후 같은 캔들에서 새 진입 신호 확인 — 기존엔 5분 대기 필요. cooldown/daily limit으로 안전성 보장. |
 | (연구) | 02-23 | **ATR-Scaled Backtest Study** (`atr_scaled_backtest_study.py`): Scanner(고정 TP/SL) vs Production(ATR-scaled TP/SL) 조건 비교 4-Phase 연구. **Phase 1**: 15패턴 개별 비교 — ATR scaling이 avg WR +4.5pp, edge +0.876%/trade 개선 (11/15 패턴 향상). **Phase 2**: 59패턴 재평가 — ATR-scaled 필터가 더 엄격 (39 pass vs Fixed 51), 패턴 선별이 달라짐. **Phase 3**: Hedge N=5 포트폴리오 — ATR T864 PnL/MDD **17.18** vs Fixed 10.91, 둘 다 WF 3/3 PASS. ATR scaling이 리스크 조정 성과 +57.5% 향상. **Phase 4**: ATR ratio 분포 — mean 1.0874 (slight expansion), 72.1% within clamps [0.6,1.7]. **결론**: ATR scaling은 Scanner 단계에서도 적용 시 선별 결과가 달라지며, Production 조건과의 정합성이 향상됨. |
 | **(연구)** | 03-04 | **Entry Optimization 연구 + ROLLBACK**: `entry_behavior_critical_study.py` 7-test 심층 분석 + `entry_improvement_hypotheses.py` 11가설 WF 검증 + `h7_critical_validation.py` 6-test 비판적 검증. **H7_tp75_to432 IS: PnL/MDD 212.8** (baseline 97.0), WF 3/3 PASS. **그러나 h7_critical_validation 결과**: (1) **WF 판별력 부재** — tp_mult 0.5~1.5 (34 configs 중 32 = 94%) 전부 WF PASS. WF가 사실상 non-discriminating. (2) **95% Cascade 의존** — Cascade ON: H7 lift +115.8, Cascade OFF: H7 lift **+5.6만**. 독립적 가치 거의 없음. (3) **Live WR에서 열위** — WR 55-60%에서 H0 E[trade] 0.68-1.15% vs H7 0.05-0.45% (H0이 2-13x 우월). (4) R:R 1.089→0.839 (-23%), breakeven WR 47.9→54.4% (+6.5pp). **VERDICT: ROLLBACK**. TP×0.75 코드 제거, timeout 864 복원. **교훈**: WF 3/3 PASS가 유일한 검증 gate일 때 94% pass rate로 판별력 부재 — 추가 비판적 검증 필수. Cascade 상호작용이 지배적인 효과를 독립적 개선으로 착각하지 말 것. |
-| **v1.51.0** | 03-05 | **Momentum Guard threshold 1.0→1.5% + ATR infra KEEP**: `atr_infra_sweep_study.py` 4-Phase (ATR period 7값 + window 8값 + 2D grid 9configs + momentum threshold 6값). **ATR infra**: p14/w576 현행 최적 (p25/p30 WF 3/3 PASS하나 IS 열위, period 변경은 scanner 정합성 문제). **Momentum threshold 1.5%**: IS PnL/MDD 1137.7 (현행 1080.5 대비 +5.3%), MDD 2.92% (현행 3.00% -3%), OOS min fold 93.9 (동일), WF 3/3 PASS. 현 스택에서 Cascade SL + AggRisk가 충분한 보호 → momentum의 aggressive 차단 불필요. config `momentum_guard.threshold_pct: 1.5`. 이전 값(1.0)으로 즉시 롤백 가능. **1061 tests passed**. ← **현재** |
+| **v1.52.0** | 03-05 | **Pattern Rescan (125pat) — Scanner-Production ATR 정합성 확보**: Scanner 기본값 ATR clamp [0.6,1.7] → [0.5,1.5] (production v1.47.0+v1.50.0 일치). 재스캔 결과: **125패턴 (59L+66S)**, 기존 130 대비 -5. IS: WR 95.1%, PnL +1,419%, MDD 28.3%. N-pos IS: 848 trades, WR 74.9%, PnL +123.8%, MDD 6.42%, PnL/MDD 19.3x. Holdout 6 SHORT 제거. WF N-pos 3/3 PASS: F1 +14.05%(WR 71.9%), F2 +12.39%(WR 68.1%), F3 +37.75%(WR 73.1%). TP 0.85-2.84%, SL 1.44-4.84%. Scanner defaults 업데이트: `DEFAULT_ATR_CLAMP_LO=0.5, DEFAULT_ATR_CLAMP_HI=1.5`. Backup: `dynamic_patterns_130pat_v1420_backup.json`. **1061 tests passed**. ← **현재** |
+| **v1.51.0** | 03-05 | **Momentum Guard threshold 1.0→1.5% + ATR infra KEEP**: `atr_infra_sweep_study.py` 4-Phase (ATR period 7값 + window 8값 + 2D grid 9configs + momentum threshold 6값). **ATR infra**: p14/w576 현행 최적 (p25/p30 WF 3/3 PASS하나 IS 열위, period 변경은 scanner 정합성 문제). **Momentum threshold 1.5%**: IS PnL/MDD 1137.7 (현행 1080.5 대비 +5.3%), MDD 2.92% (현행 3.00% -3%), OOS min fold 93.9 (동일), WF 3/3 PASS. 현 스택에서 Cascade SL + AggRisk가 충분한 보호 → momentum의 aggressive 차단 불필요. config `momentum_guard.threshold_pct: 1.5`. 이전 값(1.0)으로 즉시 롤백 가능. **1061 tests passed**. |
 | **v1.50.0** | 03-05 | **ATR clamp_hi 1.7→1.5 + MDD sizing KEEP**: `atr_mdd_param_sweep_study.py` 5-Phase 연구 (ATR clamp_hi 11값 + MDD full_below/min_above/min_scale 각 7-8값 + WF). **ATR clamp_hi**: 1.5 IS PnL/MDD **1112.5** (현행 731.2 대비 +52%), PnL +3337%, MDD 3.00%. 1.4 OOS min +101.7% 최고지만 1.5의 IS 압도적 우위 + OOS min 93.9 (충분). **MDD sizing**: 3개 파라미터 전부 **noise level** (<2% PnL 차이). MDD OFF도 OOS min 동일 — DD가 full_below(3%) threshold 미달로 트리거 자체 희소. WF 3/3 PASS. 고변동 구간에서 SL/TP 확대 제한 강화 → MDD 감소. config `atr_scale.clamp_hi: 1.5`. 이전 값(1.7)으로 즉시 롤백 가능. **1061 tests passed**. |
 | **v1.49.0** | 03-05 | **AggRisk counter 5→8%**: `aggrisk_resweep_study.py` v1.48.0 baseline re-sweep. Counter sweep(2-10%): 단조 증가, c8 IS PnL/MDD 731.2 (현행 568.2 +29%). With sweep: **w15에서 포화** (w18+=동일, non-binding). c8_w18 WF 3/3 PASS: OOS min 91.7 (현행 82.0 +12%), avg 129.3 (+11%). Blocks 1693→735 (-57%). Timeout=288(v1.48.0)이 빠른 슬롯 재활용으로 자연적 방향 분산 → AggRisk 추가 완화 가능. with_cap=15 유지 (이미 non-binding). config `counter_cap: 8.0`. 이전 값(5.0)으로 즉시 롤백 가능. **1061 tests passed**. |
 | **v1.48.0** | 03-05 | **Timeout 864→288 (72h→24h) + Early Exit KEEP**: `timeout_sweep_study.py` 12-config sweep (144~1440 bars + OFF). 288 (24h) 선택: IS PnL/MDD 568.2 (현행 554.7 동등), **OOS min fold 82.0 (현행 69.8 대비 +17.5%)**, OOS avg 116.5 (+5.7%), WF 3/3 PASS. Scanner MAX_BARS=288 일치 (production-scanner 정합성). Timeout exits 357→1533 (더 빠른 슬롯 재활용). NO_TIMEOUT: PnL/MDD 88.4 → timeout 필수 확인. Holding P50 21h→8h. **주의**: 전 설정 WF 3/3 PASS (non-discriminating) — R:R 변경 없음이 v1.43.0과 차별점. `early_exit_sweep_study.py`도 수행: **KEEP** (confirm=3, min_profit=0.3 — Early exit ON이 OFF 대비 IS +64%, OOS +5.9pp; min_profit 변경은 noise 수준). config `timeout_bars: 288`. 이전 값(864)으로 즉시 롤백 가능. **1061 tests passed**. |

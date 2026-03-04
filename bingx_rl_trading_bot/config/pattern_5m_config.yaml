@@ -21,8 +21,8 @@ risk:
     min_scale: 0.25           # minimum position scale factor
   aggregate_risk_cap:      # v1.35.5→v1.44.0: Aggregate directional SL exposure cap (relaxed from 3/7 to 5/15)
     enabled: true
-    counter_cap: 5.0         # v1.44.0: 3→5% (aggrisk_cascade_validation: Cascade-OFF WF +81%, random 0/15 PASS, genuine effect)
-    with_cap: 15.0           # v1.44.0: 7→15% (correlated loss: worst burst -3.63% < baseline -3.30%, max dir SL/day 9=same)
+    counter_cap: 8.0         # v1.49.0: 5→8% (aggrisk_resweep_study: IS +31%, OOS min +12%, timeout=288 자연 분산)
+    with_cap: 15.0           # v1.44.0: 7→15% (non-binding at w15+, Phase 2 saturation confirmed)
   loss_burst_brake:        # v1.37.0: Block direction after burst losses — v1.40.1 DISABLED (redundant with momentum_guard, ablation +5.66)
     enabled: false
     threshold: 2             # number of same-dir losses to trigger brake

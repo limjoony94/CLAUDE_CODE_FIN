@@ -63,7 +63,7 @@ strategy:
     enabled: true
     window: 576       # rolling median window (576봉 = 2일)
     clamp_lo: 0.5     # v1.47.0: 0.6→0.5 (atr_clamp_sweep_study: IS PnL/MDD +44%, MDD -25%, OOS min +5.4%)
-    clamp_hi: 1.7     # maximum ratio
+    clamp_hi: 1.5     # v1.50.0: 1.7→1.5 (atr_mdd_param_sweep_study: IS PnL/MDD +52%, OOS min +2.4pp, MDD sizing noise-level)
   cooldown_candles: 0
   direction_cap: 7         # v1.36.1: cap8→7 (portfolio study: PnL/MDD 14.43x vs 13.54x, corr loss 3.1% vs 3.5%)
   rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)

@@ -67,7 +67,8 @@ strategy:
   cooldown_candles: 0
   direction_cap: 7         # v1.36.1: cap8→7 (portfolio study: PnL/MDD 14.43x vs 13.54x, corr loss 3.1% vs 3.5%)
   rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
-  timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h, 0 = disabled)
+  timeout_bars: 432        # v1.43.0: 36h position timeout (432 × 5m = 36h, was 864=72h — holding time WR inverse correlation)
+  tp_multiplier: 0.75      # v1.43.0: TP distance × 0.75 — faster take-profit (H7 WF 3/3 PASS, PnL/MDD 212.8 vs 97.0)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)
   # Per-pattern TP/SL in constants.py PATTERN_OPTIMAL_TPSL (tp_pct/sl_pct are fallback defaults)

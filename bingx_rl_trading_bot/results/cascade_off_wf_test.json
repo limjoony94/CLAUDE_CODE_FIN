@@ -1,0 +1,329 @@
+{
+  "is_results": {
+    "A_full_8_current": {
+      "trades": 1074,
+      "wr": 62.76,
+      "pnl": 429.07,
+      "mdd": 4.42,
+      "pnl_mdd": 97.01
+    },
+    "B_cascade_OFF": {
+      "trades": 934,
+      "wr": 74.52,
+      "pnl": 180.72,
+      "mdd": 8.84,
+      "pnl_mdd": 20.45
+    },
+    "C_cascade+mom_OFF": {
+      "trades": 940,
+      "wr": 74.57,
+      "pnl": 193.21,
+      "mdd": 7.9,
+      "pnl_mdd": 24.47
+    },
+    "D_cascade+early_OFF": {
+      "trades": 829,
+      "wr": 73.46,
+      "pnl": 233.9,
+      "mdd": 6.19,
+      "pnl_mdd": 37.77
+    },
+    "E_cascade+mdd_OFF": {
+      "trades": 923,
+      "wr": 75.08,
+      "pnl": 236.79,
+      "mdd": 8.17,
+      "pnl_mdd": 29.0
+    },
+    "F_cascade+dircap_OFF": {
+      "trades": 934,
+      "wr": 74.52,
+      "pnl": 180.72,
+      "mdd": 8.84,
+      "pnl_mdd": 20.45
+    },
+    "G_g5+atr+to": {
+      "trades": 838,
+      "wr": 73.15,
+      "pnl": 205.36,
+      "mdd": 6.3,
+      "pnl_mdd": 32.59
+    },
+    "H_g5+atr+to+mdd": {
+      "trades": 831,
+      "wr": 73.65,
+      "pnl": 237.39,
+      "mdd": 6.19,
+      "pnl_mdd": 38.33
+    }
+  },
+  "wf_results": {
+    "A_full_8_current": {
+      "n_pass": 3,
+      "avg_oos": 55.25,
+      "min_oos": 30.9,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 207,
+          "wr": 58.45,
+          "pnl": 30.9,
+          "mdd": 4.2,
+          "pnl_mdd": 7.35,
+          "fold": 1
+        },
+        {
+          "trades": 317,
+          "wr": 60.88,
+          "pnl": 53.04,
+          "mdd": 5.69,
+          "pnl_mdd": 9.32,
+          "fold": 2
+        },
+        {
+          "trades": 332,
+          "wr": 65.96,
+          "pnl": 81.8,
+          "mdd": 4.2,
+          "pnl_mdd": 19.48,
+          "fold": 3
+        }
+      ]
+    },
+    "B_cascade_OFF": {
+      "n_pass": 3,
+      "avg_oos": 26.91,
+      "min_oos": 11.37,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 185,
+          "wr": 75.14,
+          "pnl": 42.39,
+          "mdd": 5.1,
+          "pnl_mdd": 8.31,
+          "fold": 1
+        },
+        {
+          "trades": 271,
+          "wr": 70.11,
+          "pnl": 11.37,
+          "mdd": 6.95,
+          "pnl_mdd": 1.64,
+          "fold": 2
+        },
+        {
+          "trades": 277,
+          "wr": 74.01,
+          "pnl": 26.98,
+          "mdd": 8.28,
+          "pnl_mdd": 3.26,
+          "fold": 3
+        }
+      ]
+    },
+    "C_cascade+mom_OFF": {
+      "n_pass": 3,
+      "avg_oos": 26.63,
+      "min_oos": 12.74,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 180,
+          "wr": 73.89,
+          "pnl": 37.14,
+          "mdd": 5.1,
+          "pnl_mdd": 7.28,
+          "fold": 1
+        },
+        {
+          "trades": 284,
+          "wr": 69.37,
+          "pnl": 12.74,
+          "mdd": 7.9,
+          "pnl_mdd": 1.61,
+          "fold": 2
+        },
+        {
+          "trades": 273,
+          "wr": 74.36,
+          "pnl": 30.0,
+          "mdd": 6.65,
+          "pnl_mdd": 4.51,
+          "fold": 3
+        }
+      ]
+    },
+    "D_cascade+early_OFF": {
+      "n_pass": 3,
+      "avg_oos": 33.72,
+      "min_oos": 23.86,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 179,
+          "wr": 73.18,
+          "pnl": 38.96,
+          "mdd": 5.1,
+          "pnl_mdd": 7.64,
+          "fold": 1
+        },
+        {
+          "trades": 231,
+          "wr": 69.26,
+          "pnl": 23.86,
+          "mdd": 6.95,
+          "pnl_mdd": 3.43,
+          "fold": 2
+        },
+        {
+          "trades": 254,
+          "wr": 72.05,
+          "pnl": 38.34,
+          "mdd": 6.19,
+          "pnl_mdd": 6.19,
+          "fold": 3
+        }
+      ]
+    },
+    "E_cascade+mdd_OFF": {
+      "n_pass": 3,
+      "avg_oos": 31.56,
+      "min_oos": 20.89,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 182,
+          "wr": 73.63,
+          "pnl": 36.7,
+          "mdd": 5.1,
+          "pnl_mdd": 7.2,
+          "fold": 1
+        },
+        {
+          "trades": 282,
+          "wr": 70.21,
+          "pnl": 20.89,
+          "mdd": 8.17,
+          "pnl_mdd": 2.56,
+          "fold": 2
+        },
+        {
+          "trades": 275,
+          "wr": 74.55,
+          "pnl": 37.1,
+          "mdd": 6.31,
+          "pnl_mdd": 5.88,
+          "fold": 3
+        }
+      ]
+    },
+    "F_cascade+dircap_OFF": {
+      "n_pass": 3,
+      "avg_oos": 26.91,
+      "min_oos": 11.37,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 185,
+          "wr": 75.14,
+          "pnl": 42.39,
+          "mdd": 5.1,
+          "pnl_mdd": 8.31,
+          "fold": 1
+        },
+        {
+          "trades": 271,
+          "wr": 70.11,
+          "pnl": 11.37,
+          "mdd": 6.95,
+          "pnl_mdd": 1.64,
+          "fold": 2
+        },
+        {
+          "trades": 277,
+          "wr": 74.01,
+          "pnl": 26.98,
+          "mdd": 8.28,
+          "pnl_mdd": 3.26,
+          "fold": 3
+        }
+      ]
+    },
+    "G_g5+atr+to": {
+      "n_pass": 3,
+      "avg_oos": 30.77,
+      "min_oos": 15.45,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 172,
+          "wr": 73.26,
+          "pnl": 38.2,
+          "mdd": 5.1,
+          "pnl_mdd": 7.49,
+          "fold": 1
+        },
+        {
+          "trades": 239,
+          "wr": 67.36,
+          "pnl": 15.45,
+          "mdd": 6.02,
+          "pnl_mdd": 2.57,
+          "fold": 2
+        },
+        {
+          "trades": 260,
+          "wr": 72.69,
+          "pnl": 38.65,
+          "mdd": 6.3,
+          "pnl_mdd": 6.13,
+          "fold": 3
+        }
+      ]
+    },
+    "H_g5+atr+to+mdd": {
+      "n_pass": 3,
+      "avg_oos": 32.97,
+      "min_oos": 23.48,
+      "verdict": "3/3 PASS",
+      "folds": [
+        {
+          "trades": 171,
+          "wr": 73.1,
+          "pnl": 37.42,
+          "mdd": 5.1,
+          "pnl_mdd": 7.34,
+          "fold": 1
+        },
+        {
+          "trades": 234,
+          "wr": 68.8,
+          "pnl": 23.48,
+          "mdd": 6.95,
+          "pnl_mdd": 3.38,
+          "fold": 2
+        },
+        {
+          "trades": 260,
+          "wr": 72.69,
+          "pnl": 38.01,
+          "mdd": 6.19,
+          "pnl_mdd": 6.14,
+          "fold": 3
+        }
+      ]
+    }
+  },
+  "ranking": [
+    "A_full_8_current",
+    "H_g5+atr+to+mdd",
+    "D_cascade+early_OFF",
+    "G_g5+atr+to",
+    "E_cascade+mdd_OFF",
+    "C_cascade+mom_OFF",
+    "B_cascade_OFF",
+    "F_cascade+dircap_OFF"
+  ],
+  "recommended": "A_full_8_current"
+}

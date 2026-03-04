@@ -34,7 +34,7 @@ risk:
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
     lookback_bars: 3         # v1.46.0: 6→3 bars = 15min (faster spike detection, momentum_guard_sweep_study)
-    threshold_pct: 1.0       # 1% move triggers guard
+    threshold_pct: 1.5       # v1.51.0: 1.0→1.5% (atr_infra_sweep_study: IS PnL/MDD +5.3%, MDD -3%, OOS identical, less aggressive blocking)
     cooldown_bars: 12        # v1.46.0: 6→12 bars = 1h (longer protection after trigger)
   equity_curve_trading:    # v1.40.0: Equity Curve Trading (Combo2-H1) — v1.40.1 DISABLED (harmful: PnL -11.4%, MDD unchanged, ablation +1.96)
     enabled: false

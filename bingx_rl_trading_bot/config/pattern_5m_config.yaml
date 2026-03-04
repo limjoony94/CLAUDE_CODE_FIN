@@ -67,7 +67,7 @@ strategy:
   cooldown_candles: 0
   direction_cap: 7         # v1.36.1: cap8→7 (portfolio study: PnL/MDD 14.43x vs 13.54x, corr loss 3.1% vs 3.5%)
   rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
-  timeout_bars: 864        # v1.31.0: 72h position timeout (864 × 5m = 72h — 48h+ trades net negative, slot recycling)
+  timeout_bars: 288        # v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치, 24h+ trades net negative)
   # tp_multiplier removed — v1.43.0 ROLLBACK (h7_critical_validation: WF 94% non-discriminating, 95% Cascade-dependent, E[trade] inferior at live WR)
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)
   # v1.25.0: Patterns defined in constants.py (VALIDATED_LONG/SHORT_PATTERNS)

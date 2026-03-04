@@ -19,10 +19,10 @@ risk:
     full_size_below_dd: 3.0   # v1.35.2: 5→3% (faster DD response, edge half-life 30d)
     min_size_above_dd: 15.0   # v1.35.2: 20→15% (tighter drawdown protection)
     min_scale: 0.25           # minimum position scale factor
-  aggregate_risk_cap:      # v1.35.5: Aggregate directional SL exposure cap
+  aggregate_risk_cap:      # v1.35.5→v1.44.0: Aggregate directional SL exposure cap (relaxed from 3/7 to 5/15)
     enabled: true
-    counter_cap: 3.0         # counter-regime cap (% portfolio, SHORT in uptrend / LONG in downtrend)
-    with_cap: 7.0            # with-regime cap (% portfolio, SHORT in downtrend / LONG in uptrend)
+    counter_cap: 5.0         # v1.44.0: 3→5% (aggrisk_cascade_validation: Cascade-OFF WF +81%, random 0/15 PASS, genuine effect)
+    with_cap: 15.0           # v1.44.0: 7→15% (correlated loss: worst burst -3.63% < baseline -3.30%, max dir SL/day 9=same)
   loss_burst_brake:        # v1.37.0: Block direction after burst losses — v1.40.1 DISABLED (redundant with momentum_guard, ablation +5.66)
     enabled: false
     threshold: 2             # number of same-dir losses to trigger brake

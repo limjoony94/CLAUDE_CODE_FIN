@@ -31,11 +31,11 @@ risk:
   cascade_sl_tightening:   # v1.41.0→v1.45.0: After SL exit, tighten remaining same-dir SLs
     enabled: true
     tighten_pct: 85          # v1.45.0: 75→85% (cascade_pct_pattern_filter_study: IS PnL/MDD +44%, OOS min fold +64.4% vs +54.9%)
-  momentum_guard:          # v1.36.2: Pause counter-dir entries during strong moves
+  momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
-    lookback_bars: 6         # 6 bars = 30min price change window
+    lookback_bars: 3         # v1.46.0: 6→3 bars = 15min (faster spike detection, momentum_guard_sweep_study)
     threshold_pct: 1.0       # 1% move triggers guard
-    cooldown_bars: 6         # 6 bars = 30min pause after trigger
+    cooldown_bars: 12        # v1.46.0: 6→12 bars = 1h (longer protection after trigger)
   equity_curve_trading:    # v1.40.0: Equity Curve Trading (Combo2-H1) — v1.40.1 DISABLED (harmful: PnL -11.4%, MDD unchanged, ablation +1.96)
     enabled: false
     ema_trades: 30           # SMA lookback in completed trades (per-direction)

@@ -377,10 +377,6 @@ EARLY_EXIT_MIN_PROFIT_PCT = EARLY_EXIT_CONFIG['min_profit_pct']
 # API and System
 # ============================================================
 
-# DEPRECATED: Individual TTL constants unused — use CACHE_TTL_SECONDS instead
-# CACHE_TTL_TICKER = 5
-# CACHE_TTL_BALANCE = 5
-# CACHE_TTL_POSITIONS = 5
 
 # Min data bars for classification
 MIN_BARS_FOR_CLASSIFICATION = 25  # Need 20 for avg_body + 5 buffer

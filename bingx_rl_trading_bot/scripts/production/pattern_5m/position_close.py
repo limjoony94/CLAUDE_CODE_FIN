@@ -16,7 +16,6 @@ from .constants import (
     FEE_PCT,
     QTY_TOLERANCE,
     QUANTITY_ROUND_DECIMALS,
-    ROTATION_ENABLED,
     CONFIDENCE_LOG_FILE,
 )
 from .position_open import calculate_tp_sl, setup_scale_out
@@ -706,7 +705,7 @@ def recalculate_position_orders(
     position['scale_out_enabled'] = bool(scale_out_stages)
 
     # Update rotation fields
-    position['rotation_enabled'] = ROTATION_ENABLED and bool(scale_out_stages)
+    position['rotation_enabled'] = False
     position['is_partial'] = False
 
     logger.info(f"🔧 Recalculated position: qty={new_quantity}, stages={len(scale_out_stages)}")

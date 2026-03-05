@@ -3,7 +3,7 @@ Pattern 5m Bot - 3-Candle Pattern Trading Strategy
 
 A production trading bot that uses validated 3-candle patterns for BTC-USDT entry signals.
 Dynamic pattern selection via scanner CLI with per-pattern TP/SL grid search.
-Quality filter: Edge>=21.8pp + WR>=60% + SL>=1.0% + MC<0.01 + BH FDR.
+Quality filter: Edge>=18pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25 + Holdout 7d.
 """
 
 from .bot import run_bot

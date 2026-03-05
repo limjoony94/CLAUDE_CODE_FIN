@@ -17,7 +17,6 @@ from .constants import (
     ENTRY_PRICE_FETCH_DELAY,
     PRICE_ROUND_DECIMALS,
     QUANTITY_ROUND_DECIMALS,
-    ROTATION_ENABLED,
     PATTERN_OPTIMAL_TPSL,
 )
 from .models import APICache, CircuitBreaker, PerformanceMetrics
@@ -269,7 +268,7 @@ def open_position(
             'order_id': order.get('id'),
             'pattern_name': pattern,
             # Rotation (순환매) fields
-            'rotation_enabled': ROTATION_ENABLED and bool(scale_out_stages),
+            'rotation_enabled': False,
             'is_partial': False,
             'avg_entry_price': actual_entry_price,
             'total_entries': 1,

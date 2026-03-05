@@ -414,53 +414,6 @@ def _adjust_single_position_tpsl(
         logger.exception(f"Failed to adjust TP/SL: {e}")
         return False
 
-
-def _resolve_expected_tpsl(
-    position: Dict,
-    config: Dict[str, Any],
-) -> tuple:
-    """Resolve expected TP/SL percentages based on config mode.
-
-    Returns:
-        (tp_pct, sl_pct, label) or (None, None, None) if pattern not found.
-    """
-    # Dynamic per-pattern mode: lookup from _dynamic_patterns_tpsl
-    if config.get('_dynamic_tpsl_per_pattern'):
-        pattern_name = extract_pattern_name(position.get('reason', ''))
-        if not pattern_name:
-            pattern_name = position.get('pattern_name')
-        if not pattern_name:
-            logger.debug("No pattern found in position, skipping TP/SL adjustment")
-            return None, None, None
-        pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
-        if pattern_name not in pp_tpsl:
-            logger.debug(f"Pattern {pattern_name} not in dynamic per-pattern dict, skipping")
-            return None, None, None
-        tp_pct, sl_pct = pp_tpsl[pattern_name]
-        return tp_pct, sl_pct, pattern_name
-
-    # Dynamic universal mode: use config universal values
-    if config.get('_dynamic_tpsl_universal'):
-        tp_pct = config.get('_dynamic_tp', 0)
-        sl_pct = config.get('_dynamic_sl', 0)
-        if tp_pct <= 0 or sl_pct <= 0:
-            return None, None, None
-        return tp_pct, sl_pct, 'universal'
-
-    # Static mode: use PATTERN_OPTIMAL_TPSL from constants
-    pattern_name = extract_pattern_name(position.get('reason', ''))
-    if not pattern_name:
-        pattern_name = position.get('pattern_name')
-    if not pattern_name:
-        logger.debug("No pattern found in position, skipping TP/SL adjustment")
-        return None, None, None
-    if pattern_name not in PATTERN_OPTIMAL_TPSL:
-        logger.debug(f"Pattern {pattern_name} not in PATTERN_OPTIMAL_TPSL, skipping")
-        return None, None, None
-    tp_pct, sl_pct = PATTERN_OPTIMAL_TPSL[pattern_name]
-    return tp_pct, sl_pct, pattern_name
-
-
 def _cancel_existing_tpsl_orders(
     exchange: ccxt.bingx,
     position: Dict,

@@ -183,28 +183,6 @@ def _generate_slot_id() -> str:
     import uuid
     return uuid.uuid4().hex[:8]
 
-
-def _downgrade_state_v1(state: Dict[str, Any]) -> Dict[str, Any]:
-    """Downgrade v2 (multi position dict) → v1 (single position) for rollback.
-
-    Takes the first active position (if any) and puts it back as scalar.
-    """
-    if 'positions' in state and 'position' not in state:
-        positions = state.pop('positions')
-        if isinstance(positions, dict):
-            values = list(positions.values())
-            state['position'] = values[0] if values else None
-        elif isinstance(positions, list):
-            state['position'] = positions[0] if positions else None
-        else:
-            state['position'] = None
-        state.pop('state_version', None)
-        state.pop('active_direction', None)
-        state.pop('emergency_sl_order_id', None)
-        logger.info(f"State downgraded v2→v1: position={'active' if state['position'] else 'None'}")
-    return state
-
-
 def _ensure_required_keys(state: Dict[str, Any], defaults: Dict[str, Any]) -> Dict[str, Any]:
     """Fill missing required keys from defaults. Logs a warning for each missing key."""
     missing = BOT_STATE_REQUIRED_KEYS - state.keys()

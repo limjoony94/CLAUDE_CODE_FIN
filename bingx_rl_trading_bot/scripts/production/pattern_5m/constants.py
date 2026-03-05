@@ -26,10 +26,7 @@ _TF_MIN = _TF_MINUTES_MAP.get(_BOT_TF, 5)
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = f"pattern_{_BOT_TF}_bot"
-BOT_VERSION = "1.36.0"  # v1.36.0: multi-timeframe support (5m+15m mixed strategy)
-# Base: v1.27.1 + low-WR pattern review (low_wr_pattern_review.py)
-# Result: PnL +966%, WR 84.9%, MDD 16.2%, PnL/MDD 59.6x, portfolio MC p=0.0000
-# Changes: U-H-BU removed (SL 0.3% < 0.5% min, effective SL 0.23% after spread/slippage)
+BOT_VERSION = "1.53.0"  # v1.53.0: 131pat (59L+72S), ATR scanner v2.4, N-pos default
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)
@@ -468,10 +465,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 68.1  # v1.33.0: 35pat(9L+26S) compact TP/SL + cap6 + T864
-EXPECTED_AVG_WIN = 4.40   # v1.33.0: TP mean ~1.5% × 3x - 0.10% (compact grid)
-EXPECTED_AVG_LOSS = 6.10  # v1.33.0: SL mean ~2.0% × 3x + 0.10% (compact grid)
-EXPECTED_EDGE = 0.221     # v1.33.0: per-trade PnL% (297.1/1343, compact_only, 270d overlap)
+EXPECTED_WIN_RATE = 71.0  # v1.53.0: N-pos OOS 3-fold avg WR (131pat, 59L+72S)
+EXPECTED_AVG_WIN = 5.63   # v1.53.0: ATR-scaled TP mean × 3x
+EXPECTED_AVG_LOSS = 9.64  # v1.53.0: ATR-scaled SL mean × 3x
+EXPECTED_EDGE = 0.082     # v1.53.0: N-pos OOS PnL/trade (61.37/749)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 
@@ -480,11 +477,6 @@ MIN_TRADES_FOR_COMPARISON = 5
 # ============================================================
 PRICE_ROUND_DECIMALS = 1
 QUANTITY_ROUND_DECIMALS = 4
-
-# ============================================================
-# ROTATION SETTINGS
-# ============================================================
-ROTATION_ENABLED = False  # Disabled for pattern bot
 
 # ============================================================
 # MULTI-POSITION SETTINGS (v1.29.0)

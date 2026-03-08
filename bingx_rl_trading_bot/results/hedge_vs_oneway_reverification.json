@@ -1,0 +1,923 @@
+{
+  "meta": {
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "n_bars": 87315,
+    "n_patterns": 131,
+    "neutral_window": [
+      0,
+      74718,
+      259.4
+    ],
+    "config": {
+      "max_positions": 9,
+      "direction_cap": 7,
+      "cascade_tighten_pct": 85,
+      "agg_risk_counter": 8.0,
+      "agg_risk_with": 15.0,
+      "timeout": 288,
+      "atr_clamp": [
+        0.5,
+        1.5
+      ],
+      "leverage": 3,
+      "fee_pct": 0.0005
+    },
+    "timestamp": "2026-03-08 21:53:51"
+  },
+  "experiment1_is": {
+    "hedge": {
+      "trades": 4070,
+      "wr": 55.3,
+      "cmp_pnl": 502.5,
+      "cmp_mdd": 7.5,
+      "pnl_mdd": 67.35,
+      "long_trades": 1803,
+      "long_wr": 57.3,
+      "short_trades": 2267,
+      "short_wr": 53.7,
+      "exits": {
+        "TP": 2033,
+        "TIMEOUT": 806,
+        "SL": 1225,
+        "END": 6
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "fifo": {
+      "trades": 7220,
+      "wr": 46.6,
+      "cmp_pnl": -13.9,
+      "cmp_mdd": 26.8,
+      "pnl_mdd": 0,
+      "long_trades": 1997,
+      "long_wr": 43.4,
+      "short_trades": 5223,
+      "short_wr": 47.8,
+      "exits": {
+        "CLOSE_OLDEST": 5517,
+        "SL": 387,
+        "TP": 1310,
+        "TIMEOUT": 3,
+        "END": 3
+      },
+      "co_count": 5517,
+      "co_total_pnl": -234.67
+    },
+    "close_all": {
+      "trades": 12390,
+      "wr": 36.1,
+      "cmp_pnl": -93.5,
+      "cmp_mdd": 93.5,
+      "pnl_mdd": 0,
+      "long_trades": 5186,
+      "long_wr": 33.1,
+      "short_trades": 7204,
+      "short_wr": 38.2,
+      "exits": {
+        "CLOSE_ALL": 11635,
+        "TP": 594,
+        "SL": 158,
+        "END": 3
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "smart_oneway": {
+      "trades": 2967,
+      "wr": 56.7,
+      "cmp_pnl": 452.5,
+      "cmp_mdd": 14.6,
+      "pnl_mdd": 31.04,
+      "long_trades": 1217,
+      "long_wr": 58.3,
+      "short_trades": 1750,
+      "short_wr": 55.7,
+      "exits": {
+        "TP": 1530,
+        "TIMEOUT": 477,
+        "SL": 956,
+        "END": 4
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "hedge_nocap": {
+      "trades": 4078,
+      "wr": 55.3,
+      "cmp_pnl": 519.4,
+      "cmp_mdd": 7.5,
+      "pnl_mdd": 69.6,
+      "long_trades": 1801,
+      "long_wr": 57.2,
+      "short_trades": 2277,
+      "short_wr": 53.8,
+      "exits": {
+        "TP": 2038,
+        "TIMEOUT": 812,
+        "SL": 1222,
+        "END": 6
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    }
+  },
+  "experiment2_wf": {
+    "hedge": {
+      "folds": [
+        {
+          "is": {
+            "trades": 964,
+            "wr": 53.3,
+            "cmp_pnl": 55.3,
+            "cmp_mdd": 4.8,
+            "pnl_mdd": 11.5,
+            "long_trades": 443,
+            "long_wr": 60.9,
+            "short_trades": 521,
+            "short_wr": 46.8,
+            "exits": {
+              "TP": 449,
+              "TIMEOUT": 228,
+              "SL": 278,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 901,
+            "wr": 56.0,
+            "cmp_pnl": 43.5,
+            "cmp_mdd": 6.8,
+            "pnl_mdd": 6.37,
+            "long_trades": 415,
+            "long_wr": 57.6,
+            "short_trades": 486,
+            "short_wr": 54.7,
+            "exits": {
+              "TP": 429,
+              "SL": 228,
+              "TIMEOUT": 235,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 1864,
+            "wr": 54.8,
+            "cmp_pnl": 123.4,
+            "cmp_mdd": 6.8,
+            "pnl_mdd": 18.04,
+            "long_trades": 857,
+            "long_wr": 59.6,
+            "short_trades": 1007,
+            "short_wr": 50.6,
+            "exits": {
+              "TP": 881,
+              "TIMEOUT": 464,
+              "SL": 510,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 1114,
+            "wr": 56.2,
+            "cmp_pnl": 86.0,
+            "cmp_mdd": 7.1,
+            "pnl_mdd": 12.08,
+            "long_trades": 489,
+            "long_wr": 51.9,
+            "short_trades": 625,
+            "short_wr": 59.5,
+            "exits": {
+              "TP": 585,
+              "SL": 347,
+              "TIMEOUT": 173,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 2968,
+            "wr": 55.3,
+            "cmp_pnl": 317.7,
+            "cmp_mdd": 7.1,
+            "pnl_mdd": 44.62,
+            "long_trades": 1341,
+            "long_wr": 57.0,
+            "short_trades": 1627,
+            "short_wr": 53.9,
+            "exits": {
+              "TP": 1466,
+              "TIMEOUT": 636,
+              "SL": 857,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 1110,
+            "wr": 55.7,
+            "cmp_pnl": 45.7,
+            "cmp_mdd": 7.5,
+            "pnl_mdd": 6.12,
+            "long_trades": 467,
+            "long_wr": 58.5,
+            "short_trades": 643,
+            "short_wr": 53.7,
+            "exits": {
+              "TP": 574,
+              "SL": 360,
+              "TIMEOUT": 170,
+              "END": 6
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "pass_count": 3,
+      "all_pass": true,
+      "oos_avg_pnl": 58.4,
+      "oos_min_pnl": 43.5,
+      "oos_avg_wr": 56.0
+    },
+    "fifo": {
+      "folds": [
+        {
+          "is": {
+            "trades": 1775,
+            "wr": 47.5,
+            "cmp_pnl": 4.7,
+            "cmp_mdd": 10.1,
+            "pnl_mdd": 0.47,
+            "long_trades": 474,
+            "long_wr": 49.4,
+            "short_trades": 1301,
+            "short_wr": 46.9,
+            "exits": {
+              "CLOSE_OLDEST": 1397,
+              "SL": 78,
+              "TP": 294,
+              "END": 6
+            },
+            "co_count": 1397,
+            "co_total_pnl": -46.61
+          },
+          "oos": {
+            "trades": 1743,
+            "wr": 43.8,
+            "cmp_pnl": -14.2,
+            "cmp_mdd": 17.3,
+            "pnl_mdd": 0,
+            "long_trades": 611,
+            "long_wr": 41.1,
+            "short_trades": 1132,
+            "short_wr": 45.3,
+            "exits": {
+              "CLOSE_OLDEST": 1472,
+              "SL": 33,
+              "TP": 234,
+              "END": 4
+            },
+            "co_count": 1472,
+            "co_total_pnl": -62.77
+          },
+          "oos_pass": "False"
+        },
+        {
+          "is": {
+            "trades": 3518,
+            "wr": 45.7,
+            "cmp_pnl": -9.6,
+            "cmp_mdd": 20.2,
+            "pnl_mdd": 0,
+            "long_trades": 1085,
+            "long_wr": 44.8,
+            "short_trades": 2433,
+            "short_wr": 46.2,
+            "exits": {
+              "CLOSE_OLDEST": 2870,
+              "SL": 111,
+              "TP": 533,
+              "END": 4
+            },
+            "co_count": 2870,
+            "co_total_pnl": -109.32
+          },
+          "oos": {
+            "trades": 1859,
+            "wr": 47.9,
+            "cmp_pnl": 16.2,
+            "cmp_mdd": 13.3,
+            "pnl_mdd": 1.22,
+            "long_trades": 553,
+            "long_wr": 42.1,
+            "short_trades": 1306,
+            "short_wr": 50.3,
+            "exits": {
+              "CLOSE_OLDEST": 1374,
+              "TP": 364,
+              "TIMEOUT": 3,
+              "SL": 115,
+              "END": 3
+            },
+            "co_count": 1374,
+            "co_total_pnl": -53.51
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 5374,
+            "wr": 46.5,
+            "cmp_pnl": 4.3,
+            "cmp_mdd": 26.7,
+            "pnl_mdd": 0.16,
+            "long_trades": 1627,
+            "long_wr": 44.1,
+            "short_trades": 3747,
+            "short_wr": 47.5,
+            "exits": {
+              "CLOSE_OLDEST": 4245,
+              "SL": 226,
+              "TP": 897,
+              "TIMEOUT": 3,
+              "END": 3
+            },
+            "co_count": 4245,
+            "co_total_pnl": -163.46
+          },
+          "oos": {
+            "trades": 1850,
+            "wr": 46.8,
+            "cmp_pnl": -17.5,
+            "cmp_mdd": 26.8,
+            "pnl_mdd": 0,
+            "long_trades": 375,
+            "long_wr": 40.3,
+            "short_trades": 1475,
+            "short_wr": 48.5,
+            "exits": {
+              "CLOSE_OLDEST": 1276,
+              "TP": 410,
+              "SL": 161,
+              "END": 3
+            },
+            "co_count": 1276,
+            "co_total_pnl": -70.78
+          },
+          "oos_pass": "False"
+        }
+      ],
+      "pass_count": 1,
+      "all_pass": false,
+      "oos_avg_pnl": -5.2,
+      "oos_min_pnl": -17.5,
+      "oos_avg_wr": 46.2
+    },
+    "close_all": {
+      "folds": [
+        {
+          "is": {
+            "trades": 3134,
+            "wr": 33.1,
+            "cmp_pnl": -53.7,
+            "cmp_mdd": 53.8,
+            "pnl_mdd": 0,
+            "long_trades": 1322,
+            "long_wr": 33.0,
+            "short_trades": 1812,
+            "short_wr": 33.2,
+            "exits": {
+              "CLOSE_ALL": 3007,
+              "TP": 103,
+              "SL": 23,
+              "END": 1
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 3037,
+            "wr": 33.9,
+            "cmp_pnl": -55.4,
+            "cmp_mdd": 55.7,
+            "pnl_mdd": 0,
+            "long_trades": 1374,
+            "long_wr": 31.1,
+            "short_trades": 1663,
+            "short_wr": 36.3,
+            "exits": {
+              "CLOSE_ALL": 2922,
+              "SL": 22,
+              "TP": 90,
+              "END": 3
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "False"
+        },
+        {
+          "is": {
+            "trades": 6171,
+            "wr": 33.5,
+            "cmp_pnl": -79.4,
+            "cmp_mdd": 79.5,
+            "pnl_mdd": 0,
+            "long_trades": 2696,
+            "long_wr": 32.1,
+            "short_trades": 3475,
+            "short_wr": 34.6,
+            "exits": {
+              "CLOSE_ALL": 5930,
+              "TP": 193,
+              "SL": 45,
+              "END": 3
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 3120,
+            "wr": 39.6,
+            "cmp_pnl": -38.6,
+            "cmp_mdd": 40.2,
+            "pnl_mdd": 0,
+            "long_trades": 1323,
+            "long_wr": 34.8,
+            "short_trades": 1797,
+            "short_wr": 43.1,
+            "exits": {
+              "CLOSE_ALL": 2888,
+              "TP": 185,
+              "SL": 44,
+              "END": 3
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "False"
+        },
+        {
+          "is": {
+            "trades": 9291,
+            "wr": 35.6,
+            "cmp_pnl": -87.3,
+            "cmp_mdd": 87.7,
+            "pnl_mdd": 0,
+            "long_trades": 4019,
+            "long_wr": 33.0,
+            "short_trades": 5272,
+            "short_wr": 37.5,
+            "exits": {
+              "CLOSE_ALL": 8821,
+              "TP": 378,
+              "SL": 89,
+              "END": 3
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 3099,
+            "wr": 37.6,
+            "cmp_pnl": -48.5,
+            "cmp_mdd": 51.8,
+            "pnl_mdd": 0,
+            "long_trades": 1167,
+            "long_wr": 33.7,
+            "short_trades": 1932,
+            "short_wr": 40.0,
+            "exits": {
+              "CLOSE_ALL": 2811,
+              "TP": 216,
+              "SL": 69,
+              "END": 3
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "False"
+        }
+      ],
+      "pass_count": 0,
+      "all_pass": false,
+      "oos_avg_pnl": -47.5,
+      "oos_min_pnl": -55.4,
+      "oos_avg_wr": 37.0
+    },
+    "smart_oneway": {
+      "folds": [
+        {
+          "is": {
+            "trades": 712,
+            "wr": 56.5,
+            "cmp_pnl": 52.4,
+            "cmp_mdd": 9.2,
+            "pnl_mdd": 5.73,
+            "long_trades": 356,
+            "long_wr": 60.7,
+            "short_trades": 356,
+            "short_wr": 52.2,
+            "exits": {
+              "TP": 357,
+              "TIMEOUT": 130,
+              "SL": 216,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 663,
+            "wr": 53.4,
+            "cmp_pnl": 24.5,
+            "cmp_mdd": 10.6,
+            "pnl_mdd": 2.3,
+            "long_trades": 220,
+            "long_wr": 62.3,
+            "short_trades": 443,
+            "short_wr": 49.0,
+            "exits": {
+              "SL": 210,
+              "TP": 300,
+              "TIMEOUT": 146,
+              "END": 7
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 1373,
+            "wr": 55.1,
+            "cmp_pnl": 88.9,
+            "cmp_mdd": 10.6,
+            "pnl_mdd": 8.38,
+            "long_trades": 576,
+            "long_wr": 61.3,
+            "short_trades": 797,
+            "short_wr": 50.6,
+            "exits": {
+              "TP": 657,
+              "TIMEOUT": 276,
+              "SL": 433,
+              "END": 7
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 803,
+            "wr": 59.4,
+            "cmp_pnl": 101.2,
+            "cmp_mdd": 6.4,
+            "pnl_mdd": 15.72,
+            "long_trades": 374,
+            "long_wr": 53.5,
+            "short_trades": 429,
+            "short_wr": 64.6,
+            "exits": {
+              "SL": 253,
+              "TIMEOUT": 97,
+              "TP": 448,
+              "END": 5
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 2171,
+            "wr": 56.5,
+            "cmp_pnl": 277.6,
+            "cmp_mdd": 10.6,
+            "pnl_mdd": 26.15,
+            "long_trades": 950,
+            "long_wr": 58.2,
+            "short_trades": 1221,
+            "short_wr": 55.2,
+            "exits": {
+              "TP": 1106,
+              "TIMEOUT": 373,
+              "SL": 687,
+              "END": 5
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 801,
+            "wr": 57.9,
+            "cmp_pnl": 49.6,
+            "cmp_mdd": 14.6,
+            "pnl_mdd": 3.4,
+            "long_trades": 262,
+            "long_wr": 58.8,
+            "short_trades": 539,
+            "short_wr": 57.5,
+            "exits": {
+              "TP": 431,
+              "SL": 262,
+              "TIMEOUT": 104,
+              "END": 4
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "pass_count": 3,
+      "all_pass": true,
+      "oos_avg_pnl": 58.4,
+      "oos_min_pnl": 24.5,
+      "oos_avg_wr": 56.9
+    },
+    "hedge_nocap": {
+      "folds": [
+        {
+          "is": {
+            "trades": 966,
+            "wr": 53.5,
+            "cmp_pnl": 57.5,
+            "cmp_mdd": 4.8,
+            "pnl_mdd": 11.97,
+            "long_trades": 445,
+            "long_wr": 61.1,
+            "short_trades": 521,
+            "short_wr": 47.0,
+            "exits": {
+              "TP": 453,
+              "TIMEOUT": 228,
+              "SL": 276,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 898,
+            "wr": 55.8,
+            "cmp_pnl": 39.6,
+            "cmp_mdd": 6.8,
+            "pnl_mdd": 5.8,
+            "long_trades": 410,
+            "long_wr": 57.1,
+            "short_trades": 488,
+            "short_wr": 54.7,
+            "exits": {
+              "TP": 423,
+              "SL": 226,
+              "TIMEOUT": 240,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 1863,
+            "wr": 54.8,
+            "cmp_pnl": 120.5,
+            "cmp_mdd": 6.8,
+            "pnl_mdd": 17.62,
+            "long_trades": 854,
+            "long_wr": 59.5,
+            "short_trades": 1009,
+            "short_wr": 50.7,
+            "exits": {
+              "TP": 879,
+              "TIMEOUT": 469,
+              "SL": 506,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 1118,
+            "wr": 56.0,
+            "cmp_pnl": 91.5,
+            "cmp_mdd": 5.1,
+            "pnl_mdd": 17.82,
+            "long_trades": 493,
+            "long_wr": 51.5,
+            "short_trades": 625,
+            "short_wr": 59.5,
+            "exits": {
+              "TP": 587,
+              "SL": 347,
+              "TIMEOUT": 175,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        },
+        {
+          "is": {
+            "trades": 2971,
+            "wr": 55.2,
+            "cmp_pnl": 324.6,
+            "cmp_mdd": 6.8,
+            "pnl_mdd": 47.47,
+            "long_trades": 1342,
+            "long_wr": 56.8,
+            "short_trades": 1629,
+            "short_wr": 54.0,
+            "exits": {
+              "TP": 1466,
+              "TIMEOUT": 643,
+              "SL": 853,
+              "END": 9
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos": {
+            "trades": 1115,
+            "wr": 55.9,
+            "cmp_pnl": 47.3,
+            "cmp_mdd": 7.5,
+            "pnl_mdd": 6.35,
+            "long_trades": 464,
+            "long_wr": 58.8,
+            "short_trades": 651,
+            "short_wr": 53.8,
+            "exits": {
+              "TP": 579,
+              "SL": 361,
+              "TIMEOUT": 169,
+              "END": 6
+            },
+            "co_count": 0,
+            "co_total_pnl": 0
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "pass_count": 3,
+      "all_pass": true,
+      "oos_avg_pnl": 59.5,
+      "oos_min_pnl": 39.6,
+      "oos_avg_wr": 55.9
+    }
+  },
+  "experiment3_random": {
+    "hedge": {
+      "n_seeds": 20,
+      "random_passes": 20,
+      "pass_rate": 100.0,
+      "avg_random_pnl": 56.4,
+      "discriminating": false
+    },
+    "fifo": {
+      "n_seeds": 20,
+      "random_passes": 0,
+      "pass_rate": 0.0,
+      "avg_random_pnl": -37.1,
+      "discriminating": true
+    },
+    "close_all": {
+      "n_seeds": 20,
+      "random_passes": 0,
+      "pass_rate": 0.0,
+      "avg_random_pnl": -63.1,
+      "discriminating": true
+    },
+    "smart_oneway": {
+      "n_seeds": 20,
+      "random_passes": 19,
+      "pass_rate": 95.0,
+      "avg_random_pnl": 53.6,
+      "discriminating": false
+    },
+    "hedge_nocap": {
+      "n_seeds": 20,
+      "random_passes": 20,
+      "pass_rate": 100.0,
+      "avg_random_pnl": 56.5,
+      "discriminating": false
+    }
+  },
+  "experiment4_ablation": {
+    "full": {
+      "trades": 4070,
+      "wr": 55.3,
+      "cmp_pnl": 502.5,
+      "cmp_mdd": 7.5,
+      "pnl_mdd": 67.35,
+      "long_trades": 1803,
+      "long_wr": 57.3,
+      "short_trades": 2267,
+      "short_wr": 53.7,
+      "exits": {
+        "TP": 2033,
+        "TIMEOUT": 806,
+        "SL": 1225,
+        "END": 6
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "no_cascade": {
+      "trades": 3738,
+      "wr": 59.5,
+      "cmp_pnl": -50.3,
+      "cmp_mdd": 54.5,
+      "pnl_mdd": 0,
+      "long_trades": 1669,
+      "long_wr": 61.6,
+      "short_trades": 2069,
+      "short_wr": 57.8,
+      "exits": {
+        "TP": 1986,
+        "TIMEOUT": 976,
+        "SL": 770,
+        "END": 6
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "no_agg": {
+      "trades": 4282,
+      "wr": 54.1,
+      "cmp_pnl": 685.9,
+      "cmp_mdd": 10.9,
+      "pnl_mdd": 62.91,
+      "long_trades": 1773,
+      "long_wr": 57.0,
+      "short_trades": 2509,
+      "short_wr": 52.1,
+      "exits": {
+        "TP": 2082,
+        "TIMEOUT": 896,
+        "SL": 1300,
+        "END": 4
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "no_momentum": {
+      "trades": 4080,
+      "wr": 55.2,
+      "cmp_pnl": 474.1,
+      "cmp_mdd": 7.5,
+      "pnl_mdd": 63.54,
+      "long_trades": 1810,
+      "long_wr": 57.2,
+      "short_trades": 2270,
+      "short_wr": 53.6,
+      "exits": {
+        "TP": 2033,
+        "TIMEOUT": 806,
+        "SL": 1235,
+        "END": 6
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    },
+    "bare": {
+      "trades": 3865,
+      "wr": 59.1,
+      "cmp_pnl": -45.3,
+      "cmp_mdd": 53.9,
+      "pnl_mdd": 0,
+      "long_trades": 1601,
+      "long_wr": 61.0,
+      "short_trades": 2264,
+      "short_wr": 57.7,
+      "exits": {
+        "TP": 2025,
+        "TIMEOUT": 1104,
+        "SL": 732,
+        "END": 4
+      },
+      "co_count": 0,
+      "co_total_pnl": 0
+    }
+  }
+}

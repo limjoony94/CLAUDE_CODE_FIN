@@ -20,6 +20,13 @@
 - SL scaling is the key driver of ATR adaptation (TP-only FAIL, SL-only PASS)
 - Proportional vol_mult cap preserves R:R ratio (hard SL cap distorts up to +65.6%)
 
+## Research Validation
+- classify_candle() takes (row, avg_body_20), NOT (open, high, low, close) — always check function signature
+- Hedge vs FIFO re-verified (03-08): Hedge PnL/MDD 67.35 vs FIFO 0 — FIFO forced closures destroy strategy
+- "DISCRIMINATING" in random test can mean "always loses" not "has edge" — FIFO 0/20 random pass = no signal works
+- Smart-OneWay (skip opposite) is viable alternative: PnL/MDD 31.04, WF 3/3 PASS, but 46% of Hedge performance
+- Cascade SL removal → PnL +502% to -50%: single most critical mechanism
+
 ## Performance Monitoring
 - `recent_wins/losses` = rolling buffer, not accurate count — use total_pnl/trades
 - Bot PnL includes leverage (3x), TP/SL % are pre-leverage price distances

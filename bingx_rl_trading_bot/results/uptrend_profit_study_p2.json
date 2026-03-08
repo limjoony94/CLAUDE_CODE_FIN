@@ -1,0 +1,738 @@
+{
+  "study": "uptrend_profit_study_p2",
+  "date": "2026-02-26T06:36:42.293257",
+  "elapsed_seconds": 1484.4,
+  "data_bars": 77760,
+  "data_days": 270.0,
+  "protocol": {
+    "leverage": 3,
+    "fee_pct": 0.1,
+    "slippage_buffer": 0.02,
+    "timeout_bars": 864,
+    "max_positions": 9,
+    "direction_cap": 8,
+    "atr_period": 14,
+    "atr_window": 576,
+    "clamp": [
+      0.6,
+      1.7
+    ],
+    "edge_threshold": 21.8,
+    "mc_threshold": 0.01,
+    "min_trades": 25
+  },
+  "verdicts": {
+    "H1_direction_specific_threshold": "STOP",
+    "H2_data_extension": "STOP",
+    "H3_regime_aware_sizing": "GO"
+  },
+  "recommendation": "FURTHER RESEARCH: 1 hypothesis shows promise (H3_regime_aware_sizing). Needs extended live OOS validation before deployment.",
+  "h1_direction_threshold": {
+    "hypothesis": "H1_direction_specific_threshold",
+    "verdict": "STOP",
+    "better_scenarios": [],
+    "edge_distribution": {
+      "long_count": 298,
+      "short_count": 344,
+      "long_above_21_8": 1,
+      "long_above_19": 15,
+      "long_above_17": 24,
+      "long_above_15": 35,
+      "long_mean": 9.8,
+      "short_above_21_8": 4,
+      "short_mean": 9.4
+    },
+    "wf_results": {
+      "LONG_15pp_SHORT_22pp": {
+        "label": "LONG_15pp_SHORT_22pp",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 19440,
+            "oos_start": 19440,
+            "oos_end": 38880,
+            "oos_bars": 19440,
+            "is_long_patterns": 61,
+            "is_short_patterns": 1,
+            "long_edge_threshold": 15.0,
+            "short_edge_threshold": 21.8,
+            "trades": 190,
+            "wr": 70.5,
+            "pnl": 2.11,
+            "mdd": 22.71,
+            "long_trades": 167,
+            "short_trades": 23,
+            "long_pnl": 1.73,
+            "short_pnl": 0.39
+          },
+          {
+            "fold": 2,
+            "is_end": 38880,
+            "oos_start": 38880,
+            "oos_end": 58320,
+            "oos_bars": 19440,
+            "is_long_patterns": 111,
+            "is_short_patterns": 8,
+            "long_edge_threshold": 15.0,
+            "short_edge_threshold": 21.8,
+            "trades": 329,
+            "wr": 61.7,
+            "pnl": -22.78,
+            "mdd": 46.99,
+            "long_trades": 284,
+            "short_trades": 45,
+            "long_pnl": -34.29,
+            "short_pnl": 11.52
+          },
+          {
+            "fold": 3,
+            "is_end": 58320,
+            "oos_start": 58320,
+            "oos_end": 77760,
+            "oos_bars": 19440,
+            "is_long_patterns": 54,
+            "is_short_patterns": 24,
+            "long_edge_threshold": 15.0,
+            "short_edge_threshold": 21.8,
+            "trades": 212,
+            "wr": 73.6,
+            "pnl": 56.58,
+            "mdd": 6.55,
+            "long_trades": 125,
+            "short_trades": 87,
+            "long_pnl": 28.81,
+            "short_pnl": 27.77
+          }
+        ],
+        "total_pnl": 35.91,
+        "max_mdd": 46.99,
+        "pnl_mdd": 0.76,
+        "pass_3_3": false,
+        "n_positive": 2
+      },
+      "LONG_17pp_SHORT_22pp": {
+        "label": "LONG_17pp_SHORT_22pp",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 19440,
+            "oos_start": 19440,
+            "oos_end": 38880,
+            "oos_bars": 19440,
+            "is_long_patterns": 56,
+            "is_short_patterns": 1,
+            "long_edge_threshold": 17.0,
+            "short_edge_threshold": 21.8,
+            "trades": 188,
+            "wr": 71.3,
+            "pnl": 5.2,
+            "mdd": 23.04,
+            "long_trades": 165,
+            "short_trades": 23,
+            "long_pnl": 4.81,
+            "short_pnl": 0.39
+          },
+          {
+            "fold": 2,
+            "is_end": 38880,
+            "oos_start": 38880,
+            "oos_end": 58320,
+            "oos_bars": 19440,
+            "is_long_patterns": 97,
+            "is_short_patterns": 8,
+            "long_edge_threshold": 17.0,
+            "short_edge_threshold": 21.8,
+            "trades": 338,
+            "wr": 62.4,
+            "pnl": -23.03,
+            "mdd": 48.48,
+            "long_trades": 293,
+            "short_trades": 45,
+            "long_pnl": -34.57,
+            "short_pnl": 11.55
+          },
+          {
+            "fold": 3,
+            "is_end": 58320,
+            "oos_start": 58320,
+            "oos_end": 77760,
+            "oos_bars": 19440,
+            "is_long_patterns": 46,
+            "is_short_patterns": 24,
+            "long_edge_threshold": 17.0,
+            "short_edge_threshold": 21.8,
+            "trades": 207,
+            "wr": 72.9,
+            "pnl": 48.07,
+            "mdd": 5.08,
+            "long_trades": 117,
+            "short_trades": 90,
+            "long_pnl": 23.33,
+            "short_pnl": 24.74
+          }
+        ],
+        "total_pnl": 30.24,
+        "max_mdd": 48.48,
+        "pnl_mdd": 0.62,
+        "pass_3_3": false,
+        "n_positive": 2
+      },
+      "LONG_19pp_SHORT_22pp": {
+        "label": "LONG_19pp_SHORT_22pp",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 19440,
+            "oos_start": 19440,
+            "oos_end": 38880,
+            "oos_bars": 19440,
+            "is_long_patterns": 44,
+            "is_short_patterns": 1,
+            "long_edge_threshold": 19.0,
+            "short_edge_threshold": 21.8,
+            "trades": 193,
+            "wr": 70.5,
+            "pnl": 1.55,
+            "mdd": 23.51,
+            "long_trades": 170,
+            "short_trades": 23,
+            "long_pnl": 1.16,
+            "short_pnl": 0.39
+          },
+          {
+            "fold": 2,
+            "is_end": 38880,
+            "oos_start": 38880,
+            "oos_end": 58320,
+            "oos_bars": 19440,
+            "is_long_patterns": 73,
+            "is_short_patterns": 8,
+            "long_edge_threshold": 19.0,
+            "short_edge_threshold": 21.8,
+            "trades": 334,
+            "wr": 61.7,
+            "pnl": -23.67,
+            "mdd": 51.75,
+            "long_trades": 286,
+            "short_trades": 48,
+            "long_pnl": -37.7,
+            "short_pnl": 14.02
+          },
+          {
+            "fold": 3,
+            "is_end": 58320,
+            "oos_start": 58320,
+            "oos_end": 77760,
+            "oos_bars": 19440,
+            "is_long_patterns": 30,
+            "is_short_patterns": 24,
+            "long_edge_threshold": 19.0,
+            "short_edge_threshold": 21.8,
+            "trades": 220,
+            "wr": 69.5,
+            "pnl": 39.24,
+            "mdd": 6.87,
+            "long_trades": 110,
+            "short_trades": 110,
+            "long_pnl": 13.83,
+            "short_pnl": 25.41
+          }
+        ],
+        "total_pnl": 17.12,
+        "max_mdd": 51.75,
+        "pnl_mdd": 0.33,
+        "pass_3_3": false,
+        "n_positive": 2
+      },
+      "LONG_22pp_SHORT_22pp": {
+        "label": "LONG_22pp_SHORT_22pp",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 19440,
+            "oos_start": 19440,
+            "oos_end": 38880,
+            "oos_bars": 19440,
+            "is_long_patterns": 30,
+            "is_short_patterns": 1,
+            "long_edge_threshold": 21.8,
+            "short_edge_threshold": 21.8,
+            "trades": 196,
+            "wr": 68.9,
+            "pnl": 3.41,
+            "mdd": 25.68,
+            "long_trades": 173,
+            "short_trades": 23,
+            "long_pnl": 3.02,
+            "short_pnl": 0.39
+          },
+          {
+            "fold": 2,
+            "is_end": 38880,
+            "oos_start": 38880,
+            "oos_end": 58320,
+            "oos_bars": 19440,
+            "is_long_patterns": 29,
+            "is_short_patterns": 8,
+            "long_edge_threshold": 21.8,
+            "short_edge_threshold": 21.8,
+            "trades": 372,
+            "wr": 62.9,
+            "pnl": -22.92,
+            "mdd": 40.38,
+            "long_trades": 275,
+            "short_trades": 97,
+            "long_pnl": -51.78,
+            "short_pnl": 28.85
+          },
+          {
+            "fold": 3,
+            "is_end": 58320,
+            "oos_start": 58320,
+            "oos_end": 77760,
+            "oos_bars": 19440,
+            "is_long_patterns": 15,
+            "is_short_patterns": 24,
+            "long_edge_threshold": 21.8,
+            "short_edge_threshold": 21.8,
+            "trades": 219,
+            "wr": 67.1,
+            "pnl": 24.71,
+            "mdd": 11.42,
+            "long_trades": 67,
+            "short_trades": 152,
+            "long_pnl": 5.5,
+            "short_pnl": 19.21
+          }
+        ],
+        "total_pnl": 5.2,
+        "max_mdd": 40.38,
+        "pnl_mdd": 0.13,
+        "pass_3_3": false,
+        "n_positive": 2
+      }
+    }
+  },
+  "h2_data_extension": {
+    "hypothesis": "H2_data_extension",
+    "verdict": "STOP",
+    "csv_bars": 77760,
+    "extended_bars": 85326,
+    "extended_days": 296.3,
+    "scan_comparison": {
+      "270d_long": 13,
+      "270d_short": 44,
+      "ext_long": 10,
+      "ext_short": 50,
+      "delta_long": -3,
+      "delta_short": 6,
+      "new_longs": [
+        "BD-DN-D",
+        "D-ST-ST",
+        "DN-MD-ST",
+        "MU-MD-ST",
+        "U-IH-MD"
+      ],
+      "lost_longs": [
+        "BD-U-BD",
+        "D-DN-MU",
+        "DN-BD-BD",
+        "DN-ST-D",
+        "MD-BD-DN",
+        "MD-MU-ST",
+        "MU-DN-IH",
+        "ST-MU-U"
+      ]
+    },
+    "wf_fixed": {
+      "label": "extended_296d",
+      "n_folds": 3,
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 21331,
+          "oos_end": 42662,
+          "oos_bars": 21331,
+          "trades": 147,
+          "wr": 77.6,
+          "pnl": 40.1,
+          "mdd": 4.46,
+          "long_trades": 31,
+          "short_trades": 116,
+          "long_pnl": 5.18,
+          "short_pnl": 34.92
+        },
+        {
+          "fold": 2,
+          "oos_start": 42662,
+          "oos_end": 63993,
+          "oos_bars": 21331,
+          "trades": 360,
+          "wr": 76.9,
+          "pnl": 92.07,
+          "mdd": 15.11,
+          "long_trades": 65,
+          "short_trades": 295,
+          "long_pnl": 2.59,
+          "short_pnl": 89.48
+        },
+        {
+          "fold": 3,
+          "oos_start": 63993,
+          "oos_end": 85326,
+          "oos_bars": 21333,
+          "trades": 330,
+          "wr": 77.9,
+          "pnl": 97.4,
+          "mdd": 10.0,
+          "long_trades": 56,
+          "short_trades": 274,
+          "long_pnl": 13.81,
+          "short_pnl": 83.59
+        }
+      ],
+      "total_pnl": 229.57,
+      "max_mdd": 15.11,
+      "pnl_mdd": 15.19,
+      "pass_3_3": true,
+      "n_positive": 3
+    },
+    "wf_rescan": {
+      "label": "extended_rescan_296d",
+      "n_folds": 3,
+      "folds": [
+        {
+          "fold": 1,
+          "is_end": 21331,
+          "oos_start": 21331,
+          "oos_end": 42662,
+          "oos_bars": 21331,
+          "is_long_patterns": 31,
+          "is_short_patterns": 0,
+          "long_edge_threshold": 21.8,
+          "short_edge_threshold": 21.8,
+          "trades": 146,
+          "wr": 61.6,
+          "pnl": -7.24,
+          "mdd": 25.15,
+          "long_trades": 146,
+          "short_trades": 0,
+          "long_pnl": -7.24,
+          "short_pnl": 0
+        },
+        {
+          "fold": 2,
+          "is_end": 42662,
+          "oos_start": 42662,
+          "oos_end": 63993,
+          "oos_bars": 21331,
+          "is_long_patterns": 29,
+          "is_short_patterns": 14,
+          "long_edge_threshold": 21.8,
+          "short_edge_threshold": 21.8,
+          "trades": 438,
+          "wr": 68.9,
+          "pnl": 23.95,
+          "mdd": 15.39,
+          "long_trades": 264,
+          "short_trades": 174,
+          "long_pnl": -23.13,
+          "short_pnl": 47.08
+        },
+        {
+          "fold": 3,
+          "is_end": 63993,
+          "oos_start": 63993,
+          "oos_end": 85326,
+          "oos_bars": 21333,
+          "is_long_patterns": 14,
+          "is_short_patterns": 20,
+          "long_edge_threshold": 21.8,
+          "short_edge_threshold": 21.8,
+          "trades": 317,
+          "wr": 64.7,
+          "pnl": 33.15,
+          "mdd": 13.77,
+          "long_trades": 111,
+          "short_trades": 206,
+          "long_pnl": -13.05,
+          "short_pnl": 46.2
+        }
+      ],
+      "total_pnl": 49.86,
+      "max_mdd": 25.15,
+      "pnl_mdd": 1.98,
+      "pass_3_3": false,
+      "n_positive": 2
+    }
+  },
+  "h3_regime_sizing": {
+    "hypothesis": "H3_regime_aware_sizing",
+    "verdict": "GO",
+    "better_scenarios": [
+      "ema20_lb5_mult0.5",
+      "ema20_lb5_mult0.7",
+      "ema20_lb20_mult0.5",
+      "ema20_lb20_mult0.7",
+      "ema60_lb5_mult0.5",
+      "ema60_lb5_mult0.7",
+      "ema60_lb20_mult0.7",
+      "ema120_lb5_mult0.5",
+      "ema120_lb5_mult0.7",
+      "ema120_lb20_mult0.7"
+    ],
+    "wf_results": {
+      "baseline_uniform": {
+        "total_pnl": 164.42,
+        "max_mdd": 10.77,
+        "pnl_mdd": 15.27,
+        "pass_3_3": true,
+        "long_pnl": 36.77,
+        "short_pnl": 127.65,
+        "fold_pnls": [
+          35.98,
+          78.25,
+          50.19
+        ]
+      },
+      "ema20_lb5_mult0.3": {
+        "total_pnl": 100.22,
+        "max_mdd": 6.71,
+        "pnl_mdd": 14.94,
+        "pass_3_3": true,
+        "long_pnl": 18.37,
+        "short_pnl": 81.85,
+        "fold_pnls": [
+          23.86,
+          50.0,
+          26.36
+        ]
+      },
+      "ema20_lb5_mult0.5": {
+        "total_pnl": 118.57,
+        "max_mdd": 7.51,
+        "pnl_mdd": 15.79,
+        "pass_3_3": true,
+        "long_pnl": 23.63,
+        "short_pnl": 94.95,
+        "fold_pnls": [
+          27.32,
+          58.08,
+          33.17
+        ]
+      },
+      "ema20_lb5_mult0.7": {
+        "total_pnl": 136.92,
+        "max_mdd": 8.73,
+        "pnl_mdd": 15.68,
+        "pass_3_3": true,
+        "long_pnl": 28.89,
+        "short_pnl": 108.02,
+        "fold_pnls": [
+          30.79,
+          66.15,
+          39.98
+        ]
+      },
+      "ema20_lb20_mult0.3": {
+        "total_pnl": 103.29,
+        "max_mdd": 6.78,
+        "pnl_mdd": 15.23,
+        "pass_3_3": true,
+        "long_pnl": 16.97,
+        "short_pnl": 86.31,
+        "fold_pnls": [
+          25.18,
+          52.82,
+          25.29
+        ]
+      },
+      "ema20_lb20_mult0.5": {
+        "total_pnl": 120.75,
+        "max_mdd": 7.13,
+        "pnl_mdd": 16.94,
+        "pass_3_3": true,
+        "long_pnl": 22.63,
+        "short_pnl": 98.12,
+        "fold_pnls": [
+          28.27,
+          60.08,
+          32.4
+        ]
+      },
+      "ema20_lb20_mult0.7": {
+        "total_pnl": 138.22,
+        "max_mdd": 7.46,
+        "pnl_mdd": 18.53,
+        "pass_3_3": true,
+        "long_pnl": 28.29,
+        "short_pnl": 109.93,
+        "fold_pnls": [
+          31.35,
+          67.35,
+          39.52
+        ]
+      },
+      "ema60_lb5_mult0.3": {
+        "total_pnl": 101.79,
+        "max_mdd": 6.84,
+        "pnl_mdd": 14.88,
+        "pass_3_3": true,
+        "long_pnl": 17.46,
+        "short_pnl": 84.33,
+        "fold_pnls": [
+          22.9,
+          53.81,
+          25.08
+        ]
+      },
+      "ema60_lb5_mult0.5": {
+        "total_pnl": 119.7,
+        "max_mdd": 7.07,
+        "pnl_mdd": 16.93,
+        "pass_3_3": true,
+        "long_pnl": 22.98,
+        "short_pnl": 96.71,
+        "fold_pnls": [
+          26.64,
+          60.8,
+          32.26
+        ]
+      },
+      "ema60_lb5_mult0.7": {
+        "total_pnl": 137.58,
+        "max_mdd": 7.42,
+        "pnl_mdd": 18.54,
+        "pass_3_3": true,
+        "long_pnl": 28.51,
+        "short_pnl": 109.08,
+        "fold_pnls": [
+          30.37,
+          67.78,
+          39.43
+        ]
+      },
+      "ema60_lb20_mult0.3": {
+        "total_pnl": 107.25,
+        "max_mdd": 8.45,
+        "pnl_mdd": 12.69,
+        "pass_3_3": true,
+        "long_pnl": 14.18,
+        "short_pnl": 93.07,
+        "fold_pnls": [
+          23.59,
+          59.25,
+          24.41
+        ]
+      },
+      "ema60_lb20_mult0.5": {
+        "total_pnl": 123.59,
+        "max_mdd": 8.3,
+        "pnl_mdd": 14.89,
+        "pass_3_3": true,
+        "long_pnl": 20.64,
+        "short_pnl": 102.95,
+        "fold_pnls": [
+          27.13,
+          64.68,
+          31.78
+        ]
+      },
+      "ema60_lb20_mult0.7": {
+        "total_pnl": 139.92,
+        "max_mdd": 8.15,
+        "pnl_mdd": 17.17,
+        "pass_3_3": true,
+        "long_pnl": 27.09,
+        "short_pnl": 112.83,
+        "fold_pnls": [
+          30.67,
+          70.11,
+          39.14
+        ]
+      },
+      "ema120_lb5_mult0.3": {
+        "total_pnl": 111.67,
+        "max_mdd": 8.41,
+        "pnl_mdd": 13.28,
+        "pass_3_3": true,
+        "long_pnl": 21.57,
+        "short_pnl": 90.09,
+        "fold_pnls": [
+          20.32,
+          70.07,
+          21.28
+        ]
+      },
+      "ema120_lb5_mult0.5": {
+        "total_pnl": 126.75,
+        "max_mdd": 8.27,
+        "pnl_mdd": 15.33,
+        "pass_3_3": true,
+        "long_pnl": 25.91,
+        "short_pnl": 100.83,
+        "fold_pnls": [
+          24.8,
+          72.41,
+          29.54
+        ]
+      },
+      "ema120_lb5_mult0.7": {
+        "total_pnl": 141.81,
+        "max_mdd": 8.14,
+        "pnl_mdd": 17.42,
+        "pass_3_3": true,
+        "long_pnl": 30.26,
+        "short_pnl": 111.55,
+        "fold_pnls": [
+          29.27,
+          74.74,
+          37.8
+        ]
+      },
+      "ema120_lb20_mult0.3": {
+        "total_pnl": 109.85,
+        "max_mdd": 8.53,
+        "pnl_mdd": 12.88,
+        "pass_3_3": true,
+        "long_pnl": 15.19,
+        "short_pnl": 94.65,
+        "fold_pnls": [
+          19.08,
+          66.32,
+          24.45
+        ]
+      },
+      "ema120_lb20_mult0.5": {
+        "total_pnl": 125.44,
+        "max_mdd": 8.35,
+        "pnl_mdd": 15.02,
+        "pass_3_3": true,
+        "long_pnl": 21.35,
+        "short_pnl": 104.08,
+        "fold_pnls": [
+          23.91,
+          69.73,
+          31.8
+        ]
+      },
+      "ema120_lb20_mult0.7": {
+        "total_pnl": 141.04,
+        "max_mdd": 8.18,
+        "pnl_mdd": 17.24,
+        "pass_3_3": true,
+        "long_pnl": 27.53,
+        "short_pnl": 113.51,
+        "fold_pnls": [
+          28.74,
+          73.14,
+          39.16
+        ]
+      }
+    }
+  }
+}

@@ -94,16 +94,17 @@ SLIPPAGE_BUFFER = 0.02  # 0.02% slippage buffer for ATR-scaled TP/SL
 # Distribution-based TP hit probability grid (v1.37.1: log-normal MFE fit)
 DIST_HIT_PROBS = [0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.92, 0.95]
 
-# N-position portfolio simulator defaults (v1.38: production-aligned backtest)
+# N-position portfolio simulator defaults (v1.53.0: production-aligned backtest)
 DEFAULT_N_SLOTS = 9
 DEFAULT_DIRECTION_CAP = 7
-TIMEOUT_BARS = 864          # 72h position timeout (production v1.31.0)
+TIMEOUT_BARS = 288          # 24h position timeout (production v1.48.0)
 DEFAULT_REGIME_MULT = 0.3
-DEFAULT_AGG_RISK_COUNTER = 3.0
-DEFAULT_AGG_RISK_WITH = 7.0
-DEFAULT_MOMENTUM_LOOKBACK = 6
-DEFAULT_MOMENTUM_THRESHOLD = 1.0
-DEFAULT_MOMENTUM_COOLDOWN = 6
+DEFAULT_AGG_RISK_COUNTER = 8.0  # v1.49.0: 3.0->8.0
+DEFAULT_AGG_RISK_WITH = 15.0    # v1.44.0: 7.0->15.0
+DEFAULT_MOMENTUM_LOOKBACK = 3   # v1.46.0: 6->3 (15min)
+DEFAULT_MOMENTUM_THRESHOLD = 1.5 # v1.51.0: 1.0->1.5
+DEFAULT_MOMENTUM_COOLDOWN = 12  # v1.46.0: 6->12 (1h)
+DEFAULT_CASCADE_TIGHTEN_PCT = 85  # v1.45.0: SL exit → same-dir SL dist × (1-85/100) = 15%
 NPOS_EMA_PERIOD = 20
 NPOS_EMA_LOOKBACK = 5
 
@@ -722,7 +723,12 @@ def _check_exit_npos(pos, bar, opens, highs, lows, n_bars, atr_ratio, fee,
         r = 1.0
 
     eff_tp = tp_pct * r + SLIPPAGE_BUFFER
-    eff_sl = max(0.1, sl_pct * r - SLIPPAGE_BUFFER)
+    # Cascade SL override: use tightened SL distance if set
+    eff_sl_override = pos.get('eff_sl_override')
+    if eff_sl_override is not None:
+        eff_sl = max(0.1, eff_sl_override - SLIPPAGE_BUFFER)
+    else:
+        eff_sl = max(0.1, sl_pct * r - SLIPPAGE_BUFFER)
 
     if direction == 'LONG':
         tp_price = entry * (1 + eff_tp / 100)
@@ -779,7 +785,8 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                    momentum_threshold=DEFAULT_MOMENTUM_THRESHOLD,
                    momentum_cooldown=DEFAULT_MOMENTUM_COOLDOWN,
                    clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
-                   timeout_bars=TIMEOUT_BARS):
+                   timeout_bars=TIMEOUT_BARS,
+                   cascade_tighten_pct=DEFAULT_CASCADE_TIGHTEN_PCT):
     """N-position portfolio simulator matching production protections.
 
     Source: entry_improvement_study.py:210 simulate_portfolio()
@@ -839,6 +846,29 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                 bar_pnl_sum += pnl_portfolio
                 if result['reason'] == 'SL':
                     bar_sl_count += 1
+
+        # Cascade SL tightening: after SL exits, tighten same-dir remaining SLs
+        if cascade_tighten_pct > 0 and bar_sl_count > 0:
+            keep_ratio = 1.0 - cascade_tighten_pct / 100.0
+            sl_directions = set()
+            for t in trades[len(trades) - len(closed_slots):]:
+                if t.get('reason') == 'SL':
+                    sl_directions.add(t['direction'])
+            for sl_dir in sl_directions:
+                for pos in positions:
+                    if pos['slot'] in closed_slots:
+                        continue
+                    if pos['direction'] != sl_dir:
+                        continue
+                    # Compute current effective SL distance (ATR-scaled)
+                    sig = pos['signal_bar']
+                    if (atr_ratio is not None and sig < len(atr_ratio)
+                            and not np.isnan(atr_ratio[sig])):
+                        r = max(clamp_lo, min(clamp_hi, atr_ratio[sig]))
+                    else:
+                        r = 1.0
+                    cur_eff_sl = pos.get('eff_sl_override') or (pos['sl_pct'] * r)
+                    pos['eff_sl_override'] = cur_eff_sl * keep_ratio
 
         positions = [p for p in positions if p['slot'] not in closed_slots]
 
@@ -2291,6 +2321,12 @@ def main():
                         help='Disable momentum guard in npos mode')
     parser.add_argument('--no-agg-risk-cap', action='store_true',
                         help='Disable aggregate risk cap in npos mode')
+    parser.add_argument('--cascade-tighten-pct', type=float,
+                        default=DEFAULT_CASCADE_TIGHTEN_PCT,
+                        help=f'Cascade SL tighten %% after SL exit '
+                             f'(default: {DEFAULT_CASCADE_TIGHTEN_PCT})')
+    parser.add_argument('--no-cascade', action='store_true',
+                        help='Disable cascade SL tightening in npos mode')
     parser.add_argument('--verbose', '-v', action='store_true',
                         help='Verbose output')
     args = parser.parse_args()
@@ -2640,6 +2676,7 @@ def main():
             'clamp_lo': args.atr_clamp_lo,
             'clamp_hi': args.atr_clamp_hi,
             'timeout_bars': TIMEOUT_BARS,
+            'cascade_tighten_pct': 0 if args.no_cascade else args.cascade_tighten_pct,
         }
 
     # N-pos IS summary (Change 7: full IS data portfolio simulation)
@@ -2755,6 +2792,8 @@ def main():
             'regime_mult': npos_kwargs['regime_mult'],
             'agg_risk_cap': f"{npos_kwargs['agg_risk_counter']}/{npos_kwargs['agg_risk_with']}",
             'momentum_guard': not args.no_momentum_guard,
+            'cascade_sl': not args.no_cascade,
+            'cascade_tighten_pct': npos_kwargs['cascade_tighten_pct'],
             'timeout_bars': TIMEOUT_BARS,
             'is_stats': npos_is_stats,
         } if args.npos else None,

@@ -461,10 +461,10 @@ API_MAX_DELAY = 30
 # ============================================================
 # METRICS DEFAULTS (from v1.15 regime-validated backtest)
 # ============================================================
-EXPECTED_WIN_RATE = 71.0  # v1.53.0: N-pos OOS 3-fold avg WR (131pat, 59L+72S)
+EXPECTED_WIN_RATE = 61.6  # v1.54.0: N-pos+Cascade OOS 3-fold avg WR (131pat, 59L+72S)
 EXPECTED_AVG_WIN = 5.63   # v1.53.0: ATR-scaled TP mean × 3x
 EXPECTED_AVG_LOSS = 9.64  # v1.53.0: ATR-scaled SL mean × 3x
-EXPECTED_EDGE = 0.082     # v1.53.0: N-pos OOS PnL/trade (61.37/749)
+EXPECTED_EDGE = 0.115     # v1.54.0: N-pos+Cascade OOS PnL/trade (128.9/1117)
 METRICS_WINDOW_SIZE = 50
 MIN_TRADES_FOR_COMPARISON = 5
 

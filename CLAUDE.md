@@ -94,7 +94,9 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=61.6 (v1.54.0, N-pos+Cascade OOS, 131pat)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=65.9 (v1.55.0, post-03-05 clean baseline, 44t)
+- **Clean baseline**: `results/pattern_5m_baseline_post0305.json` — pre-03-05 오염 데이터 제외한 정확한 기대치
+- **주의**: LONG WR 0% (03-05~08, 15t) — BTC 하락 레짐 편향. 소표본이므로 지속 모니터 필요
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---

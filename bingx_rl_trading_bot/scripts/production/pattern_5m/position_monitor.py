@@ -200,9 +200,14 @@ def get_actual_exit_price(
 
 
 def _infer_exit_reason(filled_price: float, position: Dict) -> str:
-    """Infer exit reason from filled price proximity to TP/SL."""
+    """Infer exit reason from filled price proximity to TP/SL.
+
+    v1.55.0: Extended classification to reduce MARKET/UNKNOWN exits.
+    Priority: TP > SL (exact) > EMERGENCY_SL > SL (near) > CASCADE_SL > MARKET.
+    """
     tp = position.get('tp_price', 0)
     sl = position.get('sl_price', 0)
+    entry = position.get('entry_price', 0)
     direction = position.get('direction', '')
 
     if tp and abs(filled_price - tp) / tp < PRICE_TOLERANCE_PCT:
@@ -215,6 +220,43 @@ def _infer_exit_reason(filled_price: float, position: Dict) -> str:
         return 'EMERGENCY_SL'
     if direction == 'SHORT' and sl and filled_price > sl:
         return 'EMERGENCY_SL'
+
+    # v1.55.0: Near-SL classification — if price is between entry and SL,
+    # and closer to SL than to entry (within SL-side 40% of range), classify as SL.
+    # This captures slippage-affected SL fills and cascade-tightened SL hits.
+    if entry > 0 and sl > 0:
+        sl_to_entry = abs(entry - sl)
+        if sl_to_entry > 0:
+            if direction == 'LONG' and sl < filled_price < entry:
+                sl_proximity = abs(filled_price - sl) / sl_to_entry
+                if sl_proximity < 0.4:  # within 40% of SL→entry range from SL
+                    return 'SL'
+            if direction == 'SHORT' and entry < filled_price < sl:
+                sl_proximity = abs(filled_price - sl) / sl_to_entry
+                if sl_proximity < 0.4:
+                    return 'SL'
+
+    # Cascade SL inference: price between entry and SL (loss direction) but not
+    # near current SL — likely hit a pre-cascade SL or exchange closed during
+    # cascade chain.  Only classify as CASCADE_SL when position was losing.
+    if entry > 0 and sl > 0:
+        if direction == 'LONG' and sl < filled_price < entry:
+            return 'CASCADE_SL'
+        if direction == 'SHORT' and entry < filled_price < sl:
+            return 'CASCADE_SL'
+
+    # v1.55.0: Near-TP classification — profitable exit near TP
+    if entry > 0 and tp > 0:
+        tp_to_entry = abs(tp - entry)
+        if tp_to_entry > 0:
+            if direction == 'LONG' and filled_price > entry:
+                tp_proximity = abs(filled_price - tp) / tp_to_entry
+                if tp_proximity < 0.3:  # within 30% of entry→TP range from TP
+                    return 'TP'
+            if direction == 'SHORT' and filled_price < entry:
+                tp_proximity = abs(filled_price - tp) / tp_to_entry
+                if tp_proximity < 0.3:
+                    return 'TP'
 
     return 'MARKET'
 
@@ -271,15 +313,46 @@ def check_position_status(
 
             # All slots for this direction are closed (exchange has no position)
             if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
-                if len(dir_slots) > 1:
-                    total_qty = sum(s.get('quantity', 0) for s in dir_slots)
+                # v1.55.0: Mass closure verification — if 3+ slots appear closed
+                # simultaneously, re-fetch positions to guard against API glitches
+                # (03-05 incident: network error returned empty positions → false closure)
+                if len(dir_slots) >= 3:
                     logger.warning(
-                        f"⚠️ CASCADE: {len(dir_slots)} {dir_label} slots closed simultaneously "
-                        f"(qty={total_qty:.4f}). Likely emergency SL or exchange liquidation."
+                        f"⚠️ {len(dir_slots)} {dir_label} slots appear closed — "
+                        f"verifying with fresh API call..."
                     )
-                for slot in list(dir_slots):
-                    _handle_position_closed(exchange, state, config, slot, cache, metrics)
-                any_closed = True
+                    time.sleep(1)
+                    try:
+                        verify_positions = fetch_positions_cached(
+                            exchange, symbol, cache, force_refresh=True,
+                            circuit_breaker=circuit_breaker, metrics=metrics
+                        )
+                        for vp in verify_positions:
+                            if (float(vp.get('contracts', 0)) > 0
+                                    and vp.get('side') == dir_key):
+                                logger.warning(
+                                    f"⚠️ FALSE ALARM: {dir_label} position still exists "
+                                    f"on exchange after re-check — skipping closure"
+                                )
+                                exchange_pos = vp
+                                break
+                    except Exception as e:
+                        logger.warning(
+                            f"⚠️ Mass closure verification failed: {e} — "
+                            f"deferring to next cycle"
+                        )
+                        continue  # Skip this direction entirely, retry next loop
+
+                if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
+                    if len(dir_slots) > 1:
+                        total_qty = sum(s.get('quantity', 0) for s in dir_slots)
+                        logger.warning(
+                            f"⚠️ CASCADE: {len(dir_slots)} {dir_label} slots closed simultaneously "
+                            f"(qty={total_qty:.4f}). Likely emergency SL or exchange liquidation."
+                        )
+                    for slot in list(dir_slots):
+                        _handle_position_closed(exchange, state, config, slot, cache, metrics)
+                    any_closed = True
                 continue
 
             # Per-slot TP/SL fill detection (N>1 multi-position)
@@ -434,7 +507,7 @@ def _handle_position_closed(
             exit_reason = f'SL_AFTER_{filled_stages}_STAGES'
 
     # v1.41.0: Cascade SL tightening — tighten same-dir SLs before slot removal
-    if exit_reason in ('SL', 'EMERGENCY_SL') or exit_reason.startswith('SL_AFTER_'):
+    if exit_reason in ('SL', 'EMERGENCY_SL', 'CASCADE_SL') or exit_reason.startswith('SL_AFTER_'):
         _cascade_tighten_sls(exchange, state, config, position)
 
     record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics, position=position)
@@ -510,6 +583,7 @@ def _infer_exit_from_price(exit_price: float, position: Dict) -> str:
     """Infer exit reason from current price vs TP/SL levels."""
     tp = position.get('tp_price', 0)
     sl = position.get('sl_price', 0)
+    entry = position.get('entry_price', 0)
     direction = position.get('direction', '')
 
     if direction == 'LONG':
@@ -522,5 +596,33 @@ def _infer_exit_from_price(exit_price: float, position: Dict) -> str:
             return 'TP'
         elif sl > 0 and exit_price >= sl * SL_LOWER_MULT:
             return 'SL'
+
+    # v1.55.0: Near-SL classification (within 40% of SL-to-entry distance)
+    if entry > 0 and sl > 0:
+        sl_to_entry = abs(entry - sl)
+        if sl_to_entry > 0:
+            if direction == 'LONG' and sl < exit_price < entry:
+                sl_proximity = abs(exit_price - sl) / sl_to_entry
+                if sl_proximity < 0.4:
+                    return 'SL'
+                return 'CASCADE_SL'
+            if direction == 'SHORT' and entry < exit_price < sl:
+                sl_proximity = abs(exit_price - sl) / sl_to_entry
+                if sl_proximity < 0.4:
+                    return 'SL'
+                return 'CASCADE_SL'
+
+    # v1.55.0: Near-TP classification (within 30% of TP-to-entry distance)
+    if entry > 0 and tp > 0:
+        tp_to_entry = abs(tp - entry)
+        if tp_to_entry > 0:
+            if direction == 'LONG' and exit_price > entry:
+                tp_proximity = abs(exit_price - tp) / tp_to_entry
+                if tp_proximity < 0.3:
+                    return 'TP'
+            if direction == 'SHORT' and exit_price < entry:
+                tp_proximity = abs(exit_price - tp) / tp_to_entry
+                if tp_proximity < 0.3:
+                    return 'TP'
 
     return 'UNKNOWN'

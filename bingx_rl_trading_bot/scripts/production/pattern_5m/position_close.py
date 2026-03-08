@@ -271,6 +271,43 @@ def record_closed_position(
     cache.invalidate_all()
 
 
+def _recover_pattern_from_history(
+    entry_price: float,
+    direction: str,
+    config: Dict[str, Any],
+) -> Tuple[Optional[str], float]:
+    """Search metrics trade_history for pattern_name matching entry_price+direction.
+
+    v1.55.0: When crash recovery can't find pattern_name from state (e.g. after
+    false mass closure), search recent trade_history for the same position that
+    was just incorrectly recorded as closed.
+
+    Returns:
+        Tuple of (pattern_name, vol_mult). pattern_name may be None.
+    """
+    from .state import load_metrics
+    try:
+        metrics = load_metrics()
+        if not metrics:
+            return None, 1.0
+        history = getattr(metrics, 'trade_history', None) or []
+        # Search last 20 trades for matching entry_price + direction
+        for trade in reversed(history[-20:]):
+            if (trade.get('direction') == direction
+                    and abs(trade.get('entry_price', 0) - entry_price) < 0.5):
+                pat = trade.get('pattern')
+                if pat and pat != 'N/A':
+                    vol_mult = trade.get('vol_mult', 1.0)
+                    logger.info(
+                        f"✅ Recovery: pattern_name '{pat}' recovered from trade_history "
+                        f"(entry=${entry_price:.1f}, {direction})"
+                    )
+                    return pat, vol_mult
+    except Exception as e:
+        logger.debug(f"Pattern recovery from history failed: {e}")
+    return None, 1.0
+
+
 def recover_position_to_state(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -307,6 +344,13 @@ def recover_position_to_state(
             old_vol_mult = slot.get('vol_mult', 1.0)
             if old_pattern_name:
                 break
+
+    # v1.55.0: Fallback — search recent trade_history for matching entry+direction
+    # This handles false mass closures where slots were removed but position still exists
+    if not old_pattern_name:
+        old_pattern_name, old_vol_mult = _recover_pattern_from_history(
+            entry_price, direction, config
+        )
 
     if not old_pattern_name:
         logger.warning(

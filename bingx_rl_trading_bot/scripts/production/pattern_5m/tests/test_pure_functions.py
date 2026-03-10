@@ -412,8 +412,8 @@ class TestInferExitReason:
     def test_outside_tolerance(self):
         """Price beyond TP tolerance → 'MARKET'."""
         pos = {'tp_price': 51000.0, 'sl_price': 49000.0}
-        # 51000 * 0.003 = 153. So 51200 is outside tolerance.
-        assert _infer_exit_reason(51200.0, pos) == 'MARKET'
+        # 51000 * 0.005 = 255. So 51300 is outside tolerance.
+        assert _infer_exit_reason(51300.0, pos) == 'MARKET'
 
     def test_no_tp_price(self):
         """tp_price=0 → can't match TP."""

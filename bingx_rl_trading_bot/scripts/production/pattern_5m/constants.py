@@ -391,7 +391,7 @@ FEE_PCT = 0.05
 # ============================================================
 # PRICE TOLERANCE (for TP/SL detection)
 # ============================================================
-PRICE_TOLERANCE_PCT = 0.003
+PRICE_TOLERANCE_PCT = 0.005
 TP_LOWER_MULT = 0.999
 TP_UPPER_MULT = 1.001
 SL_LOWER_MULT = 0.999

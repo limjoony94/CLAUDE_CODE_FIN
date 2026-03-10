@@ -202,8 +202,12 @@ def get_actual_exit_price(
 def _infer_exit_reason(filled_price: float, position: Dict) -> str:
     """Infer exit reason from filled price proximity to TP/SL.
 
-    v1.55.0: Extended classification to reduce MARKET/UNKNOWN exits.
-    Priority: TP > SL (exact) > EMERGENCY_SL > SL (near) > CASCADE_SL > MARKET.
+    v1.55.1: Widened thresholds to reduce MARKET/UNKNOWN misclassifications.
+    - Near-SL zone: 40% → 60% of entry-to-SL range
+    - TP tolerance: 0.3% → 0.5% (via PRICE_TOLERANCE_PCT constant)
+    - Near-TP zone: 30% → 50% of entry-to-TP range
+    - CASCADE_SL: also detects via cascade_tightened flag and prior SL levels
+    Priority: TP > SL (exact) > EMERGENCY_SL > CASCADE_SL (flagged) > SL (near) > CASCADE_SL (inferred) > MARKET.
     """
     tp = position.get('tp_price', 0)
     sl = position.get('sl_price', 0)
@@ -221,19 +225,40 @@ def _infer_exit_reason(filled_price: float, position: Dict) -> str:
     if direction == 'SHORT' and sl and filled_price > sl:
         return 'EMERGENCY_SL'
 
-    # v1.55.0: Near-SL classification — if price is between entry and SL,
-    # and closer to SL than to entry (within SL-side 40% of range), classify as SL.
+    # v1.55.1: CASCADE_SL detection — if position was cascade-tightened and
+    # exit is in the loss direction, classify as CASCADE_SL immediately.
+    # Also check against prior SL levels stored during cascade tightening.
+    if position.get('cascade_tightened'):
+        if direction == 'LONG' and entry > 0 and filled_price < entry:
+            # Check against prior SL levels (cascade may have moved SL multiple times)
+            prior_sls = position.get('cascade_prior_sls') or []
+            for prior_sl in prior_sls:
+                if prior_sl > 0 and abs(filled_price - prior_sl) / prior_sl < PRICE_TOLERANCE_PCT:
+                    return 'CASCADE_SL'
+            # General loss-side exit on cascade-tightened position
+            if sl and sl < filled_price < entry:
+                return 'CASCADE_SL'
+        if direction == 'SHORT' and entry > 0 and filled_price > entry:
+            prior_sls = position.get('cascade_prior_sls') or []
+            for prior_sl in prior_sls:
+                if prior_sl > 0 and abs(filled_price - prior_sl) / prior_sl < PRICE_TOLERANCE_PCT:
+                    return 'CASCADE_SL'
+            if sl and entry < filled_price < sl:
+                return 'CASCADE_SL'
+
+    # v1.55.1: Near-SL classification — if price is between entry and SL,
+    # and closer to SL than to entry (within SL-side 60% of range), classify as SL.
     # This captures slippage-affected SL fills and cascade-tightened SL hits.
     if entry > 0 and sl > 0:
         sl_to_entry = abs(entry - sl)
         if sl_to_entry > 0:
             if direction == 'LONG' and sl < filled_price < entry:
                 sl_proximity = abs(filled_price - sl) / sl_to_entry
-                if sl_proximity < 0.4:  # within 40% of SL→entry range from SL
+                if sl_proximity < 0.6:  # within 60% of SL→entry range from SL
                     return 'SL'
             if direction == 'SHORT' and entry < filled_price < sl:
                 sl_proximity = abs(filled_price - sl) / sl_to_entry
-                if sl_proximity < 0.4:
+                if sl_proximity < 0.6:
                     return 'SL'
 
     # Cascade SL inference: price between entry and SL (loss direction) but not
@@ -245,17 +270,17 @@ def _infer_exit_reason(filled_price: float, position: Dict) -> str:
         if direction == 'SHORT' and entry < filled_price < sl:
             return 'CASCADE_SL'
 
-    # v1.55.0: Near-TP classification — profitable exit near TP
+    # v1.55.1: Near-TP classification — profitable exit near TP
     if entry > 0 and tp > 0:
         tp_to_entry = abs(tp - entry)
         if tp_to_entry > 0:
             if direction == 'LONG' and filled_price > entry:
                 tp_proximity = abs(filled_price - tp) / tp_to_entry
-                if tp_proximity < 0.3:  # within 30% of entry→TP range from TP
+                if tp_proximity < 0.5:  # within 50% of entry→TP range from TP
                     return 'TP'
             if direction == 'SHORT' and filled_price < entry:
                 tp_proximity = abs(filled_price - tp) / tp_to_entry
-                if tp_proximity < 0.3:
+                if tp_proximity < 0.5:
                     return 'TP'
 
     return 'MARKET'
@@ -568,6 +593,13 @@ def _cascade_tighten_sls(
             f"  CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "
             f"(dist {old_dist:.1f} → {new_dist:.1f})"
         )
+
+        # v1.55.1: Track cascade tightening for exit classification
+        pos['cascade_tightened'] = True
+        prior_sls = pos.get('cascade_prior_sls') or []
+        prior_sls.append(old_sl)
+        pos['cascade_prior_sls'] = prior_sls
+
         success = update_single_sl(exchange, pos, config, new_sl)
         if not success:
             pos['sl_price'] = old_sl
@@ -580,7 +612,13 @@ def _cascade_tighten_sls(
 
 
 def _infer_exit_from_price(exit_price: float, position: Dict) -> str:
-    """Infer exit reason from current price vs TP/SL levels."""
+    """Infer exit reason from current price vs TP/SL levels.
+
+    v1.55.1: Widened thresholds to match _infer_exit_reason().
+    - Near-SL zone: 40% → 60%
+    - Near-TP zone: 30% → 50%
+    - CASCADE_SL: also detects via cascade_tightened flag
+    """
     tp = position.get('tp_price', 0)
     sl = position.get('sl_price', 0)
     entry = position.get('entry_price', 0)
@@ -597,32 +635,49 @@ def _infer_exit_from_price(exit_price: float, position: Dict) -> str:
         elif sl > 0 and exit_price >= sl * SL_LOWER_MULT:
             return 'SL'
 
-    # v1.55.0: Near-SL classification (within 40% of SL-to-entry distance)
+    # v1.55.1: CASCADE_SL detection via flag
+    if position.get('cascade_tightened'):
+        if direction == 'LONG' and entry > 0 and exit_price < entry:
+            prior_sls = position.get('cascade_prior_sls') or []
+            for prior_sl in prior_sls:
+                if prior_sl > 0 and abs(exit_price - prior_sl) / prior_sl < PRICE_TOLERANCE_PCT:
+                    return 'CASCADE_SL'
+            if sl and sl < exit_price < entry:
+                return 'CASCADE_SL'
+        if direction == 'SHORT' and entry > 0 and exit_price > entry:
+            prior_sls = position.get('cascade_prior_sls') or []
+            for prior_sl in prior_sls:
+                if prior_sl > 0 and abs(exit_price - prior_sl) / prior_sl < PRICE_TOLERANCE_PCT:
+                    return 'CASCADE_SL'
+            if sl and entry < exit_price < sl:
+                return 'CASCADE_SL'
+
+    # v1.55.1: Near-SL classification (within 60% of SL-to-entry distance)
     if entry > 0 and sl > 0:
         sl_to_entry = abs(entry - sl)
         if sl_to_entry > 0:
             if direction == 'LONG' and sl < exit_price < entry:
                 sl_proximity = abs(exit_price - sl) / sl_to_entry
-                if sl_proximity < 0.4:
+                if sl_proximity < 0.6:
                     return 'SL'
                 return 'CASCADE_SL'
             if direction == 'SHORT' and entry < exit_price < sl:
                 sl_proximity = abs(exit_price - sl) / sl_to_entry
-                if sl_proximity < 0.4:
+                if sl_proximity < 0.6:
                     return 'SL'
                 return 'CASCADE_SL'
 
-    # v1.55.0: Near-TP classification (within 30% of TP-to-entry distance)
+    # v1.55.1: Near-TP classification (within 50% of TP-to-entry distance)
     if entry > 0 and tp > 0:
         tp_to_entry = abs(tp - entry)
         if tp_to_entry > 0:
             if direction == 'LONG' and exit_price > entry:
                 tp_proximity = abs(exit_price - tp) / tp_to_entry
-                if tp_proximity < 0.3:
+                if tp_proximity < 0.5:
                     return 'TP'
             if direction == 'SHORT' and exit_price < entry:
                 tp_proximity = abs(exit_price - tp) / tp_to_entry
-                if tp_proximity < 0.3:
+                if tp_proximity < 0.5:
                     return 'TP'
 
     return 'UNKNOWN'

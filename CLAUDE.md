@@ -125,7 +125,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 
 ### v1.53.0 검증 요약
 
-- **IS (1-pos)**: WR 95.4%, PnL +1,420%, MDD 27.0% | **N-pos IS (Cascade ON)**: 1162 trades, WR 71.3%, PnL +236.4%, MDD 1.37%, PnL/MDD 172.4x
+- **IS (1-pos)**: WR 95.4%, PnL +1,420%, MDD 27.0% | **N-pos IS (Cascade ON)**: 1162 trades, WR 71.3%, PnL +236.4%, MDD 4.87%(MTM), PnL/MDD 48.3x
 - **131패턴 (59L+72S)**: TP 0.85-2.80%, SL 1.44-5.95%, Edge 18.0-31.8pp, Trades/pat 25-266
 - 개별 패턴 상세: `results/dynamic_patterns.json` 참조
 
@@ -315,7 +315,7 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
 | **v1.55.0** | 03-08 | **Live 안정성 3종 개선** ← 현재. (1) N/A 패턴 방지: crash recovery 시 trade_history에서 pattern 복원 (2) Exit 분류 강화: near-SL 40%/near-TP 30% proximity 분류 (3) Mass closure guard: 3+ 동시 청산 시 API 재확인 |
-| v1.54.0 | 03-07 | Scanner Cascade SL 구현 + EXIT 분류 개선. N-pos IS: WR 71.3%, PnL +236.4%, MDD 1.37%, PnL/MDD 172.4x. WF 3/3 PASS (OOS +128.9%). CASCADE_SL exit reason 추가 |
+| v1.54.0 | 03-07 | Scanner Cascade SL 구현 + EXIT 분류 개선. N-pos IS: WR 71.3%, PnL +236.4%, MDD 4.87%(MTM), PnL/MDD 48.3x. WF 3/3 PASS (OOS +128.9%). CASCADE_SL exit reason 추가 |
 | v1.53.0 | 03-05 | Data 303d + Rescan 131pat (59L+72S). WF 3/3 PASS (OOS +110.6%, aligned). N-pos IS: WR 86.6%, PnL +220.8%, MDD 2.01% |
 | (연구) | 03-05 | 5개 파라미터 Sweep **ALL KEEP baseline** — 최적화 공간 소진 |
 | (연구) | 03-04 | Entry Optimization **ROLLBACK** — WF 94% PASS rate (비판별), 95% Cascade 의존 |

@@ -807,6 +807,7 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
     trades = []
     equity = 100.0
     peak_equity = 100.0
+    max_dd_mtm = 0.0          # mark-to-market MDD (unrealized included)
 
     max_corr_loss = 0.0
     max_sim_positions = 0
@@ -977,6 +978,35 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
         if len(positions) > max_sim_positions:
             max_sim_positions = len(positions)
 
+        # Mark-to-market MDD: realized equity + unrealized PnL of open positions
+        if positions and bar < n_bars:
+            mtm_equity = equity
+            for pos in positions:
+                eb = pos['entry_bar']
+                if eb >= n_bars or bar < eb:
+                    continue
+                entry_price = opens[eb]
+                if entry_price <= 0:
+                    continue
+                if pos['direction'] == 'LONG':
+                    unr = (closes[bar] / entry_price - 1) * 100 * LEVERAGE
+                else:
+                    unr = (1 - closes[bar] / entry_price) * 100 * LEVERAGE
+                sm = pos.get('size_mult', 1.0)
+                mtm_equity += unr * (size_pct / 100) * sm
+            if mtm_equity > peak_equity:
+                peak_equity = mtm_equity
+            dd = (peak_equity - mtm_equity) / peak_equity * 100 if peak_equity > 0 else 0
+            if dd > max_dd_mtm:
+                max_dd_mtm = dd
+        elif not positions:
+            # No open positions: equity IS mark-to-market
+            if equity > peak_equity:
+                peak_equity = equity
+            dd = (peak_equity - equity) / peak_equity * 100 if peak_equity > 0 else 0
+            if dd > max_dd_mtm:
+                max_dd_mtm = dd
+
     # Force-close remaining
     for pos in positions:
         entry_bar = pos['entry_bar']
@@ -1005,6 +1035,7 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
         'max_sim_positions': max_sim_positions,
         'corr_events': len(corr_events),
         'blocked': total_blocked,
+        'mdd_mtm': round(max_dd_mtm, 2),
     }
     return trades, stats
 
@@ -1019,7 +1050,7 @@ def calc_stats_compound(trades):
                 'pnl_mdd': 0.0, 'pnl_per_trade': 0.0}
 
     wins = [t for t in trades if t['pnl_slot'] > 0]
-    sorted_trades = sorted(trades, key=lambda x: x['entry_bar'])
+    sorted_trades = sorted(trades, key=lambda x: x['exit_bar'])
 
     equity = 100.0
     peak = equity
@@ -1434,6 +1465,8 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
             oos_stats = calc_stats_compound(oos_trades_npos)
             oos_stats['blocked'] = oos_npos_stats.get('blocked', {})
             oos_stats['max_corr_loss'] = oos_npos_stats.get('max_corr_loss', 0)
+            # Use mark-to-market MDD from portfolio_npos (includes unrealized)
+            oos_mdd_mtm = oos_npos_stats.get('mdd_mtm', oos_stats['mdd'])
 
             fold_result = {
                 'fold': fold + 1,
@@ -1444,8 +1477,8 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
                 'oos_trades': oos_stats['trades'],
                 'oos_wr': oos_stats['wr'],
                 'oos_pnl': oos_stats['pnl'],
-                'oos_mdd': oos_stats['mdd'],
-                'oos_pnl_mdd': oos_stats.get('pnl_mdd', 0),
+                'oos_mdd': oos_mdd_mtm,
+                'oos_pnl_mdd': round(oos_stats['pnl'] / oos_mdd_mtm, 2) if oos_mdd_mtm > 0 else 0,
                 'oos_positive': oos_stats['pnl'] > 0,
                 'oos_blocked': oos_stats.get('blocked', {}),
                 'oos_max_corr_loss': oos_stats.get('max_corr_loss', 0),
@@ -2709,6 +2742,12 @@ def main():
             )
             npos_is_stats = calc_stats_compound(is_trades)
             npos_is_stats.update(is_raw_stats)
+            # Replace realized MDD with mark-to-market MDD
+            if 'mdd_mtm' in npos_is_stats:
+                npos_is_stats['mdd'] = npos_is_stats['mdd_mtm']
+                pnl_val = npos_is_stats['pnl']
+                mdd_val = npos_is_stats['mdd']
+                npos_is_stats['pnl_mdd'] = round(pnl_val / mdd_val, 2) if mdd_val > 0 else 0
             logger.info(f"N-pos IS: {npos_is_stats['trades']} trades, "
                          f"WR {npos_is_stats['wr']}%, PnL {npos_is_stats['pnl']}%, "
                          f"MDD {npos_is_stats['mdd']}%, "

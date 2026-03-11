@@ -1,11 +1,11 @@
 {
   "phase1_reality_gap": {
     "backtest": {
-      "trades": 355,
-      "wr": 70.42,
-      "avg_win": 2.787,
-      "avg_loss": 5.114,
-      "pnl": 159.8
+      "trades": 425,
+      "wr": 69.41,
+      "avg_win": 2.811,
+      "avg_loss": 5.489,
+      "pnl": 115.7
     },
     "live": {
       "trades": 31,
@@ -14,19 +14,19 @@
       "avg_loss": 5.69,
       "pnl": 22.02
     },
-    "gap_wr_pp": 2.68,
-    "binom_p": 0.437784,
+    "gap_wr_pp": 1.67,
+    "binom_p": 0.487038,
     "live_wr_ci_95": [
       50.1,
       81.4
     ],
     "n_trades_for_statistical_power": 1539,
-    "months_needed": 39
+    "months_needed": 33
   },
   "phase2_break_even_margin": {
     "break_even_wr": 64.78,
     "live_margin_pp": 2.96,
-    "bt_margin_pp": 5.65,
+    "bt_margin_pp": 4.63,
     "scenarios": [
       {
         "wr": 45,
@@ -59,14 +59,14 @@
         "pnl_100": 25.7
       },
       {
+        "wr": 69.4,
+        "pnl_per_trade": 0.4061,
+        "pnl_100": 40.6
+      },
+      {
         "wr": 70,
         "pnl_per_trade": 0.4588,
         "pnl_100": 45.9
-      },
-      {
-        "wr": 70.4,
-        "pnl_per_trade": 0.4939,
-        "pnl_100": 49.4
       },
       {
         "wr": 75,
@@ -189,8 +189,8 @@
     "actual_edge_per_trade": 0.7103,
     "break_even_wr": 64.78,
     "margin_pp": 2.96,
-    "degradation_factor": 0.9619,
-    "bt_trades_per_month": 39.0,
+    "degradation_factor": 0.9759,
+    "bt_trades_per_month": 47.0,
     "decay_scenarios": {
       "0pp": {
         "decay_pp_per_month": 0,
@@ -222,30 +222,30 @@
       }
     },
     "n_trades_for_power": 1539,
-    "months_for_power": 39
+    "months_for_power": 33
   },
   "phase6_adversarial": {
     "reversed_directions": {
-      "pnl": -359.8,
-      "wr": 56.1,
-      "direction_edge": 519.6
+      "pnl": -340.8,
+      "wr": 59.4,
+      "direction_edge": 456.5
     },
     "random_directions": {
-      "mean_pnl": -164.3,
-      "std_pnl": 95.9,
+      "mean_pnl": -174.0,
+      "std_pnl": 103.7,
       "p_better_than_original": 0.005,
-      "direction_value": 324.0
+      "direction_value": 289.7
     },
     "time_shuffled": {
       "mean_pnl": 602.0,
       "std_pnl": 13.2,
-      "temporal_order_impact": -442.2
+      "temporal_order_impact": -486.3
     },
     "partial_failure_60pct": {
-      "mean_pnl": 144.3,
-      "std_pnl": 49.9,
+      "mean_pnl": 126.6,
+      "std_pnl": 50.2,
       "prob_loss": 0.0
     }
   },
-  "timestamp": "2026-02-21T14:33:02.250840"
+  "timestamp": "2026-03-04T21:29:52.245847"
 }

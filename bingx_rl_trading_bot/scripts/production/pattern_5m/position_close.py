@@ -146,6 +146,31 @@ def record_closed_position(
             return
         position = next(iter(positions.values()))
 
+    # v1.55.2: Duplicate trade guard — skip if identical trade was already recorded
+    # Prevents mass closure loop from recording same position multiple times
+    if metrics and hasattr(metrics, 'trade_history') and metrics.trade_history:
+        recent = metrics.trade_history[-10:]  # check last 10 entries
+        for prev in recent:
+            if (abs(prev.get('entry_price', 0) - position.get('entry_price', -1)) < 0.5
+                    and abs(prev.get('exit_price', 0) - exit_price) < 0.5
+                    and prev.get('direction') == position.get('direction')):
+                logger.info(
+                    f"⏭️ Duplicate trade guard: {position['direction']} "
+                    f"entry=${position['entry_price']:.1f} exit=${exit_price:.1f} "
+                    f"already recorded — skipping"
+                )
+                # Still remove the slot from state but don't record duplicate trade
+                slot_id = position.get('slot_id')
+                positions_dict = state.get('positions') or {}
+                if slot_id and slot_id in positions_dict:
+                    del positions_dict[slot_id]
+                state['has_position'] = len(positions_dict) > 0
+                if not positions_dict:
+                    state['active_direction'] = None
+                save_state(state, is_trade_close=True)
+                cache.invalidate_all()
+                return
+
     if exchange:
         cancel_remaining_orders(exchange, state, config, position=position)
 
@@ -165,8 +190,13 @@ def record_closed_position(
             leverage=slot_leverage,
         )
 
-    # Extract pattern name from reason
-    pattern_name = extract_pattern_name(position.get('reason', '')) or 'N/A'
+    # Extract pattern name: slot field > reason regex > fallback 'N/A'
+    # v1.55.2: Prefer direct pattern_name field (set during entry/recovery)
+    pattern_name = (
+        position.get('pattern_name')
+        or extract_pattern_name(position.get('reason', ''))
+        or 'N/A'
+    )
 
     # Calculate hold time
     entry_time_str = position.get('entry_time', '')

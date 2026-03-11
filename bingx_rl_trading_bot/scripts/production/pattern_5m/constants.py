@@ -26,7 +26,7 @@ _TF_MIN = _TF_MINUTES_MAP.get(_BOT_TF, 5)
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = f"pattern_{_BOT_TF}_bot"
-BOT_VERSION = "1.53.0"  # v1.53.0: 131pat (59L+72S), ATR scanner v2.4, N-pos default
+BOT_VERSION = "1.56.2"  # v1.56.2: Code audit fixes — Cascade SL place-first, state persistence, hardcoded cleanup
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)

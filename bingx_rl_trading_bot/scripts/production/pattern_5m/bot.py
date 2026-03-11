@@ -231,7 +231,11 @@ def _check_scan_staleness(config: Dict[str, Any]) -> None:
     try:
         with open(DYNAMIC_PATTERNS_FILE, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        generated_at = datetime.fromisoformat(data.get('generated_at', ''))
+        generated_at_str = data.get('generated_at', '')
+        if not generated_at_str:
+            logger.warning("dynamic_patterns.json missing 'generated_at' field")
+            return
+        generated_at = datetime.fromisoformat(generated_at_str)
         age_days = (datetime.now() - generated_at).days
         interval = config.get('strategy', {}).get('rescan_interval_days', 90)
         if age_days > interval:
@@ -288,7 +292,7 @@ def _run_bot_main(
     recover_from_crash(exchange, state, config, cache, circuit_breaker, metrics)
 
     # Check if existing positions' TP/SL match current config
-    if state.get('positions') or {}:
+    if state.get('positions'):
         adjust_tpsl_to_config(exchange, state, config)
 
     # Candle-aligned loop state
@@ -329,7 +333,7 @@ def _run_bot_main(
                         )
 
                 # 1b. Check position timeouts (v1.31.0: close stale positions)
-                if state.get('positions') or {}:
+                if state.get('positions'):
                     _check_position_timeouts(
                         exchange, state, config, cache, circuit_breaker, metrics
                     )
@@ -404,8 +408,8 @@ def _run_bot_main(
                         equity = float(bal.get('USDT', {}).get('total', 0))
                         if equity > 0:
                             update_peak_equity(state, equity)
-                    except Exception:
-                        pass  # non-critical, skip on error
+                    except Exception as e:
+                        logger.debug(f"Peak equity update skipped: {e}")  # non-critical
                     last_metrics_save_time = now
 
             # Smart sleep — refresh in case position changed during this iteration
@@ -605,7 +609,7 @@ def _check_position_timeouts(
 
     closed_any = False
     now = datetime.now()
-    timeout_seconds = timeout_bars * 300  # 5min = 300s per bar
+    timeout_seconds = timeout_bars * CANDLE_DURATION_MS // 1000
 
     for slot_id, pos in list(positions.items()):
         entry_time_str = pos.get('entry_time', '')
@@ -709,14 +713,16 @@ def _check_momentum_guard(
         logger.info(f"⚡ Momentum guard: BTC {pct_change:+.2f}% in {lookback_bars*5}min "
                      f"(>{threshold_pct}%), blocking SHORT entry")
         # Store cooldown expiry in state for future checks
-        state['_momentum_cooldown_short'] = time.time() + cooldown_bars * 300
+        state['_momentum_cooldown_short'] = time.time() + cooldown_bars * CANDLE_DURATION_MS // 1000
+        save_state(state)  # v1.56.2: persist cooldown across crashes
         return True
 
     # Strong downward move → block LONG
     if signal_direction == 'LONG' and pct_change < -threshold_pct:
         logger.info(f"⚡ Momentum guard: BTC {pct_change:+.2f}% in {lookback_bars*5}min "
                      f"(<-{threshold_pct}%), blocking LONG entry")
-        state['_momentum_cooldown_long'] = time.time() + cooldown_bars * 300
+        state['_momentum_cooldown_long'] = time.time() + cooldown_bars * CANDLE_DURATION_MS // 1000
+        save_state(state)  # v1.56.2: persist cooldown across crashes
         return True
 
     # Check if still in cooldown from previous trigger
@@ -839,8 +845,9 @@ def _check_loss_burst_brake(
         return False
 
     threshold = brake_cfg.get('threshold', 2)
-    window_seconds = brake_cfg.get('window_bars', 288) * 300  # bars → seconds
-    block_seconds = brake_cfg.get('block_bars', 144) * 300
+    candle_seconds = CANDLE_DURATION_MS // 1000
+    window_seconds = brake_cfg.get('window_bars', 288) * candle_seconds  # bars → seconds
+    block_seconds = brake_cfg.get('block_bars', 144) * candle_seconds
 
     # Check active block
     blocked_key = f'_loss_burst_blocked_until_{signal_direction.lower()}'

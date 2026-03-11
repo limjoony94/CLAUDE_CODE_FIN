@@ -302,7 +302,13 @@ def open_position(
                     logger.info(f"SL order placed on retry {retry + 1}")
                     break
             if not new_slot.get('sl_order_id'):
-                logger.error(f"CRITICAL: SL order failed for slot {slot_id} — position UNPROTECTED until next verify cycle")
+                logger.error(
+                    f"CRITICAL: SL order failed for slot {slot_id} after 2 retries — "
+                    f"ensuring emergency SL covers position"
+                )
+                # v1.56.2: Force emergency SL immediately — don't leave position unprotected
+                update_emergency_sl(exchange, state, config)
+                return True  # position opened but relying on emergency SL
 
         # v1.29.0: Update emergency SL to cover all active slots
         update_emergency_sl(exchange, state, config)

@@ -14,8 +14,6 @@
     "deny": [],
     "defaultMode": "bypassPermissions"
   },
-  "outputStyle": "default",
-  "prefersReducedMotion": false,
   "hooks": {
     "SessionStart": [
       {
@@ -58,5 +56,7 @@
         ]
       }
     ]
-  }
+  },
+  "outputStyle": "default",
+  "prefersReducedMotion": true
 }

@@ -1,0 +1,242 @@
+{
+  "version": "2.1",
+  "generated_at": "2026-02-27T04:50:01",
+  "data_file": "btc_15m_full.csv",
+  "data_bars": 205344,
+  "selection_criteria": {
+    "discovery_method": "mae_mfe",
+    "edge_threshold_pp": 21.8,
+    "mc_threshold": 0.01,
+    "min_trades": 25,
+    "max_baseline_wr": 70.0,
+    "is_days": 720,
+    "correction_method": "none",
+    "n_tested": 1868,
+    "n_before_correction": 3,
+    "n_after_correction": 3,
+    "tp_percentile_grid": [
+      40,
+      50,
+      60,
+      70,
+      80
+    ],
+    "sl_percentile_grid": [
+      70,
+      75,
+      80,
+      85,
+      90,
+      95
+    ],
+    "holdout_days": 7
+  },
+  "patterns": {
+    "long": [
+      "BD-ST-GS"
+    ],
+    "short": [
+      "MD-H-U",
+      "ST-D-IH"
+    ]
+  },
+  "pattern_count": {
+    "long": 1,
+    "short": 2
+  },
+  "backtest_summary": {
+    "total_trades": 81,
+    "win_rate": 81.5,
+    "pnl_pct": 390.4,
+    "max_drawdown_pct": 20.8,
+    "profit_factor": 4.02,
+    "mc_pvalue": 0.0,
+    "portfolio_mc_pass": true
+  },
+  "pattern_details": {
+    "BD-ST-GS_LONG": {
+      "key": "BD-ST-GS_LONG",
+      "pattern": "BD-ST-GS",
+      "direction": "LONG",
+      "tp": 2.67,
+      "sl": 3.46,
+      "tp_percentile": 40,
+      "sl_percentile": 70,
+      "trades": 32,
+      "wr": 81.2,
+      "edge": 24.8,
+      "mc_p": 0.0006,
+      "baseline_wr": 56.4,
+      "exc_stats": {
+        "n_signals": 37,
+        "mfe_median": 3.833,
+        "mfe_mean": 4.904,
+        "mae_median": 1.98,
+        "mae_mean": 3.212,
+        "mae_p90": 7.045,
+        "bars_to_mfe_median": 152.0,
+        "mfe_mae_ratio": 1.936
+      }
+    },
+    "MD-H-U_SHORT": {
+      "key": "MD-H-U_SHORT",
+      "pattern": "MD-H-U",
+      "direction": "SHORT",
+      "tp": 2.61,
+      "sl": 2.78,
+      "tp_percentile": 40,
+      "sl_percentile": 75,
+      "trades": 27,
+      "wr": 77.8,
+      "edge": 26.2,
+      "mc_p": 0.0024,
+      "baseline_wr": 51.6,
+      "exc_stats": {
+        "n_signals": 35,
+        "mfe_median": 3.496,
+        "mfe_mean": 5.537,
+        "mae_median": 1.534,
+        "mae_mean": 2.387,
+        "mae_p90": 5.251,
+        "bars_to_mfe_median": 168.0,
+        "mfe_mae_ratio": 2.279
+      }
+    },
+    "ST-D-IH_SHORT": {
+      "key": "ST-D-IH_SHORT",
+      "pattern": "ST-D-IH",
+      "direction": "SHORT",
+      "tp": 2.71,
+      "sl": 3.89,
+      "tp_percentile": 40,
+      "sl_percentile": 90,
+      "trades": 25,
+      "wr": 88.0,
+      "edge": 29.1,
+      "mc_p": 0.0004,
+      "baseline_wr": 58.9,
+      "exc_stats": {
+        "n_signals": 34,
+        "mfe_median": 4.507,
+        "mfe_mean": 5.323,
+        "mae_median": 2.279,
+        "mae_mean": 3.134,
+        "mae_p90": 3.895,
+        "bars_to_mfe_median": 132.0,
+        "mfe_mae_ratio": 1.977
+      }
+    }
+  },
+  "tp_sl_mode": "per_pattern",
+  "patterns_tpsl": {
+    "BD-ST-GS": [
+      2.67,
+      3.46
+    ],
+    "MD-H-U": [
+      2.61,
+      2.78
+    ],
+    "ST-D-IH": [
+      2.71,
+      3.89
+    ]
+  },
+  "tp_distribution": {
+    "min": 2.61,
+    "median": 2.7,
+    "mean": 2.7,
+    "max": 2.71
+  },
+  "sl_distribution": {
+    "min": 2.78,
+    "median": 3.5,
+    "mean": 3.4,
+    "max": 3.89
+  },
+  "walk_forward": {
+    "n_folds": 3,
+    "folds": [
+      {
+        "fold": 1,
+        "is_bars": 51336,
+        "oos_bars": 51336,
+        "is_patterns": 6,
+        "is_long": 4,
+        "is_short": 2,
+        "oos_trades": 128,
+        "oos_wr": 55.5,
+        "oos_pnl": -15.7,
+        "oos_mdd": 136.4,
+        "oos_pf": 0.97,
+        "oos_positive": false
+      },
+      {
+        "fold": 2,
+        "is_bars": 102672,
+        "oos_bars": 51336,
+        "is_patterns": 12,
+        "is_long": 9,
+        "is_short": 3,
+        "oos_trades": 99,
+        "oos_wr": 64.6,
+        "oos_pnl": 54.2,
+        "oos_mdd": 66.0,
+        "oos_pf": 1.18,
+        "oos_positive": true
+      },
+      {
+        "fold": 3,
+        "is_bars": 154008,
+        "oos_bars": 51336,
+        "is_patterns": 10,
+        "is_long": 8,
+        "is_short": 2,
+        "oos_trades": 71,
+        "oos_wr": 69.0,
+        "oos_pnl": 72.7,
+        "oos_mdd": 54.7,
+        "oos_pf": 1.35,
+        "oos_positive": true
+      }
+    ],
+    "positive_folds": 2,
+    "total_oos_pnl": 111.2,
+    "total_oos_trades": 298,
+    "stable_pattern_count": 0,
+    "stable_patterns": []
+  },
+  "holdout_validation": {
+    "holdout_days": 7,
+    "results": {
+      "BD-ST-GS_LONG": {
+        "status": "SKIP",
+        "reason": "insufficient_trades",
+        "trades": 0
+      },
+      "MD-H-U_SHORT": {
+        "status": "SKIP",
+        "reason": "no_signals",
+        "trades": 0
+      },
+      "ST-D-IH_SHORT": {
+        "status": "SKIP",
+        "reason": "insufficient_trades",
+        "trades": 0
+      }
+    }
+  },
+  "atr_config": {
+    "enabled": true,
+    "period": 14,
+    "window": 192,
+    "clamp_lo": 0.6,
+    "clamp_hi": 1.7
+  },
+  "timing": {
+    "classify_sec": 9.4,
+    "scan_sec": 16.3,
+    "wf_sec": 89.6,
+    "total_sec": 115.6
+  }
+}

@@ -53,9 +53,6 @@ CURRENT_PAT = os.path.join(RESULTS_DIR, 'dynamic_patterns.json')
 BACKUP_59 = os.path.join(RESULTS_DIR, 'dynamic_patterns_59pat_backup.json')
 
 LEVERAGE = 3
-FEE_PCT = 0.05
-FEE = FEE_PCT * LEVERAGE / 100  # 0.0015
-SLIPPAGE = 0.02 / 100  # 0.0002
 ATR_PERIOD = 14
 ATR_WINDOW = 576
 TIMEOUT_T864 = 864

@@ -55,8 +55,6 @@ BACKUP_59 = os.path.join(RESULTS_DIR, 'dynamic_patterns_59pat_backup.json')
 OUTPUT_FILE = os.path.join(RESULTS_DIR, 'natural_adaptation_study.json')
 
 LEVERAGE = 3
-FEE_PCT = 0.05
-FEE = FEE_PCT * LEVERAGE / 100
 ATR_PERIOD = 14
 ATR_WINDOW = 576
 TIMEOUT_T864 = 864

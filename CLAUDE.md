@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.55.0 | **Bot**: Pattern 5m (131패턴, 59L+72S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery) | **Updated**: 2026-03-08
+> **Version**: v1.56.2 | **Bot**: Pattern 5m (131패턴, 59L+72S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix) | **Updated**: 2026-03-12
 
 ---
 
@@ -15,7 +15,7 @@
 | 상태 | `results/pattern_5m_bot_state.json` |
 | 메트릭 | `results/pattern_5m_metrics.json` |
 | 로그 | `logs/pattern_5m_bot_*.log` |
-| 데이터 | `data/btc_5m_270days_reclassified.csv` (270일, Ground Truth) |
+| 데이터 | `data/btc_5m_270days_reclassified.csv` (303일, Ground Truth, 파일명은 레거시) |
 | Dynamic Patterns | `results/dynamic_patterns.json` (scanner 출력) |
 | Scanner | `scripts/scanner/pattern_scanner.py` (Dynamic WF 패턴 선택 CLI) |
 
@@ -94,14 +94,14 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 ### monitor — 성과 모니터링
 - **메트릭**: `cat results/pattern_5m_metrics.json | jq .`
 - **로그**: `tail -100 logs/pattern_5m_bot_*.log | grep -E "(TRADE|PROFIT|LOSS|ERROR)"`
-- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=65.9 (v1.55.0, post-03-05 clean baseline, 44t)
+- **알림 기준**: 연속손실 ≥3, 일일손실 ≤-13%, MDD ≥25%, WR <50% | EXPECTED_WIN_RATE=67.4 (v1.56.1 clean TP+SL, 129t) / post-fix 83.0% (53t)
 - **Clean baseline**: `results/pattern_5m_baseline_post0305.json` — pre-03-05 오염 데이터 제외한 정확한 기대치
 - **주의**: LONG WR 0% (03-05~08, 15t) — BTC 하락 레짐 편향. 소표본이므로 지속 모니터 필요
 - 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.53.0
+## 📊 현재 전략: Pattern 5m v1.56.1
 
 ### 핵심 파라미터
 
@@ -123,21 +123,24 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **Position Timeout** | **288 bars (24h)** — v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치) |
 | Risk | Daily loss **13%** (v1.28.5), **aggregate risk cap** (counter 8%/with 15%, v1.49.0: 5→8% counter) |
 
-### v1.53.0 검증 요약
+### v1.56.0 검증 요약
 
-- **IS (1-pos)**: WR 95.4%, PnL +1,420%, MDD 27.0% | **N-pos IS (Cascade ON)**: 1162 trades, WR 71.3%, PnL +236.4%, MDD 4.87%(MTM), PnL/MDD 48.3x
+- **N-pos IS (Cascade ON, regime_mult=1.0)**: 1157 trades, WR 72.8%, PnL +357.6%, MDD 4.04%(MTM), PnL/MDD 88.5x
 - **131패턴 (59L+72S)**: TP 0.85-2.80%, SL 1.44-5.95%, Edge 18.0-31.8pp, Trades/pat 25-266
+- **v1.53.0→v1.56.0 개선**: PnL/MDD 48.3x→88.5x (+83%), Regime Sizing 비활성화 정합 (scanner regime_mult 0.3→1.0)
 - 개별 패턴 상세: `results/dynamic_patterns.json` 참조
 
-### WF OOS 검증 (v1.54.0, Cascade SL ON, 3-fold Expanding Window, N-pos)
+### WF OOS 검증 (v1.56.0, Cascade SL ON, regime_mult=1.0, 3-fold Expanding Window, N-pos)
 
-| Fold | IS Bars | OOS Bars | IS Patterns | OOS Trades | OOS WR | OOS PnL |
-|------|---------|----------|-------------|------------|--------|---------|
-| 1 | 18,156 | 18,156 | 40 (35L+5S) | 310 | 61.0% | +32.7% |
-| 2 | 36,312 | 18,156 | 94 (72L+22S) | 381 | 57.7% | +40.4% |
-| 3 | 54,468 | 18,159 | 109 (62L+47S) | 426 | 66.0% | +55.8% |
+| Fold | OOS PnL |
+|------|---------|
+| 1 | +43.0% |
+| 2 | +55.7% |
+| 3 | +107.4% |
 
-**Verdict: 3/3 PASS** | Total OOS PnL: +128.9% (N-pos+Cascade) | Total OOS Trades: 1117 | Avg OOS WR: ~61.6%
+**Verdict: 3/3 PASS** | Total OOS PnL: +206.1% (N-pos+Cascade, regime fixed) | IS PnL/MDD: 88.5x
+
+> 이전 v1.54.0 WF: OOS +128.9% → v1.56.0: +206.1% (+60% 향상, regime_mult 정합 효과)
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -198,6 +201,9 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **N-pos Scanner (v1.38.1 default)** | Scanner에 N=9/compound/dir_cap/agg_risk/momentum 통합. `--no-npos`로 legacy |
 | **Scanner Cascade SL (v1.54.0)** | Scanner N-pos에 Cascade SL 구현. `--no-cascade`로 비활성화. IS WR -15pp, MDD -32%, PnL/MDD +57% |
 | **Cascade SL Tightening (v1.45.0)** | SL 피격 시 동일 방향 SL 거리 ×0.15 (85% 축소). 연쇄 적용 (0.15²=2.25%). config `cascade_sl_tightening` |
+| **Scanner Regime Fix (v1.56.0)** | Scanner DEFAULT_REGIME_MULT 0.3→1.0 — production v1.42.0에서 비활성화한 Regime Sizing을 scanner에서도 정합. IS PnL/MDD +83%, OOS +60% |
+| **Duplicate Trade Guard (v1.56.1)** | `record_closed_position`에 중복 기록 방지 가드 추가 + `pattern_name` 필드 우선 사용. N/A 오염(22건) 정화 완료. TP+SL WR 61.6→67.4%, gap 11.2→5.4pp |
+| **Code Audit Fixes (v1.56.2)** | (1) Cascade SL Place-first/Cancel-after (보호 갭 제거) (2) SL 실패 시 Emergency SL 즉시 호출 (3) Momentum cooldown state 영속화 (4) datetime 파싱 방어 (5) Hardcoded 300s→CANDLE_DURATION_MS (6) Always-truthy 수정. 1061 tests ALL PASSED |
 | **DISABLED (5개)** | Regime Sizing, Adaptive Leverage, Equity Curve, Correlation-Aware, Loss Burst Brake — 각 `enabled: true`로 재활성화 가능. Entry Optimization은 ROLLED BACK (코드 제거) |
 
 ### Dynamic Pattern Selection (v1.27.3)
@@ -220,8 +226,8 @@ python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-thre
 # 주요 옵션: --no-neutral, --no-atr, --neutral-tol 2.0, --atr-clamp-lo 0.5 --atr-clamp-hi 1.5, --n-slots 5 --direction-cap 4
 ```
 
-**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **131패턴 (59L+72S)** (v1.53.0 rescan).
-WF N-pos 3/3 PASS, OOS +110.6% (aligned rescan). Neutral window ±1% 자동 탐색 (259d). ATR config: a14/w576/clamp[0.5,1.5]. Data: 303d. Backup: `results/dynamic_patterns_131pat_v1530_backup.json`
+**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **131패턴 (59L+72S)** (v1.56.0 rescan, regime_mult=1.0).
+WF N-pos 3/3 PASS, OOS +206.1%. IS PnL/MDD 88.5x. Neutral window ±1% 자동 탐색 (259d). ATR config: a14/w576/clamp[0.5,1.5]. Data: 303d. Backup: `results/dynamic_patterns_131pat_v1530_backup.json`
 
 ---
 
@@ -256,7 +262,7 @@ bingx_rl_trading_bot/
 │   ├── monitor/                    # 모니터링 스크립트
 │   ├── tests/                      # 테스트
 │   └── utils/                      # 유틸리티
-├── data/                           # 시장 데이터 CSV (270일 Ground Truth)
+├── data/                           # 시장 데이터 CSV (303일 Ground Truth)
 ├── results/                        # 봇 상태/메트릭 JSON
 ├── logs/                           # pattern_5m 운영 로그
 ├── claudedocs/                     # 활성 연구 리포트 (2026~)
@@ -314,7 +320,11 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.55.0** | 03-08 | **Live 안정성 3종 개선** ← 현재. (1) N/A 패턴 방지: crash recovery 시 trade_history에서 pattern 복원 (2) Exit 분류 강화: near-SL 40%/near-TP 30% proximity 분류 (3) Mass closure guard: 3+ 동시 청산 시 API 재확인 |
+| **v1.56.2** | 03-12 | **Code Audit 전수점검 + 7건 수정** ← 현재. (1) `update_single_sl` Place-first/Cancel-after (Cascade SL 보호 갭 제거) (2) SL 실패 시 Emergency SL 즉시 호출 (3) Momentum cooldown `save_state` 영속화 (4) `datetime.fromisoformat('')` 방어 (5) `except Exception: pass`→로깅 (6) always-truthy `or {}` 수정 (7) Hardcoded 300s→`CANDLE_DURATION_MS//1000`. 교차검증으로 57건 중 4건 FALSE POSITIVE 확인 (C-10,H-9,H-11,L-1일부). 1061 tests ALL PASSED |
+| v1.56.1 | 03-11 | N/A 오염 정화 + Duplicate Guard. (1) trade_history 22건 N/A+dup 제거 (2) `record_closed_position` duplicate guard 추가 (3) `pattern_name` 필드 우선 사용. TP+SL WR 61.6→67.4%, gap 11.2→5.4pp (p=0.10, NOT significant) |
+| v1.56.0 | 03-11 | Scanner regime_mult 정합 + 메커니즘 교차검증. Scanner DEFAULT_REGIME_MULT 0.3→1.0. IS PnL/MDD 48.3→88.5x (+83%). WF OOS +128.9→+206.1% (+60%). 6-mechanism 교차검증: M6 Regime 유해(-121.7%), M5 Timeout 필수(+80.7%), TOP3(Timeout+Cascade+Momentum) 최적 |
+| (연구) | 03-11 | Timeout 교차검증 6-phase: 독립 효과 확인, Cascade 무관 (+193.7%), slot liberation 2124건. Mechanism 교차검증: 15-seed 전부 NON-DISC, AggRisk/DirCap은 IS 감소시키나 live risk guard 역할 |
+| v1.55.0 | 03-08 | Live 안정성 3종 개선. (1) N/A 패턴 방지: crash recovery 시 trade_history에서 pattern 복원 (2) Exit 분류 강화: near-SL 40%/near-TP 30% proximity 분류 (3) Mass closure guard: 3+ 동시 청산 시 API 재확인 |
 | v1.54.0 | 03-07 | Scanner Cascade SL 구현 + EXIT 분류 개선. N-pos IS: WR 71.3%, PnL +236.4%, MDD 4.87%(MTM), PnL/MDD 48.3x. WF 3/3 PASS (OOS +128.9%). CASCADE_SL exit reason 추가 |
 | v1.53.0 | 03-05 | Data 303d + Rescan 131pat (59L+72S). WF 3/3 PASS (OOS +110.6%, aligned). N-pos IS: WR 86.6%, PnL +220.8%, MDD 2.01% |
 | (연구) | 03-05 | 5개 파라미터 Sweep **ALL KEEP baseline** — 최적화 공간 소진 |

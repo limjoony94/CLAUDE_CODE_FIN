@@ -1,6 +1,6 @@
 # Coding Conventions - CLAUDE_CODE_FIN
 
-**Last Updated**: 2026-02-11 | **Bot Version**: v1.27.0
+**Last Updated**: 2026-03-12 | **Bot Version**: v1.56.2
 
 ---
 
@@ -25,7 +25,7 @@ stop_loss_pct = 0.01
 # 상수: UPPER_CASE
 MAX_POSITION_SIZE = 0.95
 DEFAULT_LEVERAGE = 3
-EXPECTED_WIN_RATE = 84.0
+EXPECTED_WIN_RATE = 67.4
 
 # Private 메서드/속성: _prefix
 def _calculate_indicators():

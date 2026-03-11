@@ -1,9 +1,15 @@
 # Version History (Full)
 
 > CLAUDE.md에서는 최근 주요 버전만 표시. 전체 히스토리는 이 파일 참조.
+> **Last Updated**: 2026-03-12 | **Current Version**: v1.56.2
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
+| **v1.56.2** | 03-12 | **Code Audit 전수점검 + 7건 수정**: (1) `update_single_sl` Place-first/Cancel-after (Cascade SL 보호 갭 제거) (2) SL 실패 시 Emergency SL 즉시 호출 (3) Momentum cooldown `save_state` 영속화 (4) `datetime.fromisoformat('')` 방어 (5) `except Exception: pass`→로깅 (6) always-truthy `or {}` 수정 (7) Hardcoded 300s→`CANDLE_DURATION_MS//1000`. 교차검증으로 57건 중 4건 FALSE POSITIVE 확인 (C-10,H-9,H-11,L-1일부). **1061 tests ALL PASSED**. |
+| **v1.56.1** | 03-11 | **N/A 오염 정화 + Duplicate Guard**: (1) trade_history 22건 N/A+dup 제거 (2) `record_closed_position` duplicate guard 추가 (3) `pattern_name` 필드 우선 사용. TP+SL WR 61.6→67.4%, gap 11.2→5.4pp (p=0.10, NOT significant). |
+| **v1.56.0** | 03-11 | **Scanner regime_mult 정합 + 메커니즘 교차검증**: Scanner DEFAULT_REGIME_MULT 0.3→1.0 (production v1.42.0에서 비활성화한 Regime Sizing을 scanner에서도 정합). IS PnL/MDD 48.3→88.5x (+83%). WF OOS +128.9→+206.1% (+60%). 6-mechanism 교차검증: M6 Regime 유해(-121.7%), M5 Timeout 필수(+80.7%), TOP3(Timeout+Cascade+Momentum) 최적. |
+| **v1.55.0** | 03-08 | **Live 안정성 3종 개선**: (1) N/A 패턴 방지: crash recovery 시 trade_history에서 pattern 복원 (2) Exit 분류 강화: near-SL 40%/near-TP 30% proximity 분류 (3) Mass closure guard: 3+ 동시 청산 시 API 재확인. |
+| **v1.54.0** | 03-07 | **Scanner Cascade SL 구현 + EXIT 분류 개선**: N-pos IS: WR 71.3%, PnL +236.4%, MDD 4.87%(MTM), PnL/MDD 48.3x. WF 3/3 PASS (OOS +128.9%). CASCADE_SL exit reason 추가. |
 | **v1.53.0** | 03-05 | **Data Extension 303d + Pattern Rescan (131pat, 59L+72S)**: 데이터 297d→303d (87,315 rows, 2026-03-04까지). BTC +10.3% 상승장 기간 포함으로 SHORT 패턴 선별 개선. **131패턴 (59L+72S)**, v1.52.0(125) 대비 +6S. Neutral 259d (drift -0.72%). IS: WR 95.4%, PnL +1,420%, MDD 27.0%. N-pos IS: 831 trades, WR 73.6%, PnL +120.4%, MDD 5.3%, PnL/MDD 22.7x. Holdout 10 FAIL 제거 (vs 6 previously). WF 3/3 PASS: F1 +19.0%, F2 +12.0%, F3 +30.4% (total +61.4%), 6 stable patterns. TP 0.85-2.8%, SL 1.44-5.95%. |
 | **v1.52.0** | 03-05 | **Pattern Rescan (125pat) — Scanner-Production ATR 정합성 확보**: Scanner 기본값 ATR clamp [0.6,1.7] → [0.5,1.5] (production v1.47.0+v1.50.0 일치). 재스캔 결과: **125패턴 (59L+66S)**, 기존 130 대비 -5. IS: WR 95.1%, PnL +1,419%, MDD 28.3%. N-pos IS: 848 trades, WR 74.9%, PnL +123.8%, MDD 6.42%, PnL/MDD 19.3x. Holdout 6 SHORT 제거. WF N-pos 3/3 PASS: F1 +14.05%(WR 71.9%), F2 +12.39%(WR 68.1%), F3 +37.75%(WR 73.1%). TP 0.85-2.84%, SL 1.44-4.84%. Scanner defaults 업데이트: `DEFAULT_ATR_CLAMP_LO=0.5, DEFAULT_ATR_CLAMP_HI=1.5`. Backup: `dynamic_patterns_130pat_v1420_backup.json`. **1061 tests passed**. |
 | **v1.51.0** | 03-05 | **Momentum Guard threshold 1.0→1.5% + ATR infra KEEP**: `atr_infra_sweep_study.py` 4-Phase (ATR period 7값 + window 8값 + 2D grid 9configs + momentum threshold 6값). **ATR infra**: p14/w576 현행 최적. **Momentum threshold 1.5%**: IS PnL/MDD 1137.7 (현행 1080.5 대비 +5.3%), MDD 2.92% (현행 3.00% -3%), OOS min fold 93.9 (동일), WF 3/3 PASS. config `momentum_guard.threshold_pct: 1.5`. **1061 tests passed**. |
@@ -122,6 +128,9 @@
 
 | 날짜 | 연구 | 결과 |
 |------|------|------|
+| 03-12 | Code Audit 전수점검 (57건 검출, 교차검증) | **7건 실제 수정**, 4건 FALSE POSITIVE, 5건 severity 하향 |
+| 03-11 | Timeout 교차검증 6-phase | 독립 효과 확인, Cascade 무관 (+193.7%), slot liberation 2124건 |
+| 03-11 | Mechanism 교차검증 (15-seed) | 전부 NON-DISC, AggRisk/DirCap은 IS 감소시키나 live risk guard 역할 |
 | 03-05 | 5개 파라미터 Sweep (SL Cooldown, Sizing, ATR clamp resweep, Time-of-day, MDD Sizing) | **ALL KEEP baseline** — 최적화 공간 소진 |
 | 03-04 | Entry Optimization (h7_critical_validation) | **ROLLBACK** — WF 94% PASS rate (비판별), 95% Cascade 의존 |
 | 03-04 | Strategy Foundation Critical Study | WF 100% non-discriminating (30 random all PASS), 패턴 기여 32.6% |

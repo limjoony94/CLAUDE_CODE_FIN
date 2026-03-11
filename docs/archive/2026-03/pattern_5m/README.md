@@ -12,7 +12,7 @@
 
 | Document | Purpose | Version | Date |
 |----------|---------|---------|------|
-| **[pattern_5m.report.md](features/pattern_5m.report.md)** | Complete PDCA Cycle Documentation | v1.55.0 | 2026-03-08 |
+| **[pattern_5m.report.md](pattern_5m.report.md)** | Complete PDCA Cycle Documentation | v1.55.0 | 2026-03-08 |
 | **[v1.55.0-summary.md](v1.55.0-summary.md)** | Executive Summary & Key Insights | v1.55.0 | 2026-03-08 |
 | **[changelog.md](changelog.md)** | Version History & Change Log | v1.55.0 | 2026-03-08 |
 

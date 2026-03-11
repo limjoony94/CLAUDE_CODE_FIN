@@ -1,6 +1,6 @@
 # Git Workflow - CLAUDE_CODE_FIN
 
-**Last Updated**: 2026-02-11 | **Bot Version**: v1.27.0
+**Last Updated**: 2026-03-12 | **Bot Version**: v1.56.2
 
 ---
 
@@ -24,16 +24,16 @@ feature/v1.28.0-xxx # 대규모 변경 시
 
 ```bash
 # 버전 릴리스
-git commit -m "feat(v1.27.0): Uniform TP 70% + risk management — WR 83.7%, MDD 16.2%"
+git commit -m "feat(v1.56.2): Code Audit 7 fixes — Place-first SL, Emergency SL fallback, state persistence"
 
 # TP/SL 최적화
-git commit -m "feat(v1.26.4): full TP/SL optimization — grid search + 5-phase deep validation"
+git commit -m "feat(v1.53.0): Data 303d + Rescan 131pat (59L+72S), WF 3/3 PASS"
 
 # 버그 수정
-git commit -m "fix: fd double-close in state save"
+git commit -m "fix: cascade SL protection gap — Place-first/Cancel-after"
 
 # 문서 업데이트
-git commit -m "docs: update all docs to v1.27.0"
+git commit -m "docs: update all docs to v1.56.2"
 
 # 코드 리뷰
 git commit -m "refactor(v1.25.6): code review — 5 critical bugs fixed"
@@ -55,7 +55,7 @@ MAJOR: 전략 변경 (패턴 세트, TP/SL 방법론)
 MINOR: 세부 조정 (파라미터, 버그 수정)
 ```
 
-현재: **v1.27.0** (Uniform TP 70% + Risk Management)
+현재: **v1.56.2** (131pat, ATR Scanner v2.4, Cascade SL, Code Audit)
 
 ---
 
@@ -64,10 +64,10 @@ MINOR: 세부 조정 (파라미터, 버그 수정)
 ### Review Checklist
 - ✅ **Look-Ahead Bias**: `shift(-1)`, `center=True` 없는지 확인
 - ✅ **MC Validation**: p < 0.01 (sign randomization, 10k sims)
-- ✅ **WF Validation**: ≥ 4/5 profitable folds
-- ✅ **Edge Test**: 랜덤 baseline 대비 유의미한 edge
-- ✅ **Constants Update**: `PATTERN_OPTIMAL_TPSL`, `PATTERN_STATS` 동기화
-- ✅ **CLAUDE.md Update**: 버전 히스토리 추가
+- ✅ **WF Validation**: 3/3 profitable folds (Expanding Window)
+- ✅ **Edge Test**: Edge>=18pp, MC<0.01, min_trades>=25
+- ✅ **Constants Update**: `constants.py` + `dynamic_patterns.json` 동기화
+- ✅ **CLAUDE.md Update**: 버전 히스토리 추가 + `docs/VERSION_HISTORY.md`
 - ✅ **State Compatibility**: 기존 포지션과 호환
 
 ---
@@ -78,6 +78,7 @@ MINOR: 세부 조정 (파라미터, 버그 수정)
 ```yaml
 Core Docs (항상 최신 유지):
   - CLAUDE.md              # 전략/파라미터/버전
+  - docs/VERSION_HISTORY.md # 전체 버전 히스토리
   - docs/agent-guides.md   # 에이전트 가이드
   - docs/INDEX.md          # 문서 목차
 

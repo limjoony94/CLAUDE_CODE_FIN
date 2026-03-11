@@ -112,6 +112,9 @@ def get_position_size(
         ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True,
                                      circuit_breaker=circuit_breaker, metrics=metrics)
         price = ticker['last']
+        if not price or price <= 0:
+            logger.error("Invalid ticker price: %s", price)
+            return None, None, None
 
         effective_leverage = config['leverage']
         quantity = (position_value * effective_leverage) / price

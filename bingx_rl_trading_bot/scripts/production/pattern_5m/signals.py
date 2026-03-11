@@ -592,6 +592,8 @@ def check_early_exit_signal(
 
     direction = position.get('direction', '')
     entry_price = position.get('entry_price', 0)
+    if not entry_price or entry_price <= 0:
+        return False, position.get('reversal_count', 0), None, position.get('last_counted_candle_ts')
     leverage = config.get('leverage', 3)
     reversal_count = position.get('reversal_count', 0)
     last_counted_ts = position.get('last_counted_candle_ts')

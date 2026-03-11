@@ -294,7 +294,7 @@ def compute_ema_slope(closes, period=NPOS_EMA_PERIOD, lookback=NPOS_EMA_LOOKBACK
 
 def bt_signals_atr(signal_bars, direction, tp_pct, sl_pct,
                     opens, highs, lows, n_bars,
-                    atr_ratio, clamp_lo=0.6, clamp_hi=1.7):
+                    atr_ratio, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI):
     """Backtest with ATR-scaled TP/SL per signal.
 
     Same protocol as bt_signals() but applies ATR ratio scaling
@@ -436,7 +436,7 @@ def apply_multiple_testing_correction(selected, n_tested, method='none',
 
 def grid_search_best(signal_bars, direction, opens, highs, lows, n_bars,
                      min_tr=20, max_baseline_wr=MAX_BASELINE_WR,
-                     atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
+                     atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI):
     """Grid search for best TP/SL by PnL/MDD. Skips combos with baseline WR > max_baseline_wr."""
     best = None
     best_score = -9999
@@ -588,7 +588,7 @@ def derive_tp_from_distribution(dist_params, hit_probs):
 def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
                          max_bars=MAX_BARS, min_tr=20,
                          max_baseline_wr=MAX_BASELINE_WR,
-                         atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+                         atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
                          tp_max=None, sl_max=None,
                          tp_method='percentile', dist_hit_probs=None):
     """Grid search over MFE/MAE percentiles (or distribution) to find best TP/SL by PnL/MDD.
@@ -1131,7 +1131,7 @@ _shared_data = {}
 
 
 def _pp_init(opens, highs, lows, n_bars,
-             atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+             atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
              tp_max=None, sl_max=None,
              tp_method='percentile', dist_hit_probs=None):
     """Initialize shared data in worker processes."""
@@ -1161,8 +1161,8 @@ def _pp_worker(args_tuple):
     lows = _shared_data['lows']
     n_bars = _shared_data['n_bars']
     atr_ratio = _shared_data.get('atr_ratio')
-    clamp_lo = _shared_data.get('clamp_lo', 0.6)
-    clamp_hi = _shared_data.get('clamp_hi', 1.7)
+    clamp_lo = _shared_data.get('clamp_lo', DEFAULT_ATR_CLAMP_LO)
+    clamp_hi = _shared_data.get('clamp_hi', DEFAULT_ATR_CLAMP_HI)
 
     if len(sigs_list) < min_trades:
         return None
@@ -1220,8 +1220,8 @@ def _mae_mfe_worker(args_tuple):
     lows = _shared_data['lows']
     n_bars = _shared_data['n_bars']
     atr_ratio = _shared_data.get('atr_ratio')
-    clamp_lo = _shared_data.get('clamp_lo', 0.6)
-    clamp_hi = _shared_data.get('clamp_hi', 1.7)
+    clamp_lo = _shared_data.get('clamp_lo', DEFAULT_ATR_CLAMP_LO)
+    clamp_hi = _shared_data.get('clamp_hi', DEFAULT_ATR_CLAMP_HI)
     tp_max = _shared_data.get('tp_max')
     sl_max = _shared_data.get('sl_max')
     tp_method = _shared_data.get('tp_method', 'percentile')
@@ -1291,7 +1291,7 @@ def scan_universe_range(signal_index, opens, highs, lows, n_bars,
                         edge_threshold=DEFAULT_EDGE_THRESHOLD,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
                         max_baseline_wr=MAX_BASELINE_WR,
-                        atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+                        atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
                         tp_max=None, sl_max=None,
                         tp_method='percentile', dist_hit_probs=None):
     """Scan patterns within [bar_start, bar_end) signal range.
@@ -1385,7 +1385,7 @@ def expanding_window_wf(signal_index, opens, highs, lows, n_bars,
                         mc_threshold=DEFAULT_MC_THRESHOLD,
                         max_baseline_wr=MAX_BASELINE_WR,
                         closes=None, atr_period=14, atr_window=576,
-                        clamp_lo=0.6, clamp_hi=1.7, use_atr=True,
+                        clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI, use_atr=True,
                         tp_max=None, sl_max=None,
                         tp_method='percentile', dist_hit_probs=None,
                         use_npos=False, npos_kwargs=None):
@@ -1689,7 +1689,7 @@ def scan_patterns_pp(
     correction_method: str = 'none',
     fdr_q: float = 0.05,
     require_portfolio_mc: bool = False,
-    atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+    atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
 ) -> dict:
     """Per-Pattern Discovery: grid search optimal TP/SL per pattern.
 
@@ -1876,7 +1876,7 @@ def scan_patterns_mae_mfe(
     correction_method: str = 'none',
     fdr_q: float = 0.05,
     require_portfolio_mc: bool = False,
-    atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7,
+    atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
     tp_max=None, sl_max=None,
     tp_method: str = 'percentile',
     dist_hit_probs: list = None,
@@ -2174,7 +2174,7 @@ def build_output_json(
 
 
 def holdout_validate(df_holdout, scan_result, signal_index_holdout, n_holdout,
-                     atr_ratio=None, clamp_lo=0.6, clamp_hi=1.7):
+                     atr_ratio=None, clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI):
     """Validate selected patterns on holdout data (v1.34.0).
 
     For each selected pattern, backtest on holdout period and check

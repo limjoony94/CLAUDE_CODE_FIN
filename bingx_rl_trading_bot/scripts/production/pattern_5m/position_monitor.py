@@ -99,7 +99,8 @@ def sync_position_with_exchange(
                         try:
                             ticker = fetch_ticker_cached(exchange, config['symbol'], cache, force_refresh=True)
                             fallback_price = ticker['last']
-                        except Exception:
+                        except Exception as e:
+                            logger.warning("Ticker fetch failed for closed position, using entry_price: %s", e)
                             fallback_price = slot['entry_price']
                         record_closed_position(exchange, state, config, fallback_price,
                                               'EXTERNAL', cache, metrics, position=slot)

@@ -4,6 +4,7 @@ Place and manage TP/SL orders.
 """
 
 import logging
+import time
 from typing import Dict, Any, List, Optional
 
 import ccxt
@@ -784,28 +785,41 @@ def cancel_remaining_orders(
     if not orders_to_cancel:
         return
 
-    try:
-        open_orders = exchange.fetch_open_orders(symbol)
-        open_order_ids = {o.get('id') for o in open_orders}
+    # Retry up to 3 times on transient failures (v1.59.4)
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            open_orders = exchange.fetch_open_orders(symbol)
+            open_order_ids = {o.get('id') for o in open_orders}
 
-        for order_type, order_id in orders_to_cancel:
-            if order_id in open_order_ids:
-                try:
-                    exchange.cancel_order(order_id, symbol)
-                    logger.info(f"🗑️ Cancelled {order_type} order: {order_id}")
-                except ccxt.OrderNotFound:
-                    logger.debug(f"{order_type} order already filled/cancelled: {order_id}")
-                except ccxt.ExchangeError as e:
-                    logger.warning(f"⚠️ Failed to cancel {order_type} order {order_id}: {e}")
-                except Exception as e:
-                    logger.warning(f"⚠️ Failed to cancel {order_type} order {order_id}: {e}")
+            for order_type, order_id in orders_to_cancel:
+                if order_id in open_order_ids:
+                    try:
+                        exchange.cancel_order(order_id, symbol)
+                        logger.info(f"🗑️ Cancelled {order_type} order: {order_id}")
+                    except ccxt.OrderNotFound:
+                        logger.debug(f"{order_type} order already filled/cancelled: {order_id}")
+                    except ccxt.ExchangeError as e:
+                        logger.warning(f"⚠️ Failed to cancel {order_type} order {order_id}: {e}")
+                    except Exception as e:
+                        logger.warning(f"⚠️ Failed to cancel {order_type} order {order_id}: {e}")
+            return  # success — exit retry loop
 
-    except ccxt.NetworkError as e:
-        logger.error(f"Failed to cancel remaining orders (network): {e}")
-    except ccxt.ExchangeError as e:
-        logger.error(f"Failed to cancel remaining orders (exchange): {e}")
-    except Exception as e:
-        logger.exception(f"Failed to cancel remaining orders: {e}")
+        except (ccxt.NetworkError, ccxt.ExchangeError) as e:
+            if attempt < max_retries - 1:
+                wait = 1.0 * (attempt + 1)
+                logger.warning(
+                    f"⚠️ cancel_remaining_orders attempt {attempt + 1}/{max_retries} "
+                    f"failed: {e} — retrying in {wait}s"
+                )
+                time.sleep(wait)
+            else:
+                logger.error(
+                    f"Failed to cancel remaining orders after {max_retries} attempts: {e}"
+                )
+        except Exception as e:
+            logger.exception(f"Failed to cancel remaining orders: {e}")
+            return  # non-transient error — don't retry
 
 
 def _verify_emergency_sl_for_direction(

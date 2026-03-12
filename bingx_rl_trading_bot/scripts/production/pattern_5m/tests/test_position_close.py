@@ -14,6 +14,9 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.position_close import (
     recover_from_crash,
     _read_tpsl_from_exchange_orders,
     _snapshot_all_tpsl,
+    _recover_patterns_from_state_backups,
+    _recover_patterns_from_logs,
+    _restore_none_pattern_slots,
     detect_ghost_positions,
     recalculate_position_orders,
 )
@@ -414,11 +417,13 @@ class TestClosePositionMarket:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs',
+       return_value=[])
 class TestRecoverPositionToState:
     """Test recover_position_to_state() exchange -> state recovery."""
 
     def test_basic_recovery_with_exchange_tpsl(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """Exchange has TP/SL -> uses them directly."""
         mock_read.return_value = (51000.0, 49000.0)
@@ -442,7 +447,7 @@ class TestRecoverPositionToState:
         mock_save.assert_called()
 
     def test_fallback_to_config_when_no_exchange_tpsl(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """No TP/SL on exchange -> calculate from config."""
         mock_read.return_value = (None, None)
@@ -463,7 +468,7 @@ class TestRecoverPositionToState:
         mock_place.assert_not_called()  # No exchange provided
 
     def test_places_orders_when_exchange_provided(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """exchange provided -> place_tp_sl_orders called."""
         mock_read.return_value = (51000.0, 49000.0)
@@ -478,7 +483,7 @@ class TestRecoverPositionToState:
         mock_place.assert_called_once()
 
     def test_preserves_pattern_from_old_state(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """Old position has pattern -> preserved in reason."""
         mock_read.return_value = (51000.0, 49000.0)
@@ -1252,7 +1257,9 @@ class TestRecoverPositionNeedsTpsl:
            return_value=(None, None))
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl',
            return_value=(51000.0, 49000.0, 2.0, 2.0))
-    def test_tp_order_placed_clears_needs_tpsl(self, mock_calc, mock_read, mock_setup,
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs',
+           return_value=[])
+    def test_tp_order_placed_clears_needs_tpsl(self, mock_logs, mock_calc, mock_read, mock_setup,
                                                 mock_place, mock_save):
         """After successful TP/SL placement -> needs_tpsl=False (lines 293-294)."""
         exchange = MagicMock()
@@ -1375,11 +1382,13 @@ class TestSnapshotAllTpsl:
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl')
 @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs',
+       return_value=[])
 class TestRecoverWithSavedTpsl:
     """Test recover_position_to_state() with pre-saved TP/SL pairs."""
 
     def test_saved_pairs_distributed_to_slots(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """saved_tpsl_pairs -> each slot gets individual TP/SL."""
         mock_scale.return_value = []
@@ -1410,7 +1419,7 @@ class TestRecoverWithSavedTpsl:
         mock_calc.assert_not_called()
 
     def test_saved_pairs_skips_exchange_read(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """When saved_tpsl_pairs provided, _read_tpsl_from_exchange_orders not called."""
         mock_scale.return_value = []
@@ -1429,7 +1438,7 @@ class TestRecoverWithSavedTpsl:
         assert pos['sl_price'] == 49000.0
 
     def test_no_saved_pairs_falls_through(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """No saved_tpsl_pairs -> reads from exchange (existing behavior)."""
         mock_read.return_value = (51000.0, 49000.0)
@@ -1443,7 +1452,7 @@ class TestRecoverWithSavedTpsl:
         mock_read.assert_called_once()
 
     def test_saved_pair_with_none_sl_uses_calculated(
-        self, mock_scale, mock_calc, mock_read, mock_save, mock_place
+        self, mock_logs, mock_scale, mock_calc, mock_read, mock_save, mock_place
     ):
         """Saved pair with None SL -> fallback to calculated SL."""
         mock_calc.return_value = (51000.0, 48000.0, 2.0, 2.0)
@@ -1460,3 +1469,567 @@ class TestRecoverWithSavedTpsl:
         pos = next(iter(state['positions'].values()))
         assert pos['tp_price'] == 52000.0
         assert pos['sl_price'] == 48000.0  # from calculate_tp_sl fallback
+
+
+# -- _recover_patterns_from_state_backups -----------------------------------
+
+
+class TestRecoverPatternsFromStateBackups:
+    """Test _recover_patterns_from_state_backups() backup file search."""
+
+    def _make_state_json(self, positions):
+        """Build a minimal state dict with given positions and serialize to JSON."""
+        import json
+        return json.dumps({'positions': positions, 'total_trades': 1})
+
+    def test_bak_file_recovers_patterns(self, tmp_path):
+        """.bak file with LONG positions -> patterns recovered."""
+        import json
+        state_file = str(tmp_path / 'state.json')
+        bak_file = state_file + '.bak'
+
+        positions = {
+            's1': {
+                'direction': 'LONG', 'pattern_name': 'BU-BU-DN',
+                'vol_mult': 1.2, 'entry_price': 50000.0,
+            },
+            's2': {
+                'direction': 'LONG', 'pattern_name': 'H-U-BD',
+                'vol_mult': 0.9, 'entry_price': 50000.0,
+            },
+            's3': {
+                'direction': 'SHORT', 'pattern_name': 'DN-DN-U',
+                'vol_mult': 1.0, 'entry_price': 50000.0,
+            },
+        }
+        with open(bak_file, 'w') as f:
+            json.dump({'positions': positions, 'total_trades': 1}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert len(result) == 2
+        patterns = [r[0] for r in result]
+        assert 'BU-BU-DN' in patterns
+        assert 'H-U-BD' in patterns
+        # SHORT pattern excluded
+        assert 'DN-DN-U' not in patterns
+
+    def test_direction_filtering(self, tmp_path):
+        """Only positions matching requested direction are returned."""
+        import json
+        state_file = str(tmp_path / 'state.json')
+        bak_file = state_file + '.bak'
+
+        positions = {
+            's1': {'direction': 'LONG', 'pattern_name': 'BU-BU-DN', 'vol_mult': 1.0},
+            's2': {'direction': 'SHORT', 'pattern_name': 'DN-DN-U', 'vol_mult': 1.0},
+        }
+        with open(bak_file, 'w') as f:
+            json.dump({'positions': positions}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('SHORT')
+
+        assert len(result) == 1
+        assert result[0][0] == 'DN-DN-U'
+
+    def test_na_patterns_filtered(self, tmp_path):
+        """N/A and None pattern_name slots are excluded."""
+        import json
+        state_file = str(tmp_path / 'state.json')
+        bak_file = state_file + '.bak'
+
+        positions = {
+            's1': {'direction': 'LONG', 'pattern_name': None, 'vol_mult': 1.0},
+            's2': {'direction': 'LONG', 'pattern_name': 'N/A', 'vol_mult': 1.0},
+            's3': {'direction': 'LONG', 'pattern_name': 'BU-BU-DN', 'vol_mult': 1.0},
+        }
+        with open(bak_file, 'w') as f:
+            json.dump({'positions': positions}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert len(result) == 1
+        assert result[0][0] == 'BU-BU-DN'
+
+    def test_new_file_fallback(self, tmp_path):
+        """No .bak -> falls through to .new file."""
+        import json
+        state_file = str(tmp_path / 'state.json')
+        new_file = state_file + '.new'
+
+        positions = {
+            's1': {'direction': 'LONG', 'pattern_name': 'H-U-BD', 'vol_mult': 0.8},
+        }
+        with open(new_file, 'w') as f:
+            json.dump({'positions': positions}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert len(result) == 1
+        assert result[0] == ('H-U-BD', 0.8)
+
+    def test_timestamped_backup_fallback(self, tmp_path):
+        """No .bak or .new -> tries timestamped backups (newest first)."""
+        import json
+        state_file = str(tmp_path / 'state.json')
+
+        # Create two timestamped backups
+        old_backup = str(tmp_path / 'state.json.backup_20260310_100000')
+        new_backup = str(tmp_path / 'state.json.backup_20260311_100000')
+
+        with open(old_backup, 'w') as f:
+            json.dump({'positions': {
+                's1': {'direction': 'LONG', 'pattern_name': 'OLD-PAT', 'vol_mult': 1.0},
+            }, 'total_trades': 1}, f)
+
+        with open(new_backup, 'w') as f:
+            json.dump({'positions': {
+                's1': {'direction': 'LONG', 'pattern_name': 'NEW-PAT', 'vol_mult': 1.0},
+            }, 'total_trades': 1}, f)
+
+        # Make "new" backup actually newer by modifying mtime
+        import os
+        os.utime(new_backup, (9999999999, 9999999999))
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert len(result) == 1
+        assert result[0][0] == 'NEW-PAT'  # newest backup used
+
+    def test_corrupted_backup_graceful(self, tmp_path):
+        """Corrupted .bak -> returns empty list."""
+        state_file = str(tmp_path / 'state.json')
+        bak_file = state_file + '.bak'
+
+        with open(bak_file, 'w') as f:
+            f.write('{invalid json')
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert result == []
+
+    def test_no_backups_returns_empty(self, tmp_path):
+        """No backup files at all -> empty list."""
+        state_file = str(tmp_path / 'state.json')
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert result == []
+
+    def test_reason_field_fallback(self, tmp_path):
+        """pattern_name missing but reason has pattern -> extracted from reason."""
+        import json
+        state_file = str(tmp_path / 'state.json')
+        bak_file = state_file + '.bak'
+
+        positions = {
+            's1': {
+                'direction': 'LONG',
+                'reason': 'Pattern: BU-BU-DN (LONG)',
+                'vol_mult': 1.0,
+            },
+        }
+        with open(bak_file, 'w') as f:
+            json.dump({'positions': positions}, f)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.STATE_FILE',
+            state_file,
+        ):
+            result = _recover_patterns_from_state_backups('LONG')
+
+        assert len(result) == 1
+        assert result[0][0] == 'BU-BU-DN'
+
+
+# -- recover_position_to_state with backup patterns -------------------------
+
+
+class TestRecoverPositionWithBackupPatterns:
+    """Test recover_position_to_state() integration with state backup recovery."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders',
+           return_value=(None, None))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl',
+           return_value=(51000.0, 49000.0, 2.0, 2.0))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_state_backups')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_pattern_from_history',
+           return_value=(None, 1.0))
+    def test_backup_patterns_used_when_state_empty(
+        self, mock_history, mock_logs, mock_backup, mock_scale, mock_calc, mock_read,
+        mock_save, mock_place
+    ):
+        """Empty state + backup has patterns -> uses backup patterns."""
+        mock_backup.return_value = [('BU-BU-DN', 1.2)]
+
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT'}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.01}
+
+        recover_position_to_state(state, config, exchange_pos, 'LONG')
+
+        pos = next(iter(state['positions'].values()))
+        assert pos['pattern_name'] == 'BU-BU-DN'
+        assert pos['vol_mult'] == 1.2
+        assert 'BU-BU-DN' in pos['reason']
+        # _recover_pattern_from_history should NOT be called (backup succeeded)
+        mock_history.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders',
+           return_value=(None, None))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl',
+           return_value=(51000.0, 49000.0, 2.0, 2.0))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_state_backups')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_pattern_from_history',
+           return_value=('HISTORY-PAT', 0.5))
+    def test_history_fallback_when_backup_empty(
+        self, mock_history, mock_logs, mock_backup, mock_scale, mock_calc, mock_read,
+        mock_save, mock_place
+    ):
+        """Backup and logs return empty -> falls through to trade_history."""
+        mock_backup.return_value = []
+
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT'}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.01}
+
+        recover_position_to_state(state, config, exchange_pos, 'LONG')
+
+        pos = next(iter(state['positions'].values()))
+        assert pos['pattern_name'] == 'HISTORY-PAT'
+        mock_history.assert_called_once()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.place_tp_sl_orders')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.save_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._read_tpsl_from_exchange_orders',
+           return_value=(None, None))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.calculate_tp_sl')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.setup_scale_out',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_state_backups')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs',
+           return_value=[])
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_pattern_from_history',
+           return_value=(None, 1.0))
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._calculate_recovery_slot_count',
+           return_value=3)
+    def test_multi_pattern_round_robin(
+        self, mock_slot_count, mock_history, mock_logs, mock_backup, mock_scale, mock_calc,
+        mock_read, mock_save, mock_place
+    ):
+        """3 slots with 2 backup patterns -> round-robin assignment."""
+        mock_backup.return_value = [('PAT-A', 1.0), ('PAT-B', 0.8)]
+        mock_calc.return_value = (51000.0, 49000.0, 2.0, 2.0)
+
+        state = {'positions': {}, 'active_direction': None}
+        config = {'strategy': {}, 'symbol': 'BTC/USDT:USDT', 'max_positions': 9}
+        exchange_pos = {'entryPrice': 50000.0, 'contracts': 0.03}
+
+        recover_position_to_state(state, config, exchange_pos, 'LONG')
+
+        positions = list(state['positions'].values())
+        assert len(positions) == 3
+        # Round-robin: PAT-A, PAT-B, PAT-A
+        assert positions[0]['pattern_name'] == 'PAT-A'
+        assert positions[1]['pattern_name'] == 'PAT-B'
+        assert positions[2]['pattern_name'] == 'PAT-A'
+        # vol_mult assigned per-slot
+        assert positions[0]['vol_mult'] == 1.0
+        assert positions[1]['vol_mult'] == 0.8
+
+
+# -- _recover_patterns_from_logs -------------------------------------------
+
+
+class TestRecoverPatternsFromLogs:
+    """Test _recover_patterns_from_logs() log file parsing."""
+
+    def _write_log(self, tmp_path, filename, lines):
+        """Write log lines to a file."""
+        log_file = tmp_path / filename
+        log_file.write_text('\n'.join(lines) + '\n')
+        return str(log_file)
+
+    def test_basic_open_no_close(self, tmp_path):
+        """Opened but not closed -> pattern recovered."""
+        lines = [
+            '2026-03-12 01:00:05 | INFO | Signal detected: LONG | Pattern: BU-BU-DN (LONG)',
+            '2026-03-12 01:00:06 | INFO | Actual fill: $70000.0 (qty: 0.01)',
+            '2026-03-12 01:00:06 | INFO | Position opened (slot abc12345): 12345 [1/9 slots]',
+        ]
+        self._write_log(tmp_path, 'pattern_5m_bot_20260312.log', lines)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('LONG')
+
+        assert len(result) == 1
+        assert result[0][0] == 'BU-BU-DN'
+
+    def test_open_and_closed_cancels(self, tmp_path):
+        """Opened and then closed -> not recovered."""
+        lines = [
+            '2026-03-12 01:00:05 | INFO | Signal detected: LONG | Pattern: BU-BU-DN (LONG)',
+            '2026-03-12 01:00:06 | INFO | Actual fill: $70000.0 (qty: 0.01)',
+            '2026-03-12 01:00:06 | INFO | Position opened (slot abc12345): 12345 [1/9 slots]',
+            '2026-03-12 02:00:00 | INFO | TRADE CLOSED | LONG BU-BU-DN | Entry: $70000.0 | PnL: +1%',
+        ]
+        self._write_log(tmp_path, 'pattern_5m_bot_20260312.log', lines)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('LONG')
+
+        assert result == []
+
+    def test_direction_filtering(self, tmp_path):
+        """Only positions matching direction returned."""
+        lines = [
+            '2026-03-12 01:00:05 | INFO | Signal detected: LONG | Pattern: BU-BU-DN (LONG)',
+            '2026-03-12 01:00:06 | INFO | Actual fill: $70000.0 (qty: 0.01)',
+            '2026-03-12 01:00:06 | INFO | Position opened (slot abc12345): 12345 [1/9 slots]',
+            '2026-03-12 01:05:05 | INFO | Signal detected: SHORT | Pattern: DN-DN-U (SHORT)',
+            '2026-03-12 01:05:06 | INFO | Actual fill: $70100.0 (qty: 0.01)',
+            '2026-03-12 01:05:06 | INFO | Position opened (slot def67890): 12346 [2/9 slots]',
+        ]
+        self._write_log(tmp_path, 'pattern_5m_bot_20260312.log', lines)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('SHORT')
+
+        assert len(result) == 1
+        assert result[0][0] == 'DN-DN-U'
+
+    def test_multiple_open_one_closed(self, tmp_path):
+        """3 opened, 1 closed -> 2 recovered."""
+        lines = [
+            '2026-03-12 01:00:05 | INFO | Signal detected: LONG | Pattern: PAT-A-B (LONG)',
+            '2026-03-12 01:00:06 | INFO | Actual fill: $70000.0 (qty: 0.01)',
+            '2026-03-12 01:00:06 | INFO | Position opened (slot aaa11111): 1 [1/9 slots]',
+            '2026-03-12 01:05:05 | INFO | Signal detected: LONG | Pattern: PAT-C-D (LONG)',
+            '2026-03-12 01:05:06 | INFO | Actual fill: $70100.0 (qty: 0.01)',
+            '2026-03-12 01:05:06 | INFO | Position opened (slot bbb22222): 2 [2/9 slots]',
+            '2026-03-12 01:10:05 | INFO | Signal detected: LONG | Pattern: PAT-E-F (LONG)',
+            '2026-03-12 01:10:06 | INFO | Actual fill: $70200.0 (qty: 0.01)',
+            '2026-03-12 01:10:06 | INFO | Position opened (slot ccc33333): 3 [3/9 slots]',
+            '2026-03-12 02:00:00 | INFO | TRADE CLOSED | LONG PAT-C-D | Entry: $70100.0 | PnL: -1%',
+        ]
+        self._write_log(tmp_path, 'pattern_5m_bot_20260312.log', lines)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('LONG')
+
+        assert len(result) == 2
+        patterns = [r[0] for r in result]
+        assert 'PAT-A-B' in patterns
+        assert 'PAT-E-F' in patterns
+
+    def test_no_log_files_returns_empty(self, tmp_path):
+        """No log files -> empty list."""
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('LONG')
+
+        assert result == []
+
+    def test_na_closures_ignored(self, tmp_path):
+        """N/A pattern in TRADE CLOSED lines are ignored."""
+        lines = [
+            '2026-03-12 01:00:05 | INFO | Signal detected: SHORT | Pattern: ST-H-U (SHORT)',
+            '2026-03-12 01:00:06 | INFO | Actual fill: $69641.6 (qty: 0.012)',
+            '2026-03-12 01:00:06 | INFO | Position opened (slot abc12345): 12345 [1/9 slots]',
+            '2026-03-12 02:00:00 | INFO | TRADE CLOSED | SHORT N/A | Entry: $69641.6 | PnL: +1%',
+        ]
+        self._write_log(tmp_path, 'pattern_5m_bot_20260312.log', lines)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('SHORT')
+
+        # N/A closure doesn't cancel a real pattern open
+        assert len(result) == 1
+        assert result[0][0] == 'ST-H-U'
+
+    def test_duplicate_pattern_price_multiset_na_closure(self, tmp_path):
+        """Two opens with same pattern+price, one closed -> one remains."""
+        lines = [
+            '2026-03-12 01:00:05 | INFO | Signal detected: SHORT | Pattern: ST-H-U (SHORT)',
+            '2026-03-12 01:00:06 | INFO | Actual fill: $70000.0 (qty: 0.01)',
+            '2026-03-12 01:00:06 | INFO | Position opened (slot aaa11111): 1 [1/9 slots]',
+            '2026-03-12 01:05:05 | INFO | Signal detected: SHORT | Pattern: ST-H-U (SHORT)',
+            '2026-03-12 01:05:06 | INFO | Actual fill: $70000.0 (qty: 0.01)',
+            '2026-03-12 01:05:06 | INFO | Position opened (slot bbb22222): 2 [2/9 slots]',
+            '2026-03-12 02:00:00 | INFO | TRADE CLOSED | SHORT ST-H-U | Entry: $70000.0 | PnL: +1%',
+        ]
+        self._write_log(tmp_path, 'pattern_5m_bot_20260312.log', lines)
+
+        with patch(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.LOG_DIR',
+            str(tmp_path),
+        ):
+            result = _recover_patterns_from_logs('SHORT')
+
+        assert len(result) == 1
+        assert result[0][0] == 'ST-H-U'
+
+
+class TestRestoreNonePatternSlots:
+    """Tests for _restore_none_pattern_slots() — N/A cascade prevention."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_no_none_slots_noop(self, mock_logs):
+        """When all slots have patterns, nothing happens."""
+        state = {
+            'positions': {
+                's1': {'slot_id': 's1', 'direction': 'LONG', 'pattern_name': 'BU-H-U'},
+                's2': {'slot_id': 's2', 'direction': 'SHORT', 'pattern_name': 'ST-BD-U'},
+            }
+        }
+        result = _restore_none_pattern_slots(state)
+        assert result == 0
+        mock_logs.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_restores_single_none_slot(self, mock_logs):
+        """Single None-pattern slot gets restored from logs."""
+        mock_logs.return_value = [('ST-H-U', 0.85)]
+        state = {
+            'positions': {
+                's1': {
+                    'slot_id': 's1', 'direction': 'SHORT', 'pattern_name': None,
+                    'reason': 'Recovered from exchange',
+                },
+            }
+        }
+        result = _restore_none_pattern_slots(state)
+        assert result == 1
+        assert state['positions']['s1']['pattern_name'] == 'ST-H-U'
+        assert state['positions']['s1']['vol_mult'] == 0.85
+        assert 'ST-H-U' in state['positions']['s1']['reason']
+        mock_logs.assert_called_once_with('SHORT')
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_round_robin_multiple_none_slots(self, mock_logs):
+        """Multiple None slots assigned patterns round-robin."""
+        mock_logs.return_value = [('ST-H-U', 0.8), ('BD-U-ST', 0.9)]
+        state = {
+            'positions': {
+                's1': {'slot_id': 's1', 'direction': 'LONG', 'pattern_name': None, 'reason': 'Recovered'},
+                's2': {'slot_id': 's2', 'direction': 'LONG', 'pattern_name': None, 'reason': 'Recovered'},
+                's3': {'slot_id': 's3', 'direction': 'LONG', 'pattern_name': None, 'reason': 'Recovered'},
+            }
+        }
+        result = _restore_none_pattern_slots(state)
+        assert result == 3
+        patterns = [state['positions'][k]['pattern_name'] for k in ['s1', 's2', 's3']]
+        assert patterns == ['ST-H-U', 'BD-U-ST', 'ST-H-U']
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_no_log_patterns_found(self, mock_logs):
+        """When logs yield nothing, slots stay None (graceful)."""
+        mock_logs.return_value = []
+        state = {
+            'positions': {
+                's1': {'slot_id': 's1', 'direction': 'LONG', 'pattern_name': None, 'reason': 'Recovered'},
+            }
+        }
+        result = _restore_none_pattern_slots(state)
+        assert result == 0
+        assert state['positions']['s1']['pattern_name'] is None
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_mixed_directions(self, mock_logs):
+        """None slots in different directions each get separate recovery."""
+        def side_effect(direction):
+            if direction == 'LONG':
+                return [('BU-H-U', 1.0)]
+            return [('ST-BD-U', 0.7)]
+        mock_logs.side_effect = side_effect
+
+        state = {
+            'positions': {
+                's1': {'slot_id': 's1', 'direction': 'LONG', 'pattern_name': None, 'reason': 'Recovered'},
+                's2': {'slot_id': 's2', 'direction': 'SHORT', 'pattern_name': None, 'reason': 'Recovered'},
+                's3': {'slot_id': 's3', 'direction': 'LONG', 'pattern_name': 'H-ST-U'},
+            }
+        }
+        result = _restore_none_pattern_slots(state)
+        assert result == 2
+        assert state['positions']['s1']['pattern_name'] == 'BU-H-U'
+        assert state['positions']['s2']['pattern_name'] == 'ST-BD-U'
+        assert state['positions']['s3']['pattern_name'] == 'H-ST-U'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_empty_positions(self, mock_logs):
+        """Empty positions dict → 0 restored."""
+        state = {'positions': {}}
+        result = _restore_none_pattern_slots(state)
+        assert result == 0
+        mock_logs.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close._recover_patterns_from_logs')
+    def test_empty_string_pattern_treated_as_none(self, mock_logs):
+        """Empty string pattern_name also triggers restoration."""
+        mock_logs.return_value = [('BD-U-ST', 0.9)]
+        state = {
+            'positions': {
+                's1': {'slot_id': 's1', 'direction': 'SHORT', 'pattern_name': '', 'reason': 'Recovered'},
+            }
+        }
+        result = _restore_none_pattern_slots(state)
+        assert result == 1
+        assert state['positions']['s1']['pattern_name'] == 'BD-U-ST'

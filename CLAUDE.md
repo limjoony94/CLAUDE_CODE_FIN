@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.59.3 | **Bot**: Pattern 5m (131패턴, 59L+72S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix+TPScale05+OrphanPrevention+PosTrackFix+MedianFallback+EmgSlRace) | **Updated**: 2026-03-12
+> **Version**: v1.59.4 | **Bot**: Pattern 5m (131패턴, 59L+72S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix+TPScale05+OrphanPrevention+PosTrackFix+MedianFallback+EmgSlRace+NaPrevent) | **Updated**: 2026-03-12
 
 ---
 
@@ -208,6 +208,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **Code Audit Fixes (v1.56.2)** | (1) Cascade SL Place-first/Cancel-after (보호 갭 제거) (2) SL 실패 시 Emergency SL 즉시 호출 (3) Momentum cooldown state 영속화 (4) datetime 파싱 방어 (5) Hardcoded 300s→CANDLE_DURATION_MS (6) Always-truthy 수정. 1061 tests ALL PASSED |
 | **TP Scale Factor (v1.57.0)** | **Post-discovery TP×0.5 스케일링** — N-pos 슬롯 회전 최적화. Scanner 1-pos 최적 TP를 N-pos 포트폴리오에 맞게 축소. IS PnL/MDD +28%, OOS +49%, 10/10 MC wins, DISCRIMINATING, Cascade-independent. config `tp_scale_factor` |
 | **Orphan Prevention (v1.59.0)** | **3-layer defense against transient API zero-contract** — (1) ALL closure detections trigger 1s delay + fresh re-verify (removed ≥3 threshold) (2) Inter-direction exchange_map rebuild after closures (3) Post-closure orphan detection + auto-recovery. Root cause: BingX API transient 0-contract during order processing. 1073 tests ALL PASSED |
+| **N/A Pattern Prevention (v1.59.4)** | **4-layer N/A cascade 방지** — (1) `_restore_none_pattern_slots()`: crash recovery 후 None 슬롯 로그 기반 복원 (2) `record_closed_position` last-resort log recovery (3) `cancel_remaining_orders` 3회 retry (4) Recovery 전 stale order cleanup. Root cause: BingX averaged entry → price matching 실패 → None cascade |
 | **DISABLED (5개)** | Regime Sizing, Adaptive Leverage, Equity Curve, Correlation-Aware, Loss Burst Brake — 각 `enabled: true`로 재활성화 가능. Entry Optimization은 ROLLED BACK (코드 제거) |
 
 ### Dynamic Pattern Selection (v1.27.3)
@@ -324,7 +325,8 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.59.3** | 03-12 | **Emergency SL Race Condition Fix** ← 현재. `update_emergency_sl()`에서 place-first/cancel-after 패턴의 경쟁 조건 수정. 새 SL 배치 시 110406(already exists) → EXCHANGE_MANAGED 설정 → old 주문 취소 → 보호 없음 버그. Fix: 110406 시 old order가 "already existing" 주문이므로 취소하지 않고 old_id 유지. Live에서 SHORT emergency SL 누락 확인 (개별 SL만으로 커버 중). 1076 tests ALL PASSED |
+| **v1.59.4** | 03-12 | **N/A Pattern Prevention + Orphan Order Retry** ← 현재. 4-layer N/A cascade 방지: (1) `_restore_none_pattern_slots()` — crash recovery 후 None-pattern 슬롯을 로그에서 복원 (Phase 5) (2) `record_closed_position` last-resort log recovery — trade_history N/A 오염 방지 (3) `cancel_remaining_orders` 3회 retry with backoff — 네트워크 에러 시 orphan 주문 방지 (4) `recover_position_to_state` stale order cleanup — recovery 전 잔류 TP/SL 주문 정리. Root cause: BingX averaged entry price defeats price-matching → pattern=None → .bak 오염 → 연쇄 N/A. 재시작 시 4개 None 슬롯 즉시 복원 + per-pattern TP/SL 재조정 확인. 1101 tests ALL PASSED |
+| v1.59.3 | 03-12 | Emergency SL Race Condition Fix. `update_emergency_sl()`에서 place-first/cancel-after 패턴의 경쟁 조건 수정. 새 SL 배치 시 110406(already exists) → EXCHANGE_MANAGED 설정 → old 주문 취소 → 보호 없음 버그. Fix: 110406 시 old order가 "already existing" 주문이므로 취소하지 않고 old_id 유지. Live에서 SHORT emergency SL 누락 확인 (개별 SL만으로 커버 중). 1076 tests ALL PASSED |
 | v1.59.2 | 03-12 | Median TP/SL Fallback. Recovery 포지션(pattern=None)이 config defaults(tp=1%, sl=1%)를 사용하여 실제 SL 범위(1.44~5.95%) 대비 위험하게 타이트한 문제 수정. (1) `calculate_tp_sl()`에 `_get_median_tpsl_fallback()` 추가 — per-pattern dict의 median TP/SL 사용 (TP=0.855%, SL=3.48%) (2) `_adjust_single_position_tpsl()`에서 pattern=None 시 `return False` 제거 — 재시작 시 median fallback으로 조정 가능. 거래소 교차검증: 4슬롯 9주문 전부 정합 확인. 1073+ tests ALL PASSED |
 | v1.59.1 | 03-12 | Position Tracking Fix + SL×1.1 Revert. (1) Duplicate trade guard에서 TP/SL 주문 미취소 → orphan order 잔류 → ghost closure 연쇄 버그 수정 (`cancel_remaining_orders` 추가) (2) Orphan detection에서 stale snapshot 사용 → 첫 루프 slot 제거 후 재감지 → 중복 recovery 버그 수정 (`state.get('positions')` 재조회) (3) Duplicate recovery guard 추가 (`recovered=True` 슬롯 존재 시 동일 방향 재복구 차단) (4) SL×1.1 revert (corrected WF NON-DISC: +429.7% vs SL×1.0 +430.0%). Root cause chain: Cascade SL mass closure → dup guard skipped order cancel → orphan TP filled → ghost slot removal → recovery created duplicate. 1073 tests ALL PASSED |
 | v1.59.0 | 03-12 | Orphan Prevention 3-layer defense. Root cause: BingX API transient 0-contract response → 2-slot direction이 ≥3 mass closure guard 미발동 → false closure → TP/SL 취소 → orphan. Fix: (1) ALL closures 1s delay + fresh re-verify (≥3 조건 제거) (2) Inter-direction exchange_map rebuild (3) Post-closure orphan detection + auto-recovery. 1073 tests ALL PASSED |

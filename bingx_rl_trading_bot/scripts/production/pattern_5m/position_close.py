@@ -8,7 +8,7 @@ import os
 import time
 import uuid
 from datetime import datetime
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, List, Optional, Tuple
 
 import ccxt
 
@@ -17,6 +17,9 @@ from .constants import (
     QTY_TOLERANCE,
     QUANTITY_ROUND_DECIMALS,
     CONFIDENCE_LOG_FILE,
+    STATE_FILE,
+    LOG_DIR,
+    BOT_NAME,
 )
 from .position_open import calculate_tp_sl, setup_scale_out
 from .models import APICache, CircuitBreaker, PerformanceMetrics
@@ -193,13 +196,23 @@ def record_closed_position(
             leverage=slot_leverage,
         )
 
-    # Extract pattern name: slot field > reason regex > fallback 'N/A'
+    # Extract pattern name: slot field > reason regex > log recovery > fallback 'N/A'
     # v1.55.2: Prefer direct pattern_name field (set during entry/recovery)
     pattern_name = (
         position.get('pattern_name')
         or extract_pattern_name(position.get('reason', ''))
-        or 'N/A'
     )
+    # v1.59.4: Last-resort log recovery — prevents N/A contamination of trade_history
+    if not pattern_name:
+        try:
+            log_pats = _recover_patterns_from_logs(position.get('direction', ''))
+            if log_pats:
+                pattern_name = log_pats[0][0]
+                logger.info(f"✅ Last-resort pattern recovery: '{pattern_name}' from logs")
+        except Exception:
+            pass
+    if not pattern_name:
+        pattern_name = 'N/A'
 
     # Calculate hold time
     entry_time_str = position.get('entry_time', '')
@@ -341,6 +354,212 @@ def _recover_pattern_from_history(
     return None, 1.0
 
 
+def _recover_patterns_from_state_backups(
+    direction: str,
+) -> List[Tuple[str, float]]:
+    """Search state backup files for pattern_name+vol_mult of positions matching direction.
+
+    v1.59.4: BingX merges same-direction positions into averaged entry_price,
+    so entry_price matching is unreliable. We match by direction only.
+
+    Search order: .bak → .new → timestamped backups (newest first).
+    Stops at first backup that yields results.
+
+    Returns:
+        List of (pattern_name, vol_mult) tuples. Empty list on failure.
+    """
+    import json
+
+    results = []
+
+    def _extract_from_state_data(data: Dict) -> List[Tuple[str, float]]:
+        """Extract (pattern_name, vol_mult) for matching direction from state dict."""
+        found = []
+        positions = data.get('positions') or {}
+        for slot in positions.values():
+            if slot.get('direction') != direction:
+                continue
+            pat = slot.get('pattern_name')
+            if not pat or pat == 'N/A':
+                pat = extract_pattern_name(slot.get('reason', ''))
+            if pat and pat != 'N/A':
+                found.append((pat, slot.get('vol_mult', 1.0)))
+        return found
+
+    try:
+        # 1. Try .bak file
+        bak_file = STATE_FILE + '.bak'
+        if os.path.exists(bak_file):
+            try:
+                with open(bak_file, 'r') as f:
+                    data = json.load(f)
+                results = _extract_from_state_data(data)
+                if results:
+                    logger.info(
+                        f"✅ Recovery: {len(results)} pattern(s) recovered from .bak "
+                        f"for {direction}: {[r[0] for r in results]}"
+                    )
+                    return results
+            except (json.JSONDecodeError, IOError, OSError):
+                pass
+
+        # 2. Try .new file
+        new_file = STATE_FILE + '.new'
+        if os.path.exists(new_file):
+            try:
+                with open(new_file, 'r') as f:
+                    data = json.load(f)
+                results = _extract_from_state_data(data)
+                if results:
+                    logger.info(
+                        f"✅ Recovery: {len(results)} pattern(s) recovered from .new "
+                        f"for {direction}: {[r[0] for r in results]}"
+                    )
+                    return results
+            except (json.JSONDecodeError, IOError, OSError):
+                pass
+
+        # 3. Try timestamped backups (newest first)
+        state_dir = os.path.dirname(STATE_FILE)
+        state_name = os.path.basename(STATE_FILE)
+        backup_prefix = f"{state_name}.backup_"
+
+        backups = []
+        if os.path.isdir(state_dir):
+            for filename in os.listdir(state_dir):
+                if filename.startswith(backup_prefix):
+                    filepath = os.path.join(state_dir, filename)
+                    backups.append((filepath, os.path.getmtime(filepath)))
+
+        if backups:
+            backups.sort(key=lambda x: x[1], reverse=True)
+            for filepath, _ in backups:
+                try:
+                    with open(filepath, 'r') as f:
+                        data = json.load(f)
+                    results = _extract_from_state_data(data)
+                    if results:
+                        logger.info(
+                            f"✅ Recovery: {len(results)} pattern(s) recovered from "
+                            f"{os.path.basename(filepath)} for {direction}: "
+                            f"{[r[0] for r in results]}"
+                        )
+                        return results
+                except (json.JSONDecodeError, IOError, OSError):
+                    continue
+
+    except Exception as e:
+        logger.debug(f"Pattern recovery from state backups failed: {e}")
+
+    return []
+
+
+def _recover_patterns_from_logs(
+    direction: str,
+) -> List[Tuple[str, float]]:
+    """Search recent log files for open positions matching direction that were never closed.
+
+    v1.59.4: Last-resort recovery when state backups and trade_history both fail.
+    Scans logs for "Position opened" events and subtracts "TRADE CLOSED" events
+    to find positions still open on the exchange.
+
+    Log formats:
+        Open:  "Position opened (slot XXXX): ORDER_ID [N/M slots]"
+        Prior: "Signal detected: LONG | Pattern: BU-BU-DN (LONG)"
+        Close: "TRADE CLOSED | LONG DN-ST-MU | Entry: $70219.3 ..."
+
+    Returns:
+        List of (pattern_name, vol_mult) tuples. vol_mult defaults to 1.0 (not in logs).
+    """
+    import re
+    import glob as glob_mod
+
+    try:
+        # Find log files, newest first
+        log_pattern = os.path.join(LOG_DIR, f"{BOT_NAME}_*.log")
+        log_files = sorted(glob_mod.glob(log_pattern), reverse=True)
+        if not log_files:
+            return []
+
+        # Track opened and closed patterns per direction
+        opened_patterns = []  # [(pattern, entry_price), ...]
+        closed_counts = {}    # {(pattern, entry_price_str): count}
+
+        # Regex patterns
+        re_signal = re.compile(
+            r'Signal detected: (LONG|SHORT) \| Pattern: ([A-Z]+-[A-Z]+-[A-Z]+)'
+        )
+        re_opened = re.compile(r'Position opened \(slot ([0-9a-f]+)\)')
+        re_closed = re.compile(
+            r'TRADE CLOSED \| (LONG|SHORT) ([A-Z/]+-?[A-Z]*-?[A-Z]*) \| Entry: \$([0-9.]+)'
+        )
+        re_entry_price = re.compile(r'Actual fill: \$([0-9.]+)')
+
+        # Scan last 2 log files (covers cross-day scenarios)
+        for log_file in log_files[:2]:
+            try:
+                with open(log_file, 'r', encoding='utf-8', errors='replace') as f:
+                    lines = f.readlines()
+            except (IOError, OSError):
+                continue
+
+            pending_signal = None  # (direction, pattern)
+            pending_entry_price = None
+
+            for line in lines:
+                # Track signal → entry_price → opened sequence
+                m_sig = re_signal.search(line)
+                if m_sig:
+                    pending_signal = (m_sig.group(1), m_sig.group(2))
+                    pending_entry_price = None
+                    continue
+
+                m_price = re_entry_price.search(line)
+                if m_price and pending_signal:
+                    pending_entry_price = m_price.group(1)
+                    continue
+
+                m_open = re_opened.search(line)
+                if m_open and pending_signal and pending_entry_price:
+                    sig_dir, sig_pat = pending_signal
+                    if sig_dir == direction:
+                        opened_patterns.append((sig_pat, pending_entry_price))
+                    pending_signal = None
+                    pending_entry_price = None
+                    continue
+
+                # Track closures
+                m_close = re_closed.search(line)
+                if m_close:
+                    close_dir = m_close.group(1)
+                    close_pat = m_close.group(2)
+                    close_price = m_close.group(3)
+                    if close_dir == direction and close_pat != 'N/A':
+                        key = (close_pat, close_price)
+                        closed_counts[key] = closed_counts.get(key, 0) + 1
+
+        # Subtract closed from opened to find still-open positions
+        still_open = []
+        for pat, price in opened_patterns:
+            key = (pat, price)
+            if closed_counts.get(key, 0) > 0:
+                closed_counts[key] -= 1  # consume one closure
+            else:
+                still_open.append((pat, 1.0))  # vol_mult not in logs
+
+        if still_open:
+            logger.info(
+                f"✅ Recovery: {len(still_open)} pattern(s) recovered from logs "
+                f"for {direction}: {[s[0] for s in still_open]}"
+            )
+
+        return still_open
+
+    except Exception as e:
+        logger.debug(f"Pattern recovery from logs failed: {e}")
+        return []
+
+
 def recover_position_to_state(
     state: Dict[str, Any],
     config: Dict[str, Any],
@@ -385,12 +604,37 @@ def recover_position_to_state(
     # Try to find pattern_name and vol_mult from existing slots for this direction
     old_pattern_name = None
     old_vol_mult = 1.0
+    backup_patterns = []  # v1.59.4: multi-pattern list from backups
     for slot in (state.get('positions') or {}).values():
         if slot.get('direction') == direction:
             old_pattern_name = extract_pattern_name(slot.get('reason', '')) or slot.get('pattern_name')
             old_vol_mult = slot.get('vol_mult', 1.0)
             if old_pattern_name:
                 break
+
+    # v1.59.4: Try state backup files (.bak, .new, timestamped) for pattern recovery
+    # BingX averages entry_price for same-direction positions, so price matching fails
+    if not old_pattern_name:
+        backup_patterns = _recover_patterns_from_state_backups(direction)
+        if backup_patterns:
+            old_pattern_name, old_vol_mult = backup_patterns[0]
+            logger.info(f"Recovery source: state backup ({len(backup_patterns)} pattern(s))")
+
+    # v1.59.4: Try log files for pattern recovery (open - closed = still active)
+    # Also used to supplement backup_patterns with more patterns for multi-slot recovery
+    log_patterns = _recover_patterns_from_logs(direction)
+    if log_patterns:
+        if not old_pattern_name:
+            old_pattern_name, old_vol_mult = log_patterns[0]
+            backup_patterns = log_patterns
+            logger.info(f"Recovery source: log files ({len(log_patterns)} pattern(s))")
+        elif len(log_patterns) > len(backup_patterns):
+            # Log has more patterns (better for multi-slot assignment)
+            backup_patterns = log_patterns
+            logger.info(
+                f"Recovery: supplementing with log patterns "
+                f"({len(log_patterns)} > {len(backup_patterns)} from backup)"
+            )
 
     # v1.55.0: Fallback — search recent trade_history for matching entry+direction
     # This handles false mass closures where slots were removed but position still exists
@@ -451,7 +695,6 @@ def recover_position_to_state(
     )
     per_slot_qty = round(quantity / n_slots, QUANTITY_ROUND_DECIMALS)
 
-    reason = f"Recovered from exchange ({old_pattern_name})" if old_pattern_name else 'Recovered from exchange'
     positions = state.setdefault('positions', {})
     new_slot_ids = []
 
@@ -462,14 +705,28 @@ def recover_position_to_state(
         else:
             slot_qty = per_slot_qty
 
+        # v1.59.4: Per-slot pattern from backup (round-robin if fewer patterns than slots)
+        if backup_patterns:
+            slot_pattern, slot_vol_mult = backup_patterns[i % len(backup_patterns)]
+        else:
+            slot_pattern = old_pattern_name
+            slot_vol_mult = old_vol_mult
+
         # Per-slot TP/SL from saved snapshot (if available)
         if saved_tpsl_pairs and i < len(saved_tpsl_pairs):
             slot_tp = saved_tpsl_pairs[i][0] or default_tp
             slot_sl = saved_tpsl_pairs[i][1] or default_sl
+        elif backup_patterns and slot_pattern != old_pattern_name:
+            # Recalculate TP/SL for this slot's specific pattern
+            slot_tp, slot_sl, _, _ = calculate_tp_sl(
+                entry_price, dir_mult, strategy,
+                vol_mult=slot_vol_mult, pattern=slot_pattern, config=config
+            )
         else:
             slot_tp = default_tp
             slot_sl = default_sl
 
+        slot_reason = f"Recovered from exchange ({slot_pattern})" if slot_pattern else 'Recovered from exchange'
         slot_tp_pct = abs(slot_tp / entry_price - 1) * 100 if entry_price > 0 else 1.0
         scale_out_stages = setup_scale_out(strategy, entry_price, slot_qty, dir_mult, slot_tp_pct)
         slot_id = uuid.uuid4().hex[:8]
@@ -481,12 +738,12 @@ def recover_position_to_state(
             'remaining_quantity': slot_qty,
             'tp_price': slot_tp,
             'sl_price': slot_sl,
-            'vol_mult': old_vol_mult,
+            'vol_mult': slot_vol_mult,
             'scale_out_enabled': bool(scale_out_stages),
             'scale_out_stages': scale_out_stages,
             'entry_time': datetime.now().isoformat(),
-            'reason': reason,
-            'pattern_name': old_pattern_name or None,
+            'reason': slot_reason,
+            'pattern_name': slot_pattern or None,
             'recovered': True,
             'needs_tpsl': True,
         }
@@ -501,6 +758,36 @@ def recover_position_to_state(
     save_state(state)
 
     if exchange:
+        # v1.59.4: Clean up stale orders for this direction before placing new ones.
+        # After cascade SL closures, old TP/SL orders may remain if cancel failed
+        # (e.g., network error). Cancel them now to prevent over-coverage.
+        try:
+            symbol = config.get('symbol', 'BTC-USDT')
+            open_orders = exchange.fetch_open_orders(symbol)
+            new_order_ids = set()  # will be populated below
+            stale_dir_orders = []
+            for o in open_orders:
+                info = o.get('info', {})
+                pos_side = info.get('positionSide', '')
+                otype = str(info.get('type', ''))
+                if pos_side == direction and ('TAKE_PROFIT' in otype or 'STOP' in otype):
+                    stale_dir_orders.append(o)
+            if stale_dir_orders:
+                logger.info(
+                    f"Recovery cleanup: cancelling {len(stale_dir_orders)} "
+                    f"stale {direction} orders before placing new ones"
+                )
+                for o in stale_dir_orders:
+                    try:
+                        exchange.cancel_order(o['id'], symbol)
+                        logger.info(f"🗑️ Cancelled stale {direction} order: {o['id']}")
+                    except ccxt.OrderNotFound:
+                        pass
+                    except Exception as e:
+                        logger.warning(f"⚠️ Failed to cancel stale order {o['id']}: {e}")
+        except Exception as e:
+            logger.warning(f"⚠️ Recovery cleanup failed (non-fatal): {e}")
+
         for sid in new_slot_ids:
             slot = positions[sid]
             place_tp_sl_orders(exchange, state, config, position=slot)
@@ -945,6 +1232,57 @@ def _cancel_all_symbol_orders(exchange: ccxt.bingx, symbol: str) -> int:
         return 0
 
 
+def _restore_none_pattern_slots(state: Dict[str, Any]) -> int:
+    """Scan slots with pattern_name=None and try to restore from logs.
+
+    v1.59.4: Prevents N/A cascade — once a recovery slot gets pattern=None,
+    all subsequent closures record N/A in trade_history, which contaminates
+    future recovery attempts. This function breaks the cycle by restoring
+    patterns from log files (signal→open tracking).
+
+    Called after crash recovery and can also be called periodically.
+
+    Returns:
+        Number of slots restored.
+    """
+    positions = state.get('positions') or {}
+    none_dirs = set()
+    for slot in positions.values():
+        if not slot.get('pattern_name'):
+            none_dirs.add(slot.get('direction'))
+
+    if not none_dirs:
+        return 0
+
+    restored = 0
+    for direction in none_dirs:
+        log_patterns = _recover_patterns_from_logs(direction)
+        if not log_patterns:
+            continue
+
+        # Assign patterns round-robin to None-pattern slots of this direction
+        dir_none_slots = [
+            s for s in positions.values()
+            if s.get('direction') == direction and not s.get('pattern_name')
+        ]
+        for i, slot in enumerate(dir_none_slots):
+            pat, vol = log_patterns[i % len(log_patterns)]
+            slot['pattern_name'] = pat
+            slot['vol_mult'] = vol
+            old_reason = slot.get('reason', '')
+            if 'Recovered from exchange' in old_reason and pat:
+                slot['reason'] = f"Recovered from exchange ({pat})"
+            restored += 1
+            logger.info(
+                f"✅ Restored pattern '{pat}' to {direction} slot {slot.get('slot_id', '?')[:8]} "
+                f"(was None)"
+            )
+
+    if restored:
+        logger.info(f"Pattern restoration: {restored} slot(s) updated from log analysis")
+    return restored
+
+
 def recover_from_crash(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -1140,6 +1478,11 @@ def recover_from_crash(
                 if not slot.get('tp_order_id') or not slot.get('sl_order_id'):
                     place_tp_sl_orders(exchange, state, config, position=slot)
             update_emergency_sl(exchange, state, config)
+
+        # Phase 5 (v1.59.4): Restore pattern_name for None-pattern slots
+        # After recovery, some slots may have pattern=None (BingX price averaging
+        # defeats price-based matching). Try log-based recovery to fill gaps.
+        _restore_none_pattern_slots(state)
 
         save_state(state)
 

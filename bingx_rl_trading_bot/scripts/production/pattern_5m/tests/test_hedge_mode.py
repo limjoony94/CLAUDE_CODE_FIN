@@ -7,13 +7,17 @@ state v3 migration, and config validation for hedge mode.
 import pytest
 from unittest.mock import MagicMock, patch
 
+import ccxt
+
 from bingx_rl_trading_bot.scripts.production.pattern_5m.orders import (
     _get_position_side as orders_get_position_side,
     _get_worst_sl_price_for_direction,
     _set_emergency_sl_id,
     _get_emergency_sl_id,
+    _EXCHANGE_MANAGED,
     place_emergency_sl,
     cancel_emergency_sl,
+    update_emergency_sl,
 )
 from bingx_rl_trading_bot.scripts.production.pattern_5m.bot import _route_signal
 from bingx_rl_trading_bot.scripts.production.pattern_5m.constants import (
@@ -191,6 +195,50 @@ class TestEmergencySlPerDirection:
         place_emergency_sl(exchange, state, config)
         exchange.create_order.assert_called_once()
         assert state['emergency_sl_order_id'] == 'emg_456'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_update_emergency_sl_110406_keeps_old_order(self, mock_save):
+        """v1.59.3: When 110406 (SL already exists) during update, keep old order.
+
+        Bug scenario: update_emergency_sl tries to place new → 110406 →
+        marks as EXCHANGE_MANAGED → then cancels old order → NO protection.
+        Fix: detect 110406 result and keep old order instead of cancelling.
+        """
+        exchange = MagicMock()
+        # First call (place new) → 110406 error
+        exchange.create_order.side_effect = ccxt.ExchangeError(
+            'bingx {"code":110406,"msg":"SL already exists"}'
+        )
+        state = {
+            'positions': {
+                's1': {'direction': 'SHORT', 'sl_price': 53000, 'quantity': 0.01},
+            },
+            'emergency_sl_orders': {'SHORT': 'old_emg_order_123'},
+        }
+        config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
+        update_emergency_sl(exchange, state, config)
+        # Old order must NOT be cancelled — it IS the "already existing" SL
+        exchange.cancel_order.assert_not_called()
+        # State should retain old_id, NOT EXCHANGE_MANAGED
+        assert state['emergency_sl_orders']['SHORT'] == 'old_emg_order_123'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_update_emergency_sl_success_cancels_old(self, mock_save):
+        """Normal update: new order placed successfully → old order cancelled."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'new_emg_456'}
+        state = {
+            'positions': {
+                's1': {'direction': 'SHORT', 'sl_price': 53000, 'quantity': 0.01},
+            },
+            'emergency_sl_orders': {'SHORT': 'old_emg_123'},
+        }
+        config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
+        update_emergency_sl(exchange, state, config)
+        # Old order should be cancelled
+        exchange.cancel_order.assert_called_once_with('old_emg_123', 'BTC/USDT:USDT')
+        # New order should be stored
+        assert state['emergency_sl_orders']['SHORT'] == 'new_emg_456'
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
     def test_cancel_emergency_sl_hedge(self, mock_save):

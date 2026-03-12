@@ -1130,8 +1130,11 @@ def update_emergency_sl(
             # Place new SL first (closePosition=true, no qty conflict)
             _set_emergency_sl_id(state, config, direction, None)
             _place_emergency_sl_for_direction(exchange, state, config, direction)
-            # Then cancel old SL (protection gap = 0)
-            if old_id and old_id != _EXCHANGE_MANAGED:
+            new_id = _get_emergency_sl_id(state, config, direction)
+            # v1.59.3: Only cancel old if new was actually placed (not EXCHANGE_MANAGED).
+            # If _place got 110406 ("already exists"), the "already existing" order IS the
+            # old_id we're about to cancel — cancelling it leaves ZERO protection.
+            if old_id and old_id != _EXCHANGE_MANAGED and new_id and new_id != _EXCHANGE_MANAGED:
                 try:
                     exchange.cancel_order(old_id, config.get('symbol', 'BTC-USDT'))
                     logger.debug(f"Cancelled old emergency SL ({direction}) {old_id}")
@@ -1139,6 +1142,14 @@ def update_emergency_sl(
                     logger.debug(f"Old emergency SL ({direction}) already gone: {old_id}")
                 except Exception as e:
                     logger.warning(f"Failed to cancel old emergency SL ({direction}) {old_id}: {e}")
+            elif old_id and old_id != _EXCHANGE_MANAGED and new_id == _EXCHANGE_MANAGED:
+                # 110406 hit: the "already exists" order is likely old_id itself.
+                # Keep old_id as the active emergency SL instead of EXCHANGE_MANAGED.
+                _set_emergency_sl_id(state, config, direction, old_id)
+                logger.info(
+                    f"Emergency SL ({direction}) update: 110406 hit, keeping old order {old_id} "
+                    f"as active emergency SL (not cancelling)"
+                )
     else:
         # One-Way: same as before
         old_order_id = state.get('emergency_sl_order_id')

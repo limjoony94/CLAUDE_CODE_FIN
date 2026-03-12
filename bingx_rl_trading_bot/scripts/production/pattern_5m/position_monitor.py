@@ -331,43 +331,61 @@ def check_position_status(
 
         # Group bot slots by direction
         for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
-            dir_slots = [s for s in bot_slots.values() if s.get('direction') == dir_label]
+            # v1.59.0: Re-read bot_slots each iteration — slots may have been
+            # removed during previous direction's closure processing.
+            dir_slots = [s for s in (state.get('positions') or {}).values()
+                         if s.get('direction') == dir_label]
             if not dir_slots:
                 continue
+
+            # v1.59.0: Re-fetch exchange_map if previous direction had closures
+            # to avoid using stale single-fetch data for the next direction.
+            if any_closed:
+                try:
+                    exchange_positions = fetch_positions_cached(
+                        exchange, symbol, cache, force_refresh=True,
+                        circuit_breaker=circuit_breaker, metrics=metrics
+                    )
+                    exchange_map = {}
+                    for pos in exchange_positions:
+                        contracts = float(pos.get('contracts', 0))
+                        if contracts > 0:
+                            exchange_map[pos.get('side')] = pos
+                except Exception as e:
+                    logger.warning(f"Inter-direction re-fetch failed: {e}")
 
             exchange_pos = exchange_map.get(dir_key)
 
             # All slots for this direction are closed (exchange has no position)
             if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
-                # v1.55.0: Mass closure verification — if 3+ slots appear closed
-                # simultaneously, re-fetch positions to guard against API glitches
-                # (03-05 incident: network error returned empty positions → false closure)
-                if len(dir_slots) >= 3:
-                    logger.warning(
-                        f"⚠️ {len(dir_slots)} {dir_label} slots appear closed — "
-                        f"verifying with fresh API call..."
+                # v1.59.0: ALWAYS re-verify before recording closures (any slot count)
+                # v1.55.0 only guarded ≥3 slots; 03-12 orphan incident showed 2-slot
+                # false closure when BingX API returned transient 0-contract response.
+                logger.warning(
+                    f"⚠️ {len(dir_slots)} {dir_label} slot(s) appear closed — "
+                    f"verifying with fresh API call..."
+                )
+                time.sleep(1)
+                try:
+                    verify_positions = fetch_positions_cached(
+                        exchange, symbol, cache, force_refresh=True,
+                        circuit_breaker=circuit_breaker, metrics=metrics
                     )
-                    time.sleep(1)
-                    try:
-                        verify_positions = fetch_positions_cached(
-                            exchange, symbol, cache, force_refresh=True,
-                            circuit_breaker=circuit_breaker, metrics=metrics
-                        )
-                        for vp in verify_positions:
-                            if (float(vp.get('contracts', 0)) > 0
-                                    and vp.get('side') == dir_key):
-                                logger.warning(
-                                    f"⚠️ FALSE ALARM: {dir_label} position still exists "
-                                    f"on exchange after re-check — skipping closure"
-                                )
-                                exchange_pos = vp
-                                break
-                    except Exception as e:
-                        logger.warning(
-                            f"⚠️ Mass closure verification failed: {e} — "
-                            f"deferring to next cycle"
-                        )
-                        continue  # Skip this direction entirely, retry next loop
+                    for vp in verify_positions:
+                        if (float(vp.get('contracts', 0)) > 0
+                                and vp.get('side') == dir_key):
+                            logger.warning(
+                                f"⚠️ FALSE ALARM: {dir_label} position still exists "
+                                f"on exchange after re-check — skipping closure"
+                            )
+                            exchange_pos = vp
+                            break
+                except Exception as e:
+                    logger.warning(
+                        f"⚠️ Closure verification failed: {e} — "
+                        f"deferring to next cycle"
+                    )
+                    continue  # Skip this direction entirely, retry next loop
 
                 if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
                     if len(dir_slots) > 1:
@@ -442,6 +460,38 @@ def check_position_status(
                 scale_out_enabled = slot.get('scale_out_enabled', False)
                 if scale_out_enabled:
                     _check_scale_out_fills(state, slot, exchange_pos)
+
+        # v1.59.0: Post-closure orphan detection — catch false closures
+        # where API transiently reported 0 but position still exists.
+        # Re-fetch and recover any untracked exchange positions.
+        if any_closed:
+            from .position_close import recover_position_to_state
+            time.sleep(1)
+            try:
+                post_positions = fetch_positions_cached(
+                    exchange, symbol, cache, force_refresh=True,
+                    circuit_breaker=circuit_breaker, metrics=metrics
+                )
+                current_slots = state.get('positions') or {}
+                for vp in post_positions:
+                    if float(vp.get('contracts', 0)) > 0:
+                        dir_key = vp.get('side')
+                        dir_label = 'LONG' if dir_key == 'long' else 'SHORT'
+                        has_slots = any(
+                            s.get('direction') == dir_label
+                            for s in current_slots.values()
+                        )
+                        if not has_slots:
+                            logger.critical(
+                                f"🚨 ORPHAN DETECTED after closure: {dir_label} "
+                                f"position (qty={vp.get('contracts')}) still on exchange "
+                                f"but no bot slots. Recovering..."
+                            )
+                            recover_position_to_state(
+                                state, config, vp, dir_label, exchange, cache
+                            )
+            except Exception as e:
+                logger.warning(f"Post-closure orphan check failed: {e}")
 
         return any_closed
 

@@ -1083,3 +1083,242 @@ class TestPerSlotFillDetection:
         mock_record.assert_not_called()
         # fetch_open_orders should NOT be called (no mismatch)
         exchange.fetch_open_orders.assert_not_called()
+
+
+# ── v1.59.0: Orphan Prevention Tests ─────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.save_state')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+       new=MagicMock())
+class TestOrphanPreventionV159:
+    """v1.59.0: Tests for false-closure prevention and orphan detection."""
+
+    def test_false_alarm_transient_zero_contract(self, mock_save, mock_sleep):
+        """First fetch returns 0 contracts, re-verification shows position alive → no closure."""
+        exchange = MagicMock()
+        # First fetch: 0 contracts (API glitch)
+        # Second fetch (re-verify): position alive
+        exchange.fetch_positions.side_effect = [
+            [],  # initial: empty
+            [{'side': 'long', 'contracts': 0.01}],  # re-verify: still alive
+        ]
+        pos_dict = {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'scale_out_enabled': False,
+        }
+        state = _make_position_state(pos_dict)
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is False
+        # Position should still be in state (not removed)
+        assert len(state.get('positions', {})) == 1
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    def test_two_slot_closure_reverified(self, mock_handle, mock_save, mock_sleep):
+        """2 LONG slots, API returns 0, re-verify confirms truly closed → closure proceeds."""
+        exchange = MagicMock()
+        # Both fetches: 0 contracts (truly closed)
+        exchange.fetch_positions.return_value = []
+        state = _make_two_slot_state(qty_each=0.01)
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        # Both slots should have been processed
+        assert mock_handle.call_count == 2
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    def test_inter_direction_refetch_after_closure(self, mock_handle, mock_save, mock_sleep):
+        """LONG closes, SHORT re-fetch gets fresh data instead of stale initial fetch."""
+        exchange = MagicMock()
+
+        # Build state with 1 LONG + 1 SHORT slot
+        s_long = {
+            'slot_id': 'sL', 'direction': 'LONG', 'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00', 'quantity': 0.01,
+            'remaining_quantity': 0.01, 'tp_price': 51000.0, 'sl_price': 49000.0,
+            'scale_out_enabled': False,
+        }
+        s_short = {
+            'slot_id': 'sS', 'direction': 'SHORT', 'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00', 'quantity': 0.01,
+            'remaining_quantity': 0.01, 'tp_price': 49000.0, 'sl_price': 51000.0,
+            'scale_out_enabled': False,
+        }
+        state = {
+            'positions': {'sL': s_long, 'sS': s_short},
+            'active_direction': None,
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        }
+
+        # Initial fetch: both show 0 (API glitch)
+        # LONG re-verify: still 0 → LONG truly closed
+        # After LONG closure, inter-direction re-fetch: SHORT alive
+        # SHORT re-verify would also show alive
+        exchange.fetch_positions.side_effect = [
+            [],  # initial: both empty
+            [],  # LONG re-verify: confirmed closed
+            [{'side': 'short', 'contracts': 0.01}],  # inter-direction re-fetch
+            # post-closure check (any_closed=True)
+            [{'side': 'short', 'contracts': 0.01}],
+        ]
+
+        # _handle_position_closed removes the slot from state
+        def handle_side_effect(exch, st, cfg, pos, c, m):
+            slot_id = pos.get('slot_id')
+            positions = st.get('positions') or {}
+            if slot_id in positions:
+                del positions[slot_id]
+            return True
+        mock_handle.side_effect = handle_side_effect
+
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        # Only LONG should have been handled (SHORT still alive after re-fetch)
+        assert mock_handle.call_count == 1
+        called_pos = mock_handle.call_args[0][3]  # 4th positional arg = position
+        assert called_pos['direction'] == 'LONG'
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
+    def test_post_closure_orphan_recovery(self, mock_record, mock_recover, mock_save, mock_sleep):
+        """After closure processing, exchange still has position → orphan recovered."""
+        exchange = MagicMock()
+
+        pos_dict = {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00', 'quantity': 0.01,
+            'remaining_quantity': 0.01, 'tp_price': 51000.0, 'sl_price': 49000.0,
+            'scale_out_enabled': False,
+        }
+        state = _make_position_state(pos_dict)
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
+
+        orphan_pos = {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0}
+
+        # Initial + re-verify: both 0 → closure proceeds
+        # Post-closure fetch: position STILL alive (orphan!)
+        exchange.fetch_positions.side_effect = [
+            [],  # initial
+            [],  # re-verify
+            [orphan_pos],  # post-closure orphan check
+        ]
+        exchange.fetch_my_trades.return_value = [
+            {'side': 'sell', 'price': 51000.0, 'timestamp': 2000000},
+        ]
+        exchange.fetch_ticker.return_value = {'last': 51000.0}
+
+        # Simulate record_closed_position removing the slot from state
+        def record_side_effect(exch, st, cfg, exit_price, exit_reason, c, m, position=None):
+            if position:
+                slot_id = position.get('slot_id')
+                positions = st.get('positions') or {}
+                if slot_id and slot_id in positions:
+                    del positions[slot_id]
+        mock_record.side_effect = record_side_effect
+
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        # record_closed_position was called (false closure)
+        assert mock_record.called
+        # BUT orphan was detected and recovery was called
+        mock_recover.assert_called_once()
+        recover_args = mock_recover.call_args
+        assert recover_args[0][2] == orphan_pos  # exchange_pos
+        assert recover_args[0][3] == 'LONG'  # direction
+
+    def test_verification_api_failure_defers(self, mock_save, mock_sleep):
+        """Verification fetch raises exception → direction skipped, no closure."""
+        exchange = MagicMock()
+        # Initial: 0 contracts
+        # Re-verify: exception
+        exchange.fetch_positions.side_effect = [
+            [],  # initial: empty
+            ccxt.NetworkError('timeout'),  # re-verify: fails
+        ]
+        pos_dict = {
+            'direction': 'LONG', 'entry_price': 50000.0,
+            'quantity': 0.01, 'remaining_quantity': 0.01,
+            'scale_out_enabled': False,
+        }
+        state = _make_position_state(pos_dict)
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        # Direction skipped due to verification failure → no closure recorded
+        assert result is False
+        assert len(state.get('positions', {})) == 1
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    def test_both_directions_false_closure_prevention(self, mock_handle, mock_save, mock_sleep):
+        """Both LONG+SHORT return 0 transiently → both re-verified, SHORT saved by re-fetch."""
+        exchange = MagicMock()
+
+        s_long = {
+            'slot_id': 'sL', 'direction': 'LONG', 'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00', 'quantity': 0.01,
+            'remaining_quantity': 0.01, 'tp_price': 51000.0, 'sl_price': 49000.0,
+            'scale_out_enabled': False,
+        }
+        s_short = {
+            'slot_id': 'sS', 'direction': 'SHORT', 'entry_price': 50000.0,
+            'entry_time': '2026-01-01T00:00:00', 'quantity': 0.01,
+            'remaining_quantity': 0.01, 'tp_price': 49000.0, 'sl_price': 51000.0,
+            'scale_out_enabled': False,
+        }
+        state = {
+            'positions': {'sL': s_long, 'sS': s_short},
+            'active_direction': None,
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        }
+
+        # Initial: both 0 (transient API glitch)
+        # LONG re-verify: confirmed closed (truly closed)
+        # Inter-direction re-fetch: SHORT alive now
+        # Post-closure: SHORT still alive (no orphan)
+        exchange.fetch_positions.side_effect = [
+            [],  # initial
+            [],  # LONG re-verify: confirmed
+            [{'side': 'short', 'contracts': 0.01}],  # inter-direction re-fetch
+            [{'side': 'short', 'contracts': 0.01}],  # post-closure check
+        ]
+
+        def handle_side_effect(exch, st, cfg, pos, c, m):
+            slot_id = pos.get('slot_id')
+            positions = st.get('positions') or {}
+            if slot_id in positions:
+                del positions[slot_id]
+            return True
+        mock_handle.side_effect = handle_side_effect
+
+        cache = APICache()
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result is True
+        # Only LONG was closed, SHORT was saved by inter-direction re-fetch
+        assert mock_handle.call_count == 1
+        called_pos = mock_handle.call_args[0][3]
+        assert called_pos['direction'] == 'LONG'
+        # SHORT slot should remain
+        remaining = state.get('positions', {})
+        assert any(s.get('direction') == 'SHORT' for s in remaining.values())

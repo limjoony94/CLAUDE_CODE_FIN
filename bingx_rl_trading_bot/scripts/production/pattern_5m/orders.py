@@ -1124,8 +1124,10 @@ def update_emergency_sl(
 ) -> None:
     """Re-calculate and re-place emergency SL(s) after slot add/remove.
 
-    Place-first, cancel-after: new closePosition SL is placed before
-    cancelling old one, eliminating the protection gap (v1.36.6).
+    v1.59.5: Cancel-first, place-after for closePosition=true orders.
+    BingX allows only ONE closePosition order per direction — place-first
+    always gets 110406, making it impossible to update the price.
+    Per-slot SLs cover the brief protection gap during cancel→place.
     """
     positions = state.get('positions') or {}
     if not positions:
@@ -1138,34 +1140,12 @@ def update_emergency_sl(
         for direction in ['LONG', 'SHORT']:
             if direction not in active_dirs:
                 _cancel_emergency_sl_for_direction(exchange, state, config, direction)
-        # Place-first, cancel-after for active directions
+        # v1.59.5: Cancel-first, place-after (closePosition=true is 1-per-direction)
         for direction in active_dirs:
-            old_id = _get_emergency_sl_id(state, config, direction)
-            # Place new SL first (closePosition=true, no qty conflict)
-            _set_emergency_sl_id(state, config, direction, None)
+            _cancel_emergency_sl_for_direction(exchange, state, config, direction)
             _place_emergency_sl_for_direction(exchange, state, config, direction)
-            new_id = _get_emergency_sl_id(state, config, direction)
-            # v1.59.3: Only cancel old if new was actually placed (not EXCHANGE_MANAGED).
-            # If _place got 110406 ("already exists"), the "already existing" order IS the
-            # old_id we're about to cancel — cancelling it leaves ZERO protection.
-            if old_id and old_id != _EXCHANGE_MANAGED and new_id and new_id != _EXCHANGE_MANAGED:
-                try:
-                    exchange.cancel_order(old_id, config.get('symbol', 'BTC-USDT'))
-                    logger.debug(f"Cancelled old emergency SL ({direction}) {old_id}")
-                except (ccxt.OrderNotFound, ccxt.InvalidOrder):
-                    logger.debug(f"Old emergency SL ({direction}) already gone: {old_id}")
-                except Exception as e:
-                    logger.warning(f"Failed to cancel old emergency SL ({direction}) {old_id}: {e}")
-            elif old_id and old_id != _EXCHANGE_MANAGED and new_id == _EXCHANGE_MANAGED:
-                # 110406 hit: the "already exists" order is likely old_id itself.
-                # Keep old_id as the active emergency SL instead of EXCHANGE_MANAGED.
-                _set_emergency_sl_id(state, config, direction, old_id)
-                logger.info(
-                    f"Emergency SL ({direction}) update: 110406 hit, keeping old order {old_id} "
-                    f"as active emergency SL (not cancelling)"
-                )
     else:
-        # One-Way: same as before
+        # One-Way: cancel then place
         old_order_id = state.get('emergency_sl_order_id')
         if old_order_id and old_order_id != _EXCHANGE_MANAGED:
             try:

@@ -197,18 +197,15 @@ class TestEmergencySlPerDirection:
         assert state['emergency_sl_order_id'] == 'emg_456'
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
-    def test_update_emergency_sl_110406_keeps_old_order(self, mock_save):
-        """v1.59.3: When 110406 (SL already exists) during update, keep old order.
+    def test_update_emergency_sl_cancel_first_then_place(self, mock_save):
+        """v1.59.5: Cancel-first, place-after for closePosition=true orders.
 
-        Bug scenario: update_emergency_sl tries to place new → 110406 →
-        marks as EXCHANGE_MANAGED → then cancels old order → NO protection.
-        Fix: detect 110406 result and keep old order instead of cancelling.
+        BingX allows only ONE closePosition order per direction. Place-first
+        always gets 110406, making price update impossible.
+        Fix: cancel old first, then place new at correct price.
         """
         exchange = MagicMock()
-        # First call (place new) → 110406 error
-        exchange.create_order.side_effect = ccxt.ExchangeError(
-            'bingx {"code":110406,"msg":"SL already exists"}'
-        )
+        exchange.create_order.return_value = {'id': 'new_emg_456'}
         state = {
             'positions': {
                 's1': {'direction': 'SHORT', 'sl_price': 53000, 'quantity': 0.01},
@@ -217,16 +214,17 @@ class TestEmergencySlPerDirection:
         }
         config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
         update_emergency_sl(exchange, state, config)
-        # Old order must NOT be cancelled — it IS the "already existing" SL
-        exchange.cancel_order.assert_not_called()
-        # State should retain old_id, NOT EXCHANGE_MANAGED
-        assert state['emergency_sl_orders']['SHORT'] == 'old_emg_order_123'
+        # Old order cancelled first, then new order placed
+        exchange.cancel_order.assert_called_once_with('old_emg_order_123', 'BTC/USDT:USDT')
+        exchange.create_order.assert_called_once()
+        assert state['emergency_sl_orders']['SHORT'] == 'new_emg_456'
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
-    def test_update_emergency_sl_success_cancels_old(self, mock_save):
-        """Normal update: new order placed successfully → old order cancelled."""
+    def test_update_emergency_sl_cancel_already_gone(self, mock_save):
+        """When old order already gone, cancel is no-op and new is placed."""
         exchange = MagicMock()
-        exchange.create_order.return_value = {'id': 'new_emg_456'}
+        exchange.cancel_order.side_effect = ccxt.OrderNotFound('gone')
+        exchange.create_order.return_value = {'id': 'new_emg_789'}
         state = {
             'positions': {
                 's1': {'direction': 'SHORT', 'sl_price': 53000, 'quantity': 0.01},
@@ -235,10 +233,10 @@ class TestEmergencySlPerDirection:
         }
         config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
         update_emergency_sl(exchange, state, config)
-        # Old order should be cancelled
-        exchange.cancel_order.assert_called_once_with('old_emg_123', 'BTC/USDT:USDT')
-        # New order should be stored
-        assert state['emergency_sl_orders']['SHORT'] == 'new_emg_456'
+        # Cancel attempted (got OrderNotFound), new order placed
+        exchange.cancel_order.assert_called_once()
+        exchange.create_order.assert_called_once()
+        assert state['emergency_sl_orders']['SHORT'] == 'new_emg_789'
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
     def test_cancel_emergency_sl_hedge(self, mock_save):

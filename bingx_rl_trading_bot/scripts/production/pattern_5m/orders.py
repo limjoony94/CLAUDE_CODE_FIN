@@ -822,6 +822,28 @@ def cancel_remaining_orders(
             return  # non-transient error — don't retry
 
 
+def _find_close_position_order(
+    open_orders: List[Dict],
+    direction: str,
+    config: Dict[str, Any],
+) -> Optional[Dict]:
+    """Find existing closePosition STOP_MARKET order for a direction.
+
+    v1.59.5: Used to resolve EXCHANGE_MANAGED state by finding the actual
+    order on the exchange so we can adopt or cancel-replace it.
+    """
+    position_side = _get_position_side(config, direction)
+    close_side = 'sell' if direction == 'LONG' else 'buy'
+    for o in open_orders:
+        info = o.get('info') or {}
+        if (o.get('type', '').upper() in ('STOP_MARKET', 'STOP')
+                and o.get('side', '').lower() == close_side
+                and info.get('positionSide', '').upper() == position_side
+                and str(info.get('closePosition', '')).lower() == 'true'):
+            return o
+    return None
+
+
 def _verify_emergency_sl_for_direction(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -836,6 +858,26 @@ def _verify_emergency_sl_for_direction(
 
     order_id = _get_emergency_sl_id(state, config, direction)
     if not order_id or order_id == _EXCHANGE_MANAGED:
+        # v1.59.5: When EXCHANGE_MANAGED, find actual order to adopt or replace
+        if order_id == _EXCHANGE_MANAGED:
+            existing = _find_close_position_order(open_orders, direction, config)
+            if existing:
+                found_id = existing.get('id')
+                found_price = float(existing.get('stopPrice', 0) or existing.get('price', 0))
+                if abs(found_price - expected_price) <= 1.0:
+                    _set_emergency_sl_id(state, config, direction, found_id)
+                    save_state(state)
+                    logger.info(f"🛡️ Emergency SL ({direction}) adopted from exchange: {found_id} @ ${found_price:.1f}")
+                    return
+                else:
+                    # Price mismatch — set real ID so cancel-first works, then update
+                    logger.info(
+                        f"🛡️ Emergency SL ({direction}) EXCHANGE_MANAGED price mismatch: "
+                        f"${found_price:.1f} vs expected ${expected_price:.1f} — cancel-replacing"
+                    )
+                    _set_emergency_sl_id(state, config, direction, found_id)
+                    update_emergency_sl(exchange, state, config)
+                    return
         logger.info(f"🛡️ Emergency SL ({direction}) missing — placing at ${expected_price:.1f}")
         _place_emergency_sl_for_direction(exchange, state, config, direction)
         return
@@ -986,8 +1028,20 @@ def _place_emergency_sl_for_direction(
     except ccxt.ExchangeError as e:
         error_msg = str(e)
         if '110406' in error_msg:
-            _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
-            logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")
+            # v1.59.5: Try to find and adopt the existing order instead of EXCHANGE_MANAGED
+            try:
+                open_orders = exchange.fetch_open_orders(symbol)
+                existing = _find_close_position_order(open_orders, direction, config)
+                if existing:
+                    _set_emergency_sl_id(state, config, direction, existing['id'])
+                    save_state(state)
+                    logger.info(f"Emergency SL ({direction}) already exists, adopted: {existing['id']} @ ${float(existing.get('stopPrice', 0) or existing.get('price', 0)):.1f}")
+                else:
+                    _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
+                    logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")
+            except Exception:
+                _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
+                logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")
         elif '110412' in error_msg or '110411' in error_msg:
             # Emergency SL price already breached — recalculate (v1.35.4, v1.36.6: +110411)
             new_sl = _recalculate_breached_sl(exchange, symbol, direction, worst_sl)
@@ -1084,9 +1138,28 @@ def _cancel_emergency_sl_for_direction(
     config: Dict[str, Any],
     direction: str,
 ) -> None:
-    """Cancel emergency SL for one direction."""
+    """Cancel emergency SL for one direction.
+
+    v1.59.5: When EXCHANGE_MANAGED, search open orders for the actual
+    closePosition order and cancel it by ID.
+    """
     order_id = _get_emergency_sl_id(state, config, direction)
-    if not order_id or order_id == _EXCHANGE_MANAGED:
+    if not order_id:
+        return
+
+    if order_id == _EXCHANGE_MANAGED:
+        # Find and cancel actual exchange order
+        try:
+            symbol = config.get('symbol', 'BTC-USDT')
+            open_orders = exchange.fetch_open_orders(symbol)
+            existing = _find_close_position_order(open_orders, direction, config)
+            if existing:
+                exchange.cancel_order(existing['id'], symbol)
+                logger.info(f"🛡️ Emergency SL ({direction}) cancelled EXCHANGE_MANAGED order: {existing['id']}")
+            else:
+                logger.debug(f"Emergency SL ({direction}) EXCHANGE_MANAGED but no order found on exchange")
+        except Exception as e:
+            logger.warning(f"Failed to cancel EXCHANGE_MANAGED emergency SL ({direction}): {e}")
         _set_emergency_sl_id(state, config, direction, None)
         return
 

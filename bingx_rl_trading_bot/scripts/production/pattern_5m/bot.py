@@ -80,6 +80,7 @@ from .position import (
 from .orders import (
     verify_tp_sl_orders, adjust_tpsl_to_config,
     _get_emergency_sl_id, _place_emergency_sl_for_direction,
+    _EXCHANGE_MANAGED,
 )
 from .utils import extract_pattern_name
 from .utils.lock import acquire_lock, release_lock
@@ -568,7 +569,11 @@ def _ensure_emergency_sl_exists(
     state: Dict[str, Any],
     config: Dict[str, Any],
 ) -> None:
-    """Proactive check: re-place emergency SL if missing for any active direction."""
+    """Proactive check: re-place emergency SL if missing for any active direction.
+
+    v1.59.5: Also resolves EXCHANGE_MANAGED state by calling verify
+    to find actual order and adopt or cancel-replace it.
+    """
     if config.get('position_mode') != 'hedge':
         return
     positions = state.get('positions') or {}
@@ -580,6 +585,11 @@ def _ensure_emergency_sl_exists(
         if not sl_id:
             logger.warning(f"🛡️ Emergency SL ({direction}) absent — re-placing proactively")
             _place_emergency_sl_for_direction(exchange, state, config, direction)
+        elif sl_id == _EXCHANGE_MANAGED:
+            # v1.59.5: EXCHANGE_MANAGED = BingX has its own closePosition order.
+            # Per-slot individual SLs provide real protection.
+            # Don't retry — BingX may report different stopPrice or hide the order.
+            pass
 
 
 def _check_position_timeouts(

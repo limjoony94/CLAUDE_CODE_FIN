@@ -15,6 +15,9 @@ from bingx_rl_trading_bot.scripts.production.pattern_5m.orders import (
     _set_emergency_sl_id,
     _get_emergency_sl_id,
     _EXCHANGE_MANAGED,
+    _find_close_position_order,
+    _verify_emergency_sl_for_direction,
+    _cancel_emergency_sl_for_direction,
     place_emergency_sl,
     cancel_emergency_sl,
     update_emergency_sl,
@@ -251,6 +254,85 @@ class TestEmergencySlPerDirection:
         assert exchange.cancel_order.call_count == 2
         assert state['emergency_sl_orders']['LONG'] is None
         assert state['emergency_sl_orders']['SHORT'] is None
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_cancel_exchange_managed_finds_and_cancels(self, mock_save):
+        """v1.59.5: Cancel EXCHANGE_MANAGED finds actual order on exchange."""
+        exchange = MagicMock()
+        exchange.fetch_open_orders.return_value = [{
+            'id': 'real_order_123',
+            'type': 'STOP_MARKET',
+            'side': 'buy',
+            'info': {'positionSide': 'SHORT', 'closePosition': 'true'},
+        }]
+        state = {
+            'positions': {'s1': {'direction': 'SHORT', 'sl_price': 53000, 'quantity': 0.01}},
+            'emergency_sl_orders': {'SHORT': _EXCHANGE_MANAGED},
+        }
+        config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
+        _cancel_emergency_sl_for_direction(exchange, state, config, 'SHORT')
+        exchange.cancel_order.assert_called_once_with('real_order_123', 'BTC/USDT:USDT')
+        assert state['emergency_sl_orders']['SHORT'] is None
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_verify_exchange_managed_adopts_matching_price(self, mock_save):
+        """v1.59.5: Verify adopts EXCHANGE_MANAGED order if price matches."""
+        exchange = MagicMock()
+        state = {
+            'positions': {'s1': {'direction': 'LONG', 'sl_price': 49000, 'quantity': 0.01}},
+            'emergency_sl_orders': {'LONG': _EXCHANGE_MANAGED},
+        }
+        config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
+        expected = _get_worst_sl_price_for_direction(state, 'LONG')
+        open_orders = [{
+            'id': 'found_order_456',
+            'type': 'STOP_MARKET',
+            'side': 'sell',
+            'stopPrice': str(expected),
+            'info': {'positionSide': 'LONG', 'closePosition': 'true'},
+        }]
+        _verify_emergency_sl_for_direction(exchange, state, config, 'LONG', open_orders)
+        assert state['emergency_sl_orders']['LONG'] == 'found_order_456'
+        exchange.create_order.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.orders.save_state')
+    def test_verify_exchange_managed_replaces_wrong_price(self, mock_save):
+        """v1.59.5: Verify cancel-replaces EXCHANGE_MANAGED order with wrong price."""
+        exchange = MagicMock()
+        exchange.create_order.return_value = {'id': 'new_order_789'}
+        state = {
+            'positions': {'s1': {'direction': 'LONG', 'sl_price': 49000, 'quantity': 0.01}},
+            'emergency_sl_orders': {'LONG': _EXCHANGE_MANAGED},
+        }
+        config = {'position_mode': 'hedge', 'symbol': 'BTC/USDT:USDT'}
+        open_orders = [{
+            'id': 'stale_order_111',
+            'type': 'STOP_MARKET',
+            'side': 'sell',
+            'stopPrice': '45000.0',
+            'info': {'positionSide': 'LONG', 'closePosition': 'true'},
+        }]
+        _verify_emergency_sl_for_direction(exchange, state, config, 'LONG', open_orders)
+        # Should have cancelled stale order and placed new one
+        exchange.cancel_order.assert_called()
+        exchange.create_order.assert_called()
+
+    def test_find_close_position_order(self):
+        """v1.59.5: Finds closePosition STOP_MARKET by direction."""
+        config = {'position_mode': 'hedge'}
+        orders = [
+            {'id': 'tp1', 'type': 'TAKE_PROFIT_MARKET', 'side': 'sell',
+             'info': {'positionSide': 'LONG', 'closePosition': 'false'}},
+            {'id': 'sl_close', 'type': 'STOP_MARKET', 'side': 'sell',
+             'info': {'positionSide': 'LONG', 'closePosition': 'true'}},
+            {'id': 'sl_normal', 'type': 'STOP_MARKET', 'side': 'sell',
+             'info': {'positionSide': 'LONG', 'closePosition': 'false'}},
+        ]
+        result = _find_close_position_order(orders, 'LONG', config)
+        assert result['id'] == 'sl_close'
+        # SHORT direction should not match LONG orders
+        result_short = _find_close_position_order(orders, 'SHORT', config)
+        assert result_short is None
 
 
 # ── State v3 migration ──────────────────────────────────────

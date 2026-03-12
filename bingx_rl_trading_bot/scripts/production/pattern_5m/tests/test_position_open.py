@@ -93,16 +93,35 @@ class TestCalculateTPSL:
         assert tp > 100000.0
         assert sl < 100000.0
 
-    def test_dynamic_per_pattern_missing_falls_to_default(self, strategy):
-        """Pattern not in dynamic dict → uses strategy defaults."""
+    def test_dynamic_per_pattern_missing_falls_to_median(self, strategy):
+        """v1.59.2: Pattern not in dynamic dict → uses median fallback (not config defaults)."""
         config = {
             '_dynamic_tpsl_per_pattern': True,
             '_dynamic_patterns_tpsl': {'OTHER-PAT': [2.5, 4.0]},
         }
-        _, _, tp_adj, _ = calculate_tp_sl(
+        _, _, tp_adj, sl_adj = calculate_tp_sl(
             100000.0, +1, strategy, 1.0, pattern='UNKNOWN', config=config
         )
-        assert tp_adj == pytest.approx(strategy['tp_pct'] + SLIPPAGE_BUFFER_PCT)
+        # Median of single entry: TP=2.5, SL=4.0
+        assert tp_adj == pytest.approx(2.5 + SLIPPAGE_BUFFER_PCT)
+        assert sl_adj == pytest.approx(4.0 - SLIPPAGE_BUFFER_PCT)
+
+    def test_dynamic_per_pattern_none_falls_to_median(self, strategy):
+        """v1.59.2: pattern=None → uses median fallback (not config defaults)."""
+        config = {
+            '_dynamic_tpsl_per_pattern': True,
+            '_dynamic_patterns_tpsl': {
+                'PAT-A': [1.0, 2.0],
+                'PAT-B': [2.0, 4.0],
+                'PAT-C': [3.0, 6.0],
+            },
+        }
+        _, _, tp_adj, sl_adj = calculate_tp_sl(
+            100000.0, +1, strategy, 1.0, pattern=None, config=config
+        )
+        # Median of [1.0, 2.0, 3.0] = 2.0; median of [2.0, 4.0, 6.0] = 4.0
+        assert tp_adj == pytest.approx(2.0 + SLIPPAGE_BUFFER_PCT)
+        assert sl_adj == pytest.approx(4.0 - SLIPPAGE_BUFFER_PCT)
 
     # ── Mode 2: Dynamic universal ──
 

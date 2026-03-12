@@ -627,8 +627,8 @@ class TestCalculateTpSl:
         assert tp_pct == pytest.approx(1.5 + SLIPPAGE_BUFFER_PCT, abs=0.001)
         assert sl_pct == pytest.approx(2.5 - SLIPPAGE_BUFFER_PCT, abs=0.001)
 
-    def test_dynamic_per_pattern_fallback(self):
-        """Pattern not in dynamic dict → falls back to strategy defaults."""
+    def test_dynamic_per_pattern_fallback_uses_median(self):
+        """v1.59.2: Pattern not in dynamic dict → uses median fallback (not strategy defaults)."""
         config = {
             '_dynamic_tpsl_per_pattern': True,
             '_dynamic_patterns_tpsl': {'OTHER-PAT': [1.0, 2.0]},
@@ -638,8 +638,9 @@ class TestCalculateTpSl:
             50000.0, direction=1, strategy={'tp_pct': 2.0, 'sl_pct': 3.0},
             vol_mult=1.0, pattern='MISSING-PAT', config=config
         )
-        # Falls back to strategy.tp_pct=2.0
-        assert tp_pct == pytest.approx(2.0 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+        # v1.59.2: Median of single entry OTHER-PAT: TP=1.0, SL=2.0
+        assert tp_pct == pytest.approx(1.0 + SLIPPAGE_BUFFER_PCT, abs=0.001)
+        assert sl_pct == pytest.approx(2.0 - SLIPPAGE_BUFFER_PCT, abs=0.001)
 
     def test_price_rounding(self):
         """Output prices should be rounded to PRICE_ROUND_DECIMALS."""

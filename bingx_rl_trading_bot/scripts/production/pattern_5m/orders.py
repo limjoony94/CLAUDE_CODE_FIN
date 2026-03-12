@@ -350,13 +350,14 @@ def _adjust_single_position_tpsl(
 
     # Verify pattern/mode compatibility before proceeding
     if config.get('_dynamic_tpsl_per_pattern'):
-        if not pattern:
-            logger.debug("No pattern found in position, skipping TP/SL adjustment")
-            return False
         pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
-        if pattern not in pp_tpsl:
-            logger.debug(f"Pattern {pattern} not in dynamic per-pattern dict, skipping adjustment")
-            return False
+        if not pattern or pattern not in pp_tpsl:
+            # v1.59.2: Don't skip — calculate_tp_sl uses median fallback for unknown patterns.
+            # Skipping leaves positions with dangerously tight defaults (1%/1%) forever.
+            logger.info(
+                f"Pattern {'missing' if not pattern else f'{pattern} not in dict'} — "
+                f"TP/SL adjustment will use median fallback"
+            )
     elif config.get('_dynamic_tpsl_universal'):
         pass  # Universal mode doesn't require a pattern
     else:

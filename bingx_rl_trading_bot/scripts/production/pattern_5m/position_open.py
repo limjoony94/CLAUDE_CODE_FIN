@@ -8,7 +8,7 @@ import uuid
 import logging
 import pandas as pd
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Tuple
 
 import ccxt
 
@@ -413,6 +413,31 @@ def _get_actual_fill_price(
     return actual_entry_price, actual_quantity
 
 
+def _get_median_tpsl_fallback(
+    pp_tpsl: Dict[str, list],
+    strategy: Dict[str, Any],
+) -> Tuple[float, float]:
+    """Return median TP/SL from dynamic per-pattern dict as safe fallback.
+
+    v1.59.2: When pattern is unknown (recovery, extraction failure), using
+    config defaults (tp_pct=1.0, sl_pct=1.0) is dangerous because actual
+    per-pattern SL ranges 1.44~5.95%. A 1% SL is ~1.5-6x tighter than intended.
+    Median values provide a neutral middle-ground that won't prematurely stop out.
+    """
+    if not pp_tpsl:
+        return strategy.get('tp_pct', 1.0), strategy.get('sl_pct', 1.0)
+
+    tps = sorted(v[0] for v in pp_tpsl.values() if isinstance(v, (list, tuple)) and len(v) >= 2)
+    sls = sorted(v[1] for v in pp_tpsl.values() if isinstance(v, (list, tuple)) and len(v) >= 2)
+
+    if not tps or not sls:
+        return strategy.get('tp_pct', 1.0), strategy.get('sl_pct', 1.0)
+
+    median_tp = tps[len(tps) // 2]
+    median_sl = sls[len(sls) // 2]
+    return median_tp, median_sl
+
+
 def _effective_vol_mult(vol_mult: float, base_sl_pct: float, config: Optional[Dict[str, Any]]) -> float:
     """Compute effective vol_mult so scaled SL never exceeds daily loss limit.
 
@@ -458,9 +483,14 @@ def calculate_tp_sl(
             base_sl_pct = pp_tpsl[pattern][1]
             logger.debug(f"Using dynamic per-pattern TP/SL: {pattern} → TP={base_tp_pct}%, SL={base_sl_pct}%")
         else:
-            base_tp_pct = strategy['tp_pct']
-            base_sl_pct = strategy['sl_pct']
-            logger.warning(f"Pattern {pattern} not in dynamic per-pattern dict, using defaults")
+            # v1.59.2: Median fallback — use portfolio median TP/SL instead of config defaults
+            # Config defaults (tp_pct=1.0, sl_pct=1.0) are dangerously tight for per-pattern mode
+            # where actual SL ranges 1.44~5.95%. Using median protects recovered positions.
+            base_tp_pct, base_sl_pct = _get_median_tpsl_fallback(pp_tpsl, strategy)
+            logger.warning(
+                f"Pattern {pattern} not in dynamic per-pattern dict, "
+                f"using median fallback TP={base_tp_pct:.2f}% SL={base_sl_pct:.2f}%"
+            )
 
         eff_mult = _effective_vol_mult(vol_mult, base_sl_pct, config)
         tp_pct_adjusted = (base_tp_pct * eff_mult) + SLIPPAGE_BUFFER_PCT

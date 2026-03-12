@@ -18,16 +18,18 @@ from .models import PerformanceMetrics, BOT_STATE_REQUIRED_KEYS
 logger = logging.getLogger('pattern_5m')
 
 
-def load_state(state_file: str = STATE_FILE) -> Dict[str, Any]:
+def load_state(state_file: str = None) -> Dict[str, Any]:
     """
     Load bot state from JSON file with .bak recovery on corruption.
 
     Args:
-        state_file: Path to state JSON file
+        state_file: Path to state JSON file (defaults to STATE_FILE at call time)
 
     Returns:
         State dictionary (new or loaded)
     """
+    if state_file is None:
+        state_file = STATE_FILE
     default_state = _create_default_state()
 
     if os.path.exists(state_file):
@@ -269,7 +271,7 @@ def _atomic_replace_with_retry(src: str, dst: str, max_retries: int = 3) -> None
 
 def save_state(
     state: Dict[str, Any],
-    state_file: str = STATE_FILE,
+    state_file: str = None,
     create_backup: bool = True,
     is_trade_close: bool = False
 ) -> None:
@@ -278,10 +280,12 @@ def save_state(
 
     Args:
         state: State dictionary to save
-        state_file: Path to state JSON file
+        state_file: Path to state JSON file (defaults to STATE_FILE at call time)
         create_backup: Whether to create a backup before saving
         is_trade_close: Whether this save is due to a trade closing
     """
+    if state_file is None:
+        state_file = STATE_FILE
     state['updated_at'] = datetime.now().isoformat()
 
     # Only update last_trade_date when a trade actually closes
@@ -419,14 +423,16 @@ def reset_daily_stats_if_needed(state: Dict[str, Any]) -> bool:
 # METRICS PERSISTENCE
 # ============================================================
 
-def save_metrics(metrics: PerformanceMetrics, metrics_file: str = METRICS_FILE) -> None:
+def save_metrics(metrics: PerformanceMetrics, metrics_file: str = None) -> None:
     """
     Save performance metrics to file.
 
     Args:
         metrics: PerformanceMetrics instance to save
-        metrics_file: Path to metrics JSON file
+        metrics_file: Path to metrics JSON file (defaults to METRICS_FILE at call time)
     """
+    if metrics_file is None:
+        metrics_file = METRICS_FILE
     try:
         metrics_data = metrics.to_dict()
         metrics_dir = os.path.dirname(metrics_file)
@@ -465,16 +471,18 @@ def save_metrics(metrics: PerformanceMetrics, metrics_file: str = METRICS_FILE) 
         logger.warning(f"Failed to save metrics: {e}")
 
 
-def load_metrics(metrics_file: str = METRICS_FILE) -> Optional[PerformanceMetrics]:
+def load_metrics(metrics_file: str = None) -> Optional[PerformanceMetrics]:
     """
     Load performance metrics from file.
 
     Args:
-        metrics_file: Path to metrics JSON file
+        metrics_file: Path to metrics JSON file (defaults to METRICS_FILE at call time)
 
     Returns:
         PerformanceMetrics instance or None if loading fails
     """
+    if metrics_file is None:
+        metrics_file = METRICS_FILE
     try:
         if os.path.exists(metrics_file):
             with open(metrics_file, 'r') as f:

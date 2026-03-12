@@ -334,6 +334,33 @@ class TestEmergencySlPerDirection:
         result_short = _find_close_position_order(orders, 'SHORT', config)
         assert result_short is None
 
+    def test_find_close_position_order_ccxt_normalized_type(self):
+        """v1.59.6: CCXT normalizes STOP_MARKET → 'market'; match via info.type."""
+        config = {'position_mode': 'hedge'}
+        # Realistic CCXT-normalized order: type='market' but info.type='STOP_MARKET'
+        orders = [
+            {'id': 'tp1', 'type': 'market', 'side': 'sell',
+             'info': {'positionSide': 'LONG', 'closePosition': 'false',
+                      'type': 'TAKE_PROFIT_MARKET'}},
+            {'id': 'emg_sl', 'type': 'market', 'side': 'sell',
+             'info': {'positionSide': 'LONG', 'closePosition': 'true',
+                      'type': 'STOP_MARKET'}},
+        ]
+        result = _find_close_position_order(orders, 'LONG', config)
+        assert result is not None
+        assert result['id'] == 'emg_sl'
+
+    def test_find_close_position_order_rejects_non_stop(self):
+        """Reject orders that are not STOP type even with closePosition."""
+        config = {'position_mode': 'hedge'}
+        orders = [
+            {'id': 'limit_close', 'type': 'limit', 'side': 'sell',
+             'info': {'positionSide': 'LONG', 'closePosition': 'true',
+                      'type': 'LIMIT'}},
+        ]
+        result = _find_close_position_order(orders, 'LONG', config)
+        assert result is None
+
 
 # ── State v3 migration ──────────────────────────────────────
 

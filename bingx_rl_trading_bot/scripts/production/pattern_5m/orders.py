@@ -836,7 +836,12 @@ def _find_close_position_order(
     close_side = 'sell' if direction == 'LONG' else 'buy'
     for o in open_orders:
         info = o.get('info') or {}
-        if (o.get('type', '').upper() in ('STOP_MARKET', 'STOP')
+        # CCXT normalizes STOP_MARKET → 'market'; check both ccxt type and raw info.type
+        ccxt_type = o.get('type', '').upper()
+        raw_type = str(info.get('type', '')).upper()
+        is_stop = (ccxt_type in ('STOP_MARKET', 'STOP')
+                   or raw_type in ('STOP_MARKET', 'STOP'))
+        if (is_stop
                 and o.get('side', '').lower() == close_side
                 and info.get('positionSide', '').upper() == position_side
                 and str(info.get('closePosition', '')).lower() == 'true'):
@@ -863,7 +868,14 @@ def _verify_emergency_sl_for_direction(
             existing = _find_close_position_order(open_orders, direction, config)
             if existing:
                 found_id = existing.get('id')
-                found_price = float(existing.get('stopPrice', 0) or existing.get('price', 0))
+                # CCXT may return stopPrice=None; use info.stopPrice for actual value
+                info = existing.get('info') or {}
+                found_price = float(
+                    existing.get('stopPrice')
+                    or info.get('stopPrice')
+                    or existing.get('price', 0)
+                    or 0
+                )
                 if abs(found_price - expected_price) <= 1.0:
                     _set_emergency_sl_id(state, config, direction, found_id)
                     save_state(state)
@@ -1035,7 +1047,9 @@ def _place_emergency_sl_for_direction(
                 if existing:
                     _set_emergency_sl_id(state, config, direction, existing['id'])
                     save_state(state)
-                    logger.info(f"Emergency SL ({direction}) already exists, adopted: {existing['id']} @ ${float(existing.get('stopPrice', 0) or existing.get('price', 0)):.1f}")
+                    adopt_info = existing.get('info') or {}
+                    adopt_price = float(existing.get('stopPrice') or adopt_info.get('stopPrice') or existing.get('price', 0) or 0)
+                    logger.info(f"Emergency SL ({direction}) already exists, adopted: {existing['id']} @ ${adopt_price:.1f}")
                 else:
                     _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
                     logger.info(f"Emergency SL ({direction}) already exists on exchange — marking as managed")

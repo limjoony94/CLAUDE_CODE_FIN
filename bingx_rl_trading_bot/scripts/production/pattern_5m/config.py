@@ -260,6 +260,23 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             if missing:
                 logger.warning(f"  {len(missing)} patterns have no TP/SL entry (will use config defaults): {list(missing)[:5]}")
 
+            # v1.57.0: TP scale factor — N-pos portfolio optimization
+            # (tpsl_deep_crossval: TP×0.5 IS PnL/MDD +28%, OOS +64%, DISCRIMINATING,
+            #  Cascade-independent, 10/10 MC wins. Scanner 1-pos context mismatch fix.)
+            tp_scale = config.get('strategy', {}).get('tp_scale_factor', 1.0)
+            # SL scale factor — infrastructure kept but default 1.0 (SL×1.1 NON-DISC in corrected WF)
+            sl_scale = config.get('strategy', {}).get('sl_scale_factor', 1.0)
+            if tp_scale != 1.0 or sl_scale != 1.0:
+                for key, vals in patterns_tpsl.items():
+                    if isinstance(vals, (list, tuple)) and len(vals) >= 2:
+                        new_tp = round(max(0.3, vals[0] * tp_scale), 3) if tp_scale != 1.0 else vals[0]
+                        new_sl = round(max(0.5, vals[1] * sl_scale), 3) if sl_scale != 1.0 else vals[1]
+                        patterns_tpsl[key] = [new_tp, new_sl]
+                if tp_scale != 1.0:
+                    logger.info(f"TP scale factor applied: {tp_scale} (N-pos portfolio optimization)")
+                if sl_scale != 1.0:
+                    logger.info(f"SL scale factor applied: {sl_scale}")
+
             config['_dynamic_tpsl_per_pattern'] = True
             config['_dynamic_patterns_tpsl'] = patterns_tpsl
             logger.info(f"Per-pattern TP/SL loaded: {len(patterns_tpsl)} patterns")

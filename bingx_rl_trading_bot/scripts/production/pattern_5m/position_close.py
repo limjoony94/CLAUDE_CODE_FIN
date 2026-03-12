@@ -160,6 +160,9 @@ def record_closed_position(
                     f"already recorded — skipping"
                 )
                 # Still remove the slot from state but don't record duplicate trade
+                # v1.57.1: Cancel remaining TP/SL orders for this slot (prevents orphan orders)
+                if exchange:
+                    cancel_remaining_orders(exchange, state, config, position=position)
                 slot_id = position.get('slot_id')
                 positions_dict = state.get('positions') or {}
                 if slot_id and slot_id in positions_dict:
@@ -364,6 +367,20 @@ def recover_position_to_state(
     entry_price = float(exchange_pos.get('entryPrice', 0))
     quantity = float(exchange_pos.get('contracts', 0))
     dir_mult = 1 if direction == 'LONG' else -1
+
+    # v1.57.1: Duplicate recovery guard — skip if recovered slots for this direction exist
+    # (Prevents same exchange position from being recovered multiple times)
+    existing_recovered = [
+        s for s in (state.get('positions') or {}).values()
+        if s.get('direction') == direction and s.get('recovered', False)
+    ]
+    if existing_recovered:
+        logger.warning(
+            f"⚠️ Recovery skipped: {len(existing_recovered)} recovered {direction} slot(s) "
+            f"already exist (entry=${existing_recovered[0].get('entry_price', 0):.1f}). "
+            f"Not creating duplicate recovery slots."
+        )
+        return
 
     # Try to find pattern_name and vol_mult from existing slots for this direction
     old_pattern_name = None

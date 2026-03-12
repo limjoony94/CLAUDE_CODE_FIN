@@ -529,6 +529,121 @@ class TestLoadDynamicPatterns:
         assert result['strategy']['long_patterns'] == ['U-MU-H']
         assert len(result['strategy']['short_patterns']) == 2
 
+    def test_tp_scale_factor_applied(self, tmp_path, monkeypatch, per_pattern_json):
+        """v1.57.0: tp_scale_factor multiplies TP values, SL unchanged."""
+        config = {
+            'strategy': {
+                'pattern_source': 'dynamic',
+                'tp_pct': 1.0, 'sl_pct': 1.0,
+                'long_patterns': [], 'short_patterns': [],
+                'tp_scale_factor': 0.5,
+            }
+        }
+        f = str(tmp_path / 'scale.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(config)
+        assert result['_dynamic_tpsl_per_pattern'] is True
+        # TP should be scaled by 0.5, SL unchanged
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][0] == pytest.approx(0.9, abs=0.01)  # 1.8 * 0.5
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][1] == 3.5  # SL unchanged
+        assert result['_dynamic_patterns_tpsl']['DN-BU-BU'][0] == pytest.approx(1.0, abs=0.01)  # 2.0 * 0.5
+        assert result['_dynamic_patterns_tpsl']['DN-BU-BU'][1] == 4.0  # SL unchanged
+
+    def test_sl_scale_factor_applied(self, tmp_path, monkeypatch, per_pattern_json):
+        """v1.58.0: sl_scale_factor multiplies SL values, TP unchanged when tp_scale=1.0."""
+        config = {
+            'strategy': {
+                'pattern_source': 'dynamic',
+                'tp_pct': 1.0, 'sl_pct': 1.0,
+                'long_patterns': [], 'short_patterns': [],
+                'sl_scale_factor': 1.1,
+            }
+        }
+        f = str(tmp_path / 'sl_scale.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(config)
+        assert result['_dynamic_tpsl_per_pattern'] is True
+        # SL should be scaled by 1.1, TP unchanged
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][0] == 1.8  # TP unchanged
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][1] == pytest.approx(3.85, abs=0.01)  # 3.5 * 1.1
+        assert result['_dynamic_patterns_tpsl']['DN-BU-BU'][1] == pytest.approx(4.4, abs=0.01)  # 4.0 * 1.1
+
+    def test_tp_and_sl_scale_factors_combined(self, tmp_path, monkeypatch, per_pattern_json):
+        """v1.58.0: Both tp_scale_factor and sl_scale_factor applied together."""
+        config = {
+            'strategy': {
+                'pattern_source': 'dynamic',
+                'tp_pct': 1.0, 'sl_pct': 1.0,
+                'long_patterns': [], 'short_patterns': [],
+                'tp_scale_factor': 0.5,
+                'sl_scale_factor': 1.1,
+            }
+        }
+        f = str(tmp_path / 'both_scale.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(config)
+        assert result['_dynamic_tpsl_per_pattern'] is True
+        # TP×0.5, SL×1.1
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][0] == pytest.approx(0.9, abs=0.01)  # 1.8 * 0.5
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][1] == pytest.approx(3.85, abs=0.01)  # 3.5 * 1.1
+
+    def test_sl_scale_factor_minimum_floor(self, tmp_path, monkeypatch, per_pattern_json):
+        """sl_scale_factor should not reduce SL below 0.5%."""
+        config = {
+            'strategy': {
+                'pattern_source': 'dynamic',
+                'tp_pct': 1.0, 'sl_pct': 1.0,
+                'long_patterns': [], 'short_patterns': [],
+                'sl_scale_factor': 0.1,  # Extreme reduction
+            }
+        }
+        f = str(tmp_path / 'sl_floor.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(config)
+        # 3.5 * 0.1 = 0.35 → clamped to 0.5
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][1] >= 0.5
+
+    def test_tp_scale_factor_default_no_change(self, base_config, tmp_path, monkeypatch, per_pattern_json):
+        """No tp_scale_factor → TP values unchanged (default 1.0)."""
+        f = str(tmp_path / 'noscale.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(base_config)
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'] == [1.8, 3.5]  # Original values
+
+    def test_tp_scale_factor_minimum_floor(self, tmp_path, monkeypatch, per_pattern_json):
+        """tp_scale_factor should not reduce TP below 0.3%."""
+        config = {
+            'strategy': {
+                'pattern_source': 'dynamic',
+                'tp_pct': 1.0, 'sl_pct': 1.0,
+                'long_patterns': [], 'short_patterns': [],
+                'tp_scale_factor': 0.1,  # Extreme reduction
+            }
+        }
+        f = str(tmp_path / 'floor.json')
+        self._write_json(f, per_pattern_json)
+        monkeypatch.setattr(
+            'bingx_rl_trading_bot.scripts.production.pattern_5m.config.DYNAMIC_PATTERNS_FILE', f,
+        )
+        result = load_dynamic_patterns(config)
+        # 1.8 * 0.1 = 0.18 → clamped to 0.3
+        assert result['_dynamic_patterns_tpsl']['U-MU-H'][0] >= 0.3
+
     def test_per_pattern_empty_tpsl_fallback(self, base_config, tmp_path, monkeypatch):
         """Per-pattern mode with empty patterns_tpsl → fallback."""
         f = str(tmp_path / 'empty_tpsl.json')

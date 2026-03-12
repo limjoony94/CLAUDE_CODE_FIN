@@ -107,12 +107,12 @@ def sync_position_with_exchange(
                 sync_needed = True
 
         # Check for orphan exchange positions (exchange has position, no bot slots)
-        for dir_label, dir_key, bot_dir_slots in [
-            ('LONG', 'long', bot_long_slots),
-            ('SHORT', 'short', bot_short_slots),
-        ]:
+        # v1.57.1: Re-read current slots from state (first loop may have removed slots)
+        current_slots = state.get('positions') or {}
+        for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
             exchange_pos = exchange_map.get(dir_key)
-            if exchange_pos and not bot_dir_slots:
+            current_dir_slots = [s for s in current_slots.values() if s.get('direction') == dir_label]
+            if exchange_pos and not current_dir_slots:
                 logger.info(f"Exchange has {dir_label} position but no bot slots — recovering")
                 recover_position_to_state(state, config, exchange_pos, dir_label, exchange, cache)
                 sync_needed = True
@@ -472,11 +472,12 @@ def check_position_status(
                     exchange, symbol, cache, force_refresh=True,
                     circuit_breaker=circuit_breaker, metrics=metrics
                 )
-                current_slots = state.get('positions') or {}
                 for vp in post_positions:
                     if float(vp.get('contracts', 0)) > 0:
                         dir_key = vp.get('side')
                         dir_label = 'LONG' if dir_key == 'long' else 'SHORT'
+                        # v1.57.1: Re-read slots each iteration (recovery modifies state)
+                        current_slots = state.get('positions') or {}
                         has_slots = any(
                             s.get('direction') == dir_label
                             for s in current_slots.values()

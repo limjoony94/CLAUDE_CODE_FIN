@@ -393,7 +393,8 @@ def _run_bot_main(
 
                     if now - last_log_status_time >= LOG_STATUS_INTERVAL_SECONDS:
                         for slot in (state.get('positions') or {}).values():
-                            _log_position_status(slot, config, cache, exchange)
+                            if not slot.get('_pending_close'):
+                                _log_position_status(slot, config, cache, exchange)
                         last_log_status_time = now
                 else:
                     if now - last_log_status_time >= LOG_STATUS_INTERVAL_SECONDS:
@@ -1241,9 +1242,12 @@ def _check_aggregate_risk_cap(
     cap = counter_cap if is_counter else with_cap
 
     # Compute aggregate SL exposure from existing positions
+    # v1.60.0: Exclude pending-close slots
     positions = state.get('positions') or {}
     agg_exposure = 0.0
     for pos in positions.values():
+        if pos.get('_pending_close'):
+            continue
         if pos.get('direction') != signal_direction:
             continue
         entry = pos.get('entry_price', 0)
@@ -1298,11 +1302,16 @@ def _route_signal(
 
     if is_hedge:
         # Hedge mode: mixed directions allowed, check slot count + direction cap
-        if len(positions) >= max_pos:
+        # v1.60.0: Exclude pending-close slots from counts
+        active_positions = {
+            sid: p for sid, p in positions.items()
+            if not p.get('_pending_close')
+        }
+        if len(active_positions) >= max_pos:
             return 'SKIP'
         direction_cap = config.get('strategy', {}).get('direction_cap', max_pos)
         same_dir_count = sum(
-            1 for p in positions.values()
+            1 for p in active_positions.values()
             if p.get('direction') == signal_direction
         )
         if same_dir_count >= direction_cap:

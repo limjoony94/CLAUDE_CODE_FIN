@@ -171,8 +171,12 @@ def open_position(
 
     try:
         # Check slot availability (multi-position)
+        # v1.60.0: Exclude pending-close slots from active count
         max_positions = config.get('max_positions', 1)
-        active_positions = state.get('positions') or {}
+        active_positions = {
+            sid: s for sid, s in (state.get('positions') or {}).items()
+            if not s.get('_pending_close')
+        }
         if len(active_positions) >= max_positions:
             logger.info(f"All {max_positions} slots occupied ({len(active_positions)} active), skipping signal")
             return False
@@ -345,9 +349,15 @@ def open_position(
 
 
 def _check_slot_available(state: Dict[str, Any], config: Dict[str, Any]) -> bool:
-    """Check if a slot is available for a new position."""
+    """Check if a slot is available for a new position.
+
+    v1.60.0: Pending-close slots are excluded from active count.
+    """
     max_positions = config.get('max_positions', 1)
-    active = len(state.get('positions') or {})
+    active = sum(
+        1 for s in (state.get('positions') or {}).values()
+        if not s.get('_pending_close')
+    )
     return active < max_positions
 
 

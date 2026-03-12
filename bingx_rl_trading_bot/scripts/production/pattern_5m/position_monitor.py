@@ -69,8 +69,11 @@ def sync_position_with_exchange(
                 exchange_map[pos.get('side')] = pos
 
         bot_slots = state.get('positions') or {}
-        bot_long_slots = [s for s in bot_slots.values() if s.get('direction') == 'LONG']
-        bot_short_slots = [s for s in bot_slots.values() if s.get('direction') == 'SHORT']
+        # v1.60.0: Exclude pending-close slots from sync check
+        bot_long_slots = [s for s in bot_slots.values()
+                          if s.get('direction') == 'LONG' and not s.get('_pending_close')]
+        bot_short_slots = [s for s in bot_slots.values()
+                           if s.get('direction') == 'SHORT' and not s.get('_pending_close')]
 
         logger.debug(
             f"Position sync: exchange_long={'yes' if 'long' in exchange_map else 'no'}, "
@@ -111,6 +114,7 @@ def sync_position_with_exchange(
         current_slots = state.get('positions') or {}
         for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
             exchange_pos = exchange_map.get(dir_key)
+            # v1.60.0: Include pending-close slots — they ARE tracked, just pending
             current_dir_slots = [s for s in current_slots.values() if s.get('direction') == dir_label]
             if exchange_pos and not current_dir_slots:
                 logger.info(f"Exchange has {dir_label} position but no bot slots — recovering")
@@ -301,6 +305,16 @@ def check_position_status(
     Iterates all active slots, groups by direction, and checks
     against exchange positions.
 
+    v1.60.0: Soft-delete for mass closure — when ALL slots of a direction
+    appear closed (exchange returns 0 contracts), slots are marked
+    _pending_close instead of immediately deleted. On the NEXT loop,
+    if exchange still shows 0 → confirmed closure. If exchange shows
+    position exists → false alarm, slots restored. This prevents
+    irreversible data loss from BingX transient 0-contract responses.
+
+    Individual per-slot closures (one TP/SL fill) are still processed
+    immediately since exchange qty genuinely decreased.
+
     Args:
         exchange: Exchange instance
         state: Bot state dictionary
@@ -329,17 +343,23 @@ def check_position_status(
 
         any_closed = False
 
-        # Group bot slots by direction
+        # v1.60.0: Phase 1 — Resolve pending-close slots from previous cycle
+        any_closed |= _resolve_pending_close_slots(
+            exchange, state, config, cache, exchange_map,
+            circuit_breaker, metrics,
+        )
+
+        # Phase 2 — Detect new closures
         for dir_label, dir_key in [('LONG', 'long'), ('SHORT', 'short')]:
-            # v1.59.0: Re-read bot_slots each iteration — slots may have been
+            # Re-read bot_slots each iteration — slots may have been
             # removed during previous direction's closure processing.
             dir_slots = [s for s in (state.get('positions') or {}).values()
-                         if s.get('direction') == dir_label]
+                         if s.get('direction') == dir_label
+                         and not s.get('_pending_close')]
             if not dir_slots:
                 continue
 
-            # v1.59.0: Re-fetch exchange_map if previous direction had closures
-            # to avoid using stale single-fetch data for the next direction.
+            # Re-fetch exchange_map if previous direction had closures
             if any_closed:
                 try:
                     exchange_positions = fetch_positions_cached(
@@ -356,11 +376,11 @@ def check_position_status(
 
             exchange_pos = exchange_map.get(dir_key)
 
-            # All slots for this direction are closed (exchange has no position)
+            # All slots for this direction appear closed (exchange has no position)
             if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
-                # v1.59.0: ALWAYS re-verify before recording closures (any slot count)
-                # v1.55.0 only guarded ≥3 slots; 03-12 orphan incident showed 2-slot
-                # false closure when BingX API returned transient 0-contract response.
+                # v1.60.0: Soft-delete — mark slots as pending instead of deleting.
+                # Re-verify once (1s delay) to catch very short transients,
+                # then mark remaining as pending for next-cycle confirmation.
                 logger.warning(
                     f"⚠️ {len(dir_slots)} {dir_label} slot(s) appear closed — "
                     f"verifying with fresh API call..."
@@ -385,23 +405,26 @@ def check_position_status(
                         f"⚠️ Closure verification failed: {e} — "
                         f"deferring to next cycle"
                     )
-                    continue  # Skip this direction entirely, retry next loop
+                    continue
 
                 if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
-                    if len(dir_slots) > 1:
-                        total_qty = sum(s.get('quantity', 0) for s in dir_slots)
-                        logger.warning(
-                            f"⚠️ CASCADE: {len(dir_slots)} {dir_label} slots closed simultaneously "
-                            f"(qty={total_qty:.4f}). Likely emergency SL or exchange liquidation."
-                        )
-                    for slot in list(dir_slots):
-                        _handle_position_closed(exchange, state, config, slot, cache, metrics)
-                    any_closed = True
+                    # v1.60.0: Mark as pending-close instead of immediate deletion
+                    pending_time = datetime.now().isoformat()
+                    for slot in dir_slots:
+                        slot['_pending_close'] = True
+                        slot['_pending_close_time'] = pending_time
+                    total_qty = sum(s.get('quantity', 0) for s in dir_slots)
+                    logger.warning(
+                        f"🔒 SOFT-DELETE: {len(dir_slots)} {dir_label} slot(s) marked pending-close "
+                        f"(qty={total_qty:.4f}). Will confirm on next cycle."
+                    )
+                    save_state(state)
                 continue
 
             # Per-slot TP/SL fill detection (N>1 multi-position)
             # Exchange has position but with fewer contracts than local sum
             # → some individual slot TP/SL orders were filled
+            # Note: pending-close slots are excluded from dir_slots above
             exchange_qty = float(exchange_pos.get('contracts', 0))
             local_qty_sum = sum(s.get('quantity', 0) for s in dir_slots)
 
@@ -461,39 +484,6 @@ def check_position_status(
                 if scale_out_enabled:
                     _check_scale_out_fills(state, slot, exchange_pos)
 
-        # v1.59.0: Post-closure orphan detection — catch false closures
-        # where API transiently reported 0 but position still exists.
-        # Re-fetch and recover any untracked exchange positions.
-        if any_closed:
-            from .position_close import recover_position_to_state
-            time.sleep(1)
-            try:
-                post_positions = fetch_positions_cached(
-                    exchange, symbol, cache, force_refresh=True,
-                    circuit_breaker=circuit_breaker, metrics=metrics
-                )
-                for vp in post_positions:
-                    if float(vp.get('contracts', 0)) > 0:
-                        dir_key = vp.get('side')
-                        dir_label = 'LONG' if dir_key == 'long' else 'SHORT'
-                        # v1.57.1: Re-read slots each iteration (recovery modifies state)
-                        current_slots = state.get('positions') or {}
-                        has_slots = any(
-                            s.get('direction') == dir_label
-                            for s in current_slots.values()
-                        )
-                        if not has_slots:
-                            logger.critical(
-                                f"🚨 ORPHAN DETECTED after closure: {dir_label} "
-                                f"position (qty={vp.get('contracts')}) still on exchange "
-                                f"but no bot slots. Recovering..."
-                            )
-                            recover_position_to_state(
-                                state, config, vp, dir_label, exchange, cache
-                            )
-            except Exception as e:
-                logger.warning(f"Post-closure orphan check failed: {e}")
-
         return any_closed
 
     except ccxt.NetworkError as e:
@@ -505,6 +495,75 @@ def check_position_status(
     except Exception as e:
         logger.exception(f"Failed to check position status: {e}")
         return False
+
+
+def _resolve_pending_close_slots(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    cache: APICache,
+    exchange_map: Dict[str, Any],
+    circuit_breaker: Optional[CircuitBreaker] = None,
+    metrics: Optional[PerformanceMetrics] = None,
+) -> bool:
+    """Resolve slots marked _pending_close from the previous cycle.
+
+    v1.60.0: Two-cycle confirmation for mass closure detection.
+    - If exchange STILL shows 0 contracts → closure confirmed, process normally.
+    - If exchange shows position exists → false alarm, restore slots.
+
+    Returns:
+        True if any slots were confirmed closed.
+    """
+    positions = state.get('positions') or {}
+    pending_by_dir = {}  # dir_label → [slot, ...]
+    for slot in positions.values():
+        if slot.get('_pending_close'):
+            d = slot.get('direction', 'UNKNOWN')
+            pending_by_dir.setdefault(d, []).append(slot)
+
+    if not pending_by_dir:
+        return False
+
+    any_closed = False
+
+    for dir_label, pending_slots in pending_by_dir.items():
+        dir_key = 'long' if dir_label == 'LONG' else 'short'
+        exchange_pos = exchange_map.get(dir_key)
+
+        if exchange_pos is None or float(exchange_pos.get('contracts', 0)) == 0:
+            # Confirmed: exchange still shows 0 → process closures
+            total_qty = sum(s.get('quantity', 0) for s in pending_slots)
+            if len(pending_slots) > 1:
+                logger.warning(
+                    f"⚠️ CASCADE CONFIRMED: {len(pending_slots)} {dir_label} slots "
+                    f"(qty={total_qty:.4f}) — exchange confirms closure."
+                )
+            else:
+                logger.info(
+                    f"✅ Closure confirmed: {dir_label} slot "
+                    f"(qty={total_qty:.4f}) — exchange confirms closure."
+                )
+
+            for slot in list(pending_slots):
+                # Clear pending flags before processing
+                slot.pop('_pending_close', None)
+                slot.pop('_pending_close_time', None)
+                _handle_position_closed(exchange, state, config, slot, cache, metrics)
+            any_closed = True
+        else:
+            # False alarm: position still exists → restore slots
+            logger.warning(
+                f"⚠️ FALSE CLOSURE PREVENTED: {len(pending_slots)} {dir_label} "
+                f"slot(s) were pending-close but exchange shows position exists "
+                f"(qty={exchange_pos.get('contracts')}). Restoring slots."
+            )
+            for slot in pending_slots:
+                slot.pop('_pending_close', None)
+                slot.pop('_pending_close_time', None)
+            save_state(state)
+
+    return any_closed
 
 
 def _check_scale_out_fills(

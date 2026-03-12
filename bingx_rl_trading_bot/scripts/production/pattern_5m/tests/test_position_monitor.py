@@ -416,7 +416,8 @@ class TestCheckPositionStatus:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
            new=MagicMock())
     def test_position_closed_detected(self, mock_record, mock_save, mock_sleep):
-        """Position gone from exchange → detected as closed."""
+        """Position gone from exchange → v1.60.0 soft-delete: first call marks
+        pending, second call confirms closure."""
         exchange = MagicMock()
         exchange.fetch_positions.return_value = []  # No positions
         exchange.fetch_my_trades.return_value = [
@@ -440,8 +441,20 @@ class TestCheckPositionStatus:
             'last_trade': None, 'last_signal_time': None,
         })
         cache = APICache()
-        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
-        assert result is True
+
+        # Cycle 1: should mark pending, not yet closed
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False  # Not yet confirmed
+        # Slot should still be in state but marked pending
+        positions = state.get('positions') or {}
+        assert len(positions) == 1
+        slot = next(iter(positions.values()))
+        assert slot.get('_pending_close') is True
+
+        # Cycle 2: exchange still shows 0 → confirmed closure
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is True
+        mock_record.assert_called_once()
 
     def test_network_error_returns_false(self, mock_save, mock_sleep):
         """Network error → returns False (safe default)."""
@@ -706,7 +719,8 @@ class TestCheckPositionStatusExtended:
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
            new=MagicMock())
     def test_direction_mismatch_recovers(self, mock_handle, mock_save, mock_sleep):
-        """State=LONG but exchange=SHORT → LONG slot closed (no LONG on exchange)."""
+        """State=LONG but exchange=SHORT → v1.60.0: LONG marked pending first,
+        confirmed closed on second cycle."""
         exchange = MagicMock()
         exchange.fetch_positions.return_value = [
             {'side': 'short', 'contracts': 0.01, 'entryPrice': 49000.0},
@@ -720,9 +734,16 @@ class TestCheckPositionStatusExtended:
         }
         state = _make_position_state(pos_dict)
         cache = APICache()
-        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
-        assert result is True
-        # LONG slot detected as closed (exchange has no LONG position)
+
+        # Cycle 1: pending
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        slot = next(iter(state['positions'].values()))
+        assert slot.get('_pending_close') is True
+
+        # Cycle 2: confirmed
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is True
         mock_handle.assert_called_once()
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
@@ -1123,20 +1144,30 @@ class TestOrphanPreventionV159:
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
     def test_two_slot_closure_reverified(self, mock_handle, mock_save, mock_sleep):
-        """2 LONG slots, API returns 0, re-verify confirms truly closed → closure proceeds."""
+        """2 LONG slots, API returns 0, re-verify confirms truly closed →
+        v1.60.0: first call marks pending, second call confirms closure."""
         exchange = MagicMock()
-        # Both fetches: 0 contracts (truly closed)
+        # All fetches: 0 contracts (truly closed)
         exchange.fetch_positions.return_value = []
         state = _make_two_slot_state(qty_each=0.01)
         cache = APICache()
-        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
-        assert result is True
+
+        # Cycle 1: slots marked pending-close
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        for slot in state['positions'].values():
+            assert slot.get('_pending_close') is True
+
+        # Cycle 2: exchange still 0 → confirmed closure
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is True
         # Both slots should have been processed
         assert mock_handle.call_count == 2
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
     def test_inter_direction_refetch_after_closure(self, mock_handle, mock_save, mock_sleep):
-        """LONG closes, SHORT re-fetch gets fresh data instead of stale initial fetch."""
+        """LONG closes, SHORT re-fetch gets fresh data instead of stale initial fetch.
+        v1.60.0: LONG pending on cycle 1, confirmed on cycle 2."""
         exchange = MagicMock()
 
         # Build state with 1 LONG + 1 SHORT slot
@@ -1160,15 +1191,26 @@ class TestOrphanPreventionV159:
             'last_trade': None, 'last_signal_time': None,
         }
 
-        # Initial fetch: both show 0 (API glitch)
-        # LONG re-verify: still 0 → LONG truly closed
-        # After LONG closure, inter-direction re-fetch: SHORT alive
-        # SHORT re-verify would also show alive
+        # Cycle 1: Initial fetch shows both 0 → both directions get pending-close
+        # Re-verify for LONG: still 0 → marks pending
+        # Re-verify for SHORT: still 0 → marks pending
         exchange.fetch_positions.side_effect = [
             [],  # initial: both empty
-            [],  # LONG re-verify: confirmed closed
-            [{'side': 'short', 'contracts': 0.01}],  # inter-direction re-fetch
-            # post-closure check (any_closed=True)
+            [],  # LONG re-verify: confirmed 0 → pending
+            [],  # SHORT re-verify: confirmed 0 → pending
+        ]
+
+        cache = APICache()
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        assert state['positions']['sL'].get('_pending_close') is True
+        assert state['positions']['sS'].get('_pending_close') is True
+
+        # Cycle 2: initial fetch shows SHORT alive now → _resolve_pending_close_slots
+        # confirms LONG closed (no long in exchange_map) and restores SHORT (false alarm)
+        exchange.fetch_positions.side_effect = [
+            [{'side': 'short', 'contracts': 0.01}],  # initial: SHORT alive, LONG absent
+            # After LONG closure, post-closure orphan check:
             [{'side': 'short', 'contracts': 0.01}],
         ]
 
@@ -1181,18 +1223,17 @@ class TestOrphanPreventionV159:
             return True
         mock_handle.side_effect = handle_side_effect
 
-        cache = APICache()
-        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
-        assert result is True
-        # Only LONG should have been handled (SHORT still alive after re-fetch)
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is True
+        # Only LONG should have been handled (SHORT restored by exchange showing it alive)
         assert mock_handle.call_count == 1
         called_pos = mock_handle.call_args[0][3]  # 4th positional arg = position
         assert called_pos['direction'] == 'LONG'
 
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.recover_position_to_state')
-    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_close.record_closed_position')
-    def test_post_closure_orphan_recovery(self, mock_record, mock_recover, mock_save, mock_sleep):
-        """After closure processing, exchange still has position → orphan recovered."""
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    def test_post_closure_confirmed_after_two_cycles(self, mock_handle, mock_save, mock_sleep):
+        """v1.60.0: Confirmed closure after two cycles — cycle 1 marks pending,
+        cycle 2 confirms. Orphan recovery now handled by sync_position_with_exchange."""
         exchange = MagicMock()
 
         pos_dict = {
@@ -1208,39 +1249,26 @@ class TestOrphanPreventionV159:
             'last_trade': None, 'last_signal_time': None,
         })
 
-        orphan_pos = {'side': 'long', 'contracts': 0.01, 'entryPrice': 50000.0}
-
-        # Initial + re-verify: both 0 → closure proceeds
-        # Post-closure fetch: position STILL alive (orphan!)
+        # Cycle 1: Initial + re-verify: both 0 → marks pending
         exchange.fetch_positions.side_effect = [
             [],  # initial
             [],  # re-verify
-            [orphan_pos],  # post-closure orphan check
         ]
-        exchange.fetch_my_trades.return_value = [
-            {'side': 'sell', 'price': 51000.0, 'timestamp': 2000000},
-        ]
-        exchange.fetch_ticker.return_value = {'last': 51000.0}
-
-        # Simulate record_closed_position removing the slot from state
-        def record_side_effect(exch, st, cfg, exit_price, exit_reason, c, m, position=None):
-            if position:
-                slot_id = position.get('slot_id')
-                positions = st.get('positions') or {}
-                if slot_id and slot_id in positions:
-                    del positions[slot_id]
-        mock_record.side_effect = record_side_effect
 
         cache = APICache()
-        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
-        assert result is True
-        # record_closed_position was called (false closure)
-        assert mock_record.called
-        # BUT orphan was detected and recovery was called
-        mock_recover.assert_called_once()
-        recover_args = mock_recover.call_args
-        assert recover_args[0][2] == orphan_pos  # exchange_pos
-        assert recover_args[0][3] == 'LONG'  # direction
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        slot = next(iter(state['positions'].values()))
+        assert slot.get('_pending_close') is True
+
+        # Cycle 2: exchange still 0 → confirmed closure
+        exchange.fetch_positions.side_effect = None
+        exchange.fetch_positions.return_value = []
+
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is True
+        # _handle_position_closed was called for confirmed closure
+        mock_handle.assert_called_once()
 
     def test_verification_api_failure_defers(self, mock_save, mock_sleep):
         """Verification fetch raises exception → direction skipped, no closure."""
@@ -1270,7 +1298,8 @@ class TestOrphanPreventionV159:
 
     @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
     def test_both_directions_false_closure_prevention(self, mock_handle, mock_save, mock_sleep):
-        """Both LONG+SHORT return 0 transiently → both re-verified, SHORT saved by re-fetch."""
+        """Both LONG+SHORT return 0 transiently → both pending on cycle 1,
+        cycle 2 confirms LONG closed but SHORT saved by exchange showing it alive."""
         exchange = MagicMock()
 
         s_long = {
@@ -1293,15 +1322,26 @@ class TestOrphanPreventionV159:
             'last_trade': None, 'last_signal_time': None,
         }
 
-        # Initial: both 0 (transient API glitch)
-        # LONG re-verify: confirmed closed (truly closed)
-        # Inter-direction re-fetch: SHORT alive now
-        # Post-closure: SHORT still alive (no orphan)
+        # Cycle 1: both directions 0 → both marked pending
         exchange.fetch_positions.side_effect = [
-            [],  # initial
-            [],  # LONG re-verify: confirmed
-            [{'side': 'short', 'contracts': 0.01}],  # inter-direction re-fetch
-            [{'side': 'short', 'contracts': 0.01}],  # post-closure check
+            [],  # initial: both empty
+            [],  # LONG re-verify: 0 → pending
+            [],  # SHORT re-verify: 0 → pending
+        ]
+
+        cache = APICache()
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        assert state['positions']['sL'].get('_pending_close') is True
+        assert state['positions']['sS'].get('_pending_close') is True
+
+        # Cycle 2: _resolve_pending_close_slots uses exchange_map from initial fetch.
+        # Initial fetch shows SHORT alive → SHORT restored (false alarm),
+        # LONG absent → LONG confirmed closed.
+        exchange.fetch_positions.side_effect = [
+            [{'side': 'short', 'contracts': 0.01}],  # initial: SHORT alive, LONG absent
+            # After LONG closure (any_closed=True), post-closure re-fetch:
+            [{'side': 'short', 'contracts': 0.01}],
         ]
 
         def handle_side_effect(exch, st, cfg, pos, c, m):
@@ -1312,13 +1352,163 @@ class TestOrphanPreventionV159:
             return True
         mock_handle.side_effect = handle_side_effect
 
-        cache = APICache()
-        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
-        assert result is True
-        # Only LONG was closed, SHORT was saved by inter-direction re-fetch
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is True
+        # Only LONG was closed, SHORT was saved by exchange showing it alive
         assert mock_handle.call_count == 1
         called_pos = mock_handle.call_args[0][3]
         assert called_pos['direction'] == 'LONG'
         # SHORT slot should remain
         remaining = state.get('positions', {})
         assert any(s.get('direction') == 'SHORT' for s in remaining.values())
+
+
+# ── v1.60.0 Soft-Delete Tests ──────────────────────────────────
+
+
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.time.sleep')
+@patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor.save_state')
+class TestSoftDeleteV160:
+    """v1.60.0: Two-cycle confirmation prevents false closure data loss."""
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_false_closure_prevented_slot_data_preserved(self, mock_handle, mock_save, mock_sleep):
+        """Core scenario: API returns 0 transiently → slots marked pending →
+        next cycle API returns position → slots fully restored with ALL original data."""
+        exchange = MagicMock()
+        pos_dict = {
+            'slot_id': 'abc123', 'direction': 'LONG', 'entry_price': 70105.6,
+            'entry_time': '2026-03-12T13:30:00', 'quantity': 0.0112,
+            'remaining_quantity': 0.0112, 'tp_price': 70778.8, 'sl_price': 67081.7,
+            'pattern_name': 'ST-DN-D', 'vol_mult': 0.908,
+            'scale_out_enabled': False,
+        }
+        state = _make_position_state(pos_dict, slot_id='abc123')
+        state.update({
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        })
+        cache = APICache()
+
+        # Cycle 1: API transiently returns 0 → pending
+        exchange.fetch_positions.return_value = []
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        slot = state['positions']['abc123']
+        assert slot['_pending_close'] is True
+        # ALL original data preserved
+        assert slot['pattern_name'] == 'ST-DN-D'
+        assert slot['tp_price'] == 70778.8
+        assert slot['sl_price'] == 67081.7
+        assert slot['vol_mult'] == 0.908
+
+        # Cycle 2: API now returns position → false alarm, restored
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.0112, 'entryPrice': 70105.6},
+        ]
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is False
+        # Slot restored — pending flags removed
+        slot = state['positions']['abc123']
+        assert '_pending_close' not in slot
+        assert '_pending_close_time' not in slot
+        # Original data intact
+        assert slot['pattern_name'] == 'ST-DN-D'
+        assert slot['tp_price'] == 70778.8
+        assert slot['vol_mult'] == 0.908
+        # Never called _handle_position_closed
+        mock_handle.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_multi_slot_false_closure_all_preserved(self, mock_handle, mock_save, mock_sleep):
+        """3 LONG slots (the exact bug scenario) — all preserved on false closure."""
+        exchange = MagicMock()
+        slots = {}
+        for i, sid in enumerate(['slot_a', 'slot_b', 'slot_c']):
+            slots[sid] = {
+                'slot_id': sid, 'direction': 'LONG', 'entry_price': 70105.6,
+                'entry_time': '2026-03-12T13:30:00', 'quantity': 0.0112,
+                'remaining_quantity': 0.0112,
+                'tp_price': 70778.8, 'sl_price': 67081.7,
+                'pattern_name': 'ST-DN-D', 'vol_mult': 0.908,
+                'scale_out_enabled': False,
+            }
+        state = {
+            'positions': slots, 'active_direction': None,
+            'total_trades': 0, 'winning_trades': 0, 'total_pnl': 0.0,
+            'daily_trades': 0, 'daily_pnl': 0.0, 'consecutive_losses': 0,
+            'last_trade': None, 'last_signal_time': None,
+        }
+        cache = APICache()
+
+        # Cycle 1: transient 0
+        exchange.fetch_positions.return_value = []
+        result1 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result1 is False
+        assert all(s.get('_pending_close') for s in state['positions'].values())
+
+        # Cycle 2: exchange shows position again
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.0336},
+        ]
+        result2 = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        assert result2 is False
+        # All 3 slots fully restored
+        assert len(state['positions']) == 3
+        for slot in state['positions'].values():
+            assert '_pending_close' not in slot
+            assert slot['pattern_name'] == 'ST-DN-D'
+        mock_handle.assert_not_called()
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_pending_slots_excluded_from_new_entry_count(self, mock_save, mock_sleep):
+        """Pending-close slots should NOT block new entries."""
+        from bingx_rl_trading_bot.scripts.production.pattern_5m.position_open import (
+            _check_slot_available,
+        )
+        state = {
+            'positions': {
+                's1': {'direction': 'LONG', '_pending_close': True},
+                's2': {'direction': 'SHORT'},
+            },
+        }
+        config = {'max_positions': 2}
+        # 1 active + 1 pending = should have 1 slot available
+        assert _check_slot_available(state, config) is True
+
+        config2 = {'max_positions': 1}
+        # 1 active slot, max 1 → no availability
+        assert _check_slot_available(state, config2) is False
+
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.position_monitor._handle_position_closed')
+    @patch('bingx_rl_trading_bot.scripts.production.pattern_5m.exchange._interruptible_api_sleep',
+           new=MagicMock())
+    def test_per_slot_fill_still_immediate(self, mock_handle, mock_save, mock_sleep):
+        """Individual TP/SL fill (exchange qty > 0) should still process immediately."""
+        exchange = MagicMock()
+        exchange.fetch_positions.return_value = [
+            {'side': 'long', 'contracts': 0.01},  # Has position, but less than local
+        ]
+        exchange.fetch_open_orders.return_value = [
+            {'id': 'sl_1'},  # Only SL remains → TP filled
+        ]
+        state = _make_two_slot_state(qty_each=0.01)
+        # Give slots order IDs for per-slot detection
+        slots = list(state['positions'].values())
+        slots[0]['tp_order_id'] = 'tp_1'
+        slots[0]['sl_order_id'] = 'sl_1'
+        slots[1]['tp_order_id'] = 'tp_2'
+        slots[1]['sl_order_id'] = 'sl_2'
+        cache = APICache()
+
+        result = check_position_status(exchange, state, {'symbol': 'BTC/USDT:USDT'}, cache)
+        # Per-slot fill should be immediate (no pending)
+        assert result is True
+        # slot[1] had both orders gone → closed. slot[0] had TP gone but SL present → closed.
+        assert mock_handle.call_count >= 1

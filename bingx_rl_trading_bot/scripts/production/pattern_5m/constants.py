@@ -26,7 +26,7 @@ _TF_MIN = _TF_MINUTES_MAP.get(_BOT_TF, 5)
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = f"pattern_{_BOT_TF}_bot"
-BOT_VERSION = "1.62.0"  # v1.62.0: Time-Decay TP (linear_144) — after 12h, linearly reduce TP to 50% by 24h
+BOT_VERSION = "1.63.0"  # v1.63.0: Exp-Decay TP — TP *= 0.997^bars (half-life 19.25h, from bar 0)
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)

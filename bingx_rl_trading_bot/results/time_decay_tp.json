@@ -1,6 +1,6 @@
 {
   "study": "time_decay_tp",
-  "date": "2026-03-14T01:54:15.203120",
+  "date": "2026-03-14T03:39:34.918965",
   "script": "scripts/analysis/time_decay_tp.py",
   "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
   "data_bars": 87315,
@@ -40,7 +40,7 @@
         "dup_pat": 381,
         "max_pos": 6047
       },
-      "elapsed_s": 2.2
+      "elapsed_s": 2.6
     },
     "linear_144": {
       "trades": 2128,
@@ -60,7 +60,7 @@
         "dup_pat": 390,
         "max_pos": 5942
       },
-      "elapsed_s": 2.2
+      "elapsed_s": 3.0
     },
     "linear_96": {
       "trades": 2179,
@@ -80,7 +80,7 @@
         "dup_pat": 394,
         "max_pos": 5894
       },
-      "elapsed_s": 2.3
+      "elapsed_s": 1.4
     },
     "step_2": {
       "trades": 2425,
@@ -100,7 +100,7 @@
         "dup_pat": 398,
         "max_pos": 5686
       },
-      "elapsed_s": 2.2
+      "elapsed_s": 1.4
     },
     "step_3": {
       "trades": 2433,
@@ -120,7 +120,7 @@
         "dup_pat": 413,
         "max_pos": 5660
       },
-      "elapsed_s": 2.2
+      "elapsed_s": 1.4
     },
     "aggressive": {
       "trades": 2480,
@@ -140,7 +140,7 @@
         "dup_pat": 383,
         "max_pos": 5664
       },
-      "elapsed_s": 2.2
+      "elapsed_s": 1.4
     },
     "conservative": {
       "trades": 2008,
@@ -160,7 +160,7 @@
         "dup_pat": 374,
         "max_pos": 6007
       },
-      "elapsed_s": 2.2
+      "elapsed_s": 1.4
     },
     "exp_decay": {
       "trades": 2578,
@@ -180,7 +180,7 @@
         "dup_pat": 416,
         "max_pos": 5473
       },
-      "elapsed_s": 2.3
+      "elapsed_s": 1.4
     }
   },
   "is_ranking": [
@@ -218,90 +218,90 @@
     ]
   ],
   "wf_results": {
-    "linear_144": {
+    "exp_decay": {
       "folds": [
         {
           "fold": 1,
           "is_bars": 18660,
           "oos_bars": 18660,
-          "oos_trades": 454,
-          "oos_wr": 84.4,
-          "oos_pnl": 105.48,
-          "oos_mdd": 4.75,
-          "oos_mdd_mtm": 7.42,
-          "timeouts": 308,
-          "avg_holding_bars": 200.3
+          "oos_trades": 572,
+          "oos_wr": 86.2,
+          "oos_pnl": 107.56,
+          "oos_mdd": 4.59,
+          "oos_mdd_mtm": 7.44,
+          "timeouts": 273,
+          "avg_holding_bars": 175.5
         },
         {
           "fold": 2,
           "is_bars": 37320,
           "oos_bars": 18660,
-          "oos_trades": 577,
-          "oos_wr": 77.1,
-          "oos_pnl": 117.49,
-          "oos_mdd": 2.36,
-          "oos_mdd_mtm": 4.12,
-          "timeouts": 267,
-          "avg_holding_bars": 173.3
+          "oos_trades": 692,
+          "oos_wr": 80.3,
+          "oos_pnl": 115.92,
+          "oos_mdd": 2.85,
+          "oos_mdd_mtm": 4.31,
+          "timeouts": 226,
+          "avg_holding_bars": 156.7
         },
         {
           "fold": 3,
           "is_bars": 55980,
           "oos_bars": 18662,
-          "oos_trades": 645,
-          "oos_wr": 74.9,
-          "oos_pnl": 111.43,
-          "oos_mdd": 4.31,
-          "oos_mdd_mtm": 5.3,
-          "timeouts": 234,
-          "avg_holding_bars": 164.1
+          "oos_trades": 741,
+          "oos_wr": 78.1,
+          "oos_pnl": 109.06,
+          "oos_mdd": 4.57,
+          "oos_mdd_mtm": 5.43,
+          "timeouts": 213,
+          "avg_holding_bars": 147.7
         }
       ],
-      "total_oos_pnl": 334.4,
+      "total_oos_pnl": 332.5,
       "n_pass": 3,
       "n_folds": 3,
       "verdict": "PASS"
     },
-    "baseline": {
+    "aggressive": {
       "folds": [
         {
           "fold": 1,
           "is_bars": 18660,
           "oos_bars": 18660,
-          "oos_trades": 365,
-          "oos_wr": 80.8,
-          "oos_pnl": 90.73,
-          "oos_mdd": 3.57,
-          "oos_mdd_mtm": 7.31,
-          "timeouts": 368,
-          "avg_holding_bars": 208.7
+          "oos_trades": 542,
+          "oos_wr": 86.2,
+          "oos_pnl": 99.95,
+          "oos_mdd": 5.84,
+          "oos_mdd_mtm": 7.39,
+          "timeouts": 269,
+          "avg_holding_bars": 185.2
         },
         {
           "fold": 2,
           "is_bars": 37320,
           "oos_bars": 18660,
-          "oos_trades": 507,
-          "oos_wr": 71.8,
-          "oos_pnl": 99.66,
-          "oos_mdd": 2.66,
-          "oos_mdd_mtm": 4.59,
-          "timeouts": 319,
-          "avg_holding_bars": 177.7
+          "oos_trades": 671,
+          "oos_wr": 80.6,
+          "oos_pnl": 119.73,
+          "oos_mdd": 2.74,
+          "oos_mdd_mtm": 4.19,
+          "timeouts": 227,
+          "avg_holding_bars": 161.9
         },
         {
           "fold": 3,
           "is_bars": 55980,
           "oos_bars": 18662,
-          "oos_trades": 588,
-          "oos_wr": 73.3,
-          "oos_pnl": 109.27,
-          "oos_mdd": 4.34,
-          "oos_mdd_mtm": 5.22,
-          "timeouts": 284,
-          "avg_holding_bars": 165.7
+          "oos_trades": 726,
+          "oos_wr": 78.2,
+          "oos_pnl": 110.66,
+          "oos_mdd": 4.41,
+          "oos_mdd_mtm": 5.37,
+          "timeouts": 194,
+          "avg_holding_bars": 155.2
         }
       ],
-      "total_oos_pnl": 299.7,
+      "total_oos_pnl": 330.3,
       "n_pass": 3,
       "n_folds": 3,
       "verdict": "PASS"
@@ -349,6 +349,138 @@
       "n_pass": 3,
       "n_folds": 3,
       "verdict": "PASS"
+    },
+    "linear_144": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 18660,
+          "oos_bars": 18660,
+          "oos_trades": 454,
+          "oos_wr": 84.4,
+          "oos_pnl": 105.48,
+          "oos_mdd": 4.75,
+          "oos_mdd_mtm": 7.42,
+          "timeouts": 308,
+          "avg_holding_bars": 200.3
+        },
+        {
+          "fold": 2,
+          "is_bars": 37320,
+          "oos_bars": 18660,
+          "oos_trades": 577,
+          "oos_wr": 77.1,
+          "oos_pnl": 117.49,
+          "oos_mdd": 2.36,
+          "oos_mdd_mtm": 4.12,
+          "timeouts": 267,
+          "avg_holding_bars": 173.3
+        },
+        {
+          "fold": 3,
+          "is_bars": 55980,
+          "oos_bars": 18662,
+          "oos_trades": 645,
+          "oos_wr": 74.9,
+          "oos_pnl": 111.43,
+          "oos_mdd": 4.31,
+          "oos_mdd_mtm": 5.3,
+          "timeouts": 234,
+          "avg_holding_bars": 164.1
+        }
+      ],
+      "total_oos_pnl": 334.4,
+      "n_pass": 3,
+      "n_folds": 3,
+      "verdict": "PASS"
+    },
+    "step_2": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 18660,
+          "oos_bars": 18660,
+          "oos_trades": 539,
+          "oos_wr": 83.7,
+          "oos_pnl": 104.53,
+          "oos_mdd": 5.17,
+          "oos_mdd_mtm": 6.14,
+          "timeouts": 274,
+          "avg_holding_bars": 184.5
+        },
+        {
+          "fold": 2,
+          "is_bars": 37320,
+          "oos_bars": 18660,
+          "oos_trades": 639,
+          "oos_wr": 81.1,
+          "oos_pnl": 123.35,
+          "oos_mdd": 2.68,
+          "oos_mdd_mtm": 4.1,
+          "timeouts": 245,
+          "avg_holding_bars": 165.0
+        },
+        {
+          "fold": 3,
+          "is_bars": 55980,
+          "oos_bars": 18662,
+          "oos_trades": 719,
+          "oos_wr": 77.6,
+          "oos_pnl": 119.01,
+          "oos_mdd": 4.4,
+          "oos_mdd_mtm": 5.34,
+          "timeouts": 213,
+          "avg_holding_bars": 153.3
+        }
+      ],
+      "total_oos_pnl": 346.9,
+      "n_pass": 3,
+      "n_folds": 3,
+      "verdict": "PASS"
+    },
+    "baseline": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 18660,
+          "oos_bars": 18660,
+          "oos_trades": 365,
+          "oos_wr": 80.8,
+          "oos_pnl": 90.73,
+          "oos_mdd": 3.57,
+          "oos_mdd_mtm": 7.31,
+          "timeouts": 368,
+          "avg_holding_bars": 208.7
+        },
+        {
+          "fold": 2,
+          "is_bars": 37320,
+          "oos_bars": 18660,
+          "oos_trades": 507,
+          "oos_wr": 71.8,
+          "oos_pnl": 99.66,
+          "oos_mdd": 2.66,
+          "oos_mdd_mtm": 4.59,
+          "timeouts": 319,
+          "avg_holding_bars": 177.7
+        },
+        {
+          "fold": 3,
+          "is_bars": 55980,
+          "oos_bars": 18662,
+          "oos_trades": 588,
+          "oos_wr": 73.3,
+          "oos_pnl": 109.27,
+          "oos_mdd": 4.34,
+          "oos_mdd_mtm": 5.22,
+          "timeouts": 284,
+          "avg_holding_bars": 165.7
+        }
+      ],
+      "total_oos_pnl": 299.7,
+      "n_pass": 3,
+      "n_folds": 3,
+      "verdict": "PASS"
     }
   },
   "discrimination": {
@@ -363,10 +495,10 @@
     "gap_pnl_mdd": -5.6,
     "gap_avg_hold_bars": -4.0
   },
-  "recommendation": "CONSIDER linear_144",
+  "recommendation": "CONSIDER step_2",
   "reason": [
-    "OOS linear_144: +334.4% vs baseline +299.7% (gap +11.6%)",
-    "IS PnL/MDD: 101.2x vs baseline 106.8x"
+    "OOS step_2: +346.9% vs baseline +299.7% (gap +15.7%)",
+    "IS PnL/MDD: 92.2x vs baseline 106.8x"
   ],
-  "elapsed_s": 28.6
+  "elapsed_s": 24.3
 }

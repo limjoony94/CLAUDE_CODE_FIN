@@ -651,7 +651,7 @@ def run_is_screening(data):
 # ============================================================
 # Phase 2: WF Validation (top variants)
 # ============================================================
-def run_wf_validation(data, is_results, n_folds=3, top_n=3):
+def run_wf_validation(data, is_results, n_folds=3, top_n=3, force_include=None):
     """Run expanding-window WF on top variants by PnL/MDD(MTM)."""
     print("\n" + "="*60)
     print(f"PHASE 2: Walk-Forward Validation ({n_folds}-fold, top {top_n} variants)")
@@ -664,11 +664,15 @@ def run_wf_validation(data, is_results, n_folds=3, top_n=3):
         ranked.append((name, pnl_mdd, r['pnl']))
     ranked.sort(key=lambda x: x[1], reverse=True)
 
-    # Always include baseline + top variants
+    # Always include baseline + top variants + forced
     top_names = set()
     top_names.add('baseline')
     for name, _, _ in ranked[:top_n]:
         top_names.add(name)
+    if force_include:
+        for name in force_include:
+            if name in is_results:
+                top_names.add(name)
     top_names = list(top_names)
 
     print(f"  Selected for WF: {top_names}")
@@ -823,8 +827,9 @@ def main():
         best_variant = ranked[1][0] if len(ranked) > 1 else 'baseline'
     best_pnl_mdd = ranked[0][1]
 
-    # Phase 2: WF validation (top 3 + baseline)
-    wf_results = run_wf_validation(data, is_results, n_folds=3, top_n=3)
+    # Phase 2: WF validation (top 3 + baseline + exp_decay forced)
+    wf_results = run_wf_validation(data, is_results, n_folds=3, top_n=3,
+                                   force_include=['exp_decay', 'step_2', 'aggressive'])
 
     # Phase 3: Discrimination
     disc = run_discrimination_test(data, is_results, best_variant)

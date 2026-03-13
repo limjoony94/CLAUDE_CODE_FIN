@@ -604,15 +604,15 @@ def _apply_time_decay_tp(
     config: Dict[str, Any],
 ) -> None:
     """
-    Apply time-decay to TP orders for positions held beyond decay_start_bars.
+    Apply exponential time-decay to TP orders from bar 0.
 
-    v1.62.0: After decay_start_bars (default 144 = 12h), linearly reduce TP
-    distance toward decay_target_pct (default 50%) of original TP distance
-    by decay_end_bars (default 288 = 24h). Updates exchange TP order when
-    price change > $1.
+    v1.62.0→v1.63.0: Exponential decay — TP_distance *= decay_rate^bars_held.
+    Default decay_rate=0.997 (half-life ~231 bars = 19.25h).
+    TP moves toward entry over time, accelerating slot turnover.
+    Updates exchange TP order every update_interval_bars (default 6 = 30min).
 
-    Research: time_decay_tp.py — linear_144 OOS +334.4% vs baseline +299.7%
-    (+11.6%), 30/30 MC discrimination test PASS.
+    Research: time_decay_tp.py — exp_decay OOS +332.5% vs baseline +299.7%
+    (+10.9%), WF 3/3 PASS, IS trades +40% (slot turnover), 100% MECHANICAL.
     """
     decay_cfg = config.get('strategy', {}).get('tp_decay', {})
     if not decay_cfg.get('enabled'):
@@ -622,9 +622,7 @@ def _apply_time_decay_tp(
     if not positions:
         return
 
-    decay_start = decay_cfg.get('decay_start_bars', 144)
-    decay_end = decay_cfg.get('decay_end_bars', 288)
-    target_pct = decay_cfg.get('decay_target_pct', 0.50)
+    decay_rate = decay_cfg.get('decay_rate', 0.997)
     update_interval = decay_cfg.get('update_interval_bars', 6)
 
     now = datetime.now()
@@ -646,7 +644,8 @@ def _apply_time_decay_tp(
         held_seconds = (now - entry_dt).total_seconds()
         bars_held = int(held_seconds / candle_seconds)
 
-        if bars_held < decay_start:
+        # Skip very fresh positions (< 1 update interval)
+        if bars_held < update_interval:
             continue
 
         # Store original TP on first decay (one-time)
@@ -663,10 +662,8 @@ def _apply_time_decay_tp(
         if bars_held - last_decay_bar < update_interval:
             continue
 
-        # Calculate decay progress: 0 at decay_start, 1 at decay_end
-        progress = min(1.0, (bars_held - decay_start) / max(1, decay_end - decay_start))
-        # decay_factor: 1.0 → target_pct linearly
-        decay_factor = 1.0 - (1.0 - target_pct) * progress
+        # Exponential decay: TP_distance *= decay_rate^bars_held
+        decay_factor = decay_rate ** bars_held
 
         entry_price = pos.get('entry_price', 0)
         original_tp = pos.get('tp_price_original', pos.get('tp_price', 0))
@@ -695,7 +692,7 @@ def _apply_time_decay_tp(
         # Update TP on exchange
         logger.info(
             f"⏰ DECAY: Slot {slot_id} ({pos.get('pattern_name', '?')} {direction}) "
-            f"bar {bars_held}/{decay_end} decay={decay_factor:.2f} — "
+            f"bar {bars_held} decay={decay_factor:.3f} — "
             f"TP ${current_tp:.1f} → ${decayed_tp:.1f} "
             f"(original ${original_tp:.1f})"
         )

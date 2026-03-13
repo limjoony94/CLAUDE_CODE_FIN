@@ -74,11 +74,9 @@ strategy:
   # v1.61.0: TP×0.72 — IS PnL/MDD 106.8x, OOS +276.8%, R:R 1.009 → WR margin +27.0pp (safe)
   # tp_factor_deep_study: ×0.72 best risk-adjusted (R:R crosses 1.0, BE WR 49.8%)
   tp_scale_factor: 0.72
-  tp_decay:                        # v1.62.0: Time-Decay TP (linear_144)
+  tp_decay:                        # v1.63.0: Exponential Time-Decay TP (exp_decay)
     enabled: true
-    decay_start_bars: 144          # 12h @ 5min — start reducing TP
-    decay_end_bars: 288            # 24h @ 5min — TP reaches minimum
-    decay_target_pct: 0.50         # Reduce TP distance to 50% of original at decay_end
+    decay_rate: 0.997              # TP_dist *= 0.997^bars_held (half-life ~231 bars = 19.25h)
     update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula

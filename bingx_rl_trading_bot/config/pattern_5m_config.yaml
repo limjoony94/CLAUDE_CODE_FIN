@@ -69,10 +69,11 @@ strategy:
   rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
   timeout_bars: 288        # v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치, 24h+ trades net negative)
   # tp_multiplier removed — v1.43.0 ROLLBACK (h7_critical_validation: WF 94% non-discriminating, 95% Cascade-dependent, E[trade] inferior at live WR)
-  # v1.57.0: TP scale factor (N-pos portfolio optimization)
-  # tpsl_deep_crossval: TP×0.5 IS PnL/MDD +28%, OOS +64%, 10/10 MC wins, DISCRIMINATING, Cascade-independent
-  # Different from v1.43.0 tp_multiplier: this is uniform scaling, not entry-optimization-dependent
-  tp_scale_factor: 0.5
+  # v1.57.0→v1.61.0: TP scale factor (N-pos portfolio optimization)
+  # v1.57.0: TP×0.5 — IS PnL/MDD 113.0x, OOS +306%, but R:R 0.66 → live WR margin only +2.1pp
+  # v1.61.0: TP×0.72 — IS PnL/MDD 106.8x, OOS +276.8%, R:R 1.009 → WR margin +27.0pp (safe)
+  # tp_factor_deep_study: ×0.72 best risk-adjusted (R:R crosses 1.0, BE WR 49.8%)
+  tp_scale_factor: 0.72
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

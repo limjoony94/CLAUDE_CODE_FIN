@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.60.1 | **Bot**: Pattern 5m (131패턴, 59L+72S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix+TPScale05+OrphanPrevention+PosTrackFix+MedianFallback+EmgSlRace+NaPrevent+EmgSlUpdate+CcxtTypeAdopt+SoftDelete+ScannerVolCap) | **Updated**: 2026-03-13
+> **Version**: v1.61.0 | **Bot**: Pattern 5m (131패턴, 59L+72S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap7+MomGuard1.5%15m1h+NposScanner+CascadeSL85+AggRisk8_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix+TPScale072+OrphanPrevention+PosTrackFix+MedianFallback+EmgSlRace+NaPrevent+EmgSlUpdate+CcxtTypeAdopt+SoftDelete+ScannerVolCap) | **Updated**: 2026-03-13
 
 ---
 
@@ -108,7 +108,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | **Per-pattern ATR-scaled × TP 0.5** (TP 0.43-1.40%, SL 1.44-5.95%, MAE/MFE + ATR scanner v2.4 + tp_scale_factor 0.5, v1.57.0) |
+| TP/SL | **Per-pattern ATR-scaled × TP 0.72** (TP 0.61-2.02%, SL 1.44-5.95%, MAE/MFE + ATR scanner v2.4 + tp_scale_factor 0.72, v1.61.0) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
 | Leverage | **Fixed 3x** (v1.42.0: Adaptive 비활성화 — M4+M2 redundancy -46.94, P3 CascadeSL이 MDD 방어 대체) |
 | Timeframe | 5m |
@@ -123,26 +123,24 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **Position Timeout** | **288 bars (24h)** — v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치) |
 | Risk | Daily loss **13%** (v1.28.5), **aggregate risk cap** (counter 8%/with 15%, v1.49.0: 5→8% counter) |
 
-### v1.57.0 검증 요약
+### v1.61.0 검증 요약
 
-- **N-pos IS (TP×0.5, Cascade ON, regime_mult=1.0)**: WR 77.8%, PnL +458%, MDD 4.05%(MTM), **PnL/MDD 113.0x**
-- **131패턴 (59L+72S)**: TP 0.43-1.40% (×0.5), SL 1.44-5.95%, Edge 18.0-31.8pp
-- **v1.56.0→v1.57.0 개선**: PnL/MDD 88.5x→113.0x (+28%), OOS +206→+306% (+49%)
-- **TP Scale Factor**: `tp_scale_factor: 0.5` — N-pos 슬롯 회전 최적화 (1-pos 최적 ≠ N-pos 최적)
-- **판별력 검증**: DISCRIMINATING (random gap +83-146%), Cascade-INDEPENDENT (OFF gap +56.5% > ON +33.8%)
-- 개별 패턴 상세: `results/dynamic_patterns.json` 참조 (원본 TP, config에서 ×0.5 적용)
+- **N-pos IS (TP×0.72, Cascade ON, regime_mult=1.0)**: PnL/MDD **106.8x**, OOS **+276.8%**, WF 3/3 PASS
+- **131패턴 (59L+72S)**: TP 0.61-2.02% (×0.72), SL 1.44-5.95%, Edge 18.0-31.8pp
+- **R:R 1.009** (1 SL loss ≈ 1 TP win), **BE WR 49.8%**, WR margin **+27.0pp** (live-safe)
+- **v1.57.0→v1.61.0 조정 이유**: ×0.5 live R:R 0.66 → WR margin +2.1pp (위험). ×0.72 IS PnL/MDD 소폭 감소(-6%) 대신 R:R 1.0 돌파, compensation 안정성 대폭 향상
+- **TP Scale Factor**: `tp_scale_factor: 0.72` — risk-adjusted 최적 (deep study 0.68-0.92 range)
+- 개별 패턴 상세: `results/dynamic_patterns.json` 참조 (원본 TP, config에서 ×0.72 적용)
 
-### WF OOS 검증 (v1.57.0, TP×0.5, Cascade SL ON, regime_mult=1.0, 3-fold Expanding Window, N-pos)
+### WF OOS 검증 (v1.61.0, TP×0.72, Cascade SL ON, regime_mult=1.0, 3-fold Expanding Window, N-pos)
 
 | Fold | OOS PnL |
 |------|---------|
-| 1 | +56.8% |
-| 2 | +79.2% |
-| 3 | +170.0% |
+| Total | +276.8% |
 
-**Verdict: 3/3 PASS** | Total OOS PnL: +306.0% (TP×0.5+Cascade, N-pos) | IS PnL/MDD: 113.0x
+**Verdict: 3/3 PASS** | Total OOS PnL: +276.8% (TP×0.72+Cascade, N-pos) | IS PnL/MDD: 106.8x
 
-> 이전 v1.56.0 WF: OOS +206.1% → v1.57.0: +306.0% (+49% 향상, TP scale factor 효과)
+> 이전 v1.57.0 (×0.5): OOS +306.0%, PnL/MDD 113.0x — 순수 PnL 우위이나 R:R 0.66으로 live WR 하락 시 compensation 부족 위험
 
 ### 12-Type Candle Classification (Ground Truth)
 
@@ -206,7 +204,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | **Scanner Regime Fix (v1.56.0)** | Scanner DEFAULT_REGIME_MULT 0.3→1.0 — production v1.42.0에서 비활성화한 Regime Sizing을 scanner에서도 정합. IS PnL/MDD +83%, OOS +60% |
 | **Duplicate Trade Guard (v1.56.1)** | `record_closed_position`에 중복 기록 방지 가드 추가 + `pattern_name` 필드 우선 사용. N/A 오염(22건) 정화 완료. TP+SL WR 61.6→67.4%, gap 11.2→5.4pp |
 | **Code Audit Fixes (v1.56.2)** | (1) Cascade SL Place-first/Cancel-after (보호 갭 제거) (2) SL 실패 시 Emergency SL 즉시 호출 (3) Momentum cooldown state 영속화 (4) datetime 파싱 방어 (5) Hardcoded 300s→CANDLE_DURATION_MS (6) Always-truthy 수정. 1061 tests ALL PASSED |
-| **TP Scale Factor (v1.57.0)** | **Post-discovery TP×0.5 스케일링** — N-pos 슬롯 회전 최적화. Scanner 1-pos 최적 TP를 N-pos 포트폴리오에 맞게 축소. IS PnL/MDD +28%, OOS +49%, 10/10 MC wins, DISCRIMINATING, Cascade-independent. config `tp_scale_factor` |
+| **TP Scale Factor (v1.57.0→v1.61.0)** | **Post-discovery TP×0.72 스케일링** — R:R 1.009 (1 SL ≈ 1 TP), BE WR 49.8%, WR margin +27.0pp. v1.57.0 ×0.5에서 조정 (live R:R 0.66, WR margin +2.1pp 위험). IS PnL/MDD 106.8x, OOS +276.8%, WF 3/3 PASS. config `tp_scale_factor` |
 | **Orphan Prevention (v1.59.0)** | **3-layer defense against transient API zero-contract** — (1) ALL closure detections trigger 1s delay + fresh re-verify (removed ≥3 threshold) (2) Inter-direction exchange_map rebuild after closures (3) Post-closure orphan detection + auto-recovery. Root cause: BingX API transient 0-contract during order processing. 1073 tests ALL PASSED |
 | **N/A Pattern Prevention (v1.59.4)** | **4-layer N/A cascade 방지** — (1) `_restore_none_pattern_slots()`: crash recovery 후 None 슬롯 로그 기반 복원 (2) `record_closed_position` last-resort log recovery (3) `cancel_remaining_orders` 3회 retry (4) Recovery 전 stale order cleanup. Root cause: BingX averaged entry → price matching 실패 → None cascade |
 | **Emergency SL Update Fix (v1.59.5)** | **Cancel-first/Place-after + EXCHANGE_MANAGED 해소** — (1) `update_emergency_sl` cancel-first 패턴 (closePosition=true 1-per-direction) (2) `_find_close_position_order` 헬퍼: open_orders에서 실제 closePosition 주문 검색 (3) `_verify_emergency_sl_for_direction` EXCHANGE_MANAGED 시 실제 주문 adopt 또는 cancel-replace (4) `_cancel_emergency_sl_for_direction` EXCHANGE_MANAGED 시 실제 주문 찾아 취소. 1105 tests ALL PASSED |
@@ -222,7 +220,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 |------|--------|-----------|-------|
 | Static (fallback) | `pattern_source: static` | constants.py 51패턴 | Per-pattern 최적화 |
 | Dynamic PP | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` | results/dynamic_patterns.json | PP grid search |
-| **Dynamic ATR + TP Scale (현재)** | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` + `tp_scale_factor: 0.5` | results/dynamic_patterns.json | **MAE/MFE + ATR-scaled, TP×0.5** |
+| **Dynamic ATR + TP Scale (현재)** | `pattern_source: dynamic` + `tp_sl_mode: per_pattern` + `tp_scale_factor: 0.72` | results/dynamic_patterns.json | **MAE/MFE + ATR-scaled, TP×0.72** |
 
 **Scanner CLI 사용법** (v2.4):
 ```bash
@@ -234,8 +232,8 @@ python scripts/scanner/pattern_scanner.py --discovery-method mae_mfe --edge-thre
 # 주요 옵션: --no-neutral, --no-atr, --neutral-tol 2.0, --atr-clamp-lo 0.5 --atr-clamp-hi 1.5, --n-slots 5 --direction-cap 4
 ```
 
-**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **131패턴 (59L+72S)** (v1.56.0 rescan, regime_mult=1.0) + **tp_scale_factor=0.5** (v1.57.0).
-WF N-pos 3/3 PASS, OOS +306.0%. IS PnL/MDD 113.0x. TP 0.43-1.40% (×0.5), SL 1.44-5.95%. Neutral window ±1% 자동 탐색 (259d). ATR config: a14/w576/clamp[0.5,1.5]. Data: 303d. Backup: `results/dynamic_patterns_131pat_v1530_backup.json`
+**현재 적용**: MAE/MFE + ATR scanner + Neutral window (edge>=18pp, MC<0.01, --wf-folds 3, --holdout-days 7) → **131패턴 (59L+72S)** (v1.56.0 rescan, regime_mult=1.0) + **tp_scale_factor=0.72** (v1.61.0).
+WF N-pos 3/3 PASS, OOS +276.8%. IS PnL/MDD 106.8x. TP 0.61-2.02% (×0.72), SL 1.44-5.95%. Neutral window ±1% 자동 탐색 (259d). ATR config: a14/w576/clamp[0.5,1.5]. Data: 303d. Backup: `results/dynamic_patterns_131pat_v1530_backup.json`
 
 ---
 
@@ -328,7 +326,8 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.60.1** | 03-13 | **Scanner _effective_vol_mult Cap (Production Parity)** ← 현재. Scanner N-pos 백테스트에 production `_effective_vol_mult` 캡 추가 — `min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / sl_pct)`. 6곳 적용: (1) `bt_signals_atr()` 1-pos (2) `_check_exit_npos()` N-pos exit (3) Cascade SL ATR ratio (4-5) Aggregate risk 기존/신규 포지션 (6) 상수 `MAX_DAILY_LOSS_PCT=13`. Production은 이미 이 캡 적용 중이나 scanner에는 없어서 6/131 패턴(base_sl>4.333%)에서 IS 불일치. 적용 후: IS WR 77.8→83.5%, PnL +458→+449%, MDD 4.05→4.93%, PnL/MDD 113.0→91.1x. WF 3/3 PASS (OOS +299.1% vs +306.0%). Production 코드 변경 없음 (scanner only). 1111 tests ALL PASSED |
+| **v1.61.0** | 03-13 | **TP Scale Factor 0.5→0.72 (R:R Compensation Fix)** ← 현재. Live TP×0.5 R:R=0.66 → WR margin +2.1pp (위험, SL 1회 복구에 TP 1.5회 필요). tp_factor_deep_study: ×0.72 IS PnL/MDD 106.8x, OOS +276.8%, R:R 1.009 (1 SL≈1 TP), BE WR 49.8%, WR margin +27.0pp. Config `tp_scale_factor: 0.72`. TP range: 0.61-2.02% (원본×0.72). Production 코드 변경 없음 (config only) |
+| v1.60.1 | 03-13 | Scanner _effective_vol_mult Cap (Production Parity). Scanner N-pos 백테스트에 production `_effective_vol_mult` 캡 추가 — `min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / sl_pct)`. 6곳 적용: (1) `bt_signals_atr()` 1-pos (2) `_check_exit_npos()` N-pos exit (3) Cascade SL ATR ratio (4-5) Aggregate risk 기존/신규 포지션 (6) 상수 `MAX_DAILY_LOSS_PCT=13`. Production은 이미 이 캡 적용 중이나 scanner에는 없어서 6/131 패턴(base_sl>4.333%)에서 IS 불일치. 적용 후: IS WR 77.8→83.5%, PnL +458→+449%, MDD 4.05→4.93%, PnL/MDD 113.0→91.1x. WF 3/3 PASS (OOS +299.1% vs +306.0%). Production 코드 변경 없음 (scanner only). 1111 tests ALL PASSED |
 | v1.60.0 | 03-13 | Soft-Delete Mass Closure (Two-Cycle Confirmation). BingX transient 0-contract 응답에 의한 false closure 근본 방지. (1) `_resolve_pending_close_slots()` 신규 — 이전 사이클 pending 슬롯을 exchange 재확인 (0→confirmed, exists→false alarm 복원) (2) Mass closure 감지 시 `_pending_close=True` 마킹 (즉시 삭제 대신) (3) `position_open.py` pending 슬롯 진입 카운트 제외 (4) `bot.py` pending 슬롯 direction cap/aggregate risk/모니터링 제외. Root cause: transient 0-contract → `del positions[slot_id]` → `.bak` 덮어쓰기 → 원본 데이터 영구 유실 → orphan recovery가 동일 패턴 할당 → 동일 TP/SL (3 LONG slots 70778.8/67081.7 현상). 1111 tests ALL PASSED |
 | v1.59.6 | 03-13 | CCXT Type Adopt Fix. `_find_close_position_order()` CCXT type 정규화 대응: CCXT가 STOP_MARKET→`'market'`로 정규화하여 `type in ('STOP_MARKET','STOP')` 매칭 항상 실패 → `info.type` 이중 체크 추가. `_verify`/`_place` adopt 시 `info.stopPrice` 우선 사용 (CCXT `stopPrice=None` quirk). Root cause: EXCHANGE_MANAGED 무한 루프의 실제 원인 — 주문은 거래소에 존재하지만 CCXT 타입 불일치로 발견 불가 → adopt 불가 → 영구 EXCHANGE_MANAGED. Live 교차검증: 20 open orders 전부 state와 일치 확인. 1107 tests ALL PASSED |
 | v1.59.5 | 03-12 | Emergency SL Update Fix (Cancel-first + EXCHANGE_MANAGED 해소). (1) `update_emergency_sl()` cancel-first/place-after 패턴 전환 — BingX closePosition=true 1-per-direction 제약으로 place-first 시 110406 에러 → 가격 업데이트 불가. (2) `_find_close_position_order()` 헬퍼 추가 — open_orders에서 실제 closePosition 주문 검색. (3) `_verify_emergency_sl_for_direction` EXCHANGE_MANAGED 무한 루프 해소 — 실제 주문 찾아 adopt(가격 일치) 또는 cancel-replace(가격 불일치). (4) `_cancel_emergency_sl_for_direction` EXCHANGE_MANAGED 시 실제 주문 찾아 취소. Live 검증: emergency SL 정상 업데이트 확인. 1105 tests ALL PASSED |

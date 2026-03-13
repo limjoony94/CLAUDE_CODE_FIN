@@ -1,0 +1,91 @@
+{
+  "study": "tpsl_discrimination_test",
+  "timestamp": "2026-03-12T03:18:23",
+  "baseline": {
+    "pnl_mdd": 88.36,
+    "pnl": 356.96,
+    "oos_pnl": 242.09999999999997,
+    "wf_pass": true
+  },
+  "tp06_shift": {
+    "pnl_mdd": 104.02,
+    "pnl": 421.27,
+    "oos_pnl": 275.87,
+    "wf_pass": true
+  },
+  "random_shuffle": [
+    {
+      "seed": 42,
+      "pnl_mdd": 78.57,
+      "pnl": 304.87,
+      "oos_pnl": 187.31,
+      "wf_pass": true
+    },
+    {
+      "seed": 123,
+      "pnl_mdd": 68.46,
+      "pnl": 286.17,
+      "oos_pnl": 201.62,
+      "wf_pass": true
+    },
+    {
+      "seed": 7,
+      "pnl_mdd": 57.43,
+      "pnl": 280.24,
+      "oos_pnl": 189.25,
+      "wf_pass": true
+    }
+  ],
+  "full_random": [
+    {
+      "seed": 42,
+      "pnl_mdd": 39.19,
+      "pnl": 224.16,
+      "oos_pnl": 150.77,
+      "wf_pass": true
+    },
+    {
+      "seed": 123,
+      "pnl_mdd": 15.86,
+      "pnl": 121.94,
+      "oos_pnl": 102.27,
+      "wf_pass": true
+    },
+    {
+      "seed": 7,
+      "pnl_mdd": 30.5,
+      "pnl": 182.37,
+      "oos_pnl": 135.94,
+      "wf_pass": true
+    }
+  ],
+  "tp06_random_sl": [
+    {
+      "seed": 42,
+      "pnl_mdd": 80.09,
+      "pnl": 285.91,
+      "oos_pnl": 195.58,
+      "wf_pass": true
+    },
+    {
+      "seed": 123,
+      "pnl_mdd": 77.29,
+      "pnl": 307.63,
+      "oos_pnl": 222.95000000000002,
+      "wf_pass": true
+    },
+    {
+      "seed": 7,
+      "pnl_mdd": 49.39,
+      "pnl": 323.53,
+      "oos_pnl": 225.39999999999998,
+      "wf_pass": true
+    }
+  ],
+  "discrimination": {
+    "verdict": "DISCRIMINATING \u2014 TP/SL optimization provides genuine edge",
+    "gap_vs_shuffled": 83.14333333333332,
+    "gap_vs_full_random": 146.21
+  },
+  "elapsed_seconds": 26.34258008003235
+}

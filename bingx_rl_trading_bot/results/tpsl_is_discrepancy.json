@@ -1,0 +1,98 @@
+{
+  "study": "tpsl_is_discrepancy",
+  "date": "2026-03-12",
+  "test1_json_orig": {
+    "trades": 1567,
+    "wr": 68.9,
+    "pnl": 427.86,
+    "mdd": 1.97,
+    "pnl_mdd": 97.7,
+    "pnl_per_trade": 0.273,
+    "mdd_mtm": 4.38,
+    "blocked": {
+      "momentum": 99,
+      "agg_risk": 935,
+      "dir_cap": 172,
+      "dup_pat": 343,
+      "max_pos": 11031
+    }
+  },
+  "test2_json_scaled": {
+    "trades": 3003,
+    "wr": 83.3,
+    "pnl": 558.04,
+    "mdd": 2.62,
+    "pnl_mdd": 75.9,
+    "pnl_per_trade": 0.186,
+    "mdd_mtm": 7.35,
+    "blocked": {
+      "momentum": 112,
+      "agg_risk": 1478,
+      "dir_cap": 214,
+      "dup_pat": 472,
+      "max_pos": 9227
+    }
+  },
+  "test3_scanner": {
+    "n_scanned": 119,
+    "overlap_with_json": 53,
+    "only_json": 78,
+    "only_scan": 66,
+    "scan_orig": {
+      "trades": 1506,
+      "wr": 72.0,
+      "pnl": 492.11,
+      "mdd": 2.41,
+      "pnl_mdd": 78.1,
+      "pnl_per_trade": 0.327,
+      "mdd_mtm": 6.3,
+      "blocked": {
+        "momentum": 68,
+        "agg_risk": 1079,
+        "dir_cap": 1037,
+        "dup_pat": 501,
+        "max_pos": 6792
+      }
+    },
+    "scan_scaled": {
+      "trades": 2783,
+      "wr": 85.1,
+      "pnl": 550.22,
+      "mdd": 2.96,
+      "pnl_mdd": 58.6,
+      "pnl_per_trade": 0.198,
+      "mdd_mtm": 9.39,
+      "blocked": {
+        "momentum": 74,
+        "agg_risk": 1387,
+        "dir_cap": 1157,
+        "dup_pat": 609,
+        "max_pos": 5304
+      }
+    }
+  },
+  "test4_tpsl_comparison": {
+    "tp_diff_mean": -0.042,
+    "tp_diff_std": 0.355,
+    "sl_diff_mean": -0.06,
+    "sl_diff_std": 0.465,
+    "exact_match_rate": 5.7
+  },
+  "test5_fullreopt": {
+    "trades": 3003,
+    "wr": 83.3,
+    "pnl": 558.04,
+    "mdd": 2.62,
+    "pnl_mdd": 75.9,
+    "pnl_per_trade": 0.186,
+    "mdd_mtm": 7.35,
+    "blocked": {
+      "momentum": 112,
+      "agg_risk": 1478,
+      "dir_cap": 214,
+      "dup_pat": 472,
+      "max_pos": 9227
+    }
+  },
+  "elapsed_seconds": 37.3
+}

@@ -90,6 +90,7 @@ TP_PERCENTILES = [40, 50, 60, 70, 80]
 SL_PERCENTILES = [70, 75, 80, 85, 90, 95]
 
 SLIPPAGE_BUFFER = 0.02  # 0.02% slippage buffer for ATR-scaled TP/SL
+MAX_DAILY_LOSS_PCT = 13  # v1.59.5: production risk cap (config max_daily_loss_pct)
 
 # Distribution-based TP hit probability grid (v1.37.1: log-normal MFE fit)
 DIST_HIT_PROBS = [0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.92, 0.95]
@@ -318,6 +319,9 @@ def bt_signals_atr(signal_bars, direction, tp_pct, sl_pct,
             r = max(clamp_lo, min(clamp_hi, atr_ratio[idx]))
         else:
             r = 1.0
+        # v1.59.5: cap vol_mult so scaled SL never exceeds daily loss limit (production parity)
+        if sl_pct > 0:
+            r = min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / sl_pct)
 
         eff_tp = tp_pct * r + SLIPPAGE_BUFFER
         eff_sl = max(0.1, sl_pct * r - SLIPPAGE_BUFFER)
@@ -721,6 +725,9 @@ def _check_exit_npos(pos, bar, opens, highs, lows, n_bars, atr_ratio, fee,
         r = max(clamp_lo, min(clamp_hi, atr_ratio[sig_bar]))
     else:
         r = 1.0
+    # v1.59.5: cap vol_mult so scaled SL never exceeds daily loss limit (production parity)
+    if sl_pct > 0:
+        r = min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / sl_pct)
 
     eff_tp = tp_pct * r + SLIPPAGE_BUFFER
     # Cascade SL override: use tightened SL distance if set
@@ -868,7 +875,11 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                         r = max(clamp_lo, min(clamp_hi, atr_ratio[sig]))
                     else:
                         r = 1.0
-                    cur_eff_sl = pos.get('eff_sl_override') or (pos['sl_pct'] * r)
+                    # v1.59.5: daily loss cap (production parity)
+                    p_sl = pos['sl_pct']
+                    if p_sl > 0:
+                        r = min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / p_sl)
+                    cur_eff_sl = pos.get('eff_sl_override') or (p_sl * r)
                     pos['eff_sl_override'] = cur_eff_sl * keep_ratio
 
         positions = [p for p in positions if p['slot'] not in closed_slots]
@@ -949,6 +960,9 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                             p_r = max(clamp_lo, min(clamp_hi, atr_ratio[p_sig]))
                         else:
                             p_r = 1.0
+                        # v1.59.5: daily loss cap (production parity)
+                        if p_sl > 0:
+                            p_r = min(p_r, MAX_DAILY_LOSS_PCT / LEVERAGE / p_sl)
                         p_eff_sl = p_sl * p_r
                         p_sm = p.get('size_mult', 1.0)
                         existing_exposure += p_eff_sl * (1.0 / n_slots) * LEVERAGE * p_sm
@@ -957,6 +971,9 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                 if (atr_ratio is not None and sig_bar < len(atr_ratio)
                         and not np.isnan(atr_ratio[sig_bar])):
                     new_r = max(clamp_lo, min(clamp_hi, atr_ratio[sig_bar]))
+                # v1.59.5: daily loss cap (production parity)
+                if sl_pct > 0:
+                    new_r = min(new_r, MAX_DAILY_LOSS_PCT / LEVERAGE / sl_pct)
                 new_eff_sl = sl_pct * new_r
                 new_exposure = new_eff_sl * (1.0 / n_slots) * LEVERAGE * sm
 

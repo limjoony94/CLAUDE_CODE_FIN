@@ -1,6 +1,6 @@
 {
   "study": "trailing_be_sl_study",
-  "date": "2026-03-14 01:06:26",
+  "date": "2026-03-14 02:22:52",
   "protocol": {
     "fee_pct": 0.1,
     "leverage": 3,
@@ -13,7 +13,7 @@
     ],
     "data_days": 259.2,
     "patterns": 111,
-    "mc_sims": 100,
+    "mc_sims": 200,
     "mc_seeds": [
       42,
       123,
@@ -425,8 +425,36 @@
     }
   },
   "phase3_mc_discrimination": {
-    "skipped": true,
-    "reason": "all_variants_worse_than_baseline"
+    "0.7": {
+      "activation_pct": 0.7,
+      "p_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_p": 0.0,
+      "discriminating": true
+    },
+    "0.6": {
+      "activation_pct": 0.6,
+      "p_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_p": 0.0,
+      "discriminating": true
+    },
+    "baseline": {
+      "activation_pct": 999,
+      "p_values": [
+        0.0,
+        0.0,
+        0.005
+      ],
+      "max_p": 0.005,
+      "discriminating": true
+    }
   },
   "phase4_net_impact": {
     "0.3": {
@@ -503,5 +531,5 @@
     }
   },
   "best_candidate": "0.7",
-  "elapsed_seconds": 44.6
+  "elapsed_seconds": 5167.6
 }

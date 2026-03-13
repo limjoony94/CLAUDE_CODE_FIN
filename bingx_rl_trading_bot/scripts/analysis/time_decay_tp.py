@@ -79,7 +79,7 @@ from scripts.scanner.pattern_scanner import (
 DATA_FILE = os.path.join(PROJECT_ROOT, 'data', 'btc_5m_270days_reclassified.csv')
 PATTERNS_FILE = os.path.join(PROJECT_ROOT, 'results', 'dynamic_patterns.json')
 OUTPUT_FILE = os.path.join(PROJECT_ROOT, 'results', 'time_decay_tp.json')
-TP_SCALE_FACTOR = 0.5  # v1.57.0: post-discovery TP scaling
+TP_SCALE_FACTOR = 0.72  # v1.61.0: post-discovery TP scaling
 
 
 # ============================================================
@@ -843,33 +843,32 @@ def main():
     recommendation = "KEEP_BASELINE"
     reason = []
 
-    # Check if best variant WF passes
-    if best_wf.get('verdict') == 'PASS' and baseline_wf.get('verdict') == 'PASS':
-        best_oos = best_wf.get('total_oos_pnl', 0)
-        base_oos = baseline_wf.get('total_oos_pnl', 0)
-        if best_oos > base_oos * 1.05:  # >5% improvement in OOS
-            recommendation = f"CONSIDER {best_variant}"
-            reason.append(f"OOS +{best_oos:.1f}% vs baseline +{base_oos:.1f}%")
-        else:
-            reason.append(f"OOS gap insufficient ({best_oos:.1f}% vs {base_oos:.1f}%)")
-    elif best_wf.get('verdict') != 'PASS':
-        reason.append(f"{best_variant} WF {best_wf.get('verdict', 'N/A')}")
-    else:
-        reason.append("Baseline WF FAIL (unexpected)")
+    # Check ALL WF-tested variants vs baseline
+    base_oos = baseline_wf.get('total_oos_pnl', 0)
+    best_oos_variant = None
+    best_oos_pnl = base_oos
 
-    # Check if ANY variant beats baseline
-    any_better = False
     for vname, vwf in wf_results.items():
         if vname == 'baseline':
             continue
         if vwf.get('verdict') == 'PASS':
             v_oos = vwf.get('total_oos_pnl', 0)
-            b_oos = baseline_wf.get('total_oos_pnl', 0)
-            if v_oos > b_oos * 1.05:
-                any_better = True
+            if v_oos > best_oos_pnl:
+                best_oos_pnl = v_oos
+                best_oos_variant = vname
 
-    if not any_better and recommendation == "KEEP_BASELINE":
-        reason.append("No variant beats baseline in OOS")
+    if best_oos_variant:
+        gap_pct = (best_oos_pnl - base_oos) / base_oos * 100 if base_oos > 0 else 0
+        recommendation = f"CONSIDER {best_oos_variant}"
+        reason.append(f"OOS {best_oos_variant}: +{best_oos_pnl:.1f}% vs baseline +{base_oos:.1f}% (gap +{gap_pct:.1f}%)")
+        # Also check IS PnL/MDD improvement
+        v_is = is_results.get(best_oos_variant, {})
+        b_is = is_results.get('baseline', {})
+        v_pnl_mdd = v_is['pnl'] / v_is['mdd_mtm'] if v_is.get('mdd_mtm', 0) > 0 else 0
+        b_pnl_mdd = b_is['pnl'] / b_is['mdd_mtm'] if b_is.get('mdd_mtm', 0) > 0 else 0
+        reason.append(f"IS PnL/MDD: {v_pnl_mdd:.1f}x vs baseline {b_pnl_mdd:.1f}x")
+    else:
+        reason.append(f"No variant beats baseline OOS ({base_oos:.1f}%)")
 
     elapsed = time.time() - t_start
 

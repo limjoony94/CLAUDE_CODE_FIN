@@ -246,6 +246,47 @@ def _place_sl_order(
         logger.warning(f"SL order failed: {e}")
 
 
+def update_single_tp(
+    exchange: ccxt.bingx,
+    position: Dict,
+    config: Dict[str, Any],
+    new_tp_price: float,
+) -> bool:
+    """Update a single position's TP order with place-first/cancel-after pattern.
+
+    Used by time-decay TP (v1.62.0) to gradually tighten TP as holding time increases.
+    Mirrors update_single_sl() safety pattern.
+
+    Returns True if the new TP was placed (or marked managed).
+    """
+    symbol = config['symbol']
+    direction = position.get('direction', '')
+    close_side = 'sell' if direction == 'LONG' else 'buy'
+    position_side = _get_position_side(config, direction)
+    quantity = position.get('remaining_quantity', position.get('quantity', 0))
+
+    old_tp_id = position.get('tp_order_id')
+
+    # Place new TP FIRST — position profit target is always active
+    position['tp_order_id'] = None
+    position['tp_price'] = new_tp_price
+    _place_single_tp_order(exchange, position, symbol, close_side, quantity, new_tp_price, position_side)
+
+    new_placed = position.get('tp_order_id') is not None
+
+    # THEN cancel old TP
+    if old_tp_id and old_tp_id != _EXCHANGE_MANAGED:
+        try:
+            exchange.cancel_order(old_tp_id, symbol)
+            logger.info(f"⏰ DECAY: Cancelled old TP {old_tp_id} (new TP active)")
+        except (ccxt.OrderNotFound, ccxt.InvalidOrder):
+            logger.debug(f"⏰ DECAY: Old TP {old_tp_id} already gone")
+        except Exception as e:
+            logger.warning(f"⏰ DECAY: Failed to cancel old TP {old_tp_id}: {e}")
+
+    return new_placed
+
+
 def update_single_sl(
     exchange: ccxt.bingx,
     position: Dict,

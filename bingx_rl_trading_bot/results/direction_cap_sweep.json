@@ -1,0 +1,397 @@
+{
+  "study": "direction_cap_sweep",
+  "date": "2026-03-13",
+  "baseline_cap": 7,
+  "tp_scale_factor": 0.72,
+  "n_slots": 9,
+  "data_bars": 87315,
+  "neutral_window": {
+    "start": 0,
+    "end": 74642,
+    "days": 259.2
+  },
+  "patterns": 111,
+  "signals_in_window": 10158,
+  "protocol": {
+    "entry": "next_bar_open",
+    "exit": "intrabar_high_low_distance",
+    "sizing": "compound",
+    "fee_pct": 0.1,
+    "leverage": 3,
+    "timeout_bars": 288,
+    "cascade_tighten_pct": 85,
+    "agg_risk": "8.0/15.0",
+    "momentum": "1.5%/3b/12b",
+    "atr_clamp": "[0.5, 1.5]",
+    "regime_mult": 1.0,
+    "wf_folds": 3,
+    "wf_method": "expanding_window"
+  },
+  "sweep_results": [
+    {
+      "direction_cap": 3,
+      "is_wr": 77.7,
+      "is_pnl": 226.36,
+      "is_mdd": 3.33,
+      "is_pnl_mdd": 67.98,
+      "trades": 1102,
+      "trades_per_day": 4.25,
+      "max_corr_loss": 3.68,
+      "corr_events": 66,
+      "rr_ratio": 0.805,
+      "long_trades": 595,
+      "short_trades": 507,
+      "long_pct": 54.0,
+      "short_pct": 46.0,
+      "entry_rejections_dir_cap": 8007,
+      "entry_rejections_all": {
+        "momentum": 26,
+        "agg_risk": 0,
+        "dir_cap": 8007,
+        "dup_pat": 109,
+        "max_pos": 0
+      },
+      "slot_utilization": 0.197,
+      "max_sim_positions": 6,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 52.5,
+          "oos_wr": 79.7,
+          "oos_trades": 222,
+          "oos_mdd": 2.07
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 63.36,
+          "oos_wr": 73.9,
+          "oos_trades": 333,
+          "oos_mdd": 1.92
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 53.97,
+          "oos_wr": 75.4,
+          "oos_trades": 325,
+          "oos_mdd": 3.96
+        }
+      ],
+      "wf_oos_total": 169.83,
+      "wf_verdict": "PASS"
+    },
+    {
+      "direction_cap": 4,
+      "is_wr": 75.1,
+      "is_pnl": 300.92,
+      "is_mdd": 4.24,
+      "is_pnl_mdd": 70.97,
+      "trades": 1525,
+      "trades_per_day": 5.88,
+      "max_corr_loss": 4.78,
+      "corr_events": 93,
+      "rr_ratio": 0.934,
+      "long_trades": 827,
+      "short_trades": 698,
+      "long_pct": 54.2,
+      "short_pct": 45.8,
+      "entry_rejections_dir_cap": 7241,
+      "entry_rejections_all": {
+        "momentum": 28,
+        "agg_risk": 0,
+        "dir_cap": 7241,
+        "dup_pat": 208,
+        "max_pos": 0
+      },
+      "slot_utilization": 0.267,
+      "max_sim_positions": 8,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 66.36,
+          "oos_wr": 78.3,
+          "oos_trades": 295,
+          "oos_mdd": 2.34
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 78.73,
+          "oos_wr": 70.6,
+          "oos_trades": 446,
+          "oos_mdd": 2.03
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 72.79,
+          "oos_wr": 71.1,
+          "oos_trades": 463,
+          "oos_mdd": 5.16
+        }
+      ],
+      "wf_oos_total": 217.88,
+      "wf_verdict": "PASS"
+    },
+    {
+      "direction_cap": 5,
+      "is_wr": 74.6,
+      "is_pnl": 348.59,
+      "is_mdd": 4.38,
+      "is_pnl_mdd": 79.59,
+      "trades": 1772,
+      "trades_per_day": 6.84,
+      "max_corr_loss": 5.88,
+      "corr_events": 102,
+      "rr_ratio": 0.965,
+      "long_trades": 943,
+      "short_trades": 829,
+      "long_pct": 53.2,
+      "short_pct": 46.8,
+      "entry_rejections_dir_cap": 1633,
+      "entry_rejections_all": {
+        "momentum": 31,
+        "agg_risk": 0,
+        "dir_cap": 1633,
+        "dup_pat": 279,
+        "max_pos": 5151
+      },
+      "slot_utilization": 0.314,
+      "max_sim_positions": 9,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 73.52,
+          "oos_wr": 76.5,
+          "oos_trades": 357,
+          "oos_mdd": 4.06
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 93.66,
+          "oos_wr": 70.4,
+          "oos_trades": 507,
+          "oos_mdd": 2.32
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 83.68,
+          "oos_wr": 70.5,
+          "oos_trades": 533,
+          "oos_mdd": 4.56
+        }
+      ],
+      "wf_oos_total": 250.86,
+      "wf_verdict": "PASS"
+    },
+    {
+      "direction_cap": 6,
+      "is_wr": 76.1,
+      "is_pnl": 386.58,
+      "is_mdd": 3.82,
+      "is_pnl_mdd": 101.2,
+      "trades": 1837,
+      "trades_per_day": 7.09,
+      "max_corr_loss": 4.4,
+      "corr_events": 94,
+      "rr_ratio": 0.981,
+      "long_trades": 889,
+      "short_trades": 948,
+      "long_pct": 48.4,
+      "short_pct": 51.6,
+      "entry_rejections_dir_cap": 617,
+      "entry_rejections_all": {
+        "momentum": 37,
+        "agg_risk": 227,
+        "dir_cap": 617,
+        "dup_pat": 329,
+        "max_pos": 5783
+      },
+      "slot_utilization": 0.316,
+      "max_sim_positions": 9,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 88.96,
+          "oos_wr": 81.7,
+          "oos_trades": 356,
+          "oos_mdd": 3.54
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 96.06,
+          "oos_wr": 70.0,
+          "oos_trades": 523,
+          "oos_mdd": 2.67
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 102.38,
+          "oos_wr": 73.4,
+          "oos_trades": 571,
+          "oos_mdd": 4.43
+        }
+      ],
+      "wf_oos_total": 287.4,
+      "wf_verdict": "PASS"
+    },
+    {
+      "direction_cap": 7,
+      "is_wr": 76.8,
+      "is_pnl": 406.92,
+      "is_mdd": 3.81,
+      "is_pnl_mdd": 106.8,
+      "trades": 1846,
+      "trades_per_day": 7.12,
+      "max_corr_loss": 3.68,
+      "corr_events": 86,
+      "rr_ratio": 1.009,
+      "long_trades": 851,
+      "short_trades": 995,
+      "long_pct": 46.1,
+      "short_pct": 53.9,
+      "entry_rejections_dir_cap": 124,
+      "entry_rejections_all": {
+        "momentum": 37,
+        "agg_risk": 390,
+        "dir_cap": 124,
+        "dup_pat": 381,
+        "max_pos": 6047
+      },
+      "slot_utilization": 0.32,
+      "max_sim_positions": 9,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 90.74,
+          "oos_wr": 80.8,
+          "oos_trades": 365,
+          "oos_mdd": 3.57
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 99.63,
+          "oos_wr": 71.8,
+          "oos_trades": 507,
+          "oos_mdd": 2.66
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 109.27,
+          "oos_wr": 73.3,
+          "oos_trades": 588,
+          "oos_mdd": 4.34
+        }
+      ],
+      "wf_oos_total": 299.64,
+      "wf_verdict": "PASS"
+    },
+    {
+      "direction_cap": 8,
+      "is_wr": 77.0,
+      "is_pnl": 406.32,
+      "is_mdd": 3.86,
+      "is_pnl_mdd": 105.26,
+      "trades": 1832,
+      "trades_per_day": 7.07,
+      "max_corr_loss": 3.68,
+      "corr_events": 85,
+      "rr_ratio": 0.997,
+      "long_trades": 844,
+      "short_trades": 988,
+      "long_pct": 46.1,
+      "short_pct": 53.9,
+      "entry_rejections_dir_cap": 10,
+      "entry_rejections_all": {
+        "momentum": 37,
+        "agg_risk": 421,
+        "dir_cap": 10,
+        "dup_pat": 394,
+        "max_pos": 6118
+      },
+      "slot_utilization": 0.316,
+      "max_sim_positions": 9,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 92.28,
+          "oos_wr": 81.0,
+          "oos_trades": 368,
+          "oos_mdd": 3.57
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 101.93,
+          "oos_wr": 72.2,
+          "oos_trades": 508,
+          "oos_mdd": 2.51
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 110.17,
+          "oos_wr": 73.5,
+          "oos_trades": 586,
+          "oos_mdd": 4.3
+        }
+      ],
+      "wf_oos_total": 304.38,
+      "wf_verdict": "PASS"
+    },
+    {
+      "direction_cap": 9,
+      "is_wr": 77.2,
+      "is_pnl": 410.44,
+      "is_mdd": 3.86,
+      "is_pnl_mdd": 106.33,
+      "trades": 1832,
+      "trades_per_day": 7.07,
+      "max_corr_loss": 3.68,
+      "corr_events": 84,
+      "rr_ratio": 1.0,
+      "long_trades": 842,
+      "short_trades": 990,
+      "long_pct": 46.0,
+      "short_pct": 54.0,
+      "entry_rejections_dir_cap": 0,
+      "entry_rejections_all": {
+        "momentum": 37,
+        "agg_risk": 429,
+        "dir_cap": 0,
+        "dup_pat": 401,
+        "max_pos": 6110
+      },
+      "slot_utilization": 0.314,
+      "max_sim_positions": 9,
+      "mc_pvalue": 0.0,
+      "wf_oos_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 92.69,
+          "oos_wr": 80.7,
+          "oos_trades": 368,
+          "oos_mdd": 3.57
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 104.41,
+          "oos_wr": 72.5,
+          "oos_trades": 510,
+          "oos_mdd": 2.51
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 110.17,
+          "oos_wr": 73.5,
+          "oos_trades": 586,
+          "oos_mdd": 4.3
+        }
+      ],
+      "wf_oos_total": 307.27,
+      "wf_verdict": "PASS"
+    }
+  ],
+  "recommendation": "KEEP_BASELINE (cap=7). No WF-passing cap improves over baseline PnL/MDD 106.8x."
+}

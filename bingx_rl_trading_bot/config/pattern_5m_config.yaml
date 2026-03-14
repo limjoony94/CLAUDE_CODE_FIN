@@ -21,7 +21,7 @@ risk:
     min_scale: 0.25           # minimum position scale factor
   aggregate_risk_cap:      # v1.35.5→v1.44.0: Aggregate directional SL exposure cap (relaxed from 3/7 to 5/15)
     enabled: true
-    counter_cap: 8.0         # v1.49.0: 5→8% (aggrisk_resweep_study: IS +31%, OOS min +12%, timeout=288 자연 분산)
+    counter_cap: 999.0       # v1.64.2: 8→999 (REMOVE — aggrisk_counter_removal_study: 74% profitable trades blocked, 0pp MDD benefit, Cascade+DirCap sufficient)
     with_cap: 999.0          # v1.64.1: 15→999 (DEAD CODE — never triggers at N=9/DirCap=7/SL≤4.56%, mechanism_stress_test confirmed)
   loss_burst_brake:        # v1.37.0: Block direction after burst losses — v1.40.1 DISABLED (redundant with momentum_guard, ablation +5.66)
     enabled: false

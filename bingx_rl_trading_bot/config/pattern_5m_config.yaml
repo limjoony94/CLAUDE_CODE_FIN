@@ -30,7 +30,7 @@ risk:
     block_bars: 144          # 144 bars = 12h block duration
   cascade_sl_tightening:   # v1.41.0→v1.45.0: After SL exit, tighten remaining same-dir SLs
     enabled: true
-    tighten_pct: 85          # v1.45.0: 75→85% (cascade_pct_pattern_filter_study: IS PnL/MDD +44%, OOS min fold +64.4% vs +54.9%)
+    tighten_pct: 95          # v1.64.0: 85→95% (non-cumul+norefire study: IS PnL/MDD +12%, OOS +11%)
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
     lookback_bars: 3         # v1.46.0: 6→3 bars = 15min (faster spike detection, momentum_guard_sweep_study)
@@ -76,7 +76,7 @@ strategy:
   tp_scale_factor: 0.72
   tp_decay:                        # v1.63.0: Exponential Time-Decay TP (exp_decay)
     enabled: true
-    decay_rate: 0.997              # TP_dist *= 0.997^bars_held (half-life ~231 bars = 19.25h)
+    decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)
     update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula

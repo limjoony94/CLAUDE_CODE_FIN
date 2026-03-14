@@ -643,8 +643,10 @@ def _handle_position_closed(
             exit_reason = f'SL_AFTER_{filled_stages}_STAGES'
 
     # v1.41.0: Cascade SL tightening — tighten same-dir SLs before slot removal
+    # v1.64.0: No-refire — skip cascade if this position was already cascade-tightened
     if exit_reason in ('SL', 'EMERGENCY_SL', 'CASCADE_SL') or exit_reason.startswith('SL_AFTER_'):
-        _cascade_tighten_sls(exchange, state, config, position)
+        if not position.get('cascade_tightened'):
+            _cascade_tighten_sls(exchange, state, config, position)
 
     record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics, position=position)
     return True
@@ -658,9 +660,10 @@ def _cascade_tighten_sls(
 ) -> None:
     """Tighten SL orders on remaining same-direction positions after an SL exit.
 
-    v1.41.0: Correlated loss study H5_Cascade_t75 — reduce SL distance
-    to (1 - tighten_pct/100) of current distance. Cascading: each
-    subsequent SL exit recalculates from current sl_price.
+    v1.41.0: Correlated loss study H5_Cascade_t75 — reduce SL distance.
+    v1.64.0: Non-cumulative — always tighten from original SL distance,
+    not from already-tightened SL. Combined with no-refire (caller skips
+    cascade if closed position was already cascade-tightened).
     """
     cascade_cfg = config.get('risk', {}).get('cascade_sl_tightening', {})
     if not cascade_cfg.get('enabled', False):
@@ -692,8 +695,12 @@ def _cascade_tighten_sls(
         if entry <= 0 or old_sl <= 0:
             continue
 
-        old_dist = abs(entry - old_sl)
-        new_dist = old_dist * keep_ratio
+        # v1.64.0: Non-cumulative — use original SL distance, not current
+        original_sl_dist = pos.get('original_sl_distance')
+        if original_sl_dist is None:
+            original_sl_dist = abs(entry - old_sl)
+            pos['original_sl_distance'] = original_sl_dist
+        new_dist = original_sl_dist * keep_ratio
 
         if direction == 'LONG':
             new_sl = round(entry - new_dist, 1)

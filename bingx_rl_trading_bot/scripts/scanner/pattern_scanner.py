@@ -834,6 +834,8 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
         closed_slots = []
         bar_pnl_sum = 0.0
         bar_sl_count = 0
+        # v1.64.0: Track directions where ORIGINAL (non-cascaded) positions hit SL
+        bar_sl_original_dirs = set()
 
         for pos in positions:
             result = _check_exit_npos(pos, bar, opens, highs, lows, n_bars,
@@ -854,21 +856,21 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                 bar_pnl_sum += pnl_portfolio
                 if result['reason'] == 'SL':
                     bar_sl_count += 1
+                    # v1.64.0: No-refire — only original SL exits trigger cascade
+                    if not pos.get('cascaded', False):
+                        bar_sl_original_dirs.add(pos['direction'])
 
         # Cascade SL tightening: after SL exits, tighten same-dir remaining SLs
-        if cascade_tighten_pct > 0 and bar_sl_count > 0:
+        # v1.64.0: No-refire + non-cumulative
+        if cascade_tighten_pct > 0 and len(bar_sl_original_dirs) > 0:
             keep_ratio = 1.0 - cascade_tighten_pct / 100.0
-            sl_directions = set()
-            for t in trades[len(trades) - len(closed_slots):]:
-                if t.get('reason') == 'SL':
-                    sl_directions.add(t['direction'])
-            for sl_dir in sl_directions:
+            for sl_dir in bar_sl_original_dirs:
                 for pos in positions:
                     if pos['slot'] in closed_slots:
                         continue
                     if pos['direction'] != sl_dir:
                         continue
-                    # Compute current effective SL distance (ATR-scaled)
+                    # Compute original effective SL distance (ATR-scaled)
                     sig = pos['signal_bar']
                     if (atr_ratio is not None and sig < len(atr_ratio)
                             and not np.isnan(atr_ratio[sig])):
@@ -879,8 +881,10 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                     p_sl = pos['sl_pct']
                     if p_sl > 0:
                         r = min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / p_sl)
-                    cur_eff_sl = pos.get('eff_sl_override') or (p_sl * r)
-                    pos['eff_sl_override'] = cur_eff_sl * keep_ratio
+                    # v1.64.0: Non-cumulative — always use original SL, not current
+                    original_eff_sl = p_sl * r
+                    pos['eff_sl_override'] = original_eff_sl * keep_ratio
+                    pos['cascaded'] = True
 
         positions = [p for p in positions if p['slot'] not in closed_slots]
 

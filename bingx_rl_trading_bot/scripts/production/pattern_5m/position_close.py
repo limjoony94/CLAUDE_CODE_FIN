@@ -1165,7 +1165,7 @@ def close_position_market(
             type='market',
             side=close_side,
             amount=quantity,
-            params={'positionSide': position_side}
+            params={'positionSide': position_side, 'reduceOnly': True}
         )
 
         if order:

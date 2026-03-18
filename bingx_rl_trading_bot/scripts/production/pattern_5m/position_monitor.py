@@ -707,6 +707,7 @@ def _cascade_tighten_sls(
         else:
             new_sl = round(entry + new_dist, 1)
 
+        old_dist = abs(entry - old_sl)
         logger.info(
             f"  CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "
             f"(dist {old_dist:.1f} → {new_dist:.1f})"

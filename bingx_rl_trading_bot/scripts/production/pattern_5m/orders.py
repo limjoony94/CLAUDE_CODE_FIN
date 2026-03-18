@@ -135,8 +135,7 @@ def _place_scale_out_orders(
             order_params = {
                 'positionSide': position_side,
                 'stopPrice': stage_tp_price,
-                'reduceOnly': True,
-            }
+                            }
 
             tp_order = exchange.create_order(
                 symbol=symbol,
@@ -175,8 +174,7 @@ def _place_single_tp_order(
             params={
                 'positionSide': position_side,
                 'stopPrice': tp_price,
-                'reduceOnly': True,
-            }
+                            }
         )
         position['tp_order_id'] = tp_order.get('id')
         logger.info(f"TP order placed: {tp_order.get('id')} @ ${tp_price} (qty: {quantity})")
@@ -215,8 +213,7 @@ def _place_sl_order(
             params={
                 'positionSide': position_side,
                 'stopPrice': sl_price,
-                'reduceOnly': True,
-            }
+                            }
         )
         position['sl_order_id'] = sl_order.get('id')
         logger.info(f"SL order placed: {sl_order.get('id')} @ ${sl_price} (qty: {quantity})")
@@ -237,7 +234,7 @@ def _place_sl_order(
                     sl_order = exchange.create_order(
                         symbol=symbol, type='STOP_MARKET', side=close_side,
                         amount=quantity,
-                        params={'positionSide': position_side, 'stopPrice': new_sl, 'reduceOnly': True},
+                        params={'positionSide': position_side, 'stopPrice': new_sl},
                     )
                     position['sl_order_id'] = sl_order.get('id')
                     logger.info(f"SL order placed (breach-adjusted): {sl_order.get('id')} @ ${new_sl}")
@@ -638,8 +635,7 @@ def _verify_single_tp_order(
                 params={
                     'positionSide': position_side,
                     'stopPrice': position['tp_price'],
-                    'reduceOnly': True,
-                }
+                                    }
             )
             position['tp_order_id'] = tp_order.get('id')
             logger.info(f"TP order {'placed' if not tp_order_id else 're-placed'}: {tp_order.get('id')}")
@@ -685,7 +681,7 @@ def _verify_scale_out_orders(
             action = "was never placed" if not stage_order_id else "missing from exchange"
             logger.warning(f"Stage {stage['stage']} TP order {action}, re-placing...")
             try:
-                order_params = {'positionSide': position_side, 'stopPrice': stage['tp_price'], 'reduceOnly': True}
+                order_params = {'positionSide': position_side, 'stopPrice': stage['tp_price']}
 
                 tp_order = exchange.create_order(
                     symbol=symbol,
@@ -750,8 +746,7 @@ def _verify_sl_order(
                 params={
                     'positionSide': position_side,
                     'stopPrice': position['sl_price'],
-                    'reduceOnly': True,
-                }
+                                    }
             )
             position['sl_order_id'] = sl_order.get('id')
             logger.info(f"SL order {'placed' if not sl_order_id else 're-placed'}: {sl_order.get('id')}")
@@ -773,7 +768,7 @@ def _verify_sl_order(
                         sl_order = exchange.create_order(
                             symbol=symbol, type='STOP_MARKET', side=close_side,
                             amount=position.get('remaining_quantity', position['quantity']),
-                            params={'positionSide': position_side, 'stopPrice': new_sl, 'reduceOnly': True},
+                            params={'positionSide': position_side, 'stopPrice': new_sl},
                         )
                         position['sl_order_id'] = sl_order.get('id')
                         logger.info(f"SL order placed (breach-adjusted): {sl_order.get('id')} @ ${new_sl}")
@@ -1077,13 +1072,12 @@ def _place_emergency_sl_for_direction(
                 'positionSide': position_side,
                 'stopPrice': worst_sl,
                 'closePosition': 'true',
-                'reduceOnly': True,
-            }
+                            }
         )
         order_id = order.get('id')
         _set_emergency_sl_id(state, config, direction, order_id)
         save_state(state)
-        logger.info(f"🛡️ Emergency SL ({direction}) placed: {order_id} @ ${worst_sl:.1f} (closePosition=true, reduceOnly, qty={total_qty})")
+        logger.info(f"🛡️ Emergency SL ({direction}) placed: {order_id} @ ${worst_sl:.1f} (closePosition=true, qty={total_qty})")
     except ccxt.ExchangeError as e:
         error_msg = str(e)
         if '110406' in error_msg:
@@ -1118,8 +1112,7 @@ def _place_emergency_sl_for_direction(
                             'positionSide': position_side,
                             'stopPrice': new_sl,
                             'closePosition': 'true',
-                            'reduceOnly': True,
-                        },
+                                                    },
                     )
                     order_id = order.get('id')
                     _set_emergency_sl_id(state, config, direction, order_id)

@@ -188,6 +188,10 @@ def _place_single_tp_order(
         elif '110413' in error_msg:
             position['tp_order_id'] = _EXCHANGE_MANAGED
             logger.warning("TP price already exceeded — marking as managed, position_monitor will handle")
+        elif '110414' in error_msg:
+            # TP price already past current price (e.g. decay reduced TP beyond market)
+            position['tp_order_id'] = _EXCHANGE_MANAGED
+            logger.warning("TP price past current market — marking as managed, position_monitor will handle")
         else:
             logger.warning(f"TP order failed (exchange error): {e}")
     except Exception as e:
@@ -238,8 +242,20 @@ def _place_sl_order(
                     )
                     position['sl_order_id'] = sl_order.get('id')
                     logger.info(f"SL order placed (breach-adjusted): {sl_order.get('id')} @ ${new_sl}")
+                except ccxt.ExchangeError as retry_e:
+                    retry_msg = str(retry_e)
+                    if '110424' in retry_msg:
+                        # Qty exceeds available — position partially closed during cascade
+                        logger.warning(f"SL qty {quantity} exceeds available — position likely partially closed, will sync next cycle")
+                        position['sl_order_id'] = _EXCHANGE_MANAGED
+                    else:
+                        logger.error(f"SL order retry failed after breach adjustment: {retry_e}")
                 except Exception as retry_e:
                     logger.error(f"SL order retry failed after breach adjustment: {retry_e}")
+        elif '110424' in error_msg:
+            # Qty exceeds available — position partially closed
+            logger.warning(f"SL qty {quantity} exceeds available — position likely partially closed, will sync next cycle")
+            position['sl_order_id'] = _EXCHANGE_MANAGED
         else:
             logger.warning(f"SL order failed (exchange error): {e}")
     except Exception as e:
@@ -650,6 +666,10 @@ def _verify_single_tp_order(
                 position['tp_order_id'] = _EXCHANGE_MANAGED
                 logger.warning("TP price already exceeded current price — skipping TP placement, position_monitor will handle")
                 state_changed = True
+            elif '110414' in error_msg:
+                position['tp_order_id'] = _EXCHANGE_MANAGED
+                logger.warning("TP price past current market — marking as managed, position_monitor will handle")
+                state_changed = True
             else:
                 logger.error(f"Failed to place TP order (exchange error): {e}")
         except Exception as e:
@@ -773,8 +793,20 @@ def _verify_sl_order(
                         position['sl_order_id'] = sl_order.get('id')
                         logger.info(f"SL order placed (breach-adjusted): {sl_order.get('id')} @ ${new_sl}")
                         state_changed = True
+                    except ccxt.ExchangeError as retry_e:
+                        retry_msg = str(retry_e)
+                        if '110424' in retry_msg:
+                            logger.warning(f"SL qty exceeds available — position likely partially closed, will sync next cycle")
+                            position['sl_order_id'] = _EXCHANGE_MANAGED
+                            state_changed = True
+                        else:
+                            logger.error(f"SL order retry failed after breach adjustment: {retry_e}")
                     except Exception as retry_e:
                         logger.error(f"SL order retry failed after breach adjustment: {retry_e}")
+            elif '110424' in error_msg:
+                logger.warning(f"SL qty exceeds available — position likely partially closed, will sync next cycle")
+                position['sl_order_id'] = _EXCHANGE_MANAGED
+                state_changed = True
             else:
                 logger.error(f"Failed to place SL order (exchange error): {e}")
         except Exception as e:

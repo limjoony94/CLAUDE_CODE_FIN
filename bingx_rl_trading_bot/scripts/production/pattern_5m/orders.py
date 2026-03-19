@@ -376,7 +376,9 @@ def adjust_tpsl_to_config(
     symbol = config['symbol']
     any_adjusted = False
 
-    for position in positions.values():
+    for i, position in enumerate(positions.values()):
+        if i > 0:
+            time.sleep(0.3)  # Rate limit protection between slots
         adjusted = _adjust_single_position_tpsl(exchange, position, state, config, symbol)
         any_adjusted = any_adjusted or adjusted
 
@@ -573,9 +575,11 @@ def verify_tp_sl_orders(
         except Exception as e:
             logger.debug(f"Verify qty guard: fetch_positions failed: {e}")
 
-        for position in positions.values():
+        for i, position in enumerate(positions.values()):
             if position.get('direction') in skip_directions:
                 continue
+            if i > 0:
+                time.sleep(0.2)  # Rate limit protection between verify cycles
             position_side = _get_position_side(config, position['direction'])
             scale_out_enabled = position.get('scale_out_enabled', False)
             scale_out_stages = position.get('scale_out_stages', [])

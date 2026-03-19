@@ -689,7 +689,9 @@ def _cascade_tighten_sls(
         f"tightening {len(same_dir)} same-dir positions to {keep_ratio:.0%} SL distance"
     )
 
-    for sid, pos in same_dir:
+    for i, (sid, pos) in enumerate(same_dir):
+        if i > 0:
+            time.sleep(0.3)  # Rate limit protection between cascade updates
         entry = pos.get('entry_price', 0)
         old_sl = pos.get('sl_price', 0)
         if entry <= 0 or old_sl <= 0:

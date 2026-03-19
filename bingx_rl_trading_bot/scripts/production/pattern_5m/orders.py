@@ -444,8 +444,15 @@ def _adjust_single_position_tpsl(
     current_tp = position.get('tp_price', 0)
     current_sl = position.get('sl_price', 0)
 
+    # VOL_ADAPT가 SL을 관리 중인 포지션은 SL 비교를 건너뛰기 (VOL_ADAPT에 위임)
+    # adjust_tpsl는 진입 시 vol_mult만 보므로, 실시간 vol_factor 반영된 SL과 충돌
+    vol_adapt_active = position.get('_sl_price_original') is not None
+    if vol_adapt_active:
+        sl_diff = 0.0  # SL은 VOL_ADAPT가 관리 → 비교 skip
+    else:
+        sl_diff = abs(current_sl - expected_sl_price)
+
     tp_diff = abs(current_tp - expected_tp_price)
-    sl_diff = abs(current_sl - expected_sl_price)
 
     if tp_diff <= 1.0 and sl_diff <= 1.0:
         logger.debug(f"TP/SL already match config for {pattern} (vol_mult={vol_mult:.4f})")
@@ -459,11 +466,12 @@ def _adjust_single_position_tpsl(
 
     try:
         # Cancel existing orders
-        _cancel_existing_tpsl_orders(exchange, position, symbol)
+        _cancel_existing_tpsl_orders(exchange, position, symbol, skip_sl=vol_adapt_active)
 
         # Update position with new prices
         position['tp_price'] = expected_tp_price
-        position['sl_price'] = expected_sl_price
+        if not vol_adapt_active:
+            position['sl_price'] = expected_sl_price
 
         # Place new orders (use remaining_quantity for scale-out partial fills)
         quantity = position.get('remaining_quantity', position['quantity'])
@@ -473,8 +481,9 @@ def _adjust_single_position_tpsl(
         # Place TP order
         _place_single_tp_order(exchange, position, symbol, close_side, quantity, expected_tp_price, position_side)
 
-        # Place SL order
-        _place_sl_order(exchange, position, symbol, close_side, quantity, expected_sl_price, position_side)
+        # Place SL order (skip if VOL_ADAPT is managing SL — SL not cancelled)
+        if not vol_adapt_active:
+            _place_sl_order(exchange, position, symbol, close_side, quantity, expected_sl_price, position_side)
 
         save_state(state)
         logger.info(f"✅ TP/SL adjusted successfully for {pattern} (slot {slot_id})")
@@ -489,6 +498,7 @@ def _cancel_existing_tpsl_orders(
     position: Dict,
     symbol: str,
     open_orders: Optional[List] = None,
+    skip_sl: bool = False,
 ) -> None:
     """Cancel existing TP/SL orders before placing new ones."""
     tp_order_id = position.get('tp_order_id')
@@ -503,7 +513,7 @@ def _cancel_existing_tpsl_orders(
             exchange.cancel_order(tp_order_id, symbol)
             logger.info(f"   Cancelled old TP order: {tp_order_id}")
 
-        if sl_order_id and sl_order_id != _EXCHANGE_MANAGED and sl_order_id in open_order_ids:
+        if not skip_sl and sl_order_id and sl_order_id != _EXCHANGE_MANAGED and sl_order_id in open_order_ids:
             exchange.cancel_order(sl_order_id, symbol)
             logger.info(f"   Cancelled old SL order: {sl_order_id}")
 

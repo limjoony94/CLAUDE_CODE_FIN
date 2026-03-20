@@ -684,6 +684,13 @@ def _cascade_tighten_sls(
     if not same_dir:
         return
 
+    # Fetch current price for SL validity check
+    try:
+        ticker = exchange.fetch_ticker(config.get('symbol', 'BTC-USDT'))
+        current_price = ticker.get('last', 0)
+    except Exception:
+        current_price = 0
+
     logger.info(
         f"🔗 CASCADE SL: {direction} SL exit (slot {closed_slot}) — "
         f"tightening {len(same_dir)} same-dir positions to {keep_ratio:.0%} SL distance"
@@ -708,6 +715,23 @@ def _cascade_tighten_sls(
             new_sl = round(entry - new_dist, 1)
         else:
             new_sl = round(entry + new_dist, 1)
+
+        # Validate cascaded SL against current price to avoid breached placement
+        if current_price > 0:
+            if direction == 'LONG' and new_sl >= current_price:
+                logger.warning(
+                    f"  CASCADE slot {sid}: SKIP — cascaded SL ${new_sl:.1f} >= current ${current_price:.1f} "
+                    f"(position already past cascade level, keeping old SL ${old_sl:.1f})"
+                )
+                pos['cascade_tightened'] = True
+                continue
+            if direction == 'SHORT' and new_sl <= current_price:
+                logger.warning(
+                    f"  CASCADE slot {sid}: SKIP — cascaded SL ${new_sl:.1f} <= current ${current_price:.1f} "
+                    f"(position already past cascade level, keeping old SL ${old_sl:.1f})"
+                )
+                pos['cascade_tightened'] = True
+                continue
 
         old_dist = abs(entry - old_sl)
         logger.info(

@@ -295,7 +295,7 @@ def direction_bias(trades, baseline):
     # Binomial test for LONG WR = 0%
     if n_long > 0:
         # Under null of BT_IS_WR / 100 for longs
-        p_val = stats.binom_test(long_wins, n_long, BT_IS_WR / 100, alternative="less")
+        p_val = stats.binomtest(long_wins, n_long, BT_IS_WR / 100, alternative="less").pvalue
         print(f"\n  Binomial test (H0: long WR >= {BT_IS_WR}%): p = {p_val:.6f}")
         print(f"  --> {'SIGNIFICANT' if p_val < 0.05 else 'NOT significant'} at alpha=0.05")
 
@@ -327,7 +327,7 @@ def statistical_assessment(trades):
         print(f"  Gap: {live_wr - bt_wr:+.1f}pp")
 
         # Binomial test
-        p_val = stats.binom_test(wins, n, bt_wr / 100, alternative="less")
+        p_val = stats.binomtest(wins, n, bt_wr / 100, alternative="less").pvalue
         print(f"  Binomial test (H0: WR >= {bt_wr}%): p = {p_val:.6f}")
         print(f"  --> {'SIGNIFICANT' if p_val < 0.05 else 'NOT significant'} (alpha=0.05)")
 

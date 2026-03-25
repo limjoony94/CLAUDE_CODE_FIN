@@ -21,8 +21,8 @@ risk:
     min_scale: 0.25           # minimum position scale factor
   aggregate_risk_cap:      # v1.35.5→v1.44.0: Aggregate directional SL exposure cap (relaxed from 3/7 to 5/15)
     enabled: true
-    counter_cap: 999.0       # v1.64.2: 8→999 (REMOVE — aggrisk_counter_removal_study: 74% profitable trades blocked, 0pp MDD benefit, Cascade+DirCap sufficient)
-    with_cap: 999.0          # v1.64.1: 15→999 (DEAD CODE — never triggers at N=9/DirCap=7/SL≤4.56%, mechanism_stress_test confirmed)
+    counter_cap: 10.0        # v1.65.0: 999→10 (preemptive_param_crossval: re-enabled with pre-emptive cascade, OOS +368.9% at 10 vs +340% at 8)
+    with_cap: 15.0           # v1.65.0: 999→15 (restored, works with DirCap=6)
   loss_burst_brake:        # v1.37.0: Block direction after burst losses — v1.40.1 DISABLED (redundant with momentum_guard, ablation +5.66)
     enabled: false
     threshold: 2             # number of same-dir losses to trigger brake
@@ -31,6 +31,10 @@ risk:
   cascade_sl_tightening:   # v1.41.0→v1.45.0: After SL exit, tighten remaining same-dir SLs
     enabled: true
     tighten_pct: 95          # v1.64.0: 85→95% (non-cumul+norefire study: IS PnL/MDD +12%, OOS +11%)
+  preemptive_cascade:      # v1.65.0: Pre-emptive SL tightening when unrealized loss exceeds threshold
+    enabled: true
+    unrealized_loss_pct: 3.0   # v1.66.0: 4→3% (vol_adapt_param_optimization Phase 3: pre=3% + vol_adapt 시너지, OOS +453.9%)
+    tighten_pct: 95            # v1.65.0: 95% optimal (crossval sweep 70-95%, OOS +366.4% at 95%)
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
     lookback_bars: 3         # v1.46.0: 6→3 bars = 15min (faster spike detection, momentum_guard_sweep_study)
@@ -65,19 +69,30 @@ strategy:
     clamp_lo: 0.5     # v1.47.0: 0.6→0.5 (atr_clamp_sweep_study: IS PnL/MDD +44%, MDD -25%, OOS min +5.4%)
     clamp_hi: 1.5     # v1.50.0: 1.7→1.5 (atr_mdd_param_sweep_study: IS PnL/MDD +52%, OOS min +2.4pp, MDD sizing noise-level)
   cooldown_candles: 0
-  direction_cap: 7         # v1.36.1: cap8→7 (portfolio study: PnL/MDD 14.43x vs 13.54x, corr loss 3.1% vs 3.5%)
+  direction_cap: 6         # v1.65.0: 7→6 (preemptive_param_crossval: COMBO_B OOS +410.7% vs DC7 +408.3%, cluster exposure -14%)
   rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
   timeout_bars: 288        # v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치, 24h+ trades net negative)
   # tp_multiplier removed — v1.43.0 ROLLBACK (h7_critical_validation: WF 94% non-discriminating, 95% Cascade-dependent, E[trade] inferior at live WR)
-  # v1.57.0→v1.61.0: TP scale factor (N-pos portfolio optimization)
-  # v1.57.0: TP×0.5 — IS PnL/MDD 113.0x, OOS +306%, but R:R 0.66 → live WR margin only +2.1pp
-  # v1.61.0: TP×0.72 — IS PnL/MDD 106.8x, OOS +276.8%, R:R 1.009 → WR margin +27.0pp (safe)
-  # tp_factor_deep_study: ×0.72 best risk-adjusted (R:R crosses 1.0, BE WR 49.8%)
-  tp_scale_factor: 0.72
+  # v1.67.0: TP mode — 'scale' (uniform factor) or 'mfe_median' (per-pattern MFE median)
+  # mfe_median: uses each pattern's MFE median from scanner exc_stats as TP directly.
+  #   0 free params (data-derived) → lowest overfit risk (score 30.6, FP=0)
+  #   OOS5 +385% vs scale×0.72 +380%, IS P/M 149.3x vs 134.8x
+  #   Effective scale per-pattern 0.37~1.44 (median 0.71), adapts to each pattern's MFE shape
+  tp_mode: mfe_median
+  tp_scale_factor: 0.72  # only used when tp_mode: scale (v1.61.0 legacy fallback)
   tp_decay:                        # v1.63.0: Exponential Time-Decay TP (exp_decay)
     enabled: true
     decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)
     update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
+  vol_adaptation:                  # v1.66.0: Volatility-adaptive TP/SL
+    enabled: true
+    clamp_lo: 0.5                  # min vol_factor (SL shrinks to 50% min in low vol)
+    clamp_hi: 2.0                  # max vol_factor (SL expands to 200% max in high vol)
+    update_interval_bars: 1        # update every bar (vol_adapt_param_optimization: iv=1 optimal)
+  opposite_signal_exit:            # v1.66.0: Close profitable positions on consecutive opposite signals
+    enabled: true
+    consecutive_signals: 2           # number of consecutive opposite-direction signals to trigger
+    min_profit_pct: 0.1              # minimum unrealized profit (slot %, with leverage) to qualify
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

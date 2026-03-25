@@ -704,11 +704,16 @@ def _cascade_tighten_sls(
         if entry <= 0 or old_sl <= 0:
             continue
 
-        # v1.64.0: Non-cumulative — use original SL distance, not current
-        original_sl_dist = pos.get('original_sl_distance')
-        if original_sl_dist is None:
-            original_sl_dist = abs(entry - old_sl)
-            pos['original_sl_distance'] = original_sl_dist
+        # v1.67.1: Use _sl_price_original (true entry-time SL) for cascade distance.
+        # Prior bug: original_sl_distance was set from vol_adapt-adjusted SL,
+        # making cascade SL too tight (entry ± $75) → SKIP → cascade ineffective.
+        # _sl_price_original is set at position entry (before any vol_adapt).
+        orig_sl_price = pos.get('_sl_price_original')
+        if orig_sl_price and orig_sl_price > 0:
+            original_sl_dist = abs(entry - orig_sl_price)
+        else:
+            original_sl_dist = pos.get('original_sl_distance') or abs(entry - old_sl)
+        pos['original_sl_distance'] = original_sl_dist
         new_dist = original_sl_dist * keep_ratio
 
         if direction == 'LONG':

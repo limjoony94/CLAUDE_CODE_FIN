@@ -1,10 +1,27 @@
 # Version History (Full)
 
 > CLAUDE.md에서는 최근 주요 버전만 표시. 전체 히스토리는 이 파일 참조.
-> **Last Updated**: 2026-03-12 | **Current Version**: v1.56.2
+> **Last Updated**: 2026-03-25 | **Current Version**: v1.67.1
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
+| **v1.67.1** | 03-25 | **Cascade SL original distance fix**: Reactive cascade(`_cascade_tighten_sls`)와 pre-emptive cascade(`_apply_preemptive_cascade`)가 `original_sl_distance`를 vol_adapt 이후 SL에서 계산 → cascade SL이 entry 근처에 배치 → 가격 유효성 검증 SKIP → `cascade_tightened=True`로 마킹되지만 SL 미변경 → cascade 무력화. Fix: `_sl_price_original`(진입 시 원래 SL) 우선 사용. BT 영향: +0.3%(무). 라이브: cascade SKIP 비율 감소로 실효성 향상 기대. 연구: sim_production_parity_study(SL 4배 괴리 발견 → cascade 90% vs live 16%), realistic_sim_study(1-bar delay + vol_adapt + decay + timeout_pnl realistic sim), cascade_tighten_sweep(95% 최적 재확인), overfit_check(FP=0, IS-OOS gap 동일, 과적합 아님). **1111 tests ALL PASSED**. |
+| **v1.67.0** | 03-24 | **MFE Median TP + OPP_SIGNAL Exit**: (1) `tp_mode: mfe_median` — 각 패턴의 MFE(최대유리편향) 중앙값을 TP로 직접 사용. 자유파라미터 0개(데이터 직접 사용), 과적합 위험 최저(overfit score 30.6, 12전략 중 최저). IS P/M 149.3x (baseline ×0.72 134.8x), OOS5 +385% (+380%). 패턴별 적응적 scale 0.37~1.44 (median 0.71). `config.py` load_dynamic_patterns에 tp_mode 분기 추가, `pattern_details.exc_stats.mfe_median` 참조. Rollback: `tp_mode: scale`. (2) OPP_SIGNAL Exit (v1.66.0): `_check_opposite_signal_exit()` — 2회 연속 반대 신호 + 수익>0.1% → 시장가 청산 (opp_partial_close_study: 100% 전량청산 최적, 50% 부분청산 OOS -18.6%). (3) high_rr_pattern_discovery: TP>SL 고R:R 패턴 3개만 발견, DISCRIMINATING이나 표본 부족(78건). TP<SL 구조 유지 확정. (4) tp_calibration_study: 12개 TP 보정 전략 비교 — uniform, RR-bucket, WR-adaptive, MFE-median, edge-weight, trade-count 등. Joint TP+SL 동시 보정(SL 축소)은 WR margin 급감으로 비추. (5) tp_calibration_overfit_diag: 전략별 IS-OOS gap, fold CV, 자유 파라미터, 3→5 fold 열화 정량 평가. **1111 tests ALL PASSED**. |
+| **v1.65.0** | 03-15 | **Pre-emptive Cascade SL + 파라미터 재최적화 + 시스템 본질 재정의**: (1) `_apply_preemptive_cascade()`: 방향별 미실현 손실 > 4% 시 SL 선제 95% 축소 — SL 피격 전 클러스터 방어. (2) DirCap 7→6 (동시 방향 노출 감소). (3) AggRisk counter 999→10%, with 999→15% 재활성화. (4) 13개 심층 연구 기반 시스템 본질 재정의: "BTC 5m 변동성 수확기" — 랜덤 진입 86% 성과, 방향 반전 100% 수익, 레짐 무관. COMBO_B: WF OOS +410.7% (v1.63.1 +308.4%), IS P/M 127.3x, R:R 1.291. Scanner: pre-emptive cascade + DirCap=6 + AggRisk 10 정합. `claudedocs/system_deep_analysis_20260315.md`. **1111 tests ALL PASSED**. |
+| v1.63.1 | 03-14 | **Decay Rate 0.997→0.9975**: 10-point sweep 최적화. OOS +339.5%. Option B (TP→SL) 열위 확인. |
+| v1.63.0 | 03-14 | **Exp-Decay TP (0.9975^bars)**: Bar 0부터 TP 지수 감소. IS +457.5%, OOS +332.5%. trades +40%. |
+| v1.62.0 | 03-14 | Time-Decay TP (linear_144). → v1.63.0에서 exp_decay로 교체. |
+| v1.61.0 | 03-13 | **TP Scale Factor 0.5→0.72**: R:R 1.009, BE WR 49.8%, WR margin +27.0pp. |
+| v1.60.1 | 03-13 | Scanner _effective_vol_mult Cap (Production Parity). |
+| v1.60.0 | 03-13 | **Soft-Delete Mass Closure** (Two-Cycle Confirmation). |
+| v1.59.6 | 03-13 | CCXT Type Adopt Fix. |
+| v1.59.5 | 03-12 | Emergency SL Update Fix (Cancel-first + EXCHANGE_MANAGED 해소). |
+| v1.59.4 | 03-12 | N/A Pattern Prevention + Orphan Order Retry. |
+| v1.59.3 | 03-12 | Emergency SL Race Condition Fix. |
+| v1.59.2 | 03-12 | Median TP/SL Fallback. |
+| v1.59.1 | 03-12 | Position Tracking Fix + SL×1.1 Revert. |
+| v1.59.0 | 03-12 | Orphan Prevention 3-layer defense. |
+| v1.57.0 | 03-12 | TP Scale Factor 0.5. |
 | **v1.56.2** | 03-12 | **Code Audit 전수점검 + 7건 수정**: (1) `update_single_sl` Place-first/Cancel-after (Cascade SL 보호 갭 제거) (2) SL 실패 시 Emergency SL 즉시 호출 (3) Momentum cooldown `save_state` 영속화 (4) `datetime.fromisoformat('')` 방어 (5) `except Exception: pass`→로깅 (6) always-truthy `or {}` 수정 (7) Hardcoded 300s→`CANDLE_DURATION_MS//1000`. 교차검증으로 57건 중 4건 FALSE POSITIVE 확인 (C-10,H-9,H-11,L-1일부). **1061 tests ALL PASSED**. |
 | **v1.56.1** | 03-11 | **N/A 오염 정화 + Duplicate Guard**: (1) trade_history 22건 N/A+dup 제거 (2) `record_closed_position` duplicate guard 추가 (3) `pattern_name` 필드 우선 사용. TP+SL WR 61.6→67.4%, gap 11.2→5.4pp (p=0.10, NOT significant). |
 | **v1.56.0** | 03-11 | **Scanner regime_mult 정합 + 메커니즘 교차검증**: Scanner DEFAULT_REGIME_MULT 0.3→1.0 (production v1.42.0에서 비활성화한 Regime Sizing을 scanner에서도 정합). IS PnL/MDD 48.3→88.5x (+83%). WF OOS +128.9→+206.1% (+60%). 6-mechanism 교차검증: M6 Regime 유해(-121.7%), M5 Timeout 필수(+80.7%), TOP3(Timeout+Cascade+Momentum) 최적. |

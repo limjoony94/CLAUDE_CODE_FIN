@@ -225,11 +225,14 @@ def _apply_preemptive_cascade(
             if entry <= 0 or old_sl <= 0:
                 continue
 
-            # Use original SL distance (non-cumulative, like reactive cascade)
-            original_sl_dist = pos.get('original_sl_distance')
-            if original_sl_dist is None:
-                original_sl_dist = abs(entry - old_sl)
-                pos['original_sl_distance'] = original_sl_dist
+            # v1.67.1: Use _sl_price_original (true entry-time SL) for cascade distance.
+            # Prior bug: original_sl_distance was from vol_adapt-adjusted SL → too tight.
+            orig_sl_price = pos.get('_sl_price_original')
+            if orig_sl_price and orig_sl_price > 0:
+                original_sl_dist = abs(entry - orig_sl_price)
+            else:
+                original_sl_dist = pos.get('original_sl_distance') or abs(entry - old_sl)
+            pos['original_sl_distance'] = original_sl_dist
 
             new_dist = original_sl_dist * keep_ratio
 

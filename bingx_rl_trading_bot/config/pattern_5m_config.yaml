@@ -29,12 +29,12 @@ risk:
     window_bars: 288         # 288 bars = 24h window to count losses
     block_bars: 144          # 144 bars = 12h block duration
   cascade_sl_tightening:   # v1.41.0→v1.45.0: After SL exit, tighten remaining same-dir SLs
-    enabled: true
-    tighten_pct: 98          # v1.68.0: 95→98% (harness cycle: STRONG GO 8.2/10, OOS +660.5%, bootstrap CI [+83%,+121%])
+    enabled: false           # v1.68.0: DISABLED — Live evidence: cascade at 10% keep caused 6 EXTRA closures = -27.81% damage. Original SLs would have survived. BT cascade (same-bar) ≠ Live cascade (delayed). Trust original per-pattern SLs.
+    tighten_pct: 98
   preemptive_cascade:      # v1.65.0: Pre-emptive SL tightening when unrealized loss exceeds threshold
-    enabled: true
-    unrealized_loss_pct: 2.0   # v1.68.0: 3→2% (harness cycle: STRONG GO 8.2/10, cascade BE 23%, live pre-emptive 0건→trigger 증가)
-    tighten_pct: 98            # v1.68.0: 95→98% (creative cycle: +41.8% OOS, fold decay IMPROVING 1.76, overfit 0.146 LOW)
+    enabled: false           # v1.68.0: DISABLED — Same issue: tightened SLs trigger on normal volatility. Mechanism works (6/6 SUCCESS) but effect is harmful (forced closure of surviving positions).
+    unrealized_loss_pct: 2.0
+    tighten_pct: 98
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
     lookback_bars: 3         # v1.46.0: 6→3 bars = 15min (faster spike detection, momentum_guard_sweep_study)

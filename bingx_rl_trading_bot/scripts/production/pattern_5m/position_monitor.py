@@ -704,39 +704,27 @@ def _cascade_tighten_sls(
         if entry <= 0 or old_sl <= 0:
             continue
 
-        # v1.67.1: Use _sl_price_original (true entry-time SL) for cascade distance.
-        # Prior bug: original_sl_distance was set from vol_adapt-adjusted SL,
-        # making cascade SL too tight (entry ± $75) → SKIP → cascade ineffective.
-        # _sl_price_original is set at position entry (before any vol_adapt).
-        orig_sl_price = pos.get('_sl_price_original')
-        if orig_sl_price and orig_sl_price > 0:
-            original_sl_dist = abs(entry - orig_sl_price)
-        else:
-            original_sl_dist = pos.get('original_sl_distance') or abs(entry - old_sl)
-        pos['original_sl_distance'] = original_sl_dist
-        new_dist = original_sl_dist * keep_ratio
+        # v1.68.0: Current-price-based cascade distance.
+        # Entry-based cascade always SKIPs in live because positions move past entry
+        # before cascade fires (100% SKIP rate observed in production).
+        # Current-price-based: SL = current_price ± (current_sl_dist × keep_ratio)
+        # with minimum floor to avoid noise triggers.
+        CASCADE_MIN_DIST = 30.0  # minimum $30 distance from current price
+        CASCADE_CURR_KEEP = 0.10  # 10% of current SL distance (≈ BT entry-based 2% in absolute $)
+
+        current_sl_dist = abs(current_price - old_sl)
+        new_dist = max(current_sl_dist * CASCADE_CURR_KEEP, CASCADE_MIN_DIST)
 
         if direction == 'LONG':
-            new_sl = round(entry - new_dist, 1)
+            new_sl = round(current_price - new_dist, 1)
         else:
-            new_sl = round(entry + new_dist, 1)
+            new_sl = round(current_price + new_dist, 1)
 
-        # Validate cascaded SL against current price to avoid breached placement
-        if current_price > 0:
-            if direction == 'LONG' and new_sl >= current_price:
-                logger.warning(
-                    f"  CASCADE slot {sid}: SKIP — cascaded SL ${new_sl:.1f} >= current ${current_price:.1f} "
-                    f"(position already past cascade level, keeping old SL ${old_sl:.1f})"
-                )
-                pos['cascade_tightened'] = True
-                continue
-            if direction == 'SHORT' and new_sl <= current_price:
-                logger.warning(
-                    f"  CASCADE slot {sid}: SKIP — cascaded SL ${new_sl:.1f} <= current ${current_price:.1f} "
-                    f"(position already past cascade level, keeping old SL ${old_sl:.1f})"
-                )
-                pos['cascade_tightened'] = True
-                continue
+        # Only tighten, never widen
+        if direction == 'LONG' and new_sl <= old_sl:
+            continue
+        if direction == 'SHORT' and new_sl >= old_sl:
+            continue
 
         old_dist = abs(entry - old_sl)
         logger.info(

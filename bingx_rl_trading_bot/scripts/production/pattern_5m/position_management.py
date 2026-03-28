@@ -233,21 +233,18 @@ def _apply_preemptive_cascade(
             if entry <= 0 or old_sl <= 0:
                 continue
 
-            # v1.67.1: Use _sl_price_original (true entry-time SL) for cascade distance.
-            # Prior bug: original_sl_distance was from vol_adapt-adjusted SL → too tight.
-            orig_sl_price = pos.get('_sl_price_original')
-            if orig_sl_price and orig_sl_price > 0:
-                original_sl_dist = abs(entry - orig_sl_price)
-            else:
-                original_sl_dist = pos.get('original_sl_distance') or abs(entry - old_sl)
-            pos['original_sl_distance'] = original_sl_dist
+            # v1.68.0: Current-price-based cascade distance.
+            # Entry-based always SKIPs when position is in loss (100% SKIP observed).
+            CASCADE_MIN_DIST = 30.0
+            CASCADE_CURR_KEEP = 0.10
 
-            new_dist = original_sl_dist * keep_ratio
+            current_sl_dist = abs(current_price - old_sl)
+            new_dist = max(current_sl_dist * CASCADE_CURR_KEEP, CASCADE_MIN_DIST)
 
             if direction == 'LONG':
-                new_sl = round(entry - new_dist, 1)
+                new_sl = round(current_price - new_dist, 1)
             else:
-                new_sl = round(entry + new_dist, 1)
+                new_sl = round(current_price + new_dist, 1)
 
             # Only tighten, never widen
             if direction == 'LONG' and new_sl <= old_sl:
@@ -255,7 +252,7 @@ def _apply_preemptive_cascade(
             if direction == 'SHORT' and new_sl >= old_sl:
                 continue
 
-            # Validate against current price to avoid breached SL placement
+            # Validate against current price
             if direction == 'LONG' and new_sl >= current_price:
                 logger.warning(
                     f"  PRE-CASCADE slot {sid}: SKIP — SL ${new_sl:.1f} >= current ${current_price:.1f}")

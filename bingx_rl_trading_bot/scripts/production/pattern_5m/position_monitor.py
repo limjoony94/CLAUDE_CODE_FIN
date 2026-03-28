@@ -598,6 +598,88 @@ def _check_scale_out_fills(
         save_state(state)
 
 
+def _market_close_same_direction(
+    exchange: ccxt.bingx,
+    state: Dict[str, Any],
+    config: Dict[str, Any],
+    closed_position: Dict,
+    cache,
+    metrics,
+) -> None:
+    """v1.68.0: Market-close ALL same-direction positions on SL exit.
+
+    Instead of modifying SL orders (which always SKIP or harm in live),
+    immediately market-close remaining positions in the same direction.
+    This is the Live-equivalent of BT cascade's "instant same-bar closure".
+    """
+    from .position_close import record_closed_position
+    from .orders import cancel_remaining_orders
+
+    direction = closed_position.get('direction')
+    positions = state.get('positions') or {}
+    closed_slot = closed_position.get('slot_id')
+
+    same_dir = [
+        (sid, pos) for sid, pos in positions.items()
+        if pos.get('direction') == direction
+        and sid != closed_slot
+        and not pos.get('_pending_close')
+    ]
+
+    if not same_dir:
+        return
+
+    logger.warning(
+        f"🔗 MARKET-CLOSE CASCADE: {direction} SL exit → "
+        f"market-closing {len(same_dir)} same-dir positions"
+    )
+
+    try:
+        ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
+        current_price = ticker['last']
+    except Exception as e:
+        logger.error(f"  MCC: Failed to get price: {e}")
+        return
+
+    symbol = config['symbol']
+    position_side = 'LONG' if direction == 'LONG' else 'SHORT'
+    close_side = 'sell' if direction == 'LONG' else 'buy'
+
+    for sid, pos in same_dir:
+        qty = pos.get('remaining_quantity', pos.get('quantity', 0))
+        if qty <= 0:
+            continue
+        try:
+            # Cancel existing TP/SL orders first
+            cancel_remaining_orders(exchange, state, config, position=pos)
+            time.sleep(0.3)
+
+            # Market close
+            order = exchange.create_order(
+                symbol=symbol,
+                type='market',
+                side=close_side,
+                amount=qty,
+                params={'positionSide': position_side},
+            )
+            exit_price = order.get('average', order.get('price', current_price))
+
+            logger.info(
+                f"  MCC: Closed {sid[:8]} {direction} {pos.get('pattern_name','?')} "
+                f"at ${exit_price:.1f} (entry ${pos.get('entry_price',0):.1f})"
+            )
+
+            # Record as cascade exit
+            record_closed_position(
+                exchange, state, config, exit_price,
+                'MCC_CLOSE', cache, metrics, position=pos,
+            )
+            time.sleep(0.3)
+
+        except Exception as e:
+            logger.error(f"  MCC: Failed to close {sid[:8]}: {e}")
+
+
 def _handle_position_closed(
     exchange: ccxt.bingx,
     state: Dict[str, Any],
@@ -642,11 +724,16 @@ def _handle_position_closed(
         elif exit_reason == 'SL':
             exit_reason = f'SL_AFTER_{filled_stages}_STAGES'
 
-    # v1.41.0: Cascade SL tightening — tighten same-dir SLs before slot removal
-    # v1.64.0: No-refire — skip cascade if this position was already cascade-tightened
-    if exit_reason in ('SL', 'EMERGENCY_SL', 'CASCADE_SL') or exit_reason.startswith('SL_AFTER_'):
-        if not position.get('cascade_tightened'):
-            _cascade_tighten_sls(exchange, state, config, position)
+    # v1.68.0: Market-Close Cascade — on SL exit, market-close ALL same-direction positions.
+    # Replaces SL-tightening cascade which was:
+    #   - Entry-based: 100% SKIP in live (position past entry)
+    #   - Current-price-based: 100% harmful (forced closure at tight SL)
+    # Market-close is always executable and avoids further SL cluster losses.
+    cascade_cfg = config.get('risk', {}).get('cascade_sl_tightening', {})
+    if cascade_cfg.get('enabled', False):
+        if exit_reason in ('SL', 'EMERGENCY_SL', 'CASCADE_SL') or exit_reason.startswith('SL_AFTER_'):
+            if not position.get('cascade_tightened'):
+                _market_close_same_direction(exchange, state, config, position, cache, metrics)
 
     record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics, position=position)
     return True

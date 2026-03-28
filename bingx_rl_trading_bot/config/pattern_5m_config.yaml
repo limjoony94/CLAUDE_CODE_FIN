@@ -28,8 +28,8 @@ risk:
     threshold: 2             # number of same-dir losses to trigger brake
     window_bars: 288         # 288 bars = 24h window to count losses
     block_bars: 144          # 144 bars = 12h block duration
-  cascade_sl_tightening:   # v1.41.0→v1.45.0: After SL exit, tighten remaining same-dir SLs
-    enabled: false           # v1.68.0: DISABLED — Live evidence: cascade at 10% keep caused 6 EXTRA closures = -27.81% damage. Original SLs would have survived. BT cascade (same-bar) ≠ Live cascade (delayed). Trust original per-pattern SLs.
+  cascade_sl_tightening:   # v1.68.0: Market-Close Cascade (MCC) — SL exit → market-close ALL same-dir
+    enabled: true            # v1.68.0: RE-ENABLED as MCC (market close, not SL modification). SL tighten code bypassed.
     tighten_pct: 98
   preemptive_cascade:      # v1.65.0: Pre-emptive SL tightening when unrealized loss exceeds threshold
     enabled: false           # v1.68.0: DISABLED — Same issue: tightened SLs trigger on normal volatility. Mechanism works (6/6 SUCCESS) but effect is harmful (forced closure of surviving positions).

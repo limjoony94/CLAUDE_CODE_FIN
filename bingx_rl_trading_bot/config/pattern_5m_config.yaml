@@ -91,8 +91,9 @@ strategy:
     update_interval_bars: 1        # update every bar (vol_adapt_param_optimization: iv=1 optimal)
   opposite_signal_exit:            # v1.66.0: Close profitable positions on consecutive opposite signals
     enabled: true
-    consecutive_signals: 2           # number of consecutive opposite-direction signals to trigger
+    consecutive_signals: 2           # number of opposite-direction signals within window to trigger
     min_profit_pct: 0.1              # minimum unrealized profit (slot %, with leverage) to qualify
+    window_bars: 4                   # v1.68.0: time window for counting signals (4 bars=20min, ~3-5 OPP/day matching BT 2.7/day)
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

@@ -485,10 +485,6 @@ def _check_opposite_signal_exit(
         return False
 
     if not current_signal:
-        # v1.68.0: Don't reset counters on no-signal bars.
-        # Only reset when a same-direction signal appears (see below).
-        # This allows consecutive opposite signals across non-signal gaps,
-        # matching how signals are sparse in live (most bars = no signal).
         return False
 
     positions = state.get('positions') or {}
@@ -497,14 +493,32 @@ def _check_opposite_signal_exit(
 
     consec_threshold = opp_cfg.get('consecutive_signals', 2)
     profit_threshold = opp_cfg.get('min_profit_pct', 0.1)
+    # v1.68.0 fix: Time-window based counter (not raw consecutive, not unlimited accumulation)
+    # Record signal bars and count only signals within last N bars
+    opp_window_bars = opp_cfg.get('window_bars', 6)  # 6 bars = 30min default
 
-    # Update consecutive counters
-    if current_signal == 'SHORT':
-        state['_opp_consec_vs_long'] = state.get('_opp_consec_vs_long', 0) + 1
-        state['_opp_consec_vs_short'] = 0
-    elif current_signal == 'LONG':
-        state['_opp_consec_vs_short'] = state.get('_opp_consec_vs_short', 0) + 1
-        state['_opp_consec_vs_long'] = 0
+    # Track signal history as list of (bar_number, direction)
+    import time
+    current_bar = int(time.time() * 1000 / 300000)  # approximate bar index from epoch
+
+    if '_opp_signal_history' not in state:
+        state['_opp_signal_history'] = []
+
+    state['_opp_signal_history'].append((current_bar, current_signal))
+
+    # Prune old entries outside window
+    cutoff = current_bar - opp_window_bars
+    state['_opp_signal_history'] = [
+        (bar, sig) for bar, sig in state['_opp_signal_history']
+        if bar >= cutoff
+    ]
+
+    # Count recent signals by direction within window
+    recent_short = sum(1 for _, sig in state['_opp_signal_history'] if sig == 'SHORT')
+    recent_long = sum(1 for _, sig in state['_opp_signal_history'] if sig == 'LONG')
+
+    state['_opp_consec_vs_long'] = recent_short   # SHORT signals oppose LONG positions
+    state['_opp_consec_vs_short'] = recent_long    # LONG signals oppose SHORT positions
 
     # Get current price
     try:

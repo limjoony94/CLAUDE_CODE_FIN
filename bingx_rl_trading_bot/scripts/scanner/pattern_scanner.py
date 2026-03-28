@@ -97,15 +97,18 @@ DIST_HIT_PROBS = [0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.92, 0.
 
 # N-position portfolio simulator defaults (v1.53.0: production-aligned backtest)
 DEFAULT_N_SLOTS = 9
-DEFAULT_DIRECTION_CAP = 7
+DEFAULT_DIRECTION_CAP = 6   # v1.65.0: 7→6 (preemptive_param_crossval COMBO_B)
 TIMEOUT_BARS = 288          # 24h position timeout (production v1.48.0)
 DEFAULT_REGIME_MULT = 1.0   # v1.56.0: 0.3→1.0 (production v1.42.0 disabled regime_sizing, scanner aligned)
-DEFAULT_AGG_RISK_COUNTER = 8.0  # v1.49.0: 3.0->8.0
+DEFAULT_AGG_RISK_COUNTER = 10.0  # v1.65.0: 8→10 (preemptive_param_crossval: OOS +368.9% at 10)
 DEFAULT_AGG_RISK_WITH = 15.0    # v1.44.0: 7.0->15.0
 DEFAULT_MOMENTUM_LOOKBACK = 3   # v1.46.0: 6->3 (15min)
 DEFAULT_MOMENTUM_THRESHOLD = 1.5 # v1.51.0: 1.0->1.5
 DEFAULT_MOMENTUM_COOLDOWN = 12  # v1.46.0: 6->12 (1h)
 DEFAULT_CASCADE_TIGHTEN_PCT = 85  # v1.45.0: SL exit → same-dir SL dist × (1-85/100) = 15%
+DEFAULT_TP_DECAY_RATE = 0.9975    # v1.63.1: TP × decay_rate^bars_held (half-life 23.1h = ~277 bars)
+DEFAULT_PREEMPTIVE_CASCADE_PCT = 4.0  # v1.65.0: trigger pre-emptive cascade when dir unrealized loss > 4%
+DEFAULT_PREEMPTIVE_TIGHTEN_PCT = 95   # v1.65.0: 95% distance reduction (crossval optimal)
 NPOS_EMA_PERIOD = 20
 NPOS_EMA_LOOKBACK = 5
 
@@ -701,13 +704,14 @@ def grid_search_mae_mfe(signal_bars, direction, opens, highs, lows, n_bars,
     return best, exc_stats
 
 
-def _check_exit_npos(pos, bar, opens, highs, lows, n_bars, atr_ratio, fee,
+def _check_exit_npos(pos, bar, opens, highs, lows, closes, n_bars, atr_ratio, fee,
                      clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
-                     timeout_bars=TIMEOUT_BARS):
+                     timeout_bars=TIMEOUT_BARS, tp_decay_rate=0.0,
+                     vol_adapt_clamp=(0.0, 0.0)):
     """Check exit for a single N-pos position.
 
-    ATR-scaled TP/SL + slippage buffer + timeout(DROP) + intrabar resolution.
-    Source: entry_improvement_study.py:140 (verified 21 scenarios WF).
+    ATR-scaled TP/SL + slippage buffer + timeout(PnL) + TP decay + vol_adapt + intrabar.
+    v1.67.1 parity: timeout PnL, TP decay, vol_adapt SL scaling.
     """
     entry_bar = pos['entry_bar']
     if bar < entry_bar:
@@ -729,13 +733,39 @@ def _check_exit_npos(pos, bar, opens, highs, lows, n_bars, atr_ratio, fee,
     if sl_pct > 0:
         r = min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / sl_pct)
 
-    eff_tp = tp_pct * r + SLIPPAGE_BUFFER
+    hold = bar - entry_bar
+
+    # v1.67.1 parity: TP decay — TP distance shrinks by decay_rate^hold
+    if tp_decay_rate > 0 and tp_decay_rate < 1.0:
+        decay_factor = tp_decay_rate ** hold
+    else:
+        decay_factor = 1.0
+
+    # v1.68 parity: Vol_adapt — SL scales with realized volatility vs expected
+    va_lo, va_hi = vol_adapt_clamp
+    vol_factor = 1.0
+    if va_hi > 0 and hold > 0 and bar < len(closes) and entry > 0:
+        # Price movement since entry (absolute %)
+        price_move_pct = abs(closes[bar] / entry - 1) * 100
+        # Expected movement based on SL at entry ATR
+        expected_move_pct = sl_pct * r
+        if expected_move_pct > 0:
+            time_factor = max(1, hold) / 48  # normalize to ~4h
+            adjusted_expected = expected_move_pct * min(time_factor, 2.0)
+            if adjusted_expected > 0:
+                raw_vf = max(0.5, price_move_pct / adjusted_expected)
+            else:
+                raw_vf = 1.0
+            vol_factor = max(va_lo, min(va_hi, raw_vf))
+
+    eff_tp = tp_pct * r * decay_factor + SLIPPAGE_BUFFER
     # Cascade SL override: use tightened SL distance if set
     eff_sl_override = pos.get('eff_sl_override')
     if eff_sl_override is not None:
+        # Don't apply vol_adapt on cascade-overridden SL
         eff_sl = max(0.1, eff_sl_override - SLIPPAGE_BUFFER)
     else:
-        eff_sl = max(0.1, sl_pct * r - SLIPPAGE_BUFFER)
+        eff_sl = max(0.1, sl_pct * r * vol_factor - SLIPPAGE_BUFFER)
 
     if direction == 'LONG':
         tp_price = entry * (1 + eff_tp / 100)
@@ -744,10 +774,16 @@ def _check_exit_npos(pos, bar, opens, highs, lows, n_bars, atr_ratio, fee,
         tp_price = entry * (1 - eff_tp / 100)
         sl_price = entry * (1 + eff_sl / 100)
 
-    hold = bar - entry_bar
+    # v1.67.1 parity: timeout records PnL at close price (not DROP)
     if hold >= timeout_bars:
-        return {'entry_bar': entry_bar, 'exit_bar': bar, 'pnl_slot': 0,
-                'reason': 'TIMEOUT', 'drop': True}
+        close_price = closes[bar] if bar < len(closes) else opens[bar]
+        if direction == 'LONG':
+            pnl = (close_price / entry - 1) * 100 * LEVERAGE
+        else:
+            pnl = (1 - close_price / entry) * 100 * LEVERAGE
+        pnl -= fee
+        return {'entry_bar': entry_bar, 'exit_bar': bar, 'pnl_slot': pnl,
+                'reason': 'TIMEOUT', 'drop': False}
 
     h, l = highs[bar], lows[bar]
     if direction == 'LONG':
@@ -793,9 +829,14 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
                    momentum_cooldown=DEFAULT_MOMENTUM_COOLDOWN,
                    clamp_lo=DEFAULT_ATR_CLAMP_LO, clamp_hi=DEFAULT_ATR_CLAMP_HI,
                    timeout_bars=TIMEOUT_BARS,
-                   cascade_tighten_pct=DEFAULT_CASCADE_TIGHTEN_PCT):
+                   cascade_tighten_pct=DEFAULT_CASCADE_TIGHTEN_PCT,
+                   preemptive_cascade_pct=DEFAULT_PREEMPTIVE_CASCADE_PCT,
+                   preemptive_tighten_pct=DEFAULT_PREEMPTIVE_TIGHTEN_PCT,
+                   tp_decay_rate=0.0,
+                   vol_adapt_clamp=(0.0, 0.0)):
     """N-position portfolio simulator matching production protections.
 
+    v1.68 parity: timeout PnL + TP decay + vol_adapt SL scaling.
     Source: entry_improvement_study.py:210 simulate_portfolio()
     (verified 21 scenarios WF, v1.36.2).
 
@@ -830,6 +871,47 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
     sig_idx = 0
 
     for bar in range(start_bar, end_bar):
+        # 0. Pre-emptive cascade: tighten SLs when unrealized loss exceeds threshold (v1.65.0)
+        if preemptive_cascade_pct > 0 and len(positions) >= 2:
+            pre_keep = 1.0 - preemptive_tighten_pct / 100.0
+            for pre_dir in ('LONG', 'SHORT'):
+                dir_pos = [p for p in positions if p['direction'] == pre_dir
+                           and not p.get('pre_cascaded')]
+                if len(dir_pos) < 2:
+                    continue
+                unreal_loss = 0.0
+                for p in dir_pos:
+                    eb_p = p['entry_bar']
+                    if eb_p >= n_bars or bar < eb_p:
+                        continue
+                    ep = opens[eb_p]
+                    if ep <= 0:
+                        continue
+                    if pre_dir == 'LONG':
+                        unr = (closes[bar] / ep - 1) * 100 * LEVERAGE
+                    else:
+                        unr = (1 - closes[bar] / ep) * 100 * LEVERAGE
+                    if unr < 0:
+                        unreal_loss += abs(unr) * (size_pct / 100)
+                if unreal_loss > preemptive_cascade_pct:
+                    for p in dir_pos:
+                        sig = p['signal_bar']
+                        if (atr_ratio is not None and sig < len(atr_ratio)
+                                and not np.isnan(atr_ratio[sig])):
+                            r = max(clamp_lo, min(clamp_hi, atr_ratio[sig]))
+                        else:
+                            r = 1.0
+                        p_sl = p['sl_pct']
+                        if p_sl > 0:
+                            r = min(r, MAX_DAILY_LOSS_PCT / LEVERAGE / p_sl)
+                        original_eff_sl = p_sl * r
+                        new_sl = original_eff_sl * pre_keep
+                        cur_sl = p.get('eff_sl_override')
+                        if cur_sl is None or new_sl < cur_sl:
+                            p['eff_sl_override'] = new_sl
+                            p['pre_cascaded'] = True
+                            p['cascaded'] = True
+
         # 1. Check exits
         closed_slots = []
         bar_pnl_sum = 0.0
@@ -838,9 +920,10 @@ def portfolio_npos(signal_tuples, opens, highs, lows, closes, n_bars,
         bar_sl_original_dirs = set()
 
         for pos in positions:
-            result = _check_exit_npos(pos, bar, opens, highs, lows, n_bars,
+            result = _check_exit_npos(pos, bar, opens, highs, lows, closes, n_bars,
                                       atr_ratio, fee, clamp_lo, clamp_hi,
-                                      timeout_bars)
+                                      timeout_bars, tp_decay_rate,
+                                      vol_adapt_clamp)
             if result is not None:
                 if result.get('drop', False):
                     closed_slots.append(pos['slot'])

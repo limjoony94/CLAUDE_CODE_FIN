@@ -179,26 +179,33 @@ def _apply_preemptive_cascade(
 
     state_changed = False
 
+    leverage = config.get('leverage', 3)
+    n_slots = config.get('max_positions', 9)
+
     for direction in ['LONG', 'SHORT']:
-        dir_positions = [
+        # v1.68.0: Compute unrealized loss using ALL dir positions (including already-cascaded)
+        # but only APPLY tightening to non-cascaded positions.
+        # This ensures threshold reflects TRUE directional exposure.
+        all_dir_positions = [
             (sid, pos) for sid, pos in positions.items()
             if pos.get('direction') == direction
             and not pos.get('_pending_close')
-            and not pos.get('_preemptive_cascaded')
+        ]
+        actionable_positions = [
+            (sid, pos) for sid, pos in all_dir_positions
+            if not pos.get('_preemptive_cascaded')
         ]
 
-        if len(dir_positions) < 2:
+        if len(all_dir_positions) < 2 or len(actionable_positions) < 1:
             continue
 
-        # Compute combined unrealized loss for this direction
+        # Compute combined unrealized loss for ALL positions in this direction
         total_unrealized_loss = 0.0
         n_losing = 0
-        for sid, pos in dir_positions:
+        for sid, pos in all_dir_positions:
             entry = pos.get('entry_price', 0)
             if entry <= 0:
                 continue
-            leverage = config.get('strategy', {}).get('leverage', 3)
-            n_slots = config.get('strategy', {}).get('max_positions', 9)
             if direction == 'LONG':
                 unr_pct = (current_price / entry - 1) * 100 * leverage
             else:
@@ -211,15 +218,16 @@ def _apply_preemptive_cascade(
         if total_unrealized_loss < threshold_pct:
             continue
 
-        # Threshold exceeded — tighten SL for all positions in this direction
+        # Threshold exceeded — tighten SL for actionable (non-cascaded) positions
         logger.warning(
             f"🔗 PRE-EMPTIVE CASCADE: {direction} unrealized loss "
             f"{total_unrealized_loss:.1f}% > {threshold_pct}% threshold "
-            f"({n_losing} losing of {len(dir_positions)} positions) — "
+            f"({n_losing} losing of {len(all_dir_positions)} positions, "
+            f"{len(actionable_positions)} actionable) — "
             f"tightening SLs to {keep_ratio:.0%} distance"
         )
 
-        for sid, pos in dir_positions:
+        for sid, pos in actionable_positions:
             entry = pos.get('entry_price', 0)
             old_sl = pos.get('sl_price', 0)
             if entry <= 0 or old_sl <= 0:
@@ -477,9 +485,10 @@ def _check_opposite_signal_exit(
         return False
 
     if not current_signal:
-        # No signal this bar — reset counters
-        state['_opp_consec_vs_long'] = 0
-        state['_opp_consec_vs_short'] = 0
+        # v1.68.0: Don't reset counters on no-signal bars.
+        # Only reset when a same-direction signal appears (see below).
+        # This allows consecutive opposite signals across non-signal gaps,
+        # matching how signals are sparse in live (most bars = no signal).
         return False
 
     positions = state.get('positions') or {}

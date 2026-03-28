@@ -30,11 +30,11 @@ risk:
     block_bars: 144          # 144 bars = 12h block duration
   cascade_sl_tightening:   # v1.41.0→v1.45.0: After SL exit, tighten remaining same-dir SLs
     enabled: true
-    tighten_pct: 95          # v1.64.0: 85→95% (non-cumul+norefire study: IS PnL/MDD +12%, OOS +11%)
+    tighten_pct: 98          # v1.68.0: 95→98% (harness cycle: STRONG GO 8.2/10, OOS +660.5%, bootstrap CI [+83%,+121%])
   preemptive_cascade:      # v1.65.0: Pre-emptive SL tightening when unrealized loss exceeds threshold
     enabled: true
-    unrealized_loss_pct: 3.0   # v1.66.0: 4→3% (vol_adapt_param_optimization Phase 3: pre=3% + vol_adapt 시너지, OOS +453.9%)
-    tighten_pct: 95            # v1.65.0: 95% optimal (crossval sweep 70-95%, OOS +366.4% at 95%)
+    unrealized_loss_pct: 2.0   # v1.68.0: 3→2% (harness cycle: STRONG GO 8.2/10, cascade BE 23%, live pre-emptive 0건→trigger 증가)
+    tighten_pct: 98            # v1.68.0: 95→98% (creative cycle: +41.8% OOS, fold decay IMPROVING 1.76, overfit 0.146 LOW)
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
     lookback_bars: 3         # v1.46.0: 6→3 bars = 15min (faster spike detection, momentum_guard_sweep_study)

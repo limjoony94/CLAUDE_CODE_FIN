@@ -287,6 +287,9 @@ def open_position(
             'effective_leverage': effective_leverage,
             # v1.40.0: Equity curve scale factor
             'equity_curve_scale': equity_curve_scale,
+            # v1.68.0: True entry-time SL — set at entry, NOT at first vol_adapt
+            # Cascade uses this for original_sl_distance (v1.67.1 fix completion)
+            '_sl_price_original': sl_price,
         }
         state['positions'][slot_id] = new_slot
         # One-Way mode: track single direction constraint; Hedge: no constraint

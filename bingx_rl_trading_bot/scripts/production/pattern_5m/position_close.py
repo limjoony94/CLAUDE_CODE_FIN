@@ -240,10 +240,12 @@ def record_closed_position(
     if metrics:
         trade_detail = {
             'timestamp': datetime.now().isoformat(),
+            'close_time': datetime.now().isoformat(),
             'pattern': pattern_name,
             'direction': position['direction'],
             'entry_price': position['entry_price'],
             'exit_price': exit_price,
+            'pnl_pct': round(pnl_pct, 4),
             'pnl_slot': round(pnl_pct, 4),
             'pnl_portfolio': round(portfolio_pnl_pct, 4),
             'tp_price': position.get('tp_price', 0),
@@ -746,6 +748,8 @@ def recover_position_to_state(
             'pattern_name': slot_pattern or None,
             'recovered': True,
             'needs_tpsl': True,
+            # v1.68.0: Set _sl_price_original at recovery to prevent vol_adapt corruption
+            '_sl_price_original': slot_sl,
         }
         positions[slot_id] = recovered_slot
         new_slot_ids.append(slot_id)

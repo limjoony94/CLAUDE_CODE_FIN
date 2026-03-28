@@ -285,12 +285,22 @@ def update_single_tp(
 
     # Place new TP FIRST — position profit target is always active
     position['tp_order_id'] = None
+    old_tp_price = position.get('tp_price')
     position['tp_price'] = new_tp_price
     _place_single_tp_order(exchange, position, symbol, close_side, quantity, new_tp_price, position_side)
 
     new_placed = position.get('tp_order_id') is not None
 
-    # THEN cancel old TP
+    # v1.68.0: If new TP placement failed, revert tp_price to old value
+    # and keep old TP order active (don't cancel it)
+    if not new_placed:
+        position['tp_price'] = old_tp_price or new_tp_price
+        if old_tp_id:
+            position['tp_order_id'] = old_tp_id  # restore old order reference
+            logger.warning(f"⏰ DECAY: New TP placement failed, keeping old TP {old_tp_id}")
+        return False
+
+    # THEN cancel old TP (only if new was successfully placed)
     if old_tp_id and old_tp_id != _EXCHANGE_MANAGED:
         try:
             exchange.cancel_order(old_tp_id, symbol)
@@ -300,7 +310,7 @@ def update_single_tp(
         except Exception as e:
             logger.warning(f"⏰ DECAY: Failed to cancel old TP {old_tp_id}: {e}")
 
-    return new_placed
+    return True
 
 
 def update_single_sl(

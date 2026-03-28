@@ -26,7 +26,7 @@ _TF_MIN = _TF_MINUTES_MAP.get(_BOT_TF, 5)
 # BOT IDENTIFICATION
 # ============================================================
 BOT_NAME = f"pattern_{_BOT_TF}_bot"
-BOT_VERSION = "1.63.0"  # v1.63.0: Exp-Decay TP — TP *= 0.997^bars (half-life 19.25h, from bar 0)
+BOT_VERSION = "1.68.0"  # v1.68.0: Harness-optimized cascade (98%/pre2%/pt98) + pre-emptive cascade threshold fix (config path + ALL-dir loss calc). 111pat. OOS5 +660%, bootstrap CI [+83%,+121%]
 
 # ============================================================
 # PROJECT ROOT (absolute path, CWD-independent)

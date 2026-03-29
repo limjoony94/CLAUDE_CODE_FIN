@@ -104,6 +104,11 @@ strategy:
     consecutive_signals: 2           # number of opposite-direction signals within window to trigger
     min_profit_pct: 0.1              # minimum unrealized profit (slot %, with leverage) to qualify
     window_bars: 4                   # v1.68.0: time window for counting signals (4 bars=20min, ~3-5 OPP/day matching BT 2.7/day)
+  type_merge:                        # v1.68.0: 8-type merge — reduce 12→8 types by merging ambiguous boundaries
+    DF: D                              # DRAGONFLY → DOJI (both: body<10%, wick dominant)
+    GS: D                              # GRAVESTONE → DOJI (mirror of dragonfly)
+    H: ST                              # HAMMER → SPINNING_TOP (wick/body ratio similar)
+    IH: ST                             # INV_HAMMER → SPINNING_TOP
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

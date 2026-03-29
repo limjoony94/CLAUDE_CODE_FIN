@@ -294,14 +294,10 @@ def _apply_trailing_stop(
     config: Dict[str, Any],
     cache: APICache,
 ) -> None:
-    """v1.68.0: Per-position trailing stop — lock profit after activation.
+    """v1.68.0: Ensure exchange-native TRAILING_STOP_MARKET order exists.
 
-    When price moves activation_pct% favorable, start trailing.
-    If price gives back trail_pct% from peak → market close (lock profit).
-
-    Independent of MCC (per-position, not cross-position).
-    BT validation: +15.6% improvement over baseline (corrected npos).
-    DISCRIMINATING (direction matters, genuine edge).
+    Checks each position for trail_order_id. If missing, places one.
+    Exchange handles real-time trail tracking (no loop delay).
     """
     trail_cfg = config.get('strategy', {}).get('trailing_stop', {})
     if not trail_cfg.get('enabled', False):
@@ -313,83 +309,23 @@ def _apply_trailing_stop(
 
     activation_pct = trail_cfg.get('activation_pct', 1.0)
     trail_pct = trail_cfg.get('trail_pct', 0.3)
-    leverage = config.get('leverage', 3)
+    symbol = config.get('symbol', 'BTC-USDT')
 
-    try:
-        ticker = fetch_ticker_cached(exchange, config['symbol'], cache)
-        current_price = ticker['last']
-    except Exception:
-        return
-
-    if not current_price or current_price <= 0:
-        return
-
-    from .position_close import record_closed_position
-    from .orders import cancel_remaining_orders
+    from .position_open import _place_trailing_stop_order
 
     for slot_id, pos in list(positions.items()):
         if pos.get('_pending_close'):
             continue
+        if pos.get('trail_order_id'):
+            continue  # already has trail order
 
         entry_price = pos.get('entry_price', 0)
-        direction = pos.get('direction', '')
         if entry_price <= 0:
             continue
 
-        # Calculate favorable movement
-        if direction == 'LONG':
-            favorable_pct = (current_price / entry_price - 1) * 100
-        else:
-            favorable_pct = (1 - current_price / entry_price) * 100
-
-        # Track peak favorable
-        peak_key = '_trail_peak_favorable'
-        prev_peak = pos.get(peak_key, 0)
-        if favorable_pct > prev_peak:
-            pos[peak_key] = favorable_pct
-            prev_peak = favorable_pct
-
-        # Check activation
-        if prev_peak < activation_pct:
-            continue
-
-        # Check trail: giveback from peak
-        giveback = prev_peak - favorable_pct
-        if giveback < trail_pct:
-            continue
-
-        # Trail triggered — market close this position
-        logger.info(
-            f"📈 TRAIL STOP: {slot_id[:8]} {direction} {pos.get('pattern_name', '?')} "
-            f"peak {prev_peak:.2f}% → current {favorable_pct:.2f}% "
-            f"(giveback {giveback:.2f}% >= trail {trail_pct:.2f}%)"
-        )
-
-        try:
-            cancel_remaining_orders(exchange, state, config, position=pos)
-            time.sleep(0.3)
-
-            close_side = 'sell' if direction == 'LONG' else 'buy'
-            position_side = direction
-            qty = pos.get('remaining_quantity', pos.get('quantity', 0))
-
-            order = exchange.create_order(
-                symbol=config['symbol'],
-                type='market',
-                side=close_side,
-                amount=qty,
-                params={'positionSide': position_side},
-            )
-            exit_price = order.get('average', order.get('price', current_price))
-
-            record_closed_position(
-                exchange, state, config, exit_price,
-                'TRAIL_STOP', cache,
-                state.get('_metrics_ref'),
-                position=pos,
-            )
-        except Exception as e:
-            logger.error(f"  TRAIL: Failed to close {slot_id[:8]}: {e}")
+        logger.info(f"📈 TRAIL: Placing exchange-native trail for {slot_id[:8]} "
+                     f"{pos.get('direction','')} {pos.get('pattern_name','?')}")
+        _place_trailing_stop_order(exchange, config, pos)
 
 
 def _apply_volatility_adaptation(

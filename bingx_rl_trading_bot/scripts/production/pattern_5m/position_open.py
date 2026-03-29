@@ -801,8 +801,7 @@ def _place_trailing_stop_order(
             params={
                 'positionSide': position_side,
                 'activationPrice': activation_price,
-                'callbackRate': trail_pct,
-                # reduceOnly not supported in BingX Hedge mode
+                'priceRate': trail_pct / 100,  # BingX wants decimal (0.003 = 0.3%)
             },
         )
         order_id = order.get('id', '')

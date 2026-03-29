@@ -28,8 +28,8 @@ risk:
     threshold: 2             # number of same-dir losses to trigger brake
     window_bars: 288         # 288 bars = 24h window to count losses
     block_bars: 144          # 144 bars = 12h block duration
-  cascade_sl_tightening:   # v1.68.0: Market-Close Cascade (MCC) — SL exit → market-close ALL same-dir
-    enabled: true            # v1.68.0: RE-ENABLED as MCC (market close, not SL modification). SL tighten code bypassed.
+  cascade_sl_tightening:   # v1.68.0: MCC disabled — Trail only is optimal (MCC+Trail = -23% CANCEL interaction)
+    enabled: false           # Ralph Loop Iter 2: Trail WF 5/5 PASS +134.7%, MCC+Trail CANCEL, Trail only +5.2% OOS
     tighten_pct: 98
   preemptive_cascade:      # v1.65.0: Pre-emptive SL tightening when unrealized loss exceeds threshold
     enabled: false           # v1.68.0: DISABLED — Same issue: tightened SLs trigger on normal volatility. Mechanism works (6/6 SUCCESS) but effect is harmful (forced closure of surviving positions).

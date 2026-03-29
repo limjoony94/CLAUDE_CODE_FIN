@@ -174,7 +174,8 @@ def _place_single_tp_order(
             params={
                 'positionSide': position_side,
                 'stopPrice': tp_price,
-                            }
+                # Note: reduceOnly not supported in BingX Hedge mode (positionSide handles it)
+            }
         )
         position['tp_order_id'] = tp_order.get('id')
         logger.info(f"TP order placed: {tp_order.get('id')} @ ${tp_price} (qty: {quantity})")
@@ -217,7 +218,8 @@ def _place_sl_order(
             params={
                 'positionSide': position_side,
                 'stopPrice': sl_price,
-                            }
+                # Note: reduceOnly not supported in BingX Hedge mode (positionSide handles it)
+            }
         )
         position['sl_order_id'] = sl_order.get('id')
         logger.info(f"SL order placed: {sl_order.get('id')} @ ${sl_price} (qty: {quantity})")

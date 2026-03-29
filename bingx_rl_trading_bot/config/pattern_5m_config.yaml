@@ -78,14 +78,16 @@ strategy:
   #   0 free params (data-derived) → lowest overfit risk (score 30.6, FP=0)
   #   OOS5 +385% vs scale×0.72 +380%, IS P/M 149.3x vs 134.8x
   #   Effective scale per-pattern 0.37~1.44 (median 0.71), adapts to each pattern's MFE shape
-  tp_mode: mfe_median
-  tp_scale_factor: 0.72  # only used when tp_mode: scale (v1.61.0 legacy fallback)
-  trailing_stop:                    # v1.68.0: Per-position trailing stop (DISC, cascade-independent)
+  # v1.68.0: TP effectively disabled — trail is primary exit. TP set very high (×10) as safety net.
+  # Validated: 3 true OOS periods all profitable (+40~+285%), 13/13 trail params profitable, NON-DISC.
+  tp_mode: scale
+  tp_scale_factor: 10.0  # TP = MFE median × 10 (effectively unreachable, trail exits before TP)
+  trailing_stop:                    # v1.68.0: Exchange-native TRAILING_STOP_MARKET — PRIMARY exit mechanism
     enabled: true
-    activation_pct: 1.0              # Start trailing after 1.0% favorable move (unleveraged)
-    trail_pct: 0.3                   # Close if giveback >= 0.3% from peak (unleveraged)
-  tp_decay:                        # v1.63.0: Exponential Time-Decay TP (exp_decay)
-    enabled: true
+    activation_pct: 0.5              # v1.68.0: 1.0→0.5% (validated: 13/13 params profitable, 3 periods OOS+, NON-DISC)
+    trail_pct: 0.2                   # v1.68.0: 0.3→0.2% (0.5/0.2 = sweet spot: WR 78%, R:R 0.66)
+  tp_decay:                        # v1.63.0: Exponential Time-Decay TP — DISABLED (trail replaces TP as primary exit)
+    enabled: false
     decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)
     update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
   vol_adaptation:                  # v1.66.0: Volatility-adaptive TP/SL

@@ -82,6 +82,15 @@ from .orders import (
     _get_emergency_sl_id, _place_emergency_sl_for_direction,
     _EXCHANGE_MANAGED,
     update_single_tp,
+    update_single_sl,
+)
+from .position_management import (
+    _apply_time_decay_tp,
+    _apply_preemptive_cascade,
+    _apply_volatility_adaptation,
+    _apply_trailing_stop,
+    _check_opposite_signal_exit,
+    _check_position_timeouts,
 )
 from .utils import extract_pattern_name
 from .utils.lock import acquire_lock, release_lock
@@ -344,6 +353,18 @@ def _run_bot_main(
                 if state.get('positions'):
                     _apply_time_decay_tp(exchange, state, config)
 
+                # 1b3. Pre-emptive cascade SL (v1.65.0: tighten SLs before cluster hit)
+                if state.get('positions'):
+                    _apply_preemptive_cascade(exchange, state, config, cache)
+
+                # 1b4. Trailing stop (v1.68.0: lock profit after activation)
+                if state.get('positions'):
+                    _apply_trailing_stop(exchange, state, config, cache)
+
+                # 1b5. Volatility-adaptive SL (v1.66.0: adjust SL based on real-time ATR)
+                if state.get('positions'):
+                    _apply_volatility_adaptation(exchange, state, config, cache)
+
                 # 1c. Proactive emergency SL health check (v1.36.6)
                 _ensure_emergency_sl_exists(exchange, state, config)
 
@@ -360,6 +381,15 @@ def _run_bot_main(
                 _process_entry_signal(
                     exchange, state, config, cache, circuit_breaker, metrics
                 )
+
+                # 2b. Opposite signal early exit (v1.66.0)
+                # Uses last_signal stored by _process_entry_signal
+                last_sig = state.get('_last_detected_signal')
+                if state.get('positions') and last_sig:
+                    _check_opposite_signal_exit(
+                        exchange, state, config, cache, circuit_breaker, metrics,
+                        last_sig,
+                    )
 
                 last_processed_candle_id = timing.candle_id
 
@@ -597,166 +627,6 @@ def _ensure_emergency_sl_exists(
             # Don't retry — BingX may report different stopPrice or hide the order.
             pass
 
-
-def _apply_time_decay_tp(
-    exchange: ccxt.bingx,
-    state: Dict[str, Any],
-    config: Dict[str, Any],
-) -> None:
-    """
-    Apply exponential time-decay to TP orders from bar 0.
-
-    v1.62.0→v1.63.0: Exponential decay — TP_distance *= decay_rate^bars_held.
-    Default decay_rate=0.997 (half-life ~231 bars = 19.25h).
-    TP moves toward entry over time, accelerating slot turnover.
-    Updates exchange TP order every update_interval_bars (default 6 = 30min).
-
-    Research: time_decay_tp.py — exp_decay OOS +332.5% vs baseline +299.7%
-    (+10.9%), WF 3/3 PASS, IS trades +40% (slot turnover), 100% MECHANICAL.
-    """
-    decay_cfg = config.get('strategy', {}).get('tp_decay', {})
-    if not decay_cfg.get('enabled'):
-        return
-
-    positions = state.get('positions') or {}
-    if not positions:
-        return
-
-    decay_rate = decay_cfg.get('decay_rate', 0.997)
-    update_interval = decay_cfg.get('update_interval_bars', 6)
-
-    now = datetime.now()
-    candle_seconds = CANDLE_DURATION_MS / 1000
-
-    for slot_id, pos in list(positions.items()):
-        if pos.get('_pending_close'):
-            continue
-
-        entry_time_str = pos.get('entry_time', '')
-        if not entry_time_str:
-            continue
-
-        try:
-            entry_dt = datetime.fromisoformat(entry_time_str)
-        except (ValueError, TypeError):
-            continue
-
-        held_seconds = (now - entry_dt).total_seconds()
-        bars_held = int(held_seconds / candle_seconds)
-
-        # Skip very fresh positions (< 1 update interval)
-        if bars_held < update_interval:
-            continue
-
-        # Store original TP on first decay (one-time)
-        if 'tp_price_original' not in pos:
-            pos['tp_price_original'] = pos.get('tp_price', 0)
-            logger.info(
-                f"⏰ DECAY START: Slot {slot_id} ({pos.get('pattern_name', '?')} "
-                f"{pos.get('direction', '?')}) bar {bars_held} — "
-                f"original TP=${pos['tp_price_original']:.1f}"
-            )
-
-        # Only update at interval boundaries to avoid excessive API calls
-        last_decay_bar = pos.get('_last_decay_bar', 0)
-        if bars_held - last_decay_bar < update_interval:
-            continue
-
-        # Exponential decay: TP_distance *= decay_rate^bars_held
-        decay_factor = decay_rate ** bars_held
-
-        entry_price = pos.get('entry_price', 0)
-        original_tp = pos.get('tp_price_original', pos.get('tp_price', 0))
-        direction = pos.get('direction', '')
-
-        # Calculate decayed TP price from original TP distance
-        if direction == 'LONG':
-            original_dist = original_tp - entry_price
-            decayed_tp = entry_price + original_dist * decay_factor
-            # Safety: never decay TP below entry (break-even)
-            decayed_tp = max(decayed_tp, entry_price + 1.0)
-        else:
-            original_dist = entry_price - original_tp
-            decayed_tp = entry_price - original_dist * decay_factor
-            # Safety: never decay TP above entry (break-even)
-            decayed_tp = min(decayed_tp, entry_price - 1.0)
-
-        decayed_tp = round(decayed_tp, 1)
-
-        # Check if TP actually changed enough to warrant exchange update
-        current_tp = pos.get('tp_price', 0)
-        if abs(current_tp - decayed_tp) <= 1.0:
-            pos['_last_decay_bar'] = bars_held
-            continue
-
-        # Update TP on exchange
-        logger.info(
-            f"⏰ DECAY: Slot {slot_id} ({pos.get('pattern_name', '?')} {direction}) "
-            f"bar {bars_held} decay={decay_factor:.3f} — "
-            f"TP ${current_tp:.1f} → ${decayed_tp:.1f} "
-            f"(original ${original_tp:.1f})"
-        )
-        success = update_single_tp(exchange, pos, config, decayed_tp)
-        pos['_last_decay_bar'] = bars_held
-
-        if success:
-            save_state(state)
-
-
-def _check_position_timeouts(
-    exchange: ccxt.bingx,
-    state: Dict[str, Any],
-    config: Dict[str, Any],
-    cache: APICache,
-    circuit_breaker: CircuitBreaker,
-    metrics: PerformanceMetrics,
-) -> bool:
-    """
-    Close positions that exceeded the timeout threshold.
-
-    v1.31.0: Positions held longer than timeout_bars × 5min are closed
-    at market price. This frees stale slots (48h+ trades are net negative).
-
-    Returns:
-        True if any position was closed due to timeout
-    """
-    timeout_bars = config.get('strategy', {}).get('timeout_bars', DEFAULT_TIMEOUT_BARS)
-    if not timeout_bars:
-        return False
-
-    positions = state.get('positions') or {}
-    if not positions:
-        return False
-
-    closed_any = False
-    now = datetime.now()
-    timeout_seconds = timeout_bars * CANDLE_DURATION_MS // 1000
-
-    for slot_id, pos in list(positions.items()):
-        entry_time_str = pos.get('entry_time', '')
-        if not entry_time_str:
-            continue
-        try:
-            entry_dt = datetime.fromisoformat(entry_time_str)
-            held_seconds = (now - entry_dt).total_seconds()
-            if held_seconds >= timeout_seconds:
-                held_hours = held_seconds / 3600
-                timeout_hours = timeout_seconds / 3600
-                pattern = pos.get('pattern_name', '?')
-                direction = pos.get('direction', '?')
-                logger.info(
-                    f"⏰ TIMEOUT: Slot {slot_id} ({pattern} {direction}) "
-                    f"held {held_hours:.1f}h > {timeout_hours:.0f}h limit, closing at market"
-                )
-                close_position_market(
-                    exchange, state, config, cache, 'TIMEOUT', metrics,
-                    position=pos,
-                )
-                closed_any = True
-        except (ValueError, TypeError):
-            continue
-
-    return closed_any
 
 
 def _estimate_new_sl_pct(
@@ -1476,6 +1346,10 @@ def _process_entry_signal(
 
     # Check for entry signal
     signal_result, reason = check_entry_signal(df, state, config)
+
+    # v1.66.0: Store detected signal direction for opposite-signal exit
+    state['_last_detected_signal'] = signal_result  # None if no signal
+
     if not signal_result:
         return False
 

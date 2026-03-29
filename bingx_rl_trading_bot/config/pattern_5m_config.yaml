@@ -80,6 +80,10 @@ strategy:
   #   Effective scale per-pattern 0.37~1.44 (median 0.71), adapts to each pattern's MFE shape
   tp_mode: mfe_median
   tp_scale_factor: 0.72  # only used when tp_mode: scale (v1.61.0 legacy fallback)
+  trailing_stop:                    # v1.68.0: Per-position trailing stop (DISC, cascade-independent)
+    enabled: true
+    activation_pct: 1.0              # Start trailing after 1.0% favorable move (unleveraged)
+    trail_pct: 0.3                   # Close if giveback >= 0.3% from peak (unleveraged)
   tp_decay:                        # v1.63.0: Exponential Time-Decay TP (exp_decay)
     enabled: true
     decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)

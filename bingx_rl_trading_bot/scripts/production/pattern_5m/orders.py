@@ -874,6 +874,10 @@ def cancel_remaining_orders(
             orders_to_cancel.append(('TP', tp_order_id))
         if sl_order_id and sl_order_id != _EXCHANGE_MANAGED:
             orders_to_cancel.append(('SL', sl_order_id))
+        # v1.68.0: Cancel trailing stop order if exists
+        trail_order_id = slot.get('trail_order_id')
+        if trail_order_id:
+            orders_to_cancel.append(('TRAIL', trail_order_id))
 
         for stage in slot.get('scale_out_stages', []):
             if stage.get('order_id') and not stage.get('filled'):

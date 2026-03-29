@@ -357,9 +357,8 @@ def _run_bot_main(
                 if state.get('positions'):
                     _apply_preemptive_cascade(exchange, state, config, cache)
 
-                # 1b4. Trailing stop (v1.68.0: lock profit after activation)
-                if state.get('positions'):
-                    _apply_trailing_stop(exchange, state, config, cache)
+                # 1b4. Trailing stop — now exchange-native (placed at entry, not loop-checked)
+                # _apply_trailing_stop is kept as fallback but exchange TRAILING_STOP_MARKET is primary
 
                 # 1b5. Volatility-adaptive SL (v1.66.0: adjust SL based on real-time ATR)
                 if state.get('positions'):

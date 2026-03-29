@@ -320,6 +320,11 @@ def open_position(
                 update_emergency_sl(exchange, state, config)
                 return True  # position opened but relying on emergency SL
 
+        # v1.68.0: Place exchange-native trailing stop order
+        trail_cfg = config.get('strategy', {}).get('trailing_stop', {})
+        if trail_cfg.get('enabled', False):
+            _place_trailing_stop_order(exchange, config, new_slot)
+
         # v1.29.0: Update emergency SL to cover all active slots
         update_emergency_sl(exchange, state, config)
 
@@ -749,3 +754,63 @@ def refill_position(
     except Exception as e:
         logger.exception(f"Failed to refill position: {e}")
         return False
+
+
+def _place_trailing_stop_order(
+    exchange: ccxt.bingx,
+    config: Dict[str, Any],
+    position: Dict[str, Any],
+) -> None:
+    """v1.68.0: Place exchange-native TRAILING_STOP_MARKET order.
+
+    BingX executes trailing stop in real-time (no 5min loop delay).
+    Activation: entry ± activation_pct% (favorable direction)
+    CallbackRate: trail_pct% from peak favorable price
+
+    Coexists with TP + SL orders. If trail triggers first,
+    cancel_remaining_orders() handles TP+SL cleanup.
+    """
+    trail_cfg = config.get('strategy', {}).get('trailing_stop', {})
+    activation_pct = trail_cfg.get('activation_pct', 1.0)
+    trail_pct = trail_cfg.get('trail_pct', 0.3)
+
+    entry_price = position.get('entry_price', 0)
+    direction = position.get('direction', '')
+    quantity = position.get('remaining_quantity', position.get('quantity', 0))
+    symbol = config.get('symbol', 'BTC-USDT')
+
+    if entry_price <= 0 or quantity <= 0:
+        return
+
+    # Activation price: price at which trailing starts
+    if direction == 'LONG':
+        activation_price = round(entry_price * (1 + activation_pct / 100), 1)
+        close_side = 'sell'
+        position_side = 'LONG'
+    else:
+        activation_price = round(entry_price * (1 - activation_pct / 100), 1)
+        close_side = 'buy'
+        position_side = 'SHORT'
+
+    try:
+        order = exchange.create_order(
+            symbol=symbol,
+            type='TRAILING_STOP_MARKET',
+            side=close_side,
+            amount=quantity,
+            params={
+                'positionSide': position_side,
+                'activationPrice': activation_price,
+                'callbackRate': trail_pct,
+            },
+        )
+        order_id = order.get('id', '')
+        position['trail_order_id'] = order_id
+        logger.info(
+            f"📈 TRAIL order placed: {order_id} | {direction} "
+            f"activation=${activation_price:.1f} ({activation_pct}%) "
+            f"trail={trail_pct}% (qty: {quantity})"
+        )
+    except Exception as e:
+        logger.warning(f"📈 TRAIL order FAILED for {position.get('slot_id','?')}: {e}")
+        # Not critical — TP/SL still protect the position

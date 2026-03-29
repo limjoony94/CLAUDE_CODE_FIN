@@ -371,6 +371,23 @@ def check_entry_signal(
     else:
         logger.debug(f"Pattern {pattern} not in validated patterns (L={len(long_patterns)}, S={len(short_patterns)})")
 
+        # v1.68.0: Volatility Breakout (VB) — gap-filler signal when no pattern matches
+        # VB fires when current bar range > 1.5 × rolling median range
+        # Validated: 23d OOS +10.5% improvement, WF PASS, NON-DISC
+        vb_cfg = config.get('strategy', {}).get('volatility_breakout', {})
+        if vb_cfg.get('enabled', False) and signal is None:
+            threshold = vb_cfg.get('threshold_mult', 1.5)
+            lookback = vb_cfg.get('lookback_bars', 100)
+            if len(df) >= lookback + 2:
+                ranges = (df['high'] - df['low']).iloc[-(lookback+1):-1]
+                med_range = ranges.median()
+                current_range = current['high'] - current['low']
+                if med_range > 0 and current_range > threshold * med_range:
+                    vb_dir = 'LONG' if current['close'] > current['open'] else 'SHORT'
+                    signal = vb_dir
+                    reason = f"VB: range {current_range:.1f} > {threshold}x median {med_range:.1f}"
+                    logger.info(f"📊 VB signal: {vb_dir} | {reason}")
+
     if signal:
         # Multi-slot: prevent entering the same pattern twice
         active_patterns = {s.get('pattern_name') for s in (state.get('positions') or {}).values() if s.get('pattern_name')}

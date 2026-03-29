@@ -95,6 +95,10 @@ strategy:
     clamp_lo: 0.5                  # min vol_factor (SL shrinks to 50% min in low vol)
     clamp_hi: 2.0                  # max vol_factor (SL expands to 200% max in high vol)
     update_interval_bars: 1        # update every bar (vol_adapt_param_optimization: iv=1 optimal)
+  volatility_breakout:              # v1.68.0: VB gap-filler signal when no pattern matches
+    enabled: true
+    threshold_mult: 1.5              # current bar range > 1.5 × median range
+    lookback_bars: 100               # rolling window for median range
   opposite_signal_exit:            # v1.66.0: Close profitable positions on consecutive opposite signals
     enabled: true
     consecutive_signals: 2           # number of opposite-direction signals within window to trigger

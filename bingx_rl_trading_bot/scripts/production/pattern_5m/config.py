@@ -306,6 +306,25 @@ def load_dynamic_patterns(config: Dict[str, Any]) -> Dict[str, Any]:
             config['_dynamic_patterns_tpsl'] = patterns_tpsl
             logger.info(f"Per-pattern TP/SL loaded: {len(patterns_tpsl)} patterns")
 
+        # v1.68.0: Apply type_merge to pattern names (8-type classification)
+        # Patterns like "H-ST-DN" become "ST-ST-DN" to match merged type_codes
+        type_merge = config.get('strategy', {}).get('type_merge', {})
+        if type_merge:
+            def merge_pattern(pat):
+                return '-'.join(type_merge.get(p, p) for p in pat.split('-'))
+            long_patterns = list(set(merge_pattern(p) for p in long_patterns))
+            short_patterns = list(set(merge_pattern(p) for p in short_patterns))
+            # Also merge per-pattern TP/SL keys
+            if patterns_tpsl:
+                merged_tpsl = {}
+                for pat_key, tpsl in patterns_tpsl.items():
+                    new_key = merge_pattern(pat_key)
+                    if new_key not in merged_tpsl:
+                        merged_tpsl[new_key] = tpsl
+                config['_dynamic_patterns_tpsl'] = merged_tpsl
+            total = len(long_patterns) + len(short_patterns)
+            logger.info(f"Type merge applied: {len(type_merge)} merges → {total} unique patterns")
+
         # TP/SL validated — NOW inject patterns into config
         config['strategy']['long_patterns'] = long_patterns
         config['strategy']['short_patterns'] = short_patterns

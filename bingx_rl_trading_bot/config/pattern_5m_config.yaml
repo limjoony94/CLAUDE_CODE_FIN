@@ -99,8 +99,8 @@ strategy:
     enabled: true
     threshold_mult: 1.5              # current bar range > 1.5 × median range
     lookback_bars: 100               # rolling window for median range
-  opposite_signal_exit:            # v1.66.0: Close profitable positions on consecutive opposite signals
-    enabled: true
+  opposite_signal_exit:            # v1.68.0: DISABLED — OPP steals Trail profit (17/34 exits below trail activation)
+    enabled: false
     consecutive_signals: 2           # number of opposite-direction signals within window to trigger
     min_profit_pct: 0.1              # minimum unrealized profit (slot %, with leverage) to qualify
     window_bars: 4                   # v1.68.0: time window for counting signals (4 bars=20min, ~3-5 OPP/day matching BT 2.7/day)

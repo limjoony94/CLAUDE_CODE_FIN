@@ -905,4 +905,12 @@ def _infer_exit_from_price(exit_price: float, position: Dict) -> str:
                 if tp_proximity < 0.5:
                     return 'TP'
 
+    # v1.68.0: Trail exit classification — position had trail_order_id and exited in profit
+    # between entry and TP (not near SL, not near TP = trail territory)
+    if position.get('trail_order_id'):
+        if direction == 'LONG' and exit_price > entry:
+            return 'TRAIL_STOP'
+        if direction == 'SHORT' and exit_price < entry:
+            return 'TRAIL_STOP'
+
     return 'UNKNOWN'

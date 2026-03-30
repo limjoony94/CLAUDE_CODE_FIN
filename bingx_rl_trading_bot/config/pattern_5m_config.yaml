@@ -78,16 +78,17 @@ strategy:
   #   0 free params (data-derived) → lowest overfit risk (score 30.6, FP=0)
   #   OOS5 +385% vs scale×0.72 +380%, IS P/M 149.3x vs 134.8x
   #   Effective scale per-pattern 0.37~1.44 (median 0.71), adapts to each pattern's MFE shape
-  # v1.68.0: TP effectively disabled — trail is primary exit. TP set very high (×10) as safety net.
-  # Validated: 3 true OOS periods all profitable (+40~+285%), 13/13 trail params profitable, NON-DISC.
-  tp_mode: scale
-  tp_scale_factor: 10.0  # TP = MFE median × 10 (effectively unreachable, trail exits before TP)
-  trailing_stop:                    # v1.68.0: Exchange-native TRAILING_STOP_MARKET — PRIMARY exit mechanism
-    enabled: true
-    activation_pct: 0.5              # v1.68.0: 1.0→0.5% (validated: 13/13 params profitable, 3 periods OOS+, NON-DISC)
-    trail_pct: 0.2                   # v1.68.0: 0.3→0.2% (0.5/0.2 = sweet spot: WR 78%, R:R 0.66)
-  tp_decay:                        # v1.63.0: Exponential Time-Decay TP — DISABLED (trail replaces TP as primary exit)
+  # v1.69.0: REVERT to MFE median TP — 4-study validation: trail R:R 0.11, WRm +3.6pp vs no-trail R:R 0.73, WRm +23pp
+  # Trail avg_win 1.04% vs MFE median avg_win 2.69% — trail locks profit too early in N-pos environment
+  # IS +377% vs trail +224%, OOS +280% vs +189%, P/M 79.4x vs 33.0x
+  tp_mode: mfe_median
+  tp_scale_factor: 1.0   # v1.69.0: ×10→×1.0 (MFE median used directly, no scaling)
+  trailing_stop:                    # v1.68.0→v1.69.0: DISABLED — trail hurts N-pos (R:R 0.11, 1 SL = 9 trails)
     enabled: false
+    activation_pct: 0.5
+    trail_pct: 0.2
+  tp_decay:                        # v1.63.0→v1.69.0: RE-ENABLED — TP decay is the correct profit-taking mechanism
+    enabled: true
     decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)
     update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
   vol_adaptation:                  # v1.66.0: Volatility-adaptive TP/SL
@@ -95,8 +96,8 @@ strategy:
     clamp_lo: 0.5                  # min vol_factor (SL shrinks to 50% min in low vol)
     clamp_hi: 2.0                  # max vol_factor (SL expands to 200% max in high vol)
     update_interval_bars: 1        # update every bar (vol_adapt_param_optimization: iv=1 optimal)
-  volatility_breakout:              # v1.68.0: VB gap-filler signal when no pattern matches
-    enabled: true
+  volatility_breakout:              # v1.68.0→v1.69.0: DISABLED — marginal OOS +7.8%, needs isolated study
+    enabled: false
     threshold_mult: 1.5              # current bar range > 1.5 × median range
     lookback_bars: 100               # rolling window for median range
   opposite_signal_exit:            # v1.68.0: DISABLED — OPP steals Trail profit (17/34 exits below trail activation)
@@ -104,11 +105,7 @@ strategy:
     consecutive_signals: 2           # number of opposite-direction signals within window to trigger
     min_profit_pct: 0.1              # minimum unrealized profit (slot %, with leverage) to qualify
     window_bars: 4                   # v1.68.0: time window for counting signals (4 bars=20min, ~3-5 OPP/day matching BT 2.7/day)
-  type_merge:                        # v1.68.0: 8-type merge — reduce 12→8 types by merging ambiguous boundaries
-    DF: D                              # DRAGONFLY → DOJI (both: body<10%, wick dominant)
-    GS: D                              # GRAVESTONE → DOJI (mirror of dragonfly)
-    H: ST                              # HAMMER → SPINNING_TOP (wick/body ratio similar)
-    IH: ST                             # INV_HAMMER → SPINNING_TOP
+  type_merge: {}                     # v1.69.0: DISABLED — 8-type merge OOS neutral (-0.2%), 12-type preserves pattern granularity
   # sl_scale_factor: removed — corrected WF shows SL×1.1 NON-DISCRIMINATING (+429.7% vs SL×1.0 +430.0%)
   # Original "DISCRIMINATING" result was from scripts with buggy fold boundary formula
   pattern_source: dynamic  # 'static' (constants.py) or 'dynamic' (results/dynamic_patterns.json)

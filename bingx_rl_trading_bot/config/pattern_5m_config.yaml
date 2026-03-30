@@ -31,9 +31,9 @@ risk:
   cascade_sl_tightening:   # v1.69.0: RE-ENABLED — Trail OFF removes MCC conflict. _sl_price_original bug fixed v1.67.1.
     enabled: true            # 4-study validation: Cascade 98% IS +547%, OOS +440% vs OFF IS -85%. WF 5/5 PASS.
     tighten_pct: 98
-  preemptive_cascade:      # v1.69.0: RE-ENABLED — dir unrealized loss >2% triggers SL 98% tightening
-    enabled: true            # cascade_va_validation + live_sl_divergence: cascade is THE dominant mechanism
-    unrealized_loss_pct: 2.0
+  preemptive_cascade:      # v1.69.1: threshold 2.0→1.5% (cascade_param_sweep: OOS +470 vs +440, MDD 1.43%)
+    enabled: true
+    unrealized_loss_pct: 1.5   # v1.69.1: 2.0→1.5% (earlier trigger, OOS +30.4%, IS-OOS gap 19% OK)
     tighten_pct: 98
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true
@@ -66,12 +66,12 @@ strategy:
   atr_scale:
     enabled: true
     window: 576       # rolling median window (576봉 = 2일)
-    clamp_lo: 0.5     # v1.47.0: 0.6→0.5 (atr_clamp_sweep_study: IS PnL/MDD +44%, MDD -25%, OOS min +5.4%)
-    clamp_hi: 1.5     # v1.50.0: 1.7→1.5 (atr_mdd_param_sweep_study: IS PnL/MDD +52%, OOS min +2.4pp, MDD sizing noise-level)
+    clamp_lo: 1.0     # v1.69.1: 0.5→1.0 (expand-only: low-vol shrinkage hurts TP fill, OOS +12.4%)
+    clamp_hi: 1.5     # v1.50.0: 1.7→1.5 (atr_mdd_param_sweep_study)
   cooldown_candles: 0
-  direction_cap: 6         # v1.65.0: 7→6 (preemptive_param_crossval: COMBO_B OOS +410.7% vs DC7 +408.3%, cluster exposure -14%)
-  rescan_interval_days: 60  # v1.35.2: 90→60d (edge half-life 30d, first negative 90d)
-  timeout_bars: 288        # v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치, 24h+ trades net negative)
+  direction_cap: 6         # v1.65.0: 7→6
+  rescan_interval_days: 60  # v1.35.2: 90→60d
+  timeout_bars: 576        # v1.69.1: 288→576 (timeout_cascade_study: OOS +42.7%, TP decay replaces timeout, 1.3% TO exits)
   # tp_multiplier removed — v1.43.0 ROLLBACK (h7_critical_validation: WF 94% non-discriminating, 95% Cascade-dependent, E[trade] inferior at live WR)
   # v1.67.0: TP mode — 'scale' (uniform factor) or 'mfe_median' (per-pattern MFE median)
   # mfe_median: uses each pattern's MFE median from scanner exc_stats as TP directly.

@@ -91,6 +91,42 @@ class TestInferExitReason:
         result = _infer_exit_reason(50000.0, {})
         assert result == 'MARKET'
 
+    def test_trail_stop_long_profit(self):
+        """LONG with trail_order_id, exit in profit far from TP → TRAIL_STOP."""
+        position = {
+            'entry_price': 50000.0,
+            'direction': 'LONG',
+            'tp_price': 80000.0,
+            'sl_price': 47000.0,
+            'trail_order_id': '12345',
+        }
+        result = _infer_exit_reason(51000.0, position)
+        assert result == 'TRAIL_STOP'
+
+    def test_trail_stop_short_profit(self):
+        """SHORT with trail_order_id, exit in profit far from TP → TRAIL_STOP."""
+        position = {
+            'entry_price': 50000.0,
+            'direction': 'SHORT',
+            'tp_price': 30000.0,
+            'sl_price': 53000.0,
+            'trail_order_id': '12345',
+        }
+        result = _infer_exit_reason(49000.0, position)
+        assert result == 'TRAIL_STOP'
+
+    def test_trail_tp_proximity_still_tp(self):
+        """Even with trail_order_id, near-TP exit still classifies as TP."""
+        position = {
+            'entry_price': 50000.0,
+            'direction': 'LONG',
+            'tp_price': 51000.0,
+            'sl_price': 49000.0,
+            'trail_order_id': '12345',
+        }
+        result = _infer_exit_reason(51000.0, position)
+        assert result == 'TP'
+
 
 # ── _infer_exit_from_price (current price based) ────────────
 
@@ -178,6 +214,41 @@ class TestInferExitFromPrice:
         }
         result = _infer_exit_from_price(51000.0, position)
         assert result == 'TP'
+
+    def test_trail_stop_long_in_profit(self):
+        """LONG position with trail_order_id, exit in profit → TRAIL_STOP."""
+        position = {
+            'entry_price': 50000.0,
+            'direction': 'LONG',
+            'tp_price': 80000.0,  # very far TP (trail-primary mode)
+            'sl_price': 47000.0,
+            'trail_order_id': '12345',
+        }
+        result = _infer_exit_from_price(51000.0, position)
+        assert result == 'TRAIL_STOP'
+
+    def test_trail_stop_short_in_profit(self):
+        """SHORT position with trail_order_id, exit in profit → TRAIL_STOP."""
+        position = {
+            'entry_price': 50000.0,
+            'direction': 'SHORT',
+            'tp_price': 30000.0,  # very far TP
+            'sl_price': 53000.0,
+            'trail_order_id': '12345',
+        }
+        result = _infer_exit_from_price(49000.0, position)
+        assert result == 'TRAIL_STOP'
+
+    def test_trail_no_order_id_returns_unknown(self):
+        """No trail_order_id → UNKNOWN (not TRAIL_STOP)."""
+        position = {
+            'entry_price': 50000.0,
+            'direction': 'LONG',
+            'tp_price': 80000.0,
+            'sl_price': 47000.0,
+        }
+        result = _infer_exit_from_price(51000.0, position)
+        assert result == 'UNKNOWN'
 
 
 # ── _check_scale_out_fills ───────────────────────────────────

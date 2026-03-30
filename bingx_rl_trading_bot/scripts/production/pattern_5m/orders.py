@@ -193,6 +193,9 @@ def _place_single_tp_order(
             # TP price already past current price (e.g. decay reduced TP beyond market)
             position['tp_order_id'] = _EXCHANGE_MANAGED
             logger.warning("TP price past current market — marking as managed, position_monitor will handle")
+        elif '109420' in error_msg or '101205' in error_msg:
+            # v1.68.0: Position no longer exists (trail stop closed it)
+            logger.info(f"TP order skipped — position no longer exists (likely trail stop)")
         else:
             logger.warning(f"TP order failed (exchange error): {e}")
     except Exception as e:
@@ -258,6 +261,9 @@ def _place_sl_order(
             # Qty exceeds available — position partially closed
             logger.warning(f"SL qty {quantity} exceeds available — position likely partially closed, will sync next cycle")
             position['sl_order_id'] = _EXCHANGE_MANAGED
+        elif '109420' in error_msg or '101205' in error_msg:
+            # v1.68.0: Position no longer exists (trail stop closed it)
+            logger.info(f"SL order skipped — position no longer exists (likely trail stop)")
         else:
             logger.warning(f"SL order failed (exchange error): {e}")
     except Exception as e:
@@ -423,6 +429,13 @@ def _adjust_single_position_tpsl(
     # Verify pattern/mode compatibility before proceeding
     if config.get('_dynamic_tpsl_per_pattern'):
         pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
+        # v1.68.0: Apply type_merge to pattern name for dict lookup
+        if pattern and pattern not in pp_tpsl:
+            type_merge = config.get('strategy', {}).get('type_merge', {})
+            if type_merge:
+                merged = '-'.join(type_merge.get(p, p) for p in pattern.split('-'))
+                if merged in pp_tpsl:
+                    pattern = merged
         if not pattern or pattern not in pp_tpsl:
             # v1.59.2: Don't skip — calculate_tp_sl uses median fallback for unknown patterns.
             # Skipping leaves positions with dangerously tight defaults (1%/1%) forever.
@@ -1192,6 +1205,13 @@ def _place_emergency_sl_for_direction(
                 f"Per-slot SLs active — marking as exchange-managed."
             )
             _set_emergency_sl_id(state, config, direction, _EXCHANGE_MANAGED)
+        elif '109420' in error_msg or '101205' in error_msg:
+            # v1.68.0: Position already closed (e.g., trail stop fired) — no emergency SL needed
+            logger.info(
+                f"Emergency SL ({direction}) skipped — position no longer exists on exchange. "
+                f"Likely closed by trail stop or external action."
+            )
+            _set_emergency_sl_id(state, config, direction, None)
         else:
             logger.critical(
                 f"EMERGENCY SL ({direction}) PLACEMENT FAILED — POSITION UNPROTECTED! "

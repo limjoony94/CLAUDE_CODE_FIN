@@ -496,6 +496,14 @@ def calculate_tp_sl(
     # Dynamic Per-Pattern TP/SL mode (highest priority)
     if config and config.get('_dynamic_tpsl_per_pattern'):
         pp_tpsl = config.get('_dynamic_patterns_tpsl', {})
+        # v1.68.0: Apply type_merge to pattern name for dict lookup
+        # State may store pre-merge names (e.g. H-ST-U) while dict uses merged (ST-ST-U)
+        if pattern and pattern not in pp_tpsl:
+            type_merge = config.get('strategy', {}).get('type_merge', {})
+            if type_merge:
+                merged = '-'.join(type_merge.get(p, p) for p in pattern.split('-'))
+                if merged in pp_tpsl:
+                    pattern = merged
         if pattern and pattern in pp_tpsl:
             base_tp_pct = pp_tpsl[pattern][0]
             base_sl_pct = pp_tpsl[pattern][1]
@@ -505,7 +513,7 @@ def calculate_tp_sl(
             # Config defaults (tp_pct=1.0, sl_pct=1.0) are dangerously tight for per-pattern mode
             # where actual SL ranges 1.44~5.95%. Using median protects recovered positions.
             base_tp_pct, base_sl_pct = _get_median_tpsl_fallback(pp_tpsl, strategy)
-            logger.warning(
+            logger.debug(
                 f"Pattern {pattern} not in dynamic per-pattern dict, "
                 f"using median fallback TP={base_tp_pct:.2f}% SL={base_sl_pct:.2f}%"
             )

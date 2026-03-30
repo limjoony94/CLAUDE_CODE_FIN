@@ -385,6 +385,7 @@ def check_entry_signal(
                 if med_range > 0 and current_range > threshold * med_range:
                     vb_dir = 'LONG' if current['close'] > current['open'] else 'SHORT'
                     signal = vb_dir
+                    pattern = 'VB'  # v1.68.0: VB gets explicit pattern name
                     reason = f"VB: range {current_range:.1f} > {threshold}x median {med_range:.1f}"
                     logger.info(f"📊 VB signal: {vb_dir} | {reason}")
 

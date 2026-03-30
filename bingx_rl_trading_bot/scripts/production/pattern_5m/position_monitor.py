@@ -288,6 +288,13 @@ def _infer_exit_reason(filled_price: float, position: Dict) -> str:
                 if tp_proximity < 0.5:
                     return 'TP'
 
+    # v1.68.0: Trail exit classification — position had trail_order_id and exited in profit
+    if position.get('trail_order_id'):
+        if direction == 'LONG' and filled_price > entry:
+            return 'TRAIL_STOP'
+        if direction == 'SHORT' and filled_price < entry:
+            return 'TRAIL_STOP'
+
     return 'MARKET'
 
 

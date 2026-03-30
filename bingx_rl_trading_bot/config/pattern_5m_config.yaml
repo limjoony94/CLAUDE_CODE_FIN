@@ -28,11 +28,11 @@ risk:
     threshold: 2             # number of same-dir losses to trigger brake
     window_bars: 288         # 288 bars = 24h window to count losses
     block_bars: 144          # 144 bars = 12h block duration
-  cascade_sl_tightening:   # v1.68.0: MCC disabled — Trail only is optimal (MCC+Trail = -23% CANCEL interaction)
-    enabled: false           # Ralph Loop Iter 2: Trail WF 5/5 PASS +134.7%, MCC+Trail CANCEL, Trail only +5.2% OOS
+  cascade_sl_tightening:   # v1.69.0: RE-ENABLED — Trail OFF removes MCC conflict. _sl_price_original bug fixed v1.67.1.
+    enabled: true            # 4-study validation: Cascade 98% IS +547%, OOS +440% vs OFF IS -85%. WF 5/5 PASS.
     tighten_pct: 98
-  preemptive_cascade:      # v1.65.0: Pre-emptive SL tightening when unrealized loss exceeds threshold
-    enabled: false           # v1.68.0: DISABLED — Same issue: tightened SLs trigger on normal volatility. Mechanism works (6/6 SUCCESS) but effect is harmful (forced closure of surviving positions).
+  preemptive_cascade:      # v1.69.0: RE-ENABLED — dir unrealized loss >2% triggers SL 98% tightening
+    enabled: true            # cascade_va_validation + live_sl_divergence: cascade is THE dominant mechanism
     unrealized_loss_pct: 2.0
     tighten_pct: 98
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
@@ -91,11 +91,11 @@ strategy:
     enabled: true
     decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)
     update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
-  vol_adaptation:                  # v1.66.0: Volatility-adaptive TP/SL
-    enabled: true
-    clamp_lo: 0.5                  # min vol_factor (SL shrinks to 50% min in low vol)
-    clamp_hi: 2.0                  # max vol_factor (SL expands to 200% max in high vol)
-    update_interval_bars: 1        # update every bar (vol_adapt_param_optimization: iv=1 optimal)
+  vol_adaptation:                  # v1.69.0: DISABLED — clusters SLs in low vol (03-29: 6 SL同시 -27.82%)
+    enabled: false                 # live_sl_divergence + cascade_va_validation: VA net negative (cascade ON: +660 vs +555 with VA)
+    clamp_lo: 0.5
+    clamp_hi: 2.0
+    update_interval_bars: 1
   volatility_breakout:              # v1.68.0→v1.69.0: DISABLED — marginal OOS +7.8%, needs isolated study
     enabled: false
     threshold_mult: 1.5              # current bar range > 1.5 × median range

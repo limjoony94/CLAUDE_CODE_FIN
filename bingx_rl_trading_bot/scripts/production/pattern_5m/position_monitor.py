@@ -829,6 +829,12 @@ def _cascade_tighten_sls(  # v1.69.1: Reactivated — replaces MCC. SL tighten a
                 new_sl = round(current_price * (1 + CASCADE_FALLBACK_PCT), 1)
                 new_dist = abs(entry - new_sl)
 
+        # Re-check only-tighten after fallback (fallback may widen if old_sl was already tight)
+        if direction == 'LONG' and new_sl <= old_sl:
+            continue
+        if direction == 'SHORT' and new_sl >= old_sl:
+            continue
+
         old_dist = abs(entry - old_sl)
         logger.info(
             f"  CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "

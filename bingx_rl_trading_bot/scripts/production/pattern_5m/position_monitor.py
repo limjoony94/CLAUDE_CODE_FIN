@@ -798,21 +798,17 @@ def _cascade_tighten_sls(
         if entry <= 0 or old_sl <= 0:
             continue
 
-        # v1.68.0: Current-price-based cascade distance.
-        # Entry-based cascade always SKIPs in live because positions move past entry
-        # before cascade fires (100% SKIP rate observed in production).
-        # Current-price-based: SL = current_price ± (current_sl_dist × keep_ratio)
-        # with minimum floor to avoid noise triggers.
-        CASCADE_MIN_DIST = 30.0  # minimum $30 distance from current price
-        CASCADE_CURR_KEEP = 0.10  # 10% of current SL distance (≈ BT entry-based 2% in absolute $)
-
-        current_sl_dist = abs(current_price - old_sl)
-        new_dist = max(current_sl_dist * CASCADE_CURR_KEEP, CASCADE_MIN_DIST)
+        # v1.69.1: Entry-based cascade using _sl_price_original (v1.67.1 fix).
+        # v1.68.0 used current-price-based (10% hardcoded) which gave 8% keep instead of 2%.
+        # _sl_price_original stores the SL at entry time, before any vol_adapt/cascade.
+        original_sl = pos.get('_sl_price_original', old_sl)
+        original_dist = abs(entry - original_sl)
+        new_dist = max(original_dist * keep_ratio, 30.0)  # keep_ratio = 0.02 for tighten_pct=98
 
         if direction == 'LONG':
-            new_sl = round(current_price - new_dist, 1)
+            new_sl = round(entry - new_dist, 1)
         else:
-            new_sl = round(current_price + new_dist, 1)
+            new_sl = round(entry + new_dist, 1)
 
         # Only tighten, never widen
         if direction == 'LONG' and new_sl <= old_sl:

@@ -233,18 +233,16 @@ def _apply_preemptive_cascade(
             if entry <= 0 or old_sl <= 0:
                 continue
 
-            # v1.68.0: Current-price-based cascade distance.
-            # Entry-based always SKIPs when position is in loss (100% SKIP observed).
-            CASCADE_MIN_DIST = 30.0
-            CASCADE_CURR_KEEP = 0.10
-
-            current_sl_dist = abs(current_price - old_sl)
-            new_dist = max(current_sl_dist * CASCADE_CURR_KEEP, CASCADE_MIN_DIST)
+            # v1.69.1: Entry-based cascade using _sl_price_original (v1.67.1 fix).
+            # v1.68.0 hardcoded 10% keep instead of config tighten_pct.
+            original_sl = pos.get('_sl_price_original', old_sl)
+            original_dist = abs(entry - original_sl)
+            new_dist = max(original_dist * keep_ratio, 30.0)
 
             if direction == 'LONG':
-                new_sl = round(current_price - new_dist, 1)
+                new_sl = round(entry - new_dist, 1)
             else:
-                new_sl = round(current_price + new_dist, 1)
+                new_sl = round(entry + new_dist, 1)
 
             # Only tighten, never widen
             if direction == 'LONG' and new_sl <= old_sl:

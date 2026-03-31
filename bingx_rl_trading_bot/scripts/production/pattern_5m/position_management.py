@@ -250,14 +250,15 @@ def _apply_preemptive_cascade(
             if direction == 'SHORT' and new_sl >= old_sl:
                 continue
 
-            # Validate against current price — fallback to current ± min_dist
+            # Validate against current price — fallback to current ± 0.4% (BingX min ~0.3%)
+            CASCADE_FALLBACK_PCT = 0.004
             if direction == 'LONG' and new_sl >= current_price:
-                new_sl = round(current_price - 30.0, 1)
+                new_sl = round(current_price * (1 - CASCADE_FALLBACK_PCT), 1)
                 new_dist = abs(entry - new_sl)
                 if new_sl <= old_sl:
                     continue
             if direction == 'SHORT' and new_sl <= current_price:
-                new_sl = round(current_price + 30.0, 1)
+                new_sl = round(current_price * (1 + CASCADE_FALLBACK_PCT), 1)
                 new_dist = abs(entry - new_sl)
                 if new_sl >= old_sl:
                     continue

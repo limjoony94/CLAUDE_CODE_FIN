@@ -817,14 +817,16 @@ def _cascade_tighten_sls(  # v1.69.1: Reactivated — replaces MCC. SL tighten a
         if direction == 'SHORT' and new_sl >= old_sl:
             continue
 
-        # v1.69.1: Price validity check — SL must be on the correct side of current price
-        # If entry-based SL is already past current price, use current_price + min_dist instead
+        # v1.69.1: Price validity check — SL must be on the correct side of current price.
+        # Use 0.4% buffer from current price (BingX requires ~0.3% minimum distance for STOP).
+        # $30 floor would trigger 110412 (breached) → 0.4% avoids the error round-trip.
+        CASCADE_FALLBACK_PCT = 0.004  # 0.4% from current price (~$270 at $67k)
         if current_price > 0:
             if direction == 'LONG' and new_sl >= current_price:
-                new_sl = round(current_price - 30.0, 1)
+                new_sl = round(current_price * (1 - CASCADE_FALLBACK_PCT), 1)
                 new_dist = abs(entry - new_sl)
             elif direction == 'SHORT' and new_sl <= current_price:
-                new_sl = round(current_price + 30.0, 1)
+                new_sl = round(current_price * (1 + CASCADE_FALLBACK_PCT), 1)
                 new_dist = abs(entry - new_sl)
 
         old_dist = abs(entry - old_sl)

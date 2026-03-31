@@ -735,18 +735,19 @@ def _handle_position_closed(
     # Replaces SL-tightening cascade which was:
     #   - Entry-based: 100% SKIP in live (position past entry)
     #   - Current-price-based: 100% harmful (forced closure at tight SL)
-    # Market-close is always executable and avoids further SL cluster losses.
+    # v1.69.1: SL tighten instead of MCC. MCC force-closes at adverse prices (OOS -43%).
+    # SL tighten allows recovery (OOS +701%). Preemptive handles 91% of clusters.
     cascade_cfg = config.get('risk', {}).get('cascade_sl_tightening', {})
     if cascade_cfg.get('enabled', False):
         if exit_reason in ('SL', 'EMERGENCY_SL', 'CASCADE_SL') or exit_reason.startswith('SL_AFTER_'):
             if not position.get('cascade_tightened'):
-                _market_close_same_direction(exchange, state, config, position, cache, metrics)
+                _cascade_tighten_sls(exchange, state, config, position)
 
     record_closed_position(exchange, state, config, exit_price, exit_reason, cache, metrics, position=position)
     return True
 
 
-def _cascade_tighten_sls(  # NOTE: Dead code — not called in production. MCC used instead (line 743).
+def _cascade_tighten_sls(  # v1.69.1: Reactivated — replaces MCC. SL tighten allows recovery (OOS +701% vs MCC -43%).
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],

@@ -746,7 +746,7 @@ def _handle_position_closed(
     return True
 
 
-def _cascade_tighten_sls(
+def _cascade_tighten_sls(  # NOTE: Dead code — not called in production. MCC used instead (line 743).
     exchange: ccxt.bingx,
     state: Dict[str, Any],
     config: Dict[str, Any],

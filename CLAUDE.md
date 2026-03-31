@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - BTC 5분봉 패턴 트레이딩 봇
 
-> **Version**: v1.68.0 | **Bot**: Pattern 5m (111패턴, 51L+60S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap6+MomGuard1.5%15m1h+NposScanner+CascadeSL98+PreCascade2pct98+AggRisk10_15+ATRClamp05_15+TO288+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix+MFEMedianTP+OrphanPrevention+PosTrackFix+MedianFallback+EmgSlRace+NaPrevent+EmgSlUpdate+CcxtTypeAdopt+SoftDelete+ScannerVolCap+ExpDecayTP0.9975+OppSignalExit+CascadeFixComplete+PreCascadeFix+OppWindowFix+TPDecaySafety+ScannerParity) | **Updated**: 2026-03-28
+> **Version**: v1.69.1 | **Bot**: Pattern 5m (111패턴, 51L+60S, Edge18pp+NeutralWindow+ATR Scanner+Holdout+MDD+Cap6+MomGuard1.5%15m1h+NposScanner+CascadeSL98+PreCascade1.5pct98+AggRisk10_15+ATRClamp10_15+TO576+ScannerCascade+MassCloseGuard+ExitClassify+PatternRecovery+RegimeFix+DupGuard+CodeAuditFix+MFEMedianTP+OrphanPrevention+PosTrackFix+MedianFallback+EmgSlRace+NaPrevent+EmgSlUpdate+CcxtTypeAdopt+SoftDelete+ScannerVolCap+ExpDecayTP0.9975+OppSignalExit+CascadeEntryBasedFix+PreCascadeFix+OppWindowFix+TPDecaySafety+ScannerParity+VolAdaptOFF+TrailOFF) | **Updated**: 2026-03-31
 
 ---
 
@@ -146,27 +146,33 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 
 ---
 
-## 📊 현재 전략: Pattern 5m v1.67.0
+## 📊 현재 전략: Pattern 5m v1.69.1
 
 ### 핵심 파라미터
 
 | 파라미터 | 값 |
 |---------|-----|
 | Entry | 3-candle pattern match (12-type) |
-| TP/SL | **Per-pattern MFE Median TP** (TP 0.84-1.70%, SL 1.44-5.95%, MFE median from exc_stats, v1.67.0) |
+| TP/SL | **Per-pattern MFE Median TP** (TP 0.84-2.48%, SL 1.44-4.56%, MFE median from exc_stats, v1.67.0) |
 | Classification | Ground Truth (HAMMER/INV_HAMMER 우선순위 수정) |
-| Leverage | **Fixed 3x** (v1.42.0: Adaptive 비활성화 — M4+M2 redundancy -46.94, P3 CascadeSL이 MDD 방어 대체) |
+| Leverage | **Fixed 3x** |
 | Timeframe | 5m |
 | **Max Positions** | **9** (virtual slots, 1/N=11.1% sizing, **mixed-direction** in Hedge) |
-| **Position Mode** | **Hedge** (LONG/SHORT 독립 포지션, v1.30.0) |
+| **Position Mode** | **Hedge** (LONG/SHORT 독립 포지션) |
 | Pattern Source | **Dynamic** (results/dynamic_patterns.json, Neutral window ±1%) |
 | Discovery | **MAE/MFE + ATR-scaled** (TP=MFE percentile, SL=MAE percentile, ATR scanner v2.4) |
-| Scanner MAX_BARS | **288** (24h; v1.28.24: 500→288, 24h timeout study) |
+| Scanner MAX_BARS | **288** (24h) |
 | Quality Filter | **Edge>=18pp + WR>=60% + SL>=1.0% + MC<0.01 + min_trades>=25 + Holdout 7d** |
-| Patterns | **131** (59L + 72S), ATR scanner v2.4 + Neutral window + WF 3/3 PASS + Holdout validation (v1.53.0 rescan, 303d, ATR clamp [0.5,1.5]) |
-| **Direction Cap** | **6** (max same-direction positions, 6/9 = 67%, v1.65.0 — preemptive_param_crossval COMBO_B: OOS +410.7%) |
-| **Position Timeout** | **288 bars (24h)** — v1.48.0: 864→288 (timeout_sweep_study: OOS min +17.5%, scanner MAX_BARS 일치) |
-| Risk | Daily loss **13%** (v1.28.5), **aggregate risk cap** (counter **10%**/with **15%**, v1.65.0: 8→10% counter) |
+| Patterns | **111** (51L + 60S), ATR scanner v2.4 + Neutral window + WF 5/5 PASS (v1.68.0 rescan, 325d) |
+| **Direction Cap** | **6** (max same-direction positions) |
+| **Position Timeout** | **576 bars (48h)** — v1.69.1: 288→576 (timeout_cascade_study: TP decay replaces timeout, OOS +42.7%) |
+| **ATR Entry Clamp** | **[1.0, 1.5]** — v1.69.1: expand-only (no low-vol shrinkage, OOS +12.4%) |
+| **Vol Adaptation** | **OFF** — v1.69.1: mid-trade SL adjustment 비활성 (SL clustering 방지) |
+| **Trail Stop** | **OFF** — v1.69.0: N-pos에서 R:R 0.11로 역효과 |
+| **TP Decay** | **0.9975^bars** (HL 23.1h, bar 0부터, update 6bars) |
+| **Cascade SL** | **98% tighten** — entry-based with _sl_price_original (v1.69.1 fix: 하드코딩 10%→config 2%) |
+| **Preemptive Cascade** | **1.5% unrealized loss → 98% tighten** — v1.69.1: 2.0→1.5% (OOS +30.4%) |
+| Risk | Daily loss **13%**, **aggregate risk cap** (counter **10%**/with **15%**) |
 
 ### v1.67.0 검증 요약
 
@@ -374,7 +380,9 @@ params={'positionSide': 'SHORT'}  # Hedge mode (v1.30.0)
 
 | 버전 | 날짜 | 변경사항 |
 |------|------|---------|
-| **v1.68.0** | 03-28~29 | **Market-Close Cascade (MCC) + Harness + 5 code fixes** ← 현재. Cascade 3단계 시도 후 MCC로 전환: (1) Entry-based SL tightening: 100% SKIP. (2) Current-price-based: -27.81% 피해. (3) MCC: SL exit시 같은 방향 전체 시장가 청산 (SL 수정 대신). BT sim +3999% WF. Live 검증 대기 중. (1) Config: cascade_tighten_pct 95→98, preemptive_cascade_pct 3→2, preemptive_tighten_pct 95→98 (23-iter adversarial harness, STRONG GO 8.2/10, bootstrap CI [+83%,+121%]). (2) Fix A: `_sl_price_original` 진입 시 설정 — v1.67.1 fix 완성. (3) Fix B: Pre-emptive loss 계산에 ALL 포지션 포함 (0건→trigger 가능). (4) Fix C v2: OPP_SIGNAL 시간 윈도우 카운터 (window_bars=4, 20min) — no-reset 과도 발동 수정. (5) Fix F: TP decay 실패 시 old TP 유지. (6) Fix G: Recovery 포지션 _sl_price_original 설정. Scanner parity: timeout PnL + TP decay + vol_adapt. Strategy Harness 시스템 구축 (adversarial_evaluator_v2, loop_evaluator, STRATEGY_LOOP.md). 111pat (51L+60S). WF 5/5 PASS, OOS +660.5%. 1111 tests ALL PASSED |
+| **v1.69.1** | 03-31 | **Cascade entry-based fix + 17-study validation** ← 현재. (1) CRITICAL BUG FIX: cascade SL이 config tighten_pct(98%)를 무시하고 하드코딩 10% keep 사용 → entry-based + _sl_price_original로 복원 (BT R:R 4.84 vs Live 0.66 근본 원인). (2) Price validity: entry-based SL이 current price 넘어가면 current±$30 fallback. (3) Trail OFF: N-pos R:R 0.11로 역효과. (4) vol_adapt OFF: SL clustering 방지 (03-29 6건 동시 SL -27.82%). (5) ATR clamp [0.5,1.5]→[1.0,1.5]: expand-only. (6) Preemptive 2.0→1.5%: OOS +30.4%. (7) Timeout 288→576: decay가 대체. 17개 연구 + adversarial 검증: holdout +56.9%, bootstrap 0/1000 음수, 파라미터 ±10% 최악 +451%. WF 5/5 PASS, OOS +716%. MTM MDD 1.95-2.28%. 1117 tests ALL PASSED |
+| v1.69.0 | 03-31 | Trail OFF + Cascade/Preemptive re-enable + Vol_adapt OFF. 7-study validated. Cascade OFF→ON: OOS -91%→+440%. |
+| v1.68.0 | 03-28~29 | Market-Close Cascade (MCC) + Harness + 5 code fixes. Cascade 3단계 시도 후 MCC로 전환: (1) Entry-based SL tightening: 100% SKIP. (2) Current-price-based: -27.81% 피해. (3) MCC: SL exit시 같은 방향 전체 시장가 청산 (SL 수정 대신). BT sim +3999% WF. Live 검증 대기 중. (1) Config: cascade_tighten_pct 95→98, preemptive_cascade_pct 3→2, preemptive_tighten_pct 95→98 (23-iter adversarial harness, STRONG GO 8.2/10, bootstrap CI [+83%,+121%]). (2) Fix A: `_sl_price_original` 진입 시 설정 — v1.67.1 fix 완성. (3) Fix B: Pre-emptive loss 계산에 ALL 포지션 포함 (0건→trigger 가능). (4) Fix C v2: OPP_SIGNAL 시간 윈도우 카운터 (window_bars=4, 20min) — no-reset 과도 발동 수정. (5) Fix F: TP decay 실패 시 old TP 유지. (6) Fix G: Recovery 포지션 _sl_price_original 설정. Scanner parity: timeout PnL + TP decay + vol_adapt. Strategy Harness 시스템 구축 (adversarial_evaluator_v2, loop_evaluator, STRATEGY_LOOP.md). 111pat (51L+60S). WF 5/5 PASS, OOS +660.5%. 1111 tests ALL PASSED |
 | v1.67.1 | 03-25 | **Cascade SL original distance fix**. Reactive/pre-emptive cascade가 `original_sl_distance`를 vol_adapt 이후 SL에서 계산하여 cascade SL이 entry 근처에 배치 → 가격 유효성 검증 SKIP → cascade 무력화 버그 수정. `_sl_price_original` (진입 시 원래 SL) 우선 사용. 시뮬레이션 차이 +0.3% (무), 라이브에서 cascade SKIP 비율 감소 기대. sim_production_parity_study + realistic_sim_study + cascade_tighten_sweep + overfit_check: 과적합 아님(FP=0, IS-OOS gap 동일). 1111 tests ALL PASSED |
 | v1.67.0 | 03-24 | **MFE Median TP + OPP_SIGNAL Exit**. (1) `tp_mode: mfe_median`: 각 패턴의 MFE 중앙값을 TP로 직접 사용 — 자유파라미터 0개, 과적합 위험 최저(score 30.6). IS P/M 149.3x, OOS5 +385%. 패턴별 적응적 scale 0.37~1.44 (uniform ×0.72 대체). tp_calibration_study 12전략 비교 + overfit_diag 정량 평가. (2) OPP_SIGNAL Exit (v1.66.0): 2회 연속 반대 신호 + 수익>0.1% → 시장가 청산. opp_partial_close_study: 100% 전량청산이 50%/75%/25% 부분청산 대비 OOS 우위 (+18~27%). 1111 tests ALL PASSED |
 | v1.65.0 | 03-15 | **Pre-emptive Cascade SL + 파라미터 재최적화**. (1) `_apply_preemptive_cascade()`: 방향별 미실현 손실 > 4% 시 SL 선제 95% 축소 — SL 피격 전 클러스터 방어 (sl_cluster_defense: IS P/M 127.3x, R:R 1.29, WF OOS +410.7% vs baseline +308.4%). (2) DirCap 7→6 (동시 방향 노출 감소). (3) AggRisk counter 999→10%, with 999→15% 재활성화. (4) 13개 심층 연구 기반 시스템 본질 재정의: "BTC 5m 변동성 수확기" (랜덤 진입 86% 성과, 방향 반전 100% 수익). `claudedocs/system_deep_analysis_20260315.md` 참조. 1111 tests ALL PASSED |

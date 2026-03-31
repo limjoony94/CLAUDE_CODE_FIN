@@ -31,9 +31,9 @@ risk:
   cascade_sl_tightening:   # v1.69.0: RE-ENABLED — Trail OFF removes MCC conflict. _sl_price_original bug fixed v1.67.1.
     enabled: true            # 4-study validation: Cascade 98% IS +547%, OOS +440% vs OFF IS -85%. WF 5/5 PASS.
     tighten_pct: 98
-  preemptive_cascade:      # v1.69.1: threshold 2.0→1.5% (cascade_param_sweep: OOS +470 vs +440, MDD 1.43%)
+  preemptive_cascade:      # v1.69.1: REALISTIC cascade BT — PRE_1.0 optimal (OOS +180.7% vs 1.5%=+169.6%)
     enabled: true
-    unrealized_loss_pct: 1.5   # v1.69.1: 2.0→1.5% (earlier trigger, OOS +30.4%, IS-OOS gap 19% OK)
+    unrealized_loss_pct: 1.0   # v1.69.1: 1.5→1.0% (realistic_cascade_bt: earlier trigger reduces cascade market-fill gap)
     tighten_pct: 98
   momentum_guard:          # v1.36.2→v1.46.0: Pause counter-dir entries during strong moves
     enabled: true

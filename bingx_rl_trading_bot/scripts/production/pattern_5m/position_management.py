@@ -250,15 +250,17 @@ def _apply_preemptive_cascade(
             if direction == 'SHORT' and new_sl >= old_sl:
                 continue
 
-            # Validate against current price
+            # Validate against current price — fallback to current ± min_dist
             if direction == 'LONG' and new_sl >= current_price:
-                logger.warning(
-                    f"  PRE-CASCADE slot {sid}: SKIP — SL ${new_sl:.1f} >= current ${current_price:.1f}")
-                continue
+                new_sl = round(current_price - 30.0, 1)
+                new_dist = abs(entry - new_sl)
+                if new_sl <= old_sl:
+                    continue
             if direction == 'SHORT' and new_sl <= current_price:
-                logger.warning(
-                    f"  PRE-CASCADE slot {sid}: SKIP — SL ${new_sl:.1f} <= current ${current_price:.1f}")
-                continue
+                new_sl = round(current_price + 30.0, 1)
+                new_dist = abs(entry - new_sl)
+                if new_sl >= old_sl:
+                    continue
 
             logger.info(
                 f"  PRE-CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "

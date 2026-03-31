@@ -816,6 +816,16 @@ def _cascade_tighten_sls(
         if direction == 'SHORT' and new_sl >= old_sl:
             continue
 
+        # v1.69.1: Price validity check — SL must be on the correct side of current price
+        # If entry-based SL is already past current price, use current_price + min_dist instead
+        if current_price > 0:
+            if direction == 'LONG' and new_sl >= current_price:
+                new_sl = round(current_price - 30.0, 1)
+                new_dist = abs(entry - new_sl)
+            elif direction == 'SHORT' and new_sl <= current_price:
+                new_sl = round(current_price + 30.0, 1)
+                new_dist = abs(entry - new_sl)
+
         old_dist = abs(entry - old_sl)
         logger.info(
             f"  CASCADE slot {sid}: SL ${old_sl:.1f} → ${new_sl:.1f} "

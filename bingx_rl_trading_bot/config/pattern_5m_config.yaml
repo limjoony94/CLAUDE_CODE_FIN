@@ -87,10 +87,10 @@ strategy:
     enabled: false
     activation_pct: 0.5
     trail_pct: 0.2
-  tp_decay:                        # v1.63.0→v1.69.0: RE-ENABLED — TP decay is the correct profit-taking mechanism
-    enabled: true
-    decay_rate: 0.9975             # v1.63.1: 0.997→0.9975 (decay_rate_optimization: OOS +339.5% vs +332.5%, HL 23.1h)
-    update_interval_bars: 6        # Update exchange TP order every 6 bars (30min)
+  tp_decay:                        # v1.69.1: DISABLED — decay pulls TP to cascade-loss level (R:R 1.05→1.98 without)
+    enabled: false                 # tp_rr_fix_study: NO_DECAY OOS +192% vs baseline +181%, R:R 1.98 vs 1.64
+    decay_rate: 0.9975
+    update_interval_bars: 6
   vol_adaptation:                  # v1.69.0: DISABLED — clusters SLs in low vol (03-29: 6 SL同시 -27.82%)
     enabled: false                 # live_sl_divergence + cascade_va_validation: VA net negative (cascade ON: +660 vs +555 with VA)
     clamp_lo: 0.5

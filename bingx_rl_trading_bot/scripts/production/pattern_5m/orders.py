@@ -139,9 +139,10 @@ def _place_scale_out_orders(
 
             tp_order = exchange.create_order(
                 symbol=symbol,
-                type='TAKE_PROFIT_MARKET',
+                type='TAKE_PROFIT',  # v1.70.1: LIMIT execution → maker fee (0.02% vs 0.05%)
                 side=close_side,
                 amount=stage_qty,
+                price=stage_tp_price,  # limit execution price
                 params=order_params
             )
             stage['order_id'] = tp_order.get('id')
@@ -164,21 +165,54 @@ def _place_single_tp_order(
     tp_price: float,
     position_side: str = 'BOTH',
 ) -> None:
-    """Place a single TP order."""
+    """Place a single TP order as LIMIT for maker fee (0.02% vs taker 0.05%).
+
+    v1.70.2: Regular LIMIT order sits in order book until price reaches TP.
+    When filled, charged maker fee (0.02%) since the order was already in the book.
+    This saves 0.03% per side × 3x leverage = 0.09% per TP trade.
+    Falls back to TAKE_PROFIT if LIMIT placement fails.
+    """
     try:
         tp_order = exchange.create_order(
             symbol=symbol,
-            type='TAKE_PROFIT_MARKET',
+            type='limit',  # v1.70.2: regular LIMIT → maker fee (sits in book)
             side=close_side,
             amount=quantity,
+            price=tp_price,
             params={
                 'positionSide': position_side,
-                'stopPrice': tp_price,
-                # Note: reduceOnly not supported in BingX Hedge mode (positionSide handles it)
             }
         )
         position['tp_order_id'] = tp_order.get('id')
-        logger.info(f"TP order placed: {tp_order.get('id')} @ ${tp_price} (qty: {quantity})")
+        logger.info(f"TP order placed (LIMIT/maker): {tp_order.get('id')} @ ${tp_price} (qty: {quantity})")
+    except ccxt.ExchangeError as e:
+        # Fallback to TAKE_PROFIT if LIMIT fails (e.g., price already past TP)
+        error_msg = str(e)
+        logger.warning(f"LIMIT TP failed ({error_msg[:80]}), falling back to TAKE_PROFIT")
+        try:
+            tp_order = exchange.create_order(
+                symbol=symbol,
+                type='TAKE_PROFIT',
+                side=close_side,
+                amount=quantity,
+                price=tp_price,
+                params={
+                    'positionSide': position_side,
+                    'stopPrice': tp_price,
+                }
+            )
+            position['tp_order_id'] = tp_order.get('id')
+            logger.info(f"TP order placed (TAKE_PROFIT fallback): {tp_order.get('id')} @ ${tp_price}")
+        except ccxt.ExchangeError as e2:
+            error_msg2 = str(e2)
+            if '110407' in error_msg2:
+                position['tp_order_id'] = _EXCHANGE_MANAGED
+                logger.info("TP order already exists on exchange — marking as managed")
+            elif '110413' in error_msg2 or '110414' in error_msg2:
+                position['tp_order_id'] = _EXCHANGE_MANAGED
+                logger.warning("TP price past current market — marking as managed")
+            else:
+                logger.error(f"TP fallback also failed: {e2}")
     except ccxt.InsufficientFunds as e:
         logger.warning(f"TP order failed (insufficient funds): {e}")
     except ccxt.ExchangeError as e:
@@ -682,16 +716,25 @@ def _verify_single_tp_order(
     if needs_tp:
         try:
             close_side = 'sell' if position['direction'] == 'LONG' else 'buy'
-            tp_order = exchange.create_order(
-                symbol=symbol,
-                type='TAKE_PROFIT_MARKET',
-                side=close_side,
-                amount=position.get('remaining_quantity', position['quantity']),
-                params={
-                    'positionSide': position_side,
-                    'stopPrice': position['tp_price'],
-                                    }
-            )
+            # v1.70.2: Try LIMIT first (maker fee), fallback to TAKE_PROFIT
+            try:
+                tp_order = exchange.create_order(
+                    symbol=symbol,
+                    type='limit',  # v1.70.2: LIMIT → maker fee (0.02%)
+                    side=close_side,
+                    amount=position.get('remaining_quantity', position['quantity']),
+                    price=position['tp_price'],
+                    params={'positionSide': position_side}
+                )
+            except ccxt.ExchangeError:
+                tp_order = exchange.create_order(
+                    symbol=symbol,
+                    type='TAKE_PROFIT',  # fallback
+                    side=close_side,
+                    amount=position.get('remaining_quantity', position['quantity']),
+                    price=position['tp_price'],
+                    params={'positionSide': position_side, 'stopPrice': position['tp_price']}
+                )
             position['tp_order_id'] = tp_order.get('id')
             logger.info(f"TP order {'placed' if not tp_order_id else 're-placed'}: {tp_order.get('id')}")
             state_changed = True
@@ -744,9 +787,10 @@ def _verify_scale_out_orders(
 
                 tp_order = exchange.create_order(
                     symbol=symbol,
-                    type='TAKE_PROFIT_MARKET',
+                    type='TAKE_PROFIT',  # v1.70.1: LIMIT execution → maker fee
                     side=close_side,
                     amount=stage['quantity'],
+                    price=stage['tp_price'],  # limit execution price
                     params=order_params
                 )
                 stage['order_id'] = tp_order.get('id')

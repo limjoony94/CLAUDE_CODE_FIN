@@ -298,7 +298,7 @@ class C1BreakoutBot:
         try:
             ohlcv = self.exchange.fetch_ohlcv(
                 self.config['exchange']['symbol'], '15m',
-                limit=self.config['bot'].get('candle_bars_fetch', 100))
+                limit=self.config['exchange'].get('candle_bars_fetch', 100))  # BUG#42: was config['bot'] — wrong section
             if not ohlcv or len(ohlcv) < 30: return None
             # Stale data guard: check if last completed bar timestamp is new
             last_ts = ohlcv[-2][0]  # n-2 = last completed bar

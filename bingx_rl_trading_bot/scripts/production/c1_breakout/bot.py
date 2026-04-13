@@ -440,11 +440,29 @@ class C1BreakoutBot:
                 self.positions[-1]['sl_order_id'] = sl_result.get('id', '')
             logger.info(f"SL @ ${sl_price:.1f}")
 
-            # 3. Trail TP as managed STOP_MARKET (backtest-identical math)
-            # No TRAILING_STOP_MARKET — instead compute exact trigger price
-            # and place a STOP_MARKET that bot updates every 15m cycle.
-            # Initial trail: not yet active (best_pnl ≈ 0), skip placement.
-            # Will be placed on first _update_exchange_trail call.
+            # 3. Trail TP — exchange native TRAILING_STOP_MARKET (backup)
+            # Bot's check_exit is primary (backtest math, 15m check).
+            # Exchange trail is backup when bot is down.
+            trail_K = self.config['strategy'].get('trail_K', 2.5)
+            ref_price = fill_price if fill_price > 0 else price
+            atr_pct = atr_val / ref_price * 100
+            callback = round(max(0.1, min(5.0, trail_K * atr_pct)), 1)
+            try:
+                tp_side = 'sell' if direction == 'LONG' else 'buy'
+                activate = round(ref_price * (1 + 0.001) if direction == 'LONG'
+                                 else ref_price * (1 - 0.001), 1)
+                self.exchange.create_order(
+                    symbol, 'TRAILING_STOP_MARKET', tp_side, filled_qty,
+                    params={'positionSide': 'BOTH',
+                            'activatePrice': activate,
+                            'priceRate': callback,
+                            'reduceOnly': True})
+                pos_obj = self.positions[-1] if self.positions else None
+                if pos_obj:
+                    pos_obj['last_callback'] = callback
+                logger.info(f"Trail TP: callback={callback}% activate=${activate:.1f}")
+            except Exception as e:
+                logger.warning(f"Trail TP on exchange failed (bot will manage): {e}")
 
             return True
         except Exception as e:
@@ -467,11 +485,8 @@ class C1BreakoutBot:
     def _calc_trail_trigger_price(self, pos, cur_atr):
         """Compute exact trail trigger price using backtest-identical math.
 
-        Backtest formula (LONG):
-          drawdown = (best - cur) / entry >= trail_K * ATR / cur
-          → (best - cur) * cur >= trail_K * ATR * entry
-          → cur² - best·cur + trail_K·ATR·entry = 0
-          → cur = (best - sqrt(best² - 4·trail_K·ATR·entry)) / 2
+        Not used for exchange orders (exchange uses native TRAILING_STOP_MARKET).
+        Kept for analysis/debugging. Bot's check_exit handles trail internally.
 
         Returns trigger price or None if trail not yet active.
         """
@@ -517,23 +532,32 @@ class C1BreakoutBot:
             return round(trigger, 1)
 
     def _update_exchange_trail(self, pos, cur_price, cur_atr):
-        """Update exchange trail STOP_MARKET using backtest-identical math.
+        """Update exchange TRAILING_STOP_MARKET callback rate with current ATR.
 
         Also verifies fractal SL STOP still exists — re-places if missing.
+        Bot's check_exit is the primary trail mechanism (backtest math).
+        Exchange TRAILING_STOP_MARKET is backup when bot is down.
         """
         try:
+            import math
+            if math.isnan(cur_atr) or cur_atr <= 0:
+                return
+
             symbol = self.config['exchange']['symbol']
+            trail_K = self.config['strategy'].get('trail_K', 2.5)
+            new_callback = round(max(0.1, min(5.0, trail_K * cur_atr / cur_price * 100)), 1)
+
             orders = self.exchange.fetch_open_orders(symbol)
 
-            # Verify SL STOP exists — re-place if missing
+            # ── Verify SL STOP exists — re-place if missing ──
             sl_order_id = pos.get('sl_order_id', '')
             sl_found = any(o.get('id', '') == sl_order_id for o in orders) if sl_order_id else False
             if not sl_found:
-                # Check if any STOP at SL price exists (orphan from restart)
                 sl_price = pos['sl_price']
                 sl_found = any(
                     abs(float(o.get('stopPrice') or o.get('info', {}).get('stopPrice') or 0) - sl_price) < 1.0
-                    for o in orders)
+                    for o in orders
+                    if 'TRAILING' not in ((o.get('info') or {}).get('type', '') or '').upper())
             if not sl_found:
                 live = self._get_live_positions()
                 if live and pos['direction'] in live:
@@ -546,47 +570,45 @@ class C1BreakoutBot:
                     pos['sl_order_id'] = sl_result.get('id', '')
                     logger.warning(f"SL STOP was missing — re-placed @ ${pos['sl_price']:.1f}")
 
-            # Trail trigger calculation
-            trigger = self._calc_trail_trigger_price(pos, cur_atr)
-            if trigger is None:
-                return  # Trail not yet active
+            # ── Update TRAILING_STOP_MARKET callback ──
+            old_callback = pos.get('last_callback', 0)
+            if abs(new_callback - old_callback) < 0.1:
+                return  # No meaningful change
 
-            # Skip if trigger unchanged
-            old_trigger = pos.get('last_trail_trigger', 0)
-            if abs(trigger - old_trigger) < 0.5:
-                return
-
-            # Cancel existing trail stop — must NOT cancel fractal SL
-            trail_order_id = pos.get('trail_order_id')
+            # Cancel existing trailing stop (TRAILING_STOP_MARKET or legacy STOP_MARKET trail)
             for order in orders:
                 oid = order.get('id', '')
                 if oid == pos.get('sl_order_id', ''):
                     continue  # Never cancel the fractal SL
                 o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
-                is_trail_order = (oid == trail_order_id) if trail_order_id else False
-                is_trailing_type = 'TRAILING' in o_type.upper()
+                is_trailing = 'TRAILING' in o_type.upper()
+                # Also cancel non-SL STOP_MARKET (legacy managed trail from v2.5 transition)
+                is_non_sl_stop = o_type.upper() == 'STOP_MARKET'
+                if is_trailing or is_non_sl_stop:
+                    try:
+                        self.exchange.cancel_order(oid, symbol)
+                    except Exception:
+                        pass
 
-                if is_trail_order or is_trailing_type:
-                    self.exchange.cancel_order(oid, symbol)
-
-            # Place new STOP_MARKET at calculated trigger price
+            # Place new TRAILING_STOP_MARKET with updated callback
             live = self._get_live_positions()
             if not live or pos['direction'] not in live:
                 return
 
             qty = live[pos['direction']]['contracts']
             tp_side = 'sell' if pos['direction'] == 'LONG' else 'buy'
+            activate = round(cur_price * (1 + 0.001) if pos['direction'] == 'LONG'
+                             else cur_price * (1 - 0.001), 1)
 
-            result = self.exchange.create_order(
-                symbol, 'STOP_MARKET', tp_side, qty,
+            self.exchange.create_order(
+                symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
                 params={'positionSide': 'BOTH',
-                        'stopPrice': trigger,
+                        'activatePrice': activate,
+                        'priceRate': new_callback,
                         'reduceOnly': True})
 
-            pos['trail_order_id'] = result.get('id', '')
-            pos['last_trail_trigger'] = trigger
-            trail_pct = abs(trigger - cur_price) / cur_price * 100
-            logger.info(f"Trail STOP @ ${trigger:.1f} ({trail_pct:.2f}% from cur, ATR=${cur_atr:.0f})")
+            pos['last_callback'] = new_callback
+            logger.info(f"Trail TP updated: callback={new_callback}% (ATR=${cur_atr:.0f})")
 
         except Exception as e:
             logger.warning(f"Trail update failed: {e}")

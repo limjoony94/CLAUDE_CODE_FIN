@@ -1,0 +1,32 @@
+# C1 Breakout v2 Configuration
+# 15m Channel Breakout + Fractal SL + ATR Trailing TP
+# Validated: PnL +381%, MDD 5.9%, WF 5/5, MC p=0.000
+
+strategy:
+  channel_period: 15
+  body_min_ratio: 0.4
+  atr_period: 14
+  trail_K: 2.5
+  max_sl_atr: 3.3
+  emergency_sl_pct: 3.0
+  max_hold_bars: 192    # 48 hours
+  sl_min_pct: 0.15
+  sl_max_pct: 3.0
+  min_bars_between: 2
+  trail_activation_pct: 0.05
+  max_positions: 1       # BTC 단일종목 = 1포지션
+  backstop_tp_atr: 0      # Disabled — trail has no cap, SL only on exchange
+
+risk: {}  # No halt brakes — all removed per 2026-04-13
+
+exchange:
+  symbol: BTC-USDT
+  timeframe: 15m
+  leverage: 10             # Exchange max leverage setting (BingX account)
+  trading_leverage: 3      # Actual position sizing leverage (qty = balance × 3 / price)
+  position_mode: One-Way   # positionSide=BOTH (One-Way mode)
+  candle_bars_fetch: 100
+
+bot:
+  poll_interval_seconds: 900  # 15 minutes
+  warmup_bars: 25

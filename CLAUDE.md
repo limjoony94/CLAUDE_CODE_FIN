@@ -1,7 +1,8 @@
-# CLAUDE_CODE_FIN - C1 Breakout v2.5 15m BTC 트레이딩 봇
+# CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.4.0 | **Bot**: C1 Breakout v2.5 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-13
+> **Version**: v4.5.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-14
 >
+> **v2.6**: 20 Cycle 비판 평가. BUG#35~42 (8건) 수정. Trail 90%→0.9% CRITICAL fix. SL ID sync. 봇 재시작 완료.
 > **v2.5**: 30 Cycle 비판 평가. SL-first 우선순위, Exchange trail=백테스트 수학 통일, lookback=10 통일
 > **v2.3**: 21 Cycle 비판 평가로 16건 버그 수정
 > **이전 봇**: MAVS-15 → 2026-04-12 WF 3/5 퇴화, C1에 의해 교체
@@ -34,7 +35,7 @@
 | 자산        | BTC/USDT (단일)                                         |
 | 포지션      | **N=1**, One-Way 모드 (positionSide=BOTH)               |
 | Exchange SL | STOP_MARKET @ fractal SL (crash protection)            |
-| Exchange TP | STOP_MARKET @ trail trigger price (백테스트 동일 수학, 15분 갱신) |
+| Exchange TP | TRAILING_STOP_MARKET @ ATR callback % (trailingPercent, 15분 갱신) |
 | **검증**    | MC p=0.000 DISC, WF 5/5 PASS, 3-Way ALL PASS            |
 | **리스크**  | Halt 없음 — SL/Trail/Emergency만 적용                    |
 

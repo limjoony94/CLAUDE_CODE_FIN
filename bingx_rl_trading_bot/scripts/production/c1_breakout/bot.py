@@ -12,6 +12,13 @@ v2.5 (2026-04-13): 30-Cycle critical review
   - Ghost trade lookup 24h window
   - Leverage verification on startup (abort if mismatch)
   - Halt brakes removed (per user)
+
+BUG#35 (2026-04-14): TRAILING_STOP_MARKET priceRate fix
+  - Root cause: 'priceRate' param bypasses CCXT ÷100 conversion
+    CCXT converts priceRate internally BUT extend(request,params) overwrites it
+    with original priceRate=0.9 → BingX interprets as 90% callback
+  - Fix: use 'trailingPercent' (in CCXT omit list, survives conversion)
+  - Impact: trigger was at best×0.1 (~$7,212) instead of best×0.991 (~$71,778)
 """
 
 import os
@@ -65,6 +72,9 @@ class C1BreakoutBot:
         self.positions = []
         self.trade_history = []
         self.bars_since_last_exit = 999  # BUG#16: min_bars_between enforcement
+        # BUG#35: Force trail re-placement on first cycle after restart
+        # Ensures any wrong priceRate (90%) orders are replaced with correct trailingPercent (0.9%)
+        self._force_trail_reset = True
 
         self._init_exchange()
         self._load_state()
@@ -455,7 +465,7 @@ class C1BreakoutBot:
                     symbol, 'TRAILING_STOP_MARKET', tp_side, filled_qty,
                     params={'positionSide': 'BOTH',
                             'activatePrice': activate,
-                            'priceRate': callback,
+                            'trailingPercent': callback,  # BUG#35: priceRate bypasses CCXT ÷100 conversion
                             'reduceOnly': True})
                 pos_obj = self.positions[-1] if self.positions else None
                 if pos_obj:
@@ -572,7 +582,12 @@ class C1BreakoutBot:
 
             # ── Update TRAILING_STOP_MARKET callback ──
             old_callback = pos.get('last_callback', 0)
-            if abs(new_callback - old_callback) < 0.1:
+            # BUG#35: On first cycle after restart, force re-placement to fix wrong priceRate orders
+            force_reset = getattr(self, '_force_trail_reset', False)
+            if force_reset:
+                self._force_trail_reset = False  # Only once per bot session
+                logger.info("Trail: forcing re-placement (BUG#35 priceRate fix)")
+            elif abs(new_callback - old_callback) < 0.1:
                 return  # No meaningful change
 
             # Cancel existing trailing stop (TRAILING_STOP_MARKET or legacy STOP_MARKET trail)
@@ -604,7 +619,7 @@ class C1BreakoutBot:
                 symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
                 params={'positionSide': 'BOTH',
                         'activatePrice': activate,
-                        'priceRate': new_callback,
+                        'trailingPercent': new_callback,  # BUG#35: use trailingPercent (CCXT omits it after ÷100)
                         'reduceOnly': True})
 
             pos['last_callback'] = new_callback

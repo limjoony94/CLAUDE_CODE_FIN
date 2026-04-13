@@ -563,11 +563,17 @@ class C1BreakoutBot:
             sl_order_id = pos.get('sl_order_id', '')
             sl_found = any(o.get('id', '') == sl_order_id for o in orders) if sl_order_id else False
             if not sl_found:
+                # BUG#36: Price-based fallback — must update sl_order_id to prevent accidental cancellation
                 sl_price = pos['sl_price']
-                sl_found = any(
-                    abs(float(o.get('stopPrice') or o.get('info', {}).get('stopPrice') or 0) - sl_price) < 1.0
-                    for o in orders
-                    if 'TRAILING' not in ((o.get('info') or {}).get('type', '') or '').upper())
+                for o in orders:
+                    if 'TRAILING' in ((o.get('info') or {}).get('type', '') or '').upper():
+                        continue
+                    sp = float(o.get('stopPrice') or o.get('info', {}).get('stopPrice') or 0)
+                    if abs(sp - sl_price) < 1.0:
+                        sl_found = True
+                        pos['sl_order_id'] = o.get('id', sl_order_id)  # Update ID to prevent cancel
+                        logger.info(f"SL found by price (ID mismatch) — updated sl_order_id")
+                        break
             if not sl_found:
                 live = self._get_live_positions()
                 if live and pos['direction'] in live:
@@ -657,7 +663,9 @@ class C1BreakoutBot:
         next_min = 15 - (now.minute % 15)
         if next_min == 15: next_min = 0
         wait = next_min * 60 - now.second + 5
-        if wait <= 5: wait += 900
+        # BUG#37: was `<= 5` — skipped valid bars when 0-5 sec past boundary
+        # Fix: only skip when already past the 5-sec buffer window (wait < 0)
+        if wait <= 0: wait += 900
         logger.info(f"Next: {(now+timedelta(seconds=wait)).strftime('%H:%M:%S')} UTC ({wait}s)")
         time.sleep(wait)
 
@@ -670,7 +678,7 @@ class C1BreakoutBot:
         while True:
             try:
                 self._wait_for_candle()
-                if self.positions: self._sync_exchange()
+                self._sync_exchange()  # BUG#38: unconditional — orphan detect works even when no local positions
                 candles = self.fetch_candles()
                 if candles: self.process_candles(candles)
                 logger.info(f"Cycle: pos={len(self.positions)}")

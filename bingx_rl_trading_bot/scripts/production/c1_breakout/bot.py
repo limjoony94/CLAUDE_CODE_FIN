@@ -433,9 +433,11 @@ class C1BreakoutBot:
 
             # 2. SL (STOP_MARKET) — use actual filled qty (BUG#28)
             sl_side = 'sell' if direction == 'LONG' else 'buy'
-            self.exchange.create_order(symbol, 'STOP_MARKET', sl_side, filled_qty,
+            sl_result = self.exchange.create_order(symbol, 'STOP_MARKET', sl_side, filled_qty,
                 params={'positionSide': 'BOTH', 'stopPrice': round(sl_price, 1),
                         'reduceOnly': True})
+            if self.positions:
+                self.positions[-1]['sl_order_id'] = sl_result.get('id', '')
             logger.info(f"SL @ ${sl_price:.1f}")
 
             # 3. Trail TP as managed STOP_MARKET (backtest-identical math)
@@ -533,20 +535,19 @@ class C1BreakoutBot:
 
             symbol = self.config['exchange']['symbol']
 
-            # Cancel existing trail stop (not the fractal SL)
+            # Cancel existing trail stop — must NOT cancel fractal SL
             orders = self.exchange.fetch_open_orders(symbol)
             trail_order_id = pos.get('trail_order_id')
+            sl_order_id = pos.get('sl_order_id', '')
             for order in orders:
                 oid = order.get('id', '')
-                # Cancel by saved ID, or by type detection
+                if oid == sl_order_id:
+                    continue  # Never cancel the fractal SL
                 o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
-                stop_price = float(order.get('stopPrice') or order.get('info', {}).get('stopPrice') or 0)
                 is_trail_order = (oid == trail_order_id) if trail_order_id else False
                 is_trailing_type = 'TRAILING' in o_type.upper()
-                # Also detect our managed trail STOP by comparing price to old trigger
-                is_managed_trail = (abs(stop_price - old_trigger) < 1.0) if old_trigger > 0 else False
 
-                if is_trail_order or is_trailing_type or is_managed_trail:
+                if is_trail_order or is_trailing_type:
                     self.exchange.cancel_order(oid, symbol)
 
             # Place new STOP_MARKET at calculated trigger price

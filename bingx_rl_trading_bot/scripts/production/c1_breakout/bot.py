@@ -519,11 +519,34 @@ class C1BreakoutBot:
     def _update_exchange_trail(self, pos, cur_price, cur_atr):
         """Update exchange trail STOP_MARKET using backtest-identical math.
 
-        Replaces TRAILING_STOP_MARKET with a managed STOP_MARKET at the
-        exact price where the backtest trail would trigger. Updated every
-        15m cycle as best_price and ATR change.
+        Also verifies fractal SL STOP still exists — re-places if missing.
         """
         try:
+            symbol = self.config['exchange']['symbol']
+            orders = self.exchange.fetch_open_orders(symbol)
+
+            # Verify SL STOP exists — re-place if missing
+            sl_order_id = pos.get('sl_order_id', '')
+            sl_found = any(o.get('id', '') == sl_order_id for o in orders) if sl_order_id else False
+            if not sl_found:
+                # Check if any STOP at SL price exists (orphan from restart)
+                sl_price = pos['sl_price']
+                sl_found = any(
+                    abs(float(o.get('stopPrice') or o.get('info', {}).get('stopPrice') or 0) - sl_price) < 1.0
+                    for o in orders)
+            if not sl_found:
+                live = self._get_live_positions()
+                if live and pos['direction'] in live:
+                    sl_side = 'sell' if pos['direction'] == 'LONG' else 'buy'
+                    sl_result = self.exchange.create_order(
+                        symbol, 'STOP_MARKET', sl_side, live[pos['direction']]['contracts'],
+                        params={'positionSide': 'BOTH',
+                                'stopPrice': round(pos['sl_price'], 1),
+                                'reduceOnly': True})
+                    pos['sl_order_id'] = sl_result.get('id', '')
+                    logger.warning(f"SL STOP was missing — re-placed @ ${pos['sl_price']:.1f}")
+
+            # Trail trigger calculation
             trigger = self._calc_trail_trigger_price(pos, cur_atr)
             if trigger is None:
                 return  # Trail not yet active
@@ -533,15 +556,11 @@ class C1BreakoutBot:
             if abs(trigger - old_trigger) < 0.5:
                 return
 
-            symbol = self.config['exchange']['symbol']
-
             # Cancel existing trail stop — must NOT cancel fractal SL
-            orders = self.exchange.fetch_open_orders(symbol)
             trail_order_id = pos.get('trail_order_id')
-            sl_order_id = pos.get('sl_order_id', '')
             for order in orders:
                 oid = order.get('id', '')
-                if oid == sl_order_id:
+                if oid == pos.get('sl_order_id', ''):
                     continue  # Never cancel the fractal SL
                 o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
                 is_trail_order = (oid == trail_order_id) if trail_order_id else False
@@ -581,11 +600,15 @@ class C1BreakoutBot:
                 self.exchange.create_order(symbol, 'market', side,
                     live[direction]['contracts'],
                     params={'positionSide': 'BOTH', 'reduceOnly': True})
-            # Cancel all remaining orders
+            # Cancel all remaining orders (individually, so one failure doesn't stop others)
             try:
                 for order in self.exchange.fetch_open_orders(symbol):
-                    self.exchange.cancel_order(order['id'], symbol)
-            except Exception: pass
+                    try:
+                        self.exchange.cancel_order(order['id'], symbol)
+                    except Exception:
+                        pass
+            except Exception:
+                pass
             logger.info(f"Closed {direction}")
         except Exception as e:
             logger.error(f"Close: {e}")

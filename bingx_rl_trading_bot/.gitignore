@@ -30,6 +30,11 @@ venv/
 ENV/
 env/
 
+# Bot Runtime State (never commit — causes state rollback on checkout)
+results/c1_breakout_state.json
+results/c1_breakout_state.json.tmp
+results/*_backup_*.json
+
 # Data & Models
 data/historical/*.csv
 data/historical/*.h5

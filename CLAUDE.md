@@ -1,6 +1,8 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.5.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-14
+> **Version**: v4.6.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-14
+>
+> **v4.6.0**: 49-Cycle 하네스 감사. 39건 수정. Pattern 5m 코드 완전 삭제. Lock 메커니즘 추가. 전략 변경 체크리스트 추가.
 >
 > **v2.6**: 20 Cycle 비판 평가. BUG#35~42 (8건) 수정. Trail 90%→0.9% CRITICAL fix. SL ID sync. 봇 재시작 완료.
 > **v2.5**: 30 Cycle 비판 평가. SL-first 우선순위, Exchange trail=백테스트 수학 통일, lookback=10 통일

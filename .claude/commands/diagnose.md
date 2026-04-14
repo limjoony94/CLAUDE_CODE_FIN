@@ -1,49 +1,39 @@
-Run comprehensive system diagnostic and anomaly detection.
+Run comprehensive C1 Breakout v2 system diagnostic and anomaly detection.
 
 ## Diagnostic Steps
 
 ### 1. Process Health
-```bash
-# Check bot process
-ps aux | grep pattern_5m_bot | grep -v grep
-
-# Check system resources
-cd bingx_rl_trading_bot && python scripts/utils/system_diagnostic.py
+```powershell
+Get-WmiObject Win32_Process -Filter "Name='python.exe' AND CommandLine LIKE '%c1_breakout%'" | Select-Object ProcessId, WorkingSetSize, CreationDate
 ```
 
 ### 2. State Integrity
-```bash
-cd bingx_rl_trading_bot && python scripts/utils/verify_state.py
-```
-- Compare state vs metrics for consistency (trades count, PnL)
-- Check for corruption markers (state < metrics = corruption)
-- Verify .bak and .new files don't exist (indicates previous write failure)
+- Read `bingx_rl_trading_bot/results/c1_breakout_state.json`
+- Verify JSON validity
+- Check for .tmp or .bak files (indicates previous write failure)
+- Verify positions array consistency
 
 ### 3. Exchange Connectivity
-- Check last successful API call timestamp in logs
-- Count API errors in last hour
-- Circuit breaker status (tripped count, current state)
+- Check last successful API call timestamp in log
+- Count ERROR lines in last hour
+- Verify SL/Trail exchange order IDs match state
 
 ### 4. Log Analysis
-- Parse last 100 log lines for ERROR/WARNING/CRITICAL
+- Parse last 100 lines from `bingx_rl_trading_bot/logs/c1_breakout.log`
+- Filter: ERROR, WARNING, CRITICAL, GHOST, ORPHAN
 - Check for recurring patterns (same error repeating)
-- Identify any unhandled exceptions
 
 ### 5. Performance Anomaly Detection
-Read metrics and flag:
-- WR deviation > 10pp from expected (68%)
-- PnL trajectory diverging from expected
+Flag:
+- WR deviation > 15pp from expected (36.6%)
 - Trade frequency anomaly (< 1 or > 8 trades/day)
-- Unexpected pattern distribution (one pattern dominating)
+- Consecutive losses > 15
+- Emergency SL triggers (should be 0)
 
 ### 6. File System Check
-- State file age (should be < 10 minutes if bot running)
-- Log file rotation (not too large)
-- Lock file status (should not exist if bot not running, should exist if running)
-- OneDrive sync issues (check for .tmp or locked files)
+- State file age (should be < 15 minutes if bot running)
+- Log file size and rotation
+- OneDrive sync issues (check for locked files)
 
 ## Output
-Produce a diagnostic report with:
-- Overall health: HEALTHY / DEGRADED / CRITICAL
-- Issues found (sorted by severity)
-- Recommended actions per issue
+Produce diagnostic report: HEALTHY / DEGRADED / CRITICAL with issues and actions.

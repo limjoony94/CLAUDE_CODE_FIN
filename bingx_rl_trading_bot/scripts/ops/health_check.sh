@@ -1,19 +1,19 @@
 #!/bin/bash
-# health_check.sh — API 연결 + 메트릭 요약
+# health_check.sh — C1 Breakout v2 API 연결 + 상태 요약
 set -euo pipefail
 
-BOT_DIR="/home/sp/.openclaw/workspace/CLAUDE_CODE_FIN/bingx_rl_trading_bot"
+BOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 
-echo "=== 🏥 Health Check ==="
+echo "=== C1 Breakout v2 Health Check ==="
 echo "Time: $(date '+%Y-%m-%d %H:%M:%S %Z')"
 echo ""
 
 # 1. Process check
 echo "--- Process ---"
-if tmux has-session -t pattern_5m 2>/dev/null; then
-    echo "✅ Bot process: RUNNING"
+if pgrep -f "c1_breakout_bot.py" > /dev/null 2>&1; then
+    echo "Bot: RUNNING (PID $(pgrep -f c1_breakout_bot.py))"
 else
-    echo "❌ Bot process: STOPPED"
+    echo "Bot: STOPPED"
 fi
 
 # 2. API connectivity
@@ -21,35 +21,30 @@ echo ""
 echo "--- API Connectivity ---"
 HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 "https://open-api.bingx.com/openApi/swap/v2/server/time" 2>/dev/null || echo "000")
 if [ "$HTTP_CODE" = "200" ]; then
-    echo "✅ BingX API: OK (HTTP $HTTP_CODE)"
+    echo "BingX API: OK (HTTP $HTTP_CODE)"
 else
-    echo "❌ BingX API: FAILED (HTTP $HTTP_CODE)"
+    echo "BingX API: FAILED (HTTP $HTTP_CODE)"
 fi
 
-# 3. Metrics summary
+# 3. State summary
 echo ""
-echo "--- Metrics ---"
-METRICS_FILE="$BOT_DIR/results/pattern_5m_metrics.json"
-if [ -f "$METRICS_FILE" ]; then
+echo "--- State ---"
+STATE_FILE="$BOT_DIR/results/c1_breakout_state.json"
+if [ -f "$STATE_FILE" ]; then
     python3 -c "
 import json
-with open('$METRICS_FILE') as f:
-    m = json.load(f)
-if isinstance(m, dict):
-    for k, v in list(m.items())[:10]:
-        print(f'  {k}: {v}')
-elif isinstance(m, list) and len(m) > 0:
-    last = m[-1] if isinstance(m[-1], dict) else {}
-    for k, v in list(last.items())[:10]:
-        print(f'  {k}: {v}')
-" 2>/dev/null || echo "  (could not parse metrics)"
+with open('$STATE_FILE') as f:
+    s = json.load(f)
+print(f'  Positions: {len(s.get(\"positions\",[]))}')
+print(f'  Trades: {len(s.get(\"trade_history\",[]))}')
+print(f'  Updated: {s.get(\"updated\",\"?\")}')
+" 2>/dev/null || echo "  (could not parse state)"
 else
-    echo "  No metrics file found"
+    echo "  No state file found"
 fi
 
 # 4. Disk usage
 echo ""
 echo "--- Disk ---"
-du -sh "$BOT_DIR/logs/" 2>/dev/null | awk '{print "  Logs: "$1}'
-du -sh "$BOT_DIR/results/" 2>/dev/null | awk '{print "  Results: "$1}'
-du -sh "$BOT_DIR/models/" 2>/dev/null | awk '{print "  Models: "$1}'
+du -sh "$BOT_DIR/logs/" 2>/dev/null | awk '{print "  Logs: "$1}' || true
+du -sh "$BOT_DIR/results/" 2>/dev/null | awk '{print "  Results: "$1}' || true

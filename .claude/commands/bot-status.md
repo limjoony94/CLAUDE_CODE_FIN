@@ -1,15 +1,19 @@
-Check the current pattern_5m trading bot status:
+Check the current C1 Breakout v2 trading bot status:
 
-1. Check if the bot process is running (look for pattern_5m_bot.py process)
-2. Read the latest state from `bingx_rl_trading_bot/results/pattern_5m_bot_state.json`
-3. Read the latest metrics from `bingx_rl_trading_bot/results/pattern_5m_metrics.json`
-4. Read the last 50 lines from the most recent log file in `bingx_rl_trading_bot/logs/`
-5. Summarize:
+1. Check if the bot process is running:
+   ```powershell
+   Get-WmiObject Win32_Process -Filter "Name='python.exe' AND CommandLine LIKE '%c1_breakout%'" | Select-Object ProcessId
+   ```
+2. Read state from `bingx_rl_trading_bot/results/c1_breakout_state.json`
+3. Read last 50 lines from `bingx_rl_trading_bot/logs/c1_breakout.log`
+4. Summarize:
    - Bot running status (process alive or not)
-   - Current position (if any): pattern, direction, entry price, unrealized PnL
+   - Current position (if any): direction, entry price, unrealized PnL
+   - SL/Trail order status (exchange orders placed?)
    - Today's stats: trades, wins, losses, daily PnL
-   - Overall stats: total trades, win rate, total PnL, max drawdown
-   - Recent trade history (last 5 trades)
+   - Overall stats: total trades, win rate, total PnL
+   - Recent trade history (last 5 trades from log)
    - Any warnings or errors in recent logs
-6. Compare actual performance against expected (EXPECTED_WIN_RATE=68%, EXPECTED_EDGE=0.27%)
-7. Flag any anomalies: consecutive losses >= 3, daily loss > 10%, WR < 60%
+5. Compare actual performance against expected:
+   - Expected WR: ~36.6%, R:R: ~3.36, daily: ~+1.5% (additive 3x), ~3.1 trades/day
+6. Flag anomalies: consecutive losses >= 15, daily loss > 5%, no trades in 12h

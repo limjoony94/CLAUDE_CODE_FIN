@@ -95,9 +95,9 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 | "봇 상태", "봇 확인", "살아있어?"       | `/bot-status`                                     | 프로세스+메트릭+로그 종합 |
 | "성과", "실적", "수익률", "얼마 벌었어" | `/check-live`                                     | 기대치 대비 성과 분석     |
 | "일일 보고", "오늘 어때", "daily"       | `/daily-report`                                   | 일일 성과 리포트 생성     |
-| "패턴 스캔", "재스캔", "새 패턴"        | `/scan-patterns`                                  | MAE/MFE 스캐너 실행       |
+| "패턴 스캔", "재스캔", "새 패턴"        | `/scan-patterns`                                  | C1은 고정 파라미터 (DEPRECATED) |
 | "연구", "가설", "백테스트", "분석해줘"  | `/research-template` + `trading-researcher` agent | 연구 프로토콜 강제        |
-| "테스트", "tests"                       | `/run-tests`                                      | pytest 1139+ 검증         |
+| "테스트", "tests"                       | `/run-tests`                                      | 모듈 import + 구문 검증   |
 | "WF 검증", "walk-forward", "OOS"        | `/wf-validate`                                    | Expanding window WF       |
 | "배포", "적용", "deploy"                | `/deploy-patterns`                                | 안전 배포 체크리스트      |
 | "문제", "에러", "왜 안돼", "이상해"     | `/diagnose` + `root-cause-analyst` agent          | 종합 진단                 |
@@ -122,7 +122,7 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 3. **연구 스크립트 작성 시** → `trading-researcher` agent 사용 + 연구 프로토콜 검증
 4. **git commit 후 production 파일 포함 시** → CLAUDE.md Version History 업데이트 제안
 5. **비정상 결과 감지 시** (PnL > 5000%, WF 전부 FAIL) → 자동 경고 + 원인 분석 제안
-6. **새 세션 시작 시** → Serena 메모리 확인 (`project_state_v1_28_42`)
+6. **새 세션 시작 시** → Serena 메모리 확인 (`ccxt_bingx_pitfalls`, `research_protocol_standard`)
 
 ### Serena MCP 자동 활용
 
@@ -203,9 +203,24 @@ bingx_rl_trading_bot/
 
 ## 🔗 문서 링크
 
-- [전략 설계서](claudedocs/strategy_15m_volspike_multi_design.md)
-- [최종 연구 보고서](claudedocs/strategy_15m_final_report.md)
+- [C1 설계서](claudedocs/c1_breakout_v2_design.md)
 - [연구 프로토콜](claudedocs/STANDARD_RESEARCH_PROTOCOL.md)
 
 > **레거시 문서**: `archive/legacy_bots/docs/`, `docs/` 디렉토리 참조
-> Pattern 5m 버전 히스토리: `docs/VERSION_HISTORY.md` (archive 참조)
+
+## ✅ 전략 변경 시 체크리스트
+
+전략 교체 또는 주요 파라미터 변경 시 아래 **모든 항목** 갱신 필수:
+
+1. [ ] `CLAUDE.md` — 빠른 참조 테이블, 검증 결과, Auto-Trigger, 에이전트 가이드
+2. [ ] `AGENTS.md` — 파일 경로, 금지 사항
+3. [ ] `.claude/hooks/session-init.sh` — 봇 이름, 경로, 키 메모리
+4. [ ] `.claude/hooks/guard-production.sh` — 감시 대상 경로
+5. [ ] `.claude/hooks/post-commit-remind.sh` — 커밋 감지 경로
+6. [ ] `.claude/commands/*.md` — 10개 커맨드 전부 (경로, 기대치, 프로세스명)
+7. [ ] `Makefile` — 타겟, 경로, 프로세스명
+8. [ ] `Serena project.yml` — initial_prompt
+9. [ ] `MEMORY.md` — Active Strategy, Project State
+10. [ ] `claudedocs/*_design.md` — 설계 문서 검증 수치, 파라미터
+11. [ ] `requirements/runtime.txt` — 실제 의존성
+12. [ ] 봇 코드 내 버전 문자열 (docstring + logger)

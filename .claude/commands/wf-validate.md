@@ -1,27 +1,27 @@
-Run Walk-Forward validation on the current or proposed strategy.
+Run Walk-Forward validation on the C1 Breakout v2 strategy.
 
 ## Standard WF Protocol
 - Method: Expanding Window (IS=[0..T], OOS=[T..T+1], T increases)
+- Formula: ie = int(n * (fi + 1) / (n_folds + 1))
 - NEVER use cross-validation / leave-one-out (produces false positives)
-- Folds: 3 (720d data, ~240d per fold)
-- Metrics per fold: OOS Trades, OOS WR, OOS PnL, OOS MDD
+- Folds: 5
+- PnL: Additive (no compound)
+- Fee: 0.10% RT
 
 ## Pass Criteria
-- All 3 folds must have positive OOS PnL
-- Average OOS WR > breakeven WR (= SL / (TP + SL))
-- No single fold OOS MDD > 50%
+- All 5 folds must have positive OOS PnL
+- No single fold OOS MDD > 15% (additive 1x)
 
-## Current Baseline (v1.28.42 MAE/MFE 59 patterns)
-| Fold | OOS Trades | OOS WR | OOS PnL | OOS MDD |
-|------|-----------|--------|---------|---------|
-| 1    | 156       | 69.2%  | +80.7%  | 36.9%   |
-| 2    | 131       | 72.5%  | +112.1% | 39.6%   |
-| 3    | 154       | 79.9%  | +127.7% | 37.0%   |
-Total OOS PnL: +320.5% | Avg OOS WR: 73.9%
+## Current Baseline (v2.5, 333 days, additive 1x)
+| Fold | OOS PnL |
+|------|---------|
+| 1-5  | Total +153.9% (ALL PASS) |
+
+Overall: PnL +169.5%, MDD 5.4%, WR 36.6%, R:R 3.36
 
 ## Usage
 1. Read the proposed strategy changes
-2. Run WF validation with the scanner or custom script
+2. Run WF validation script
 3. Compare against baseline
 4. Report: PASS/FAIL per fold + comparison table
 

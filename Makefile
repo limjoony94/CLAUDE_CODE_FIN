@@ -18,11 +18,11 @@ status:
 	@bash $(OPS_DIR)/status.sh
 
 test:
-	@echo "=== 🧪 Import Check ==="
-	@$(PYTHON) -c "import ccxt; import pandas; import numpy; import yaml; print('✅ All core imports OK')" 2>/dev/null \
-		|| python3 -c "import ccxt; import pandas; import numpy; import yaml; print('✅ All core imports OK')"
-	@echo "=== 🧪 Bot Module Check ==="
-	@$(PYTHON) -c "import sys; sys.path.insert(0,'$(BOT_DIR)'); from scripts.production.pattern_5m.bot import *; print('✅ Bot module loads OK')" 2>/dev/null || echo "⚠️  Bot module check skipped (venv not ready?)"
+	@echo "=== Import Check ==="
+	@$(PYTHON) -c "import ccxt; import numpy; import yaml; print('All core imports OK')" 2>/dev/null \
+		|| python3 -c "import ccxt; import numpy; import yaml; print('All core imports OK')"
+	@echo "=== Bot Module Check ==="
+	@$(PYTHON) -c "import sys; sys.path.insert(0,'$(BOT_DIR)'); from scripts.production.c1_breakout import bot, signals, indicators, config; print('C1 Breakout module loads OK')" 2>/dev/null || echo "Bot module check skipped (venv not ready?)"
 
 report:
 	@echo "=== 📊 Daily Report ==="

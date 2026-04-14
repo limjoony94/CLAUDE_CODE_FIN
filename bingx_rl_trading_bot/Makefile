@@ -1,118 +1,65 @@
-.PHONY: help start-pattern stop-pattern monitor clean test install backtest
+.PHONY: help start stop monitor status test clean backup-state restore-state
 
 # Default target
 help:
-	@echo "BingX RL Trading Bot - Available Commands"
+	@echo "C1 Breakout v2.6 — Available Commands"
 	@echo ""
 	@echo "Production:"
-	@echo "  make start-pattern    Start Pattern 5m bot (background)"
-	@echo "  make stop-pattern     Stop Pattern 5m bot"
+	@echo "  make start            Start C1 Breakout bot (Windows background)"
+	@echo "  make stop             Stop C1 Breakout bot"
 	@echo "  make monitor          Monitor bot logs (real-time)"
 	@echo "  make status           Check bot status"
 	@echo ""
 	@echo "Development:"
-	@echo "  make install          Install dependencies"
-	@echo "  make test             Run test suite"
-	@echo "  make backtest         Run v1.23.0 validation backtest"
+	@echo "  make test             Verify module imports"
 	@echo "  make clean            Clean temporary files"
 	@echo ""
-	@echo "Data:"
-	@echo "  make download-data    Download latest market data"
-	@echo "  make analyze-patterns Analyze pattern performance"
+	@echo "Safety:"
+	@echo "  make backup-state     Backup bot state"
+	@echo "  make restore-state    List available backups"
 	@echo ""
 
-# Production Commands
-start-pattern:
-	@echo "Starting Pattern 5m bot..."
-	@nohup python3 scripts/production/pattern_5m_bot.py > /dev/null 2>&1 &
+# Production Commands (Windows)
+start:
+	@echo "Starting C1 Breakout bot..."
+	powershell -Command "Start-Process -FilePath 'python' -ArgumentList 'scripts/production/c1_breakout_bot.py' -WindowStyle Hidden -WorkingDirectory '$(CURDIR)'"
 	@echo "Bot started. Use 'make monitor' to view logs."
 
-stop-pattern:
-	@echo "Stopping Pattern 5m bot..."
-	@pkill -f "pattern_5m_bot.py" || echo "No bot process found"
-	@rm -f results/pattern_5m_bot.lock
+stop:
+	@echo "Stopping C1 Breakout bot..."
+	powershell -Command "Get-WmiObject Win32_Process -Filter \"Name='python.exe' AND CommandLine LIKE '%%c1_breakout%%'\" | ForEach-Object { Stop-Process -Id $$_.ProcessId -Force }"
 	@echo "Bot stopped."
 
 monitor:
-	@echo "Monitoring Pattern 5m bot (Ctrl+C to exit)..."
-	@tail -f logs/pattern_5m_bot_$$(date +%Y%m%d).log
+	@echo "Monitoring C1 Breakout bot (Ctrl+C to exit)..."
+	@tail -f logs/c1_breakout.log
 
 status:
-	@echo "Checking bot status..."
-	@ps aux | grep "pattern_5m_bot.py" | grep -v grep || echo "Bot not running"
-	@if [ -f "results/pattern_5m_bot.lock" ]; then \
-		echo "Lock file present: results/pattern_5m_bot.lock"; \
-	fi
+	@echo "Checking C1 Breakout bot status..."
+	@powershell -Command "Get-WmiObject Win32_Process -Filter \"Name='python.exe' AND CommandLine LIKE '%%c1_breakout%%'\" | Select-Object ProcessId, CreationDate" || echo "Bot not running"
+	@echo ""
+	@echo "Latest state:"
+	@python -c "import json; d=json.load(open('results/c1_breakout_state.json')); print(f\"Positions: {len(d.get('positions',[]))}, Trades: {len(d.get('trade_history',[]))}, Updated: {d.get('updated','?')}\")" 2>/dev/null || echo "No state file"
 
-# Development Commands
-install:
-	@echo "Installing dependencies..."
-	@pip install -r requirements.txt
-	@echo "Installation complete."
-
+# Development
 test:
-	@echo "Running test suite..."
-	@pytest tests/ -v
-	@echo "Tests complete."
-
-test-coverage:
-	@echo "Running tests with coverage..."
-	@pytest --cov=scripts/production/pattern_5m --cov-report=html --cov-report=term tests/
-	@echo "Coverage report generated in htmlcov/"
-
-backtest:
-	@echo "Running v1.23.0 validation backtest..."
-	@python3 scripts/analysis/v1230_validation_backtest.py
-
-# Data Commands
-download-data:
-	@echo "Downloading latest market data..."
-	@python3 scripts/analysis/download_extended_data.py
-	@echo "Data download complete."
-
-analyze-patterns:
-	@echo "Analyzing pattern performance..."
-	@python3 scripts/analysis/pattern_correlation_analysis.py
+	@echo "Verifying C1 Breakout module imports..."
+	@python -c "from scripts.production.c1_breakout import bot, signals, indicators, config; print('All modules import OK')"
+	@python -c "from scripts.production.c1_breakout.config import load_config; c = load_config(); print(f'Config loaded: {len(c)} sections')"
 
 # Cleanup
 clean:
 	@echo "Cleaning temporary files..."
-	@rm -rf __pycache__
-	@rm -rf scripts/__pycache__
-	@rm -rf scripts/production/__pycache__
-	@rm -rf scripts/production/pattern_5m/__pycache__
-	@rm -rf .pytest_cache
-	@rm -rf htmlcov
-	@rm -rf .coverage
-	@rm -f results/*.lock
+	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	@rm -rf .pytest_cache htmlcov .coverage
 	@echo "Cleanup complete."
 
-# Research Commands
-discover-patterns:
-	@echo "Running pattern discovery..."
-	@python3 scripts/analysis/pattern_discovery_optimized.py
-
-validate-patterns:
-	@echo "Running pattern validation..."
-	@python3 scripts/analysis/production_pattern_validation.py
-
-# Utilities
-format:
-	@echo "Formatting code with black..."
-	@black scripts/ tests/
-	@echo "Code formatted."
-
-lint:
-	@echo "Linting code..."
-	@flake8 scripts/ tests/ --max-line-length=120
-	@echo "Linting complete."
-
-# Safety Commands
+# Safety
 backup-state:
-	@echo "Backing up bot state..."
-	@cp results/pattern_5m_bot_state.json results/pattern_5m_bot_state.json.backup_$$(date +%Y%m%d_%H%M%S)
+	@echo "Backing up C1 Breakout state..."
+	@cp results/c1_breakout_state.json "results/c1_breakout_state_backup_$$(date +%Y%m%d_%H%M%S).json"
 	@echo "State backed up."
 
 restore-state:
 	@echo "Available backups:"
-	@ls -1 results/pattern_5m_bot_state.json.backup_* 2>/dev/null || echo "No backups found"
+	@ls -1 results/c1_breakout_state_backup_* 2>/dev/null || echo "No backups found"

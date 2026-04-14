@@ -55,6 +55,18 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/bin/bash .claude/hooks/session-end-remind.sh",
+            "timeout": 5
+          }
+        ]
+      }
     ]
   },
   "outputStyle": "default",

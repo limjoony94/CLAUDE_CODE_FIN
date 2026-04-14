@@ -1,22 +1,22 @@
-Run the project test suite and report results.
+Run project tests if available.
 
+## Current Status
+C1 Breakout v2 does NOT have a dedicated test suite yet.
+The previous 1139+ tests were for Pattern 5m (now in archive/legacy_bots/).
+
+## What You Can Verify
+1. **Syntax check**: `cd bingx_rl_trading_bot && python -c "from scripts.production.c1_breakout import bot, signals, indicators, config; print('All modules import OK')"`
+2. **Config validity**: `cd bingx_rl_trading_bot && python -c "from scripts.production.c1_breakout.config import load_config; c = load_config(); print(f'Config loaded: {len(c)} sections')"`
+3. **Indicator sanity**: Run a quick backtest snippet to verify indicators produce expected output
+
+## If Tests Are Created
+Place in `bingx_rl_trading_bot/scripts/tests/` and run:
 ```bash
 cd bingx_rl_trading_bot && python -m pytest scripts/tests/ -v --tb=short 2>&1 | tail -80
 ```
 
-Expected: 1139+ tests all passing (v1.28.42 baseline)
-
-After running:
-1. Report total tests passed/failed/skipped
-2. If any failures: show the failing test names and error messages
-3. Compare against baseline (1139 tests expected)
-4. If new tests were added, note the count increase
-5. If tests were removed, flag for review
-
-For specific test files:
-- `test_patterns.py` — Pattern validation and stats
-- `test_pure_functions.py` — PnL calculation, pattern extraction, scale-out
-- `test_config.py` — Dynamic pattern loading, config validation
-- `test_indicators.py` — Candle classification accuracy
-
-Do NOT skip or disable any failing tests. Investigate root cause instead.
+## Priority Test Areas for C1 Breakout
+- `signals.py`: Channel breakout detection, body filter, direction logic
+- `indicators.py`: ATR calculation, channel high/low, fractal swing finding
+- `bot.py`: State management, position lifecycle, exchange order sync
+- `config.py`: Config loading, default values, validation

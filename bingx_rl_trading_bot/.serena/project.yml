@@ -65,11 +65,13 @@ excluded_tools: []
 # initial prompt for the project. It will always be given to the LLM upon activating the project
 # (contrary to the memories, which are loaded on demand).
 initial_prompt: |
-  BTC 5m Pattern Trading Bot (v1.28.42). 59 patterns (12L+47S), MAE/MFE TP/SL, ATR-scaled.
-  Key memories: project_state_v1_28_42, research_protocol_standard, common_pitfalls_and_lessons.
-  Bot is LIVE — never modify production files (scripts/production/pattern_5m/) without explicit approval.
-  Research scripts go in scripts/analysis/. Always use production classify_candle(), LEVERAGE=3, DROP timeouts.
-  Tests: pytest scripts/tests/ (1139+ expected). Config: config/pattern_5m_config.yaml.
+  C1 Breakout v2.6 (15m BTC Channel Breakout + Fractal SL + ATR Trailing TP).
+  Entry: scripts/production/c1_breakout_bot.py. Modules: scripts/production/c1_breakout/ (bot.py, signals.py, indicators.py, config.py).
+  Config: config/c1_breakout_config.yaml. State: results/c1_breakout_state.json. Log: logs/c1_breakout.log.
+  Key memories: ccxt_bingx_pitfalls, research_protocol_standard.
+  Bot is LIVE — never modify production files (scripts/production/c1_breakout/) without explicit approval.
+  Research scripts go in scripts/analysis/. CCXT trail: use trailingPercent only (NOT priceRate — BUG#35).
+  N=1, Exchange 10x / Trading 3x. WR ~36.6%, R:R ~3.36, MDD ~5.4% (additive 1x).
 # the name by which the project can be referenced within Serena
 project_name: "bingx_rl_trading_bot"
 
@@ -143,3 +145,17 @@ read_only_memory_patterns: []
 # Possible values: unset (use global setting), "lf", "crlf", or "native" (platform default)
 # This does not affect Serena's own files (e.g. memories and configuration files), which always use native line endings.
 line_ending:
+
+# list of regex patterns for memories to completely ignore.
+# Matching memories will not appear in list_memories or activate_project output
+# and cannot be accessed via read_memory or write_memory.
+# To access ignored memory files, use the read_file tool on the raw file path.
+# Extends the list from the global configuration, merging the two lists.
+# Example: ["_archive/.*", "_episodes/.*"]
+ignored_memory_patterns: []
+
+# advanced configuration option allowing to configure language server-specific options.
+# Maps the language key to the options.
+# Have a look at the docstring of the constructors of the LS implementations within solidlsp (e.g., for C# or PHP) to see which options are available.
+# No documentation on options means no options are available.
+ls_specific_settings: {}

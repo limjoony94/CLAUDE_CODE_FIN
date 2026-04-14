@@ -1,64 +1,47 @@
-Safely deploy new patterns to the live trading bot.
+Safely deploy changes to the live C1 Breakout v2 trading bot.
 
 ## CRITICAL: This modifies the live trading system. Always ask for user confirmation.
 
 ## Pre-Deployment Checklist
-1. [ ] New patterns file exists and is valid JSON
-2. [ ] WF validation passed (3/3 folds positive OOS PnL)
-3. [ ] MC test passed (3-seed, p < 0.01)
-4. [ ] All quality filters applied (E>=21.8pp, WR>=60%, SL>=1.0%, min_trades>=25)
-5. [ ] Test suite passes (1139+ tests)
-6. [ ] Current bot has no open position (check state)
+1. [ ] Code changes tested and reviewed
+2. [ ] WF validation passed (5/5 folds positive OOS PnL)
+3. [ ] MC test passed (>=999 sims, p < 0.01)
+4. [ ] Test suite passes
+5. [ ] Current bot has no open position (check state)
+6. [ ] Config changes match backtest parameters exactly
 
 ## Deployment Steps
 
-### 1. Backup Current Patterns
+### 1. Backup Current Config
 ```bash
 cd bingx_rl_trading_bot
-cp results/dynamic_patterns.json "results/dynamic_patterns_backup_$(date +%Y%m%d_%H%M%S).json"
+cp config/c1_breakout_config.yaml "config/c1_breakout_config_backup_$(date +%Y%m%d_%H%M%S).yaml"
 ```
 
-### 2. Validate New Patterns
-```bash
-# Check JSON validity
-python -c "import json; d=json.load(open('results/dynamic_patterns_NEW.json')); print(f'{len(d[\"patterns\"])} patterns loaded')"
+### 2. Stop Bot
+```powershell
+Get-WmiObject Win32_Process -Filter "Name='python.exe' AND CommandLine LIKE '%c1_breakout%'" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
 ```
 
-### 3. Stop Bot (if running)
-```bash
-python scripts/utils/stop_bot.py
-# Wait for confirmation of stop
-ps aux | grep pattern_5m_bot | grep -v grep
+### 3. Apply Changes (code or config)
+
+### 4. Restart Bot
+```powershell
+Start-Process -FilePath 'python' -ArgumentList 'scripts/production/c1_breakout_bot.py' -WindowStyle Hidden -WorkingDirectory 'C:\Users\J\OneDrive\CLAUDE_CODE_FIN\bingx_rl_trading_bot'
 ```
 
-### 4. Deploy
-```bash
-cp results/dynamic_patterns_NEW.json results/dynamic_patterns.json
-```
-
-### 5. Run Tests
-```bash
-python -m pytest scripts/tests/ -v --tb=short 2>&1 | tail -30
-```
-
-### 6. Restart Bot
-```bash
-# User must restart manually or via tmux
-```
-
-### 7. Post-Deploy Verification
-- Monitor first 5 trades after deployment
-- Verify correct patterns loaded (check bot startup log)
-- Verify TP/SL values match expected
+### 5. Post-Deploy Verification
+- Monitor first 3 trades after restart
+- Verify log shows correct config loaded
+- Check exchange SL/Trail orders placed correctly on first entry
 
 ## Rollback
 ```bash
-cp results/dynamic_patterns_backup_TIMESTAMP.json results/dynamic_patterns.json
+cp config/c1_breakout_config_backup_TIMESTAMP.yaml config/c1_breakout_config.yaml
 # Restart bot
 ```
 
 ## When NOT to Deploy
-- Market is in extreme volatility (ATR ratio > 2.0)
 - Open position exists
 - Test suite has failures
 - WF validation not completed

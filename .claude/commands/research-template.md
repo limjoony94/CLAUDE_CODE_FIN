@@ -6,32 +6,33 @@ The script MUST follow these mandatory rules:
 ```python
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
-from scripts.production.pattern_5m.indicators import classify_candle  # NEVER self-implement
-from scripts.production.pattern_5m.constants import PATTERN_DIRECTIONS
+from scripts.production.c1_breakout.indicators import calculate_atr, calculate_channel, find_fractal_swings
 
-LEVERAGE = 3  # MUST apply to PnL
-FEE_PCT = 0.10  # 0.05% x 2 sides
+FEE_PCT = 0.10  # 0.05% x 2 sides (RT)
 ```
 
-## Backtest Rules
-- Entry: signal bar's NEXT bar open (no look-ahead)
-- Exit: intrabar high/low distance-based resolution
-- Same-bar TP/SL: use `abs(tpp - opens[j])` (bar open), NOT `abs(tpp - entry)`
-- Sizing: compound (multiplicative returns)
-- Fees: `FEE_PCT * LEVERAGE` per side (BingX charges on notional)
-- Timeout trades: DROP (do not include in PnL)
-- MAX_BARS: 288 (24h)
+## C1 Breakout Backtest Rules
+- Timeframe: 15m (synthesized from 5m data)
+- Entry: signal bar[i] close > channel high AND body > 40% range → next bar open[i+1]
+- SL: Fractal swing point (lookback=10, max 3.3x ATR cap)
+- TP: Trailing — best_price drawdown >= trail_K x ATR / close x 100
+- Exit: Intrabar High/Low (distance-based same-bar resolution)
+- Fee: 0.10% RT (taker 0.05% x 2)
+- PnL: Additive (compound distortion prevention)
+- Timeout: 48h (192 bars at 15m)
+- min_bars_between: 2 bars after exit
 
 ## Validation Requirements
-- Monte Carlo: sign randomization, 10k sims, 3 seeds (42, 123, 7), max p-value < 0.01
-- Walk-Forward: Expanding window only (IS=[0..T], OOS=[T..T+1]), NEVER cross-validation
+- Monte Carlo: sign randomization (>=999 sims), p < 0.01
+- Walk-Forward: 5-fold expanding window, ie = int(n*(fi+1)/(n_folds+1))
+- Look-ahead: Progressive test mandatory (truncated vs full comparison)
+- 3-way split: train/val/test
 - min_trades >= 25 for statistical validity
 
 ## Forbidden Patterns
 - `df['col'].shift(-1)` — look-ahead bias
 - `df.rolling(n, center=True)` — centered window bias
-- Self-implemented `classify_candle()` — MUST use production version
-- Single seed MC tests — MUST use 3 seeds
+- Single seed MC tests — MUST use multiple seeds
 
 ## Output
 - Save results to `bingx_rl_trading_bot/results/` as JSON

@@ -56,20 +56,17 @@ def classify_candles(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     # Compute avg_body_20 for normalization
-    body_abs = (df['close'] - df['open']).abs()
-    avg_body_20 = body_abs.rolling(20).mean().fillna(1.0)  # default 1.0 for early bars
+    df['body_abs'] = (df['close'] - df['open']).abs()
+    df['avg_body_20'] = df['body_abs'].rolling(20).mean()
 
-    # Use production classify_candle for each row
-    df['candle_type'] = [
-        classify_candle(
-            df['open'].iloc[i],
-            df['high'].iloc[i],
-            df['low'].iloc[i],
-            df['close'].iloc[i],
-            avg_body_20.iloc[i]
-        )
-        for i in range(len(df))
-    ]
+    # Use production classify_candle (row, avg_body_20) — 2 args
+    types = []
+    for i, row in df.iterrows():
+        avg_b = df.at[i, 'avg_body_20']
+        if pd.isna(avg_b):
+            avg_b = 1.0
+        types.append(classify_candle(row, avg_b).value)
+    df['candle_type'] = types
 
     # Create pattern string (last 3 candles)
     df['pattern'] = df['candle_type'].shift(2) + '-' + df['candle_type'].shift(1) + '-' + df['candle_type']

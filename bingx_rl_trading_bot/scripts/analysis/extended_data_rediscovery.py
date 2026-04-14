@@ -37,6 +37,9 @@ import ccxt
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent.parent
+sys.path.insert(0, str(PROJECT_ROOT.parent))
+from scripts.production.pattern_5m.indicators import classify_candle as _prod_classify
+from scripts.production.pattern_5m.constants import AVG_BODY_WINDOW
 DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
 
@@ -100,52 +103,20 @@ def download_binance_data(days: int) -> pd.DataFrame:
     return df
 
 
-# ── Candle classification (Ground Truth) ─────────────────────
+# ── Candle classification — delegates to production canonical ─
 def classify_candles(df: pd.DataFrame) -> pd.DataFrame:
-    """Classify candles using Ground Truth v1.24.0 system."""
+    """Classify candles using production classify_candle (canonical source)."""
     print("  Classifying candles...")
     df = df.copy()
-    df['body'] = df['close'] - df['open']
-    df['body_abs'] = df['body'].abs()
-    df['avg_body_20'] = df['body_abs'].rolling(20, min_periods=1).mean()
+    df['body_abs'] = (df['close'] - df['open']).abs()
+    df['avg_body_20'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
 
     codes = []
-    for i in range(len(df)):
-        o, h, l, c = df['open'].iloc[i], df['high'].iloc[i], df['low'].iloc[i], df['close'].iloc[i]
-        rng = h - l
-        if rng == 0:
-            codes.append('D')
-            continue
-
-        body = c - o
-        body_abs = abs(body)
-        body_ratio = body_abs / rng
-        upper_wick = h - max(o, c)
-        lower_wick = min(o, c) - l
-        total_wick_ratio = (upper_wick + lower_wick) / rng
-        avg_b = df['avg_body_20'].iloc[i]
-        norm_body = body_abs / avg_b if avg_b > 0 else 1.0
-
-        # Priority order (Ground Truth v1.24.0)
-        if total_wick_ratio < 0.15:
-            codes.append('MU' if body > 0 else 'MD')
-        elif body_abs > 0 and lower_wick / body_abs > 2.0:
-            codes.append('H')
-        elif body_abs > 0 and upper_wick / body_abs > 2.0:
-            codes.append('IH')
-        elif body_ratio < 0.10:
-            if lower_wick / rng > 0.70:
-                codes.append('DF')
-            elif upper_wick / rng > 0.70:
-                codes.append('GS')
-            else:
-                codes.append('D')
-        elif norm_body < 0.5 and lower_wick >= 0.5 * body_abs and upper_wick >= 0.5 * body_abs:
-            codes.append('ST')
-        elif norm_body > 1.5:
-            codes.append('BU' if body > 0 else 'BD')
-        else:
-            codes.append('U' if body > 0 else 'DN')
+    for i, row in df.iterrows():
+        avg_b = df.at[i, 'avg_body_20']
+        if pd.isna(avg_b):
+            avg_b = 1.0
+        codes.append(_prod_classify(row, avg_b).value)
 
     df['type_code'] = codes
     df['pattern_3'] = (

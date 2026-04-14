@@ -34,6 +34,12 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+# Import production canonical classify_candle
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(_SCRIPT_DIR))
+sys.path.insert(0, os.path.dirname(_PROJECT_ROOT))
+from scripts.production.pattern_5m.indicators import classify_candle as _prod_classify
+
 # ============================================================
 # CONFIGURATION
 # ============================================================
@@ -101,56 +107,18 @@ def parse_args():
 # ============================================================
 
 def classify_candles(df: pd.DataFrame) -> pd.DataFrame:
-    """Vectorized 12-type candle classification (matches production logic)."""
+    """Classify candles using production canonical classify_candle."""
     df = df.copy()
-    df['body'] = df['close'] - df['open']
-    df['body_abs'] = df['body'].abs()
-    df['range'] = df['high'] - df['low']
-    df['upper_wick'] = df['high'] - df[['open', 'close']].max(axis=1)
-    df['lower_wick'] = df[['open', 'close']].min(axis=1) - df['low']
-    df['avg_body'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean().fillna(1.0)
-    df['norm_body'] = df['body_abs'] / df['avg_body'].replace(0, 1)
-    df['body_ratio'] = df['body_abs'] / df['range'].replace(0, 1)
-    df['upper_ratio'] = df['upper_wick'] / df['range'].replace(0, 1)
-    df['lower_ratio'] = df['lower_wick'] / df['range'].replace(0, 1)
-    df['wick_ratio'] = (df['upper_wick'] + df['lower_wick']) / df['range'].replace(0, 1)
+    df['body_abs'] = (df['close'] - df['open']).abs()
+    df['avg_body'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
 
-    is_bullish = df['body'] > 0
-    small_range = df['range'] < 1e-10
-
-    # Default: U or DN
-    df['candle_type'] = np.where(is_bullish, 'U', 'DN')
-
-    # Doji family
-    doji = df['body_ratio'] < DOJI_BODY_RATIO
-    df.loc[doji & (df['lower_ratio'] > WICK_DOMINANCE), 'candle_type'] = 'DF'
-    df.loc[doji & (df['upper_ratio'] > WICK_DOMINANCE) & (df['lower_ratio'] <= WICK_DOMINANCE), 'candle_type'] = 'GS'
-    df.loc[doji & (df['lower_ratio'] <= WICK_DOMINANCE) & (df['upper_ratio'] <= WICK_DOMINANCE), 'candle_type'] = 'D'
-
-    # Marubozu
-    maru = (~doji) & (df['wick_ratio'] < MARUBOZU_WICK_RATIO)
-    df.loc[maru & is_bullish, 'candle_type'] = 'MU'
-    df.loc[maru & ~is_bullish, 'candle_type'] = 'MD'
-
-    # Hammer / Inverted Hammer
-    hammer_base = (~doji) & (~maru) & (df['body_abs'] > 0)
-    h = hammer_base & (df['lower_wick'] > HAMMER_WICK_TO_BODY * df['body_abs']) & (df['upper_wick'] < HAMMER_OPPOSITE_WICK * df['body_abs'])
-    ih = hammer_base & (df['upper_wick'] > HAMMER_WICK_TO_BODY * df['body_abs']) & (df['lower_wick'] < HAMMER_OPPOSITE_WICK * df['body_abs'])
-    df.loc[h, 'candle_type'] = 'H'
-    df.loc[ih, 'candle_type'] = 'IH'
-
-    # Spinning Top
-    st = (~doji) & (~maru) & (~h) & (~ih) & (df['norm_body'] < SPINNING_TOP_NORM)
-    st = st & (df['upper_wick'] > SPINNING_TOP_WICK * df['body_abs']) & (df['lower_wick'] > SPINNING_TOP_WICK * df['body_abs'])
-    df.loc[st, 'candle_type'] = 'ST'
-
-    # Big candles
-    big = (~doji) & (~maru) & (~h) & (~ih) & (~st) & (df['norm_body'] > BIG_CANDLE_NORM)
-    df.loc[big & is_bullish, 'candle_type'] = 'BU'
-    df.loc[big & ~is_bullish, 'candle_type'] = 'BD'
-
-    # Zero-range → Doji
-    df.loc[small_range, 'candle_type'] = 'D'
+    types = []
+    for i, row in df.iterrows():
+        avg_b = df.at[i, 'avg_body']
+        if pd.isna(avg_b):
+            avg_b = 1.0
+        types.append(_prod_classify(row, avg_b).value)
+    df['candle_type'] = types
 
     # 3-candle pattern
     df['pattern'] = df['candle_type'].shift(2) + '-' + df['candle_type'].shift(1) + '-' + df['candle_type']

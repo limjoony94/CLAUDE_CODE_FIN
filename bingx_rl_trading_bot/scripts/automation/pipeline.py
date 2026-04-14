@@ -40,7 +40,21 @@ METRICS_FILE = RESULTS_DIR / "pattern_5m_metrics.json"
 PATTERNS_FILE = RESULTS_DIR / "dynamic_patterns.json"
 PIPELINE_STATE = RESULTS_DIR / "pipeline_state.json"
 ALERT_FILE = RESULTS_DIR / "pipeline_alerts.json"
+DEPLOY_MANIFEST = RESULTS_DIR / "deploy_manifest.json"
 BOT_SCRIPT = ROOT / "scripts" / "production" / "pattern_5m_bot.py"
+
+def _get_symbol_config():
+    """Get symbol/data paths from config (extensible to multi-asset)."""
+    cfg = _load_config()
+    symbol_raw = cfg.get("symbol", "BTC-USDT")  # e.g., "BTC-USDT"
+    # Convert to CCXT format
+    base = symbol_raw.split("-")[0]  # "BTC"
+    ccxt_symbol = "{}/USDT:USDT".format(base)
+    # Data file (convention: data/{base}_5m_*.csv)
+    data_files = sorted(DATA_DIR.glob("{}_5m_*.csv".format(base.lower())))
+    data_file = data_files[-1] if data_files else DATA_DIR / "btc_5m_270days_reclassified.csv"
+    return {"symbol_raw": symbol_raw, "ccxt_symbol": ccxt_symbol,
+            "base": base, "data_file": data_file}
 
 THRESHOLDS = {
     "wr_green": 58.0,
@@ -56,15 +70,83 @@ THRESHOLDS = {
     "alert_cooldown_hours": 12,
 }
 
-CONFIG_VERSION = "v1.71.0"  # Current config version tag
-CONFIG_EPOCH = "2026-04-03T17:40:00"  # When current config was deployed
+_config_cache = {}
 
-# Production scanner params (must match actual bot config for accurate WF)
-PRODUCTION_SCANNER_PARAMS = {
-    "n_slots": 7, "direction_cap": 7, "cascade_tighten_pct": 0,
-    "preemptive_cascade_pct": 999, "preemptive_tighten_pct": 0,
-    "tp_decay_rate": 0, "timeout_bars": 576,
-}
+def _load_config():
+    """Load production config with caching (single source of truth)."""
+    if not _config_cache:
+        import yaml
+        with open(CONFIG_FILE) as f:
+            _config_cache.update(yaml.safe_load(f))
+    return _config_cache
+
+def _get_production_params():
+    """Extract scanner-relevant params from production config."""
+    cfg = _load_config()
+    risk = cfg.get("risk", {})
+    strategy = cfg.get("strategy", {})
+    cascade = risk.get("cascade_sl_tightening", {})
+    pre = risk.get("preemptive_cascade", {})
+    return {
+        "n_slots": cfg.get("max_positions", 7),
+        "direction_cap": strategy.get("direction_cap", 7),
+        "cascade_tighten_pct": cascade.get("tighten_pct", 0) if cascade.get("enabled") else 0,
+        "preemptive_cascade_pct": pre.get("unrealized_loss_pct", 999) if pre.get("enabled") else 999,
+        "preemptive_tighten_pct": pre.get("tighten_pct", 0) if pre.get("enabled") else 0,
+        "tp_decay_rate": strategy.get("tp_decay", {}).get("decay_rate", 0) if strategy.get("tp_decay", {}).get("enabled") else 0,
+        "timeout_bars": strategy.get("timeout_bars", 576),
+    }
+
+def _get_config_version():
+    """Get version from deploy manifest (single source of truth)."""
+    if DEPLOY_MANIFEST.exists():
+        m = _safe_read_json(DEPLOY_MANIFEST, {})
+        return m.get("version", "unknown")
+    return "unknown"
+
+def _get_config_epoch():
+    """Get deploy timestamp from manifest."""
+    if DEPLOY_MANIFEST.exists():
+        m = _safe_read_json(DEPLOY_MANIFEST, {})
+        return m.get("deployed_at", "2026-04-03T17:40:00")
+    return "2026-04-03T17:40:00"
+
+def _update_manifest(version, description, patterns_info=None):
+    """Update deploy manifest on config/pattern change."""
+    manifest = _safe_read_json(DEPLOY_MANIFEST, {"history": []})
+    cfg = _load_config()
+
+    # Record history
+    history = manifest.get("history", [])
+    history.append({
+        "version": manifest.get("version", "unknown"),
+        "date": manifest.get("deployed_at", "")[:10],
+        "changes": manifest.get("description", ""),
+    })
+
+    manifest.update({
+        "version": version,
+        "deployed_at": datetime.now().isoformat(),
+        "description": description,
+        "config_snapshot": {
+            "max_positions": cfg.get("max_positions"),
+            "direction_cap": cfg.get("strategy", {}).get("direction_cap"),
+            "leverage": cfg.get("leverage"),
+            "timeout_bars": cfg.get("strategy", {}).get("timeout_bars"),
+            "cascade_sl_tightening_enabled": cfg.get("risk", {}).get("cascade_sl_tightening", {}).get("enabled"),
+            "preemptive_cascade_enabled": cfg.get("risk", {}).get("preemptive_cascade", {}).get("enabled"),
+            "tp_mode": cfg.get("strategy", {}).get("tp_mode"),
+        },
+        "history": history[-20:],  # Keep last 20
+    })
+
+    if patterns_info:
+        manifest["patterns"] = patterns_info
+
+    _safe_write_json(DEPLOY_MANIFEST, manifest)
+
+# Derived at runtime (no hardcoding)
+PRODUCTION_SCANNER_PARAMS = _get_production_params()
 
 # Logging with rotation
 from logging.handlers import RotatingFileHandler
@@ -122,8 +204,8 @@ def _safe_write_json(filepath, data, retries=3):
 def _load_pipeline_state():
     if PIPELINE_STATE.exists():
         return _safe_read_json(PIPELINE_STATE,
-                               default={"alerts_sent": {}, "last_rescan": None, "deployed_version": CONFIG_VERSION})
-    return {"alerts_sent": {}, "last_rescan": None, "deployed_version": CONFIG_VERSION}
+                               default={"alerts_sent": {}, "last_rescan": None, "deployed_version": _get_config_version()})
+    return {"alerts_sent": {}, "last_rescan": None, "deployed_version": _get_config_version()}
 
 
 def _save_pipeline_state(state):
@@ -180,13 +262,30 @@ def _find_bot_pid():
 
 
 def _restart_bot():
-    """Graceful bot restart."""
+    """Graceful bot restart: SIGINT first, force kill only as fallback."""
     pid = _find_bot_pid()
     if pid:
-        log.info("Stopping bot PID {}...".format(pid))
-        subprocess.run(["taskkill", "//PID", str(pid), "//F"],
-                       capture_output=True, timeout=10)
-        time.sleep(5)
+        # Step 1: Graceful stop (CTRL_BREAK → triggers bot's shutdown handler)
+        log.info("Stopping bot PID {} (graceful)...".format(pid))
+        try:
+            import signal
+            os.kill(pid, signal.CTRL_BREAK_EVENT)
+            # Wait up to 15s for graceful shutdown
+            for _ in range(15):
+                time.sleep(1)
+                if not _find_bot_pid():
+                    log.info("  Bot stopped gracefully")
+                    break
+            else:
+                # Step 2: Force kill if graceful failed
+                log.warning("  Graceful stop timeout — force killing")
+                subprocess.run(["taskkill", "//PID", str(pid), "//F"],
+                               capture_output=True, timeout=10)
+                time.sleep(3)
+        except (OSError, PermissionError):
+            subprocess.run(["taskkill", "//PID", str(pid), "//F"],
+                           capture_output=True, timeout=10)
+            time.sleep(5)
 
     log.info("Starting bot...")
     subprocess.Popen(
@@ -236,9 +335,41 @@ def _check_data_integrity(filepath):
 # ============================================================
 # MONITOR — Version-aware performance tracking
 # ============================================================
+def _collect_ops_metrics():
+    """Collect operational metrics regardless of trade count."""
+    ops = {}
+    if STATE_FILE.exists():
+        state = _safe_read_json(STATE_FILE, {})
+        positions = state.get("positions", {})
+        n_long = sum(1 for p in positions.values() if p.get("direction") == "LONG")
+        n_short = len(positions) - n_long
+        cfg = _load_config()
+        max_pos = cfg.get("max_positions", 7)
+        ops["positions"] = len(positions)
+        ops["max_positions"] = max_pos
+        ops["lockout"] = len(positions) >= max_pos
+        ops["direction_balance"] = "L:{} S:{}".format(n_long, n_short)
+        ops["imbalance_pct"] = round(abs(n_long - n_short) / max(len(positions), 1) * 100)
+
+    logs = sorted(LOG_DIR.glob("pattern_5m_bot_*.log"))
+    if logs:
+        try:
+            with open(logs[-1]) as f:
+                bot_lines = f.readlines()
+            recent_lines = [l for l in bot_lines if l >= _get_config_epoch()[:10]]
+            sigs = sum(1 for l in recent_lines if "Signal detected" in l)
+            entries = sum(1 for l in recent_lines if "Position opened" in l)
+            ops["signals"] = sigs
+            ops["entries"] = entries
+            ops["capture_rate"] = round(100 * entries / max(sigs, 1), 1)
+        except:
+            pass
+    return ops
+
+
 def cmd_monitor():
     log.info("=" * 60)
-    log.info("MONITOR: Performance check (config: {})".format(CONFIG_VERSION))
+    log.info("MONITOR: Performance check (config: {})".format(_get_config_version()))
 
     if not METRICS_FILE.exists():
         log.info("No metrics file")
@@ -250,14 +381,26 @@ def cmd_monitor():
     th = metrics.get("trade_history", [])
 
     # Filter to CURRENT CONFIG VERSION only
-    current = [t for t in th if str(t.get("close_time", "")) >= CONFIG_EPOCH]
+    current = [t for t in th if str(t.get("close_time", "")) >= _get_config_epoch()]
     # Exclude CRASH_RECOVERY
     current = [t for t in current if t.get("exit_reason") != "CRASH_RECOVERY"]
 
-    log.info("  Trades since {}: {}".format(CONFIG_VERSION, len(current)))
+    log.info("  Trades since {}: {}".format(_get_config_version(), len(current)))
+
+    # Always collect operational metrics (even with 0 trades)
+    ops = _collect_ops_metrics()
+    log.info("  Ops: {}".format(ops))
 
     if len(current) < 3:
         log.info("  Too few trades for evaluation")
+        result = {
+            "timestamp": datetime.now().isoformat(),
+            "config_version": _get_config_version(),
+            "trades": len(current), "tpsl": 0, "wr": 0, "rr": 0,
+            "pnl": 0, "status": "PENDING",
+            "max_consec_loss": 0, "operational": ops,
+        }
+        _safe_write_json(RESULTS_DIR / "pipeline_monitor.json", result)
         return
 
     # WR (TP+SL only, excluding cascade/timeout for clean signal)
@@ -284,7 +427,7 @@ def cmd_monitor():
         else:
             consec = 0
 
-    log.info("  {} config trades: {} total, {} TP+SL".format(CONFIG_VERSION, len(current), tpsl))
+    log.info("  {} config trades: {} total, {} TP+SL".format(_get_config_version(), len(current), tpsl))
     log.info("  WR: {:.1f}%, R:R: {:.3f}, PnL: {:+.2f}%".format(wr, rr, total_pnl))
     log.info("  Avg TP: {:+.2f}%, Avg SL: {:+.2f}%".format(avg_tp_pnl, avg_sl_pnl))
     log.info("  Max consecutive loss: {}".format(max_consec))
@@ -309,17 +452,22 @@ def cmd_monitor():
         _alert("WR {:.1f}% < {:.0f}% after {} trades — ROLLBACK RECOMMENDED".format(
             wr, THRESHOLDS["rollback_wr"], tpsl), "CRITICAL")
 
+    # Operational metrics (extracted to function above)
+    ops = _collect_ops_metrics()
+
+    log.info("  Ops: {}".format(ops))
+
     # Save
     result = {
         "timestamp": datetime.now().isoformat(),
-        "config_version": CONFIG_VERSION,
+        "config_version": _get_config_version(),
         "trades": len(current), "tpsl": tpsl,
         "wr": round(wr, 1), "rr": round(rr, 3),
         "pnl": round(total_pnl, 2), "status": status,
         "max_consec_loss": max_consec,
+        "operational": ops,
     }
-    with open(RESULTS_DIR / "pipeline_monitor.json", "w") as f:
-        json.dump(result, f, indent=2)
+    _safe_write_json(RESULTS_DIR / "pipeline_monitor.json", result)
 
 
 # ============================================================
@@ -386,10 +534,29 @@ def cmd_guard():
             "apiKey": keys.get("api_key", keys.get("bingx", {}).get("api_key", "")),
             "secret": keys.get("api_secret", keys.get("bingx", {}).get("api_secret", "")),
         })
-        ticker = exchange.fetch_ticker("BTC/USDT:USDT")
-        log.info("  Exchange OK: BTC ${:.0f}".format(ticker["last"]))
+        sym = _get_symbol_config()
+        ticker = exchange.fetch_ticker(sym["ccxt_symbol"])
+        log.info("  Exchange OK: {} ${:.0f}".format(sym["base"], ticker["last"]))
     except Exception as e:
         _alert("Exchange connectivity failed: {}".format(str(e)[:60]))
+
+    # 6. Bot log error trend
+    logs = sorted(LOG_DIR.glob("pattern_5m_bot_*.log"))
+    if logs:
+        try:
+            with open(logs[-1]) as f:
+                bot_lines = f.readlines()
+            errors_1h = sum(1 for l in bot_lines[-720:]  # ~1h of 5s lines
+                           if "ERROR" in l or "CRITICAL" in l)
+            if errors_1h > 10:
+                _alert("Bot log: {} errors in last hour".format(errors_1h))
+        except:
+            pass
+
+    # Always save pipeline state (ensures cooldown tracking works)
+    pstate = _load_pipeline_state()
+    pstate["last_guard"] = datetime.now().isoformat()
+    _save_pipeline_state(pstate)
 
     log.info("  GUARD: Complete")
 
@@ -414,7 +581,7 @@ def cmd_rescan():
     _extend_data()
 
     # 3. Data integrity check
-    data_file = DATA_DIR / "btc_5m_270days_reclassified.csv"
+    data_file = _get_symbol_config()["data_file"]
     issues = _check_data_integrity(str(data_file))
     if issues:
         log.warning("  Data issues: {}".format(issues))
@@ -465,7 +632,27 @@ def cmd_rescan():
     log.info("  STEP 5: Restarting bot...")
     _restart_bot()
 
-    # 8. Update pipeline state
+    # 8. Update manifest + pipeline state
+    try:
+        with open(scan_output) as f:
+            scan_data = json.load(f)
+        pat_details = scan_data.get("pattern_details", {})
+        n_long = sum(1 for v in pat_details.values() if v.get("direction") == "LONG")
+        n_short = len(pat_details) - n_long
+        import pandas as pd
+        data_file = _get_symbol_config()["data_file"]
+        data_days = len(pd.read_csv(data_file)) // 288
+        _update_manifest(
+            version="auto_{}".format(datetime.now().strftime("%Y%m%d")),
+            description="Auto rescan: {} patterns ({}L+{}S), {}d data".format(
+                len(pat_details), n_long, n_short, data_days),
+            patterns_info={"count": len(pat_details), "long": n_long,
+                          "short": n_short, "data_days": data_days,
+                          "scan_date": datetime.now().strftime("%Y-%m-%d")},
+        )
+    except Exception as e:
+        log.warning("  Manifest update failed: {}".format(e))
+
     pstate = _load_pipeline_state()
     pstate["last_rescan"] = datetime.now().isoformat()
     _save_pipeline_state(pstate)
@@ -474,13 +661,13 @@ def cmd_rescan():
 
 
 def _extend_data():
-    """Download and append latest BTC data."""
+    """Download and append latest data (symbol from config)."""
     try:
         import ccxt, yaml
         import pandas as pd
         import numpy as np
 
-        data_file = DATA_DIR / "btc_5m_270days_reclassified.csv"
+        data_file = _get_symbol_config()["data_file"]
         df = pd.read_csv(data_file, parse_dates=["timestamp"])
         last_ts = df["timestamp"].iloc[-1]
         gap = (datetime.now() - last_ts.to_pydatetime()).days
@@ -499,7 +686,7 @@ def _extend_data():
         since_ms = int(last_ts.timestamp() * 1000) + 300000
         bars = []
         while since_ms < int(datetime.now().timestamp() * 1000):
-            ohlcv = exchange.fetch_ohlcv("BTC/USDT:USDT", "5m", since=since_ms, limit=1440)
+            ohlcv = exchange.fetch_ohlcv(_get_symbol_config()["ccxt_symbol"], "5m", since=since_ms, limit=1440)
             if not ohlcv:
                 break
             bars.extend(ohlcv)
@@ -584,6 +771,32 @@ def cmd_rollback():
 
 
 # ============================================================
+# DEPLOY — Atomic config change + restart + record
+# ============================================================
+def cmd_deploy():
+    """Deploy a config change: record manifest + restart bot.
+    Usage: pipeline.py deploy "v1.72.0" "description of changes"
+    """
+    if len(sys.argv) < 4:
+        print("Usage: pipeline.py deploy <version> <description>")
+        return
+
+    version = sys.argv[2]
+    description = sys.argv[3]
+
+    log.info("DEPLOY: {} — {}".format(version, description))
+
+    # 1. Record manifest (reads current config.yaml)
+    _update_manifest(version, description)
+    log.info("  Manifest updated")
+
+    # 2. Restart bot to pick up any config changes
+    _restart_bot()
+
+    log.info("  DEPLOY COMPLETE: {}".format(version))
+
+
+# ============================================================
 # STATUS
 # ============================================================
 def cmd_status():
@@ -597,7 +810,7 @@ def cmd_status():
     print("\nBOT: {} (PID: {})".format("RUNNING" if pid else "STOPPED", pid or "N/A"))
 
     # Config
-    print("CONFIG: {}, deployed {}".format(CONFIG_VERSION, CONFIG_EPOCH[:10]))
+    print("CONFIG: {}, deployed {}".format(_get_config_version(), _get_config_epoch()[:10]))
 
     # Positions
     if STATE_FILE.exists():
@@ -644,7 +857,7 @@ def main():
 
     cmd = sys.argv[1].lower()
     cmds = {"monitor": cmd_monitor, "guard": cmd_guard, "rescan": cmd_rescan,
-            "rollback": cmd_rollback, "status": cmd_status}
+            "rollback": cmd_rollback, "deploy": cmd_deploy, "status": cmd_status}
 
     if cmd in cmds:
         cmds[cmd]()

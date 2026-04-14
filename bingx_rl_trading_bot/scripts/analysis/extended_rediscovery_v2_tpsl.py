@@ -31,6 +31,9 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = SCRIPT_DIR.parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 RESULTS_DIR = PROJECT_ROOT / "results"
+sys.path.insert(0, str(PROJECT_ROOT.parent))
+from scripts.production.pattern_5m.indicators import classify_candle as _prod_classify
+from scripts.production.pattern_5m.constants import AVG_BODY_WINDOW
 
 # ── Parameters ────────────────────────────────────────────────
 FEE_PCT = 0.10
@@ -61,47 +64,18 @@ ATR_MULTIPLIERS = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
 ATR_MAX_BARS = 100
 
 
-# ── Candle classification ─────────────────────────────────────
+# ── Candle classification — delegates to production canonical ─
 def classify_candles(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    o = df['open'].values
-    h = df['high'].values
-    l = df['low'].values
-    c = df['close'].values
-    body = c - o
-    body_abs = np.abs(body)
-    avg_body_20 = pd.Series(body_abs).rolling(20, min_periods=1).mean().values
-    rng = h - l
+    df['body_abs'] = (df['close'] - df['open']).abs()
+    df['avg_body_20'] = df['body_abs'].rolling(AVG_BODY_WINDOW).mean()
 
     codes = []
-    for i in range(len(df)):
-        r = rng[i]
-        if r == 0:
-            codes.append('D'); continue
-        ba = body_abs[i]
-        br = ba / r
-        uw = h[i] - max(o[i], c[i])
-        lw = min(o[i], c[i]) - l[i]
-        twr = (uw + lw) / r
-        ab = avg_body_20[i]
-        nb = ba / ab if ab > 0 else 1.0
-
-        if twr < 0.15:
-            codes.append('MU' if body[i] > 0 else 'MD')
-        elif ba > 0 and lw / ba > 2.0:
-            codes.append('H')
-        elif ba > 0 and uw / ba > 2.0:
-            codes.append('IH')
-        elif br < 0.10:
-            if lw / r > 0.70: codes.append('DF')
-            elif uw / r > 0.70: codes.append('GS')
-            else: codes.append('D')
-        elif nb < 0.5 and lw >= 0.5 * ba and uw >= 0.5 * ba:
-            codes.append('ST')
-        elif nb > 1.5:
-            codes.append('BU' if body[i] > 0 else 'BD')
-        else:
-            codes.append('U' if body[i] > 0 else 'DN')
+    for i, row in df.iterrows():
+        avg_b = df.at[i, 'avg_body_20']
+        if pd.isna(avg_b):
+            avg_b = 1.0
+        codes.append(_prod_classify(row, avg_b).value)
 
     df['type_code'] = codes
     df['pattern_3'] = (

@@ -1,5 +1,5 @@
 """
-C1 Breakout v2.5 — Bot Main Loop
+C1 Breakout v2.6 — Bot Main Loop
 ==================================
 BTC/USDT 15m, N=1, One-Way mode, crash-safe.
 Exchange leverage 10x, trading leverage 3x.
@@ -19,6 +19,35 @@ BUG#35 (2026-04-14): TRAILING_STOP_MARKET priceRate fix
     with original priceRate=0.9 → BingX interprets as 90% callback
   - Fix: use 'trailingPercent' (in CCXT omit list, survives conversion)
   - Impact: trigger was at best×0.1 (~$7,212) instead of best×0.991 (~$71,778)
+
+BUG#36 (2026-04-14): Ghost resolution timestamp filter
+  - Root cause: _resolve_ghost_exit searched all recent sells regardless of timing
+    LONG close → SHORT open (also 'sell') → bot crash → restart resolves ghost
+    using SHORT entry price as LONG exit price
+  - Fix: only match closing trades AFTER position entry_time
+
+BUG#37 (2026-04-14): Trail replacement direction (tighten-only)
+  - Root cause: trail replaced on ANY callback change, including when ATR rises
+    Cancel old TRAILING_STOP_MARKET (tracking best_price) + re-place at lower
+    activatePrice = cur_price×1.001 → BingX tracking resets → protection gap
+  - Fix: only replace when new_callback < old_callback (tighten only)
+    Forced reset on startup still replaces regardless
+
+BUG#38 (2026-04-14): Insufficient margin retry
+  - Root cause: single attempt at full size, no fallback on 101253 error
+    After large loss, balance may be marginally insufficient at 98% sizing
+  - Fix: retry with 95% then 90% sizing on Insufficient margin error
+
+BUG#43 (2026-04-14): _force_trail_reset when no position
+  - Root cause: flag always True at startup, persists when no position exists
+    New entry → first trail update forces cancel+re-place of just-placed trail
+    → 15 min protection gap where BingX tracking is reset
+  - Fix: clear flag after _load_state() if self.positions is empty
+
+BUG#44 (2026-04-14): Balance cache in retry loop
+  - Root cause: _calc_amount calls _get_balance() (API call) on every retry
+    3 API calls in rapid succession for same balance value
+  - Fix: cache balance once before retry loop in _exchange_open
 """
 
 import os
@@ -74,10 +103,17 @@ class C1BreakoutBot:
         self.bars_since_last_exit = 999  # BUG#16: min_bars_between enforcement
         # BUG#35: Force trail re-placement on first cycle after restart
         # Ensures any wrong priceRate (90%) orders are replaced with correct trailingPercent (0.9%)
+        # Only meaningful when a position already exists at startup
         self._force_trail_reset = True
 
         self._init_exchange()
         self._load_state()
+
+        # Clear force_trail_reset if no positions — avoids unnecessary trail
+        # re-placement on the first entry after restart (BUG#43 protection gap)
+        if not self.positions:
+            self._force_trail_reset = False
+
         self._sync_exchange()
 
     @property
@@ -150,8 +186,20 @@ class C1BreakoutBot:
         Path(self.state_path).parent.mkdir(parents=True, exist_ok=True)
         # BUG#25: Atomic write — write to temp, then rename (crash-safe)
         tmp_path = self.state_path + '.tmp'
+        # Enrich positions with monitoring-friendly trail estimate
+        positions_out = []
+        for pos in self.positions:
+            p = dict(pos)
+            cb = p.get('last_callback', 0)
+            bp = p.get('best_price', p.get('entry_price', 0))
+            if cb > 0 and bp > 0:
+                d = p.get('direction', 'LONG')
+                p['trail_estimate'] = round(
+                    bp * (1 - cb / 100) if d == 'LONG' else bp * (1 + cb / 100), 1)
+                p['trail_type'] = 'TRAILING_STOP_MARKET'
+            positions_out.append(p)
         data = {
-            'positions': self.positions,
+            'positions': positions_out,
             'trade_history': self.trade_history[-500:],
             'bars_since_last_exit': self.bars_since_last_exit,
             'updated': datetime.utcnow().isoformat(),
@@ -265,26 +313,43 @@ class C1BreakoutBot:
         entry_price = pos['entry_price']
         sl_price = pos['sl_price']
 
+        # BUG#36: parse entry_time to filter trades — avoids matching a subsequent
+        # open in the same direction (e.g. LONG close → SHORT open both use 'sell')
+        entry_ts_ms = 0
+        try:
+            entry_str = pos.get('entry_time', '')
+            if entry_str:
+                from datetime import timezone
+                dt = datetime.fromisoformat(entry_str.replace('Z', '+00:00'))
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                entry_ts_ms = int(dt.timestamp() * 1000)
+        except Exception:
+            pass
+
         # Try to find the closing trade from exchange history
         try:
             symbol = self.config['exchange']['symbol']
             # Fetch recent trades (last 24 hours — covers long bot downtime)
             since = int((time.time() - 86400) * 1000)
             trades = self.exchange.fetch_my_trades(symbol, since=since, limit=50)
-            # Find closing trade: opposite side of position
+            # Find closing trade: opposite side of position, AFTER position entry
             close_side = 'sell' if d == 'LONG' else 'buy'
             for t in reversed(trades):
-                if (t.get('side', '').lower() == close_side
-                        and float(t.get('amount', 0)) > 0):
-                    exit_price = float(t['price'])
-                    # Determine reason by comparing exit to SL
-                    if d == 'LONG':
-                        near_sl = abs(exit_price - sl_price) / entry_price < 0.003
-                    else:
-                        near_sl = abs(exit_price - sl_price) / entry_price < 0.003
-                    reason = 'EXCHANGE_SL' if near_sl else 'EXCHANGE_TRAIL'
-                    logger.info(f"Ghost resolved via trade history: exit=${exit_price:.2f}")
-                    return exit_price, reason
+                if t.get('side', '').lower() != close_side:
+                    continue
+                if float(t.get('amount', 0)) <= 0:
+                    continue
+                # BUG#36: skip trades at or before entry (could be prior position's close)
+                t_ts = int(t.get('timestamp') or t.get('info', {}).get('time') or 0)
+                if entry_ts_ms > 0 and t_ts <= entry_ts_ms:
+                    continue
+                exit_price = float(t['price'])
+                # Determine reason by comparing exit to SL
+                near_sl = abs(exit_price - sl_price) / entry_price < 0.003
+                reason = 'EXCHANGE_SL' if near_sl else 'EXCHANGE_TRAIL'
+                logger.info(f"Ghost resolved via trade history: exit=${exit_price:.2f}")
+                return exit_price, reason
         except Exception as e:
             logger.debug(f"fetch_my_trades failed: {e}")
 
@@ -405,7 +470,7 @@ class C1BreakoutBot:
         except Exception as e:
             logger.error(f"Balance: {e}"); return 0
 
-    def _calc_amount(self, price):
+    def _calc_amount(self, price, scale=1.0):
         usdt = self._get_balance()
         if usdt < 10:  # BUG#22: minimum $10 balance required
             logger.warning(f"Balance too low: ${usdt:.2f}")
@@ -414,22 +479,45 @@ class C1BreakoutBot:
         trading_lev = self.config['exchange'].get('trading_leverage',
                       self.config['exchange'].get('leverage', 1))
         # BUG#31: Use 98% of balance — leave 2% for fees + maintenance margin
-        qty = usdt * 0.98 * self.size_pct / 100.0 * trading_lev / price
+        # scale param allows retry with reduced sizing (BUG#38)
+        qty = usdt * 0.98 * scale * self.size_pct / 100.0 * trading_lev / price
         return round(qty, 4)
 
     def _exchange_open(self, direction, price, sl_price, atr_val):
         """MARKET entry + SL + Trailing Stop. Returns True/False."""
         symbol = self.config['exchange']['symbol']
         side = 'buy' if direction == 'LONG' else 'sell'
-        qty = self._calc_amount(price)
-        if qty <= 0: logger.error("No balance"); return False
         fill_price = price
         market_filled = False
+        qty = 0
 
         try:
-            # 1. MARKET entry
-            order = self.exchange.create_order(symbol, 'market', side, qty,
-                params={'positionSide': 'BOTH'})
+            # 1. MARKET entry (BUG#38: retry on insufficient margin with smaller size)
+            # BUG#44: cache balance once — avoid 3× API calls on retry
+            usdt = self._get_balance()
+            if usdt < 10:
+                logger.error(f"No balance (${usdt:.2f})"); return False
+            trading_lev = self.config['exchange'].get('trading_leverage',
+                          self.config['exchange'].get('leverage', 1))
+            order = None
+            for attempt, scale in enumerate((1.0, 0.95, 0.90), 1):
+                attempt_qty = round(usdt * 0.98 * scale * self.size_pct / 100.0
+                                    * trading_lev / price, 4)
+                if attempt_qty <= 0:
+                    break
+                try:
+                    order = self.exchange.create_order(symbol, 'market', side, attempt_qty,
+                        params={'positionSide': 'BOTH'})
+                    qty = attempt_qty
+                    break
+                except Exception as e_inner:
+                    if '101253' in str(e_inner) and attempt < 3:
+                        logger.warning(f"Insufficient margin (attempt {attempt}, "
+                                       f"${usdt:.1f}×{scale}) — retrying smaller")
+                        continue
+                    raise  # re-raise non-margin errors or final attempt
+            if order is None:
+                raise RuntimeError("All sizing attempts failed")
             market_filled = True
             # BUG#18: Get actual fill price and update entry_price
             fill_price = float(order.get('average') or order.get('price') or price)
@@ -593,8 +681,13 @@ class C1BreakoutBot:
             if force_reset:
                 self._force_trail_reset = False  # Only once per bot session
                 logger.info("Trail: forcing re-placement (BUG#35 priceRate fix)")
-            elif abs(new_callback - old_callback) < 0.1:
-                return  # No meaningful change
+            elif new_callback >= old_callback - 0.05:
+                # BUG#37: Only replace when trail TIGHTENS (new_callback < old_callback).
+                # Replacing on ATR increase (looser callback) cancels BingX's native best_price
+                # tracking and resets activatePrice to cur_price — creating a protection gap
+                # if cur_price < best_price at replacement time.
+                # Tolerance 0.05: allow fractional rounding noise (0.89→0.9 considered same).
+                return
 
             # Cancel existing trailing stop (TRAILING_STOP_MARKET or legacy STOP_MARKET trail)
             for order in orders:
@@ -629,7 +722,12 @@ class C1BreakoutBot:
                         'reduceOnly': True})
 
             pos['last_callback'] = new_callback
-            logger.info(f"Trail TP updated: callback={new_callback}% (ATR=${cur_atr:.0f})")
+            # Log estimated trigger price based on current best_price and new callback
+            bp = pos.get('best_price', cur_price)
+            est_trigger = round(bp * (1 - new_callback / 100) if pos['direction'] == 'LONG'
+                                else bp * (1 + new_callback / 100), 1)
+            logger.info(f"Trail TP updated: callback={new_callback}% (ATR=${cur_atr:.0f}) "
+                        f"est_trigger≈${est_trigger:.1f} (best=${bp:.1f})")
 
         except Exception as e:
             logger.warning(f"Trail update failed: {e}")
@@ -672,7 +770,7 @@ class C1BreakoutBot:
     def run(self):
         ex_lev = self.config['exchange'].get('leverage', 1)
         tr_lev = self.config['exchange'].get('trading_leverage', ex_lev)
-        logger.info(f"C1 Breakout v2.5 (N={self.max_positions}, exchange={ex_lev}x, trading={tr_lev}x)")
+        logger.info(f"C1 Breakout v2.6 (N={self.max_positions}, exchange={ex_lev}x, trading={tr_lev}x)")
         self._last_hourly = -1
 
         while True:
@@ -692,9 +790,20 @@ class C1BreakoutBot:
                     wins = sum(1 for t in trades_today if t['pnl_pct'] > 0)
                     total = len(trades_today)
                     wr = (wins / total * 100) if total else 0
-                    pos_info = ', '.join(
-                        f"{p['direction']} @{p['entry_price']:.0f} ({p['bars_held']}b)"
-                        for p in self.positions) or 'none'
+                    pos_parts = []
+                    for p in self.positions:
+                        cb = p.get('last_callback', 0)
+                        bp = p.get('best_price', p.get('entry_price', 0))
+                        if cb > 0 and bp > 0:
+                            d = p.get('direction', 'LONG')
+                            est = round(bp * (1 - cb/100) if d == 'LONG' else bp * (1 + cb/100), 0)
+                            pos_parts.append(
+                                f"{p['direction']} @{p['entry_price']:.0f} "
+                                f"best={bp:.0f} trail≈{est:.0f} ({p['bars_held']}b)")
+                        else:
+                            pos_parts.append(
+                                f"{p['direction']} @{p['entry_price']:.0f} ({p['bars_held']}b)")
+                    pos_info = ', '.join(pos_parts) or 'none'
                     logger.info(f"HOURLY | trades={total} WR={wr:.0f}% "
                                 f"pos=[{pos_info}]")
             except KeyboardInterrupt:

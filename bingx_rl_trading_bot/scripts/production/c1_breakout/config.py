@@ -49,5 +49,9 @@ def load_config(path: str = 'config/c1_breakout_config.yaml') -> dict:
         for section in config:
             if section in user_config and isinstance(user_config[section], dict):
                 config[section].update(user_config[section])
+    else:
+        import logging
+        logging.getLogger('c1_breakout').warning(
+            f"Config file not found: {path} — using defaults (leverage=1)")
 
     return config

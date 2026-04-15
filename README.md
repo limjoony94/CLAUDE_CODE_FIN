@@ -1,13 +1,13 @@
-# CLAUDE_CODE_FIN — BTC Pattern Trading Bot
+# CLAUDE_CODE_FIN — C1 Breakout v2.6 BTC Trading Bot
 
-BingX 거래소 BTC-USDT 선물 자동 매매 봇. 5분봉 캔들 패턴 기반 전략.
+BingX 거래소 BTC-USDT 15분봉 채널 돌파 전략 자동 매매 봇.
 
 ## 현재 운영
 
-- **전략**: Pattern 5m v1.23.0
-- **패턴**: 12개 (7 Long + 5 Short), 3-캔들 조합
-- **성과**: WR 80.3%, PF 3.36, WF 5/5 (270일 백테스트)
-- **안정성**: Atomic state save, Circuit breaker exponential backoff, Ghost position detection
+- **전략**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + ATR Trailing TP)
+- **성과**: PnL +169.5% (additive 1x, 333일), WR 36.6%, R:R 3.36
+- **검증**: MC p=0.000 DISC, WF 5/5 PASS, 3-Way ALL PASS
+- **포지션**: N=1, Exchange 10x / Trading 3x
 
 ## 빠른 시작
 
@@ -17,73 +17,51 @@ BingX 거래소 BTC-USDT 선물 자동 매매 봇. 5분봉 캔들 패턴 기반 
 
 ### 설치
 ```bash
-# 의존성 설치
 pip install -r requirements.txt
-
-# 또는 최소 요구사항만
-pip install ccxt pandas numpy pyyaml
-
-# 데이터 다운로드 (백테스트/분석 시 필요)
-python3 scripts/data/fetch_historical.py
-# → data/btc_5m_270days.csv 생성됨 (270일 5분봉, Binance public API)
 ```
 
-### 실행
-```bash
+### 실행 (Windows)
+```powershell
 # 봇 시작
-python3 scripts/production/pattern_5m_bot.py
+Start-Process -FilePath 'python' -ArgumentList 'scripts/production/c1_breakout_bot.py' -WindowStyle Hidden -WorkingDirectory 'bingx_rl_trading_bot'
 
-# tmux 백그라운드 실행
-tmux new-session -d -s pattern_5m "python3 scripts/production/pattern_5m_bot.py"
+# 상태 확인
+Get-WmiObject Win32_Process -Filter "Name='python.exe' AND CommandLine LIKE '%c1_breakout%'" | Select-Object ProcessId
 ```
 
 ### 모니터링
 ```bash
-# 상태 확인
-cat results/pattern_5m_bot_state.json | jq .
-cat results/pattern_5m_metrics.json | jq .
+# 상태
+cat results/c1_breakout_state.json | python -m json.tool
 
 # 로그
-tail -f logs/pattern_5m_bot_*.log
+tail -f logs/c1_breakout.log
 ```
 
 ## 프로젝트 구조
 
 ```
 bingx_rl_trading_bot/
-├── config/                    # 설정 (API 키, 전략 파라미터)
-├── scripts/
-│   ├── production/            # 운영 코드
-│   │   ├── pattern_5m_bot.py  #   엔트리포인트
-│   │   └── pattern_5m/        #   14개 모듈 패키지 + 124 테스트
-│   ├── analysis/              # 연구/백테스트 (24개)
-│   ├── data/                  # 데이터 수집/변환
-│   ├── monitor/               # 알림, 일일 리포트
-│   ├── ops/                   # 시작/중지/헬스체크
-│   ├── utils/                 # 운영 유틸리티 (12개)
-│   ├── validation/            # Walk-forward, 스트레스 테스트
-│   └── tests/                 # API 테스트
-├── data/                      # 시장 데이터 (CSV, gitignored)
-├── results/                   # 상태/메트릭 JSON
-└── logs/                      # 운영 로그
-
-scripts/data/fetch_historical.py   # 270일 데이터 다운로드 (루트)
-archive/                           # 레거시 코드 전체 보관
+├── scripts/production/
+│   ├── c1_breakout_bot.py        # 엔트리포인트 (lock, 로깅)
+│   └── c1_breakout/              # 봇 모듈
+│       ├── bot.py                # 메인 루프, exchange, state
+│       ├── signals.py            # 채널 돌파, 프랙탈 SL, 트레일 TP
+│       ├── indicators.py         # ATR, 채널, 프랙탈 스윙
+│       └── config.py             # 설정 로딩
+├── config/
+│   ├── c1_breakout_config.yaml   # 전략 파라미터 (유일한 설정 소스)
+│   └── api_keys.yaml             # BingX API 키 (gitignored)
+├── scripts/analysis/             # 연구/검증 스크립트
+├── scripts/ops/                  # 시작/중지/상태/헬스체크
+├── results/                      # 봇 상태, 검증 결과
+├── logs/                         # c1_breakout.log (일일 회전)
+├── claudedocs/                   # 설계 문서, 연구 보고서
+└── archive/                      # 레거시 봇 (Pattern 5m 등)
 ```
 
 ## 문서
 
-- [CLAUDE.md](CLAUDE.md) — 전략 상세, 버전 히스토리, 연구 프로토콜
-- [docs/analysis.md](docs/analysis.md) — 프로젝트 분석
-- [docs/restructure-plan.md](docs/restructure-plan.md) — OpenClaw 구조 개선안
-- [docs/agent-guides.md](docs/agent-guides.md) — 에이전트별 작업 가이드
-- [docs/TECH_STACK.md](docs/TECH_STACK.md) — 기술 스택
-- [docs/CODING_CONVENTIONS.md](docs/CODING_CONVENTIONS.md) — 코딩 컨벤션
-
-## OpenClaw 에이전트 연동
-
-| 에이전트 | 역할 | 채널 |
-|---------|------|------|
-| dev | 코드 수정, 연구, 백테스트 | #dev |
-| automation | 봇 실행/중지/재시작 | #automation |
-| monitor | 성과 모니터링, 알림 | #monitor |
+- [CLAUDE.md](CLAUDE.md) — 전략 상세, 검증 결과, 연구 프로토콜
+- [AGENTS.md](AGENTS.md) — 에이전트 규칙
+- [claudedocs/c1_breakout_v2_design.md](bingx_rl_trading_bot/claudedocs/c1_breakout_v2_design.md) — 설계 문서

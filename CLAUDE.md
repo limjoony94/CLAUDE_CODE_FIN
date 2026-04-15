@@ -1,6 +1,6 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.6.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-14
+> **Version**: v4.6.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-15
 >
 > **v4.6.0**: 49-Cycle 하네스 감사. 39건 수정. Pattern 5m 코드 완전 삭제. Lock 메커니즘 추가. 전략 변경 체크리스트 추가.
 >
@@ -146,7 +146,6 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 - **수정 대상**: `scripts/production/c1_breakout/`, `config/c1_breakout_config.yaml`
 - **프로토콜**: 아래 Standard Research Protocol 반드시 준수
 - **변경 후**: CLAUDE.md Version History 업데이트 + git commit
-- 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ### automation — 봇 운영 (Windows)
 
@@ -155,7 +154,6 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 - **로그**: `tail -50 logs/c1_breakout.log`
 - **중지**: `powershell -Command "Get-WmiObject Win32_Process -Filter \"Name='python.exe' AND CommandLine LIKE '%c1_breakout%'\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }"`
 - **복구**: 봇 재시작 시 state.json에서 포지션 복원 + orphan 자동 채택
-- 상세: [docs/agent-guides.md](docs/agent-guides.md)
 
 ### monitor — 성과 모니터링
 
@@ -163,8 +161,6 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 - **로그**: `tail -100 logs/c1_breakout.log | grep -E "(ENTRY|EXIT|PnL|ERROR|HALT|GHOST|HOURLY)"`
 - **Halt**: 없음 — SL/Trail/Emergency만 적용
 - **기대치**: WR ~36%, R:R ~3.4, daily ~+1.5% (additive 3x), ~3.1 trades/day
-
----
 
 ---
 
@@ -183,7 +179,7 @@ bingx_rl_trading_bot/
 │   ├── c1_breakout_config.yaml   # 전략+리스크 파라미터 (유일한 설정 소스)
 │   └── api_keys.yaml             # BingX API 키
 ├── scripts/analysis/             # 연구/검증 스크립트
-├── data/                         # BTC 5m 데이터 (15m 합성용)
+├── data/                         # BTC 5m 데이터 (15m 합성용, 백테스트 전용)
 ├── results/                      # 봇 상태, 검증 결과
 ├── logs/                         # c1_breakout.log (일일 회전, 30일 보관)
 ├── claudedocs/                   # 전략 문서, 연구 보고서
@@ -197,7 +193,7 @@ bingx_rl_trading_bot/
 | Entry        | 신호 bar[i] → 다음 봉 o[i+1] 진입                      |
 | Exit         | Intrabar High/Low (distance-based same-bar resolution) |
 | Fee          | 0.10% RT (taker 0.05% × 2)                             |
-| MC Test      | Sign randomization (≥5000 sims)                        |
+| MC Test      | Sign randomization (≥999 sims)                         |
 | WF           | 5-fold expanding window                                |
 | Look-ahead   | Progressive test 필수 (truncated vs full 비교)         |
 | Overfit      | 3-way split (train/val/test) + sensitivity ±10%        |

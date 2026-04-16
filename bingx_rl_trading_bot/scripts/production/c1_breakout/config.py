@@ -39,7 +39,11 @@ DEFAULT_CONFIG = {
 
 
 def load_config(path: str = 'config/c1_breakout_config.yaml') -> dict:
-    """Load config from YAML, falling back to defaults."""
+    """Load config from YAML, falling back to defaults.
+
+    BUG#52: validates leverage relationship — trading_leverage must not exceed
+    exchange leverage (actual position sizing > max allowed → liquidation risk).
+    """
     config = copy.deepcopy(DEFAULT_CONFIG)
 
     if os.path.exists(path):
@@ -53,5 +57,23 @@ def load_config(path: str = 'config/c1_breakout_config.yaml') -> dict:
         import logging
         logging.getLogger('c1_breakout').warning(
             f"Config file not found: {path} — using defaults (leverage=1)")
+
+    # Validate leverage relationship
+    ex_lev = config['exchange'].get('leverage', 1)
+    tr_lev = config['exchange'].get('trading_leverage', ex_lev)
+    if tr_lev > ex_lev:
+        raise ValueError(
+            f"Config error: trading_leverage ({tr_lev}x) must not exceed "
+            f"exchange leverage ({ex_lev}x). Actual sizing cannot exceed exchange cap.")
+    if tr_lev <= 0 or ex_lev <= 0:
+        raise ValueError(
+            f"Config error: leverage must be positive (ex={ex_lev}, tr={tr_lev})")
+
+    # Validate SL bounds sanity
+    s = config['strategy']
+    if s.get('sl_min_pct', 0) >= s.get('sl_max_pct', 1):
+        raise ValueError(
+            f"Config error: sl_min_pct ({s.get('sl_min_pct')}) must be "
+            f"< sl_max_pct ({s.get('sl_max_pct')})")
 
     return config

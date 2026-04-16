@@ -48,6 +48,67 @@ BUG#44 (2026-04-14): Balance cache in retry loop
   - Root cause: _calc_amount calls _get_balance() (API call) on every retry
     3 API calls in rapid succession for same balance value
   - Fix: cache balance once before retry loop in _exchange_open
+
+BUG#45 (2026-04-15): Ghost exit_time uses detection time, not exchange time
+  - Root cause: trade_history recorded datetime.utcnow() (ghost detection)
+    instead of actual exchange execution timestamp from fetch_my_trades
+    Up to 15 min error — affects daily PnL aggregation at day boundaries
+  - Fix: _resolve_ghost_exit returns exchange trade timestamp; ghost handler uses it
+
+BUG#46 (2026-04-15): Trail update resets BingX best_price tracking
+  - Root cause: TRAILING_STOP_MARKET cancel+re-place destroys BingX's native
+    best_price memory. New order needs activatePrice re-reached before tracking.
+  - Fix: asymmetric update policy:
+    LOOSEN only (ATR↑ > 0.1pp): re-place with wider callback. Tracking resets
+      but wider trail is far from best → low premature trigger risk.
+      Prevents frozen tight trail from cutting winners short.
+    TIGHTEN never: bot's check_exit handles tightening with current ATR
+      (backtest-identical, runs every 15m). Exchange tracking preserved.
+
+BUG#48 (2026-04-17): Orphan adoption discarded actual SL (Opus 4.7 review)
+  - Root cause: _sync_exchange orphan path always wrote emergency_sl_pct (3%)
+    into local sl_price. If original fractal SL was 0.5%, on restart the bot
+    would treat SL as 3% and _update_exchange_trail would place a NEW SL at
+    3% (loose) since the 0.5% exchange SL didn't match.
+  - Fix: _resolve_orphan_sl() queries exchange for live reduceOnly STOP orders
+    on the correct side, picks the tightest (closest to entry), and restores
+    both sl_price and sl_order_id. 3% fallback only when truly no SL exists
+    (genuine crash between MARKET fill and SL placement).
+
+BUG#49 (2026-04-17): fill_price slippage could push sl_pct out of bounds
+  - Root cause: signal SL was sized against bar_close; fill_price differs by
+    slippage. After BUG#18 entry_price update, sl_pct relative to fill could
+    fall below sl_min_pct or exceed sl_max_pct without any warning.
+  - Fix: warn-only — fractal SL is absolute (market structure), but log when
+    actual sl_pct vs fill violates configured bounds for monitoring.
+
+BUG#50 (2026-04-17): Ghost exit reason used stale best_price (classification only)
+  - Root cause: BUG#47 distance heuristic compared exit price to est_trail
+    derived from last_callback × local best_price. During offline periods,
+    actual extremes moved beyond bot's state → misclassification.
+  - Fix: prefer explicit trade.info.orderType (STOP_MARKET vs TRAILING_STOP_MARKET).
+    Distance-based fallback retained for legacy trades without order type info.
+
+BUG#51 (2026-04-17): Silent candle fetch outage skipped tighten logic
+  - Root cause: fetch_candles failure → process_candles skipped → check_exit
+    skipped → ATR-based trail tightening not running. Exchange TRAILING stays
+    at initial callback (BUG#46 policy) so tightening is bot's job; sustained
+    outage leaves winners exposed.
+  - Fix: _candle_fail_streak counter; warn at streak >= 3 with open position,
+    >= 6 without — operator-visible signal for monitoring intervention.
+
+BUG#52 (2026-04-17): No validation of leverage relationship
+  - Root cause: trading_leverage > leverage silently allowed at config load.
+    Actual sizing (qty = balance × trading_lev / price) exceeding exchange cap
+    triggers immediate liquidation risk.
+  - Fix: load_config raises ValueError when trading_leverage > leverage or
+    either is non-positive. Also validates sl_min_pct < sl_max_pct.
+
+BUG#53 (2026-04-17): Channel sanity check missing
+  - Root cause: if channel_high <= channel_low (flat/inverted data), the
+    breakout condition (close > channel_high OR close < channel_low) could
+    still fire pathologically.
+  - Fix: reject channel_high <= channel_low explicitly in check_entry.
 """
 
 import os
@@ -251,7 +312,7 @@ class C1BreakoutBot:
             d = pos['direction']
             if d not in live:
                 # BUG#21: Try to get actual exit from recent trades
-                exit_price, reason = self._resolve_ghost_exit(pos)
+                exit_price, reason, exit_ts_ms = self._resolve_ghost_exit(pos)
 
                 if d == 'LONG':
                     est_pnl = (exit_price / pos['entry_price'] - 1) * 100
@@ -261,12 +322,17 @@ class C1BreakoutBot:
                 trading_lev = self.config['exchange'].get('trading_leverage',
                               self.config['exchange'].get('leverage', 1))
                 pnl = (est_pnl - 0.10) * trading_lev
+                # BUG#45: use actual exchange exit timestamp, fallback to detection time
+                if exit_ts_ms:
+                    exit_time = datetime.utcfromtimestamp(exit_ts_ms / 1000).isoformat()
+                else:
+                    exit_time = datetime.utcnow().isoformat()
                 self.trade_history.append({
                     'direction': d, 'entry_price': pos['entry_price'],
                     'exit_price': exit_price,
                     'pnl_pct': round(pnl, 4), 'reason': reason,
                     'bars_held': pos.get('bars_held', 0),
-                    'exit_time': datetime.utcnow().isoformat(),
+                    'exit_time': exit_time,
                 })
                 self.bars_since_last_exit = 0
 
@@ -275,15 +341,28 @@ class C1BreakoutBot:
                 self.positions.pop(i); changed = True
 
         # Orphan: exchange has it, local doesn't
+        # BUG#48: restore actual SL from exchange instead of 3% emergency fallback
+        #   Old: always used emergency_sl_pct (3%) → tighter original SL was discarded
+        #   New: query exchange for live STOP_MARKET order; fallback to 3% only if
+        #        genuinely no SL exists (crash between MARKET fill and SL placement)
         local_dirs = {p['direction'] for p in self.positions}
         for side, info in live.items():
             if side not in local_dirs and len(self.positions) < self.max_positions:
-                logger.warning(f"ORPHAN: {side} @ ${info['entry_price']:.2f} adopted")
                 ep = info['entry_price']
-                emg = self.config['strategy']['emergency_sl_pct']
-                sl = ep * (1-emg/100) if side=='LONG' else ep * (1+emg/100)
+                resolved_sl, resolved_id = self._resolve_orphan_sl(side, ep)
+                if resolved_sl is not None:
+                    sl = resolved_sl
+                    sl_src = f"exchange (id={resolved_id[:8]}...)" if resolved_id else "exchange"
+                else:
+                    emg = self.config['strategy']['emergency_sl_pct']
+                    sl = ep * (1-emg/100) if side=='LONG' else ep * (1+emg/100)
+                    resolved_id = ''
+                    sl_src = f"emergency {emg}% fallback"
+                logger.warning(
+                    f"ORPHAN: {side} @ ${ep:.2f} adopted | SL=${sl:.2f} ({sl_src})")
                 self.positions.append({
                     'direction': side, 'entry_price': ep, 'sl_price': sl,
+                    'sl_order_id': resolved_id,
                     'best_price': ep, 'entry_time': datetime.utcnow().isoformat(),
                     'bars_held': 0, 'size_pct': self.size_pct,
                 })
@@ -302,6 +381,89 @@ class C1BreakoutBot:
 
         if changed: self._save_state()
         else: logger.info("Sync: OK")
+
+    def _resolve_orphan_sl(self, side, entry_price):
+        """Query exchange for existing SL STOP order on orphan position.
+
+        BUG#48: Restores actual SL (fractal-based) during crash recovery instead of
+        forcing 3% emergency fallback. Only uses fallback when genuinely no SL exists
+        (true orphan = crash between MARKET fill and SL placement).
+
+        Filters:
+          - reduceOnly = True (closing order)
+          - side opposite to position (sell for LONG, buy for SHORT)
+          - non-TRAILING (fractal SL is STOP_MARKET)
+          - stopPrice on correct side of entry (LONG: below, SHORT: above)
+
+        Selection: closest to entry (most conservative / already partially triggered).
+
+        Returns:
+            (stop_price, order_id) if found, (None, None) otherwise.
+        """
+        if not self.exchange:
+            return None, None
+        try:
+            symbol = self.config['exchange']['symbol']
+            orders = self.exchange.fetch_open_orders(symbol)
+        except Exception as e:
+            logger.warning(f"Orphan SL lookup failed: {e}")
+            return None, None
+
+        close_side = 'sell' if side == 'LONG' else 'buy'
+        candidates = []
+        for o in orders:
+            info = o.get('info') or {}
+            # Type: BingX may put it on o.type or info.type, various casings
+            otype = str(info.get('type') or o.get('type') or '').upper()
+            if 'TRAILING' in otype:
+                continue  # trail is backup, not fractal SL
+            if 'STOP' not in otype:
+                continue
+            # Side check (tolerate upper/lower case from different exchanges)
+            o_side = str(o.get('side') or info.get('side') or '').lower()
+            if o_side != close_side:
+                continue
+            # reduceOnly: tolerate bool/int/str representations
+            ro_raw = o.get('reduceOnly')
+            if ro_raw is None:
+                ro_raw = info.get('reduceOnly')
+            if ro_raw is None:
+                ro_raw = info.get('reduceonly')
+            ro = str(ro_raw).lower() in ('true', '1', 'yes')
+            if not ro:
+                continue
+            # Stop price: BingX uses several aliases
+            sp_raw = (o.get('stopPrice')
+                      or info.get('stopPrice')
+                      or info.get('stopprice')
+                      or info.get('triggerPrice')
+                      or info.get('stop_price'))
+            try:
+                sp = float(sp_raw)
+            except (TypeError, ValueError):
+                continue
+            if sp <= 0:
+                continue
+            # Directional sanity: LONG SL below entry, SHORT SL above entry
+            if side == 'LONG' and sp >= entry_price:
+                continue
+            if side == 'SHORT' and sp <= entry_price:
+                continue
+            candidates.append((sp, o.get('id', '')))
+
+        if not candidates:
+            return None, None
+        # Most conservative: closest to entry
+        if side == 'LONG':
+            # LONG SL below entry → higher stopPrice = closer to entry = tighter
+            candidates.sort(key=lambda x: -x[0])
+        else:
+            # SHORT SL above entry → lower stopPrice = closer to entry = tighter
+            candidates.sort(key=lambda x: x[0])
+        if len(candidates) > 1:
+            logger.warning(
+                f"Orphan SL: {len(candidates)} STOP candidates — picking tightest")
+        return candidates[0]
 
     def _resolve_ghost_exit(self, pos):
         """Determine actual exit price and reason for a ghost position.
@@ -345,38 +507,80 @@ class C1BreakoutBot:
                 if entry_ts_ms > 0 and t_ts <= entry_ts_ms:
                     continue
                 exit_price = float(t['price'])
-                # Determine reason by comparing exit to SL
-                near_sl = abs(exit_price - sl_price) / entry_price < 0.003
-                reason = 'EXCHANGE_SL' if near_sl else 'EXCHANGE_TRAIL'
+                # BUG#50: prefer authoritative order type from exchange trade info.
+                #   Old (BUG#47): distance comparison using bot's last_callback/best_price.
+                #     Stale during offline periods (price made new extremes bot didn't see).
+                #   New: inspect trade.info.orderType for explicit STOP_MARKET / TRAILING_STOP_MARKET.
+                #     Fallback to distance comparison only when order type missing.
+                t_info = t.get('info') or {}
+                raw_type = str(
+                    t_info.get('orderType') or t_info.get('type')
+                    or t.get('type') or '').upper()
+                reason = None
+                if 'TRAILING' in raw_type:
+                    reason = 'EXCHANGE_TRAIL'
+                elif 'STOP' in raw_type:
+                    reason = 'EXCHANGE_SL'
+                if reason is None:
+                    # Fallback: distance comparison (legacy BUG#47 logic)
+                    dist_sl = abs(exit_price - sl_price)
+                    trail_cb = pos.get('last_callback', 0)
+                    bp = pos.get('best_price', entry_price)
+                    if trail_cb > 0 and bp > 0:
+                        if d == 'LONG':
+                            est_trail = bp * (1 - trail_cb / 100)
+                        else:
+                            est_trail = bp * (1 + trail_cb / 100)
+                        dist_trail = abs(exit_price - est_trail)
+                        reason = 'EXCHANGE_SL' if dist_sl < dist_trail else 'EXCHANGE_TRAIL'
+                    else:
+                        reason = 'EXCHANGE_SL' if dist_sl / entry_price < 0.003 else 'EXCHANGE_TRAIL'
+                # BUG#45: return actual exit timestamp from exchange (not detection time)
+                exit_ts = t_ts if t_ts > 0 else None
                 logger.info(f"Ghost resolved via trade history: exit=${exit_price:.2f}")
-                return exit_price, reason
+                return exit_price, reason, exit_ts
         except Exception as e:
             logger.debug(f"fetch_my_trades failed: {e}")
 
         # Fallback: use SL price (conservative)
-        return sl_price, 'EXCHANGE_SL'
+        return sl_price, 'EXCHANGE_SL', None
 
     # ── Candle Fetch ──────────────────────────────────────
 
     def fetch_candles(self):
-        if not self.exchange: return None
+        """Fetch 15m OHLCV. Returns None on failure/stale — caller tracks via
+        _candle_fail_streak.
+
+        BUG#51: consecutive failures are monitored so operator can detect silent
+        tighten-logic outage (check_exit skipped → ATR↓ tighten never runs;
+        exchange TRAILING stays at initial callback per BUG#46 policy).
+        """
+        if not self.exchange:
+            self._candle_fail_streak = getattr(self, '_candle_fail_streak', 0) + 1
+            return None
         try:
             ohlcv = self.exchange.fetch_ohlcv(
                 self.config['exchange']['symbol'], '15m',
                 limit=self.config['exchange'].get('candle_bars_fetch', 100))  # BUG#42: was config['bot'] — wrong section
-            if not ohlcv or len(ohlcv) < 30: return None
+            if not ohlcv or len(ohlcv) < 30:
+                self._candle_fail_streak = getattr(self, '_candle_fail_streak', 0) + 1
+                return None
             # Stale data guard: check if last completed bar timestamp is new
             last_ts = ohlcv[-2][0]  # n-2 = last completed bar
             if hasattr(self, '_last_bar_ts') and last_ts == self._last_bar_ts:
                 logger.warning(f"Stale candle data (same bar ts={last_ts}) — skip")
+                self._candle_fail_streak = getattr(self, '_candle_fail_streak', 0) + 1
                 return None
             self._last_bar_ts = last_ts
+            self._candle_fail_streak = 0  # reset on success
             return {
                 'open': [x[1] for x in ohlcv], 'high': [x[2] for x in ohlcv],
                 'low': [x[3] for x in ohlcv], 'close': [x[4] for x in ohlcv],
             }
         except Exception as e:
-            logger.error(f"Candle fetch: {e}"); return None
+            self._candle_fail_streak = getattr(self, '_candle_fail_streak', 0) + 1
+            logger.error(f"Candle fetch: {e}")
+            return None
 
     # ── Core Logic ────────────────────────────────────────
 
@@ -527,6 +731,18 @@ class C1BreakoutBot:
                 slip = (fill_price / price - 1) * 100
                 if abs(slip) > 0.01:
                     logger.info(f"Slippage: {slip:+.3f}% (signal={price:.1f} fill={fill_price:.1f})")
+                # BUG#49: validate sl_pct against fill_price (not signal close)
+                # SL price is fractal-based absolute — keep as-is, but warn if slippage
+                # pushed actual sl_pct outside configured min/max bounds.
+                cfg_s = self.config['strategy']
+                actual_sl_pct = abs(fill_price - sl_price) / fill_price * 100
+                lo = cfg_s.get('sl_min_pct', 0.15)
+                hi = cfg_s.get('sl_max_pct', 3.0)
+                if actual_sl_pct < lo or actual_sl_pct > hi:
+                    logger.warning(
+                        f"SL bounds after slippage: sl_pct={actual_sl_pct:.3f}% "
+                        f"outside [{lo}%, {hi}%] — fill=${fill_price:.1f} "
+                        f"sl=${sl_price:.1f} slip={slip:+.3f}%")
             logger.info(f"MARKET {direction} qty={filled_qty} fill=${fill_price:.1f}")
 
             # 2. SL (STOP_MARKET) — use actual filled qty (BUG#28)
@@ -630,11 +846,20 @@ class C1BreakoutBot:
             return round(trigger, 1)
 
     def _update_exchange_trail(self, pos, cur_price, cur_atr):
-        """Update exchange TRAILING_STOP_MARKET callback rate with current ATR.
+        """Verify exchange orders and manage trail protection.
 
-        Also verifies fractal SL STOP still exists — re-places if missing.
-        Bot's check_exit is the primary trail mechanism (backtest math).
-        Exchange TRAILING_STOP_MARKET is backup when bot is down.
+        BUG#46: Trail is placed ONCE at entry and NEVER updated.
+        Reason: BingX TRAILING_STOP_MARKET cancel+re-place RESETS best_price tracking.
+        Each update destroys the trail's memory of the highest/lowest price seen,
+        creating a protection gap where activatePrice must be re-reached.
+
+        The exchange trail is crash protection (fires intrabar).
+        The bot's check_exit is the primary mechanism (backtest-identical, current ATR).
+
+        This function only:
+        1. Verifies fractal SL STOP exists — re-places if missing
+        2. Verifies trail exists — re-places if missing (same callback as entry)
+        3. On first cycle after restart with legacy orders: one-time forced reset
         """
         try:
             import math
@@ -642,16 +867,12 @@ class C1BreakoutBot:
                 return
 
             symbol = self.config['exchange']['symbol']
-            trail_K = self.config['strategy'].get('trail_K', 2.5)
-            new_callback = round(max(0.1, min(5.0, trail_K * cur_atr / cur_price * 100)), 1)
-
             orders = self.exchange.fetch_open_orders(symbol)
 
-            # ── Verify SL STOP exists — re-place if missing ──
+            # ── 1. Verify SL STOP exists — re-place if missing ──
             sl_order_id = pos.get('sl_order_id', '')
             sl_found = any(o.get('id', '') == sl_order_id for o in orders) if sl_order_id else False
             if not sl_found:
-                # BUG#36: Price-based fallback — must update sl_order_id to prevent accidental cancellation
                 sl_price = pos['sl_price']
                 for o in orders:
                     if 'TRAILING' in ((o.get('info') or {}).get('type', '') or '').upper():
@@ -659,7 +880,7 @@ class C1BreakoutBot:
                     sp = float(o.get('stopPrice') or o.get('info', {}).get('stopPrice') or 0)
                     if abs(sp - sl_price) < 1.0:
                         sl_found = True
-                        pos['sl_order_id'] = o.get('id', sl_order_id)  # Update ID to prevent cancel
+                        pos['sl_order_id'] = o.get('id', sl_order_id)
                         logger.info(f"SL found by price (ID mismatch) — updated sl_order_id")
                         break
             if not sl_found:
@@ -674,60 +895,83 @@ class C1BreakoutBot:
                     pos['sl_order_id'] = sl_result.get('id', '')
                     logger.warning(f"SL STOP was missing — re-placed @ ${pos['sl_price']:.1f}")
 
-            # ── Update TRAILING_STOP_MARKET callback ──
-            old_callback = pos.get('last_callback', 0)
-            # BUG#35: On first cycle after restart, force re-placement to fix wrong priceRate orders
+            # ── 2. Verify trail exists — re-place if missing ──
+            trail_exists = any(
+                'TRAILING' in ((o.get('info') or {}).get('type', '') or '').upper()
+                for o in orders)
+
+            # BUG#35: On first cycle after restart, force re-placement for legacy priceRate orders
             force_reset = getattr(self, '_force_trail_reset', False)
             if force_reset:
-                self._force_trail_reset = False  # Only once per bot session
-                logger.info("Trail: forcing re-placement (BUG#35 priceRate fix)")
-            elif new_callback >= old_callback - 0.05:
-                # BUG#37: Only replace when trail TIGHTENS (new_callback < old_callback).
-                # Replacing on ATR increase (looser callback) cancels BingX's native best_price
-                # tracking and resets activatePrice to cur_price — creating a protection gap
-                # if cur_price < best_price at replacement time.
-                # Tolerance 0.05: allow fractional rounding noise (0.89→0.9 considered same).
-                return
+                self._force_trail_reset = False
+                if trail_exists:
+                    # Cancel existing trail (may have wrong priceRate from old code)
+                    for order in orders:
+                        oid = order.get('id', '')
+                        if oid == pos.get('sl_order_id', ''):
+                            continue
+                        o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
+                        if 'TRAILING' in o_type.upper():
+                            try:
+                                self.exchange.cancel_order(oid, symbol)
+                            except Exception:
+                                pass
+                    trail_exists = False
+                    logger.info("Trail: forcing re-placement (BUG#35 legacy priceRate fix)")
 
-            # Cancel existing trailing stop (TRAILING_STOP_MARKET or legacy STOP_MARKET trail)
-            for order in orders:
-                oid = order.get('id', '')
-                if oid == pos.get('sl_order_id', ''):
-                    continue  # Never cancel the fractal SL
-                o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
-                is_trailing = 'TRAILING' in o_type.upper()
-                # Also cancel non-SL STOP_MARKET (legacy managed trail from v2.5 transition)
-                is_non_sl_stop = o_type.upper() == 'STOP_MARKET'
-                if is_trailing or is_non_sl_stop:
-                    try:
-                        self.exchange.cancel_order(oid, symbol)
-                    except Exception:
-                        pass
+            # ── 3. Re-place trail if missing, or LOOSEN if ATR rose significantly ──
+            trail_K = self.config['strategy'].get('trail_K', 2.5)
+            new_callback = round(max(0.1, min(5.0, trail_K * cur_atr / cur_price * 100)), 1)
+            old_callback = pos.get('last_callback', 0)
 
-            # Place new TRAILING_STOP_MARKET with updated callback
-            live = self._get_live_positions()
-            if not live or pos['direction'] not in live:
-                return
+            need_replace = False
+            if not trail_exists:
+                need_replace = True
+                logger.warning(f"Trail STOP missing — will re-place")
+            elif new_callback > old_callback + 0.1:
+                # BUG#46: LOOSEN ONLY — ATR rose → exchange trail is too tight
+                # → would cause premature exit (not matching backtest behavior)
+                # Cancel old trail and re-place with wider callback.
+                # Tracking resets, but wider trail is far from best → low trigger risk.
+                # TIGHTENING is handled by bot's check_exit (current ATR, every 15m).
+                for order in orders:
+                    oid = order.get('id', '')
+                    if oid == pos.get('sl_order_id', ''):
+                        continue
+                    o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
+                    if 'TRAILING' in o_type.upper():
+                        try:
+                            self.exchange.cancel_order(oid, symbol)
+                        except Exception:
+                            pass
+                need_replace = True
+                logger.info(f"Trail LOOSEN: {old_callback}%→{new_callback}% (ATR=${cur_atr:.0f})")
 
-            qty = live[pos['direction']]['contracts']
-            tp_side = 'sell' if pos['direction'] == 'LONG' else 'buy'
-            activate = round(cur_price * (1 + 0.001) if pos['direction'] == 'LONG'
-                             else cur_price * (1 - 0.001), 1)
+            if need_replace:
+                callback = new_callback if new_callback > 0 else old_callback
+                if callback <= 0:
+                    callback = round(max(0.1, min(5.0, trail_K * cur_atr / cur_price * 100)), 1)
+                live = self._get_live_positions()
+                if live and pos['direction'] in live:
+                    qty = live[pos['direction']]['contracts']
+                    tp_side = 'sell' if pos['direction'] == 'LONG' else 'buy'
+                    activate = round(cur_price * (1 + 0.001) if pos['direction'] == 'LONG'
+                                     else cur_price * (1 - 0.001), 1)
+                    self.exchange.create_order(
+                        symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
+                        params={'positionSide': 'BOTH',
+                                'activatePrice': activate,
+                                'trailingPercent': callback,
+                                'reduceOnly': True})
+                    pos['last_callback'] = callback
+                    bp = pos.get('best_price', cur_price)
+                    est = round(bp * (1 - callback/100) if pos['direction'] == 'LONG'
+                                else bp * (1 + callback/100), 1)
+                    logger.info(f"Trail placed: callback={callback}% est≈${est:.1f}")
 
-            self.exchange.create_order(
-                symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
-                params={'positionSide': 'BOTH',
-                        'activatePrice': activate,
-                        'trailingPercent': new_callback,  # BUG#35: use trailingPercent (CCXT omits it after ÷100)
-                        'reduceOnly': True})
-
-            pos['last_callback'] = new_callback
-            # Log estimated trigger price based on current best_price and new callback
-            bp = pos.get('best_price', cur_price)
-            est_trigger = round(bp * (1 - new_callback / 100) if pos['direction'] == 'LONG'
-                                else bp * (1 + new_callback / 100), 1)
-            logger.info(f"Trail TP updated: callback={new_callback}% (ATR=${cur_atr:.0f}) "
-                        f"est_trigger≈${est_trigger:.1f} (best=${bp:.1f})")
+            # BUG#46 policy:
+            # - LOOSEN (ATR↑): re-place → tracking resets but trail is far → safe
+            # - TIGHTEN (ATR↓): DON'T re-place → bot check_exit handles it → tracking preserved
 
         except Exception as e:
             logger.warning(f"Trail update failed: {e}")
@@ -778,7 +1022,18 @@ class C1BreakoutBot:
                 self._wait_for_candle()
                 self._sync_exchange()  # BUG#38: unconditional — orphan detect works even when no local positions
                 candles = self.fetch_candles()
-                if candles: self.process_candles(candles)
+                if candles:
+                    self.process_candles(candles)
+                else:
+                    # BUG#51: warn on sustained candle failures — check_exit skipped,
+                    # ATR-tighten trail backup is not running (exchange trail is fixed callback).
+                    streak = getattr(self, '_candle_fail_streak', 0)
+                    if streak >= 3 and self.positions:
+                        logger.warning(
+                            f"Candle fetch failed {streak}x in a row WITH open position — "
+                            f"bot's tighten logic not running; relying on exchange SL/TRAIL only")
+                    elif streak >= 6:
+                        logger.warning(f"Candle fetch failed {streak}x in a row (no position)")
                 logger.info(f"Cycle: pos={len(self.positions)}")
 
                 # Hourly status summary

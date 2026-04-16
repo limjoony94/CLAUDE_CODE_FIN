@@ -45,6 +45,10 @@ class C1BreakoutSignal:
         if math.isnan(channel_high) or math.isnan(channel_low) or math.isnan(atr_val) or atr_val <= 0:
             return None
 
+        # BUG#53: channel sanity — flat/inverted data would produce spurious signals
+        if channel_high <= channel_low:
+            return None
+
         # Check breakout
         direction = None
         if bar_close > channel_high:

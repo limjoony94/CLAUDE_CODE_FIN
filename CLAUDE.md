@@ -1,7 +1,14 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.6.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-15
+> **Version**: v4.7.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
 >
+> **v4.7.0 (2026-04-17)**: Opus 4.7 코드 리뷰. 6-Cycle 다각도 비판 평가. BUG#48~53 (6건) 수정.
+>   - **BUG#48 [CRITICAL]**: Orphan 채택 시 거래소 실제 SL 복원 (3% fallback만 하던 것 → 실제 STOP 주문 조회)
+>   - **BUG#49**: Fill price 기준 sl_pct 재검증 경고
+>   - **BUG#50**: Ghost exit reason을 trade info.orderType로 1차 분류 (stale best_price 의존성 축소)
+>   - **BUG#51**: 연속 candle fetch 실패 감지 → tighten 로직 공백 경고
+>   - **BUG#52**: config load 시 trading_leverage > leverage 관계 검증
+>   - **BUG#53**: channel_high <= channel_low sanity check
 > **v4.6.0**: 49-Cycle 하네스 감사. 39건 수정. Pattern 5m 코드 완전 삭제. Lock 메커니즘 추가. 전략 변경 체크리스트 추가.
 >
 > **v2.6**: 20 Cycle 비판 평가. BUG#35~42 (8건) 수정. Trail 90%→0.9% CRITICAL fix. SL ID sync. 봇 재시작 완료.

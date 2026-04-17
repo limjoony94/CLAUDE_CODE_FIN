@@ -1,7 +1,12 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.2 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
+> **Version**: v4.7.3 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
 >
+> **v4.7.3 (2026-04-17)**: 4차 Cycle — Test suite 영구화.
+>   - `scripts/tests/` 신설: conftest.py + 4 test modules (test_indicators/signals/config/bot)
+>   - **58 pytest cases PASS** (~1s). 각 케이스 = 특정 비판 각도(A엣지/B parity/C상호작용/D롤백) 코드화
+>   - BUG#48/52/53/54/56/57/58/60 identity regression guard 확보
+>   - run-tests.md 갱신: quick-start, deprecation-strict, bug→test 매핑
 > **v4.7.2 (2026-04-17)**: 3차 4-Cycle 비판 평가. BUG#59~61 (3건) 추가.
 >   - **BUG#59**: _update_exchange_trail 연속 실패 감지 (streak ≥3 → 보호 공백 경고)
 >   - **BUG#60**: check_exit trail path current_close ≤ 0 / NaN 방어

@@ -1,7 +1,17 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.3 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
+> **Version**: v4.7.4 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
 >
+> **v4.7.4 (2026-04-17)**: 5차 Cycle — 복합 flow + property-based 테스트.
+>   - `test_exchange_open.py` (7): MARKET retry (BUG#38), SL placement (BUG#28),
+>     emergency close (BUG#26), partial fill (BUG#55)
+>   - `test_sync_exchange.py` (8): orphan adoption 실제 flow (BUG#48 end-to-end),
+>     ghost orderType 분류 (BUG#50), entry_time filter (BUG#36), exchange timestamp (BUG#45)
+>   - `test_trail_update.py` (8): force_reset (BUG#35), LOOSEN-only (BUG#46),
+>     failure streak (BUG#59)
+>   - `test_properties.py` (6): hypothesis로 ~400 랜덤 케이스 자동 탐색.
+>     ATR 인과성, signal 불변량, exit priority, timeout 보장
+>   - **87 pytest cases PASS** (~17s, hypothesis 포함)
 > **v4.7.3 (2026-04-17)**: 4차 Cycle — Test suite 영구화.
 >   - `scripts/tests/` 신설: conftest.py + 4 test modules (test_indicators/signals/config/bot)
 >   - **58 pytest cases PASS** (~1s). 각 케이스 = 특정 비판 각도(A엣지/B parity/C상호작용/D롤백) 코드화

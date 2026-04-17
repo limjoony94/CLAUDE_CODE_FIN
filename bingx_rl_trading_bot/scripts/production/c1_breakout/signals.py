@@ -140,7 +140,12 @@ class C1BreakoutSignal:
             best_pnl = (1 - best_price / entry_price) * 100
             cur_pnl = (1 - current_close / entry_price) * 100
 
-        if best_pnl > self.trail_activation_pct and not math.isnan(atr_val) and atr_val > 0:
+        # BUG#60: protect against current_close ≤ 0 or NaN (bad candle data).
+        # Without this, division by zero or NaN-propagation could silently skip
+        # trail exit and leave the position unprotected.
+        if (best_pnl > self.trail_activation_pct
+                and not math.isnan(atr_val) and atr_val > 0
+                and not math.isnan(current_close) and current_close > 0):
             trail_dist_pct = self.trail_K * atr_val / current_close * 100
             drawdown = best_pnl - cur_pnl
             if drawdown >= trail_dist_pct:

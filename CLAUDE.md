@@ -1,7 +1,11 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.1 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
+> **Version**: v4.7.2 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
 >
+> **v4.7.2 (2026-04-17)**: 3차 4-Cycle 비판 평가. BUG#59~61 (3건) 추가.
+>   - **BUG#59**: _update_exchange_trail 연속 실패 감지 (streak ≥3 → 보호 공백 경고)
+>   - **BUG#60**: check_exit trail path current_close ≤ 0 / NaN 방어
+>   - **BUG#61**: TimeSyncBingX offset ±60초 clamp (거래소 비정상 응답 차단)
 > **v4.7.1 (2026-04-17)**: 2차 6-Cycle 비판 평가. BUG#54~58 (5건) 추가 수정.
 >   - **BUG#54**: bars_since_last_exit wall-clock 보정 (last_exit_time 저장, 재시작 시 elapsed_bars 계산)
 >   - **BUG#55**: MARKET 부분 체결 감지 경고 (shortfall > 1%)

@@ -146,6 +146,32 @@ BUG#58 (2026-04-17): state.json I/O on OneDrive-synced path could crash loop
   - Fix: try/except around json.dump and os.replace. Log warning, clean up
     .tmp on failure. Next cycle retries. Positions still re-hydrated via
     orphan detection on restart if state is stale.
+
+BUG#59 (2026-04-17): _update_exchange_trail silent failures
+  - Root cause: the outer try/except logged a single-line warning on every
+    failure. Sustained structural problems (API permissions revoked, rate
+    limited) produced one warning per cycle — easy to miss in log noise.
+    With an open position, both SL verification AND trail re-placement run
+    inside this function, so sustained failure = no exchange-side protection
+    maintenance.
+  - Fix: _trail_update_fail_streak counter. ≥3 consecutive failures elevate
+    the warning to note that SL verification + tighten backup are not running.
+
+BUG#60 (2026-04-17): check_exit trail path unsafe on bad price data
+  - Root cause: trail_dist_pct = trail_K × atr / current_close × 100. If
+    current_close ≤ 0 (bad candle) → ZeroDivisionError. If current_close is
+    NaN → NaN propagation silently skips trail without logging, leaving
+    position unprotected on the bot side (exchange still has orders).
+  - Fix: add `not math.isnan(current_close) and current_close > 0` to trail
+    activation guard alongside existing ATR guard.
+
+BUG#61 (2026-04-17): TimeSyncBingX accepted any server time blindly
+  - Root cause: BingX serverTime response trusted without sanity check. A
+    bad response (e.g. 0, year-2000, year-3000) would set _time_offset
+    wildly wrong, breaking every signed API request thereafter with
+    timestamp errors.
+  - Fix: _MAX_OFFSET_MS = 60_000 cap. Reject offsets beyond ±60s; keep
+    previous valid offset (or 0 at startup). Log warning on rejection.
 """
 
 import os
@@ -182,6 +208,11 @@ class TimeSyncBingX(ccxt.bingx):
     _time_offset = 0
     _last_sync = 0
 
+    # BUG#61: clamp offset to ±60s. Larger deviation likely indicates malformed
+    # server response or system clock drift; applying it would break every signed
+    # request with timestamp errors. Ignoring keeps the previous valid offset (or 0).
+    _MAX_OFFSET_MS = 60_000
+
     def milliseconds(self):
         # Re-sync every 5 minutes
         now = time.time()
@@ -192,9 +223,16 @@ class TimeSyncBingX(ccxt.bingx):
                     timeout=5)
                 server_ms = resp.json().get('data', {}).get('serverTime', 0)
                 if server_ms:
-                    self._time_offset = server_ms - int(now * 1000)
-                    self._last_sync = now
-                    logger.debug(f"Time sync: offset={self._time_offset}ms")
+                    new_offset = server_ms - int(now * 1000)
+                    if abs(new_offset) > self._MAX_OFFSET_MS:
+                        logger.warning(
+                            f"Time sync: offset={new_offset}ms exceeds "
+                            f"±{self._MAX_OFFSET_MS}ms — rejecting, keeping "
+                            f"previous offset={self._time_offset}ms")
+                    else:
+                        self._time_offset = new_offset
+                        self._last_sync = now
+                        logger.debug(f"Time sync: offset={new_offset}ms")
             except Exception:
                 pass
         return int(time.time() * 1000) + self._time_offset
@@ -1094,9 +1132,22 @@ class C1BreakoutBot:
             # BUG#46 policy:
             # - LOOSEN (ATR↑): re-place → tracking resets but trail is far → safe
             # - TIGHTEN (ATR↓): DON'T re-place → bot check_exit handles it → tracking preserved
+            self._trail_update_fail_streak = 0  # success resets streak (BUG#59)
 
         except Exception as e:
-            logger.warning(f"Trail update failed: {e}")
+            # BUG#59: track sustained trail-update failures. Silent warnings per-cycle
+            # could mask a structural issue (API permissions, rate limit). With open
+            # position, ≥3 consecutive failures mean SL verification + trail re-placement
+            # are both blocked — operator should investigate.
+            self._trail_update_fail_streak = getattr(
+                self, '_trail_update_fail_streak', 0) + 1
+            streak = self._trail_update_fail_streak
+            if streak >= 3:
+                logger.warning(
+                    f"Trail update failed {streak}x in a row: {e} — "
+                    f"SL verification + tighten backup are NOT running")
+            else:
+                logger.warning(f"Trail update failed: {e}")
 
     def _exchange_close(self, direction):
         try:

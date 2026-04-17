@@ -68,6 +68,7 @@ def mock_bot(full_config, tmp_path):
     set precise state. Exchange is MagicMock for controlled API responses.
     """
     from scripts.production.c1_breakout.bot import C1BreakoutBot
+    from scripts.production.c1_breakout.signals import C1BreakoutSignal
     b = C1BreakoutBot.__new__(C1BreakoutBot)
     b.config = full_config
     b.state_path = str(tmp_path / 'state.json')
@@ -76,6 +77,7 @@ def mock_bot(full_config, tmp_path):
     b.bars_since_last_exit = 999
     b.last_exit_time = None
     b.max_positions = full_config['strategy']['max_positions']
+    b.signal = C1BreakoutSignal(full_config['strategy'])
     b.exchange = MagicMock()
     b._force_trail_reset = False
     return b

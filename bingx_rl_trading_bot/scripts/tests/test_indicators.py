@@ -147,3 +147,11 @@ class TestFractalSwings:
         sw_l, sw_h = compute_fractal_swings(highs, lows, lookback=10)
         assert all(math.isnan(x) for x in sw_l[:10])
         assert all(math.isnan(x) for x in sw_h[:10])
+
+    def test_swing_high_detection(self):
+        """C. Bug interaction mirror: swing high update (line 64 coverage)."""
+        # Bar 10 hits new HIGH (120) — should be marked as swing high
+        highs = [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 120]
+        lows = [x - 2 for x in highs]
+        sw_l, sw_h = compute_fractal_swings(highs, lows, lookback=10)
+        assert sw_h[10] == 120  # current bar is highest

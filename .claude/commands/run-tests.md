@@ -6,7 +6,25 @@ Run project tests.
 cd bingx_rl_trading_bot && python -m pytest scripts/tests/ -v --tb=short
 ```
 
-Expected: **87 passed** in ~17s (includes property-based tests). No failures allowed.
+Expected: **113 passed** in ~5s (includes property-based tests + coverage). No failures allowed.
+
+## Coverage (v4.7.5)
+
+```
+Name                                           Stmts   Miss  Cover
+------------------------------------------------------------------
+scripts\production\c1_breakout\__init__.py         0      0   100%
+scripts\production\c1_breakout\bot.py            669    235    65%
+scripts\production\c1_breakout\config.py          24      0   100%
+scripts\production\c1_breakout\indicators.py      37      0   100%
+scripts\production\c1_breakout\signals.py         79      0   100%
+------------------------------------------------------------------
+TOTAL                                            809    235    71%
+```
+
+signals/indicators/config: **100%**. bot.py: main loop + init 제외 핵심 로직 커버.
+
+Run with coverage: `python -m pytest scripts/tests/ --cov=scripts/production/c1_breakout --cov-report=term-missing`
 
 ## Test Suite Overview (v4.7.4+)
 

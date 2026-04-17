@@ -1,7 +1,12 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.4 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
+> **Version**: v4.7.5 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
 >
+> **v4.7.5 (2026-04-17)**: 6차 Cycle — Coverage 극대화.
+>   - signals.py + indicators.py **100% 커버** (이전 92%/97%)
+>   - bot.py 55% → 65% (+10pp): fetch_candles 스트릭, _calc_amount, _exchange_close, process_candles 통합
+>   - **113 pytest cases PASS** (~5s) — 이전 87 + 신규 26
+>   - 총 커버리지 62% → **71%** (bot.py main loop/init 제외하면 핵심 로직 거의 100%)
 > **v4.7.4 (2026-04-17)**: 5차 Cycle — 복합 flow + property-based 테스트.
 >   - `test_exchange_open.py` (7): MARKET retry (BUG#38), SL placement (BUG#28),
 >     emergency close (BUG#26), partial fill (BUG#55)

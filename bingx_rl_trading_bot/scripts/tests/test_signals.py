@@ -70,10 +70,22 @@ class TestCheckEntry:
         assert r is None
 
     def test_zero_range_rejected(self, default_strategy_config):
-        """A. Edge: high == low (zero range) → division guard."""
+        """A. Edge: high == low (zero range) → division guard (line 65)."""
         sig = C1BreakoutSignal(default_strategy_config)
-        r = sig.check_entry(100, 100, 100, 100, 99, 99.5, 1.0, 99, 100.5)
-        # high == low → no range → must reject
+        # LONG breakout (close > channel_high) but high==low (zero range)
+        r = sig.check_entry(101, 101, 101, 101, 100, 99, 1.0, 100, 101)
+        assert r is None
+
+    def test_sl_too_wide_rejected(self, default_strategy_config):
+        """D. Rollback: sl_pct > sl_max_pct (line 92).
+
+        Very large ATR forces ATR cap beyond 3% → reject trade (too risky).
+        """
+        sig = C1BreakoutSignal(default_strategy_config)
+        # Strong LONG breakout, ATR huge → atr_sl very far → sl_pct > 3%
+        # ATR=10, max_sl_atr=3.3, entry≈101.5 → atr_sl = 101.5 - 33 = 68.5
+        # sl_pct = (101.5 - 68.5)/101.5 = 32.5% > 3.0% → reject
+        r = sig.check_entry(100, 102, 99.5, 101.5, 101, 99, 10.0, 50, 101)
         assert r is None
 
     def test_sl_clamped_by_atr_cap(self, default_strategy_config):
@@ -179,4 +191,49 @@ class TestCheckExit:
         """Happy path: nothing triggers → return None."""
         sig = C1BreakoutSignal(default_strategy_config)
         r = sig.check_exit('LONG', 100, 100.5, 100.6, 99.9, 100.2, 95, 1.0, 5)
+        assert r is None
+
+    # ── SHORT mirror coverage (missing lines 122, 128, 140-141, 156) ──
+
+    def test_short_emergency_triggers(self, default_strategy_config):
+        """C. Bug interaction: SHORT emergency when high breaches 3% above entry.
+
+        (line 122 SHORT worst_pnl + line 128 SHORT emergency exit_price)
+        """
+        sig = C1BreakoutSignal(default_strategy_config)
+        # SHORT entry=100, SL=103.5 (above emergency 103). High=104 (past emergency).
+        # worst_pnl = 1 - 104/100 = -0.04 = -4% <= -3% → Emergency
+        # But SL=103.5 and high=104 → high >= sl_price → SL fires first
+        # To isolate Emergency: put SL higher (e.g. 106, no SL hit), high=104
+        r = sig.check_exit('SHORT', 100, 100, 104, 99, 103.5, 106, 1.0, 5)
+        assert r['reason'] == 'EMERGENCY'
+        # exit_price = entry * (1 + 3/100) = 103
+        assert r['exit_price'] == 103
+
+    def test_short_trail_tp(self, default_strategy_config):
+        """C. Bug interaction: SHORT trail_tp mirror (lines 140-141, 156)."""
+        sig = C1BreakoutSignal(default_strategy_config)
+        # SHORT entry=100, best=90 (+10% profit), cur=98 (drawdown from best)
+        # best_pnl = 1 - 90/100 = 0.10 = 10%
+        # cur_pnl = 1 - 98/100 = 0.02 = 2%
+        # drawdown = 10 - 2 = 8%, trail_dist = 2.5 * 1.0 / 98 * 100 = 2.55%
+        # 8% > 2.55% → TRAIL_TP
+        r = sig.check_exit('SHORT', 100, 90, 99, 97, 98, 110, 1.0, 5)
+        assert r['reason'] == 'TRAIL_TP'
+        # For SHORT: realized_pnl = max(0, best_pnl - trail_dist)
+        # exit_price = entry * (1 - realized_pnl/100)
+        assert r['exit_price'] < 100  # SHORT TP exits below entry (profit)
+
+    def test_short_body_negative_required(self, default_strategy_config):
+        """D. Rollback: SHORT breakout must have negative body (line 74)."""
+        sig = C1BreakoutSignal(default_strategy_config)
+        # close < channel_low (SHORT breakout) but body is POSITIVE (close > open)
+        # open=99, close=99.5 → body = +0.5 (positive)
+        # close=99.5 not < channel_low=99 — actually 99.5 > 99 → no SHORT direction
+        # Construct: close below channel_low with body positive
+        # open=98, close=99, channel_low=100 → close=99 < channel_low=100 → SHORT
+        # body = 99 - 98 = +1 (positive) → must reject (SHORT needs negative body)
+        r = sig.check_entry(98, 100, 97.5, 99, 100.5, 100, 1.0, 97.5, 100)
+        # range = 100 - 97.5 = 2.5, body = 1 → body/range = 40%, meets min
+        # direction=SHORT (close 99 < channel_low 100), body=+1 → body >= 0 → reject
         assert r is None

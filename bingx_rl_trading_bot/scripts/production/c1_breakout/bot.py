@@ -109,6 +109,43 @@ BUG#53 (2026-04-17): Channel sanity check missing
     breakout condition (close > channel_high OR close < channel_low) could
     still fire pathologically.
   - Fix: reject channel_high <= channel_low explicitly in check_entry.
+
+BUG#54 (2026-04-17): bars_since_last_exit ignored wall-clock during outages
+  - Root cause: counter only incremented per processed candle cycle. After a
+    2h outage, restart saw saved_counter=0 and first cycle made it 1 — bot
+    believed only 1 bar had passed since last exit. min_bars_between=2 still
+    blocked entry once, so operational impact was minor, but bookkeeping was
+    incorrect and diverged from backtest semantics.
+  - Fix: persist last_exit_time on every close (ghost + normal). On _load_state
+    compute elapsed_bars = (now - last_exit_time)/15min and take max with saved
+    counter. Never regresses (prefers higher of the two).
+
+BUG#55 (2026-04-17): Partial fill on MARKET was silent
+  - Root cause: BingX market orders rarely partial but thin-liquidity moments
+    can leave filled_qty < requested. SL/Trail already size to filled_qty
+    (BUG#28), so exchange protection stays correct, but operator had no signal.
+  - Fix: log warning when filled_qty < requested_qty × 0.99 with shortfall %.
+
+BUG#56 (2026-04-17): trade_history grew unbounded in memory
+  - Root cause: _save_state writes trade_history[-500:] to disk, but in-memory
+    list kept appending. After months of operation memory footprint grew
+    linearly (~220KB/year at 3 trades/day — negligible but asymmetric).
+  - Fix: after each exit, trim in-memory list to 500 when it exceeds 1000.
+
+BUG#57 (2026-04-17): datetime.utcnow() deprecated in Python 3.12+
+  - Root cause: naive UTC construction deprecated; Python 3.14+ may remove.
+    Would start emitting DeprecationWarnings in 3.13 logs.
+  - Fix: _utc_now() / _utc_now_naive_iso() helpers. Internal arithmetic uses
+    aware UTC; serialization uses .replace(tzinfo=None).isoformat() to match
+    existing state.json format (backward-compatible).
+
+BUG#58 (2026-04-17): state.json I/O on OneDrive-synced path could crash loop
+  - Root cause: state_path lives under OneDrive sync folder. Sync-triggered
+    file locks (ERROR_SHARING_VIOLATION) would raise from os.replace and
+    propagate to main loop. A missed save is recoverable; a crashed loop is not.
+  - Fix: try/except around json.dump and os.replace. Log warning, clean up
+    .tmp on failure. Next cycle retries. Positions still re-hydrated via
+    orphan detection on restart if state is stale.
 """
 
 import os
@@ -119,8 +156,19 @@ import logging
 import ccxt
 import yaml
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+
+
+# BUG#57: datetime.utcnow() deprecated in Python 3.12+.
+# _utc_now() returns UTC-aware datetime; callers use .replace(tzinfo=None) to
+# preserve historical naive isoformat (backward-compatible with existing state.json).
+def _utc_now():
+    return datetime.now(timezone.utc)
+
+
+def _utc_now_naive_iso():
+    return datetime.now(timezone.utc).replace(tzinfo=None).isoformat()
 
 from .signals import C1BreakoutSignal
 from .indicators import compute_atr, compute_channel, compute_fractal_swings
@@ -162,6 +210,9 @@ class C1BreakoutBot:
         self.positions = []
         self.trade_history = []
         self.bars_since_last_exit = 999  # BUG#16: min_bars_between enforcement
+        # BUG#54: track last exit wall-clock for accurate bars_since_last_exit
+        # reconstruction on restart (elapsed time divided by 15min bar).
+        self.last_exit_time = None  # datetime or None
         # BUG#35: Force trail re-placement on first cycle after restart
         # Ensures any wrong priceRate (90%) orders are replaced with correct trailingPercent (0.9%)
         # Only meaningful when a position already exists at startup
@@ -241,11 +292,46 @@ class C1BreakoutBot:
         self.positions = state.get('positions') or []
         self.trade_history = state.get('trade_history', [])
         self.bars_since_last_exit = state.get('bars_since_last_exit', 999)
+
+        # BUG#54: reconstruct bars_since_last_exit from elapsed wall-clock time.
+        # Saved counter reflects only bars processed during bot uptime; a 2h outage
+        # would leave counter undercounted and briefly bias entry permission timing.
+        # Prefer max(saved_counter, elapsed_bars) — conservative (never entry-blocks
+        # legitimate waits, and catches up after extended downtime).
+        last_exit_str = state.get('last_exit_time')
+        if last_exit_str:
+            try:
+                from datetime import timezone
+                le = datetime.fromisoformat(last_exit_str.replace('Z', '+00:00'))
+                if le.tzinfo is None:
+                    le = le.replace(tzinfo=timezone.utc)
+                now_utc = datetime.now(timezone.utc)
+                elapsed_sec = (now_utc - le).total_seconds()
+                if elapsed_sec > 0:
+                    elapsed_bars = int(elapsed_sec // 900)  # 15 min per bar
+                    if elapsed_bars > self.bars_since_last_exit:
+                        logger.info(
+                            f"bars_since_last_exit reconciled: "
+                            f"{self.bars_since_last_exit}→{elapsed_bars} "
+                            f"(elapsed {elapsed_sec/60:.1f} min since last exit)")
+                        self.bars_since_last_exit = elapsed_bars
+                self.last_exit_time = le
+            except Exception as e:
+                logger.debug(f"last_exit_time parse failed: {e}")
         logger.info(f"State: {len(self.positions)} pos, {len(self.trade_history)} trades")
 
     def _save_state(self):
+        """Persist bot state to disk.
+
+        BUG#25: Atomic write (tmp → rename) is crash-safe.
+        BUG#58: state_path is under OneDrive-synced folder — sync can briefly lock
+        files during upload. Wrap in try/except to avoid crashing the main loop:
+        a single failed save is recoverable (next cycle retries). True data loss
+        only occurs if the bot dies before the next save AND the last persisted
+        state is stale — acceptable since positions are re-hydrated via orphan
+        detection on restart.
+        """
         Path(self.state_path).parent.mkdir(parents=True, exist_ok=True)
-        # BUG#25: Atomic write — write to temp, then rename (crash-safe)
         tmp_path = self.state_path + '.tmp'
         # Enrich positions with monitoring-friendly trail estimate
         positions_out = []
@@ -263,12 +349,26 @@ class C1BreakoutBot:
             'positions': positions_out,
             'trade_history': self.trade_history[-500:],
             'bars_since_last_exit': self.bars_since_last_exit,
-            'updated': datetime.utcnow().isoformat(),
+            # BUG#54: save last_exit_time for elapsed-bar reconciliation on restart.
+            # Naive iso format (matches exit_time/entry_time/updated convention).
+            'last_exit_time': (self.last_exit_time.replace(tzinfo=None).isoformat()
+                               if self.last_exit_time else None),
+            'updated': _utc_now_naive_iso(),
         }
-        with open(tmp_path, 'w') as f:
-            json.dump(data, f, indent=2)
-        # Atomic rename (on Windows: replaces existing)
-        os.replace(tmp_path, self.state_path)
+        try:
+            with open(tmp_path, 'w') as f:
+                json.dump(data, f, indent=2)
+            # Atomic rename (on Windows: replaces existing)
+            os.replace(tmp_path, self.state_path)
+        except (OSError, PermissionError) as e:
+            # BUG#58: OneDrive sync lock or transient I/O — warn, do not crash.
+            # Attempt cleanup of tmp file to prevent accumulation.
+            logger.warning(f"State save skipped (I/O): {e} — will retry next cycle")
+            try:
+                if os.path.exists(tmp_path):
+                    os.remove(tmp_path)
+            except Exception:
+                pass
 
     # ── Exchange Sync (SAFE: no ghost on API error) ───────
 
@@ -323,10 +423,12 @@ class C1BreakoutBot:
                               self.config['exchange'].get('leverage', 1))
                 pnl = (est_pnl - 0.10) * trading_lev
                 # BUG#45: use actual exchange exit timestamp, fallback to detection time
+                from datetime import timezone
                 if exit_ts_ms:
-                    exit_time = datetime.utcfromtimestamp(exit_ts_ms / 1000).isoformat()
+                    exit_dt = datetime.fromtimestamp(exit_ts_ms / 1000, tz=timezone.utc)
                 else:
-                    exit_time = datetime.utcnow().isoformat()
+                    exit_dt = datetime.now(timezone.utc)
+                exit_time = exit_dt.replace(tzinfo=None).isoformat()  # preserve naive format
                 self.trade_history.append({
                     'direction': d, 'entry_price': pos['entry_price'],
                     'exit_price': exit_price,
@@ -335,6 +437,10 @@ class C1BreakoutBot:
                     'exit_time': exit_time,
                 })
                 self.bars_since_last_exit = 0
+                self.last_exit_time = exit_dt  # BUG#54: accurate restart reconciliation
+                # BUG#56: cap in-memory trade_history
+                if len(self.trade_history) > 1000:
+                    self.trade_history = self.trade_history[-500:]
 
                 logger.warning(f"GHOST: {d} @ ${pos['entry_price']:.2f} → "
                                f"{reason} exit=${exit_price:.2f} PnL={pnl:+.2f}%")
@@ -363,7 +469,7 @@ class C1BreakoutBot:
                 self.positions.append({
                     'direction': side, 'entry_price': ep, 'sl_price': sl,
                     'sl_order_id': resolved_id,
-                    'best_price': ep, 'entry_time': datetime.utcnow().isoformat(),
+                    'best_price': ep, 'entry_time': _utc_now_naive_iso(),
                     'bars_held': 0, 'size_pct': self.size_pct,
                 })
                 changed = True
@@ -631,7 +737,7 @@ class C1BreakoutBot:
         d = signal['direction']; sl = signal['sl_price']
         pos = {
             'direction': d, 'entry_price': price, 'sl_price': sl,
-            'best_price': price, 'entry_time': datetime.utcnow().isoformat(),
+            'best_price': price, 'entry_time': _utc_now_naive_iso(),
             'bars_held': 0, 'size_pct': self.size_pct,
         }
         self.positions.append(pos)
@@ -651,12 +757,19 @@ class C1BreakoutBot:
                       self.config['exchange'].get('leverage', 1))
         pnl = (raw_pct - 0.10) * trading_lev
 
+        from datetime import timezone
+        exit_dt = datetime.now(timezone.utc)
         self.trade_history.append({
             'direction': d, 'entry_price': pos['entry_price'], 'exit_price': xp,
             'pnl_pct': round(pnl, 4), 'reason': exit_signal['reason'],
-            'bars_held': pos['bars_held'], 'exit_time': datetime.utcnow().isoformat(),
+            'bars_held': pos['bars_held'],
+            'exit_time': exit_dt.replace(tzinfo=None).isoformat(),
         })
         self.bars_since_last_exit = 0  # BUG#16: reset for min_bars_between
+        self.last_exit_time = exit_dt  # BUG#54: accurate restart reconciliation
+        # BUG#56: cap in-memory trade_history (disk was already capped at 500)
+        if len(self.trade_history) > 1000:
+            self.trade_history = self.trade_history[-500:]
 
         logger.info(f"EXIT {d} {exit_signal['reason']} | PnL={pnl:+.2f}% | "
                     f"Hold={pos['bars_held']}b")
@@ -726,6 +839,15 @@ class C1BreakoutBot:
             # BUG#18: Get actual fill price and update entry_price
             fill_price = float(order.get('average') or order.get('price') or price)
             filled_qty = float(order.get('filled') or order.get('amount') or qty)
+            # BUG#55: detect partial fill (thin liquidity / extreme volatility).
+            # SL/Trail are sized to filled_qty (BUG#28), so exchange-side protection
+            # stays correct. Log warns operator to investigate order book conditions.
+            requested_qty = float(qty) if qty else filled_qty
+            if requested_qty > 0 and filled_qty < requested_qty * 0.99:
+                shortfall = (requested_qty - filled_qty) / requested_qty * 100
+                logger.warning(
+                    f"Partial fill: filled={filled_qty} / requested={requested_qty} "
+                    f"(shortfall {shortfall:.2f}%) — SL/Trail sized to actual fill")
             if fill_price > 0 and self.positions:
                 self.positions[-1]['entry_price'] = fill_price
                 slip = (fill_price / price - 1) * 100
@@ -1001,7 +1123,7 @@ class C1BreakoutBot:
     # ── Main Loop ─────────────────────────────────────────
 
     def _wait_for_candle(self):
-        now = datetime.utcnow()
+        now = _utc_now().replace(tzinfo=None)  # naive UTC for arithmetic
         next_min = 15 - (now.minute % 15)
         if next_min == 15: next_min = 0
         wait = next_min * 60 - now.second + 5
@@ -1037,7 +1159,7 @@ class C1BreakoutBot:
                 logger.info(f"Cycle: pos={len(self.positions)}")
 
                 # Hourly status summary
-                now = datetime.utcnow()
+                now = _utc_now().replace(tzinfo=None)
                 if now.hour != self._last_hourly:
                     self._last_hourly = now.hour
                     trades_today = [t for t in self.trade_history

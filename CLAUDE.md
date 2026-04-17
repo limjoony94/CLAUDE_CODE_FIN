@@ -1,7 +1,13 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
+> **Version**: v4.7.1 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
 >
+> **v4.7.1 (2026-04-17)**: 2차 6-Cycle 비판 평가. BUG#54~58 (5건) 추가 수정.
+>   - **BUG#54**: bars_since_last_exit wall-clock 보정 (last_exit_time 저장, 재시작 시 elapsed_bars 계산)
+>   - **BUG#55**: MARKET 부분 체결 감지 경고 (shortfall > 1%)
+>   - **BUG#56**: trade_history in-memory cap (1000→500)
+>   - **BUG#57**: datetime.utcnow deprecation 대응 (_utc_now 헬퍼)
+>   - **BUG#58**: state.json I/O 예외 방어 (OneDrive sync lock 대응)
 > **v4.7.0 (2026-04-17)**: Opus 4.7 코드 리뷰. 6-Cycle 다각도 비판 평가. BUG#48~53 (6건) 수정.
 >   - **BUG#48 [CRITICAL]**: Orphan 채택 시 거래소 실제 SL 복원 (3% fallback만 하던 것 → 실제 STOP 주문 조회)
 >   - **BUG#49**: Fill price 기준 sl_pct 재검증 경고

@@ -1,7 +1,26 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.5 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-17
+> **Version**: v4.7.9 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-18
 >
+> **v4.7.9 (2026-04-18)**: 문서·워크스페이스 구조 전면 개편.
+>   - 레거시(Pattern/CP/MAVS/BTV/Volspike) 연구 스크립트/문서/결과 `archive/legacy_*`로 이동
+>   - `claudedocs/BUG_HISTORY.md` 신설 — BUG#1~65 연대기·카테고리·교훈
+>   - `claudedocs/BACKTEST_LIVE_PARITY.md` 신설 — 22개 정합성 체크, 현재 20/22
+>   - `.claude/commands/`, `.claude/hooks/` v2.6 기준 재검증
+>   - AGENTS.md — baton-touch/priceRate/TRAILING 한계 등 최신 학습 반영
+>   - 테스트 스위트 현황(113 pytest cases, coverage 71%) README 명시
+> **v4.7.8 (2026-04-18)**: 5차 Cycle — 백테스트-라이브 정합성 극대화. BUG#62~65 (4건) 수정.
+>   - **BUG#62**: `activatePrice`를 `trail_activation_pct`와 정합(entry×1.001 → 0.0005 기반)
+>   - **BUG#63**: best_price-driven trail tighten — 매 cycle 백테스트 정확 공식 재평가, STOP_MARKET 갱신 (backtest "re-check every bar" 정합)
+>   - **BUG#64**: `best_price`를 `fill_price`와 동기화 (entry 시점 best_pnl=0, 백테스트 초기화 정합)
+>   - **BUG#65**: `_exchange_close`가 실제 MARKET 체결가 캡처 (order.average → fetch_my_trades fallback), `_do_close`에서 사용 → PnL 정확도↑, `exit_slippage_pct` 기록
+>   - 정합성: 18/22 → **20/22** (남은 2건: pre-activation TRAILING / MARKET slippage — 구조적 한계)
+> **v4.7.7 (2026-04-18)**: 4차 Cycle — Trail Baton-Touch 구현. BUG#61 (2026-04-18) 추가.
+>   - **BUG#61 [CRITICAL]**: Trail update LOOSEN 시 baton-touch — BingX TRAILING_STOP_MARKET은 cancel+replace 시 best_price 추적 리셋되므로, 정확한 2차방정식 `cur² - best·cur + trail_K·ATR·entry = 0` 해로 STOP_MARKET 배치 → 이전 trail 레벨 보존
+>   - `_calc_trail_trigger_price()` 신설: signals.py와 100% 수식 일치 (BUG#61b)
+>   - `trail_order_id` 상태 추적 — STOP_MARKET vs TRAILING 구분하여 정확히 취소/갱신
+>   - Pre-activation (best_pnl ≤ activation_pct)는 여전히 TRAILING_STOP_MARKET (baton 미정의)
+> **v4.7.6 (2026-04-18)**: 봇 다운타임 후 재시작 케이스 방어 강화 (BUG#59~61 for 04-17, 재검).
 > **v4.7.5 (2026-04-17)**: 6차 Cycle — Coverage 극대화.
 >   - signals.py + indicators.py **100% 커버** (이전 92%/97%)
 >   - bot.py 55% → 65% (+10pp): fetch_candles 스트릭, _calc_amount, _exchange_close, process_candles 통합
@@ -74,8 +93,9 @@
 | 자산        | BTC/USDT (단일)                                         |
 | 포지션      | **N=1**, One-Way 모드 (positionSide=BOTH)               |
 | Exchange SL | STOP_MARKET @ fractal SL (crash protection)            |
-| Exchange TP | TRAILING_STOP_MARKET @ ATR callback % (trailingPercent, 15분 갱신) |
+| Exchange TP | **Pre-activation**: TRAILING_STOP_MARKET @ callback %<br>**Post-activation**: STOP_MARKET baton-touch @ exact quadratic trigger (BUG#61) |
 | **검증**    | MC p=0.000 DISC, WF 5/5 PASS, 3-Way ALL PASS            |
+| **정합성**  | 백테스트↔라이브 20/22 (BUG#62~65 적용)                 |
 | **리스크**  | Halt 없음 — SL/Trail/Emergency만 적용                    |
 
 ### 검증 결과 (v2.5, N=1, 333일 BTC 백테스트)
@@ -215,12 +235,19 @@ bingx_rl_trading_bot/
 ├── config/
 │   ├── c1_breakout_config.yaml   # 전략+리스크 파라미터 (유일한 설정 소스)
 │   └── api_keys.yaml             # BingX API 키
-├── scripts/analysis/             # 연구/검증 스크립트
+├── scripts/
+│   ├── analysis/                 # C1 현행 연구/검증 스크립트 (레거시는 archive/)
+│   ├── tests/                    # pytest 스위트 (113 cases, coverage 71%)
+│   └── ops/                      # 시작/중지/상태/헬스체크
 ├── data/                         # BTC 5m 데이터 (15m 합성용, 백테스트 전용)
-├── results/                      # 봇 상태, 검증 결과
+├── results/                      # 봇 상태, C1 검증 결과 (레거시는 archive/)
 ├── logs/                         # c1_breakout.log (일일 회전, 30일 보관)
-├── claudedocs/                   # 전략 문서, 연구 보고서
-└── archive/legacy_bots/          # 폐기된 봇
+├── claudedocs/                   # C1 설계·연구 문서, BUG_HISTORY, PARITY
+└── archive/
+    ├── legacy_bots/              # 폐기된 봇 (Pattern 5m, MAVS-15 등)
+    ├── legacy_analysis/          # 레거시 전략 연구 스크립트
+    ├── legacy_docs/              # 레거시 전략 문서
+    └── legacy_results/           # 레거시 전략 결과 JSON
 ```
 
 ## 🔬 Standard Research Protocol
@@ -238,10 +265,14 @@ bingx_rl_trading_bot/
 
 ## 🔗 문서 링크
 
-- [C1 설계서](claudedocs/c1_breakout_v2_design.md)
-- [연구 프로토콜](claudedocs/STANDARD_RESEARCH_PROTOCOL.md)
+| 문서                                                                                | 내용                                                  |
+| ----------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [C1 설계서](bingx_rl_trading_bot/claudedocs/c1_breakout_v2_design.md)               | 전략 수식, 파라미터, 검증 결과                        |
+| [BUG 히스토리](bingx_rl_trading_bot/claudedocs/BUG_HISTORY.md)                      | BUG#1~65 연대기·카테고리·교훈                         |
+| [백테스트-라이브 정합성](bingx_rl_trading_bot/claudedocs/BACKTEST_LIVE_PARITY.md)   | 22개 체크 항목, 현재 20/22 달성                       |
+| [연구 프로토콜](bingx_rl_trading_bot/claudedocs/STANDARD_RESEARCH_PROTOCOL.md)      | additive PnL, expanding WF, progressive look-ahead    |
 
-> **레거시 문서**: `archive/legacy_bots/docs/`, `docs/` 디렉토리 참조
+> **레거시 문서**: `archive/legacy_docs/`, `archive/legacy_bots/docs/`
 
 ## ✅ 전략 변경 시 체크리스트
 

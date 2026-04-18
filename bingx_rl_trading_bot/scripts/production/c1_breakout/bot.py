@@ -65,6 +65,54 @@ BUG#46 (2026-04-15): Trail update resets BingX best_price tracking
     TIGHTEN never: bot's check_exit handles tightening with current ATR
       (backtest-identical, runs every 15m). Exchange tracking preserved.
 
+BUG#65 (2026-04-18): Capture actual MARKET close fill price
+  - Root cause: _do_close recorded exit_price as the theoretical trigger from
+    check_exit, ignoring actual MARKET fill from _exchange_close. For TRAIL_TP
+    exits, recorded PnL was slightly overstated (no sell-side slippage modeled).
+  - Fix: _exchange_close returns actual fill price (via order['average'] or
+    fetch_my_trades fallback). _do_close uses it for accurate PnL recording.
+    Also records exit_slippage_pct for monitoring. Falls back to theoretical
+    on API error (safe degradation).
+
+BUG#64 (2026-04-18): best_price sync with fill_price at entry
+  - Root cause: _do_open set best_price = signal_price, _exchange_open updated
+    entry_price = fill_price, but best_price stayed at signal. With slippage,
+    best_pnl at entry was non-zero (sometimes negative for LONG with positive slip).
+    Backtest has best_price = entry_price exactly → best_pnl = 0 at entry.
+  - Fix: after fill_price update, also sync best_price = fill_price.
+    Now matches backtest initialization (best_pnl = 0 at entry).
+
+BUG#62 (2026-04-18): activatePrice aligned with trail_activation_pct
+  - Root cause: TRAILING_STOP_MARKET used activatePrice = entry × 1.001 (0.1%),
+    2x stricter than backtest's trail_activation_pct (0.05%).
+    Live trail activated later than backtest would — minor but real divergence.
+  - Fix: activatePrice = entry × (1 ± trail_activation_pct/100) → 0.05% match.
+
+BUG#63 (2026-04-18): Best-price-driven trail tighten (backtest parity)
+  - Root cause: BUG#61 baton-touch STOP_MARKET is static — never updated as
+    best_price climbs, even when backtest re-evaluates trail every bar.
+    Live trail fell behind backtest in trending markets.
+  - Fix: each cycle, compute exact backtest trigger. If tighter than current
+    STOP_MARKET trigger, cancel+replace at new price. Honors backtest's
+    "re-check every bar" semantics. Threshold: 0.05% of trigger price (to avoid
+    excessive churn on small best_price fluctuations).
+
+BUG#61 (2026-04-18): Trail update baton-touch on LOOSEN
+  - Root cause: BUG#46 LOOSEN still reset BingX tracking. New TRAILING order
+    with activatePrice = cur_price × 1.001 meant:
+      1. Lost historical best_price ($77K → forgotten)
+      2. Needs activatePrice to be re-reached before resuming tracking
+      3. If price dropped below activatePrice immediately, no protection
+  - Fix: on LOOSEN, use BATON-TOUCH:
+      1. Compute EXACT trigger via _calc_trail_trigger_price (backtest formula)
+         cur² - best·cur + trail_K·ATR·entry = 0 → upper root is trigger
+      2. Place as STOP_MARKET (fixed trigger, not TRAILING)
+      3. This preserves the level where trail WOULD be if tracking had continued
+    Track trail_order_id in pos state to properly identify/verify/cancel.
+    Pre-activation case (best_pnl ≤ trail_activation_pct) still uses
+    TRAILING_STOP_MARKET since baton-touch undefined before activation.
+    BUG#61b: use exact quadratic formula (100% parity with signals.py).
+
 BUG#48 (2026-04-17): Orphan adoption discarded actual SL (Opus 4.7 review)
   - Root cause: _sync_exchange orphan path always wrote emergency_sl_pct (3%)
     into local sl_price. If original fractal SL was 0.5%, on restart the bot
@@ -789,19 +837,51 @@ class C1BreakoutBot:
 
     def _do_close(self, idx, exit_signal):
         pos = self.positions[idx]; d = pos['direction']; xp = exit_signal['exit_price']
-        if d == 'LONG': raw_pct = (xp / pos['entry_price'] - 1) * 100
-        else: raw_pct = (1 - xp / pos['entry_price']) * 100
         trading_lev = self.config['exchange'].get('trading_leverage',
                       self.config['exchange'].get('leverage', 1))
-        pnl = (raw_pct - 0.10) * trading_lev
 
         from datetime import timezone
         exit_dt = datetime.now(timezone.utc)
+
+        # BUG#65: close on exchange FIRST, capture actual fill price
+        actual_fill = None
+        actual_ts = None
+        if self.exchange:
+            actual_fill, actual_ts = self._exchange_close(d)
+
+        # Use actual fill if available (more accurate than theoretical)
+        recorded_exit = actual_fill if actual_fill and actual_fill > 0 else xp
+        if d == 'LONG':
+            raw_pct = (recorded_exit / pos['entry_price'] - 1) * 100
+        else:
+            raw_pct = (1 - recorded_exit / pos['entry_price']) * 100
+        pnl = (raw_pct - 0.10) * trading_lev
+
+        # Slippage tracking
+        slip = 0.0
+        if actual_fill and actual_fill > 0 and xp > 0:
+            if d == 'LONG':
+                slip = (actual_fill / xp - 1) * 100  # negative = sold below trigger
+            else:
+                slip = (1 - actual_fill / xp) * 100  # negative = bought above trigger
+            if abs(slip) > 0.02:
+                logger.info(f"Exit slippage: {slip:+.3f}% (trigger=${xp:.1f} fill=${actual_fill:.1f})")
+
+        record_exit_time = exit_dt
+        if actual_ts:
+            try:
+                record_exit_time = datetime.utcfromtimestamp(actual_ts / 1000)
+            except Exception:
+                pass
+
         self.trade_history.append({
-            'direction': d, 'entry_price': pos['entry_price'], 'exit_price': xp,
+            'direction': d, 'entry_price': pos['entry_price'],
+            'exit_price': recorded_exit,
             'pnl_pct': round(pnl, 4), 'reason': exit_signal['reason'],
             'bars_held': pos['bars_held'],
-            'exit_time': exit_dt.replace(tzinfo=None).isoformat(),
+            'exit_time': record_exit_time.replace(tzinfo=None).isoformat()
+                         if record_exit_time.tzinfo else record_exit_time.isoformat(),
+            'exit_slippage_pct': round(slip, 4) if actual_fill else None,
         })
         self.bars_since_last_exit = 0  # BUG#16: reset for min_bars_between
         self.last_exit_time = exit_dt  # BUG#54: accurate restart reconciliation
@@ -811,7 +891,6 @@ class C1BreakoutBot:
 
         logger.info(f"EXIT {d} {exit_signal['reason']} | PnL={pnl:+.2f}% | "
                     f"Hold={pos['bars_held']}b")
-        if self.exchange: self._exchange_close(d)
         self.positions.pop(idx)
 
     # ── Exchange Orders (One-Way, TimeSynced) ─────────────
@@ -888,6 +967,12 @@ class C1BreakoutBot:
                     f"(shortfall {shortfall:.2f}%) — SL/Trail sized to actual fill")
             if fill_price > 0 and self.positions:
                 self.positions[-1]['entry_price'] = fill_price
+                # BUG#64: sync best_price with fill_price for backtest parity.
+                # _do_open initialized best_price = signal_price. With slippage,
+                # best_price could be LOWER than entry_price (for LONG with positive
+                # slip), causing negative best_pnl at entry — diverges from backtest
+                # where best_pnl = 0 at entry.
+                self.positions[-1]['best_price'] = fill_price
                 slip = (fill_price / price - 1) * 100
                 if abs(slip) > 0.01:
                     logger.info(f"Slippage: {slip:+.3f}% (signal={price:.1f} fill={fill_price:.1f})")
@@ -923,8 +1008,12 @@ class C1BreakoutBot:
             callback = round(max(0.1, min(5.0, trail_K * atr_pct)), 1)
             try:
                 tp_side = 'sell' if direction == 'LONG' else 'buy'
-                activate = round(ref_price * (1 + 0.001) if direction == 'LONG'
-                                 else ref_price * (1 - 0.001), 1)
+                # BUG#62: activatePrice aligned with backtest trail_activation_pct
+                # Previous 0.001 (0.1%) was 2x stricter than backtest (0.05%)
+                # Now matches: activates when price moves trail_activation_pct from entry
+                act_pct = self.config['strategy'].get('trail_activation_pct', 0.05) / 100
+                activate = round(ref_price * (1 + act_pct) if direction == 'LONG'
+                                 else ref_price * (1 - act_pct), 1)
                 self.exchange.create_order(
                     symbol, 'TRAILING_STOP_MARKET', tp_side, filled_qty,
                     params={'positionSide': 'BOTH',
@@ -1056,54 +1145,109 @@ class C1BreakoutBot:
                     logger.warning(f"SL STOP was missing — re-placed @ ${pos['sl_price']:.1f}")
 
             # ── 2. Verify trail exists — re-place if missing ──
-            trail_exists = any(
+            # BUG#61: trail may be TRAILING_STOP_MARKET (pre-activation) or
+            # STOP_MARKET with tracked trail_order_id (baton-touched after LOOSEN).
+            trail_order_id = pos.get('trail_order_id', '')
+            trail_exists_by_id = (trail_order_id and any(
+                o.get('id', '') == trail_order_id for o in orders))
+            trail_exists_by_type = any(
                 'TRAILING' in ((o.get('info') or {}).get('type', '') or '').upper()
                 for o in orders)
+            trail_exists = trail_exists_by_id or trail_exists_by_type
 
             # BUG#35: On first cycle after restart, force re-placement for legacy priceRate orders
             force_reset = getattr(self, '_force_trail_reset', False)
             if force_reset:
                 self._force_trail_reset = False
                 if trail_exists:
-                    # Cancel existing trail (may have wrong priceRate from old code)
+                    # Cancel existing trail (TRAILING or baton-touch STOP_MARKET)
                     for order in orders:
                         oid = order.get('id', '')
                         if oid == pos.get('sl_order_id', ''):
                             continue
                         o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
-                        if 'TRAILING' in o_type.upper():
+                        is_trailing = 'TRAILING' in o_type.upper()
+                        is_baton_stop = (trail_order_id and oid == trail_order_id)
+                        if is_trailing or is_baton_stop:
                             try:
                                 self.exchange.cancel_order(oid, symbol)
                             except Exception:
                                 pass
+                    pos['trail_order_id'] = ''  # clear stale ID
                     trail_exists = False
                     logger.info("Trail: forcing re-placement (BUG#35 legacy priceRate fix)")
 
-            # ── 3. Re-place trail if missing, or LOOSEN if ATR rose significantly ──
+            # ── 3. Re-place trail if missing, LOOSEN on ATR rise, or TIGHTEN on best rise ──
             trail_K = self.config['strategy'].get('trail_K', 2.5)
             new_callback = round(max(0.1, min(5.0, trail_K * cur_atr / cur_price * 100)), 1)
             old_callback = pos.get('last_callback', 0)
+
+            # BUG#63: Detect best_price-driven tighten opportunity.
+            # Backtest re-evaluates trail every bar with current best_price.
+            # Live baton-touch STOP_MARKET is static; only updating on callback
+            # change misses the best_price-driven tightening that backtest does.
+            # Fix: if current computed trigger is tighter than existing trail,
+            # update it (honors backtest "re-check every bar" semantics).
+            prev_trigger = pos.get('trail_trigger', 0)
+            bp_for_calc = pos.get('best_price', cur_price)
+            d_for_calc = pos.get('direction', 'LONG')
+            act_chk = self.config['strategy'].get('trail_activation_pct', 0.05)
+            if d_for_calc == 'LONG':
+                best_pnl_chk = (bp_for_calc / pos.get('entry_price', cur_price) - 1) * 100
+            else:
+                best_pnl_chk = (1 - bp_for_calc / pos.get('entry_price', cur_price)) * 100
+
+            should_tighten = False
+            if trail_exists and prev_trigger > 0 and best_pnl_chk > act_chk:
+                # Compute current theoretical trigger with exact backtest formula
+                exact_trig = self._calc_trail_trigger_price(pos, cur_atr)
+                if exact_trig is not None:
+                    # For LONG: tighter = higher trigger. For SHORT: tighter = lower.
+                    if d_for_calc == 'LONG' and exact_trig > prev_trigger + max(5.0, prev_trigger * 0.0005):
+                        should_tighten = True
+                    elif d_for_calc == 'SHORT' and exact_trig < prev_trigger - max(5.0, prev_trigger * 0.0005):
+                        should_tighten = True
 
             need_replace = False
             if not trail_exists:
                 need_replace = True
                 logger.warning(f"Trail STOP missing — will re-place")
-            elif new_callback > old_callback + 0.1:
-                # BUG#46: LOOSEN ONLY — ATR rose → exchange trail is too tight
-                # → would cause premature exit (not matching backtest behavior)
-                # Cancel old trail and re-place with wider callback.
-                # Tracking resets, but wider trail is far from best → low trigger risk.
-                # TIGHTENING is handled by bot's check_exit (current ATR, every 15m).
+            elif should_tighten:
+                # BUG#63: TIGHTEN on best_price rise — backtest matches this behavior
                 for order in orders:
                     oid = order.get('id', '')
                     if oid == pos.get('sl_order_id', ''):
                         continue
                     o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
-                    if 'TRAILING' in o_type.upper():
+                    is_trailing = 'TRAILING' in o_type.upper()
+                    is_baton_stop = (trail_order_id and oid == trail_order_id)
+                    if is_trailing or is_baton_stop:
                         try:
                             self.exchange.cancel_order(oid, symbol)
                         except Exception:
                             pass
+                pos['trail_order_id'] = ''
+                need_replace = True
+                logger.info(f"Trail TIGHTEN: best-driven trigger update (prev=${prev_trigger:.1f})")
+            elif new_callback > old_callback + 0.1:
+                # BUG#46 + BUG#61: LOOSEN — ATR rose → exchange trail is too tight
+                # Cancel old trail (TRAILING or baton-touch STOP_MARKET) and re-place
+                # using baton-touch from best_price (BUG#61 below in need_replace path).
+                for order in orders:
+                    oid = order.get('id', '')
+                    if oid == pos.get('sl_order_id', ''):
+                        continue
+                    o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
+                    # Cancel TRAILING or the tracked baton-touch STOP_MARKET
+                    is_trailing = 'TRAILING' in o_type.upper()
+                    is_baton_stop = (trail_order_id and oid == trail_order_id)
+                    if is_trailing or is_baton_stop:
+                        try:
+                            self.exchange.cancel_order(oid, symbol)
+                        except Exception:
+                            pass
+                # Clear old trail_order_id since we cancelled it
+                pos['trail_order_id'] = ''
                 need_replace = True
                 logger.info(f"Trail LOOSEN: {old_callback}%→{new_callback}% (ATR=${cur_atr:.0f})")
 
@@ -1115,23 +1259,89 @@ class C1BreakoutBot:
                 if live and pos['direction'] in live:
                     qty = live[pos['direction']]['contracts']
                     tp_side = 'sell' if pos['direction'] == 'LONG' else 'buy'
-                    activate = round(cur_price * (1 + 0.001) if pos['direction'] == 'LONG'
-                                     else cur_price * (1 - 0.001), 1)
-                    self.exchange.create_order(
-                        symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
-                        params={'positionSide': 'BOTH',
-                                'activatePrice': activate,
-                                'trailingPercent': callback,
-                                'reduceOnly': True})
-                    pos['last_callback'] = callback
                     bp = pos.get('best_price', cur_price)
-                    est = round(bp * (1 - callback/100) if pos['direction'] == 'LONG'
-                                else bp * (1 + callback/100), 1)
-                    logger.info(f"Trail placed: callback={callback}% est≈${est:.1f}")
+                    ep = pos.get('entry_price', cur_price)
+                    d = pos['direction']
 
-            # BUG#46 policy:
-            # - LOOSEN (ATR↑): re-place → tracking resets but trail is far → safe
-            # - TIGHTEN (ATR↓): DON'T re-place → bot check_exit handles it → tracking preserved
+                    # BUG#61: Baton-touch — preserve best_price tracking on LOOSEN.
+                    # Previous TRAILING_STOP_MARKET cancel+re-place RESETS BingX's
+                    # internal best_price tracking. New order needs activatePrice to
+                    # be re-reached before tracking resumes.
+                    # Fix: compute exact trigger from LOCAL best_price × (1±callback/100)
+                    # and place as STOP_MARKET (fixed trigger), NOT TRAILING_STOP_MARKET.
+                    # This "hands off" the trail level — continuing from where the
+                    # old trail would have been, based on the historical best_price.
+                    if d == 'LONG':
+                        best_profit_pct = (bp / ep - 1) * 100
+                    else:
+                        best_profit_pct = (1 - bp / ep) * 100
+                    activation = self.config['strategy'].get('trail_activation_pct', 0.05)
+
+                    if best_profit_pct > activation:
+                        # Trail activation threshold met → use baton-touch STOP_MARKET
+                        # BUG#61b: Use EXACT backtest formula via _calc_trail_trigger_price
+                        # (solves quadratic cur² - best·cur + trail_K·ATR·entry = 0)
+                        # instead of approximation best × (1 - callback/100).
+                        # Ensures 100% parity with signals.py check_exit math.
+                        exact_trigger = self._calc_trail_trigger_price(pos, cur_atr)
+                        if exact_trigger is not None:
+                            baton_trigger = exact_trigger
+                        elif d == 'LONG':
+                            baton_trigger = round(bp * (1 - callback/100), 1)
+                        else:
+                            baton_trigger = round(bp * (1 + callback/100), 1)
+                        # Sanity: trigger must be on correct side of current price
+                        ok = (d == 'LONG' and baton_trigger < cur_price) or \
+                             (d == 'SHORT' and baton_trigger > cur_price)
+                        if ok:
+                            result = self.exchange.create_order(
+                                symbol, 'STOP_MARKET', tp_side, qty,
+                                params={'positionSide': 'BOTH',
+                                        'stopPrice': baton_trigger,
+                                        'reduceOnly': True})
+                            pos['last_callback'] = callback
+                            pos['trail_order_id'] = result.get('id', '')
+                            pos['trail_trigger'] = baton_trigger
+                            logger.info(f"Trail BATON-TOUCH: STOP_MARKET @${baton_trigger:.1f} "
+                                        f"(best=${bp:.1f} × (1∓{callback}%))")
+                        else:
+                            # Trigger would be on wrong side — fall back to TRAILING
+                            # BUG#62: activatePrice aligned with trail_activation_pct
+                            act_pct = activation / 100
+                            activate = round(cur_price * (1 + act_pct) if d == 'LONG'
+                                             else cur_price * (1 - act_pct), 1)
+                            self.exchange.create_order(
+                                symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
+                                params={'positionSide': 'BOTH',
+                                        'activatePrice': activate,
+                                        'trailingPercent': callback,
+                                        'reduceOnly': True})
+                            pos['last_callback'] = callback
+                            est = round(bp * (1 - callback/100) if d == 'LONG'
+                                        else bp * (1 + callback/100), 1)
+                            logger.info(f"Trail placed (fallback TRAILING): callback={callback}% est≈${est:.1f}")
+                    else:
+                        # Not yet activated — use TRAILING_STOP_MARKET
+                        # BUG#62: activatePrice aligned with trail_activation_pct (backtest parity)
+                        act_pct = activation / 100
+                        activate = round(cur_price * (1 + act_pct) if d == 'LONG'
+                                         else cur_price * (1 - act_pct), 1)
+                        self.exchange.create_order(
+                            symbol, 'TRAILING_STOP_MARKET', tp_side, qty,
+                            params={'positionSide': 'BOTH',
+                                    'activatePrice': activate,
+                                    'trailingPercent': callback,
+                                    'reduceOnly': True})
+                        pos['last_callback'] = callback
+                        est = round(bp * (1 - callback/100) if d == 'LONG'
+                                    else bp * (1 + callback/100), 1)
+                        logger.info(f"Trail placed (TRAILING, pre-activation): callback={callback}% est≈${est:.1f}")
+
+            # BUG#46 + BUG#61 policy:
+            # - LOOSEN (ATR↑): baton-touch via STOP_MARKET at best_price × callback
+            #   (preserves historical best tracking, no reset)
+            # - TIGHTEN (ATR↓): DON'T re-place → bot check_exit handles it
+            # - Pre-activation (best_pnl ≤ 0.05%): use TRAILING_STOP_MARKET (BingX native)
             self._trail_update_fail_streak = 0  # success resets streak (BUG#59)
 
         except Exception as e:
@@ -1150,14 +1360,44 @@ class C1BreakoutBot:
                 logger.warning(f"Trail update failed: {e}")
 
     def _exchange_close(self, direction):
+        """Close position via MARKET + cancel remaining orders.
+
+        BUG#65: return actual fill price (and timestamp) from the MARKET close
+        so _do_close can record realistic exit_price instead of the theoretical
+        trigger price. Fallback to None on error — _do_close will keep computed.
+        """
         try:
             symbol = self.config['exchange']['symbol']
             side = 'sell' if direction == 'LONG' else 'buy'
             live = self._get_live_positions()
+            actual_fill = None
+            actual_ts = None
             if live and direction in live:
-                self.exchange.create_order(symbol, 'market', side,
+                order = self.exchange.create_order(symbol, 'market', side,
                     live[direction]['contracts'],
                     params={'positionSide': 'BOTH', 'reduceOnly': True})
+                # Try order's reported fill first
+                try:
+                    avg = order.get('average') or order.get('price')
+                    if avg and float(avg) > 0:
+                        actual_fill = float(avg)
+                    ts = order.get('timestamp') or order.get('info', {}).get('updateTime')
+                    if ts:
+                        actual_ts = int(ts)
+                except Exception:
+                    pass
+                # If average not in immediate response, query fetch_my_trades
+                if actual_fill is None:
+                    try:
+                        since = int((time.time() - 60) * 1000)  # last 60 sec
+                        trades = self.exchange.fetch_my_trades(symbol, since=since, limit=10)
+                        for t in reversed(trades):
+                            if t.get('side', '').lower() == side and float(t.get('amount', 0)) > 0:
+                                actual_fill = float(t['price'])
+                                actual_ts = int(t.get('timestamp') or 0)
+                                break
+                    except Exception:
+                        pass
             # Cancel all remaining orders (individually, so one failure doesn't stop others)
             try:
                 for order in self.exchange.fetch_open_orders(symbol):
@@ -1167,9 +1407,11 @@ class C1BreakoutBot:
                         pass
             except Exception:
                 pass
-            logger.info(f"Closed {direction}")
+            logger.info(f"Closed {direction}" + (f" @${actual_fill:.1f}" if actual_fill else ""))
+            return actual_fill, actual_ts
         except Exception as e:
             logger.error(f"Close: {e}")
+            return None, None
 
     # ── Main Loop ─────────────────────────────────────────
 

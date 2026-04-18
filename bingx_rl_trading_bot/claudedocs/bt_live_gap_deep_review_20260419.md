@@ -130,9 +130,31 @@ verification JSON에 따르면 이 trade와 대응되는 BT signal은 **04-12 17
 ## 7. 결론 & 권고
 
 ### 긍정적 시사점
-1. **신호 생성 19/19 완벽 일치** → 봇 signal 로직은 BT와 수학적으로 동일
-2. **22-item 체크리스트 20/22 달성** — 남은 2건은 물리적 구조 한계
-3. **최근 5 trades 격차 절반 감소** — BUG#62~65 fix 효과 관찰됨
+1. **신호 생성(진입) 19/19 완벽 일치** → entry 로직은 BT와 수학적으로 동일
+2. **check_exit 함수 자체는 line-by-line 동일** (BT `c1_refined_validation.check_exit` vs LIVE `signals.py::check_exit` diff 결과 수식 완전 일치)
+3. **22-item 체크리스트 20/22 달성** — 남은 2건은 물리적 구조 한계
+4. **최근 5 trades 격차 절반 감소** — BUG#62~65 fix 효과 관찰됨
+
+### ⚠ 정정 사항 — Exit 실행 경로의 pre-fix 비대칭
+
+2026-04-18 이전 실행된 대다수 trades에서 check_exit **함수 수식은 동일**했으나 **실행 통합에서 3개 버그**로 LIVE 결과가 BT와 실제로 달랐음:
+
+**BUG#64 (best_price 초기화)**:
+- BT: `best = entry` at entry → `best_pnl = 0`
+- Pre-fix LIVE: `best_price = signal_price` ≠ `fill_price` (슬리피지 시) → **`best_pnl ≠ 0` 부터 시작** → trail 수식 첫 바부터 왜곡
+- 04-12 LONG -7.89% 단건의 근본 원인
+
+**BUG#63 (trail 매 cycle 재평가)**:
+- BT: 매 iteration에 `check_exit` 호출, 현재 bar hi/lo/close 기준 trail 재평가
+- Pre-fix LIVE: 진입 시 TRAILING_STOP_MARKET 1회 배치 후 거래소 tick 추적, bot은 best_price만 갱신
+- Fix 후: 매 cycle `_update_exchange_trail`이 baton-touch 수식으로 STOP_MARKET 갱신 → parity 회복
+
+**BUG#62 (activatePrice 임계)**:
+- BT: `best_pnl > trail_activation_pct (0.05%)` 에서 trail 발동
+- Pre-fix LIVE: `activatePrice = entry × 1.001` (0.1% 고정) → **BT보다 늦게 발동**
+- 초기 avg 0.05~0.1% 구간에서 exit 타이밍 비대칭
+
+따라서 "신호 100% 일치, 수식 100% 일치" 이지만 **integrated execution 으로는 pre-fix 구간에서 exits 결과가 달랐음**. 이것이 갭 -7.72pp(1x)의 핵심 부분을 설명 — 특히 04-12 단건 outlier는 BUG#64 pre-fix의 직접적 피해.
 
 ### 부정적 시사점
 1. **MARKET slippage 제거 불가** — round-trip 평균 0.93% 구조적 비용

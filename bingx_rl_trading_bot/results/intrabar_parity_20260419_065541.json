@@ -1,0 +1,240 @@
+{
+  "timestamp": "2026-04-18T21:55:40.791383+00:00",
+  "slippage": {
+    "entry_pct": 0.05,
+    "exit_sl_pct": 0.15,
+    "exit_trail_pct": 0.05,
+    "exit_emergency_pct": 0.3,
+    "exit_timeout_pct": 0.05
+  },
+  "data": {
+    "bars_15m": 31946,
+    "bars_5m": 95838
+  },
+  "clean_baseline": {
+    "pnl": 170.49,
+    "train_pnl": 95.07,
+    "mdd": 5.38,
+    "ratio": 31.69
+  },
+  "mode_results": {
+    "baseline": {
+      "bar_close": {
+        "clean": {
+          "trades": 1028,
+          "pnl": 169.55,
+          "wr": 36.6,
+          "mdd": 5.38
+        },
+        "slip": {
+          "trades": 1028,
+          "pnl": 51.67,
+          "wr": 31.6,
+          "mdd": 17.63
+        }
+      },
+      "intrabar": {
+        "clean": {
+          "trades": 1237,
+          "pnl": 2.62,
+          "wr": 27.2,
+          "mdd": 15.81
+        },
+        "slip": {
+          "trades": 1237,
+          "pnl": -135.56,
+          "wr": 22.7,
+          "mdd": 135.97
+        }
+      },
+      "5m": {
+        "clean": {
+          "trades": 1074,
+          "pnl": 165.68,
+          "wr": 34.7,
+          "mdd": 5.55
+        },
+        "slip": {
+          "trades": 1074,
+          "pnl": 46.09,
+          "wr": 30.2,
+          "mdd": 18.78
+        }
+      },
+      "5m_slip_trades": 1074
+    },
+    "candidate_A": {
+      "bar_close": {
+        "clean": {
+          "trades": 1120,
+          "pnl": 172.3,
+          "wr": 36.4,
+          "mdd": 5.56
+        },
+        "slip": {
+          "trades": 1120,
+          "pnl": 48.62,
+          "wr": 31.3,
+          "mdd": 19.97
+        }
+      },
+      "intrabar": {
+        "clean": {
+          "trades": 1356,
+          "pnl": -21.65,
+          "wr": 26.1,
+          "mdd": 26.44
+        },
+        "slip": {
+          "trades": 1356,
+          "pnl": -170.25,
+          "wr": 20.5,
+          "mdd": 170.55
+        }
+      },
+      "5m": {
+        "clean": {
+          "trades": 1171,
+          "pnl": 158.33,
+          "wr": 33.6,
+          "mdd": 4.71
+        },
+        "slip": {
+          "trades": 1171,
+          "pnl": 30.63,
+          "wr": 29.1,
+          "mdd": 27.71
+        }
+      }
+    },
+    "candidate_B": {
+      "bar_close": {
+        "clean": {
+          "trades": 1102,
+          "pnl": 181.92,
+          "wr": 36.4,
+          "mdd": 6.56
+        },
+        "slip": {
+          "trades": 1102,
+          "pnl": 61.64,
+          "wr": 31.2,
+          "mdd": 16.75
+        }
+      },
+      "intrabar": {
+        "clean": {
+          "trades": 1329,
+          "pnl": -12.62,
+          "wr": 25.7,
+          "mdd": 29.04
+        },
+        "slip": {
+          "trades": 1329,
+          "pnl": -156.82,
+          "wr": 20.1,
+          "mdd": 157.12
+        }
+      },
+      "5m": {
+        "clean": {
+          "trades": 1152,
+          "pnl": 164.07,
+          "wr": 33.5,
+          "mdd": 5.96
+        },
+        "slip": {
+          "trades": 1152,
+          "pnl": 39.48,
+          "wr": 29.0,
+          "mdd": 25.96
+        }
+      }
+    },
+    "candidate_C": {
+      "bar_close": {
+        "clean": {
+          "trades": 1012,
+          "pnl": 192.76,
+          "wr": 37.0,
+          "mdd": 5.2
+        },
+        "slip": {
+          "trades": 1012,
+          "pnl": 79.38,
+          "wr": 31.8,
+          "mdd": 13.66
+        }
+      },
+      "intrabar": {
+        "clean": {
+          "trades": 1211,
+          "pnl": 23.9,
+          "wr": 27.6,
+          "mdd": 13.8
+        },
+        "slip": {
+          "trades": 1211,
+          "pnl": -108.88,
+          "wr": 23.0,
+          "mdd": 109.29
+        }
+      },
+      "5m": {
+        "clean": {
+          "trades": 1057,
+          "pnl": 178.84,
+          "wr": 35.1,
+          "mdd": 6.65
+        },
+        "slip": {
+          "trades": 1057,
+          "pnl": 63.06,
+          "wr": 30.5,
+          "mdd": 14.26
+        }
+      }
+    }
+  },
+  "live_window_comparison": {
+    "live_count": 19,
+    "live_pnl_1x": -3.92,
+    "live_pnl_3x": -11.77,
+    "live_days": 7,
+    "live_daily_1x": -0.56,
+    "bt_full_days": 332.8,
+    "bt_full_pnl_1x": 46.09,
+    "bt_daily_1x": 0.139,
+    "daily_gap_1x": 0.699,
+    "window_bt_count": 0,
+    "window_bt_pnl_1x": 0,
+    "window_gap_1x": 3.92,
+    "note": "LIVE window (2026-04-12~18) is OOS for this dataset (ends 2026-04-03). Use daily_gap_1x as realism proxy."
+  },
+  "go_flags": {
+    "intrabar_realism": false,
+    "baseline_preservation": false,
+    "wf_pass": false,
+    "_wf_fold_pnls": [
+      -2.08,
+      -11.53,
+      34.79,
+      5.45,
+      19.47
+    ],
+    "ratio_ok": false,
+    "_adj_mdd": 18.78,
+    "_adj_ratio": 2.45,
+    "_adj_pnl": 46.09,
+    "track_b_cost": null,
+    "track_b_benefit": null,
+    "rollback_ready": true,
+    "train_not_degraded": false,
+    "_adj_train_pnl": 21.17
+  },
+  "verdict": {
+    "outcome": "STOP",
+    "reason": "core flag intrabar_realism failed"
+  },
+  "elapsed_sec": 0.5
+}

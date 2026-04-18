@@ -10,7 +10,7 @@
     "summary": {
       "type": "research-only",
       "hypotheses": {
-        "H1_max_sl_atr": "STOP (absolute PnL +12.7pp but MDD +22% → ratio -11.9%)",
+        "H1_max_sl_atr": "STOP (absolute PnL +12.7pp but MDD +22% \u2192 ratio -11.9%)",
         "H2_trail_K": "CONFIRMED (1D sharp peak; 3D shows interaction with max_sl_atr)",
         "H3_max_hold_bars": "DEAD (timeout never fires; 96/144/192/288 identical)",
         "H4_interaction": "CONFIRMED (wider SL pairs with tighter trail)"
@@ -18,7 +18,7 @@
       "go_conditions_passed": "6/7 (wf_pass, tw_pass, test_ok, mc_pass, ci_pass, nbr_pass)",
       "go_conditions_failed": "ratio_ok (27.92 < 34.86)",
       "best_candidate": "(max_sl_atr=4.5, trail_K=2.2, max_hold_bars=144)",
-      "production_changes": "none — baseline (3.3, 2.5, 192) retained",
+      "production_changes": "none \u2014 baseline (3.3, 2.5, 192) retained",
       "lessons": "1D grid hides MDD tradeoff; absolute PnL != risk-adjusted optimum; pre-committed protocol saved from selection-after-peek",
       "infrastructure_verified": "baseline regression drift=0.00"
     }
@@ -37,10 +37,15 @@
       "hypotheses": {
         "H1_atr_scanner": "GO (ATR 20pat vs Fixed 15pat, +1.1pp WR Excess, +5 count)",
         "H2_portfolio_wf": "GO (ATR WF 3/3 PASS, OOS +108.1% vs Fixed +65.9%)",
-        "H3_param_sweep": "STOP (best +1.4% vs default, 32/32 WF PASS — robust)"
+        "H3_param_sweep": "STOP (best +1.4% vs default, 32/32 WF PASS \u2014 robust)"
       },
-      "phases_completed": ["phase_1", "phase_2", "phase_3", "phase_4"],
-      "production_action": "B_SCANNER_REPLACE_DEFAULT — ATR-integrated scanner with default params",
+      "phases_completed": [
+        "phase_1",
+        "phase_2",
+        "phase_3",
+        "phase_4"
+      ],
+      "production_action": "B_SCANNER_REPLACE_DEFAULT \u2014 ATR-integrated scanner with default params",
       "key_findings": "ATR scanner selects different+better patterns, OOS PnL +64% vs Fixed, all 32 param combos WF PASS"
     }
   },
@@ -59,8 +64,17 @@
         "H2_mtf_filter": "PARTIAL (strict +2.5pp, -74% trades)",
         "H3_tight_tp": "FAIL (edge < baseline)"
       },
-      "phases_completed": ["phase_1", "phase_2", "phase_3", "phase_3x", "phase_4"],
-      "phases_skipped": ["phase_5_wf", "phase_6_production"],
+      "phases_completed": [
+        "phase_1",
+        "phase_2",
+        "phase_3",
+        "phase_3x",
+        "phase_4"
+      ],
+      "phases_skipped": [
+        "phase_5_wf",
+        "phase_6_production"
+      ],
       "production_changes": "none"
     }
   },
@@ -73,7 +87,7 @@
     "summary": {
       "type": "feature-implementation",
       "versions": "v1.39.0",
-      "key_achievement": "Adaptive leverage GO — MDD -32%, Calmar +39%, OOS consistency 0.823",
+      "key_achievement": "Adaptive leverage GO \u2014 MDD -32%, Calmar +39%, OOS consistency 0.823",
       "research": {
         "v1_study": "H1-H4, H1_StepTiers best PnL/MDD",
         "v2_study": "H5-H9, PnL verdict STOP",
@@ -101,8 +115,8 @@
       "type": "feature-implementation",
       "versions": "v1.40.0",
       "techniques": "Combo2 (H1_EqCurve_half_ema30 + H6_CorrAware_dir70)",
-      "research": "mdd_reduction_study.py — 7H/45scenarios/6phases, 66s",
-      "expected_impact": "MDD -47.8% (6.5→3.4%), PnL -3.9%, PnL/MDD +84.1%",
+      "research": "mdd_reduction_study.py \u2014 7H/45scenarios/6phases, 66s",
+      "expected_impact": "MDD -47.8% (6.5\u21923.4%), PnL -3.9%, PnL/MDD +84.1%",
       "wf_result": "3/3 PASS (F1 +23.0%, F2 +33.6%, F3 +23.7%)",
       "changes": {
         "state.py": "equity_curve_tracker default (long_cum_pnls, short_cum_pnls)",
@@ -111,7 +125,7 @@
         "position_open.py": "equity_curve_scale param (get_position_size + open_position + slot)",
         "config.yaml": "equity_curve_trading + correlation_aware_entry sections"
       },
-      "per_direction": "LONG/SHORT 독립 에퀴티 커브 추적"
+      "per_direction": "LONG/SHORT \ub3c5\ub9bd \uc5d0\ud034\ud2f0 \ucee4\ube0c \ucd94\uc801"
     }
   },
   "pattern_5m_v1380": {
@@ -125,7 +139,7 @@
     "summary": {
       "type": "feature-implementation",
       "versions": "v1.38.0~v1.38.1",
-      "key_achievement": "N-pos Scanner default — Live WR gap 57% reduced (36.1pp to 15.4pp)",
+      "key_achievement": "N-pos Scanner default \u2014 Live WR gap 57% reduced (36.1pp to 15.4pp)",
       "production_action": "Scanner npos default ON, patterns unchanged (130pat 61L+69S)"
     }
   },
@@ -142,6 +156,36 @@
       "matchRate": 99,
       "scores": "config 98% / features 100% / data 100% / docs 100%",
       "gaps": "2 non-functional (stale constants.py defaults)"
+    }
+  },
+  "intrabar_parity": {
+    "phase": "completed",
+    "matchRate": 92,
+    "outcome": "STOP_PHASE1",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T00:00:00Z",
+    "checkedAt": "2026-04-19T07:00:00Z",
+    "completedAt": "2026-04-19T08:00:00Z",
+    "summary": {
+      "type": "research-with-insight",
+      "scope": "Track A (BT intrabar+slip) Phase 1 complete. Track B (LIVE tick polling) deferred.",
+      "hypotheses": {
+        "H1_intrabar_effect": "CONFIRMED (bar_close +170 \u2192 5m +165.68, -3.87pp)",
+        "H2_bt_replicates_live": "PARTIAL (daily gap 0.699/day vs 0.5 threshold, borderline)",
+        "H3_live_tick_polling": "DEFERRED (Phase 2)",
+        "H4_sl_trail_robustness": "REVERSED (candidate_C becomes slip-robust #1)",
+        "H5_track_b_cost_benefit": "DEFERRED"
+      },
+      "go_conditions_passed": "1/6 evaluable (rollback_ready)",
+      "go_conditions_failed": "5/6 (intrabar_realism borderline, baseline_preservation, wf_pass, ratio_ok, train_not_degraded)",
+      "key_insight": "candidate_C (4.0, 2.5, 192) became #1 in slippage env \u2014 sl_trail_tuning clean BT bias exposed",
+      "production_changes": "none \u2014 STOP verdict, Phase 2 deferred",
+      "lessons": "Clean BT biased; slippage-adjusted BT must be standard; Grid depth != robustness",
+      "follow_ups": [
+        "candidate_C full validation PDCA",
+        "30-day LIVE fix-\ud6c4 re-measurement",
+        "Track B thread-based impl"
+      ]
     }
   }
 }

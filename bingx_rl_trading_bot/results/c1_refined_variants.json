@@ -1,0 +1,203 @@
+{
+  "date_run": "2026-04-18T15:20:28.587419",
+  "variants": [
+    {
+      "name": "BASELINE",
+      "full": {
+        "trades": 1027,
+        "WR": 36.6,
+        "PnL": 170.49,
+        "MDD": 5.38
+      },
+      "wf_passed": 5,
+      "wf_total_oos": 153.5,
+      "three_way": {
+        "train": {
+          "trades": 615,
+          "WR": 37.6,
+          "PnL": 95.07,
+          "MDD": 4.27
+        },
+        "val": {
+          "trades": 204,
+          "WR": 35.3,
+          "PnL": 21.21,
+          "MDD": 5.38
+        },
+        "test": {
+          "trades": 208,
+          "WR": 35.1,
+          "PnL": 54.2,
+          "MDD": 4.1
+        }
+      },
+      "three_way_all_pos": true,
+      "fee_15pct_PnL": 119.14
+    },
+    {
+      "name": "REFINED_pure (CD=0)",
+      "full": {
+        "trades": 1612,
+        "WR": 35.7,
+        "PnL": 262.28,
+        "MDD": 8.21
+      },
+      "wf_passed": 5,
+      "wf_total_oos": 234.79,
+      "three_way": {
+        "train": {
+          "trades": 974,
+          "WR": 34.4,
+          "PnL": 123.8,
+          "MDD": 8.21
+        },
+        "val": {
+          "trades": 326,
+          "WR": 37.4,
+          "PnL": 48.14,
+          "MDD": 5.46
+        },
+        "test": {
+          "trades": 311,
+          "WR": 37.9,
+          "PnL": 85.93,
+          "MDD": 5.58
+        }
+      },
+      "three_way_all_pos": true,
+      "fee_15pct_PnL": 181.68
+    },
+    {
+      "name": "A: CD=2 restored",
+      "full": {
+        "trades": 1394,
+        "WR": 36.2,
+        "PnL": 212.36,
+        "MDD": 10.42
+      },
+      "wf_passed": 5,
+      "wf_total_oos": 191.74,
+      "three_way": {
+        "train": {
+          "trades": 826,
+          "WR": 35.7,
+          "PnL": 112.37,
+          "MDD": 6.05
+        },
+        "val": {
+          "trades": 289,
+          "WR": 35.3,
+          "PnL": 30.73,
+          "MDD": 10.06
+        },
+        "test": {
+          "trades": 279,
+          "WR": 38.0,
+          "PnL": 65.77,
+          "MDD": 7.73
+        }
+      },
+      "three_way_all_pos": true,
+      "fee_15pct_PnL": 142.66
+    },
+    {
+      "name": "B: Hard 2xATR SL",
+      "full": {
+        "trades": 1843,
+        "WR": 32.5,
+        "PnL": 60.74,
+        "MDD": 30.22
+      },
+      "wf_passed": 4,
+      "wf_total_oos": 50.0,
+      "three_way": {
+        "train": {
+          "trades": 1106,
+          "WR": 32.0,
+          "PnL": 16.69,
+          "MDD": 30.22
+        },
+        "val": {
+          "trades": 380,
+          "WR": 32.6,
+          "PnL": 9.63,
+          "MDD": 15.08
+        },
+        "test": {
+          "trades": 356,
+          "WR": 33.7,
+          "PnL": 31.91,
+          "MDD": 13.26
+        }
+      },
+      "three_way_all_pos": true,
+      "fee_15pct_PnL": -31.41
+    },
+    {
+      "name": "C: Channel soft",
+      "full": {
+        "trades": 1345,
+        "WR": 36.0,
+        "PnL": 226.07,
+        "MDD": 6.91
+      },
+      "wf_passed": 5,
+      "wf_total_oos": 205.43,
+      "three_way": {
+        "train": {
+          "trades": 825,
+          "WR": 35.4,
+          "PnL": 115.94,
+          "MDD": 6.91
+        },
+        "val": {
+          "trades": 253,
+          "WR": 38.7,
+          "PnL": 39.14,
+          "MDD": 5.15
+        },
+        "test": {
+          "trades": 267,
+          "WR": 35.2,
+          "PnL": 70.99,
+          "MDD": 3.61
+        }
+      },
+      "three_way_all_pos": true,
+      "fee_15pct_PnL": 158.82
+    },
+    {
+      "name": "D: Body 50% strict",
+      "full": {
+        "trades": 1589,
+        "WR": 35.2,
+        "PnL": 233.2,
+        "MDD": 6.9
+      },
+      "wf_passed": 5,
+      "wf_total_oos": 212.44,
+      "three_way": {
+        "train": {
+          "trades": 953,
+          "WR": 34.7,
+          "PnL": 113.63,
+          "MDD": 6.41
+        },
+        "val": {
+          "trades": 323,
+          "WR": 35.6,
+          "PnL": 48.69,
+          "MDD": 6.9
+        },
+        "test": {
+          "trades": 312,
+          "WR": 35.9,
+          "PnL": 66.46,
+          "MDD": 5.57
+        }
+      },
+      "three_way_all_pos": true,
+      "fee_15pct_PnL": 153.75
+    }
+  ]
+}

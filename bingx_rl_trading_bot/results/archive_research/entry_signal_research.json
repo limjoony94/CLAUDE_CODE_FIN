@@ -1,0 +1,202 @@
+[
+  {
+    "label": "S0: 131 Patterns (baseline)",
+    "n_signals": 12937,
+    "density": 39.69419585783687,
+    "is_30d": 106.4,
+    "is_trades": 706,
+    "is_wr": 56.9,
+    "wf_folds": [
+      80.3,
+      93.6,
+      173.2,
+      113.0,
+      200.5
+    ],
+    "wf_total": 660.6,
+    "wf_pass": true,
+    "oos_pnl": 71.9,
+    "oos_trades": 513,
+    "oos_rr": 3.592
+  },
+  {
+    "label": "S1: Random (~12/day)",
+    "n_signals": 3695,
+    "density": 11.337253899258501,
+    "is_30d": 41.8,
+    "is_trades": 332,
+    "is_wr": 55.7,
+    "wf_folds": [
+      33.1,
+      43.2,
+      68.2,
+      50.2,
+      81.8
+    ],
+    "wf_total": 276.5,
+    "wf_pass": true,
+    "oos_pnl": 29.4,
+    "oos_trades": 240,
+    "oos_rr": 2.475
+  },
+  {
+    "label": "S2: Random Dense (~24/day)",
+    "n_signals": 7506,
+    "density": 23.030427000767066,
+    "is_30d": 84.3,
+    "is_trades": 532,
+    "is_wr": 60.0,
+    "wf_folds": [
+      55.8,
+      64.6,
+      127.9,
+      88.0,
+      159.4
+    ],
+    "wf_total": 495.7,
+    "wf_pass": true,
+    "oos_pnl": 62.1,
+    "oos_trades": 395,
+    "oos_rr": 3.77
+  },
+  {
+    "label": "S3: Every 2 hours",
+    "n_signals": 3886,
+    "density": 11.92329327537714,
+    "is_30d": 47.1,
+    "is_trades": 352,
+    "is_wr": 59.4,
+    "wf_folds": [
+      42.4,
+      49.9,
+      71.9,
+      63.0,
+      79.9
+    ],
+    "wf_total": 307.2,
+    "wf_pass": true,
+    "oos_pnl": 34.5,
+    "oos_trades": 267,
+    "oos_rr": 2.759
+  },
+  {
+    "label": "S4: Every 1 hour",
+    "n_signals": 7772,
+    "density": 23.84658655075428,
+    "is_30d": 84.8,
+    "is_trades": 575,
+    "is_wr": 56.5,
+    "wf_folds": [
+      64.8,
+      80.3,
+      142.4,
+      100.2,
+      150.0
+    ],
+    "wf_total": 537.8,
+    "wf_pass": true,
+    "oos_pnl": 60.8,
+    "oos_trades": 421,
+    "oos_rr": 3.829
+  },
+  {
+    "label": "S5: Low ATR (vol compression)",
+    "n_signals": 808,
+    "density": 2.47916133981079,
+    "is_30d": 0.4,
+    "is_trades": 57,
+    "is_wr": 71.9,
+    "wf_folds": [
+      -3.9,
+      0.8,
+      6.5,
+      -1.6,
+      0.5
+    ],
+    "wf_total": 2.2,
+    "wf_pass": false,
+    "oos_pnl": -0.2,
+    "oos_trades": 47,
+    "oos_rr": 0.413
+  },
+  {
+    "label": "S6: High ATR (active market)",
+    "n_signals": 988,
+    "density": 3.031449757095372,
+    "is_30d": 7.7,
+    "is_trades": 91,
+    "is_wr": 59.3,
+    "wf_folds": [
+      13.5,
+      9.4,
+      21.8,
+      5.6,
+      9.8
+    ],
+    "wf_total": 60.1,
+    "wf_pass": true,
+    "oos_pnl": 6.7,
+    "oos_trades": 69,
+    "oos_rr": 1.549
+  },
+  {
+    "label": "S7: Mean Reversion (EMA deviation)",
+    "n_signals": 178,
+    "density": 0.5461518793147532,
+    "is_30d": 1.0,
+    "is_trades": 13,
+    "is_wr": 76.9,
+    "wf_folds": [
+      0.2,
+      -0.4,
+      6.2,
+      0.1,
+      7.6
+    ],
+    "wf_total": 13.6,
+    "wf_pass": false,
+    "oos_pnl": -0.7,
+    "oos_trades": 3,
+    "oos_rr": 0.262
+  },
+  {
+    "label": "S8: Bollinger Band Touch",
+    "n_signals": 9461,
+    "density": 29.028892866274607,
+    "is_30d": 83.3,
+    "is_trades": 625,
+    "is_wr": 49.1,
+    "wf_folds": [
+      79.8,
+      86.8,
+      139.6,
+      98.5,
+      158.3
+    ],
+    "wf_total": 563.0,
+    "wf_pass": true,
+    "oos_pnl": 55.6,
+    "oos_trades": 456,
+    "oos_rr": 4.908
+  },
+  {
+    "label": "S9: Volatility Breakout",
+    "n_signals": 21961,
+    "density": 67.38225517770391,
+    "is_30d": 145.8,
+    "is_trades": 891,
+    "is_wr": 54.5,
+    "wf_folds": [
+      70.7,
+      108.6,
+      219.4,
+      142.2,
+      279.8
+    ],
+    "wf_total": 820.8,
+    "wf_pass": true,
+    "oos_pnl": 89.9,
+    "oos_trades": 598,
+    "oos_rr": 4.152
+  }
+]

@@ -1,0 +1,1019 @@
+{
+  "metadata": {
+    "script": "mean_reversion_vs_breakout_research.py",
+    "date": "2026-04-14 16:11",
+    "data_bars": 31946,
+    "data_days": 332.8,
+    "data_range": "2025-05-05 15:00:00 to 2026-04-03 09:15:00",
+    "fee_pct": 0.1,
+    "pnl_mode": "additive"
+  },
+  "s1_breakout": {
+    "metrics": {
+      "label": "S1_Breakout",
+      "trades": 1028,
+      "total_trades_incl_timeout": 1028,
+      "pnl_pct": 169.55,
+      "mdd_pct": 5.38,
+      "wr_pct": 36.6,
+      "avg_win": 0.933,
+      "avg_loss": 0.278,
+      "rr": 3.36,
+      "trades_per_day": 3.09,
+      "daily_pnl": 0.51,
+      "exit_reasons": {
+        "SL": 149,
+        "TRAIL_TP": 879
+      },
+      "days": 332.8
+    },
+    "wf": {
+      "label": "S1_Breakout",
+      "folds": [
+        {
+          "fold": 0,
+          "is_bars": "0-5324",
+          "oos_bars": "5324-10648",
+          "is_pnl": 15.13,
+          "is_trades": 175,
+          "oos_pnl": 14.61,
+          "oos_trades": 175,
+          "oos_wr": 31.4,
+          "pass": true
+        },
+        {
+          "fold": 1,
+          "is_bars": "0-10648",
+          "oos_bars": "10648-15973",
+          "is_pnl": 30.11,
+          "is_trades": 351,
+          "oos_pnl": 30.7,
+          "oos_trades": 172,
+          "oos_wr": 39.0,
+          "pass": true
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-15973",
+          "oos_bars": "15973-21297",
+          "is_pnl": 61.04,
+          "is_trades": 523,
+          "oos_pnl": 40.78,
+          "oos_trades": 158,
+          "oos_wr": 41.8,
+          "pass": true
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-21297",
+          "oos_bars": "21297-26621",
+          "is_pnl": 101.82,
+          "is_trades": 681,
+          "oos_pnl": 47.26,
+          "oos_trades": 170,
+          "oos_wr": 35.9,
+          "pass": true
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-26621",
+          "oos_bars": "26621-31946",
+          "is_pnl": 148.98,
+          "is_trades": 852,
+          "oos_pnl": 20.56,
+          "oos_trades": 176,
+          "oos_wr": 34.7,
+          "pass": true
+        }
+      ],
+      "pass_count": "5/5",
+      "total_oos_pnl": 153.91,
+      "verdict": "PASS"
+    },
+    "mc": {
+      "p_value": 0.001,
+      "n_sims": 999,
+      "n_trades": 1028,
+      "real_pnl": 169.55,
+      "disc": "DISC"
+    },
+    "progressive": {
+      "label": "S1_Breakout",
+      "cuts": [
+        {
+          "cut": "10%",
+          "bars": 3194,
+          "pnl": 5.52,
+          "trades": 107,
+          "wr": 39.3
+        },
+        {
+          "cut": "20%",
+          "bars": 6389,
+          "pnl": 19.55,
+          "trades": 210,
+          "wr": 37.6
+        },
+        {
+          "cut": "30%",
+          "bars": 9583,
+          "pnl": 23.85,
+          "trades": 319,
+          "wr": 34.5
+        },
+        {
+          "cut": "40%",
+          "bars": 12778,
+          "pnl": 35.57,
+          "trades": 425,
+          "wr": 35.5
+        },
+        {
+          "cut": "50%",
+          "bars": 15973,
+          "pnl": 61.04,
+          "trades": 523,
+          "wr": 35.9
+        },
+        {
+          "cut": "60%",
+          "bars": 19167,
+          "pnl": 90.06,
+          "trades": 616,
+          "wr": 37.3
+        },
+        {
+          "cut": "70%",
+          "bars": 22362,
+          "pnl": 108.2,
+          "trades": 715,
+          "wr": 37.3
+        },
+        {
+          "cut": "80%",
+          "bars": 25556,
+          "pnl": 115.24,
+          "trades": 821,
+          "wr": 36.9
+        },
+        {
+          "cut": "90%",
+          "bars": 28751,
+          "pnl": 158.49,
+          "trades": 917,
+          "wr": 37.1
+        },
+        {
+          "cut": "100%",
+          "bars": 31946,
+          "pnl": 169.55,
+          "trades": 1028,
+          "wr": 36.6
+        }
+      ]
+    },
+    "monthly": [
+      {
+        "month": "2025-05",
+        "pnl": 2.92,
+        "trades": 83,
+        "wr": 41.0
+      },
+      {
+        "month": "2025-06",
+        "pnl": 12.26,
+        "trades": 95,
+        "wr": 34.7
+      },
+      {
+        "month": "2025-07",
+        "pnl": 9.33,
+        "trades": 101,
+        "wr": 29.7
+      },
+      {
+        "month": "2025-08",
+        "pnl": 8.15,
+        "trades": 98,
+        "wr": 34.7
+      },
+      {
+        "month": "2025-09",
+        "pnl": 7.74,
+        "trades": 95,
+        "wr": 38.9
+      },
+      {
+        "month": "2025-10",
+        "pnl": 30.69,
+        "trades": 91,
+        "wr": 40.7
+      },
+      {
+        "month": "2025-11",
+        "pnl": 24.92,
+        "trades": 83,
+        "wr": 38.6
+      },
+      {
+        "month": "2025-12",
+        "pnl": 16.64,
+        "trades": 91,
+        "wr": 44.0
+      },
+      {
+        "month": "2026-01",
+        "pnl": 13.29,
+        "trades": 101,
+        "wr": 32.7
+      },
+      {
+        "month": "2026-02",
+        "pnl": 34.59,
+        "trades": 78,
+        "wr": 38.5
+      },
+      {
+        "month": "2026-03",
+        "pnl": 9.55,
+        "trades": 103,
+        "wr": 33.0
+      },
+      {
+        "month": "2026-04",
+        "pnl": -0.54,
+        "trades": 9,
+        "wr": 22.2
+      }
+    ],
+    "by_regime_adx": {
+      "trending": {
+        "label": "S1_trending",
+        "trades": 432,
+        "total_trades_incl_timeout": 432,
+        "pnl_pct": 89.85,
+        "mdd_pct": 9.09,
+        "wr_pct": 38.4,
+        "avg_win": 1.009,
+        "avg_loss": 0.292,
+        "rr": 3.46,
+        "trades_per_day": 1.3,
+        "daily_pnl": 0.271,
+        "exit_reasons": {
+          "SL": 58,
+          "TRAIL_TP": 374
+        },
+        "days": 331.8
+      },
+      "ranging": {
+        "label": "S1_ranging",
+        "trades": 596,
+        "total_trades_incl_timeout": 596,
+        "pnl_pct": 79.7,
+        "mdd_pct": 6.75,
+        "wr_pct": 35.2,
+        "avg_win": 0.873,
+        "avg_loss": 0.269,
+        "rr": 3.25,
+        "trades_per_day": 1.79,
+        "daily_pnl": 0.24,
+        "exit_reasons": {
+          "TRAIL_TP": 505,
+          "SL": 91
+        },
+        "days": 332.1
+      }
+    },
+    "by_regime_bollinger": {
+      "wide": {
+        "label": "S1_BW_wide",
+        "trades": 491,
+        "total_trades_incl_timeout": 491,
+        "pnl_pct": 132.87,
+        "mdd_pct": 5.48,
+        "wr_pct": 39.7,
+        "avg_win": 1.137,
+        "avg_loss": 0.3,
+        "rr": 3.79,
+        "trades_per_day": 2.95,
+        "daily_pnl": 0.799,
+        "exit_reasons": {
+          "SL": 49,
+          "TRAIL_TP": 442
+        },
+        "days": 166.4
+      },
+      "narrow": {
+        "label": "S1_BW_narrow",
+        "trades": 537,
+        "total_trades_incl_timeout": 537,
+        "pnl_pct": 36.68,
+        "mdd_pct": 6.05,
+        "wr_pct": 33.7,
+        "avg_win": 0.714,
+        "avg_loss": 0.26,
+        "rr": 2.75,
+        "trades_per_day": 3.23,
+        "daily_pnl": 0.22,
+        "exit_reasons": {
+          "TRAIL_TP": 437,
+          "SL": 100
+        },
+        "days": 166.4
+      }
+    },
+    "by_regime_channel_atr": {
+      "wide": {
+        "label": "S1_CAR_wide",
+        "trades": 559,
+        "total_trades_incl_timeout": 559,
+        "pnl_pct": 91.03,
+        "mdd_pct": 5.28,
+        "wr_pct": 36.5,
+        "avg_win": 0.951,
+        "avg_loss": 0.29,
+        "rr": 3.28,
+        "trades_per_day": 3.36,
+        "daily_pnl": 0.547,
+        "exit_reasons": {
+          "SL": 75,
+          "TRAIL_TP": 484
+        },
+        "days": 166.4
+      },
+      "narrow": {
+        "label": "S1_CAR_narrow",
+        "trades": 469,
+        "total_trades_incl_timeout": 469,
+        "pnl_pct": 78.52,
+        "mdd_pct": 4.5,
+        "wr_pct": 36.7,
+        "avg_win": 0.912,
+        "avg_loss": 0.264,
+        "rr": 3.46,
+        "trades_per_day": 2.82,
+        "daily_pnl": 0.472,
+        "exit_reasons": {
+          "TRAIL_TP": 395,
+          "SL": 74
+        },
+        "days": 166.4
+      }
+    }
+  },
+  "s2_mean_reversion": {
+    "best_params": {
+      "sl_k": 3.0,
+      "tp_k": 3.0,
+      "body_filter": false
+    },
+    "best_metrics": {
+      "label": "MR_sl3.0_tp3.0_nobody",
+      "trades": 801,
+      "total_trades_incl_timeout": 812,
+      "pnl_pct": -71.17,
+      "mdd_pct": 75.4,
+      "wr_pct": 50.8,
+      "avg_win": 0.876,
+      "avg_loss": 1.085,
+      "rr": 0.81,
+      "trades_per_day": 2.41,
+      "daily_pnl": -0.214,
+      "exit_reasons": {
+        "TP": 407,
+        "SL": 394,
+        "TIMEOUT": 11
+      },
+      "days": 332.8
+    },
+    "all_sweep": [
+      {
+        "label": "MR_sl1.5_tp1.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl1.5_tp1.0_nobody",
+        "pnl": -163.25,
+        "trades": 1894,
+        "wr": 61.5,
+        "rr": 0.38
+      },
+      {
+        "label": "MR_sl1.5_tp1.5_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl1.5_tp1.5_nobody",
+        "pnl": -162.44,
+        "trades": 1672,
+        "wr": 49.9,
+        "rr": 0.66
+      },
+      {
+        "label": "MR_sl1.5_tp2.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl1.5_tp2.0_nobody",
+        "pnl": -148.63,
+        "trades": 1471,
+        "wr": 42.3,
+        "rr": 0.95
+      },
+      {
+        "label": "MR_sl1.5_tp3.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl1.5_tp3.0_nobody",
+        "pnl": -94.01,
+        "trades": 1185,
+        "wr": 33.7,
+        "rr": 1.57
+      },
+      {
+        "label": "MR_sl2.0_tp1.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.0_tp1.0_nobody",
+        "pnl": -169.96,
+        "trades": 1813,
+        "wr": 65.6,
+        "rr": 0.31
+      },
+      {
+        "label": "MR_sl2.0_tp1.5_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.0_tp1.5_nobody",
+        "pnl": -159.32,
+        "trades": 1522,
+        "wr": 56.6,
+        "rr": 0.51
+      },
+      {
+        "label": "MR_sl2.0_tp2.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.0_tp2.0_nobody",
+        "pnl": -142.22,
+        "trades": 1316,
+        "wr": 49.4,
+        "rr": 0.72
+      },
+      {
+        "label": "MR_sl2.0_tp3.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.0_tp3.0_nobody",
+        "pnl": -84.88,
+        "trades": 1024,
+        "wr": 40.6,
+        "rr": 1.19
+      },
+      {
+        "label": "MR_sl2.5_tp1.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.5_tp1.0_nobody",
+        "pnl": -148.84,
+        "trades": 1705,
+        "wr": 69.9,
+        "rr": 0.27
+      },
+      {
+        "label": "MR_sl2.5_tp1.5_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.5_tp1.5_nobody",
+        "pnl": -135.3,
+        "trades": 1379,
+        "wr": 62.2,
+        "rr": 0.42
+      },
+      {
+        "label": "MR_sl2.5_tp2.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.5_tp2.0_nobody",
+        "pnl": -117.29,
+        "trades": 1167,
+        "wr": 56.0,
+        "rr": 0.58
+      },
+      {
+        "label": "MR_sl2.5_tp3.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl2.5_tp3.0_nobody",
+        "pnl": -83.36,
+        "trades": 884,
+        "wr": 46.0,
+        "rr": 0.95
+      },
+      {
+        "label": "MR_sl3.0_tp1.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl3.0_tp1.0_nobody",
+        "pnl": -143.83,
+        "trades": 1588,
+        "wr": 72.7,
+        "rr": 0.23
+      },
+      {
+        "label": "MR_sl3.0_tp1.5_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl3.0_tp1.5_nobody",
+        "pnl": -122.67,
+        "trades": 1251,
+        "wr": 65.7,
+        "rr": 0.37
+      },
+      {
+        "label": "MR_sl3.0_tp2.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl3.0_tp2.0_nobody",
+        "pnl": -107.18,
+        "trades": 1065,
+        "wr": 59.8,
+        "rr": 0.51
+      },
+      {
+        "label": "MR_sl3.0_tp3.0_body",
+        "pnl": 0.0,
+        "trades": 0,
+        "wr": 0.0,
+        "rr": 0.0
+      },
+      {
+        "label": "MR_sl3.0_tp3.0_nobody",
+        "pnl": -71.17,
+        "trades": 801,
+        "wr": 50.8,
+        "rr": 0.81
+      }
+    ],
+    "wf": {
+      "label": "S2_MeanRev",
+      "folds": [
+        {
+          "fold": 0,
+          "is_bars": "0-5324",
+          "oos_bars": "5324-10648",
+          "is_pnl": -17.07,
+          "is_trades": 150,
+          "oos_pnl": 10.45,
+          "oos_trades": 132,
+          "oos_wr": 62.1,
+          "pass": true
+        },
+        {
+          "fold": 1,
+          "is_bars": "0-10648",
+          "oos_bars": "10648-15973",
+          "is_pnl": -5.61,
+          "is_trades": 282,
+          "oos_pnl": -26.7,
+          "oos_trades": 135,
+          "oos_wr": 45.2,
+          "pass": false
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-15973",
+          "oos_bars": "15973-21297",
+          "is_pnl": -33.0,
+          "is_trades": 416,
+          "oos_pnl": -14.8,
+          "oos_trades": 129,
+          "oos_wr": 48.8,
+          "pass": false
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-21297",
+          "oos_bars": "21297-26621",
+          "is_pnl": -48.29,
+          "is_trades": 543,
+          "oos_pnl": -16.97,
+          "oos_trades": 122,
+          "oos_wr": 47.5,
+          "pass": false
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-26621",
+          "oos_bars": "26621-31946",
+          "is_pnl": -64.56,
+          "is_trades": 664,
+          "oos_pnl": -6.61,
+          "oos_trades": 137,
+          "oos_wr": 50.4,
+          "pass": false
+        }
+      ],
+      "pass_count": "1/5",
+      "total_oos_pnl": -54.63,
+      "verdict": "FAIL"
+    },
+    "mc": {
+      "p_value": 0.99,
+      "n_sims": 999,
+      "n_trades": 801,
+      "real_pnl": -71.17,
+      "disc": "NOT_DISC"
+    },
+    "progressive": {
+      "label": "S2_MeanRev",
+      "cuts": [
+        {
+          "cut": "10%",
+          "bars": 3194,
+          "pnl": -4.89,
+          "trades": 91,
+          "wr": 52.7
+        },
+        {
+          "cut": "20%",
+          "bars": 6389,
+          "pnl": -11.6,
+          "trades": 182,
+          "wr": 53.8
+        },
+        {
+          "cut": "30%",
+          "bars": 9583,
+          "pnl": -6.51,
+          "trades": 260,
+          "wr": 55.8
+        },
+        {
+          "cut": "40%",
+          "bars": 12778,
+          "pnl": -12.74,
+          "trades": 335,
+          "wr": 54.9
+        },
+        {
+          "cut": "50%",
+          "bars": 15973,
+          "pnl": -33.0,
+          "trades": 416,
+          "wr": 52.6
+        },
+        {
+          "cut": "60%",
+          "bars": 19167,
+          "pnl": -49.16,
+          "trades": 496,
+          "wr": 51.6
+        },
+        {
+          "cut": "70%",
+          "bars": 22362,
+          "pnl": -46.35,
+          "trades": 565,
+          "wr": 51.7
+        },
+        {
+          "cut": "80%",
+          "bars": 25556,
+          "pnl": -56.68,
+          "trades": 638,
+          "wr": 50.9
+        },
+        {
+          "cut": "90%",
+          "bars": 28751,
+          "pnl": -58.76,
+          "trades": 725,
+          "wr": 51.3
+        },
+        {
+          "cut": "100%",
+          "bars": 31946,
+          "pnl": -71.17,
+          "trades": 801,
+          "wr": 50.8
+        }
+      ]
+    },
+    "monthly": [
+      {
+        "month": "2025-05",
+        "pnl": -5.96,
+        "trades": 72,
+        "wr": 51.4
+      },
+      {
+        "month": "2025-06",
+        "pnl": -9.77,
+        "trades": 81,
+        "wr": 50.6
+      },
+      {
+        "month": "2025-07",
+        "pnl": 9.39,
+        "trades": 81,
+        "wr": 64.2
+      },
+      {
+        "month": "2025-08",
+        "pnl": -1.33,
+        "trades": 63,
+        "wr": 55.6
+      },
+      {
+        "month": "2025-09",
+        "pnl": -12.19,
+        "trades": 77,
+        "wr": 48.1
+      },
+      {
+        "month": "2025-10",
+        "pnl": -11.8,
+        "trades": 74,
+        "wr": 47.3
+      },
+      {
+        "month": "2025-11",
+        "pnl": -16.03,
+        "trades": 67,
+        "wr": 41.8
+      },
+      {
+        "month": "2025-12",
+        "pnl": -3.27,
+        "trades": 68,
+        "wr": 50.0
+      },
+      {
+        "month": "2026-01",
+        "pnl": -3.87,
+        "trades": 69,
+        "wr": 50.7
+      },
+      {
+        "month": "2026-02",
+        "pnl": -5.61,
+        "trades": 72,
+        "wr": 51.4
+      },
+      {
+        "month": "2026-03",
+        "pnl": -8.86,
+        "trades": 74,
+        "wr": 47.3
+      },
+      {
+        "month": "2026-04",
+        "pnl": -1.87,
+        "trades": 3,
+        "wr": 33.3
+      }
+    ],
+    "by_regime_adx": {
+      "trending": {
+        "label": "S2_trending",
+        "trades": 492,
+        "total_trades_incl_timeout": 500,
+        "pnl_pct": -32.67,
+        "mdd_pct": 38.16,
+        "wr_pct": 51.8,
+        "avg_win": 0.951,
+        "avg_loss": 1.161,
+        "rr": 0.82,
+        "trades_per_day": 1.48,
+        "daily_pnl": -0.099,
+        "exit_reasons": {
+          "TP": 255,
+          "SL": 237,
+          "TIMEOUT": 8
+        },
+        "days": 331.6
+      },
+      "ranging": {
+        "label": "S2_ranging",
+        "trades": 309,
+        "total_trades_incl_timeout": 312,
+        "pnl_pct": -38.5,
+        "mdd_pct": 44.17,
+        "wr_pct": 49.2,
+        "avg_win": 0.749,
+        "avg_loss": 0.97,
+        "rr": 0.77,
+        "trades_per_day": 0.93,
+        "daily_pnl": -0.116,
+        "exit_reasons": {
+          "SL": 157,
+          "TP": 152,
+          "TIMEOUT": 3
+        },
+        "days": 331.0
+      }
+    }
+  },
+  "s3_regime_adaptive": {
+    "best_adx_threshold": 15,
+    "best_metrics": {
+      "label": "Regime_ADX15",
+      "trades": 978,
+      "total_trades_incl_timeout": 979,
+      "pnl_pct": 149.0,
+      "mdd_pct": 8.1,
+      "wr_pct": 40.5,
+      "avg_win": 0.904,
+      "avg_loss": 0.359,
+      "rr": 2.52,
+      "trades_per_day": 2.94,
+      "daily_pnl": 0.448,
+      "exit_reasons": {
+        "SL": 185,
+        "TRAIL_TP": 717,
+        "TP": 76,
+        "TIMEOUT": 1
+      },
+      "days": 332.8
+    },
+    "all_sweep": [
+      {
+        "label": "Regime_ADX15",
+        "pnl": 149.0,
+        "trades": 978,
+        "wr": 40.5,
+        "rr": 2.52
+      },
+      {
+        "label": "Regime_ADX20",
+        "pnl": 91.94,
+        "trades": 931,
+        "wr": 42.3,
+        "rr": 1.84
+      },
+      {
+        "label": "Regime_ADX25",
+        "pnl": 17.69,
+        "trades": 890,
+        "wr": 42.5,
+        "rr": 1.43
+      },
+      {
+        "label": "Regime_ADX30",
+        "pnl": -30.04,
+        "trades": 872,
+        "wr": 43.8,
+        "rr": 1.18
+      },
+      {
+        "label": "Regime_ADX35",
+        "pnl": -41.2,
+        "trades": 851,
+        "wr": 47.5,
+        "rr": 0.99
+      },
+      {
+        "label": "Regime_ADX40",
+        "pnl": -58.51,
+        "trades": 826,
+        "wr": 48.2,
+        "rr": 0.92
+      }
+    ],
+    "wf": {
+      "label": "S3_Regime",
+      "folds": [
+        {
+          "fold": 0,
+          "is_bars": "0-5324",
+          "oos_bars": "5324-10648",
+          "is_pnl": 5.89,
+          "is_trades": 166,
+          "oos_pnl": 14.04,
+          "oos_trades": 167,
+          "oos_wr": 37.1,
+          "pass": true
+        },
+        {
+          "fold": 1,
+          "is_bars": "0-10648",
+          "oos_bars": "10648-15973",
+          "is_pnl": 20.3,
+          "is_trades": 334,
+          "oos_pnl": 23.84,
+          "oos_trades": 159,
+          "oos_wr": 42.8,
+          "pass": true
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-15973",
+          "oos_bars": "15973-21297",
+          "is_pnl": 47.06,
+          "is_trades": 493,
+          "oos_pnl": 34.23,
+          "oos_trades": 158,
+          "oos_wr": 43.7,
+          "pass": true
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-21297",
+          "oos_bars": "21297-26621",
+          "is_pnl": 81.39,
+          "is_trades": 650,
+          "oos_pnl": 43.13,
+          "oos_trades": 155,
+          "oos_wr": 40.0,
+          "pass": true
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-26621",
+          "oos_bars": "26621-31946",
+          "is_pnl": 124.45,
+          "is_trades": 805,
+          "oos_pnl": 24.55,
+          "oos_trades": 173,
+          "oos_wr": 41.0,
+          "pass": true
+        }
+      ],
+      "pass_count": "5/5",
+      "total_oos_pnl": 139.79,
+      "verdict": "PASS"
+    },
+    "mc": {
+      "p_value": 0.001,
+      "n_sims": 999,
+      "n_trades": 978,
+      "real_pnl": 149.0,
+      "disc": "DISC"
+    }
+  },
+  "complementarity": {
+    "monthly_correlation": -0.374,
+    "adx_median": 23.4,
+    "bollinger_width_median": 0.98,
+    "channel_atr_ratio_median": 3.76
+  },
+  "conclusions": {}
+}

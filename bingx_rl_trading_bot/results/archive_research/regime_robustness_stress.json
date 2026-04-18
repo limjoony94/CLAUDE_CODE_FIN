@@ -1,0 +1,233 @@
+{
+  "study": "regime_robustness_stress",
+  "date": "2026-03-15T05:01:19.789204",
+  "windows": [
+    {
+      "window": "d0-30",
+      "regime": "BULL",
+      "chg": 12.0,
+      "ref": 66.4,
+      "rnd": 46.8,
+      "inv": 39.0,
+      "nom": 59.7,
+      "gap": 19.6
+    },
+    {
+      "window": "d15-45",
+      "regime": "SIDEWAYS",
+      "chg": -0.4,
+      "ref": 53.1,
+      "rnd": 40.2,
+      "inv": 39.2,
+      "nom": 56.9,
+      "gap": 12.9
+    },
+    {
+      "window": "d30-60",
+      "regime": "SIDEWAYS",
+      "chg": 2.7,
+      "ref": 43.4,
+      "rnd": 40.1,
+      "inv": 35.0,
+      "nom": 49.8,
+      "gap": 3.2
+    },
+    {
+      "window": "d45-75",
+      "regime": "BULL",
+      "chg": 12.8,
+      "ref": 41.6,
+      "rnd": 29.8,
+      "inv": 33.3,
+      "nom": 38.4,
+      "gap": 11.9
+    },
+    {
+      "window": "d60-90",
+      "regime": "BULL",
+      "chg": 5.5,
+      "ref": 46.7,
+      "rnd": 35.4,
+      "inv": 30.1,
+      "nom": 40.6,
+      "gap": 11.3
+    },
+    {
+      "window": "d75-105",
+      "regime": "SIDEWAYS",
+      "chg": -1.9,
+      "ref": 47.5,
+      "rnd": 41.4,
+      "inv": 33.1,
+      "nom": 47.2,
+      "gap": 6.1
+    },
+    {
+      "window": "d90-120",
+      "regime": "SIDEWAYS",
+      "chg": -2.1,
+      "ref": 48.1,
+      "rnd": 37.9,
+      "inv": 43.3,
+      "nom": 41.1,
+      "gap": 10.2
+    },
+    {
+      "window": "d105-135",
+      "regime": "SIDEWAYS",
+      "chg": 0.1,
+      "ref": 50.9,
+      "rnd": 43.4,
+      "inv": 38.8,
+      "nom": 46.0,
+      "gap": 7.5
+    },
+    {
+      "window": "d120-150",
+      "regime": "BULL",
+      "chg": 6.8,
+      "ref": 37.9,
+      "rnd": 40.0,
+      "inv": 26.4,
+      "nom": 36.5,
+      "gap": -2.1
+    },
+    {
+      "window": "d135-165",
+      "regime": "BEAR",
+      "chg": -9.1,
+      "ref": 49.6,
+      "rnd": 33.8,
+      "inv": 35.7,
+      "nom": 40.9,
+      "gap": 15.9
+    },
+    {
+      "window": "d150-180",
+      "regime": "BEAR",
+      "chg": -7.3,
+      "ref": 62.2,
+      "rnd": 55.2,
+      "inv": 42.8,
+      "nom": 44.9,
+      "gap": 7.0
+    },
+    {
+      "window": "d165-195",
+      "regime": "BEAR",
+      "chg": -9.5,
+      "ref": 62.7,
+      "rnd": 59.2,
+      "inv": 32.8,
+      "nom": 49.5,
+      "gap": 3.5
+    },
+    {
+      "window": "d180-210",
+      "regime": "BEAR",
+      "chg": -21.8,
+      "ref": 76.2,
+      "rnd": 57.4,
+      "inv": 28.7,
+      "nom": 64.8,
+      "gap": 18.8
+    },
+    {
+      "window": "d195-225",
+      "regime": "BEAR",
+      "chg": -8.4,
+      "ref": 63.2,
+      "rnd": 43.4,
+      "inv": 35.6,
+      "nom": 48.3,
+      "gap": 19.9
+    },
+    {
+      "window": "d210-240",
+      "regime": "SIDEWAYS",
+      "chg": 3.2,
+      "ref": 41.6,
+      "rnd": 51.9,
+      "inv": 43.0,
+      "nom": 42.6,
+      "gap": -10.3
+    },
+    {
+      "window": "d225-255",
+      "regime": "BULL",
+      "chg": 10.3,
+      "ref": 43.5,
+      "rnd": 43.5,
+      "inv": 36.8,
+      "nom": 45.5,
+      "gap": 0.0
+    },
+    {
+      "window": "d240-270",
+      "regime": "BEAR",
+      "chg": -6.0,
+      "ref": 44.5,
+      "rnd": 35.8,
+      "inv": 35.4,
+      "nom": 35.0,
+      "gap": 8.7
+    },
+    {
+      "window": "d255-285",
+      "regime": "BEAR",
+      "chg": -27.5,
+      "ref": 51.7,
+      "rnd": 43.2,
+      "inv": 49.2,
+      "nom": 7.7,
+      "gap": 8.6
+    },
+    {
+      "window": "d270-300",
+      "regime": "BEAR",
+      "chg": -19.7,
+      "ref": 61.2,
+      "rnd": 65.4,
+      "inv": 61.4,
+      "nom": 16.4,
+      "gap": -4.2
+    }
+  ],
+  "regime_stats": {
+    "SIDEWAYS": {
+      "n": 6,
+      "ref_avg": 47.4,
+      "rnd_avg": 42.5,
+      "inv_avg": 38.7,
+      "nom_avg": 47.3,
+      "gap_avg": 4.9
+    },
+    "BULL": {
+      "n": 5,
+      "ref_avg": 47.2,
+      "rnd_avg": 39.1,
+      "inv_avg": 33.1,
+      "nom_avg": 44.1,
+      "gap_avg": 8.1
+    },
+    "BEAR": {
+      "n": 8,
+      "ref_avg": 58.9,
+      "rnd_avg": 49.2,
+      "inv_avg": 40.2,
+      "nom_avg": 38.4,
+      "gap_avg": 9.8
+    }
+  },
+  "tail": {
+    "ref": 92.3,
+    "rnd": 86.9,
+    "inv": 81.3,
+    "chg": -20.8
+  },
+  "diagnostics": {
+    "avg_gap": 7.8,
+    "inv_positive_ratio": 1.0
+  },
+  "elapsed_s": 20.1
+}

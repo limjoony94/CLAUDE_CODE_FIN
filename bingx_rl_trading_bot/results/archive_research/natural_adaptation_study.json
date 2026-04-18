@@ -1,0 +1,2124 @@
+{
+  "study": "Natural Adaptation Study",
+  "timestamp": "2026-02-23 22:55:43",
+  "phase1_signal_frequency": [
+    {
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "total_signals": 71,
+      "bull_signals": 21,
+      "side_signals": 25,
+      "bear_signals": 25,
+      "bull_rate": 0.841,
+      "side_rate": 0.919,
+      "bear_rate": 0.856,
+      "adaptation_score": 0.015
+    },
+    {
+      "pattern": "DN-MU-H",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.0,
+      "total_signals": 65,
+      "bull_signals": 21,
+      "side_signals": 24,
+      "bear_signals": 20,
+      "bull_rate": 0.841,
+      "side_rate": 0.882,
+      "bear_rate": 0.685,
+      "adaptation_score": -0.157
+    },
+    {
+      "pattern": "BU-MU-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "total_signals": 61,
+      "bull_signals": 25,
+      "side_signals": 22,
+      "bear_signals": 14,
+      "bull_rate": 1.001,
+      "side_rate": 0.809,
+      "bear_rate": 0.479,
+      "adaptation_score": -0.522
+    },
+    {
+      "pattern": "U-MU-H",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "total_signals": 66,
+      "bull_signals": 18,
+      "side_signals": 35,
+      "bear_signals": 13,
+      "bull_rate": 0.721,
+      "side_rate": 1.287,
+      "bear_rate": 0.445,
+      "adaptation_score": 0.276
+    },
+    {
+      "pattern": "MD-MU-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 115,
+      "bull_signals": 40,
+      "side_signals": 48,
+      "bear_signals": 27,
+      "bull_rate": 1.602,
+      "side_rate": 1.765,
+      "bear_rate": 0.924,
+      "adaptation_score": -0.678
+    },
+    {
+      "pattern": "DN-ST-BU",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 145,
+      "bull_signals": 37,
+      "side_signals": 36,
+      "bear_signals": 72,
+      "bull_rate": 1.482,
+      "side_rate": 1.324,
+      "bear_rate": 2.464,
+      "adaptation_score": 0.982
+    },
+    {
+      "pattern": "ST-BD-BU",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 49,
+      "bull_signals": 19,
+      "side_signals": 8,
+      "bear_signals": 22,
+      "bull_rate": 0.761,
+      "side_rate": 0.294,
+      "bear_rate": 0.753,
+      "adaptation_score": -0.008
+    },
+    {
+      "pattern": "DN-BD-BU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.0,
+      "total_signals": 111,
+      "bull_signals": 34,
+      "side_signals": 30,
+      "bear_signals": 47,
+      "bull_rate": 1.362,
+      "side_rate": 1.103,
+      "bear_rate": 1.609,
+      "adaptation_score": 0.247
+    },
+    {
+      "pattern": "DN-GS-ST",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.75,
+      "total_signals": 37,
+      "bull_signals": 14,
+      "side_signals": 10,
+      "bear_signals": 13,
+      "bull_rate": 0.561,
+      "side_rate": 0.368,
+      "bear_rate": 0.445,
+      "adaptation_score": -0.116
+    },
+    {
+      "pattern": "ST-IH-DN",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.5,
+      "total_signals": 77,
+      "bull_signals": 27,
+      "side_signals": 31,
+      "bear_signals": 19,
+      "bull_rate": 1.081,
+      "side_rate": 1.14,
+      "bear_rate": 0.65,
+      "adaptation_score": -0.431
+    },
+    {
+      "pattern": "MU-ST-MD",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "total_signals": 46,
+      "bull_signals": 13,
+      "side_signals": 19,
+      "bear_signals": 14,
+      "bull_rate": 0.521,
+      "side_rate": 0.699,
+      "bear_rate": 0.479,
+      "adaptation_score": -0.041
+    },
+    {
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.5,
+      "total_signals": 74,
+      "bull_signals": 21,
+      "side_signals": 26,
+      "bear_signals": 27,
+      "bull_rate": 0.841,
+      "side_rate": 0.956,
+      "bear_rate": 0.924,
+      "adaptation_score": 0.083
+    },
+    {
+      "pattern": "IH-ST-ST",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "total_signals": 43,
+      "bull_signals": 14,
+      "side_signals": 14,
+      "bear_signals": 15,
+      "bull_rate": 0.561,
+      "side_rate": 0.515,
+      "bear_rate": 0.513,
+      "adaptation_score": -0.047
+    },
+    {
+      "pattern": "IH-DN-MD",
+      "direction": "LONG",
+      "tp": 0.75,
+      "sl": 1.5,
+      "total_signals": 40,
+      "bull_signals": 11,
+      "side_signals": 16,
+      "bear_signals": 13,
+      "bull_rate": 0.441,
+      "side_rate": 0.588,
+      "bear_rate": 0.445,
+      "adaptation_score": -0.004
+    },
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "total_signals": 64,
+      "bull_signals": 23,
+      "side_signals": 22,
+      "bear_signals": 19,
+      "bull_rate": 0.921,
+      "side_rate": 0.809,
+      "bear_rate": 0.65,
+      "adaptation_score": 0.271
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0,
+      "total_signals": 67,
+      "bull_signals": 21,
+      "side_signals": 23,
+      "bear_signals": 23,
+      "bull_rate": 0.841,
+      "side_rate": 0.846,
+      "bear_rate": 0.787,
+      "adaptation_score": 0.054
+    },
+    {
+      "pattern": "MD-DN-DN",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5,
+      "total_signals": 268,
+      "bull_signals": 68,
+      "side_signals": 101,
+      "bear_signals": 99,
+      "bull_rate": 2.723,
+      "side_rate": 3.714,
+      "bear_rate": 3.388,
+      "adaptation_score": -0.665
+    },
+    {
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.25,
+      "total_signals": 81,
+      "bull_signals": 24,
+      "side_signals": 27,
+      "bear_signals": 30,
+      "bull_rate": 0.961,
+      "side_rate": 0.993,
+      "bear_rate": 1.027,
+      "adaptation_score": -0.066
+    },
+    {
+      "pattern": "H-U-MU",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 1.0,
+      "total_signals": 42,
+      "bull_signals": 14,
+      "side_signals": 16,
+      "bear_signals": 12,
+      "bull_rate": 0.561,
+      "side_rate": 0.588,
+      "bear_rate": 0.411,
+      "adaptation_score": 0.15
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 76,
+      "bull_signals": 20,
+      "side_signals": 25,
+      "bear_signals": 31,
+      "bull_rate": 0.801,
+      "side_rate": 0.919,
+      "bear_rate": 1.061,
+      "adaptation_score": -0.26
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0,
+      "total_signals": 79,
+      "bull_signals": 18,
+      "side_signals": 28,
+      "bear_signals": 33,
+      "bull_rate": 0.721,
+      "side_rate": 1.029,
+      "bear_rate": 1.129,
+      "adaptation_score": -0.409
+    },
+    {
+      "pattern": "BU-BU-U",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.75,
+      "total_signals": 77,
+      "bull_signals": 25,
+      "side_signals": 26,
+      "bear_signals": 26,
+      "bull_rate": 1.001,
+      "side_rate": 0.956,
+      "bear_rate": 0.89,
+      "adaptation_score": -0.111
+    },
+    {
+      "pattern": "D-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 71,
+      "bull_signals": 28,
+      "side_signals": 17,
+      "bear_signals": 26,
+      "bull_rate": 1.121,
+      "side_rate": 0.625,
+      "bear_rate": 0.89,
+      "adaptation_score": -0.231
+    },
+    {
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "total_signals": 286,
+      "bull_signals": 97,
+      "side_signals": 85,
+      "bear_signals": 104,
+      "bull_rate": 3.885,
+      "side_rate": 3.125,
+      "bear_rate": 3.56,
+      "adaptation_score": -0.325
+    },
+    {
+      "pattern": "IH-U-DN",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "total_signals": 126,
+      "bull_signals": 43,
+      "side_signals": 42,
+      "bear_signals": 41,
+      "bull_rate": 1.722,
+      "side_rate": 1.544,
+      "bear_rate": 1.403,
+      "adaptation_score": -0.319
+    },
+    {
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 134,
+      "bull_signals": 42,
+      "side_signals": 40,
+      "bear_signals": 52,
+      "bull_rate": 1.682,
+      "side_rate": 1.471,
+      "bear_rate": 1.78,
+      "adaptation_score": 0.098
+    },
+    {
+      "pattern": "ST-D-U",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "total_signals": 97,
+      "bull_signals": 25,
+      "side_signals": 33,
+      "bear_signals": 39,
+      "bull_rate": 1.001,
+      "side_rate": 1.213,
+      "bear_rate": 1.335,
+      "adaptation_score": 0.334
+    },
+    {
+      "pattern": "DN-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.5,
+      "total_signals": 118,
+      "bull_signals": 29,
+      "side_signals": 39,
+      "bear_signals": 50,
+      "bull_rate": 1.161,
+      "side_rate": 1.434,
+      "bear_rate": 1.711,
+      "adaptation_score": 0.55
+    },
+    {
+      "pattern": "DN-BU-BU",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.0,
+      "total_signals": 89,
+      "bull_signals": 25,
+      "side_signals": 28,
+      "bear_signals": 36,
+      "bull_rate": 1.001,
+      "side_rate": 1.029,
+      "bear_rate": 1.232,
+      "adaptation_score": 0.231
+    },
+    {
+      "pattern": "ST-DN-BU",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.25,
+      "total_signals": 113,
+      "bull_signals": 33,
+      "side_signals": 32,
+      "bear_signals": 48,
+      "bull_rate": 1.322,
+      "side_rate": 1.177,
+      "bear_rate": 1.643,
+      "adaptation_score": 0.321
+    },
+    {
+      "pattern": "BU-BD-U",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.5,
+      "total_signals": 103,
+      "bull_signals": 38,
+      "side_signals": 30,
+      "bear_signals": 35,
+      "bull_rate": 1.522,
+      "side_rate": 1.103,
+      "bear_rate": 1.198,
+      "adaptation_score": -0.324
+    },
+    {
+      "pattern": "GS-U-DN",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.75,
+      "total_signals": 71,
+      "bull_signals": 25,
+      "side_signals": 20,
+      "bear_signals": 26,
+      "bull_rate": 1.001,
+      "side_rate": 0.735,
+      "bear_rate": 0.89,
+      "adaptation_score": -0.111
+    },
+    {
+      "pattern": "BD-BU-U",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "total_signals": 110,
+      "bull_signals": 30,
+      "side_signals": 39,
+      "bear_signals": 41,
+      "bull_rate": 1.201,
+      "side_rate": 1.434,
+      "bear_rate": 1.403,
+      "adaptation_score": 0.202
+    },
+    {
+      "pattern": "ST-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "total_signals": 75,
+      "bull_signals": 25,
+      "side_signals": 17,
+      "bear_signals": 33,
+      "bull_rate": 1.001,
+      "side_rate": 0.625,
+      "bear_rate": 1.129,
+      "adaptation_score": 0.128
+    },
+    {
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.0,
+      "total_signals": 63,
+      "bull_signals": 18,
+      "side_signals": 27,
+      "bear_signals": 18,
+      "bull_rate": 0.721,
+      "side_rate": 0.993,
+      "bear_rate": 0.616,
+      "adaptation_score": -0.105
+    }
+  ],
+  "phase1_regime_bar_counts": {
+    "BEAR": 29217,
+    "SIDE": 27198,
+    "BULL": 24969
+  },
+  "phase2_categories": {
+    "safe": [
+      "U-MU-H",
+      "DN-ST-BU",
+      "U-MD-H",
+      "H-U-MU",
+      "ST-D-U",
+      "DN-BU-ST",
+      "DN-BU-BU",
+      "ST-DN-BU"
+    ],
+    "neutral": [
+      "U-GS-DN",
+      "ST-BD-BU",
+      "DN-BD-BU",
+      "MU-ST-MD",
+      "ST-MU-ST",
+      "IH-ST-ST",
+      "IH-DN-MD",
+      "MD-MU-ST",
+      "H-ST-DN",
+      "BU-BU-U",
+      "ST-ST-U",
+      "DN-BD-ST",
+      "GS-U-DN",
+      "BD-BU-U",
+      "ST-BU-ST",
+      "DN-BU-MD"
+    ],
+    "dangerous": [
+      "DN-MU-H",
+      "BU-MU-DN",
+      "MD-MU-U",
+      "DN-GS-ST",
+      "ST-IH-DN",
+      "MD-DN-DN",
+      "MD-DN-BU",
+      "MD-BD-DN",
+      "D-MU-DN",
+      "IH-U-DN",
+      "BU-BD-U"
+    ]
+  },
+  "phase3_short_term": {
+    "BULL": {
+      "windows": 25,
+      "avg_pnl": -1.3,
+      "median_pnl": -1.64,
+      "pct_positive": 36.0,
+      "long_pct": 27.1,
+      "total_long": 269,
+      "total_short": 724,
+      "window_details": [
+        {
+          "start": 125976,
+          "end": 127992,
+          "trades": 45,
+          "long": 15,
+          "short": 30,
+          "wr": 51.1,
+          "pnl": -6.13
+        },
+        {
+          "start": 126480,
+          "end": 128496,
+          "trades": 40,
+          "long": 12,
+          "short": 28,
+          "wr": 60.0,
+          "pnl": -0.75
+        },
+        {
+          "start": 126984,
+          "end": 129000,
+          "trades": 40,
+          "long": 10,
+          "short": 30,
+          "wr": 57.5,
+          "pnl": -0.39
+        },
+        {
+          "start": 130008,
+          "end": 132024,
+          "trades": 43,
+          "long": 8,
+          "short": 35,
+          "wr": 60.5,
+          "pnl": 0.74
+        },
+        {
+          "start": 130512,
+          "end": 132528,
+          "trades": 41,
+          "long": 7,
+          "short": 34,
+          "wr": 61.0,
+          "pnl": 3.33
+        },
+        {
+          "start": 131016,
+          "end": 133032,
+          "trades": 43,
+          "long": 10,
+          "short": 33,
+          "wr": 74.4,
+          "pnl": 6.23
+        },
+        {
+          "start": 140088,
+          "end": 142104,
+          "trades": 24,
+          "long": 10,
+          "short": 14,
+          "wr": 50.0,
+          "pnl": -1.64
+        },
+        {
+          "start": 140592,
+          "end": 142608,
+          "trades": 25,
+          "long": 9,
+          "short": 16,
+          "wr": 68.0,
+          "pnl": 2.25
+        },
+        {
+          "start": 144120,
+          "end": 146136,
+          "trades": 38,
+          "long": 11,
+          "short": 27,
+          "wr": 42.1,
+          "pnl": -9.32
+        },
+        {
+          "start": 144624,
+          "end": 146640,
+          "trades": 47,
+          "long": 12,
+          "short": 35,
+          "wr": 51.1,
+          "pnl": -5.71
+        }
+      ]
+    },
+    "BEAR": {
+      "windows": 34,
+      "avg_pnl": 4.36,
+      "median_pnl": 3.47,
+      "pct_positive": 82.4,
+      "long_pct": 24.0,
+      "total_long": 439,
+      "total_short": 1391,
+      "window_details": [
+        {
+          "start": 132528,
+          "end": 134544,
+          "trades": 45,
+          "long": 14,
+          "short": 31,
+          "wr": 68.9,
+          "pnl": 5.55
+        },
+        {
+          "start": 133032,
+          "end": 135048,
+          "trades": 35,
+          "long": 11,
+          "short": 24,
+          "wr": 77.1,
+          "pnl": 5.16
+        },
+        {
+          "start": 133536,
+          "end": 135552,
+          "trades": 34,
+          "long": 12,
+          "short": 22,
+          "wr": 58.8,
+          "pnl": -0.53
+        },
+        {
+          "start": 151176,
+          "end": 153192,
+          "trades": 35,
+          "long": 14,
+          "short": 21,
+          "wr": 51.4,
+          "pnl": -1.86
+        },
+        {
+          "start": 156216,
+          "end": 158232,
+          "trades": 49,
+          "long": 16,
+          "short": 33,
+          "wr": 67.3,
+          "pnl": 2.58
+        },
+        {
+          "start": 156720,
+          "end": 158736,
+          "trades": 50,
+          "long": 18,
+          "short": 32,
+          "wr": 66.0,
+          "pnl": 2.85
+        },
+        {
+          "start": 158232,
+          "end": 160248,
+          "trades": 40,
+          "long": 10,
+          "short": 30,
+          "wr": 60.0,
+          "pnl": 1.62
+        },
+        {
+          "start": 165792,
+          "end": 167808,
+          "trades": 35,
+          "long": 12,
+          "short": 23,
+          "wr": 65.7,
+          "pnl": 3.1
+        },
+        {
+          "start": 166296,
+          "end": 168312,
+          "trades": 29,
+          "long": 12,
+          "short": 17,
+          "wr": 69.0,
+          "pnl": 2.52
+        },
+        {
+          "start": 171336,
+          "end": 173352,
+          "trades": 54,
+          "long": 10,
+          "short": 44,
+          "wr": 75.9,
+          "pnl": 7.82
+        }
+      ]
+    },
+    "SIDE": {
+      "windows": 14,
+      "avg_pnl": 0.71,
+      "median_pnl": 0.85,
+      "pct_positive": 57.1,
+      "long_pct": 33.1,
+      "total_long": 161,
+      "total_short": 326,
+      "window_details": [
+        {
+          "start": 142104,
+          "end": 144120,
+          "trades": 33,
+          "long": 9,
+          "short": 24,
+          "wr": 60.6,
+          "pnl": -0.23
+        },
+        {
+          "start": 142608,
+          "end": 144624,
+          "trades": 17,
+          "long": 6,
+          "short": 11,
+          "wr": 58.8,
+          "pnl": 1.16
+        },
+        {
+          "start": 143112,
+          "end": 145128,
+          "trades": 26,
+          "long": 8,
+          "short": 18,
+          "wr": 46.2,
+          "pnl": -4.67
+        },
+        {
+          "start": 147144,
+          "end": 149160,
+          "trades": 32,
+          "long": 8,
+          "short": 24,
+          "wr": 75.0,
+          "pnl": 5.89
+        },
+        {
+          "start": 147648,
+          "end": 149664,
+          "trades": 37,
+          "long": 15,
+          "short": 22,
+          "wr": 70.3,
+          "pnl": 5.16
+        },
+        {
+          "start": 148152,
+          "end": 150168,
+          "trades": 40,
+          "long": 18,
+          "short": 22,
+          "wr": 62.5,
+          "pnl": 1.34
+        },
+        {
+          "start": 148656,
+          "end": 150672,
+          "trades": 38,
+          "long": 14,
+          "short": 24,
+          "wr": 57.9,
+          "pnl": 0.53
+        },
+        {
+          "start": 149160,
+          "end": 151176,
+          "trades": 36,
+          "long": 11,
+          "short": 25,
+          "wr": 58.3,
+          "pnl": -0.97
+        },
+        {
+          "start": 149664,
+          "end": 151680,
+          "trades": 41,
+          "long": 11,
+          "short": 30,
+          "wr": 70.7,
+          "pnl": 3.92
+        },
+        {
+          "start": 192000,
+          "end": 194016,
+          "trades": 41,
+          "long": 11,
+          "short": 30,
+          "wr": 61.0,
+          "pnl": 2.23
+        }
+      ]
+    }
+  },
+  "phase4_adaptive": {
+    "current_all": {
+      "patterns": 35,
+      "long": 9,
+      "short": 26,
+      "trades": 1651,
+      "trades_per_day": 5.84,
+      "wr": 65.8,
+      "pnl": 88.4,
+      "mdd": 10.8,
+      "pnl_mdd": 8.19,
+      "pat_list": [
+        [
+          "U-GS-DN",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "DN-MU-H",
+          "SHORT",
+          1.75,
+          1.0
+        ],
+        [
+          "BU-MU-DN",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "U-MU-H",
+          "LONG",
+          2.0,
+          2.0
+        ],
+        [
+          "MD-MU-U",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "DN-ST-BU",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "ST-BD-BU",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "DN-BD-BU",
+          "SHORT",
+          0.5,
+          1.0
+        ],
+        [
+          "DN-GS-ST",
+          "SHORT",
+          1.0,
+          1.75
+        ],
+        [
+          "ST-IH-DN",
+          "SHORT",
+          1.5,
+          2.5
+        ],
+        [
+          "MU-ST-MD",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "ST-MU-ST",
+          "SHORT",
+          1.5,
+          2.5
+        ],
+        [
+          "IH-ST-ST",
+          "SHORT",
+          1.25,
+          2.5
+        ],
+        [
+          "IH-DN-MD",
+          "LONG",
+          0.75,
+          1.5
+        ],
+        [
+          "U-MD-H",
+          "LONG",
+          2.0,
+          2.0
+        ],
+        [
+          "MD-MU-ST",
+          "LONG",
+          1.75,
+          2.0
+        ],
+        [
+          "MD-DN-DN",
+          "LONG",
+          1.5,
+          2.5
+        ],
+        [
+          "H-ST-DN",
+          "LONG",
+          1.0,
+          1.25
+        ],
+        [
+          "H-U-MU",
+          "LONG",
+          1.75,
+          1.0
+        ],
+        [
+          "MD-DN-BU",
+          "LONG",
+          1.75,
+          2.5
+        ],
+        [
+          "MD-BD-DN",
+          "LONG",
+          1.75,
+          2.0
+        ],
+        [
+          "BU-BU-U",
+          "SHORT",
+          1.25,
+          1.75
+        ],
+        [
+          "D-MU-DN",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "ST-ST-U",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "IH-U-DN",
+          "SHORT",
+          0.75,
+          2.5
+        ],
+        [
+          "DN-BD-ST",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "ST-D-U",
+          "SHORT",
+          0.75,
+          2.5
+        ],
+        [
+          "DN-BU-ST",
+          "SHORT",
+          1.0,
+          1.5
+        ],
+        [
+          "DN-BU-BU",
+          "SHORT",
+          1.25,
+          2.0
+        ],
+        [
+          "ST-DN-BU",
+          "SHORT",
+          2.0,
+          1.25
+        ],
+        [
+          "BU-BD-U",
+          "SHORT",
+          1.0,
+          2.5
+        ],
+        [
+          "GS-U-DN",
+          "SHORT",
+          1.25,
+          1.75
+        ],
+        [
+          "BD-BU-U",
+          "SHORT",
+          1.25,
+          2.5
+        ],
+        [
+          "ST-BU-ST",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "DN-BU-MD",
+          "SHORT",
+          1.25,
+          2.0
+        ]
+      ]
+    },
+    "safe_neutral": {
+      "patterns": 24,
+      "long": 6,
+      "short": 18,
+      "trades": 1294,
+      "trades_per_day": 4.58,
+      "wr": 66.5,
+      "pnl": 95.3,
+      "mdd": 17.6,
+      "pnl_mdd": 5.41,
+      "pat_list": [
+        [
+          "U-MU-H",
+          "LONG",
+          2.0,
+          2.0
+        ],
+        [
+          "DN-ST-BU",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "U-MD-H",
+          "LONG",
+          2.0,
+          2.0
+        ],
+        [
+          "H-U-MU",
+          "LONG",
+          1.75,
+          1.0
+        ],
+        [
+          "ST-D-U",
+          "SHORT",
+          0.75,
+          2.5
+        ],
+        [
+          "DN-BU-ST",
+          "SHORT",
+          1.0,
+          1.5
+        ],
+        [
+          "DN-BU-BU",
+          "SHORT",
+          1.25,
+          2.0
+        ],
+        [
+          "ST-DN-BU",
+          "SHORT",
+          2.0,
+          1.25
+        ],
+        [
+          "U-GS-DN",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "ST-BD-BU",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "DN-BD-BU",
+          "SHORT",
+          0.5,
+          1.0
+        ],
+        [
+          "MU-ST-MD",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "ST-MU-ST",
+          "SHORT",
+          1.5,
+          2.5
+        ],
+        [
+          "IH-ST-ST",
+          "SHORT",
+          1.25,
+          2.5
+        ],
+        [
+          "IH-DN-MD",
+          "LONG",
+          0.75,
+          1.5
+        ],
+        [
+          "MD-MU-ST",
+          "LONG",
+          1.75,
+          2.0
+        ],
+        [
+          "H-ST-DN",
+          "LONG",
+          1.0,
+          1.25
+        ],
+        [
+          "BU-BU-U",
+          "SHORT",
+          1.25,
+          1.75
+        ],
+        [
+          "ST-ST-U",
+          "SHORT",
+          2.0,
+          2.5
+        ],
+        [
+          "DN-BD-ST",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "GS-U-DN",
+          "SHORT",
+          1.25,
+          1.75
+        ],
+        [
+          "BD-BU-U",
+          "SHORT",
+          1.25,
+          2.5
+        ],
+        [
+          "ST-BU-ST",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "DN-BU-MD",
+          "SHORT",
+          1.25,
+          2.0
+        ]
+      ]
+    },
+    "safe_only": {
+      "patterns": 8,
+      "long": 3,
+      "short": 5,
+      "trades": 532,
+      "trades_per_day": 1.88,
+      "wr": 63.2,
+      "pnl": 28.9,
+      "mdd": 5.9,
+      "pnl_mdd": 4.9,
+      "pat_list": [
+        [
+          "U-MU-H",
+          "LONG",
+          2.0,
+          2.0
+        ],
+        [
+          "DN-ST-BU",
+          "SHORT",
+          1.75,
+          2.5
+        ],
+        [
+          "U-MD-H",
+          "LONG",
+          2.0,
+          2.0
+        ],
+        [
+          "H-U-MU",
+          "LONG",
+          1.75,
+          1.0
+        ],
+        [
+          "ST-D-U",
+          "SHORT",
+          0.75,
+          2.5
+        ],
+        [
+          "DN-BU-ST",
+          "SHORT",
+          1.0,
+          1.5
+        ],
+        [
+          "DN-BU-BU",
+          "SHORT",
+          1.25,
+          2.0
+        ],
+        [
+          "ST-DN-BU",
+          "SHORT",
+          2.0,
+          1.25
+        ]
+      ]
+    }
+  },
+  "phase5_universe": {
+    "adaptive_count": 21,
+    "adaptive_patterns": [
+      {
+        "pattern": "DN-ST-H",
+        "direction": "LONG",
+        "adaptation_score": 0.26,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 11.1,
+        "trades": 81
+      },
+      {
+        "pattern": "U-H-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.24,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 6.4,
+        "trades": 152
+      },
+      {
+        "pattern": "U-GS-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.015,
+        "tp": 2.0,
+        "sl": 2.5,
+        "wr_excess": 13.7,
+        "trades": 52
+      },
+      {
+        "pattern": "U-MD-H",
+        "direction": "LONG",
+        "adaptation_score": 0.271,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": 14.2,
+        "trades": 53
+      },
+      {
+        "pattern": "DN-BD-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.098,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 6.0,
+        "trades": 111
+      },
+      {
+        "pattern": "ST-D-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.334,
+        "tp": 0.75,
+        "sl": 2.5,
+        "wr_excess": 8.3,
+        "trades": 88
+      },
+      {
+        "pattern": "DN-BU-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.55,
+        "tp": 1.0,
+        "sl": 1.5,
+        "wr_excess": 10.7,
+        "trades": 116
+      },
+      {
+        "pattern": "D-ST-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.219,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 9.6,
+        "trades": 101
+      },
+      {
+        "pattern": "MD-MU-ST",
+        "direction": "LONG",
+        "adaptation_score": 0.054,
+        "tp": 1.75,
+        "sl": 2.0,
+        "wr_excess": 15.6,
+        "trades": 58
+      },
+      {
+        "pattern": "DN-BU-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.231,
+        "tp": 1.25,
+        "sl": 2.0,
+        "wr_excess": 6.8,
+        "trades": 82
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.321,
+        "tp": 2.0,
+        "sl": 1.25,
+        "wr_excess": 10.1,
+        "trades": 103
+      },
+      {
+        "pattern": "MD-ST-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.122,
+        "tp": 0.75,
+        "sl": 2.5,
+        "wr_excess": 6.8,
+        "trades": 98
+      },
+      {
+        "pattern": "U-MU-H",
+        "direction": "LONG",
+        "adaptation_score": 0.276,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": 22.4,
+        "trades": 58
+      },
+      {
+        "pattern": "DN-DN-IH",
+        "direction": "SHORT",
+        "adaptation_score": 0.246,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": 6.9,
+        "trades": 116
+      },
+      {
+        "pattern": "BD-BU-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.202,
+        "tp": 1.25,
+        "sl": 2.5,
+        "wr_excess": 9.2,
+        "trades": 91
+      },
+      {
+        "pattern": "DN-ST-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.982,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 7.5,
+        "trades": 113
+      },
+      {
+        "pattern": "BD-DN-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.443,
+        "tp": 1.0,
+        "sl": 1.0,
+        "wr_excess": 7.7,
+        "trades": 78
+      },
+      {
+        "pattern": "ST-BU-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.128,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 7.3,
+        "trades": 59
+      },
+      {
+        "pattern": "DN-BD-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.247,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 10.8,
+        "trades": 111
+      },
+      {
+        "pattern": "H-U-MU",
+        "direction": "LONG",
+        "adaptation_score": 0.15,
+        "tp": 1.75,
+        "sl": 1.0,
+        "wr_excess": 16.1,
+        "trades": 40
+      },
+      {
+        "pattern": "ST-MU-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.083,
+        "tp": 1.5,
+        "sl": 2.5,
+        "wr_excess": 11.7,
+        "trades": 62
+      }
+    ],
+    "all_screened": [
+      {
+        "pattern": "BD-BD-BU",
+        "direction": "LONG",
+        "adaptation_score": -0.357,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 12.6,
+        "trades": 63
+      },
+      {
+        "pattern": "ST-U-BD",
+        "direction": "SHORT",
+        "adaptation_score": 0.355,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": -0.4,
+        "trades": 119
+      },
+      {
+        "pattern": "ST-ST-U",
+        "direction": "SHORT",
+        "adaptation_score": -0.325,
+        "tp": 2.0,
+        "sl": 2.5,
+        "wr_excess": 8.4,
+        "trades": 225
+      },
+      {
+        "pattern": "BU-IH-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.141,
+        "tp": 1.75,
+        "sl": 1.5,
+        "wr_excess": 1.5,
+        "trades": 42
+      },
+      {
+        "pattern": "MD-DN-DN",
+        "direction": "LONG",
+        "adaptation_score": -0.665,
+        "tp": 1.5,
+        "sl": 2.5,
+        "wr_excess": 9.5,
+        "trades": 236
+      },
+      {
+        "pattern": "U-IH-U",
+        "direction": "SHORT",
+        "adaptation_score": -0.365,
+        "tp": 0.75,
+        "sl": 2.5,
+        "wr_excess": 3.2,
+        "trades": 141
+      },
+      {
+        "pattern": "IH-U-DN",
+        "direction": "SHORT",
+        "adaptation_score": -0.319,
+        "tp": 0.75,
+        "sl": 2.5,
+        "wr_excess": 5.0,
+        "trades": 122
+      },
+      {
+        "pattern": "IH-U-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.178,
+        "tp": 0.5,
+        "sl": 1.5,
+        "wr_excess": -2.7,
+        "trades": 148
+      },
+      {
+        "pattern": "DN-ST-H",
+        "direction": "LONG",
+        "adaptation_score": 0.26,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 11.1,
+        "trades": 81
+      },
+      {
+        "pattern": "H-ST-DN",
+        "direction": "LONG",
+        "adaptation_score": -0.066,
+        "tp": 1.0,
+        "sl": 1.25,
+        "wr_excess": 11.9,
+        "trades": 80
+      },
+      {
+        "pattern": "U-H-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.24,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 6.4,
+        "trades": 152
+      },
+      {
+        "pattern": "U-GS-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.015,
+        "tp": 2.0,
+        "sl": 2.5,
+        "wr_excess": 13.7,
+        "trades": 52
+      },
+      {
+        "pattern": "U-MD-H",
+        "direction": "LONG",
+        "adaptation_score": 0.271,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": 14.2,
+        "trades": 53
+      },
+      {
+        "pattern": "BU-BU-U",
+        "direction": "SHORT",
+        "adaptation_score": -0.111,
+        "tp": 1.25,
+        "sl": 1.75,
+        "wr_excess": 11.5,
+        "trades": 73
+      },
+      {
+        "pattern": "DN-MU-H",
+        "direction": "SHORT",
+        "adaptation_score": -0.157,
+        "tp": 1.75,
+        "sl": 1.0,
+        "wr_excess": 6.5,
+        "trades": 63
+      },
+      {
+        "pattern": "DN-BD-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.098,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 6.0,
+        "trades": 111
+      },
+      {
+        "pattern": "ST-D-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.334,
+        "tp": 0.75,
+        "sl": 2.5,
+        "wr_excess": 8.3,
+        "trades": 88
+      },
+      {
+        "pattern": "DN-BU-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.55,
+        "tp": 1.0,
+        "sl": 1.5,
+        "wr_excess": 10.7,
+        "trades": 116
+      },
+      {
+        "pattern": "D-ST-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.219,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 9.6,
+        "trades": 101
+      },
+      {
+        "pattern": "D-U-MU",
+        "direction": "SHORT",
+        "adaptation_score": -0.419,
+        "tp": 0.5,
+        "sl": 1.25,
+        "wr_excess": 7.4,
+        "trades": 66
+      },
+      {
+        "pattern": "MD-BU-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.174,
+        "tp": 1.5,
+        "sl": 2.5,
+        "wr_excess": 4.7,
+        "trades": 64
+      },
+      {
+        "pattern": "BU-MU-DN",
+        "direction": "SHORT",
+        "adaptation_score": -0.522,
+        "tp": 2.0,
+        "sl": 2.5,
+        "wr_excess": 15.9,
+        "trades": 49
+      },
+      {
+        "pattern": "U-DN-BD",
+        "direction": "SHORT",
+        "adaptation_score": 0.688,
+        "tp": 2.0,
+        "sl": 2.5,
+        "wr_excess": 1.4,
+        "trades": 181
+      },
+      {
+        "pattern": "MD-MU-ST",
+        "direction": "LONG",
+        "adaptation_score": 0.054,
+        "tp": 1.75,
+        "sl": 2.0,
+        "wr_excess": 15.6,
+        "trades": 58
+      },
+      {
+        "pattern": "DN-BU-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.231,
+        "tp": 1.25,
+        "sl": 2.0,
+        "wr_excess": 6.8,
+        "trades": 82
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.321,
+        "tp": 2.0,
+        "sl": 1.25,
+        "wr_excess": 10.1,
+        "trades": 103
+      },
+      {
+        "pattern": "BU-BD-U",
+        "direction": "SHORT",
+        "adaptation_score": -0.324,
+        "tp": 1.0,
+        "sl": 2.5,
+        "wr_excess": 7.5,
+        "trades": 90
+      },
+      {
+        "pattern": "U-DN-H",
+        "direction": "SHORT",
+        "adaptation_score": -0.6,
+        "tp": 0.75,
+        "sl": 1.0,
+        "wr_excess": 1.9,
+        "trades": 154
+      },
+      {
+        "pattern": "H-DN-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.018,
+        "tp": 0.5,
+        "sl": 2.5,
+        "wr_excess": -2.8,
+        "trades": 118
+      },
+      {
+        "pattern": "MD-ST-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.122,
+        "tp": 0.75,
+        "sl": 2.5,
+        "wr_excess": 6.8,
+        "trades": 98
+      },
+      {
+        "pattern": "MU-DN-ST",
+        "direction": "SHORT",
+        "adaptation_score": -0.018,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 6.1,
+        "trades": 165
+      },
+      {
+        "pattern": "U-MU-H",
+        "direction": "LONG",
+        "adaptation_score": 0.276,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": 22.4,
+        "trades": 58
+      },
+      {
+        "pattern": "MD-MU-U",
+        "direction": "SHORT",
+        "adaptation_score": -0.678,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 12.5,
+        "trades": 94
+      },
+      {
+        "pattern": "U-D-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.605,
+        "tp": 0.5,
+        "sl": 1.5,
+        "wr_excess": 0.9,
+        "trades": 158
+      },
+      {
+        "pattern": "DN-DN-IH",
+        "direction": "SHORT",
+        "adaptation_score": 0.246,
+        "tp": 2.0,
+        "sl": 2.0,
+        "wr_excess": 6.9,
+        "trades": 116
+      },
+      {
+        "pattern": "D-MU-DN",
+        "direction": "SHORT",
+        "adaptation_score": -0.231,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 12.6,
+        "trades": 56
+      },
+      {
+        "pattern": "BD-ST-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.543,
+        "tp": 2.0,
+        "sl": 1.0,
+        "wr_excess": 0.0,
+        "trades": 138
+      },
+      {
+        "pattern": "GS-U-DN",
+        "direction": "SHORT",
+        "adaptation_score": -0.111,
+        "tp": 1.25,
+        "sl": 1.75,
+        "wr_excess": 14.4,
+        "trades": 66
+      },
+      {
+        "pattern": "DN-MU-MU",
+        "direction": "SHORT",
+        "adaptation_score": -0.793,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 3.3,
+        "trades": 130
+      },
+      {
+        "pattern": "BD-BU-U",
+        "direction": "SHORT",
+        "adaptation_score": 0.202,
+        "tp": 1.25,
+        "sl": 2.5,
+        "wr_excess": 9.2,
+        "trades": 91
+      },
+      {
+        "pattern": "DN-ST-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.982,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 7.5,
+        "trades": 113
+      },
+      {
+        "pattern": "ST-H-DN",
+        "direction": "SHORT",
+        "adaptation_score": 0.226,
+        "tp": 1.0,
+        "sl": 2.0,
+        "wr_excess": 4.6,
+        "trades": 73
+      },
+      {
+        "pattern": "DN-IH-MD",
+        "direction": "SHORT",
+        "adaptation_score": -0.099,
+        "tp": 1.25,
+        "sl": 1.0,
+        "wr_excess": 11.9,
+        "trades": 55
+      },
+      {
+        "pattern": "ST-BD-BU",
+        "direction": "SHORT",
+        "adaptation_score": -0.008,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 11.4,
+        "trades": 37
+      },
+      {
+        "pattern": "BD-DN-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.443,
+        "tp": 1.0,
+        "sl": 1.0,
+        "wr_excess": 7.7,
+        "trades": 78
+      },
+      {
+        "pattern": "ST-BU-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.128,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 7.3,
+        "trades": 59
+      },
+      {
+        "pattern": "DN-BD-BU",
+        "direction": "SHORT",
+        "adaptation_score": 0.247,
+        "tp": 0.5,
+        "sl": 1.0,
+        "wr_excess": 10.8,
+        "trades": 111
+      },
+      {
+        "pattern": "DN-GS-ST",
+        "direction": "SHORT",
+        "adaptation_score": -0.116,
+        "tp": 1.0,
+        "sl": 1.75,
+        "wr_excess": 19.7,
+        "trades": 36
+      },
+      {
+        "pattern": "H-U-MU",
+        "direction": "LONG",
+        "adaptation_score": 0.15,
+        "tp": 1.75,
+        "sl": 1.0,
+        "wr_excess": 16.1,
+        "trades": 40
+      },
+      {
+        "pattern": "DF-U-U",
+        "direction": "SHORT",
+        "adaptation_score": -0.014,
+        "tp": 0.75,
+        "sl": 1.5,
+        "wr_excess": 4.0,
+        "trades": 58
+      },
+      {
+        "pattern": "MD-DN-BU",
+        "direction": "LONG",
+        "adaptation_score": -0.26,
+        "tp": 1.75,
+        "sl": 2.5,
+        "wr_excess": 7.8,
+        "trades": 66
+      },
+      {
+        "pattern": "BD-DN-MU",
+        "direction": "LONG",
+        "adaptation_score": -0.083,
+        "tp": 2.0,
+        "sl": 1.5,
+        "wr_excess": 10.7,
+        "trades": 56
+      },
+      {
+        "pattern": "ST-IH-DN",
+        "direction": "SHORT",
+        "adaptation_score": -0.431,
+        "tp": 1.5,
+        "sl": 2.5,
+        "wr_excess": 8.5,
+        "trades": 62
+      },
+      {
+        "pattern": "MU-ST-MD",
+        "direction": "SHORT",
+        "adaptation_score": -0.041,
+        "tp": 2.0,
+        "sl": 2.5,
+        "wr_excess": 14.7,
+        "trades": 37
+      },
+      {
+        "pattern": "ST-MU-ST",
+        "direction": "SHORT",
+        "adaptation_score": 0.083,
+        "tp": 1.5,
+        "sl": 2.5,
+        "wr_excess": 11.7,
+        "trades": 62
+      },
+      {
+        "pattern": "DN-BU-MD",
+        "direction": "SHORT",
+        "adaptation_score": -0.105,
+        "tp": 1.25,
+        "sl": 2.0,
+        "wr_excess": 9.6,
+        "trades": 59
+      },
+      {
+        "pattern": "MD-BD-DN",
+        "direction": "LONG",
+        "adaptation_score": -0.409,
+        "tp": 1.75,
+        "sl": 2.0,
+        "wr_excess": 10.8,
+        "trades": 67
+      },
+      {
+        "pattern": "IH-ST-ST",
+        "direction": "SHORT",
+        "adaptation_score": -0.047,
+        "tp": 1.25,
+        "sl": 2.5,
+        "wr_excess": 25.2,
+        "trades": 37
+      },
+      {
+        "pattern": "IH-DN-MD",
+        "direction": "LONG",
+        "adaptation_score": -0.004,
+        "tp": 0.75,
+        "sl": 1.5,
+        "wr_excess": 15.8,
+        "trades": 40
+      }
+    ]
+  },
+  "phase6_wf_stress": {
+    "current_35": {
+      "patterns": 35,
+      "long": 9,
+      "short": 26,
+      "trades": 1651,
+      "wr": 65.8,
+      "pnl": 88.4,
+      "mdd": 10.8,
+      "pnl_mdd": 8.19,
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 323,
+          "oos_wr": 65.9,
+          "oos_pnl": 13.7,
+          "oos_mdd": 5.4,
+          "pass": true
+        },
+        {
+          "fold": 2,
+          "oos_trades": 495,
+          "oos_wr": 66.5,
+          "oos_pnl": 28.4,
+          "oos_mdd": 12.0,
+          "pass": true
+        },
+        {
+          "fold": 3,
+          "oos_trades": 477,
+          "oos_wr": 66.7,
+          "oos_pnl": 27.5,
+          "oos_mdd": 10.2,
+          "pass": true
+        }
+      ],
+      "stress": {
+        "BULL": {
+          "windows": 25,
+          "avg_pnl": -1.3,
+          "avg_wr": 57.6,
+          "pct_positive": 36.0
+        },
+        "BEAR": {
+          "windows": 34,
+          "avg_pnl": 4.36,
+          "avg_wr": 67.6,
+          "pct_positive": 82.4
+        }
+      }
+    },
+    "adaptive_59": {
+      "patterns": 21,
+      "long": 5,
+      "short": 16,
+      "trades": 1422,
+      "wr": 67.6,
+      "pnl": 79.8,
+      "mdd": 14.2,
+      "pnl_mdd": 5.62,
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 288,
+          "oos_wr": 69.8,
+          "oos_pnl": 17.9,
+          "oos_mdd": 6.5,
+          "pass": true
+        },
+        {
+          "fold": 2,
+          "oos_trades": 407,
+          "oos_wr": 68.3,
+          "oos_pnl": 25.0,
+          "oos_mdd": 12.3,
+          "pass": true
+        },
+        {
+          "fold": 3,
+          "oos_trades": 401,
+          "oos_wr": 68.1,
+          "oos_pnl": 18.2,
+          "oos_mdd": 13.4,
+          "pass": true
+        }
+      ],
+      "stress": {
+        "BULL": {
+          "windows": 25,
+          "avg_pnl": 0.05,
+          "avg_wr": 59.4,
+          "pct_positive": 44.0
+        },
+        "BEAR": {
+          "windows": 34,
+          "avg_pnl": 4.32,
+          "avg_wr": 71.6,
+          "pct_positive": 85.3
+        }
+      }
+    }
+  },
+  "elapsed_seconds": 22.1
+}

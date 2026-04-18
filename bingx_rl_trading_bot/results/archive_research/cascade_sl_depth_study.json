@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    "date": "2026-03-04T15:52:48.477682",
+    "study": "cascade_sl_depth_study",
+    "question": "Is 75% Cascade SL Tightening equivalent to immediate close?",
+    "baseline": "v1.42.0 (M2/M4 disabled, fixed leverage=3)",
+    "data_bars": 85634,
+    "neutral_window": [
+      1,
+      74723
+    ],
+    "patterns": "130 (61L + 69S)",
+    "leverage": 3,
+    "scenarios": [
+      "baseline",
+      "cascade_t25",
+      "cascade_t50",
+      "cascade_t75",
+      "immediate_close",
+      "partial_close_50"
+    ]
+  },
+  "phase1_is": {
+    "baseline": {
+      "pnl": 110.03,
+      "mdd": 5.56,
+      "pnl_mdd": 19.8,
+      "wr": 72.2,
+      "trades": 825,
+      "cluster_events": 19,
+      "cluster_loss": -48.04,
+      "corr_sl_events": 19,
+      "corr_sl_loss": -48.04,
+      "cascade_tracking": {
+        "cascade_fires": 0,
+        "total_cascade_events": 0,
+        "total_tightened_positions": 0,
+        "total_exited_tracked": 0,
+        "post_cascade_sl_hits_1bar": 0,
+        "post_cascade_sl_hits_3bar": 0,
+        "post_cascade_sl_hits_12bar": 0,
+        "post_cascade_tp_hits": 0,
+        "cascade_all_exit_1bar_events": 0,
+        "cascade_all_exit_1bar_pct": 0.0,
+        "cascade_immediate_pct": 0.0
+      }
+    },
+    "cascade_t25": {
+      "pnl": 79.61,
+      "mdd": 8.45,
+      "pnl_mdd": 9.42,
+      "wr": 64.9,
+      "trades": 986,
+      "cluster_events": 45,
+      "cluster_loss": -85.69,
+      "corr_sl_events": 45,
+      "corr_sl_loss": -85.69,
+      "cascade_tracking": {
+        "cascade_fires": 237,
+        "total_cascade_events": 237,
+        "total_tightened_positions": 561,
+        "total_exited_tracked": 476,
+        "post_cascade_sl_hits_1bar": 150,
+        "post_cascade_sl_hits_3bar": 228,
+        "post_cascade_sl_hits_12bar": 276,
+        "post_cascade_tp_hits": 17,
+        "cascade_all_exit_1bar_events": 33,
+        "cascade_all_exit_1bar_pct": 13.9,
+        "cascade_immediate_pct": 31.5
+      }
+    },
+    "cascade_t50": {
+      "pnl": 108.98,
+      "mdd": 6.12,
+      "pnl_mdd": 17.81,
+      "wr": 61.8,
+      "trades": 1013,
+      "cluster_events": 85,
+      "cluster_loss": -142.7,
+      "corr_sl_events": 85,
+      "corr_sl_loss": -142.7,
+      "cascade_tracking": {
+        "cascade_fires": 168,
+        "total_cascade_events": 168,
+        "total_tightened_positions": 404,
+        "total_exited_tracked": 396,
+        "post_cascade_sl_hits_1bar": 247,
+        "post_cascade_sl_hits_3bar": 341,
+        "post_cascade_sl_hits_12bar": 366,
+        "post_cascade_tp_hits": 5,
+        "cascade_all_exit_1bar_events": 81,
+        "cascade_all_exit_1bar_pct": 48.2,
+        "cascade_immediate_pct": 62.4
+      }
+    },
+    "cascade_t75": {
+      "pnl": 163.38,
+      "mdd": 4.04,
+      "pnl_mdd": 40.49,
+      "wr": 59.8,
+      "trades": 1017,
+      "cluster_events": 97,
+      "cluster_loss": -119.48,
+      "corr_sl_events": 97,
+      "corr_sl_loss": -119.48,
+      "cascade_tracking": {
+        "cascade_fires": 122,
+        "total_cascade_events": 122,
+        "total_tightened_positions": 335,
+        "total_exited_tracked": 328,
+        "post_cascade_sl_hits_1bar": 292,
+        "post_cascade_sl_hits_3bar": 318,
+        "post_cascade_sl_hits_12bar": 320,
+        "post_cascade_tp_hits": 0,
+        "cascade_all_exit_1bar_events": 94,
+        "cascade_all_exit_1bar_pct": 77.0,
+        "cascade_immediate_pct": 89.0
+      }
+    },
+    "immediate_close": {
+      "pnl": 46.84,
+      "mdd": 10.48,
+      "pnl_mdd": 4.47,
+      "wr": 60.6,
+      "trades": 1020,
+      "cluster_events": 9,
+      "cluster_loss": -17.44,
+      "corr_sl_events": 9,
+      "corr_sl_loss": -17.44,
+      "cascade_tracking": {
+        "cascade_fires": 95,
+        "total_cascade_events": 0,
+        "total_tightened_positions": 0,
+        "total_exited_tracked": 0,
+        "post_cascade_sl_hits_1bar": 0,
+        "post_cascade_sl_hits_3bar": 0,
+        "post_cascade_sl_hits_12bar": 0,
+        "post_cascade_tp_hits": 0,
+        "cascade_all_exit_1bar_events": 0,
+        "cascade_all_exit_1bar_pct": 0.0,
+        "cascade_immediate_pct": 0.0
+      }
+    },
+    "partial_close_50": {
+      "pnl": 64.47,
+      "mdd": 9.75,
+      "pnl_mdd": 6.61,
+      "wr": 64.6,
+      "trades": 990,
+      "cluster_events": 8,
+      "cluster_loss": -16.99,
+      "corr_sl_events": 8,
+      "corr_sl_loss": -16.99,
+      "cascade_tracking": {
+        "cascade_fires": 117,
+        "total_cascade_events": 0,
+        "total_tightened_positions": 0,
+        "total_exited_tracked": 0,
+        "post_cascade_sl_hits_1bar": 0,
+        "post_cascade_sl_hits_3bar": 0,
+        "post_cascade_sl_hits_12bar": 0,
+        "post_cascade_tp_hits": 0,
+        "cascade_all_exit_1bar_events": 0,
+        "cascade_all_exit_1bar_pct": 0.0,
+        "cascade_immediate_pct": 0.0
+      }
+    }
+  },
+  "phase2_wf": {
+    "cascade_t75": {
+      "folds": [
+        {
+          "fold": 1,
+          "pnl": 32.55,
+          "wr": 58.6,
+          "mdd": 2.97,
+          "trades": 215,
+          "cascade_tracking": {
+            "cascade_fires": 26,
+            "total_cascade_events": 26,
+            "total_tightened_positions": 78,
+            "total_exited_tracked": 77,
+            "post_cascade_sl_hits_1bar": 64,
+            "post_cascade_sl_hits_3bar": 75,
+            "post_cascade_sl_hits_12bar": 75,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 18,
+            "cascade_all_exit_1bar_pct": 69.2,
+            "cascade_immediate_pct": 83.1
+          }
+        },
+        {
+          "fold": 2,
+          "pnl": 38.54,
+          "wr": 57.9,
+          "mdd": 5.38,
+          "trades": 266,
+          "cascade_tracking": {
+            "cascade_fires": 33,
+            "total_cascade_events": 33,
+            "total_tightened_positions": 83,
+            "total_exited_tracked": 81,
+            "post_cascade_sl_hits_1bar": 74,
+            "post_cascade_sl_hits_3bar": 77,
+            "post_cascade_sl_hits_12bar": 79,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 25,
+            "cascade_all_exit_1bar_pct": 75.8,
+            "cascade_immediate_pct": 91.4
+          }
+        },
+        {
+          "fold": 3,
+          "pnl": 58.43,
+          "wr": 63.4,
+          "mdd": 3.86,
+          "trades": 306,
+          "cascade_tracking": {
+            "cascade_fires": 29,
+            "total_cascade_events": 29,
+            "total_tightened_positions": 78,
+            "total_exited_tracked": 78,
+            "post_cascade_sl_hits_1bar": 76,
+            "post_cascade_sl_hits_3bar": 78,
+            "post_cascade_sl_hits_12bar": 78,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 27,
+            "cascade_all_exit_1bar_pct": 93.1,
+            "cascade_immediate_pct": 97.4
+          }
+        }
+      ],
+      "all_pass": true,
+      "min_fold_pnl": 32.55,
+      "total_oos_pnl": 129.52
+    },
+    "baseline": {
+      "folds": [
+        {
+          "fold": 1,
+          "pnl": 27.65,
+          "wr": 71.9,
+          "mdd": 5.18,
+          "trades": 178,
+          "cascade_tracking": {
+            "cascade_fires": 0,
+            "total_cascade_events": 0,
+            "total_tightened_positions": 0,
+            "total_exited_tracked": 0,
+            "post_cascade_sl_hits_1bar": 0,
+            "post_cascade_sl_hits_3bar": 0,
+            "post_cascade_sl_hits_12bar": 0,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 0,
+            "cascade_all_exit_1bar_pct": 0.0,
+            "cascade_immediate_pct": 0.0
+          }
+        },
+        {
+          "fold": 2,
+          "pnl": 17.03,
+          "wr": 67.9,
+          "mdd": 5.47,
+          "trades": 234,
+          "cascade_tracking": {
+            "cascade_fires": 0,
+            "total_cascade_events": 0,
+            "total_tightened_positions": 0,
+            "total_exited_tracked": 0,
+            "post_cascade_sl_hits_1bar": 0,
+            "post_cascade_sl_hits_3bar": 0,
+            "post_cascade_sl_hits_12bar": 0,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 0,
+            "cascade_all_exit_1bar_pct": 0.0,
+            "cascade_immediate_pct": 0.0
+          }
+        },
+        {
+          "fold": 3,
+          "pnl": 33.3,
+          "wr": 71.8,
+          "mdd": 5.66,
+          "trades": 245,
+          "cascade_tracking": {
+            "cascade_fires": 0,
+            "total_cascade_events": 0,
+            "total_tightened_positions": 0,
+            "total_exited_tracked": 0,
+            "post_cascade_sl_hits_1bar": 0,
+            "post_cascade_sl_hits_3bar": 0,
+            "post_cascade_sl_hits_12bar": 0,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 0,
+            "cascade_all_exit_1bar_pct": 0.0,
+            "cascade_immediate_pct": 0.0
+          }
+        }
+      ],
+      "all_pass": true,
+      "min_fold_pnl": 17.03,
+      "total_oos_pnl": 77.97999999999999
+    },
+    "cascade_t50": {
+      "folds": [
+        {
+          "fold": 1,
+          "pnl": 28.12,
+          "wr": 65.5,
+          "mdd": 4.71,
+          "trades": 200,
+          "cascade_tracking": {
+            "cascade_fires": 29,
+            "total_cascade_events": 29,
+            "total_tightened_positions": 81,
+            "total_exited_tracked": 75,
+            "post_cascade_sl_hits_1bar": 44,
+            "post_cascade_sl_hits_3bar": 65,
+            "post_cascade_sl_hits_12bar": 67,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 11,
+            "cascade_all_exit_1bar_pct": 37.9,
+            "cascade_immediate_pct": 58.7
+          }
+        },
+        {
+          "fold": 2,
+          "pnl": 13.51,
+          "wr": 55.8,
+          "mdd": 8.37,
+          "trades": 292,
+          "cascade_tracking": {
+            "cascade_fires": 60,
+            "total_cascade_events": 60,
+            "total_tightened_positions": 136,
+            "total_exited_tracked": 133,
+            "post_cascade_sl_hits_1bar": 84,
+            "post_cascade_sl_hits_3bar": 118,
+            "post_cascade_sl_hits_12bar": 126,
+            "post_cascade_tp_hits": 1,
+            "cascade_all_exit_1bar_events": 27,
+            "cascade_all_exit_1bar_pct": 45.0,
+            "cascade_immediate_pct": 63.2
+          }
+        },
+        {
+          "fold": 3,
+          "pnl": 38.79,
+          "wr": 63.6,
+          "mdd": 5.28,
+          "trades": 302,
+          "cascade_tracking": {
+            "cascade_fires": 44,
+            "total_cascade_events": 44,
+            "total_tightened_positions": 98,
+            "total_exited_tracked": 98,
+            "post_cascade_sl_hits_1bar": 68,
+            "post_cascade_sl_hits_3bar": 87,
+            "post_cascade_sl_hits_12bar": 91,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 24,
+            "cascade_all_exit_1bar_pct": 54.5,
+            "cascade_immediate_pct": 69.4
+          }
+        }
+      ],
+      "all_pass": true,
+      "min_fold_pnl": 13.51,
+      "total_oos_pnl": 80.42
+    },
+    "immediate_close": {
+      "folds": [
+        {
+          "fold": 1,
+          "pnl": 7.07,
+          "wr": 60.4,
+          "mdd": 9.46,
+          "trades": 225,
+          "cascade_tracking": {
+            "cascade_fires": 19,
+            "total_cascade_events": 0,
+            "total_tightened_positions": 0,
+            "total_exited_tracked": 0,
+            "post_cascade_sl_hits_1bar": 0,
+            "post_cascade_sl_hits_3bar": 0,
+            "post_cascade_sl_hits_12bar": 0,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 0,
+            "cascade_all_exit_1bar_pct": 0.0,
+            "cascade_immediate_pct": 0.0
+          }
+        },
+        {
+          "fold": 2,
+          "pnl": 2.31,
+          "wr": 59.3,
+          "mdd": 11.02,
+          "trades": 300,
+          "cascade_tracking": {
+            "cascade_fires": 29,
+            "total_cascade_events": 0,
+            "total_tightened_positions": 0,
+            "total_exited_tracked": 0,
+            "post_cascade_sl_hits_1bar": 0,
+            "post_cascade_sl_hits_3bar": 0,
+            "post_cascade_sl_hits_12bar": 0,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 0,
+            "cascade_all_exit_1bar_pct": 0.0,
+            "cascade_immediate_pct": 0.0
+          }
+        },
+        {
+          "fold": 3,
+          "pnl": 20.75,
+          "wr": 61.6,
+          "mdd": 5.99,
+          "trades": 328,
+          "cascade_tracking": {
+            "cascade_fires": 29,
+            "total_cascade_events": 0,
+            "total_tightened_positions": 0,
+            "total_exited_tracked": 0,
+            "post_cascade_sl_hits_1bar": 0,
+            "post_cascade_sl_hits_3bar": 0,
+            "post_cascade_sl_hits_12bar": 0,
+            "post_cascade_tp_hits": 0,
+            "cascade_all_exit_1bar_events": 0,
+            "cascade_all_exit_1bar_pct": 0.0,
+            "cascade_immediate_pct": 0.0
+          }
+        }
+      ],
+      "all_pass": true,
+      "min_fold_pnl": 2.31,
+      "total_oos_pnl": 30.130000000000003
+    }
+  },
+  "phase3_clusters": {},
+  "verdict": {
+    "pnl_difference": 116.54,
+    "mdd_difference": 6.44,
+    "cascade_immediate_exit_pct": 89.0,
+    "cascade_all_in_1bar_pct": 77.0,
+    "equivalent": "False"
+  }
+}

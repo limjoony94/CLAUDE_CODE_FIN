@@ -1,0 +1,98 @@
+# MAVS-15: Multi-Asset Vol-Spike 15m Strategy
+# Option B: D=4.0 | TP=3.0×ATR | SL=1.5×ATR | 44 assets | 15m
+# Validated: 365d, MC p=0.000, 1783 trades (4.88/d), R:R 1.85
+# Leverage: 20x, 5% pos, max 10 concurrent → target daily ~1%
+# MDD ~26%, 청산거리 9.5%, 최악SL동시피격 -12.3%
+
+strategy:
+  leverage: 20               # 20x for ~1% daily target
+  exchange_leverage: 20
+  position_mode: "oneway"   # one position per asset
+  max_positions_per_asset: 1
+  timeframe: "15m"
+
+  # Vol-spike entry
+  displacement_threshold: 4.0   # bar range > 4.0 × ATR(14)
+  body_ratio_min: 0.4           # |body| > 40% × range
+  atr_period: 14
+
+  # Asymmetric ATR TP/SL (different from entry logic)
+  tp_atr_mult: 3.0             # TP = 3.0 × ATR from entry
+  sl_atr_mult: 1.5             # SL = 1.5 × ATR from entry → R:R = 2.0
+  tp_max_pct: 8.0              # TP ceiling %
+  sl_max_pct: 6.0              # SL ceiling %
+
+  # Timeout
+  max_hold_hours: 24           # 96 bars at 15m
+
+  # Cooldown
+  cooldown_bars: 4             # 1h minimum between trades per asset
+
+assets:
+  - BTC/USDT
+  - ETH/USDT
+  - SOL/USDT
+  - XRP/USDT
+  - DOGE/USDT
+  - AVAX/USDT
+  - LINK/USDT
+  - ADA/USDT
+  - BNB/USDT
+  - DOT/USDT
+  - NEAR/USDT
+  - LTC/USDT
+  - BCH/USDT
+  - ATOM/USDT
+  - UNI/USDT
+  - FIL/USDT
+  - APT/USDT
+  - ARB/USDT
+  - OP/USDT
+  - TRX/USDT
+  - WLD/USDT
+  - SEI/USDT
+  - SUI/USDT
+  - INJ/USDT
+  - TIA/USDT
+  - JUP/USDT
+  # - FTM/USDT  # not on BingX
+  - ALGO/USDT
+  - SAND/USDT
+  - MANA/USDT
+  - AXS/USDT
+  - CRV/USDT
+  - AAVE/USDT
+  # - MKR/USDT  # not on BingX
+  - COMP/USDT
+  - SNX/USDT
+  - DYDX/USDT
+  - GMX/USDT
+  - RUNE/USDT
+  - PENDLE/USDT
+  - WIF/USDT
+  - ENA/USDT
+  - STRK/USDT
+  - MANTA/USDT
+  - ONDO/USDT
+  - PYTH/USDT
+
+risk:
+  max_risk_per_trade_pct: 5.0   # 5% of balance per trade
+  # At 20x: notional = 5% × 20 = 100% of balance per position
+  # Initial margin = notional / leverage = 5% per position
+  # 10 concurrent: 50% margin used, 50% free
+  max_total_exposure_pct: 1000.0  # 10 × 100% = 1000% notional
+  max_concurrent_positions: 10    # max 10 simultaneous (50% margin)
+  max_daily_loss_pct: 15.0        # daily loss limit (20x amplified)
+
+  # Margin safety:
+  # 10 positions × 5% margin = 50% used → 50% free margin buffer
+  # Liquidation: all 10 positions 9.5% adverse simultaneously → unlikely
+  # Worst SL scenario: 10 × 0.61% = 6.1% equity loss → manageable
+
+monitoring:
+  expected_daily_pct: 1.0         # target ~1% daily
+  expected_trades_per_day: 4.0
+  alert_consecutive_losses: 6     # tighter at 20x
+  halt_wr_below: 30.0             # halt if WR < 30% over 50 trades
+  halt_eval_trades: 50

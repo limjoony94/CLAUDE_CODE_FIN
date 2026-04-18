@@ -1,0 +1,380 @@
+{
+  "study": "mechanism_stress_test",
+  "date": "2026-03-15T02:34:12.685639",
+  "question": "Is mechanism stack overfitted to 3-candle patterns?",
+  "median_tpsl": {
+    "tp": 1.2528,
+    "sl": 3.43
+  },
+  "n_ref": 10158,
+  "results": {
+    "REFERENCE": {
+      "is": {
+        "trades": 2470,
+        "wr": 83.1,
+        "pnl": 458.28,
+        "mdd_mtm": 4.5,
+        "pnl_mdd": 101.8,
+        "to": 1024,
+        "tp": 2051,
+        "sl": 410
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 111.22,
+            "oos_t": 541,
+            "oos_wr": 86.9
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 119.5,
+            "oos_t": 669,
+            "oos_wr": 79.8
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 108.82,
+            "oos_t": 717,
+            "oos_wr": 78.1
+          }
+        ],
+        "total_oos": 339.5,
+        "verdict": "PASS"
+      },
+      "n": 10158
+    },
+    "RANDOM_0.5x": {
+      "is_avg_pnl": 311.0,
+      "is_std": 8.0,
+      "is_avg_wr": 79.7,
+      "is_avg_pm": 55.8,
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 99.0,
+            "oos_t": 538,
+            "oos_wr": 84.9
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 106.53,
+            "oos_t": 682,
+            "oos_wr": 78.2
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 105.53,
+            "oos_t": 730,
+            "oos_wr": 76.6
+          }
+        ],
+        "total_oos": 311.1,
+        "verdict": "PASS"
+      },
+      "n": 5079,
+      "seed_pnls": [
+        315.1,
+        313.0,
+        322.1,
+        306.4,
+        298.6
+      ]
+    },
+    "RANDOM_1x": {
+      "is_avg_pnl": 392.7,
+      "is_std": 8.3,
+      "is_avg_wr": 80.2,
+      "is_avg_pm": 58.6,
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 88.08,
+            "oos_t": 546,
+            "oos_wr": 80.2
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 115.56,
+            "oos_t": 743,
+            "oos_wr": 78.7
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 129.65,
+            "oos_t": 788,
+            "oos_wr": 80.2
+          }
+        ],
+        "total_oos": 333.3,
+        "verdict": "PASS"
+      },
+      "n": 10158,
+      "seed_pnls": [
+        377.2,
+        396.2,
+        393.2,
+        402.2,
+        394.8
+      ]
+    },
+    "RANDOM_2x": {
+      "is_avg_pnl": 434.8,
+      "is_std": 6.6,
+      "is_avg_wr": 80.6,
+      "is_avg_pm": 80.6,
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 93.83,
+            "oos_t": 552,
+            "oos_wr": 82.1
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 131.78,
+            "oos_t": 836,
+            "oos_wr": 77.4
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 129.62,
+            "oos_t": 809,
+            "oos_wr": 77.3
+          }
+        ],
+        "total_oos": 355.2,
+        "verdict": "PASS"
+      },
+      "n": 20316,
+      "seed_pnls": [
+        438.8,
+        443.5,
+        423.8,
+        432.2,
+        435.4
+      ]
+    },
+    "PERIODIC_7b": {
+      "is": {
+        "trades": 2569,
+        "wr": 80.6,
+        "pnl": 435.9,
+        "mdd_mtm": 4.97,
+        "pnl_mdd": 87.7,
+        "to": 1068,
+        "tp": 2069,
+        "sl": 491
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 99.23,
+            "oos_t": 560,
+            "oos_wr": 82.9
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 114.41,
+            "oos_t": 736,
+            "oos_wr": 76.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 118.23,
+            "oos_t": 745,
+            "oos_wr": 78.8
+          }
+        ],
+        "total_oos": 331.9,
+        "verdict": "PASS"
+      },
+      "n": 10661
+    },
+    "PERIODIC_15b": {
+      "is": {
+        "trades": 2310,
+        "wr": 78.4,
+        "pnl": 336.47,
+        "mdd_mtm": 4.74,
+        "pnl_mdd": 71.0,
+        "to": 925,
+        "tp": 1809,
+        "sl": 492
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 82.05,
+            "oos_t": 501,
+            "oos_wr": 82.0
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 78.93,
+            "oos_t": 625,
+            "oos_wr": 73.6
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 89.24,
+            "oos_t": 661,
+            "oos_wr": 76.9
+          }
+        ],
+        "total_oos": 250.2,
+        "verdict": "PASS"
+      },
+      "n": 4975
+    },
+    "PERIODIC_30b": {
+      "is": {
+        "trades": 1798,
+        "wr": 78.3,
+        "pnl": 224.85,
+        "mdd_mtm": 4.17,
+        "pnl_mdd": 53.9,
+        "to": 643,
+        "tp": 1405,
+        "sl": 386
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 54.49,
+            "oos_t": 437,
+            "oos_wr": 78.0
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 51.07,
+            "oos_t": 456,
+            "oos_wr": 76.1
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 54.99,
+            "oos_t": 478,
+            "oos_wr": 77.2
+          }
+        ],
+        "total_oos": 160.6,
+        "verdict": "PASS"
+      },
+      "n": 2488
+    },
+    "INVERTED": {
+      "is": {
+        "trades": 2465,
+        "wr": 74.0,
+        "pnl": 320.32,
+        "mdd_mtm": 5.79,
+        "pnl_mdd": 55.3,
+        "to": 994,
+        "tp": 1817,
+        "sl": 639
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 79.44,
+            "oos_t": 577,
+            "oos_wr": 74.0
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 76.96,
+            "oos_t": 661,
+            "oos_wr": 71.7
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 83.46,
+            "oos_t": 696,
+            "oos_wr": 72.8
+          }
+        ],
+        "total_oos": 239.9,
+        "verdict": "PASS"
+      },
+      "n": 10158
+    },
+    "SHUFFLED": {
+      "is_avg_pnl": 386.7,
+      "is_std": 19.5,
+      "is_avg_wr": 77.5,
+      "is_avg_pm": 74.7,
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 76.41,
+            "oos_t": 543,
+            "oos_wr": 78.6
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 118.63,
+            "oos_t": 693,
+            "oos_wr": 76.3
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 96.12,
+            "oos_t": 707,
+            "oos_wr": 74.7
+          }
+        ],
+        "total_oos": 291.2,
+        "verdict": "PASS"
+      },
+      "seed_pnls": [
+        372.4,
+        365.6,
+        387.2,
+        422.0,
+        386.4
+      ]
+    },
+    "REF_NO_MECH": {
+      "is": {
+        "trades": 2220,
+        "wr": 91.2,
+        "pnl": 410.05,
+        "mdd_mtm": 8.5,
+        "pnl_mdd": 48.2,
+        "to": 1161,
+        "tp": 2024,
+        "sl": 187
+      },
+      "n": 10158
+    },
+    "RANDOM_NO_MECH": {
+      "is_avg_pnl": 295.0,
+      "is_std": 16.0,
+      "is_avg_wr": 88.2,
+      "seed_pnls": [
+        267.3,
+        288.6,
+        300.9,
+        314.0,
+        304.0
+      ]
+    }
+  },
+  "diagnostics": {
+    "random_ref_ratio": 85.7,
+    "inverted_pnl": 320.3,
+    "mechanism_effect": 48.2,
+    "entry_effect": 115.0
+  },
+  "elapsed_s": 121.2
+}

@@ -1,0 +1,1936 @@
+{
+  "study": "Dynamic N Adjustment Study",
+  "date": "2026-03-01 17:55:13",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "patterns_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\results\\dynamic_patterns.json",
+  "n_patterns": 130,
+  "tradeable_range": {
+    "start_bar": 590,
+    "end_bar": 74401,
+    "days": 256.3
+  },
+  "protocol": {
+    "leverage": 3,
+    "fee_pct": 0.1,
+    "slippage_buffer": 0.02,
+    "timeout_bars": 864,
+    "atr_period": 14,
+    "atr_window": 576,
+    "clamp": [
+      0.6,
+      1.7
+    ],
+    "direction_cap": 7,
+    "static_max_positions": 9,
+    "production_filters": true
+  },
+  "phases": {
+    "phase1_vol_metrics": {
+      "atr_ratio": {
+        "description": "ATR(14)/median(ATR,576)",
+        "valid_count": 73811,
+        "valid_pct": 100.0,
+        "mean": 1.185814,
+        "std": 0.754764,
+        "min": 0.115478,
+        "max": 22.838486,
+        "percentiles": {
+          "10": 0.548469,
+          "25": 0.726648,
+          "33": 0.809806,
+          "50": 0.997641,
+          "66": 1.238702,
+          "75": 1.444008,
+          "90": 2.044197,
+          "95": 2.482986,
+          "99": 3.786915
+        }
+      },
+      "realized_vol_20": {
+        "description": "RealizedVol(20 bars, log-ret std)",
+        "valid_count": 73811,
+        "valid_pct": 100.0,
+        "mean": 0.001022,
+        "std": 0.000714,
+        "min": 0.000106,
+        "max": 0.023177,
+        "percentiles": {
+          "10": 0.000431,
+          "25": 0.000608,
+          "33": 0.000692,
+          "50": 0.000868,
+          "66": 0.001082,
+          "75": 0.001247,
+          "90": 0.001778,
+          "95": 0.002219,
+          "99": 0.003226
+        }
+      },
+      "pct_change_6": {
+        "description": "Abs %change 30min (6 bars)",
+        "valid_count": 73811,
+        "valid_pct": 100.0,
+        "mean": 0.189849,
+        "std": 0.221636,
+        "min": 0.0,
+        "max": 11.460212,
+        "percentiles": {
+          "10": 0.022598,
+          "25": 0.057021,
+          "33": 0.077269,
+          "50": 0.127221,
+          "66": 0.191858,
+          "75": 0.244983,
+          "90": 0.417905,
+          "95": 0.571177,
+          "99": 1.027761
+        }
+      },
+      "pct_change_12": {
+        "description": "Abs %change 1h (12 bars)",
+        "valid_count": 73811,
+        "valid_pct": 100.0,
+        "mean": 0.265727,
+        "std": 0.308702,
+        "min": 0.0,
+        "max": 11.370619,
+        "percentiles": {
+          "10": 0.03019,
+          "25": 0.077665,
+          "33": 0.105384,
+          "50": 0.175218,
+          "66": 0.266758,
+          "75": 0.342151,
+          "90": 0.590524,
+          "95": 0.816296,
+          "99": 1.501875
+        }
+      },
+      "pct_change_48": {
+        "description": "Abs %change 4h (48 bars)",
+        "valid_count": 73811,
+        "valid_pct": 100.0,
+        "mean": 0.542792,
+        "std": 0.597081,
+        "min": 0.0,
+        "max": 12.344641,
+        "percentiles": {
+          "10": 0.059279,
+          "25": 0.153792,
+          "33": 0.210037,
+          "50": 0.353336,
+          "66": 0.54768,
+          "75": 0.706785,
+          "90": 1.266807,
+          "95": 1.718507,
+          "99": 2.85166
+        }
+      },
+      "range_vol_20": {
+        "description": "Range/Close rolling avg (20 bars)",
+        "valid_count": 73811,
+        "valid_pct": 100.0,
+        "mean": 0.146641,
+        "std": 0.093156,
+        "min": 0.010924,
+        "max": 2.43174,
+        "percentiles": {
+          "10": 0.05946,
+          "25": 0.086822,
+          "33": 0.098956,
+          "50": 0.125906,
+          "66": 0.158438,
+          "75": 0.182643,
+          "90": 0.257954,
+          "95": 0.315915,
+          "99": 0.455574
+        }
+      }
+    },
+    "phase2_strategies": {
+      "static_N3": {
+        "type": "StaticNStrategy",
+        "params": {
+          "n": 3
+        }
+      },
+      "static_N5": {
+        "type": "StaticNStrategy",
+        "params": {
+          "n": 5
+        }
+      },
+      "static_N7": {
+        "type": "StaticNStrategy",
+        "params": {
+          "n": 7
+        }
+      },
+      "static_N9": {
+        "type": "StaticNStrategy",
+        "params": {
+          "n": 9
+        }
+      },
+      "2tier_atr_ratio_p50_3_9": {
+        "type": "TwoTierVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "threshold_pct": 50,
+          "n_low": 3,
+          "n_high": 9
+        }
+      },
+      "2tier_atr_ratio_p75_3_9": {
+        "type": "TwoTierVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "threshold_pct": 75,
+          "n_low": 3,
+          "n_high": 9
+        }
+      },
+      "2tier_atr_ratio_p90_3_9": {
+        "type": "TwoTierVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "threshold_pct": 90,
+          "n_low": 3,
+          "n_high": 9
+        }
+      },
+      "2tier_pct_change_12_p50_3_9": {
+        "type": "TwoTierVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "threshold_pct": 50,
+          "n_low": 3,
+          "n_high": 9
+        }
+      },
+      "2tier_pct_change_12_p75_3_9": {
+        "type": "TwoTierVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "threshold_pct": 75,
+          "n_low": 3,
+          "n_high": 9
+        }
+      },
+      "2tier_pct_change_12_p90_3_9": {
+        "type": "TwoTierVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "threshold_pct": 90,
+          "n_low": 3,
+          "n_high": 9
+        }
+      },
+      "3tier_atr_ratio_p33_66_1_5_9": {
+        "type": "ThreeTierVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "lo_pct": 33,
+          "hi_pct": 66,
+          "n_low": 1,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "3tier_atr_ratio_p25_75_1_5_9": {
+        "type": "ThreeTierVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "lo_pct": 25,
+          "hi_pct": 75,
+          "n_low": 1,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "3tier_atr_ratio_p33_66_3_5_9": {
+        "type": "ThreeTierVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "lo_pct": 33,
+          "hi_pct": 66,
+          "n_low": 3,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "3tier_pct_change_12_p33_66_1_5_9": {
+        "type": "ThreeTierVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "lo_pct": 33,
+          "hi_pct": 66,
+          "n_low": 1,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "3tier_pct_change_12_p25_75_1_5_9": {
+        "type": "ThreeTierVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "lo_pct": 25,
+          "hi_pct": 75,
+          "n_low": 1,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "3tier_pct_change_12_p33_66_3_5_9": {
+        "type": "ThreeTierVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "lo_pct": 33,
+          "hi_pct": 66,
+          "n_low": 3,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "continuous_atr_ratio_1_9": {
+        "type": "ContinuousVolStrategy",
+        "params": {
+          "metric": "atr_ratio",
+          "n_min": 1,
+          "n_max": 9
+        }
+      },
+      "continuous_pct_change_12_1_9": {
+        "type": "ContinuousVolStrategy",
+        "params": {
+          "metric": "pct_change_12",
+          "n_min": 1,
+          "n_max": 9
+        }
+      },
+      "continuous_realized_vol_20_1_9": {
+        "type": "ContinuousVolStrategy",
+        "params": {
+          "metric": "realized_vol_20",
+          "n_min": 1,
+          "n_max": 9
+        }
+      },
+      "regime_3_9_p50": {
+        "type": "RegimeStrategy",
+        "params": {
+          "n_trend": 3,
+          "n_range": 9,
+          "vol_metric": "realized_vol_20",
+          "range_threshold_pct": 50
+        }
+      },
+      "regime_5_9_p50": {
+        "type": "RegimeStrategy",
+        "params": {
+          "n_trend": 5,
+          "n_range": 9,
+          "vol_metric": "realized_vol_20",
+          "range_threshold_pct": 50
+        }
+      },
+      "dd_5.0_10.0_1_5_9": {
+        "type": "DrawdownStrategy",
+        "params": {
+          "dd_lo": 5.0,
+          "dd_hi": 10.0,
+          "n_low": 1,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "dd_3.0_8.0_1_5_9": {
+        "type": "DrawdownStrategy",
+        "params": {
+          "dd_lo": 3.0,
+          "dd_hi": 8.0,
+          "n_low": 1,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      },
+      "dd_5.0_15.0_3_5_9": {
+        "type": "DrawdownStrategy",
+        "params": {
+          "dd_lo": 5.0,
+          "dd_hi": 15.0,
+          "n_low": 3,
+          "n_mid": 5,
+          "n_high": 9
+        }
+      }
+    },
+    "phase3_backtest": {
+      "static_N3": {
+        "trades": 309,
+        "wr": 72.49,
+        "pnl": 160.75,
+        "mdd": 13.27,
+        "pnl_mdd": 12.11,
+        "total_signals": 14059,
+        "skipped_by_n": 7480,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 5880,
+        "skipped_by_mom": 121,
+        "skipped_by_dup": 159,
+        "max_concurrent": 3,
+        "cascade_events": 1,
+        "trades_per_day": 1.22,
+        "avg_effective_n": 3.0,
+        "max_single_bar_loss": -6.54
+      },
+      "static_N5": {
+        "trades": 478,
+        "wr": 72.8,
+        "pnl": 148.71,
+        "mdd": 12.21,
+        "pnl_mdd": 12.18,
+        "total_signals": 14059,
+        "skipped_by_n": 7009,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 5940,
+        "skipped_by_mom": 113,
+        "skipped_by_dup": 324,
+        "max_concurrent": 5,
+        "cascade_events": 11,
+        "trades_per_day": 1.9,
+        "avg_effective_n": 5.0,
+        "max_single_bar_loss": -7.07
+      },
+      "static_N7": {
+        "trades": 655,
+        "wr": 73.28,
+        "pnl": 189.85,
+        "mdd": 8.24,
+        "pnl_mdd": 23.03,
+        "total_signals": 14059,
+        "skipped_by_n": 5504,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 6844,
+        "skipped_by_mom": 115,
+        "skipped_by_dup": 663,
+        "max_concurrent": 7,
+        "cascade_events": 13,
+        "trades_per_day": 2.6,
+        "avg_effective_n": 7.0,
+        "max_single_bar_loss": -4.63
+      },
+      "static_N9": {
+        "trades": 821,
+        "wr": 73.57,
+        "pnl": 205.12,
+        "mdd": 7.14,
+        "pnl_mdd": 28.72,
+        "total_signals": 14059,
+        "skipped_by_n": 4831,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 6987,
+        "skipped_by_mom": 115,
+        "skipped_by_dup": 940,
+        "max_concurrent": 9,
+        "cascade_events": 17,
+        "trades_per_day": 3.23,
+        "avg_effective_n": 9.0,
+        "max_single_bar_loss": -5.22
+      },
+      "2tier_atr_ratio_p50_3_9": {
+        "trades": 842,
+        "wr": 69.95,
+        "pnl": 109.49,
+        "mdd": 20.49,
+        "pnl_mdd": 5.34,
+        "total_signals": 14059,
+        "skipped_by_n": 6722,
+        "skipped_by_cap": 22,
+        "skipped_by_agg": 5792,
+        "skipped_by_mom": 77,
+        "skipped_by_dup": 449,
+        "max_concurrent": 9,
+        "cascade_events": 29,
+        "trades_per_day": 3.32,
+        "avg_effective_n": 8.15,
+        "max_single_bar_loss": -6.54
+      },
+      "2tier_atr_ratio_p75_3_9": {
+        "trades": 879,
+        "wr": 72.13,
+        "pnl": 154.83,
+        "mdd": 9.48,
+        "pnl_mdd": 16.33,
+        "total_signals": 14059,
+        "skipped_by_n": 7858,
+        "skipped_by_cap": 41,
+        "skipped_by_agg": 4484,
+        "skipped_by_mom": 51,
+        "skipped_by_dup": 472,
+        "max_concurrent": 9,
+        "cascade_events": 31,
+        "trades_per_day": 3.46,
+        "avg_effective_n": 8.65,
+        "max_single_bar_loss": -6.93
+      },
+      "2tier_atr_ratio_p90_3_9": {
+        "trades": 798,
+        "wr": 74.31,
+        "pnl": 207.98,
+        "mdd": 7.8,
+        "pnl_mdd": 26.65,
+        "total_signals": 14059,
+        "skipped_by_n": 5698,
+        "skipped_by_cap": 2,
+        "skipped_by_agg": 6306,
+        "skipped_by_mom": 68,
+        "skipped_by_dup": 853,
+        "max_concurrent": 9,
+        "cascade_events": 15,
+        "trades_per_day": 3.14,
+        "avg_effective_n": 8.92,
+        "max_single_bar_loss": -6.54
+      },
+      "2tier_pct_change_12_p50_3_9": {
+        "trades": 811,
+        "wr": 72.38,
+        "pnl": 178.82,
+        "mdd": 10.98,
+        "pnl_mdd": 16.29,
+        "total_signals": 14059,
+        "skipped_by_n": 9271,
+        "skipped_by_cap": 5,
+        "skipped_by_agg": 3236,
+        "skipped_by_mom": 30,
+        "skipped_by_dup": 406,
+        "max_concurrent": 9,
+        "cascade_events": 22,
+        "trades_per_day": 3.19,
+        "avg_effective_n": 8.74,
+        "max_single_bar_loss": -7.13
+      },
+      "2tier_pct_change_12_p75_3_9": {
+        "trades": 800,
+        "wr": 74.5,
+        "pnl": 223.68,
+        "mdd": 8.95,
+        "pnl_mdd": 24.99,
+        "total_signals": 14059,
+        "skipped_by_n": 7268,
+        "skipped_by_cap": 20,
+        "skipped_by_agg": 4980,
+        "skipped_by_mom": 24,
+        "skipped_by_dup": 640,
+        "max_concurrent": 9,
+        "cascade_events": 19,
+        "trades_per_day": 3.16,
+        "avg_effective_n": 8.86,
+        "max_single_bar_loss": -6.54
+      },
+      "2tier_pct_change_12_p90_3_9": {
+        "trades": 831,
+        "wr": 73.77,
+        "pnl": 216.45,
+        "mdd": 8.33,
+        "pnl_mdd": 25.99,
+        "total_signals": 14059,
+        "skipped_by_n": 6272,
+        "skipped_by_cap": 1,
+        "skipped_by_agg": 5775,
+        "skipped_by_mom": 25,
+        "skipped_by_dup": 810,
+        "max_concurrent": 9,
+        "cascade_events": 24,
+        "trades_per_day": 3.27,
+        "avg_effective_n": 8.93,
+        "max_single_bar_loss": -6.71
+      },
+      "3tier_atr_ratio_p33_66_1_5_9": {
+        "trades": 1032,
+        "wr": 72.38,
+        "pnl": 104.57,
+        "mdd": 20.25,
+        "pnl_mdd": 5.16,
+        "total_signals": 14059,
+        "skipped_by_n": 9495,
+        "skipped_by_cap": 11,
+        "skipped_by_agg": 3000,
+        "skipped_by_mom": 33,
+        "skipped_by_dup": 329,
+        "max_concurrent": 9,
+        "cascade_events": 36,
+        "trades_per_day": 4.06,
+        "avg_effective_n": 7.5,
+        "max_single_bar_loss": -6.5
+      },
+      "3tier_atr_ratio_p25_75_1_5_9": {
+        "trades": 834,
+        "wr": 71.58,
+        "pnl": 125.74,
+        "mdd": 14.8,
+        "pnl_mdd": 8.5,
+        "total_signals": 14059,
+        "skipped_by_n": 9158,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 3504,
+        "skipped_by_mom": 29,
+        "skipped_by_dup": 350,
+        "max_concurrent": 9,
+        "cascade_events": 31,
+        "trades_per_day": 3.28,
+        "avg_effective_n": 7.03,
+        "max_single_bar_loss": -7.08
+      },
+      "3tier_atr_ratio_p33_66_3_5_9": {
+        "trades": 759,
+        "wr": 72.73,
+        "pnl": 215.87,
+        "mdd": 11.94,
+        "pnl_mdd": 18.08,
+        "total_signals": 14059,
+        "skipped_by_n": 6446,
+        "skipped_by_cap": 6,
+        "skipped_by_agg": 6183,
+        "skipped_by_mom": 80,
+        "skipped_by_dup": 414,
+        "max_concurrent": 9,
+        "cascade_events": 22,
+        "trades_per_day": 2.99,
+        "avg_effective_n": 7.32,
+        "max_single_bar_loss": -6.54
+      },
+      "3tier_pct_change_12_p33_66_1_5_9": {
+        "trades": 786,
+        "wr": 74.81,
+        "pnl": 249.58,
+        "mdd": 8.58,
+        "pnl_mdd": 29.1,
+        "total_signals": 14059,
+        "skipped_by_n": 9967,
+        "skipped_by_cap": 27,
+        "skipped_by_agg": 2684,
+        "skipped_by_mom": 8,
+        "skipped_by_dup": 324,
+        "max_concurrent": 9,
+        "cascade_events": 18,
+        "trades_per_day": 3.1,
+        "avg_effective_n": 8.25,
+        "max_single_bar_loss": -6.11
+      },
+      "3tier_pct_change_12_p25_75_1_5_9": {
+        "trades": 722,
+        "wr": 72.71,
+        "pnl": 136.68,
+        "mdd": 10.03,
+        "pnl_mdd": 13.62,
+        "total_signals": 14059,
+        "skipped_by_n": 9628,
+        "skipped_by_cap": 13,
+        "skipped_by_agg": 3104,
+        "skipped_by_mom": 8,
+        "skipped_by_dup": 339,
+        "max_concurrent": 9,
+        "cascade_events": 18,
+        "trades_per_day": 2.87,
+        "avg_effective_n": 7.8,
+        "max_single_bar_loss": -5.74
+      },
+      "3tier_pct_change_12_p33_66_3_5_9": {
+        "trades": 732,
+        "wr": 71.58,
+        "pnl": 151.33,
+        "mdd": 13.82,
+        "pnl_mdd": 10.95,
+        "total_signals": 14059,
+        "skipped_by_n": 8776,
+        "skipped_by_cap": 3,
+        "skipped_by_agg": 3877,
+        "skipped_by_mom": 43,
+        "skipped_by_dup": 379,
+        "max_concurrent": 9,
+        "cascade_events": 22,
+        "trades_per_day": 2.88,
+        "avg_effective_n": 8.02,
+        "max_single_bar_loss": -6.07
+      },
+      "continuous_atr_ratio_1_9": {
+        "trades": 831,
+        "wr": 72.56,
+        "pnl": 138.62,
+        "mdd": 14.84,
+        "pnl_mdd": 9.34,
+        "total_signals": 14059,
+        "skipped_by_n": 8144,
+        "skipped_by_cap": 1,
+        "skipped_by_agg": 4580,
+        "skipped_by_mom": 35,
+        "skipped_by_dup": 328,
+        "max_concurrent": 9,
+        "cascade_events": 21,
+        "trades_per_day": 3.27,
+        "avg_effective_n": 6.17,
+        "max_single_bar_loss": -7.23
+      },
+      "continuous_pct_change_12_1_9": {
+        "trades": 670,
+        "wr": 74.48,
+        "pnl": 223.7,
+        "mdd": 10.18,
+        "pnl_mdd": 21.97,
+        "total_signals": 14059,
+        "skipped_by_n": 9819,
+        "skipped_by_cap": 8,
+        "skipped_by_agg": 2995,
+        "skipped_by_mom": 8,
+        "skipped_by_dup": 323,
+        "max_concurrent": 9,
+        "cascade_events": 14,
+        "trades_per_day": 2.66,
+        "avg_effective_n": 7.03,
+        "max_single_bar_loss": -5.69
+      },
+      "continuous_realized_vol_20_1_9": {
+        "trades": 767,
+        "wr": 69.36,
+        "pnl": 55.4,
+        "mdd": 28.13,
+        "pnl_mdd": 1.97,
+        "total_signals": 14059,
+        "skipped_by_n": 8656,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 4214,
+        "skipped_by_mom": 38,
+        "skipped_by_dup": 236,
+        "max_concurrent": 9,
+        "cascade_events": 25,
+        "trades_per_day": 3.02,
+        "avg_effective_n": 5.78,
+        "max_single_bar_loss": -7.14
+      },
+      "regime_3_9_p50": {
+        "trades": 802,
+        "wr": 68.7,
+        "pnl": 87.54,
+        "mdd": 20.15,
+        "pnl_mdd": 4.34,
+        "total_signals": 14059,
+        "skipped_by_n": 7441,
+        "skipped_by_cap": 34,
+        "skipped_by_agg": 5134,
+        "skipped_by_mom": 83,
+        "skipped_by_dup": 361,
+        "max_concurrent": 9,
+        "cascade_events": 32,
+        "trades_per_day": 3.16,
+        "avg_effective_n": 8.0,
+        "max_single_bar_loss": -6.64
+      },
+      "regime_5_9_p50": {
+        "trades": 750,
+        "wr": 72.53,
+        "pnl": 200.32,
+        "mdd": 9.9,
+        "pnl_mdd": 20.23,
+        "total_signals": 14059,
+        "skipped_by_n": 5808,
+        "skipped_by_cap": 3,
+        "skipped_by_agg": 6642,
+        "skipped_by_mom": 94,
+        "skipped_by_dup": 516,
+        "max_concurrent": 9,
+        "cascade_events": 20,
+        "trades_per_day": 2.97,
+        "avg_effective_n": 7.64,
+        "max_single_bar_loss": -7.07
+      },
+      "dd_5.0_10.0_1_5_9": {
+        "trades": 817,
+        "wr": 73.32,
+        "pnl": 199.96,
+        "mdd": 8.4,
+        "pnl_mdd": 23.81,
+        "total_signals": 14059,
+        "skipped_by_n": 4943,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 6911,
+        "skipped_by_mom": 115,
+        "skipped_by_dup": 913,
+        "max_concurrent": 9,
+        "cascade_events": 18,
+        "trades_per_day": 3.22,
+        "avg_effective_n": 8.93,
+        "max_single_bar_loss": -5.22
+      },
+      "dd_3.0_8.0_1_5_9": {
+        "trades": 761,
+        "wr": 72.8,
+        "pnl": 197.57,
+        "mdd": 6.66,
+        "pnl_mdd": 29.69,
+        "total_signals": 14059,
+        "skipped_by_n": 5528,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 6499,
+        "skipped_by_mom": 116,
+        "skipped_by_dup": 827,
+        "max_concurrent": 9,
+        "cascade_events": 24,
+        "trades_per_day": 3.0,
+        "avg_effective_n": 8.64,
+        "max_single_bar_loss": -5.3
+      },
+      "dd_5.0_15.0_3_5_9": {
+        "trades": 817,
+        "wr": 73.32,
+        "pnl": 199.96,
+        "mdd": 8.4,
+        "pnl_mdd": 23.81,
+        "total_signals": 14059,
+        "skipped_by_n": 4943,
+        "skipped_by_cap": 0,
+        "skipped_by_agg": 6911,
+        "skipped_by_mom": 115,
+        "skipped_by_dup": 913,
+        "max_concurrent": 9,
+        "cascade_events": 18,
+        "trades_per_day": 3.22,
+        "avg_effective_n": 8.93,
+        "max_single_bar_loss": -5.22
+      }
+    },
+    "phase4_wf_oos": {
+      "static_N3": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 70.78,
+        "total_oos_trades": 241,
+        "avg_oos_wr": 71.33,
+        "folds": [
+          {
+            "trades": 57,
+            "wr": 71.93,
+            "pnl": 22.87,
+            "mdd": 10.83,
+            "pnl_mdd": 2.11,
+            "total_signals": 3465,
+            "skipped_by_n": 1531,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1769,
+            "skipped_by_mom": 21,
+            "skipped_by_dup": 54,
+            "max_concurrent": 3,
+            "cascade_events": 0,
+            "trades_per_day": 0.9,
+            "avg_effective_n": 3.0,
+            "max_single_bar_loss": -5.88,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 87,
+            "wr": 67.82,
+            "pnl": 16.97,
+            "mdd": 13.27,
+            "pnl_mdd": 1.28,
+            "total_signals": 3574,
+            "skipped_by_n": 1912,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1472,
+            "skipped_by_mom": 33,
+            "skipped_by_dup": 46,
+            "max_concurrent": 3,
+            "cascade_events": 1,
+            "trades_per_day": 1.46,
+            "avg_effective_n": 3.0,
+            "max_single_bar_loss": -5.97,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 97,
+            "wr": 74.23,
+            "pnl": 30.94,
+            "mdd": 8.97,
+            "pnl_mdd": 3.45,
+            "total_signals": 3470,
+            "skipped_by_n": 1856,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1393,
+            "skipped_by_mom": 56,
+            "skipped_by_dup": 45,
+            "max_concurrent": 3,
+            "cascade_events": 0,
+            "trades_per_day": 1.59,
+            "avg_effective_n": 3.0,
+            "max_single_bar_loss": -6.5,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "static_N5": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 68.33,
+        "total_oos_trades": 371,
+        "avg_oos_wr": 71.07,
+        "folds": [
+          {
+            "trades": 95,
+            "wr": 72.63,
+            "pnl": 25.79,
+            "mdd": 6.55,
+            "pnl_mdd": 3.94,
+            "total_signals": 3465,
+            "skipped_by_n": 1944,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1282,
+            "skipped_by_mom": 17,
+            "skipped_by_dup": 65,
+            "max_concurrent": 5,
+            "cascade_events": 0,
+            "trades_per_day": 1.5,
+            "avg_effective_n": 5.0,
+            "max_single_bar_loss": -3.53,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 138,
+            "wr": 65.94,
+            "pnl": 4.78,
+            "mdd": 10.66,
+            "pnl_mdd": 0.45,
+            "total_signals": 3574,
+            "skipped_by_n": 1647,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1632,
+            "skipped_by_mom": 28,
+            "skipped_by_dup": 90,
+            "max_concurrent": 5,
+            "cascade_events": 5,
+            "trades_per_day": 2.3,
+            "avg_effective_n": 5.0,
+            "max_single_bar_loss": -3.86,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 138,
+            "wr": 74.64,
+            "pnl": 37.76,
+            "mdd": 7.01,
+            "pnl_mdd": 5.39,
+            "total_signals": 3470,
+            "skipped_by_n": 1667,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1483,
+            "skipped_by_mom": 56,
+            "skipped_by_dup": 81,
+            "max_concurrent": 5,
+            "cascade_events": 4,
+            "trades_per_day": 2.3,
+            "avg_effective_n": 5.0,
+            "max_single_bar_loss": -7.07,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "static_N7": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 91.47,
+        "total_oos_trades": 515,
+        "avg_oos_wr": 73.4,
+        "folds": [
+          {
+            "trades": 136,
+            "wr": 77.21,
+            "pnl": 38.02,
+            "mdd": 4.93,
+            "pnl_mdd": 7.72,
+            "total_signals": 3465,
+            "skipped_by_n": 1696,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1401,
+            "skipped_by_mom": 17,
+            "skipped_by_dup": 130,
+            "max_concurrent": 7,
+            "cascade_events": 3,
+            "trades_per_day": 2.15,
+            "avg_effective_n": 7.0,
+            "max_single_bar_loss": -3.32,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 188,
+            "wr": 70.21,
+            "pnl": 25.35,
+            "mdd": 6.63,
+            "pnl_mdd": 3.82,
+            "total_signals": 3574,
+            "skipped_by_n": 1219,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1908,
+            "skipped_by_mom": 29,
+            "skipped_by_dup": 170,
+            "max_concurrent": 7,
+            "cascade_events": 4,
+            "trades_per_day": 3.12,
+            "avg_effective_n": 7.0,
+            "max_single_bar_loss": -4.13,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 191,
+            "wr": 72.77,
+            "pnl": 28.1,
+            "mdd": 5.95,
+            "pnl_mdd": 4.72,
+            "total_signals": 3470,
+            "skipped_by_n": 1475,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1527,
+            "skipped_by_mom": 55,
+            "skipped_by_dup": 155,
+            "max_concurrent": 7,
+            "cascade_events": 5,
+            "trades_per_day": 3.19,
+            "avg_effective_n": 7.0,
+            "max_single_bar_loss": -4.63,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "static_N9": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 94.29,
+        "total_oos_trades": 648,
+        "avg_oos_wr": 73.25,
+        "folds": [
+          {
+            "trades": 160,
+            "wr": 74.38,
+            "pnl": 31.53,
+            "mdd": 5.43,
+            "pnl_mdd": 5.81,
+            "total_signals": 3465,
+            "skipped_by_n": 1480,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1516,
+            "skipped_by_mom": 20,
+            "skipped_by_dup": 172,
+            "max_concurrent": 9,
+            "cascade_events": 5,
+            "trades_per_day": 2.53,
+            "avg_effective_n": 9.0,
+            "max_single_bar_loss": -3.93,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 231,
+            "wr": 71.43,
+            "pnl": 25.71,
+            "mdd": 7.14,
+            "pnl_mdd": 3.6,
+            "total_signals": 3574,
+            "skipped_by_n": 999,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1959,
+            "skipped_by_mom": 29,
+            "skipped_by_dup": 276,
+            "max_concurrent": 9,
+            "cascade_events": 3,
+            "trades_per_day": 3.63,
+            "avg_effective_n": 9.0,
+            "max_single_bar_loss": -2.67,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 257,
+            "wr": 73.93,
+            "pnl": 37.05,
+            "mdd": 6.3,
+            "pnl_mdd": 5.88,
+            "total_signals": 3470,
+            "skipped_by_n": 1425,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1432,
+            "skipped_by_mom": 52,
+            "skipped_by_dup": 229,
+            "max_concurrent": 9,
+            "cascade_events": 5,
+            "trades_per_day": 4.17,
+            "avg_effective_n": 9.0,
+            "max_single_bar_loss": -5.22,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "dd_3.0_8.0_1_5_9": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 92.24,
+        "total_oos_trades": 617,
+        "avg_oos_wr": 71.83,
+        "folds": [
+          {
+            "trades": 158,
+            "wr": 72.15,
+            "pnl": 28.22,
+            "mdd": 5.43,
+            "pnl_mdd": 5.2,
+            "total_signals": 3465,
+            "skipped_by_n": 1735,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1284,
+            "skipped_by_mom": 18,
+            "skipped_by_dup": 159,
+            "max_concurrent": 9,
+            "cascade_events": 6,
+            "trades_per_day": 2.5,
+            "avg_effective_n": 8.85,
+            "max_single_bar_loss": -3.93,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 208,
+            "wr": 69.23,
+            "pnl": 23.32,
+            "mdd": 6.26,
+            "pnl_mdd": 3.73,
+            "total_signals": 3574,
+            "skipped_by_n": 1284,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1744,
+            "skipped_by_mom": 27,
+            "skipped_by_dup": 235,
+            "max_concurrent": 9,
+            "cascade_events": 4,
+            "trades_per_day": 3.27,
+            "avg_effective_n": 8.71,
+            "max_single_bar_loss": -3.2,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 251,
+            "wr": 74.1,
+            "pnl": 40.7,
+            "mdd": 7.49,
+            "pnl_mdd": 5.43,
+            "total_signals": 3470,
+            "skipped_by_n": 1397,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1493,
+            "skipped_by_mom": 56,
+            "skipped_by_dup": 207,
+            "max_concurrent": 9,
+            "cascade_events": 7,
+            "trades_per_day": 4.08,
+            "avg_effective_n": 8.55,
+            "max_single_bar_loss": -6.54,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "3tier_pct_change_12_p33_66_1_5_9": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 102.66,
+        "total_oos_trades": 604,
+        "avg_oos_wr": 73.54,
+        "folds": [
+          {
+            "trades": 160,
+            "wr": 74.38,
+            "pnl": 31.26,
+            "mdd": 4.9,
+            "pnl_mdd": 6.39,
+            "total_signals": 3465,
+            "skipped_by_n": 2569,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 580,
+            "skipped_by_mom": 0,
+            "skipped_by_dup": 66,
+            "max_concurrent": 9,
+            "cascade_events": 3,
+            "trades_per_day": 2.53,
+            "avg_effective_n": 8.62,
+            "max_single_bar_loss": -3.86,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 209,
+            "wr": 71.77,
+            "pnl": 39.4,
+            "mdd": 8.58,
+            "pnl_mdd": 4.59,
+            "total_signals": 3574,
+            "skipped_by_n": 2497,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 739,
+            "skipped_by_mom": 3,
+            "skipped_by_dup": 73,
+            "max_concurrent": 9,
+            "cascade_events": 6,
+            "trades_per_day": 3.29,
+            "avg_effective_n": 8.04,
+            "max_single_bar_loss": -3.58,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 235,
+            "wr": 74.47,
+            "pnl": 32.0,
+            "mdd": 7.68,
+            "pnl_mdd": 4.17,
+            "total_signals": 3470,
+            "skipped_by_n": 2462,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 631,
+            "skipped_by_mom": 5,
+            "skipped_by_dup": 81,
+            "max_concurrent": 9,
+            "cascade_events": 6,
+            "trades_per_day": 3.82,
+            "avg_effective_n": 8.18,
+            "max_single_bar_loss": -6.11,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "2tier_atr_ratio_p90_3_9": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 102.38,
+        "total_oos_trades": 646,
+        "avg_oos_wr": 73.42,
+        "folds": [
+          {
+            "trades": 156,
+            "wr": 74.36,
+            "pnl": 29.19,
+            "mdd": 5.43,
+            "pnl_mdd": 5.38,
+            "total_signals": 3465,
+            "skipped_by_n": 1676,
+            "skipped_by_cap": 2,
+            "skipped_by_agg": 1367,
+            "skipped_by_mom": 4,
+            "skipped_by_dup": 151,
+            "max_concurrent": 9,
+            "cascade_events": 3,
+            "trades_per_day": 2.47,
+            "avg_effective_n": 8.92,
+            "max_single_bar_loss": -3.93,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 229,
+            "wr": 71.18,
+            "pnl": 25.88,
+            "mdd": 7.8,
+            "pnl_mdd": 3.32,
+            "total_signals": 3574,
+            "skipped_by_n": 1280,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1746,
+            "skipped_by_mom": 23,
+            "skipped_by_dup": 228,
+            "max_concurrent": 9,
+            "cascade_events": 5,
+            "trades_per_day": 3.6,
+            "avg_effective_n": 8.92,
+            "max_single_bar_loss": -2.7,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 261,
+            "wr": 74.71,
+            "pnl": 47.31,
+            "mdd": 6.59,
+            "pnl_mdd": 7.17,
+            "total_signals": 3470,
+            "skipped_by_n": 1385,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1514,
+            "skipped_by_mom": 35,
+            "skipped_by_dup": 208,
+            "max_concurrent": 9,
+            "cascade_events": 5,
+            "trades_per_day": 4.24,
+            "avg_effective_n": 8.86,
+            "max_single_bar_loss": -6.19,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "2tier_pct_change_12_p90_3_9": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 97.35,
+        "total_oos_trades": 666,
+        "avg_oos_wr": 72.86,
+        "folds": [
+          {
+            "trades": 173,
+            "wr": 73.41,
+            "pnl": 29.28,
+            "mdd": 5.7,
+            "pnl_mdd": 5.14,
+            "total_signals": 3465,
+            "skipped_by_n": 1596,
+            "skipped_by_cap": 1,
+            "skipped_by_agg": 1414,
+            "skipped_by_mom": 3,
+            "skipped_by_dup": 168,
+            "max_concurrent": 9,
+            "cascade_events": 6,
+            "trades_per_day": 2.73,
+            "avg_effective_n": 8.97,
+            "max_single_bar_loss": -3.93,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 242,
+            "wr": 71.07,
+            "pnl": 28.31,
+            "mdd": 8.33,
+            "pnl_mdd": 3.4,
+            "total_signals": 3574,
+            "skipped_by_n": 1596,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1468,
+            "skipped_by_mom": 5,
+            "skipped_by_dup": 193,
+            "max_concurrent": 9,
+            "cascade_events": 8,
+            "trades_per_day": 3.8,
+            "avg_effective_n": 8.95,
+            "max_single_bar_loss": -4.62,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 251,
+            "wr": 74.1,
+            "pnl": 39.76,
+            "mdd": 6.55,
+            "pnl_mdd": 6.07,
+            "total_signals": 3470,
+            "skipped_by_n": 1685,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1228,
+            "skipped_by_mom": 14,
+            "skipped_by_dup": 217,
+            "max_concurrent": 9,
+            "cascade_events": 8,
+            "trades_per_day": 4.07,
+            "avg_effective_n": 8.88,
+            "max_single_bar_loss": -6.71,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      },
+      "2tier_pct_change_12_p75_3_9": {
+        "wf_pass": true,
+        "positive_folds": 3,
+        "total_oos_pnl": 101.74,
+        "total_oos_trades": 642,
+        "avg_oos_wr": 73.71,
+        "folds": [
+          {
+            "trades": 172,
+            "wr": 74.42,
+            "pnl": 32.36,
+            "mdd": 4.89,
+            "pnl_mdd": 6.62,
+            "total_signals": 3465,
+            "skipped_by_n": 1947,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1113,
+            "skipped_by_mom": 2,
+            "skipped_by_dup": 129,
+            "max_concurrent": 9,
+            "cascade_events": 3,
+            "trades_per_day": 2.72,
+            "avg_effective_n": 9.0,
+            "max_single_bar_loss": -4.16,
+            "oos_start": 19042,
+            "oos_end": 37494,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 228,
+            "wr": 71.49,
+            "pnl": 27.25,
+            "mdd": 8.95,
+            "pnl_mdd": 3.04,
+            "total_signals": 3574,
+            "skipped_by_n": 1958,
+            "skipped_by_cap": 0,
+            "skipped_by_agg": 1177,
+            "skipped_by_mom": 6,
+            "skipped_by_dup": 135,
+            "max_concurrent": 9,
+            "cascade_events": 5,
+            "trades_per_day": 3.62,
+            "avg_effective_n": 8.87,
+            "max_single_bar_loss": -3.84,
+            "oos_start": 37494,
+            "oos_end": 55946,
+            "oos_bars": 18452,
+            "oos_days": 64.1
+          },
+          {
+            "trades": 242,
+            "wr": 75.21,
+            "pnl": 42.13,
+            "mdd": 7.01,
+            "pnl_mdd": 6.01,
+            "total_signals": 3470,
+            "skipped_by_n": 1759,
+            "skipped_by_cap": 19,
+            "skipped_by_agg": 1189,
+            "skipped_by_mom": 13,
+            "skipped_by_dup": 174,
+            "max_concurrent": 9,
+            "cascade_events": 9,
+            "trades_per_day": 3.98,
+            "avg_effective_n": 8.78,
+            "max_single_bar_loss": -5.79,
+            "oos_start": 55946,
+            "oos_end": 74401,
+            "oos_bars": 18455,
+            "oos_days": 64.1
+          }
+        ]
+      }
+    },
+    "phase5_vs_static": {
+      "baseline": "static_N9",
+      "baseline_pnl": 205.12,
+      "baseline_mdd": 7.14,
+      "baseline_pnl_mdd": 28.72
+    },
+    "phase6_implementation": {
+      "strategy_complexity": {
+        "static_N3": {
+          "name": "static_N3",
+          "type": "StaticNStrategy",
+          "n_params": 1,
+          "params": {
+            "n": 3
+          },
+          "lookback_dependency": "none",
+          "implementation_difficulty": "low"
+        },
+        "static_N5": {
+          "name": "static_N5",
+          "type": "StaticNStrategy",
+          "n_params": 1,
+          "params": {
+            "n": 5
+          },
+          "lookback_dependency": "none",
+          "implementation_difficulty": "low"
+        },
+        "static_N7": {
+          "name": "static_N7",
+          "type": "StaticNStrategy",
+          "n_params": 1,
+          "params": {
+            "n": 7
+          },
+          "lookback_dependency": "none",
+          "implementation_difficulty": "low"
+        },
+        "static_N9": {
+          "name": "static_N9",
+          "type": "StaticNStrategy",
+          "n_params": 1,
+          "params": {
+            "n": 9
+          },
+          "lookback_dependency": "none",
+          "implementation_difficulty": "low"
+        },
+        "2tier_atr_ratio_p50_3_9": {
+          "name": "2tier_atr_ratio_p50_3_9",
+          "type": "TwoTierVolStrategy",
+          "n_params": 4,
+          "params": {
+            "metric": "atr_ratio",
+            "threshold_pct": 50,
+            "n_low": 3,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (atr_ratio)",
+          "implementation_difficulty": "medium"
+        },
+        "2tier_atr_ratio_p75_3_9": {
+          "name": "2tier_atr_ratio_p75_3_9",
+          "type": "TwoTierVolStrategy",
+          "n_params": 4,
+          "params": {
+            "metric": "atr_ratio",
+            "threshold_pct": 75,
+            "n_low": 3,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (atr_ratio)",
+          "implementation_difficulty": "medium"
+        },
+        "2tier_atr_ratio_p90_3_9": {
+          "name": "2tier_atr_ratio_p90_3_9",
+          "type": "TwoTierVolStrategy",
+          "n_params": 4,
+          "params": {
+            "metric": "atr_ratio",
+            "threshold_pct": 90,
+            "n_low": 3,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (atr_ratio)",
+          "implementation_difficulty": "medium"
+        },
+        "2tier_pct_change_12_p50_3_9": {
+          "name": "2tier_pct_change_12_p50_3_9",
+          "type": "TwoTierVolStrategy",
+          "n_params": 4,
+          "params": {
+            "metric": "pct_change_12",
+            "threshold_pct": 50,
+            "n_low": 3,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (pct_change_12)",
+          "implementation_difficulty": "medium"
+        },
+        "2tier_pct_change_12_p75_3_9": {
+          "name": "2tier_pct_change_12_p75_3_9",
+          "type": "TwoTierVolStrategy",
+          "n_params": 4,
+          "params": {
+            "metric": "pct_change_12",
+            "threshold_pct": 75,
+            "n_low": 3,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (pct_change_12)",
+          "implementation_difficulty": "medium"
+        },
+        "2tier_pct_change_12_p90_3_9": {
+          "name": "2tier_pct_change_12_p90_3_9",
+          "type": "TwoTierVolStrategy",
+          "n_params": 4,
+          "params": {
+            "metric": "pct_change_12",
+            "threshold_pct": 90,
+            "n_low": 3,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (pct_change_12)",
+          "implementation_difficulty": "medium"
+        },
+        "3tier_atr_ratio_p33_66_1_5_9": {
+          "name": "3tier_atr_ratio_p33_66_1_5_9",
+          "type": "ThreeTierVolStrategy",
+          "n_params": 6,
+          "params": {
+            "metric": "atr_ratio",
+            "lo_pct": 33,
+            "hi_pct": 66,
+            "n_low": 1,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (atr_ratio)",
+          "implementation_difficulty": "medium"
+        },
+        "3tier_atr_ratio_p25_75_1_5_9": {
+          "name": "3tier_atr_ratio_p25_75_1_5_9",
+          "type": "ThreeTierVolStrategy",
+          "n_params": 6,
+          "params": {
+            "metric": "atr_ratio",
+            "lo_pct": 25,
+            "hi_pct": 75,
+            "n_low": 1,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (atr_ratio)",
+          "implementation_difficulty": "medium"
+        },
+        "3tier_atr_ratio_p33_66_3_5_9": {
+          "name": "3tier_atr_ratio_p33_66_3_5_9",
+          "type": "ThreeTierVolStrategy",
+          "n_params": 6,
+          "params": {
+            "metric": "atr_ratio",
+            "lo_pct": 33,
+            "hi_pct": 66,
+            "n_low": 3,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (atr_ratio)",
+          "implementation_difficulty": "medium"
+        },
+        "3tier_pct_change_12_p33_66_1_5_9": {
+          "name": "3tier_pct_change_12_p33_66_1_5_9",
+          "type": "ThreeTierVolStrategy",
+          "n_params": 6,
+          "params": {
+            "metric": "pct_change_12",
+            "lo_pct": 33,
+            "hi_pct": 66,
+            "n_low": 1,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (pct_change_12)",
+          "implementation_difficulty": "medium"
+        },
+        "3tier_pct_change_12_p25_75_1_5_9": {
+          "name": "3tier_pct_change_12_p25_75_1_5_9",
+          "type": "ThreeTierVolStrategy",
+          "n_params": 6,
+          "params": {
+            "metric": "pct_change_12",
+            "lo_pct": 25,
+            "hi_pct": 75,
+            "n_low": 1,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (pct_change_12)",
+          "implementation_difficulty": "medium"
+        },
+        "3tier_pct_change_12_p33_66_3_5_9": {
+          "name": "3tier_pct_change_12_p33_66_3_5_9",
+          "type": "ThreeTierVolStrategy",
+          "n_params": 6,
+          "params": {
+            "metric": "pct_change_12",
+            "lo_pct": 33,
+            "hi_pct": 66,
+            "n_low": 3,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "vol metric (pct_change_12)",
+          "implementation_difficulty": "medium"
+        },
+        "continuous_atr_ratio_1_9": {
+          "name": "continuous_atr_ratio_1_9",
+          "type": "ContinuousVolStrategy",
+          "n_params": 3,
+          "params": {
+            "metric": "atr_ratio",
+            "n_min": 1,
+            "n_max": 9
+          },
+          "lookback_dependency": "percentile rank of vol metric",
+          "implementation_difficulty": "medium-high"
+        },
+        "continuous_pct_change_12_1_9": {
+          "name": "continuous_pct_change_12_1_9",
+          "type": "ContinuousVolStrategy",
+          "n_params": 3,
+          "params": {
+            "metric": "pct_change_12",
+            "n_min": 1,
+            "n_max": 9
+          },
+          "lookback_dependency": "percentile rank of vol metric",
+          "implementation_difficulty": "medium-high"
+        },
+        "continuous_realized_vol_20_1_9": {
+          "name": "continuous_realized_vol_20_1_9",
+          "type": "ContinuousVolStrategy",
+          "n_params": 3,
+          "params": {
+            "metric": "realized_vol_20",
+            "n_min": 1,
+            "n_max": 9
+          },
+          "lookback_dependency": "percentile rank of vol metric",
+          "implementation_difficulty": "medium-high"
+        },
+        "regime_3_9_p50": {
+          "name": "regime_3_9_p50",
+          "type": "RegimeStrategy",
+          "n_params": 4,
+          "params": {
+            "n_trend": 3,
+            "n_range": 9,
+            "vol_metric": "realized_vol_20",
+            "range_threshold_pct": 50
+          },
+          "lookback_dependency": "EMA regime + vol metric",
+          "implementation_difficulty": "medium"
+        },
+        "regime_5_9_p50": {
+          "name": "regime_5_9_p50",
+          "type": "RegimeStrategy",
+          "n_params": 4,
+          "params": {
+            "n_trend": 5,
+            "n_range": 9,
+            "vol_metric": "realized_vol_20",
+            "range_threshold_pct": 50
+          },
+          "lookback_dependency": "EMA regime + vol metric",
+          "implementation_difficulty": "medium"
+        },
+        "dd_5.0_10.0_1_5_9": {
+          "name": "dd_5.0_10.0_1_5_9",
+          "type": "DrawdownStrategy",
+          "n_params": 5,
+          "params": {
+            "dd_lo": 5.0,
+            "dd_hi": 10.0,
+            "n_low": 1,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "equity drawdown (already tracked)",
+          "implementation_difficulty": "low"
+        },
+        "dd_3.0_8.0_1_5_9": {
+          "name": "dd_3.0_8.0_1_5_9",
+          "type": "DrawdownStrategy",
+          "n_params": 5,
+          "params": {
+            "dd_lo": 3.0,
+            "dd_hi": 8.0,
+            "n_low": 1,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "equity drawdown (already tracked)",
+          "implementation_difficulty": "low"
+        },
+        "dd_5.0_15.0_3_5_9": {
+          "name": "dd_5.0_15.0_3_5_9",
+          "type": "DrawdownStrategy",
+          "n_params": 5,
+          "params": {
+            "dd_lo": 5.0,
+            "dd_hi": 15.0,
+            "n_low": 3,
+            "n_mid": 5,
+            "n_high": 9
+          },
+          "lookback_dependency": "equity drawdown (already tracked)",
+          "implementation_difficulty": "low"
+        }
+      },
+      "parameter_sensitivity": {
+        "dd_3.0_8.0_1_5_9": {
+          "pnl_mdd_range": 28.53,
+          "pnl_range": 40.66,
+          "stable": "False",
+          "perturbed": [
+            {
+              "shift": -0.1,
+              "pnl": 174.41,
+              "mdd": 18.05,
+              "pnl_mdd": 9.66,
+              "trades": 698
+            },
+            {
+              "shift": -0.05,
+              "pnl": 195.79,
+              "mdd": 7.34,
+              "pnl_mdd": 26.69,
+              "trades": 761
+            },
+            {
+              "shift": 0.0,
+              "pnl": 197.57,
+              "mdd": 6.66,
+              "pnl_mdd": 29.69,
+              "trades": 761
+            },
+            {
+              "shift": 0.05,
+              "pnl": 196.43,
+              "mdd": 7.7,
+              "pnl_mdd": 25.51,
+              "trades": 748
+            },
+            {
+              "shift": 0.1,
+              "pnl": 215.07,
+              "mdd": 5.63,
+              "pnl_mdd": 38.19,
+              "trades": 782
+            }
+          ]
+        },
+        "3tier_pct_change_12_p33_66_1_5_9": {
+          "pnl_mdd_range": 12.5,
+          "pnl_range": 67.18,
+          "stable": "False",
+          "perturbed": [
+            {
+              "shift": -0.1,
+              "pnl": 182.4,
+              "mdd": 8.5,
+              "pnl_mdd": 21.45,
+              "trades": 771
+            },
+            {
+              "shift": -0.05,
+              "pnl": 182.99,
+              "mdd": 10.1,
+              "pnl_mdd": 18.12,
+              "trades": 779
+            },
+            {
+              "shift": 0.0,
+              "pnl": 249.58,
+              "mdd": 8.58,
+              "pnl_mdd": 29.1,
+              "trades": 786
+            },
+            {
+              "shift": 0.05,
+              "pnl": 224.19,
+              "mdd": 7.32,
+              "pnl_mdd": 30.62,
+              "trades": 769
+            },
+            {
+              "shift": 0.1,
+              "pnl": 190.97,
+              "mdd": 9.07,
+              "pnl_mdd": 21.06,
+              "trades": 772
+            }
+          ]
+        },
+        "2tier_atr_ratio_p90_3_9": {
+          "pnl_mdd_range": 13.1,
+          "pnl_range": 80.4,
+          "stable": "False",
+          "perturbed": [
+            {
+              "shift": -0.1,
+              "pnl": 127.58,
+              "mdd": 9.41,
+              "pnl_mdd": 13.55,
+              "trades": 804
+            },
+            {
+              "shift": -0.05,
+              "pnl": 149.84,
+              "mdd": 9.45,
+              "pnl_mdd": 15.85,
+              "trades": 790
+            },
+            {
+              "shift": 0.0,
+              "pnl": 207.98,
+              "mdd": 7.8,
+              "pnl_mdd": 26.65,
+              "trades": 798
+            },
+            {
+              "shift": 0.05,
+              "pnl": 200.29,
+              "mdd": 7.64,
+              "pnl_mdd": 26.22,
+              "trades": 775
+            },
+            {
+              "shift": 0.1,
+              "pnl": 144.28,
+              "mdd": 8.11,
+              "pnl_mdd": 17.8,
+              "trades": 776
+            }
+          ]
+        }
+      }
+    }
+  },
+  "verdict": "STOP",
+  "best_strategy": "static_N9",
+  "recommendation": "Dynamic N strategies do not meaningfully improve over static 'static_N9' (best dynamic improvement: 3.4%). Keep current N=9. Existing production filters (agg_risk_cap, momentum_guard, regime_sizing) already handle correlated loss effectively.",
+  "timing": {
+    "total_seconds": 61.8
+  }
+}

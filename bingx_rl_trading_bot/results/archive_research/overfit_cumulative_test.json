@@ -1,0 +1,337 @@
+{
+  "generated_at": "2026-03-31T03:19:31.079478",
+  "data_bars": 93864,
+  "data_days": 326.0,
+  "n_patterns": 111,
+  "n_signals": 12937,
+  "test1_combinatorial_deflation": {
+    "dimensions": 11,
+    "total_combinations": 24576000,
+    "avg_alternatives_per_dim": 4.9,
+    "p_joint_luck": 4.07e-08,
+    "p_at_least_one_fp": 0.4312,
+    "bonferroni_threshold": 0.0045,
+    "avg_deflation_factor": 0.22,
+    "p_all_genuine": 0.0,
+    "optimizations": [
+      {
+        "name": "cascade_tighten_pct",
+        "desc": "75\u219285\u219295\u219298",
+        "alternatives": 4
+      },
+      {
+        "name": "preemptive_cascade_pct",
+        "desc": "3\u21924\u21922",
+        "alternatives": 5
+      },
+      {
+        "name": "preemptive_tighten_pct",
+        "desc": "85\u219290\u219295\u219298",
+        "alternatives": 5
+      },
+      {
+        "name": "direction_cap",
+        "desc": "7\u21926",
+        "alternatives": 4
+      },
+      {
+        "name": "agg_risk_counter",
+        "desc": "3\u21925\u21928\u219210",
+        "alternatives": 6
+      },
+      {
+        "name": "agg_risk_with",
+        "desc": "7\u219215",
+        "alternatives": 4
+      },
+      {
+        "name": "timeout_bars",
+        "desc": "864\u2192288",
+        "alternatives": 4
+      },
+      {
+        "name": "atr_clamp_lo",
+        "desc": "0.6\u21920.5",
+        "alternatives": 4
+      },
+      {
+        "name": "atr_clamp_hi",
+        "desc": "1.7\u21921.5",
+        "alternatives": 4
+      },
+      {
+        "name": "momentum_threshold",
+        "desc": "1.0\u21921.5",
+        "alternatives": 4
+      },
+      {
+        "name": "tp_decay_rate",
+        "desc": "0.997\u21920.9975",
+        "alternatives": 10
+      }
+    ],
+    "verdict": "MARGINAL",
+    "note": "Moderate risk \u2014 holdout critical"
+  },
+  "test2_holdout_validation": {
+    "split_bar": 75091,
+    "train_days": 261.0,
+    "holdout_days": 65.0,
+    "v168_train": {
+      "trades": 4461,
+      "wr": 55.8,
+      "pnl": 550.87,
+      "mdd": 1.22,
+      "pnl_mdd": 451.18,
+      "pnl_per_trade": 0.123,
+      "mdd_mtm": 1.96,
+      "rr": 3.0,
+      "wr_margin": 30.8
+    },
+    "v168_holdout": {
+      "trades": 1551,
+      "wr": 55.8,
+      "pnl": 228.94,
+      "mdd": 0.92,
+      "pnl_mdd": 249.71,
+      "pnl_per_trade": 0.148,
+      "mdd_mtm": 1.81,
+      "rr": 3.897,
+      "wr_margin": 35.4
+    },
+    "v167_train": {
+      "trades": 3753,
+      "wr": 61.3,
+      "pnl": 337.14,
+      "mdd": 2.76,
+      "pnl_mdd": 122.14,
+      "pnl_per_trade": 0.09,
+      "mdd_mtm": 4.08,
+      "rr": 1.272,
+      "wr_margin": 17.3
+    },
+    "v167_holdout": {
+      "trades": 1253,
+      "wr": 64.3,
+      "pnl": 171.99,
+      "mdd": 2.65,
+      "pnl_mdd": 64.95,
+      "pnl_per_trade": 0.137,
+      "mdd_mtm": 3.84,
+      "rr": 1.57,
+      "wr_margin": 25.4
+    },
+    "early_train": {
+      "trades": 3267,
+      "wr": 56.9,
+      "pnl": 118.35,
+      "mdd": 7.48,
+      "pnl_mdd": 15.83,
+      "pnl_per_trade": 0.036,
+      "mdd_mtm": 9.52,
+      "rr": 0.929,
+      "wr_margin": 5.1
+    },
+    "early_holdout": {
+      "trades": 1089,
+      "wr": 61.2,
+      "pnl": 81.21,
+      "mdd": 6.58,
+      "pnl_mdd": 12.35,
+      "pnl_per_trade": 0.075,
+      "mdd_mtm": 8.05,
+      "rr": 0.921,
+      "wr_margin": 9.1
+    },
+    "opt_degradation_pct": 41.6,
+    "base_degradation_pct": 51.0,
+    "holdout_gap": 56.9,
+    "verdict": "GENUINE",
+    "note": "Optimized beats baseline by +56.9% on TRUE holdout"
+  },
+  "test3_bootstrap_ci": {
+    "n_trades": 6009,
+    "n_bootstrap": 1000,
+    "pnl_ci": {
+      "p5": 752.5,
+      "p50": 780.0,
+      "p95": 809.3
+    },
+    "mdd_ci": {
+      "p5": 0.65,
+      "p50": 0.98,
+      "p95": 1.61
+    },
+    "wr_ci": {
+      "p5": 54.9,
+      "p50": 55.8,
+      "p95": 56.8
+    },
+    "rr_ci": {
+      "p5": 3.094,
+      "p50": 3.213,
+      "p95": 3.342
+    },
+    "pct_negative": 0.0,
+    "verdict": "GENUINE",
+    "note": "5th percentile PnL +752.5% > 0, 0.0% negative"
+  },
+  "test4_stability_splits": {
+    "n_segments": 5,
+    "segments": [
+      {
+        "segment": 1,
+        "start_bar": 0,
+        "end_bar": 18772,
+        "days": 65.0,
+        "trades": 1054,
+        "pnl": 120.77,
+        "wr": 54.9,
+        "mdd": 1.42,
+        "pnl_mdd": 85.0
+      },
+      {
+        "segment": 2,
+        "start_bar": 18772,
+        "end_bar": 37544,
+        "days": 65.0,
+        "trades": 1007,
+        "pnl": 107.11,
+        "wr": 56.4,
+        "mdd": 0.96,
+        "pnl_mdd": 111.6
+      },
+      {
+        "segment": 3,
+        "start_bar": 37544,
+        "end_bar": 56316,
+        "days": 65.0,
+        "trades": 1183,
+        "pnl": 159.41,
+        "wr": 56.5,
+        "mdd": 1.13,
+        "pnl_mdd": 141.1
+      },
+      {
+        "segment": 4,
+        "start_bar": 56316,
+        "end_bar": 75088,
+        "days": 65.0,
+        "trades": 1217,
+        "pnl": 158.47,
+        "wr": 55.7,
+        "mdd": 2.37,
+        "pnl_mdd": 66.9
+      },
+      {
+        "segment": 5,
+        "start_bar": 75088,
+        "end_bar": 93864,
+        "days": 65.0,
+        "trades": 1551,
+        "pnl": 228.94,
+        "wr": 55.8,
+        "mdd": 0.92,
+        "pnl_mdd": 248.8
+      }
+    ],
+    "mean_pnl": 154.9,
+    "std_pnl": 47.3,
+    "cv": 0.31,
+    "n_negative": 0,
+    "verdict": "GENUINE",
+    "note": "All segments positive, CV=0.31"
+  },
+  "test5_baseline_comparison": {
+    "configs": {
+      "v1.68.0 (full optimized)": {
+        "folds": [
+          80.3,
+          93.6,
+          173.2,
+          113.0,
+          200.5
+        ],
+        "total_oos": 660.6,
+        "avg_wr": 55.7,
+        "all_pass": true,
+        "params": {
+          "cascade": 98,
+          "pre_pct": 2.0,
+          "pre_tighten": 98,
+          "decay": 0.9975
+        }
+      },
+      "SIMPLE (cas98, no-pre, no-decay)": {
+        "folds": [
+          10.4,
+          16.8,
+          76.8,
+          19.2,
+          100.6
+        ],
+        "total_oos": 223.8,
+        "avg_wr": 57.0,
+        "all_pass": true,
+        "params": {
+          "cascade": 98,
+          "pre_pct": 999,
+          "pre_tighten": 0,
+          "decay": 0.0
+        }
+      },
+      "MINIMAL (cas85, no extras)": {
+        "folds": [
+          6.5,
+          12.1,
+          62.0,
+          4.9,
+          74.9
+        ],
+        "total_oos": 160.4,
+        "avg_wr": 57.2,
+        "all_pass": true,
+        "params": {
+          "cascade": 85,
+          "pre_pct": 999,
+          "pre_tighten": 0,
+          "decay": 0.0
+        }
+      },
+      "NO-CASCADE (no protection)": {
+        "folds": [
+          -9.9,
+          -24.3,
+          16.6,
+          -22.3,
+          -15.8
+        ],
+        "total_oos": -55.8,
+        "avg_wr": 59.1,
+        "all_pass": false,
+        "params": {
+          "cascade": 0,
+          "pre_pct": 999,
+          "pre_tighten": 0,
+          "decay": 0.0
+        }
+      }
+    },
+    "best_simple": "SIMPLE (cas98, no-pre, no-decay)",
+    "best_simple_total": 223.8,
+    "v168_total": 660.6,
+    "gap": 436.8,
+    "gap_pct": 195.2,
+    "verdict": "GENUINE",
+    "note": "Optimized beats best simple by +195.2% relative"
+  },
+  "verdicts": {
+    "test1_combinatorial": "MARGINAL",
+    "test2_holdout": "GENUINE",
+    "test3_bootstrap": "GENUINE",
+    "test4_stability": "GENUINE",
+    "test5_baseline": "GENUINE"
+  },
+  "overall_verdict": "GENUINE",
+  "overall_note": "System appears robust despite multiple optimizations"
+}

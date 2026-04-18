@@ -1,0 +1,38 @@
+{
+  "post_training_23d": {
+    "trades": 318,
+    "wr": 64.8,
+    "pnl": -22.1,
+    "mdd": 25.11,
+    "pnl_mdd": -0.88,
+    "pnl_per_trade": -0.069,
+    "rr": 0.404,
+    "exit_reasons": {
+      "TP": 202,
+      "SL": 49,
+      "TIMEOUT": 62,
+      "OOS_END": 5
+    },
+    "btc_return": -2.7,
+    "density": 40.8,
+    "n_sigs": 927
+  },
+  "training_303d": {
+    "trades": 4157,
+    "wr": 64.9,
+    "pnl": -62.07,
+    "mdd": 73.06,
+    "pnl_mdd": -0.85,
+    "pnl_per_trade": -0.015,
+    "rr": 0.502,
+    "exit_reasons": {
+      "TP": 2572,
+      "SL": 351,
+      "TIMEOUT": 1227,
+      "OOS_END": 7
+    },
+    "btc_return": -23.9,
+    "density": 39.6,
+    "n_sigs": 12010
+  }
+}

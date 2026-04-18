@@ -1,0 +1,394 @@
+{
+  "metadata": {
+    "script": "h1_bullish_long_wf_validation.py",
+    "date": "2026-02-26T04:55:22.873509",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "data_bars": 77760,
+    "patterns_tested": [
+      "BD-U-BD_LONG",
+      "MU-DN-IH_LONG",
+      "ST-MU-U_LONG"
+    ],
+    "protocol": {
+      "leverage": 3,
+      "fee_pct": 0.1,
+      "slippage_buffer": 0.02,
+      "timeout_bars": 864,
+      "max_positions": 9,
+      "direction_cap": 8,
+      "atr_period": 14,
+      "atr_window": 576,
+      "clamp_lo": 0.6,
+      "clamp_hi": 1.7,
+      "mc_seeds": [
+        42,
+        123,
+        7
+      ]
+    }
+  },
+  "phase1_is_reproduction": {
+    "BD-U-BD_LONG": {
+      "pattern": "BD-U-BD",
+      "direction": "LONG",
+      "tp": 2.14,
+      "sl": 4.07,
+      "total_signals": 94,
+      "trades": 58,
+      "wr": 74.1,
+      "baseline_wr": 65.5,
+      "edge": 8.6,
+      "mc_p": 0.0518,
+      "pnl": 109.94,
+      "mdd": 52.72
+    },
+    "MU-DN-IH_LONG": {
+      "pattern": "MU-DN-IH",
+      "direction": "LONG",
+      "tp": 1.42,
+      "sl": 2.56,
+      "total_signals": 54,
+      "trades": 46,
+      "wr": 69.6,
+      "baseline_wr": 64.3,
+      "edge": 5.2,
+      "mc_p": 0.3786,
+      "pnl": 12.12,
+      "mdd": 45.26
+    },
+    "ST-MU-U_LONG": {
+      "pattern": "ST-MU-U",
+      "direction": "LONG",
+      "tp": 2.87,
+      "sl": 3.63,
+      "total_signals": 151,
+      "trades": 90,
+      "wr": 67.8,
+      "baseline_wr": 55.8,
+      "edge": 11.9,
+      "mc_p": 0.0324,
+      "pnl": 158.23,
+      "mdd": 107.08
+    }
+  },
+  "phase2_individual_wf": {
+    "BD-U-BD_LONG": {
+      "pattern": "BD-U-BD",
+      "direction": "LONG",
+      "tp": 2.14,
+      "sl": 4.07,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 19440,
+          "oos_bars": 19440,
+          "is_trades": 13,
+          "is_wr": 76.9,
+          "is_pnl": 45.64,
+          "oos_trades": 7,
+          "oos_wr": 85.7,
+          "oos_pnl": 19.8,
+          "oos_mdd": 11.29,
+          "oos_edge": 20.2,
+          "oos_positive": "True"
+        },
+        {
+          "fold": 2,
+          "is_bars": 38880,
+          "oos_bars": 19440,
+          "is_trades": 20,
+          "is_wr": 80.0,
+          "is_pnl": 65.43,
+          "oos_trades": 17,
+          "oos_wr": 58.8,
+          "oos_pnl": -18.51,
+          "oos_mdd": 52.72,
+          "oos_edge": -6.7,
+          "oos_positive": "False"
+        },
+        {
+          "fold": 3,
+          "is_bars": 58320,
+          "oos_bars": 19440,
+          "is_trades": 37,
+          "is_wr": 70.3,
+          "is_pnl": 46.92,
+          "oos_trades": 21,
+          "oos_wr": 81.0,
+          "oos_pnl": 63.01,
+          "oos_mdd": 26.11,
+          "oos_edge": 15.5,
+          "oos_positive": "True"
+        }
+      ],
+      "positive_folds": 2,
+      "total_folds": 3,
+      "total_oos_pnl": 64.3,
+      "total_oos_trades": 45,
+      "avg_oos_wr": 75.2,
+      "verdict": "FAIL"
+    },
+    "MU-DN-IH_LONG": {
+      "pattern": "MU-DN-IH",
+      "direction": "LONG",
+      "tp": 1.42,
+      "sl": 2.56,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 19440,
+          "oos_bars": 19440,
+          "is_trades": 10,
+          "is_wr": 100.0,
+          "is_pnl": 33.22,
+          "oos_trades": 17,
+          "oos_wr": 64.7,
+          "oos_pnl": -3.64,
+          "oos_mdd": 37.45,
+          "oos_edge": 0.4,
+          "oos_positive": "False"
+        },
+        {
+          "fold": 2,
+          "is_bars": 38880,
+          "oos_bars": 19440,
+          "is_trades": 27,
+          "is_wr": 77.8,
+          "is_pnl": 29.59,
+          "oos_trades": 6,
+          "oos_wr": 50.0,
+          "oos_pnl": -13.71,
+          "oos_mdd": 19.56,
+          "oos_edge": -14.3,
+          "oos_positive": "False"
+        },
+        {
+          "fold": 3,
+          "is_bars": 58320,
+          "oos_bars": 19440,
+          "is_trades": 33,
+          "is_wr": 72.7,
+          "is_pnl": 15.87,
+          "oos_trades": 13,
+          "oos_wr": 61.5,
+          "oos_pnl": -3.75,
+          "oos_mdd": 17.41,
+          "oos_edge": -2.8,
+          "oos_positive": "False"
+        }
+      ],
+      "positive_folds": 0,
+      "total_folds": 3,
+      "total_oos_pnl": -21.1,
+      "total_oos_trades": 36,
+      "avg_oos_wr": 58.7,
+      "verdict": "FAIL"
+    },
+    "ST-MU-U_LONG": {
+      "pattern": "ST-MU-U",
+      "direction": "LONG",
+      "tp": 2.87,
+      "sl": 3.63,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 19440,
+          "oos_bars": 19440,
+          "is_trades": 21,
+          "is_wr": 95.2,
+          "is_pnl": 152.51,
+          "oos_trades": 12,
+          "oos_wr": 75.0,
+          "oos_pnl": 33.85,
+          "oos_mdd": 14.63,
+          "oos_edge": 19.2,
+          "oos_positive": "True"
+        },
+        {
+          "fold": 2,
+          "is_bars": 38880,
+          "oos_bars": 19440,
+          "is_trades": 33,
+          "is_wr": 87.9,
+          "is_pnl": 186.36,
+          "oos_trades": 38,
+          "oos_wr": 57.9,
+          "oos_pnl": -2.52,
+          "oos_mdd": 91.33,
+          "oos_edge": 2.1,
+          "oos_positive": "False"
+        },
+        {
+          "fold": 3,
+          "is_bars": 58320,
+          "oos_bars": 19440,
+          "is_trades": 71,
+          "is_wr": 71.8,
+          "is_pnl": 183.84,
+          "oos_trades": 19,
+          "oos_wr": 52.6,
+          "oos_pnl": -25.61,
+          "oos_mdd": 43.58,
+          "oos_edge": -3.2,
+          "oos_positive": "False"
+        }
+      ],
+      "positive_folds": 1,
+      "total_folds": 3,
+      "total_oos_pnl": 5.72,
+      "total_oos_trades": 69,
+      "avg_oos_wr": 61.8,
+      "verdict": "FAIL"
+    }
+  },
+  "phase3_portfolio_wf": {
+    "pat51_baseline": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 590,
+          "oos_end": 26313,
+          "trades": 240,
+          "wr": 76.7,
+          "pnl": 51.96,
+          "mdd": 10.72,
+          "long_trades": 89,
+          "short_trades": 151,
+          "long_pnl": 34.32,
+          "short_pnl": 17.64,
+          "pnl_per_trade": 0.216,
+          "pnl_mdd": 4.85
+        },
+        {
+          "fold": 2,
+          "oos_start": 26313,
+          "oos_end": 52036,
+          "trades": 252,
+          "wr": 71.0,
+          "pnl": 36.18,
+          "mdd": 11.87,
+          "long_trades": 80,
+          "short_trades": 172,
+          "long_pnl": 12.72,
+          "short_pnl": 23.46,
+          "pnl_per_trade": 0.144,
+          "pnl_mdd": 3.05
+        },
+        {
+          "fold": 3,
+          "oos_start": 52036,
+          "oos_end": 77760,
+          "trades": 368,
+          "wr": 78.8,
+          "pnl": 110.49,
+          "mdd": 6.6,
+          "long_trades": 112,
+          "short_trades": 256,
+          "long_pnl": 20.96,
+          "short_pnl": 89.53,
+          "pnl_per_trade": 0.3,
+          "pnl_mdd": 16.75
+        }
+      ],
+      "total_pnl": 198.63,
+      "max_mdd": 11.87,
+      "pnl_mdd": 16.73,
+      "positive_folds": 3,
+      "total_folds": 3,
+      "verdict": "PASS"
+    },
+    "pat54_with_h1": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 590,
+          "oos_end": 26313,
+          "trades": 233,
+          "wr": 76.8,
+          "pnl": 55.53,
+          "mdd": 9.44,
+          "long_trades": 89,
+          "short_trades": 144,
+          "long_pnl": 36.42,
+          "short_pnl": 19.11,
+          "pnl_per_trade": 0.238,
+          "pnl_mdd": 5.88
+        },
+        {
+          "fold": 2,
+          "oos_start": 26313,
+          "oos_end": 52036,
+          "trades": 246,
+          "wr": 73.6,
+          "pnl": 48.2,
+          "mdd": 8.25,
+          "long_trades": 91,
+          "short_trades": 155,
+          "long_pnl": 14.74,
+          "short_pnl": 33.46,
+          "pnl_per_trade": 0.196,
+          "pnl_mdd": 5.84
+        },
+        {
+          "fold": 3,
+          "oos_start": 52036,
+          "oos_end": 77760,
+          "trades": 362,
+          "wr": 77.1,
+          "pnl": 100.96,
+          "mdd": 6.04,
+          "long_trades": 125,
+          "short_trades": 237,
+          "long_pnl": 12.63,
+          "short_pnl": 88.33,
+          "pnl_per_trade": 0.279,
+          "pnl_mdd": 16.72
+        }
+      ],
+      "total_pnl": 204.69,
+      "max_mdd": 9.44,
+      "pnl_mdd": 21.68,
+      "positive_folds": 3,
+      "total_folds": 3,
+      "verdict": "PASS"
+    },
+    "improvement": {
+      "pnl_delta": 6.06,
+      "mdd_delta": -2.43,
+      "pnl_mdd_51": 16.73,
+      "pnl_mdd_54": 21.68,
+      "long_trades_delta": 24
+    }
+  },
+  "phase4_holdout": {
+    "BD-U-BD_LONG": {
+      "holdout_signals": 4,
+      "holdout_trades": 2,
+      "wr": 100.0,
+      "baseline_wr": 65.5,
+      "wr_excess": 34.5,
+      "pnl": 14.29,
+      "verdict": "PASS"
+    },
+    "MU-DN-IH_LONG": {
+      "holdout_signals": 6,
+      "holdout_trades": 5,
+      "wr": 40.0,
+      "baseline_wr": 64.3,
+      "wr_excess": -24.3,
+      "pnl": -11.98,
+      "verdict": "FAIL"
+    },
+    "ST-MU-U_LONG": {
+      "holdout_signals": 3,
+      "holdout_trades": 1,
+      "wr": 0.0,
+      "baseline_wr": 55.8,
+      "wr_excess": -55.8,
+      "pnl": -10.21,
+      "verdict": "FAIL"
+    }
+  },
+  "final_verdict": "STOP",
+  "adoptable_patterns": []
+}

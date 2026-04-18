@@ -1,0 +1,1198 @@
+{
+  "baseline_no_filter": {
+    "label": "BASELINE (no filters)",
+    "trades": 962,
+    "wr": 68.4,
+    "pnl": 39.17,
+    "mdd": 21.14,
+    "pnl_mdd": 1.85,
+    "pnl_per_trade": 0.041,
+    "long_trades": 360,
+    "short_trades": 602,
+    "blocked": {
+      "dir_cap": 0,
+      "regime_sizing": 0,
+      "agg_risk": 0,
+      "momentum": 0,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "all_filters_on": {
+    "label": "ALL FILTERS ON (production)",
+    "trades": 978,
+    "wr": 72.0,
+    "pnl": 85.1,
+    "mdd": 5.9,
+    "pnl_mdd": 14.42,
+    "pnl_per_trade": 0.087,
+    "long_trades": 431,
+    "short_trades": 547,
+    "blocked": {
+      "dir_cap": 2,
+      "regime_sizing": 0,
+      "agg_risk": 1024,
+      "momentum": 108,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "individual_dir_cap": {
+    "label": "ONLY F1:DirCap7",
+    "trades": 961,
+    "wr": 68.1,
+    "pnl": 36.58,
+    "mdd": 21.5,
+    "pnl_mdd": 1.7,
+    "pnl_per_trade": 0.038,
+    "long_trades": 369,
+    "short_trades": 592,
+    "blocked": {
+      "dir_cap": 37,
+      "regime_sizing": 0,
+      "agg_risk": 0,
+      "momentum": 0,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "individual_regime_sizing": {
+    "label": "ONLY F2:RegimeSz",
+    "trades": 962,
+    "wr": 68.4,
+    "pnl": 18.84,
+    "mdd": 18.49,
+    "pnl_mdd": 1.02,
+    "pnl_per_trade": 0.02,
+    "long_trades": 360,
+    "short_trades": 602,
+    "blocked": {
+      "dir_cap": 0,
+      "regime_sizing": 0,
+      "agg_risk": 0,
+      "momentum": 0,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "individual_agg_risk": {
+    "label": "ONLY F3:AggRisk",
+    "trades": 899,
+    "wr": 68.0,
+    "pnl": 13.82,
+    "mdd": 14.93,
+    "pnl_mdd": 0.93,
+    "pnl_per_trade": 0.015,
+    "long_trades": 410,
+    "short_trades": 489,
+    "blocked": {
+      "dir_cap": 0,
+      "regime_sizing": 0,
+      "agg_risk": 1740,
+      "momentum": 0,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "individual_momentum": {
+    "label": "ONLY F4:MomGuard",
+    "trades": 965,
+    "wr": 69.0,
+    "pnl": 46.96,
+    "mdd": 17.66,
+    "pnl_mdd": 2.66,
+    "pnl_per_trade": 0.049,
+    "long_trades": 346,
+    "short_trades": 619,
+    "blocked": {
+      "dir_cap": 0,
+      "regime_sizing": 0,
+      "agg_risk": 0,
+      "momentum": 90,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "individual_mdd_sizing": {
+    "label": "ONLY F5:MDDSz",
+    "trades": 962,
+    "wr": 68.4,
+    "pnl": 25.94,
+    "mdd": 18.2,
+    "pnl_mdd": 1.43,
+    "pnl_per_trade": 0.027,
+    "long_trades": 360,
+    "short_trades": 602,
+    "blocked": {
+      "dir_cap": 0,
+      "regime_sizing": 0,
+      "agg_risk": 0,
+      "momentum": 0,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "individual_timeout": {
+    "label": "ONLY F6:Timeout",
+    "trades": 1038,
+    "wr": 71.9,
+    "pnl": 139.84,
+    "mdd": 12.13,
+    "pnl_mdd": 11.53,
+    "pnl_per_trade": 0.135,
+    "long_trades": 413,
+    "short_trades": 625,
+    "blocked": {
+      "dir_cap": 0,
+      "regime_sizing": 0,
+      "agg_risk": 0,
+      "momentum": 0,
+      "mdd_sizing": 0,
+      "timeout": 0
+    }
+  },
+  "phase2_top15": [
+    {
+      "rank": 1,
+      "label": "F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 3,
+      "pnl": 143.42,
+      "mdd": 8.89,
+      "pnl_mdd": 16.13,
+      "trades": 1060,
+      "wr": 72.2,
+      "long_trades": 415,
+      "short_trades": 645
+    },
+    {
+      "rank": 2,
+      "label": "F4:MomGuard+F6:Timeout",
+      "combo": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 2,
+      "pnl": 145.28,
+      "mdd": 9.07,
+      "pnl_mdd": 16.02,
+      "trades": 1060,
+      "wr": 72.2,
+      "long_trades": 415,
+      "short_trades": 645
+    },
+    {
+      "rank": 3,
+      "label": "F1:DirCap7+F2:RegimeSz+F3:AggRisk+F5:MDDSz+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "n_filters": 5,
+      "pnl": 86.64,
+      "mdd": 5.7,
+      "pnl_mdd": 15.2,
+      "trades": 994,
+      "wr": 71.8,
+      "long_trades": 450,
+      "short_trades": 544
+    },
+    {
+      "rank": 4,
+      "label": "F1:DirCap7+F2:RegimeSz+F3:AggRisk+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "n_filters": 4,
+      "pnl": 86.64,
+      "mdd": 5.71,
+      "pnl_mdd": 15.19,
+      "trades": 994,
+      "wr": 71.8,
+      "long_trades": 450,
+      "short_trades": 544
+    },
+    {
+      "rank": 5,
+      "label": "F2:RegimeSz+F3:AggRisk+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "n_filters": 4,
+      "pnl": 86.31,
+      "mdd": 5.71,
+      "pnl_mdd": 15.12,
+      "trades": 994,
+      "wr": 71.7,
+      "long_trades": 450,
+      "short_trades": 544
+    },
+    {
+      "rank": 6,
+      "label": "F2:RegimeSz+F3:AggRisk+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "n_filters": 3,
+      "pnl": 86.31,
+      "mdd": 5.72,
+      "pnl_mdd": 15.1,
+      "trades": 994,
+      "wr": 71.7,
+      "long_trades": 450,
+      "short_trades": 544
+    },
+    {
+      "rank": 7,
+      "label": "F1:DirCap7+F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 4,
+      "pnl": 135.73,
+      "mdd": 9.38,
+      "pnl_mdd": 14.48,
+      "trades": 1053,
+      "wr": 71.7,
+      "long_trades": 418,
+      "short_trades": 635
+    },
+    {
+      "rank": 8,
+      "label": "F2:RegimeSz+F3:AggRisk+F4:MomGuard+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 4,
+      "pnl": 85.1,
+      "mdd": 5.9,
+      "pnl_mdd": 14.42,
+      "trades": 978,
+      "wr": 72.0,
+      "long_trades": 431,
+      "short_trades": 547
+    },
+    {
+      "rank": 9,
+      "label": "F1:DirCap7+F2:RegimeSz+F3:AggRisk+F4:MomGuard+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 5,
+      "pnl": 85.1,
+      "mdd": 5.9,
+      "pnl_mdd": 14.42,
+      "trades": 978,
+      "wr": 72.0,
+      "long_trades": 431,
+      "short_trades": 547
+    },
+    {
+      "rank": 10,
+      "label": "F2:RegimeSz+F3:AggRisk+F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 5,
+      "pnl": 85.1,
+      "mdd": 5.9,
+      "pnl_mdd": 14.42,
+      "trades": 978,
+      "wr": 72.0,
+      "long_trades": 431,
+      "short_trades": 547
+    },
+    {
+      "rank": 11,
+      "label": "F1:DirCap7+F2:RegimeSz+F3:AggRisk+F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 6,
+      "pnl": 85.1,
+      "mdd": 5.9,
+      "pnl_mdd": 14.42,
+      "trades": 978,
+      "wr": 72.0,
+      "long_trades": 431,
+      "short_trades": 547
+    },
+    {
+      "rank": 12,
+      "label": "F1:DirCap7+F4:MomGuard+F6:Timeout",
+      "combo": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 3,
+      "pnl": 137.39,
+      "mdd": 9.69,
+      "pnl_mdd": 14.17,
+      "trades": 1053,
+      "wr": 71.7,
+      "long_trades": 418,
+      "short_trades": 635
+    },
+    {
+      "rank": 13,
+      "label": "F3:AggRisk+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "n_filters": 3,
+      "pnl": 95.54,
+      "mdd": 6.99,
+      "pnl_mdd": 13.66,
+      "trades": 905,
+      "wr": 72.3,
+      "long_trades": 405,
+      "short_trades": 500
+    },
+    {
+      "rank": 14,
+      "label": "F1:DirCap7+F3:AggRisk+F5:MDDSz+F6:Timeout",
+      "combo": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1
+      ],
+      "n_filters": 4,
+      "pnl": 95.24,
+      "mdd": 7.0,
+      "pnl_mdd": 13.6,
+      "trades": 905,
+      "wr": 72.3,
+      "long_trades": 405,
+      "short_trades": 500
+    },
+    {
+      "rank": 15,
+      "label": "F3:AggRisk+F6:Timeout",
+      "combo": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "n_filters": 2,
+      "pnl": 95.3,
+      "mdd": 7.07,
+      "pnl_mdd": 13.48,
+      "trades": 904,
+      "wr": 72.2,
+      "long_trades": 404,
+      "short_trades": 500
+    }
+  ],
+  "phase3_wf": [
+    {
+      "label": "WF: F2:RegimeSz+F3:AggRisk+F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 5,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 56.06,
+      "max_mdd": 9.52,
+      "pnl_mdd": 5.89,
+      "total_trades": 834,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 191,
+          "wr": 70.7,
+          "pnl": 13.08,
+          "mdd": 5.05,
+          "pnl_mdd": 2.59,
+          "pnl_per_trade": 0.069,
+          "long_trades": 102,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 339,
+          "wr": 72.9,
+          "pnl": 33.17,
+          "mdd": 6.4,
+          "pnl_mdd": 5.18,
+          "pnl_per_trade": 0.098,
+          "long_trades": 131,
+          "short_trades": 208
+        },
+        {
+          "fold": 3,
+          "trades": 304,
+          "wr": 68.4,
+          "pnl": 9.81,
+          "mdd": 9.52,
+          "pnl_mdd": 1.03,
+          "pnl_per_trade": 0.032,
+          "long_trades": 134,
+          "short_trades": 170
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 800,
+        "momentum": 103,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F2:RegimeSz+F3:AggRisk+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "n_filters": 4,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 56.24,
+      "max_mdd": 9.62,
+      "pnl_mdd": 5.85,
+      "total_trades": 849,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 194,
+          "wr": 72.2,
+          "pnl": 17.1,
+          "mdd": 5.46,
+          "pnl_mdd": 3.13,
+          "pnl_per_trade": 0.088,
+          "long_trades": 105,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 345,
+          "wr": 72.2,
+          "pnl": 31.04,
+          "mdd": 5.76,
+          "pnl_mdd": 5.39,
+          "pnl_per_trade": 0.09,
+          "long_trades": 141,
+          "short_trades": 204
+        },
+        {
+          "fold": 3,
+          "trades": 310,
+          "wr": 67.1,
+          "pnl": 8.1,
+          "mdd": 9.62,
+          "pnl_mdd": 0.84,
+          "pnl_per_trade": 0.026,
+          "long_trades": 142,
+          "short_trades": 168
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 870,
+        "momentum": 0,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F1:DirCap7+F2:RegimeSz+F3:AggRisk+F5:MDDSz+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "n_filters": 5,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 56.32,
+      "max_mdd": 9.64,
+      "pnl_mdd": 5.84,
+      "total_trades": 848,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 194,
+          "wr": 72.2,
+          "pnl": 17.1,
+          "mdd": 5.46,
+          "pnl_mdd": 3.13,
+          "pnl_per_trade": 0.088,
+          "long_trades": 105,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 345,
+          "wr": 72.5,
+          "pnl": 31.48,
+          "mdd": 5.5,
+          "pnl_mdd": 5.72,
+          "pnl_per_trade": 0.091,
+          "long_trades": 141,
+          "short_trades": 204
+        },
+        {
+          "fold": 3,
+          "trades": 309,
+          "wr": 67.0,
+          "pnl": 7.74,
+          "mdd": 9.64,
+          "pnl_mdd": 0.8,
+          "pnl_per_trade": 0.025,
+          "long_trades": 142,
+          "short_trades": 167
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 10,
+        "regime_sizing": 0,
+        "agg_risk": 864,
+        "momentum": 0,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: ALL_FILTERS (production)",
+      "combo": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 6,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 55.69,
+      "max_mdd": 9.55,
+      "pnl_mdd": 5.83,
+      "total_trades": 833,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 191,
+          "wr": 70.7,
+          "pnl": 13.08,
+          "mdd": 5.05,
+          "pnl_mdd": 2.59,
+          "pnl_per_trade": 0.069,
+          "long_trades": 102,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 339,
+          "wr": 72.9,
+          "pnl": 33.17,
+          "mdd": 6.4,
+          "pnl_mdd": 5.18,
+          "pnl_per_trade": 0.098,
+          "long_trades": 131,
+          "short_trades": 208
+        },
+        {
+          "fold": 3,
+          "trades": 303,
+          "wr": 68.3,
+          "pnl": 9.44,
+          "mdd": 9.55,
+          "pnl_mdd": 0.99,
+          "pnl_per_trade": 0.031,
+          "long_trades": 134,
+          "short_trades": 169
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 2,
+        "regime_sizing": 0,
+        "agg_risk": 800,
+        "momentum": 103,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F2:RegimeSz+F3:AggRisk+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "n_filters": 3,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 56.07,
+      "max_mdd": 9.75,
+      "pnl_mdd": 5.75,
+      "total_trades": 845,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 194,
+          "wr": 72.2,
+          "pnl": 17.16,
+          "mdd": 5.46,
+          "pnl_mdd": 3.14,
+          "pnl_per_trade": 0.088,
+          "long_trades": 105,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 344,
+          "wr": 72.1,
+          "pnl": 31.1,
+          "mdd": 5.76,
+          "pnl_mdd": 5.4,
+          "pnl_per_trade": 0.09,
+          "long_trades": 141,
+          "short_trades": 203
+        },
+        {
+          "fold": 3,
+          "trades": 307,
+          "wr": 66.8,
+          "pnl": 7.81,
+          "mdd": 9.75,
+          "pnl_mdd": 0.8,
+          "pnl_per_trade": 0.025,
+          "long_trades": 141,
+          "short_trades": 166
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 892,
+        "momentum": 0,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F1:DirCap7+F2:RegimeSz+F3:AggRisk+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "n_filters": 4,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 56.05,
+      "max_mdd": 9.78,
+      "pnl_mdd": 5.73,
+      "total_trades": 844,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 194,
+          "wr": 72.2,
+          "pnl": 17.16,
+          "mdd": 5.46,
+          "pnl_mdd": 3.14,
+          "pnl_per_trade": 0.088,
+          "long_trades": 105,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 344,
+          "wr": 72.4,
+          "pnl": 31.44,
+          "mdd": 5.51,
+          "pnl_mdd": 5.71,
+          "pnl_per_trade": 0.091,
+          "long_trades": 141,
+          "short_trades": 203
+        },
+        {
+          "fold": 3,
+          "trades": 306,
+          "wr": 66.7,
+          "pnl": 7.45,
+          "mdd": 9.78,
+          "pnl_mdd": 0.76,
+          "pnl_per_trade": 0.024,
+          "long_trades": 141,
+          "short_trades": 165
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 10,
+        "regime_sizing": 0,
+        "agg_risk": 886,
+        "momentum": 0,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F2:RegimeSz+F3:AggRisk+F4:MomGuard+F6:Timeout",
+      "combo": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 4,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 55.1,
+      "max_mdd": 9.86,
+      "pnl_mdd": 5.59,
+      "total_trades": 829,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 191,
+          "wr": 70.7,
+          "pnl": 13.14,
+          "mdd": 5.05,
+          "pnl_mdd": 2.6,
+          "pnl_per_trade": 0.069,
+          "long_trades": 102,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 338,
+          "wr": 72.5,
+          "pnl": 32.54,
+          "mdd": 6.34,
+          "pnl_mdd": 5.13,
+          "pnl_per_trade": 0.096,
+          "long_trades": 132,
+          "short_trades": 206
+        },
+        {
+          "fold": 3,
+          "trades": 300,
+          "wr": 68.0,
+          "pnl": 9.42,
+          "mdd": 9.86,
+          "pnl_mdd": 0.96,
+          "pnl_per_trade": 0.031,
+          "long_trades": 134,
+          "short_trades": 166
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 817,
+        "momentum": 103,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F1:DirCap7+F2:RegimeSz+F3:AggRisk+F4:MomGuard+F6:Timeout",
+      "combo": [
+        1,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 5,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 54.74,
+      "max_mdd": 9.9,
+      "pnl_mdd": 5.53,
+      "total_trades": 828,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 191,
+          "wr": 70.7,
+          "pnl": 13.14,
+          "mdd": 5.05,
+          "pnl_mdd": 2.6,
+          "pnl_per_trade": 0.069,
+          "long_trades": 102,
+          "short_trades": 89
+        },
+        {
+          "fold": 2,
+          "trades": 338,
+          "wr": 72.5,
+          "pnl": 32.54,
+          "mdd": 6.34,
+          "pnl_mdd": 5.13,
+          "pnl_per_trade": 0.096,
+          "long_trades": 132,
+          "short_trades": 206
+        },
+        {
+          "fold": 3,
+          "trades": 299,
+          "wr": 67.9,
+          "pnl": 9.06,
+          "mdd": 9.9,
+          "pnl_mdd": 0.92,
+          "pnl_per_trade": 0.03,
+          "long_trades": 134,
+          "short_trades": 165
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 2,
+        "regime_sizing": 0,
+        "agg_risk": 817,
+        "momentum": 103,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: NO_FILTERS",
+      "combo": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "n_filters": 0,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "total_pnl": 56.55,
+      "max_mdd": 21.02,
+      "pnl_mdd": 2.69,
+      "total_trades": 856,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 183,
+          "wr": 68.3,
+          "pnl": 3.89,
+          "mdd": 11.01,
+          "pnl_mdd": 0.35,
+          "pnl_per_trade": 0.021,
+          "long_trades": 89,
+          "short_trades": 94
+        },
+        {
+          "fold": 2,
+          "trades": 366,
+          "wr": 73.5,
+          "pnl": 52.49,
+          "mdd": 8.25,
+          "pnl_mdd": 6.36,
+          "pnl_per_trade": 0.143,
+          "long_trades": 110,
+          "short_trades": 256
+        },
+        {
+          "fold": 3,
+          "trades": 307,
+          "wr": 63.8,
+          "pnl": 0.17,
+          "mdd": 21.02,
+          "pnl_mdd": 0.01,
+          "pnl_per_trade": 0.001,
+          "long_trades": 121,
+          "short_trades": 186
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 0,
+        "momentum": 0,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 3,
+      "wf_pass": "2/3",
+      "wf_passed": false,
+      "total_pnl": 104.71,
+      "max_mdd": 16.35,
+      "pnl_mdd": 6.4,
+      "total_trades": 908,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 195,
+          "wr": 70.3,
+          "pnl": 24.35,
+          "mdd": 4.77,
+          "pnl_mdd": 5.1,
+          "pnl_per_trade": 0.125,
+          "long_trades": 104,
+          "short_trades": 91
+        },
+        {
+          "fold": 2,
+          "trades": 370,
+          "wr": 77.3,
+          "pnl": 83.99,
+          "mdd": 4.57,
+          "pnl_mdd": 18.39,
+          "pnl_per_trade": 0.227,
+          "long_trades": 107,
+          "short_trades": 263
+        },
+        {
+          "fold": 3,
+          "trades": 343,
+          "wr": 62.1,
+          "pnl": -3.63,
+          "mdd": 16.35,
+          "pnl_mdd": -0.22,
+          "pnl_per_trade": -0.011,
+          "long_trades": 132,
+          "short_trades": 211
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 0,
+        "momentum": 97,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F1:DirCap7+F4:MomGuard+F5:MDDSz+F6:Timeout",
+      "combo": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "n_filters": 4,
+      "wf_pass": "2/3",
+      "wf_passed": false,
+      "total_pnl": 100.22,
+      "max_mdd": 16.4,
+      "pnl_mdd": 6.11,
+      "total_trades": 904,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 195,
+          "wr": 70.3,
+          "pnl": 24.6,
+          "mdd": 4.84,
+          "pnl_mdd": 5.08,
+          "pnl_per_trade": 0.126,
+          "long_trades": 105,
+          "short_trades": 90
+        },
+        {
+          "fold": 2,
+          "trades": 368,
+          "wr": 76.6,
+          "pnl": 79.29,
+          "mdd": 4.57,
+          "pnl_mdd": 17.36,
+          "pnl_per_trade": 0.215,
+          "long_trades": 112,
+          "short_trades": 256
+        },
+        {
+          "fold": 3,
+          "trades": 341,
+          "wr": 61.9,
+          "pnl": -3.67,
+          "mdd": 16.4,
+          "pnl_mdd": -0.22,
+          "pnl_per_trade": -0.011,
+          "long_trades": 132,
+          "short_trades": 209
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 59,
+        "regime_sizing": 0,
+        "agg_risk": 0,
+        "momentum": 98,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    },
+    {
+      "label": "WF: F4:MomGuard+F6:Timeout",
+      "combo": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "n_filters": 2,
+      "wf_pass": "2/3",
+      "wf_passed": false,
+      "total_pnl": 102.06,
+      "max_mdd": 21.02,
+      "pnl_mdd": 4.86,
+      "total_trades": 908,
+      "folds": [
+        {
+          "fold": 1,
+          "trades": 195,
+          "wr": 70.3,
+          "pnl": 24.35,
+          "mdd": 4.77,
+          "pnl_mdd": 5.1,
+          "pnl_per_trade": 0.125,
+          "long_trades": 104,
+          "short_trades": 91
+        },
+        {
+          "fold": 2,
+          "trades": 370,
+          "wr": 77.3,
+          "pnl": 84.07,
+          "mdd": 4.57,
+          "pnl_mdd": 18.41,
+          "pnl_per_trade": 0.227,
+          "long_trades": 107,
+          "short_trades": 263
+        },
+        {
+          "fold": 3,
+          "trades": 343,
+          "wr": 62.1,
+          "pnl": -6.36,
+          "mdd": 21.02,
+          "pnl_mdd": -0.3,
+          "pnl_per_trade": -0.019,
+          "long_trades": 132,
+          "short_trades": 211
+        }
+      ],
+      "total_blocked": {
+        "dir_cap": 0,
+        "regime_sizing": 0,
+        "agg_risk": 0,
+        "momentum": 97,
+        "mdd_sizing": 0,
+        "timeout": 0
+      }
+    }
+  ],
+  "metadata": {
+    "study": "neutral_filter_ablation",
+    "patterns": "22L+29S=51",
+    "data_bars": 77760,
+    "data_days": 270.0,
+    "total_signals": 4198,
+    "elapsed_sec": 66.7
+  }
+}

@@ -1,0 +1,233 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-03-14T22:49:55.275749",
+  "strategy_version": "v1.62.0",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "data_bars": 87315,
+  "data_days": 303.2,
+  "neutral_window": {
+    "start": 0,
+    "end": 74642,
+    "days": 259.2
+  },
+  "n_patterns": 111,
+  "tp_scale_factor": 0.72,
+  "full_is": {
+    "trades": 1838,
+    "pnl": 406.67,
+    "mdd": 1.75,
+    "pnl_mdd": 232.1,
+    "wr": 77.0
+  },
+  "tests": [
+    {
+      "test": "IS/OOS Ratio",
+      "oos_is_pnl_mdd_ratio": 0.215,
+      "avg_is_pnl_mdd": 115.93,
+      "avg_oos_pnl_mdd": 24.94,
+      "total_is_pnl": 1006.09,
+      "total_oos_pnl": 321.29,
+      "oos_positive_folds": "5/5",
+      "is_folds": [
+        {
+          "fold": 1,
+          "pnl": 82.47,
+          "mdd": 1.57,
+          "pnl_mdd": 52.51,
+          "trades": 337
+        },
+        {
+          "fold": 2,
+          "pnl": 127.81,
+          "mdd": 1.75,
+          "pnl_mdd": 72.95,
+          "trades": 550
+        },
+        {
+          "fold": 3,
+          "pnl": 194.85,
+          "mdd": 1.75,
+          "pnl_mdd": 111.21,
+          "trades": 769
+        },
+        {
+          "fold": 4,
+          "pnl": 251.53,
+          "mdd": 1.75,
+          "pnl_mdd": 143.55,
+          "trades": 1077
+        },
+        {
+          "fold": 5,
+          "pnl": 349.43,
+          "mdd": 1.75,
+          "pnl_mdd": 199.43,
+          "trades": 1504
+        }
+      ],
+      "oos_folds": [
+        {
+          "fold": 1,
+          "pnl": 44.32,
+          "mdd": 2.96,
+          "pnl_mdd": 14.98,
+          "trades": 215
+        },
+        {
+          "fold": 2,
+          "pnl": 65.22,
+          "mdd": 1.58,
+          "pnl_mdd": 41.3,
+          "trades": 229
+        },
+        {
+          "fold": 3,
+          "pnl": 55.26,
+          "mdd": 2.67,
+          "pnl_mdd": 20.72,
+          "trades": 318
+        },
+        {
+          "fold": 4,
+          "pnl": 99.54,
+          "mdd": 3.15,
+          "pnl_mdd": 31.58,
+          "trades": 434
+        },
+        {
+          "fold": 5,
+          "pnl": 56.95,
+          "mdd": 3.53,
+          "pnl_mdd": 16.11,
+          "trades": 336
+        }
+      ],
+      "note": "PnL/MDD ratio biased by compound growth in longer IS; all OOS folds positive is key signal",
+      "threshold": "GREEN: all OOS positive & ratio>=0.15, YELLOW: 60%+ OOS positive, RED: else",
+      "grade": "GREEN"
+    },
+    {
+      "test": "Parameter Count vs Data Points",
+      "global_params": 19,
+      "per_pattern_params": 222,
+      "total_params": 241,
+      "effective_params": 130,
+      "n_trades": 1838,
+      "sqrt_trades": 42.9,
+      "ratio_conservative": 5.621,
+      "ratio_liberal": 3.032,
+      "ratio": 5.621,
+      "note": "Per-pattern TP/SL from MAE/MFE percentile grids (constrained), not free optimization",
+      "threshold": "GREEN <=0.5, YELLOW <=1.0 (or effective<=1.0), RED >1.0",
+      "grade": "RED"
+    },
+    {
+      "test": "CSCV (Probability of Backtest Overfitting)",
+      "n_blocks": 10,
+      "n_combos": 252,
+      "block_pnls": [
+        56.03,
+        33.94,
+        26.23,
+        31.17,
+        39.52,
+        18.73,
+        47.93,
+        74.48,
+        42.04,
+        25.55
+      ],
+      "oos_underperform_count": 0,
+      "pbo": 0.0,
+      "threshold": "GREEN <=0.10, YELLOW <=0.30, RED >0.30",
+      "grade": "GREEN"
+    },
+    {
+      "test": "Deflated Sharpe Ratio",
+      "sharpe_annualized": 28.909,
+      "expected_max_sharpe": 2.797,
+      "se_sharpe": 0.8769,
+      "dsr": 29.779,
+      "strategy_trials": 50,
+      "skewness": -1.963,
+      "excess_kurtosis": 4.488,
+      "n_trades": 1838,
+      "threshold": "GREEN >1.0, YELLOW >0.0, RED <=0.0",
+      "grade": "GREEN"
+    },
+    {
+      "test": "Walk-Forward Efficiency Ratio",
+      "fold_details": [
+        {
+          "fold": 1,
+          "is_pnl": 82.47,
+          "oos_pnl": 44.32,
+          "efficiency_ratio": 0.537
+        },
+        {
+          "fold": 2,
+          "is_pnl": 127.81,
+          "oos_pnl": 65.22,
+          "efficiency_ratio": 1.021
+        },
+        {
+          "fold": 3,
+          "is_pnl": 194.85,
+          "oos_pnl": 55.26,
+          "efficiency_ratio": 0.851
+        },
+        {
+          "fold": 4,
+          "is_pnl": 251.53,
+          "oos_pnl": 99.54,
+          "efficiency_ratio": 1.583
+        },
+        {
+          "fold": 5,
+          "is_pnl": 349.43,
+          "oos_pnl": 56.95,
+          "efficiency_ratio": 0.815
+        }
+      ],
+      "avg_efficiency": 0.961,
+      "std_efficiency": 0.347,
+      "cv": 0.361,
+      "threshold": "GREEN: avg>=0.5 & CV<1.0, YELLOW: avg>=0.2 & CV<2.0, RED: else",
+      "grade": "GREEN"
+    },
+    {
+      "test": "Bootstrap Confidence Interval",
+      "n_trades": 1838,
+      "actual_pnl": 406.67,
+      "ci_95_lo": 371.11,
+      "ci_95_hi": 442.48,
+      "ci_width": 71.36,
+      "ci_width_pct_of_pnl": 17.5,
+      "frac_negative": 0.0,
+      "n_bootstrap": 1000,
+      "threshold": "GREEN: <1% neg & width<50%, YELLOW: <5% neg & width<100%, RED: else",
+      "grade": "GREEN"
+    },
+    {
+      "test": "Regime-Conditional OOS (last 90d)",
+      "is_bars": 48722,
+      "is_days": 169.2,
+      "oos_bars": 25920,
+      "oos_days": 90.0,
+      "is_pnl": 245.02,
+      "oos_pnl": 157.8,
+      "is_pnl_per_bar": 0.00503,
+      "oos_pnl_per_bar": 0.00609,
+      "oos_is_ratio_per_bar": 1.211,
+      "is_wr": 78.6,
+      "oos_wr": 74.3,
+      "is_trades": 1039,
+      "oos_trades": 797,
+      "threshold": "GREEN: ratio>=0.5 & OOS>0, YELLOW: ratio>=0.2 & OOS>0, RED: else",
+      "grade": "GREEN"
+    }
+  ],
+  "overall_grade": "B",
+  "grade_description": "Low overfitting risk \u2014 generally sound",
+  "elapsed_seconds": 22.0
+}

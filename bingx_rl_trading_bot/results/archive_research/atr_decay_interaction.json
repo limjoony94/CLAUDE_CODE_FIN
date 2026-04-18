@@ -1,0 +1,536 @@
+{
+  "study": "atr_decay_interaction",
+  "date": "2026-03-31T03:05:32",
+  "version": "v1.68.0",
+  "data_bars": 93864,
+  "neutral_window": {
+    "start": 0,
+    "end": 74567,
+    "days": 259.0
+  },
+  "config": {
+    "cascade_pct": 98,
+    "preemptive_cascade_pct": 2.0,
+    "preemptive_tighten_pct": 98,
+    "decay_rate": 0.9975,
+    "n_folds": 5,
+    "vol_adapt": "OFF",
+    "n_slots": 9,
+    "direction_cap": 6,
+    "timeout_bars": 288,
+    "agg_risk_counter": 10.0,
+    "agg_risk_with": 15.0,
+    "tp_mode": "mfe_median"
+  },
+  "phase1_atr_sweep": {
+    "CURRENT [0.5,1.5]": {
+      "clamp_lo": 0.5,
+      "clamp_hi": 1.5,
+      "is": {
+        "pnl": 547.0,
+        "mdd": 1.96,
+        "pnl_mdd": 279.1,
+        "wr": 56.0,
+        "rr": 2.98,
+        "wr_margin": 30.9,
+        "trades": 4424,
+        "exit_reasons": {
+          "TP": 2373,
+          "SL": 1521,
+          "TIMEOUT": 521,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 650,
+          "dup_pat": 300,
+          "max_pos": 4725
+        }
+      },
+      "wf": {
+        "folds": [
+          57.6,
+          66.1,
+          88.7,
+          138.7,
+          88.8
+        ],
+        "oos_total": 439.8,
+        "all_pass": true
+      }
+    },
+    "NARROW  [0.6,1.4]": {
+      "clamp_lo": 0.6,
+      "clamp_hi": 1.4,
+      "is": {
+        "pnl": 548.5,
+        "mdd": 1.96,
+        "pnl_mdd": 279.8,
+        "wr": 55.8,
+        "rr": 2.997,
+        "wr_margin": 30.8,
+        "trades": 4437,
+        "exit_reasons": {
+          "TP": 2373,
+          "SL": 1526,
+          "TIMEOUT": 529,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 657,
+          "dup_pat": 302,
+          "max_pos": 4703
+        }
+      },
+      "wf": {
+        "folds": [
+          55.3,
+          66.1,
+          90.1,
+          140.2,
+          89.3
+        ],
+        "oos_total": 441.0,
+        "all_pass": true
+      }
+    },
+    "TIGHTER [0.7,1.3]": {
+      "clamp_lo": 0.7,
+      "clamp_hi": 1.3,
+      "is": {
+        "pnl": 539.9,
+        "mdd": 1.95,
+        "pnl_mdd": 276.9,
+        "wr": 55.2,
+        "rr": 3.027,
+        "wr_margin": 30.4,
+        "trades": 4429,
+        "exit_reasons": {
+          "TP": 2334,
+          "SL": 1551,
+          "TIMEOUT": 535,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 646,
+          "dup_pat": 302,
+          "max_pos": 4722
+        }
+      },
+      "wf": {
+        "folds": [
+          54.0,
+          66.4,
+          88.9,
+          136.2,
+          88.6
+        ],
+        "oos_total": 434.1,
+        "all_pass": true
+      }
+    },
+    "TIGHT   [0.8,1.2]": {
+      "clamp_lo": 0.8,
+      "clamp_hi": 1.2,
+      "is": {
+        "pnl": 543.0,
+        "mdd": 1.9,
+        "pnl_mdd": 285.8,
+        "wr": 55.2,
+        "rr": 3.045,
+        "wr_margin": 30.5,
+        "trades": 4433,
+        "exit_reasons": {
+          "TP": 2338,
+          "SL": 1551,
+          "TIMEOUT": 535,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 671,
+          "dup_pat": 300,
+          "max_pos": 4695
+        }
+      },
+      "wf": {
+        "folds": [
+          57.2,
+          67.6,
+          88.2,
+          137.3,
+          86.5
+        ],
+        "oos_total": 436.8,
+        "all_pass": true
+      }
+    },
+    "NO_ATR  [1.0,1.0]": {
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.0,
+      "is": {
+        "pnl": 532.8,
+        "mdd": 1.95,
+        "pnl_mdd": 273.2,
+        "wr": 56.0,
+        "rr": 2.913,
+        "wr_margin": 30.4,
+        "trades": 4479,
+        "exit_reasons": {
+          "TP": 2406,
+          "SL": 1544,
+          "TIMEOUT": 520,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 592,
+          "dup_pat": 313,
+          "max_pos": 4715
+        }
+      },
+      "wf": {
+        "folds": [
+          64.7,
+          64.9,
+          86.0,
+          129.5,
+          87.9
+        ],
+        "oos_total": 433.0,
+        "all_pass": true
+      }
+    },
+    "SHRINK  [0.5,1.0]": {
+      "clamp_lo": 0.5,
+      "clamp_hi": 1.0,
+      "is": {
+        "pnl": 530.8,
+        "mdd": 1.93,
+        "pnl_mdd": 275.0,
+        "wr": 57.8,
+        "rr": 2.667,
+        "wr_margin": 30.5,
+        "trades": 4642,
+        "exit_reasons": {
+          "TP": 2606,
+          "SL": 1555,
+          "TIMEOUT": 472,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 646,
+          "dup_pat": 316,
+          "max_pos": 4495
+        }
+      },
+      "wf": {
+        "folds": [
+          66.4,
+          64.6,
+          86.6,
+          127.9,
+          83.1
+        ],
+        "oos_total": 428.5,
+        "all_pass": true
+      }
+    },
+    "EXPAND  [1.0,1.5]": {
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.5,
+      "is": {
+        "pnl": 561.7,
+        "mdd": 1.91,
+        "pnl_mdd": 294.1,
+        "wr": 54.7,
+        "rr": 3.239,
+        "wr_margin": 31.1,
+        "trades": 4314,
+        "exit_reasons": {
+          "TP": 2223,
+          "SL": 1515,
+          "TIMEOUT": 567,
+          "OOS_END": 9
+        },
+        "blocked": {
+          "momentum": 42,
+          "agg_risk": 0,
+          "dir_cap": 620,
+          "dup_pat": 286,
+          "max_pos": 4879
+        }
+      },
+      "wf": {
+        "folds": [
+          58.4,
+          67.9,
+          90.9,
+          142.1,
+          92.9
+        ],
+        "oos_total": 452.2,
+        "all_pass": true
+      }
+    }
+  },
+  "phase2_decay_interaction": {
+    "Decay_ON + ATR[1.0,1.5]": {
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.5,
+      "decay": 0.9975,
+      "is": {
+        "pnl": 561.7,
+        "mdd": 1.91,
+        "pnl_mdd": 294.1,
+        "wr": 54.7,
+        "rr": 3.239,
+        "wr_margin": 31.1,
+        "trades": 4314,
+        "exit_reasons": {
+          "TP": 2223,
+          "SL": 1515,
+          "TIMEOUT": 567,
+          "OOS_END": 9
+        }
+      },
+      "wf": {
+        "folds": [
+          58.4,
+          67.9,
+          90.9,
+          142.1,
+          92.9
+        ],
+        "oos_total": 452.2,
+        "all_pass": true
+      }
+    },
+    "Decay_OFF + ATR[1.0,1.5]": {
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.5,
+      "decay": 0.0,
+      "is": {
+        "pnl": 529.3,
+        "mdd": 3.07,
+        "pnl_mdd": 172.4,
+        "wr": 50.4,
+        "rr": 3.63,
+        "wr_margin": 28.8,
+        "trades": 3792,
+        "exit_reasons": {
+          "TP": 1549,
+          "TIMEOUT": 870,
+          "SL": 1364,
+          "OOS_END": 9
+        }
+      },
+      "wf": {
+        "folds": [
+          57.7,
+          65.9,
+          79.4,
+          145.3,
+          78.5
+        ],
+        "oos_total": 426.7,
+        "all_pass": true
+      }
+    },
+    "Decay_ON + NO_ATR[1,1]": {
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.0,
+      "decay": 0.9975,
+      "is": {
+        "pnl": 532.8,
+        "mdd": 1.95,
+        "pnl_mdd": 273.2,
+        "wr": 56.0,
+        "rr": 2.913,
+        "wr_margin": 30.4,
+        "trades": 4479,
+        "exit_reasons": {
+          "TP": 2406,
+          "SL": 1544,
+          "TIMEOUT": 520,
+          "OOS_END": 9
+        }
+      },
+      "wf": {
+        "folds": [
+          64.7,
+          64.9,
+          86.0,
+          129.5,
+          87.9
+        ],
+        "oos_total": 433.0,
+        "all_pass": true
+      }
+    },
+    "Decay_OFF + NO_ATR[1,1]": {
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.0,
+      "decay": 0.0,
+      "is": {
+        "pnl": 521.8,
+        "mdd": 2.56,
+        "pnl_mdd": 203.8,
+        "wr": 52.4,
+        "rr": 3.204,
+        "wr_margin": 28.6,
+        "trades": 3999,
+        "exit_reasons": {
+          "TP": 1790,
+          "TIMEOUT": 808,
+          "SL": 1392,
+          "OOS_END": 9
+        }
+      },
+      "wf": {
+        "folds": [
+          57.7,
+          67.0,
+          82.1,
+          135.1,
+          84.5
+        ],
+        "oos_total": 426.4,
+        "all_pass": true
+      }
+    }
+  },
+  "interaction_analysis": {
+    "is_interaction_effect": 21.4,
+    "oos_interaction_effect": 18.9,
+    "is_factorial": {
+      "atr_on_decay_on": 561.7,
+      "atr_on_decay_off": 529.3,
+      "atr_off_decay_on": 532.8,
+      "atr_off_decay_off": 521.8
+    },
+    "oos_factorial": {
+      "atr_on_decay_on": 452.2,
+      "atr_on_decay_off": 426.7,
+      "atr_off_decay_on": 433.0,
+      "atr_off_decay_off": 426.4
+    }
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "config": "EXPAND  [1.0,1.5]",
+      "is_pnl": 561.7,
+      "is_pm": 294.1,
+      "is_wr": 54.7,
+      "oos_total": 452.2,
+      "all_pass": true
+    },
+    {
+      "rank": 2,
+      "config": "Decay_ON + ATR[1.0,1.5]",
+      "is_pnl": 561.7,
+      "is_pm": 294.1,
+      "is_wr": 54.7,
+      "oos_total": 452.2,
+      "all_pass": true
+    },
+    {
+      "rank": 3,
+      "config": "NARROW  [0.6,1.4]",
+      "is_pnl": 548.5,
+      "is_pm": 279.8,
+      "is_wr": 55.8,
+      "oos_total": 441.0,
+      "all_pass": true
+    },
+    {
+      "rank": 4,
+      "config": "CURRENT [0.5,1.5]",
+      "is_pnl": 547.0,
+      "is_pm": 279.1,
+      "is_wr": 56.0,
+      "oos_total": 439.8,
+      "all_pass": true
+    },
+    {
+      "rank": 5,
+      "config": "TIGHT   [0.8,1.2]",
+      "is_pnl": 543.0,
+      "is_pm": 285.8,
+      "is_wr": 55.2,
+      "oos_total": 436.8,
+      "all_pass": true
+    },
+    {
+      "rank": 6,
+      "config": "TIGHTER [0.7,1.3]",
+      "is_pnl": 539.9,
+      "is_pm": 276.9,
+      "is_wr": 55.2,
+      "oos_total": 434.1,
+      "all_pass": true
+    },
+    {
+      "rank": 7,
+      "config": "NO_ATR  [1.0,1.0]",
+      "is_pnl": 532.8,
+      "is_pm": 273.2,
+      "is_wr": 56.0,
+      "oos_total": 433.0,
+      "all_pass": true
+    },
+    {
+      "rank": 8,
+      "config": "Decay_ON + NO_ATR[1,1]",
+      "is_pnl": 532.8,
+      "is_pm": 273.2,
+      "is_wr": 56.0,
+      "oos_total": 433.0,
+      "all_pass": true
+    },
+    {
+      "rank": 9,
+      "config": "SHRINK  [0.5,1.0]",
+      "is_pnl": 530.8,
+      "is_pm": 275.0,
+      "is_wr": 57.8,
+      "oos_total": 428.5,
+      "all_pass": true
+    },
+    {
+      "rank": 10,
+      "config": "Decay_OFF + ATR[1.0,1.5]",
+      "is_pnl": 529.3,
+      "is_pm": 172.4,
+      "is_wr": 50.4,
+      "oos_total": 426.7,
+      "all_pass": true
+    },
+    {
+      "rank": 11,
+      "config": "Decay_OFF + NO_ATR[1,1]",
+      "is_pnl": 521.8,
+      "is_pm": 203.8,
+      "is_wr": 52.4,
+      "oos_total": 426.4,
+      "all_pass": true
+    }
+  ],
+  "key_answer": {
+    "current_oos": 439.8,
+    "no_atr_oos": 433.0,
+    "diff": -6.8,
+    "recommendation": "EXPAND  [1.0,1.5]"
+  },
+  "elapsed_seconds": 74.5
+}

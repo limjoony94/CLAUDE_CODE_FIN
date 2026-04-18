@@ -1,0 +1,521 @@
+{
+  "audit_metadata": {
+    "audit_date": "2026-03-18",
+    "bot_version": "v1.63.1",
+    "auditor": "quality-engineer",
+    "scope": "scripts/production/pattern_5m/ (14 modules)",
+    "total_edge_cases": 42,
+    "severity_summary": {
+      "HIGH": 11,
+      "MEDIUM": 19,
+      "LOW": 12
+    }
+  },
+
+  "edge_cases": [
+
+    {
+      "id": "E-001",
+      "category": "Race",
+      "description": "Decay TP update races with TP fill. update_single_tp places new TP order, then cancels old one. If old TP fills between place-new and cancel-old, both the fill AND new TP order exist. New TP order becomes orphan (no matching position after fill processing).",
+      "trigger": "TP decay update coincides with TP order fill on exchange (price reaches TP between place and cancel calls, ~100-500ms window)",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "current_mitigation": "update_single_tp uses place-first/cancel-after pattern. verify_tp_sl_orders periodically checks for orphan orders.",
+      "gap": "If old TP fills AND new TP is placed, the new TP order lingers as orphan until verify cycle detects it. verify_tp_sl_orders would re-place a TP for a position that no longer exists (already closed). However, reduceOnly=True prevents opening new positions.",
+      "fix_suggestion": "After cancel-old-TP, check if position was closed during the update. If slot was removed by check_position_status between place and cancel, cancel the newly placed TP order immediately."
+    },
+
+    {
+      "id": "E-002",
+      "category": "Race",
+      "description": "Cascade SL update races with SL fill. update_single_sl places new tighter SL, then cancels old SL. If old SL fills between place-new and cancel-old, both execute — double SL on same position direction.",
+      "trigger": "SL cascade tightening coincides with original SL fill on exchange. Price reaches old SL level during the ~100-500ms window of place→cancel.",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "current_mitigation": "Place-first/cancel-after pattern in update_single_sl. New SL at tighter level would NOT trigger before old SL. reduceOnly on both orders. Emergency SL has closePosition=true (1-per-direction limit on BingX).",
+      "gap": "If old SL fills first, the new tighter SL becomes orphan. Per-slot fill detection relies on order IDs matching — the new SL ID won't match what check_position_status expects. However, since the exchange position contracts would decrease, check_position_status should still detect the closure via quantity comparison.",
+      "fix_suggestion": "After cascade tightening completes, verify the position still exists on exchange before saving state. Minor risk — current detection mechanisms cover this adequately."
+    },
+
+    {
+      "id": "E-003",
+      "category": "Race",
+      "description": "Emergency SL cancel-first gap during update_emergency_sl. BingX requires cancel-first for closePosition=true orders (1-per-direction limit). Between cancel and place, no emergency SL protects the positions.",
+      "trigger": "update_emergency_sl is called (after every entry/exit). Network latency between cancel and place calls creates an unprotected window.",
+      "impact": "MEDIUM",
+      "probability": "MEDIUM",
+      "current_mitigation": "Per-slot individual SL orders provide protection during the gap. Comment in code explicitly acknowledges: 'Per-slot SLs cover the brief protection gap during cancel-place.' v1.59.5 design decision.",
+      "gap": "If ALL per-slot SL orders have also failed or been consumed (e.g., cascade tightened SL already filled), the gap could leave positions unprotected. In practice, the gap is <1 second.",
+      "fix_suggestion": "Acceptable risk given per-slot SLs. Log a warning if the gap exceeds 2 seconds for monitoring."
+    },
+
+    {
+      "id": "E-004",
+      "category": "Race",
+      "description": "Entry order placed but crash before state save. Market order executes on exchange, but state['positions'] is not updated. On restart, position exists on exchange but not in local state.",
+      "trigger": "Crash/power loss between exchange.create_market_order() return (line 208 in position_open.py) and save_state() call (line 297).",
+      "impact": "MEDIUM",
+      "probability": "VERY_LOW",
+      "current_mitigation": "recover_from_crash and sync_position_with_exchange detect orphan exchange positions and call recover_position_to_state. Ghost position detection also warns.",
+      "gap": "Recovery creates slots with potentially wrong pattern_name (falls back to log/backup recovery). TP/SL orders won't exist yet for the orphan — recovery must place them. Entry price may be averaged by BingX if same-direction positions existed.",
+      "fix_suggestion": "Current recovery mechanisms are comprehensive (4-layer pattern recovery: state backup, logs, trade_history, median fallback). Acceptable risk."
+    },
+
+    {
+      "id": "E-005",
+      "category": "Race",
+      "description": "Position closed during entry processing. After fetching slot availability but before placing the order, a different slot's SL fills, freeing a slot and triggering cascade. The cascade could close all same-direction positions while entry is mid-flight.",
+      "trigger": "SL cascade fires on existing positions while open_position is executing for a new entry. Both processes modify state['positions'] concurrently (single-threaded but interleaved via API calls).",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "Bot is single-threaded. check_position_status runs before _process_entry_signal in the main loop. During open_position execution, no other position checking occurs until the next loop iteration.",
+      "gap": "The exchange may close SL orders autonomously (exchange-side trigger), but the bot won't know until next check_position_status call. New entry proceeds with stale slot count. Worst case: 1 extra position beyond max_positions temporarily.",
+      "fix_suggestion": "No fix needed — single-threaded execution prevents true concurrency. The temporary over-allocation resolves on next loop iteration."
+    },
+
+    {
+      "id": "E-006",
+      "category": "Quantity",
+      "description": "Partial fill on market entry order. BingX market orders are usually fully filled, but in extreme low liquidity the order could partially fill. Bot stores order['filled'] quantity but does not handle the case where filled < requested.",
+      "trigger": "Extreme market conditions (flash crash, API outage recovery) where BTC/USDT perpetual liquidity is temporarily thin.",
+      "impact": "MEDIUM",
+      "probability": "VERY_LOW",
+      "current_mitigation": "_get_actual_fill_price reads actual_quantity from order['filled'] and uses min(exchange_total_qty, quantity) to cap. The slot stores actual_quantity as 'quantity'.",
+      "gap": "TP/SL orders are placed with quantity = actual_quantity (from fill). If partial fill, TP/SL correctly match. However, position_value calculation and sizing use the requested quantity, so logging may be misleading. The unfilled portion silently disappears.",
+      "fix_suggestion": "Log a warning if actual_quantity < 0.95 * requested_quantity. No functional fix needed since TP/SL correctly use actual_quantity."
+    },
+
+    {
+      "id": "E-007",
+      "category": "Quantity",
+      "description": "SL order quantity exceeds remaining position quantity after partial scale-out. If a scale-out TP fills partially, remaining_quantity updates, but the SL order still has the original full quantity.",
+      "trigger": "Scale-out mode enabled with staged TPs. Stage 1 fills, reducing remaining_quantity. SL order still references original full quantity.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "BingX reduceOnly=true on SL orders means excess quantity is rejected or capped to actual position size. SL will close whatever remains.",
+      "gap": "If BingX rejects the SL entirely instead of capping it (behavior depends on exchange implementation), position could be unprotected. Emergency SL with closePosition=true provides backstop.",
+      "fix_suggestion": "After scale-out stage fill, update SL order quantity to match remaining_quantity. Currently scale-out is disabled in production."
+    },
+
+    {
+      "id": "E-008",
+      "category": "Quantity",
+      "description": "Emergency SL total_qty calculation includes pending-close slots. _place_emergency_sl_for_direction sums quantity from all dir_slots without excluding _pending_close slots.",
+      "trigger": "Pending-close slots exist (soft-delete cycle 1) while emergency SL is being re-placed.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "Emergency SL uses closePosition=true which closes the entire direction regardless of quantity. The amount parameter is informational for BingX with closePosition.",
+      "gap": "If closePosition is not honored by BingX (fallback to amount-based), the SL might try to close more than the actual position. reduceOnly prevents opening reverse positions. BingX would cap to actual position size.",
+      "fix_suggestion": "Filter out _pending_close slots from dir_slots in _place_emergency_sl_for_direction. Low priority since closePosition=true is the primary mechanism."
+    },
+
+    {
+      "id": "E-009",
+      "category": "API",
+      "description": "Network disconnection after order placement but before confirmation. create_market_order succeeds on exchange but the response is lost due to network failure. Bot doesn't know the order ID.",
+      "trigger": "Network interruption (WiFi drop, ISP issue) during the response phase of an API call. Exchange processed the order but bot received a NetworkError.",
+      "impact": "HIGH",
+      "probability": "LOW",
+      "current_mitigation": "open_position catches ccxt.NetworkError and returns False. On next sync cycle, sync_position_with_exchange detects the orphan position and recovers it. _api_call_with_retry retries network errors.",
+      "gap": "Between the failed entry and next sync (up to 5 minutes), the new position has NO TP/SL protection. If price moves sharply against, there's no SL. The sync interval is POSITION_SYNC_INTERVAL_MINUTES=5.",
+      "fix_suggestion": "After any NetworkError during order placement, immediately trigger a force sync rather than waiting for the next scheduled sync. Add: if network error during open_position, call sync_position_with_exchange on next loop iteration."
+    },
+
+    {
+      "id": "E-010",
+      "category": "API",
+      "description": "Rate limit during critical SL placement. _api_call_with_retry retries with backoff, but if all retries fail, the SL order is never placed. Position is left unprotected.",
+      "trigger": "High API activity (many positions being adjusted simultaneously) causes BingX rate limiting. All retry attempts for SL placement fail.",
+      "impact": "HIGH",
+      "probability": "LOW",
+      "current_mitigation": "open_position has a 2-retry loop for SL placement (lines 306-318). If still fails, update_emergency_sl is called as fallback. verify_tp_sl_orders re-places missing SLs periodically.",
+      "gap": "If both individual SL and emergency SL fail due to rate limiting, position is unprotected until the next verify_tp_sl_orders cycle (TP_SL_VERIFY_INTERVAL_SECONDS). The verify also makes API calls which could also be rate-limited.",
+      "fix_suggestion": "Add exponential backoff specifically for SL placement with longer persistence (up to 60s of retries). Consider marking the slot as 'sl_critical' to prioritize SL placement on next loop iteration."
+    },
+
+    {
+      "id": "E-011",
+      "category": "API",
+      "description": "BingX server maintenance during active positions. During scheduled or unscheduled maintenance, all API calls fail. Positions are unprotected (exchange-side SL orders remain active, but bot cannot adjust or verify them).",
+      "trigger": "BingX maintenance window (typically announced but sometimes emergency). All API calls return errors for 30-120 minutes.",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "current_mitigation": "Circuit breaker (5 failures → 60s cooldown). Exchange-side TP/SL orders persist independently of bot connectivity. Emergency SL with closePosition=true remains active.",
+      "gap": "If config changes require TP/SL adjustment during maintenance, they cannot be applied. The bot will retry endlessly with circuit breaker pauses. No alert mechanism to notify operator of extended outage.",
+      "fix_suggestion": "Add alerting (e.g., log CRITICAL) when circuit breaker trips more than 3 times consecutively. Ensure all SL orders are placed on-exchange before any planned maintenance."
+    },
+
+    {
+      "id": "E-012",
+      "category": "API",
+      "description": "Stale ticker price from cache used for position sizing or TP/SL calculation. APICache has TTL of 5 seconds, but during high volatility, 5-second-old prices can be significantly wrong.",
+      "trigger": "Flash crash or spike where BTC moves >1% in <5 seconds. Cached ticker price from 4.9 seconds ago is used for critical calculations.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "open_position uses force_refresh=True for both balance and ticker fetches. Most critical calculations force-refresh the cache.",
+      "gap": "Some maintenance window operations (position status logging, health checks) use cached values, but these are non-critical. Entry calculations always force-refresh.",
+      "fix_suggestion": "No fix needed — critical paths already force-refresh. Current design is correct."
+    },
+
+    {
+      "id": "E-013",
+      "category": "State",
+      "description": "OneDrive sync conflict corrupts state.json. Two processes or OneDrive sync conflict writes a partial or merged state file.",
+      "trigger": "Bot writes state.json at the same moment OneDrive syncs. OneDrive file locking conflict occurs on the atomic os.replace() call.",
+      "impact": "HIGH",
+      "probability": "LOW",
+      "current_mitigation": "Atomic write via tempfile + os.replace with 3-retry PermissionError handling (_atomic_replace_with_retry). Fallback to .new file on failure. load_state tries .new, .bak, and timestamped backups on corruption. Timestamped backups on trade close.",
+      "gap": "If both main and .bak are corrupted simultaneously (e.g., OneDrive syncs both at wrong time), recovery falls back to timestamped backups. If all fail, default state is created (all position data lost). Trade history in metrics.json provides partial recovery.",
+      "fix_suggestion": "Consider writing state to a non-OneDrive directory for the primary file, with periodic copy to OneDrive for backup. Or use SQLite instead of JSON for ACID guarantees."
+    },
+
+    {
+      "id": "E-014",
+      "category": "State",
+      "description": "Pending-close slot becomes permanently stuck. _resolve_pending_close_slots is only called at the start of check_position_status. If the bot crashes after marking slots as pending but before the next cycle's resolve, the pending flag persists. On restart, the first check_position_status call should resolve it, BUT if the exchange position actually exists, the slot is restored — and then never enters the normal closure flow again.",
+      "trigger": "Bot crash after marking pending-close but before next cycle resolves. Exchange position briefly returns 0 contracts during the crash, then returns to normal.",
+      "impact": "MEDIUM",
+      "probability": "VERY_LOW",
+      "current_mitigation": "_resolve_pending_close_slots checks exchange state on startup. If exchange shows position exists, slots are restored (pending flags removed). If exchange shows 0, closure is confirmed.",
+      "gap": "If exchange returns 0 contracts at crash time AND at restart time (double transient), the slot is incorrectly confirmed as closed and position becomes orphan. However, sync_position_with_exchange would then detect and recover it.",
+      "fix_suggestion": "Add a maximum pending-close duration (e.g., 10 minutes). If pending-close exceeds this, force a sync_position_with_exchange for that direction."
+    },
+
+    {
+      "id": "E-015",
+      "category": "State",
+      "description": "cascade_tightened flag persists through recovery, preventing future cascade tightening on recovered positions. When a position is recovered via recover_position_to_state, the 'recovered' flag is set but cascade_tightened is not explicitly cleared.",
+      "trigger": "Position had cascade_tightened=True, then bot crashes, then position is recovered from backup. The recovered slot inherits cascade_tightened from the backup data.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "recover_position_to_state creates fresh slot dicts without cascade_tightened. Backup-based recovery uses backup state data which may include the flag.",
+      "gap": "If backup state has cascade_tightened=True and the position is recovered, the no-refire logic in _handle_position_closed will skip cascade tightening for that slot's SL exit. This is actually correct behavior — the position was already cascade-tightened.",
+      "fix_suggestion": "No fix needed — this is correct behavior. The no-refire rule should apply to previously tightened positions regardless of recovery."
+    },
+
+    {
+      "id": "E-016",
+      "category": "State",
+      "description": "State and metrics desync during crash. If bot crashes after updating state['total_trades'] but before save_metrics(), the counts diverge.",
+      "trigger": "Crash between save_state (line 305 in position_close.py) and save_metrics (line 309).",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "sync_metrics_with_state runs at bot startup and reconciles counts. When state has more trades than metrics, metrics are updated to match. When state has fewer (corruption), state is updated from metrics.",
+      "gap": "Trade history entries in metrics may be missing the last trade. The PnL statistics would be slightly off until corrected by the sync. No financial impact since exchange execution is independent of these counters.",
+      "fix_suggestion": "No fix needed — sync_metrics_with_state handles this correctly at startup."
+    },
+
+    {
+      "id": "E-017",
+      "category": "Order",
+      "description": "Dual SL orders for same slot: individual SL + emergency SL both active. A position has both its per-slot SL order and the direction-wide emergency SL (closePosition=true). If per-slot SL fires first, it closes that slot. But emergency SL closes ENTIRE direction (closePosition=true), closing all remaining same-direction slots.",
+      "trigger": "Normal operation: every position has both per-slot SL and emergency SL. When ONE slot's SL fires, the exchange fills it. The emergency SL for that direction remains active at a worse price.",
+      "impact": "MEDIUM",
+      "probability": "MEDIUM",
+      "current_mitigation": "Emergency SL is placed at the worst (widest) SL price across all direction slots, with an additional buffer (EMERGENCY_SL_BUFFER_PCT). Per-slot SLs are tighter. Per-slot SL fires BEFORE emergency SL. After per-slot closure, update_emergency_sl is called to recalculate the emergency SL for remaining slots.",
+      "gap": "If per-slot SL fires but the bot doesn't process it quickly enough (e.g., during maintenance window), and price continues falling to emergency SL level, the emergency SL fires and closes ALL remaining same-direction positions. This is by design (safety net), but could cause unnecessary mass closure if only one slot was targeted.",
+      "fix_suggestion": "This is working as designed — emergency SL is the safety net of last resort. The buffer ensures it only fires in extreme scenarios. No fix needed."
+    },
+
+    {
+      "id": "E-018",
+      "category": "Order",
+      "description": "EXCHANGE_MANAGED state cannot be resolved when BingX order is invisible. _find_close_position_order searches open_orders for closePosition=true STOP_MARKET orders. If BingX does not return the order in open_orders (API quirk or order type mismatch), the EXCHANGE_MANAGED state persists forever.",
+      "trigger": "BingX API quirks where certain order types are not returned in fetch_open_orders. Known CCXT normalization issues (STOP_MARKET -> 'market') were fixed in v1.59.6 with dual type check.",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "current_mitigation": "v1.59.6 fixed CCXT type normalization (checks both ccxt type and info.type). _ensure_emergency_sl_exists runs every loop iteration. EXCHANGE_MANAGED state is accepted as 'BingX has protection' — per-slot SLs provide actual protection.",
+      "gap": "If a new BingX API format change or CCXT version update breaks _find_close_position_order again, EXCHANGE_MANAGED could become permanent. The pass statement in _ensure_emergency_sl_exists (line 622 of bot.py) means no retry for EXCHANGE_MANAGED.",
+      "fix_suggestion": "Add periodic full-resolution retry for EXCHANGE_MANAGED: every N minutes, try to find and adopt the actual order. If not found after 3 attempts, cancel all closePosition orders for that direction and re-place fresh."
+    },
+
+    {
+      "id": "E-019",
+      "category": "Order",
+      "description": "TP decay creates very close-to-entry TP that BingX rejects. As bars_held increases, decay_factor approaches 0, making decayed_tp approach entry_price. The safety floor is entry_price +/- 1.0 (lines 103/108 of position_management.py), but BingX may have a minimum distance requirement for TP orders.",
+      "trigger": "Position held for very long time (>48h with decay_rate=0.9975). decayed_tp = entry + 1.0 may be rejected if BingX minimum trigger distance is larger.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "Safety floor of entry_price +/- $1.0 in _apply_time_decay_tp. Timeout at 288 bars (24h) closes positions before decay becomes extreme.",
+      "gap": "If timeout is disabled or increased, and position survives past the decay half-life multiple times, the $1.0 floor may still be too close for BingX's minimum. update_single_tp would log a warning but the old TP remains.",
+      "fix_suggestion": "Change the floor to max(entry_price + 10.0, entry_price * 1.0001) for LONG (and inverse for SHORT) to ensure minimum distance. Or use a percentage-based floor (e.g., 0.01% from entry)."
+    },
+
+    {
+      "id": "E-020",
+      "category": "Cascade",
+      "description": "Cascade SL tightens to below exchange minimum order distance. After 85% tightening (keep_ratio=0.15), an SL with original distance of $500 becomes $75. After a second cascade (if no-refire were disabled), it would become $11.25. With non-cumulative mode, it stays at $75.",
+      "trigger": "Small SL distance patterns (SL=1.44%) combined with low BTC price. E.g., entry=80000, SL distance=1152, after cascade: $172.80. This is well above minimums.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "Non-cumulative cascade (v1.64.0) uses original_sl_distance, preventing compounding. No-refire prevents cascade on already-cascaded positions. Minimum SL distance is typically >$100 even after 85% tightening.",
+      "gap": "No explicit minimum distance check after cascade calculation. For very small SL patterns at low prices, the distance could theoretically be too small, but current pattern SL ranges (1.44-5.95%) make this impossible at BTC>50000.",
+      "fix_suggestion": "Add a minimum absolute distance floor (e.g., $50) after cascade calculation. Low priority."
+    },
+
+    {
+      "id": "E-021",
+      "category": "Cascade",
+      "description": "original_sl_distance not stored for positions opened before v1.64.0 (non-cumulative cascade). First cascade stores abs(entry - old_sl) as original_sl_distance, but if SL was already tightened by a prior cascade (before no-refire), the 'original' captured is actually already-tightened.",
+      "trigger": "Bot upgrade from version without non-cumulative cascade to v1.64.0 with existing cascaded positions in state.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "No-refire (cascade_tightened flag) prevents second cascade. Even if a cascaded position's original_sl_distance is wrong, it won't be cascaded again due to no-refire.",
+      "gap": "On a fresh bot restart where state has positions with cascade_tightened=True but no original_sl_distance, the no-refire logic correctly prevents further tightening. If somehow cascade_tightened is lost, the captured 'original' would be wrong.",
+      "fix_suggestion": "Store original_sl_distance at entry time (in open_position), not at first cascade time. This ensures the true original is always available."
+    },
+
+    {
+      "id": "E-022",
+      "category": "Cascade",
+      "description": "Pre-emptive cascade and reactive cascade both fire on same position. _apply_preemptive_cascade sets cascade_tightened=True and _preemptive_cascaded=True. Later, if a different same-direction position's SL hits, _cascade_tighten_sls checks cascade_tightened — the pre-emptively cascaded position is skipped by no-refire.",
+      "trigger": "Pre-emptive cascade fires first (unrealized loss exceeds threshold), then a same-direction SL actually hits.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "cascade_tightened=True from pre-emptive cascade causes no-refire skip in reactive cascade. This is correct behavior — the position was already tightened.",
+      "gap": "The pre-emptive cascade may have tightened to a different ratio than reactive cascade would have. Both use the same keep_ratio (85% tighten), so the result is the same.",
+      "fix_suggestion": "No fix needed — behavior is correct and intentional."
+    },
+
+    {
+      "id": "E-023",
+      "category": "Lifecycle",
+      "description": "Entry placed but TP/SL placement fails completely. Position exists on exchange with no TP, no SL, and no emergency SL.",
+      "trigger": "BingX rejects TP/SL orders due to exchange error (not rate limit, not breach). E.g., maintenance starting, or unusual error code.",
+      "impact": "HIGH",
+      "probability": "VERY_LOW",
+      "current_mitigation": "open_position retries SL placement 2 times (lines 306-318). If SL still fails, calls update_emergency_sl as fallback. verify_tp_sl_orders re-places missing orders periodically. _ensure_emergency_sl_exists checks every loop iteration.",
+      "gap": "Between entry and next verify/ensure cycle (potentially up to TP_SL_VERIFY_INTERVAL_SECONDS), if ALL placement attempts fail, position is unprotected. The 3-layer defense (retry + emergency SL + verify) makes this extremely unlikely.",
+      "fix_suggestion": "Consider adding an immediate force-close if SL cannot be placed after all retries AND emergency SL also fails. This would be the nuclear option — market-close the position rather than leave it unprotected."
+    },
+
+    {
+      "id": "E-024",
+      "category": "Lifecycle",
+      "description": "Position closed but record_closed_position crashes before removing slot from state. State still has the slot, but exchange position is gone.",
+      "trigger": "Exception in record_closed_position after cancel_remaining_orders but before del positions[slot_id] (line 287).",
+      "impact": "MEDIUM",
+      "probability": "VERY_LOW",
+      "current_mitigation": "sync_position_with_exchange detects 'bot has slots but exchange has none' and processes closure. On next sync cycle, the slot would be cleaned up.",
+      "gap": "Between the crash and next sync, the slot occupies a virtual position slot, preventing new entries. Statistics may be slightly off. Cancel_remaining_orders already ran, so TP/SL orders are cancelled — no double-execution risk.",
+      "fix_suggestion": "No fix needed — sync handles this. The 5-minute sync interval is acceptable for this extremely rare scenario."
+    },
+
+    {
+      "id": "E-025",
+      "category": "Lifecycle",
+      "description": "Duplicate entry for same pattern. check_entry_signal checks active_patterns set for duplicates, but there's a TOCTOU race: pattern is checked as not-active, then another position opens the same pattern before this entry completes.",
+      "trigger": "Cannot happen in practice — bot is single-threaded. The check and entry are in the same synchronous call chain.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "Single-threaded execution. active_patterns check (line 377 in signals.py) and open_position are called sequentially. No interleaving possible.",
+      "gap": "None — single-threaded design prevents this.",
+      "fix_suggestion": "No fix needed."
+    },
+
+    {
+      "id": "E-026",
+      "category": "Lifecycle",
+      "description": "Timeout closes a position while decay TP update is in progress. _check_position_timeouts and _apply_time_decay_tp both run in the trading window. If timeout closes a position, then decay tries to update the same slot's TP.",
+      "trigger": "Position reaches timeout threshold on the same bar that a decay update is scheduled.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "_check_position_timeouts runs BEFORE _apply_time_decay_tp in the main loop (lines 347-353 in bot.py). If timeout closes a position, it's removed from state before decay runs.",
+      "gap": "Decay iterates list(positions.items()) which is a snapshot. If timeout removed the slot from state between the snapshot and the update_single_tp call, the API call would try to update a TP for a non-existent position. BingX would return OrderNotFound, which is handled gracefully.",
+      "fix_suggestion": "Add a check in _apply_time_decay_tp: skip slot if slot_id not in state['positions']. Minor defensive improvement."
+    },
+
+    {
+      "id": "E-027",
+      "category": "Financial",
+      "description": "Leverage set_leverage fails silently. _set_leverage catches all exceptions and only logs warnings. If leverage is not set correctly, the position trades at whatever leverage was previously set on the exchange.",
+      "trigger": "BingX API error during set_leverage (lines 374-383 in position_open.py). Exchange retains previous leverage setting.",
+      "impact": "HIGH",
+      "probability": "LOW",
+      "current_mitigation": "_set_leverage logs warnings but doesn't propagate errors. The 'No need to change' case is handled (already at correct leverage). Network errors and value errors are caught.",
+      "gap": "If exchange has a different leverage than expected (e.g., manually changed to 10x via BingX web UI), and set_leverage fails, the bot trades with wrong leverage. Position size calculation uses config['leverage'], not exchange leverage. Actual P&L would be amplified/reduced vs expectations.",
+      "fix_suggestion": "After set_leverage, verify the actual leverage on exchange via a fetch call. If mismatch, abort entry with an error. This is the most impactful fix in this audit."
+    },
+
+    {
+      "id": "E-028",
+      "category": "Financial",
+      "description": "MDD sizing returns negative or zero scale. If dd_pct exceeds min_above by a large margin, mdd_scale could theoretically go below min_scale due to floating point, but the linear interpolation is bounded.",
+      "trigger": "Extreme drawdown (>20%) with specific floating point edge values.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "Linear interpolation between full_below (5%) and min_above (20%). dd_pct >= min_above → mdd_scale = min_scale (0.25). No path to negative.",
+      "gap": "If min_scale is configured as 0 or negative in YAML, the position size could be 0 or negative, causing the entry to fail gracefully (quantity <= 0 check).",
+      "fix_suggestion": "Add validation in validate_config: mdd_sizing.min_scale must be > 0 and <= 1.0."
+    },
+
+    {
+      "id": "E-029",
+      "category": "Financial",
+      "description": "Daily loss limit check uses local state daily_pnl which can be reset by daily boundary. If bot restarts at midnight, daily_pnl resets to 0, even if significant losses occurred just before midnight.",
+      "trigger": "Bot loses 12.9% at 23:58, restarts at 00:01, daily_pnl resets to 0.0. The 13% daily loss limit is not triggered.",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "current_mitigation": "Daily reset is by design — each trading day starts fresh. MDD sizing (peak equity HWM) provides cross-day drawdown protection independent of daily reset.",
+      "gap": "A sequence of near-limit daily losses across midnight boundaries could accumulate to larger-than-intended overall drawdown. MDD sizing partially addresses this.",
+      "fix_suggestion": "Consider a rolling 24-hour loss limit in addition to calendar-day limit. Low priority since MDD sizing provides the cross-day protection."
+    },
+
+    {
+      "id": "E-030",
+      "category": "Financial",
+      "description": "Aggregate risk cap uses stale position data for calculation. The direction-level SL exposure check (aggregate risk) is computed using position state that may not reflect the latest exchange prices.",
+      "trigger": "Fast market move changes unrealized P&L significantly since last state save.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "Aggregate risk uses SL distances (entry_price - sl_price), not current P&L. These are static once set. The risk cap is based on worst-case SL loss, not current market exposure.",
+      "gap": "If cascade SL tightening has moved SL closer, the aggregate risk is reduced, but the state update from cascade save may not have propagated to the entry-check code yet (in same loop iteration). Single-threaded execution means save_state is called before next entry check.",
+      "fix_suggestion": "No fix needed — SL-based aggregate risk is static and correctly reflects worst-case."
+    },
+
+    {
+      "id": "E-031",
+      "category": "Order",
+      "description": "adjust_tpsl_to_config cancels old orders before placing new ones (cancel-first pattern in _adjust_single_position_tpsl line 447). If new order placement fails after cancellation, position has no TP/SL.",
+      "trigger": "Bot restart with config change (e.g., tp_scale_factor changed). adjust_tpsl_to_config runs. Cancel succeeds but new placement fails (exchange error).",
+      "impact": "HIGH",
+      "probability": "LOW",
+      "current_mitigation": "verify_tp_sl_orders runs in maintenance window and would re-place missing orders. _ensure_emergency_sl_exists runs every loop. adjust_tpsl_to_config is followed by _verify_emergency_sl.",
+      "gap": "The gap between cancel and next verify cycle leaves position unprotected. Unlike update_single_sl which uses place-first/cancel-after, _adjust_single_position_tpsl uses cancel-first.",
+      "fix_suggestion": "Change _adjust_single_position_tpsl to use place-first/cancel-after pattern (like update_single_sl). Place new TP and SL, then cancel old ones. This eliminates the protection gap."
+    },
+
+    {
+      "id": "E-032",
+      "category": "Order",
+      "description": "verify_tp_sl_orders re-places orders for a position that was just closed. The skip_directions guard checks exchange qty < local qty, but if the exchange shows 0 contracts (all closed), skip_directions would contain the direction. However, the positions dict may still have the slot (not yet removed).",
+      "trigger": "Position closed on exchange between check_position_status and verify_tp_sl_orders in the same maintenance window.",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "skip_directions set excludes directions where exchange_qty < local_qty. If exchange shows 0, that direction is skipped. If position was already removed from state, no slots to verify.",
+      "gap": "If exchange shows 0 AND skip_directions doesn't catch it (fetch_positions fails), verify might try to re-place orders. But create_order with reduceOnly would fail since no position exists. Error is logged and ignored.",
+      "fix_suggestion": "No fix needed — multiple guards prevent actual harm."
+    },
+
+    {
+      "id": "E-033",
+      "category": "State",
+      "description": "Multiple save_state calls in rapid succession during cascade + closure processing. Each save_state creates a .bak of the previous state. During cascade tightening of N positions, save_state is called N+1 times. The .bak file keeps getting overwritten with slightly older data.",
+      "trigger": "Cascade SL triggers on 7 same-direction positions. _cascade_tighten_sls calls save_state once at end, but record_closed_position also calls save_state for the triggering closure.",
+      "impact": "LOW",
+      "probability": "MEDIUM",
+      "current_mitigation": "Timestamped backups are only created on trade close (is_trade_close=True). Regular save_state only updates .bak. The .bak is always the previous save, not the previous trade.",
+      "gap": ".bak file may contain state from 0.1 seconds ago rather than the last known-good state. If the final save_state corrupts and we fall back to .bak, we may lose the latest cascade tightening data. Per-slot SLs on exchange are already updated, so this is cosmetic.",
+      "fix_suggestion": "No fix needed — exchange-side orders reflect true state. State file is for bot's internal tracking."
+    },
+
+    {
+      "id": "E-034",
+      "category": "Lifecycle",
+      "description": "Hedge mode interference: LONG position TP/SL and SHORT position TP/SL orders could theoretically be confused by BingX. If positionSide parameter is missing or wrong, a LONG TP could accidentally close a SHORT position.",
+      "trigger": "Bug in _get_position_side returning wrong side, or BingX ignoring positionSide parameter.",
+      "impact": "HIGH",
+      "probability": "VERY_LOW",
+      "current_mitigation": "_get_position_side correctly returns 'LONG'/'SHORT' in hedge mode. All order placements pass positionSide parameter. reduceOnly=true on all TP/SL orders.",
+      "gap": "If BingX ever ignores positionSide and matches orders by side only, a LONG SL (sell stop) could close a SHORT position (which also needs a buy to close, so sell would ADD to short — but reduceOnly prevents this).",
+      "fix_suggestion": "No fix needed — positionSide + reduceOnly provide sufficient protection."
+    },
+
+    {
+      "id": "E-035",
+      "category": "API",
+      "description": "BingX averaged entry price defeats recovery price matching. When multiple same-direction positions exist, BingX returns a single aggregated position with averaged entryPrice. recover_position_to_state uses this averaged price for all recovery slots.",
+      "trigger": "Bot crash when 3 LONG positions exist at different entry prices. Recovery creates 3 slots all with the same averaged entry price.",
+      "impact": "MEDIUM",
+      "probability": "LOW",
+      "current_mitigation": "v1.59.4 acknowledged this as root cause of N/A pattern issues. Recovery uses backup state files and log files to find per-slot pattern names. TP/SL are recalculated from the averaged entry price (which may differ from original per-slot TPs/SLs).",
+      "gap": "Recalculated TP/SL using averaged entry price differs from original per-slot TP/SL prices. If TP was close to trigger, the new TP could be further away (missed profit) or closer (premature trigger). The deviation is typically small (<0.5%) for same-direction positions.",
+      "fix_suggestion": "Store all slot entry prices in a separate state field (e.g., _slot_entries) that BingX cannot average. On recovery, use these stored prices instead of exchange entryPrice. Moderate priority."
+    },
+
+    {
+      "id": "E-036",
+      "category": "State",
+      "description": "_last_decay_bar field persists across bot restarts, but bars_held is recalculated from wall clock time. If bot is stopped for 2 hours and restarted, bars_held jumps by ~24, but _last_decay_bar remains at the last processed value. Decay catches up immediately with a large jump.",
+      "trigger": "Bot restart after downtime. bars_held = (now - entry_time) / candle_seconds includes the downtime. _last_decay_bar is from before the downtime.",
+      "impact": "LOW",
+      "probability": "MEDIUM",
+      "current_mitigation": "Decay factor is calculated from bars_held, not incrementally. decay_rate^bars_held is the correct value regardless of when it was last updated. The TP update simply applies the correct decay for the current hold time.",
+      "gap": "If the bot was down for 4 hours, the TP jumps from its pre-downtime level to the correct decayed level in one step. This is actually correct behavior — the TP should reflect the true holding duration.",
+      "fix_suggestion": "No fix needed — the exponential decay formula is time-correct regardless of update frequency."
+    },
+
+    {
+      "id": "E-037",
+      "category": "Financial",
+      "description": "tp_scale_factor applied only at config load time. If dynamic_patterns.json is updated while bot is running, the tp_scale_factor is already baked into _dynamic_patterns_tpsl. A hot-reload of patterns without restart would skip the scaling.",
+      "trigger": "Manual edit of dynamic_patterns.json or re-scan while bot is running.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "Bot loads config once at startup. Pattern changes require bot restart. No hot-reload mechanism exists.",
+      "gap": "If hot-reload is ever added, tp_scale_factor must be re-applied. Current design is safe since restart is required.",
+      "fix_suggestion": "Document in CLAUDE.md that pattern changes require bot restart. No code fix needed."
+    },
+
+    {
+      "id": "E-038",
+      "category": "Order",
+      "description": "Scale-out TP order for stage N fills, but SL order still has full original quantity. BingX executes SL for original quantity, which exceeds remaining position. reduceOnly should cap this, but if BingX handles it by opening a reverse position instead of capping...",
+      "trigger": "Scale-out enabled, stage 1 TP fills reducing position, then SL triggers.",
+      "impact": "LOW",
+      "probability": "VERY_LOW",
+      "current_mitigation": "Scale-out is currently DISABLED in production config. reduceOnly=true on SL orders. Hedge mode means reverse-position would require opposite positionSide.",
+      "gap": "If scale-out is ever re-enabled, SL quantity should be updated after each stage fill. _check_scale_out_fills updates remaining_quantity in state but doesn't cancel/re-place the SL order.",
+      "fix_suggestion": "If scale-out is re-enabled, add SL order quantity update after each stage fill. Currently N/A since scale-out is disabled."
+    },
+
+    {
+      "id": "E-039",
+      "category": "Lifecycle",
+      "description": "close_position_market in position.py calls exchange.create_market_order for close. If this fails (network error), the position remains open but the bot may have already started cleanup (cancel_remaining_orders was called).",
+      "trigger": "Market close order fails due to network error after TP/SL orders have been cancelled.",
+      "impact": "HIGH",
+      "probability": "VERY_LOW",
+      "current_mitigation": "close_position_market returns False on failure. Caller can retry. TP/SL cancellation happens AFTER the close order in record_closed_position. For timeout/early-exit, the close order is placed first.",
+      "gap": "Need to verify: does close_position_market cancel orders before or after the market close? If cancel happens first and close fails, position is unprotected (no TP/SL, no close). Looking at the code — close_position_market likely places the market close order, and record_closed_position (which cancels orders) is only called on success.",
+      "fix_suggestion": "Verify the exact order of operations in close_position_market. Ensure cancel_remaining_orders is NEVER called before the position is actually closed on exchange."
+    },
+
+    {
+      "id": "E-040",
+      "category": "API",
+      "description": "fetch_my_trades returns limited history. get_actual_exit_price fetches last 20 trades. In high-frequency scenarios (many positions closing rapidly), the relevant trade may not be in the last 20.",
+      "trigger": "Mass cascade closure of 7+ positions in rapid succession. Each closure triggers fetch_my_trades(limit=20).",
+      "impact": "LOW",
+      "probability": "LOW",
+      "current_mitigation": "Fallback to ticker['last'] if trade not found (line 631 in position_monitor.py). _infer_exit_from_price provides reasonable classification based on current price vs TP/SL levels.",
+      "gap": "Exit price may be slightly inaccurate (using last ticker instead of actual fill). PnL calculation would use the ticker price, which could differ from fill price. Financial impact is small (typically <0.1% per trade).",
+      "fix_suggestion": "Increase limit to 50 for fetch_my_trades when processing mass closures. Or accumulate all trade IDs during a processing batch."
+    },
+
+    {
+      "id": "E-041",
+      "category": "State",
+      "description": "Confidence CSV file grows unbounded. _save_confidence_to_csv appends to CONFIDENCE_LOG_FILE on every signal. No rotation or cleanup mechanism.",
+      "trigger": "Long-running bot (weeks/months) generates thousands of entries.",
+      "impact": "LOW",
+      "probability": "HIGH",
+      "current_mitigation": "None — file grows indefinitely.",
+      "gap": "Eventually consumes disk space. OneDrive sync of large file may cause performance issues.",
+      "fix_suggestion": "Add rotation: keep last 10000 entries, or rotate monthly. Or use a fixed-size ring buffer approach."
+    },
+
+    {
+      "id": "E-042",
+      "category": "Cascade",
+      "description": "Undefined variable old_dist in _cascade_tighten_sls. Line 713 in position_monitor.py references 'old_dist' in the log message, but the variable is not defined in the non-cumulative cascade path. 'old_dist' was the local var name in the pre-v1.64.0 cumulative version.",
+      "trigger": "Any SL exit that triggers cascade tightening. The log statement will raise NameError, causing the cascade tightening for remaining positions to abort.",
+      "impact": "HIGH",
+      "probability": "HIGH",
+      "current_mitigation": "None — this appears to be a bug introduced in v1.64.0 when switching to non-cumulative cascade.",
+      "gap": "NameError on line 713 would cause _cascade_tighten_sls to fail after processing the first position (the log statement crashes before the loop continues). The except block catches at the function level, so remaining same-direction positions may NOT get their SLs tightened. save_state on line 729 may not execute.",
+      "fix_suggestion": "CRITICAL FIX: Replace 'old_dist' with 'abs(entry - old_sl)' on line 713 of position_monitor.py. Alternatively, compute old_dist = abs(entry - old_sl) before the log statement. This is the highest-priority finding in this audit."
+    }
+  ]
+}

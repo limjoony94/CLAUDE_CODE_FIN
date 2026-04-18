@@ -1,0 +1,254 @@
+{
+  "study": "volatility_adaptive_tpsl",
+  "date": "2026-03-16T01:58:09.819789",
+  "results": {
+    "BASELINE": {
+      "is": {
+        "trades": 2793,
+        "wr": 74.9,
+        "pnl": 558.41,
+        "mdd": 2.86,
+        "pm": 195.2,
+        "tp": 2091,
+        "sl": 693,
+        "rr": 2.027
+      },
+      "wf": {
+        "total_oos": 428.3,
+        "verdict": "PASS"
+      },
+      "params": {}
+    },
+    "V1_TP_VOL_0.5_2.0": {
+      "is": {
+        "trades": 3008,
+        "wr": 74.8,
+        "pnl": 566.95,
+        "mdd": 2.89,
+        "pm": 196.2,
+        "tp": 2249,
+        "sl": 750,
+        "rr": 1.673
+      },
+      "wf": {
+        "total_oos": 428.4,
+        "verdict": "PASS"
+      },
+      "params": {
+        "tp_vol_adapt": true,
+        "vol_clamp_lo": 0.5,
+        "vol_clamp_hi": 2.0
+      }
+    },
+    "V2_TPSL_VOL_0.5_2": {
+      "is": {
+        "trades": 3061,
+        "wr": 74.3,
+        "pnl": 584.1,
+        "mdd": 2.84,
+        "pm": 205.7,
+        "tp": 2272,
+        "sl": 780,
+        "rr": 1.82
+      },
+      "wf": {
+        "total_oos": 448.1,
+        "verdict": "PASS"
+      },
+      "params": {
+        "tp_vol_adapt": true,
+        "sl_vol_adapt": true,
+        "vol_clamp_lo": 0.5,
+        "vol_clamp_hi": 2.0
+      }
+    },
+    "V3_SL_VOL_0.5_2.0": {
+      "is": {
+        "trades": 2959,
+        "wr": 73.4,
+        "pnl": 551.63,
+        "mdd": 3.21,
+        "pm": 171.8,
+        "tp": 2170,
+        "sl": 780,
+        "rr": 1.841
+      },
+      "wf": {
+        "total_oos": 425.9,
+        "verdict": "PASS"
+      },
+      "params": {
+        "sl_vol_adapt": true,
+        "vol_clamp_lo": 0.5,
+        "vol_clamp_hi": 2.0
+      }
+    },
+    "V4_TPSL_WIDE": {
+      "is": {
+        "trades": 3114,
+        "wr": 73.4,
+        "pnl": 583.08,
+        "mdd": 3.3,
+        "pm": 176.7,
+        "tp": 2285,
+        "sl": 820,
+        "rr": 1.838
+      },
+      "wf": {
+        "total_oos": 453.6,
+        "verdict": "PASS"
+      },
+      "params": {
+        "tp_vol_adapt": true,
+        "sl_vol_adapt": true,
+        "vol_clamp_lo": 0.3,
+        "vol_clamp_hi": 3.0
+      }
+    },
+    "V5_TPSL_NARROW": {
+      "is": {
+        "trades": 2928,
+        "wr": 75.5,
+        "pnl": 575.7,
+        "mdd": 3.04,
+        "pm": 189.4,
+        "tp": 2209,
+        "sl": 710,
+        "rr": 1.788
+      },
+      "wf": {
+        "total_oos": 438.6,
+        "verdict": "PASS"
+      },
+      "params": {
+        "tp_vol_adapt": true,
+        "sl_vol_adapt": true,
+        "vol_clamp_lo": 0.7,
+        "vol_clamp_hi": 1.5
+      }
+    },
+    "V6_TP_VOL_NARROW": {
+      "is": {
+        "trades": 2947,
+        "wr": 75.0,
+        "pnl": 573.43,
+        "mdd": 3.04,
+        "pm": 188.6,
+        "tp": 2208,
+        "sl": 730,
+        "rr": 1.826
+      },
+      "wf": {
+        "total_oos": 437.1,
+        "verdict": "PASS"
+      },
+      "params": {
+        "tp_vol_adapt": true,
+        "vol_clamp_lo": 0.7,
+        "vol_clamp_hi": 1.5
+      }
+    },
+    "V7_SL_VOL_NARROW": {
+      "is": {
+        "trades": 2831,
+        "wr": 75.5,
+        "pnl": 568.77,
+        "mdd": 2.94,
+        "pm": 193.5,
+        "tp": 2134,
+        "sl": 688,
+        "rr": 2.006
+      },
+      "wf": {
+        "total_oos": 437.5,
+        "verdict": "PASS"
+      },
+      "params": {
+        "sl_vol_adapt": true,
+        "vol_clamp_lo": 0.7,
+        "vol_clamp_hi": 1.5
+      }
+    },
+    "FUND_0.01pct": {
+      "is": {
+        "trades": 2793,
+        "wr": 74.9,
+        "pnl": 551.82,
+        "mdd": 2.86,
+        "pm": 192.9,
+        "tp": 2091,
+        "sl": 693,
+        "rr": 1.978
+      },
+      "wf": {
+        "total_oos": 423.3,
+        "verdict": "PASS"
+      },
+      "params": {
+        "funding_cost_per_8h": 0.01
+      }
+    },
+    "FUND_0.03pct": {
+      "is": {
+        "trades": 2793,
+        "wr": 74.9,
+        "pnl": 538.64,
+        "mdd": 2.87,
+        "pm": 187.7,
+        "tp": 2091,
+        "sl": 693,
+        "rr": 1.887
+      },
+      "wf": {
+        "total_oos": 413.4,
+        "verdict": "PASS"
+      },
+      "params": {
+        "funding_cost_per_8h": 0.03
+      }
+    },
+    "FUND_0.05pct": {
+      "is": {
+        "trades": 2793,
+        "wr": 74.9,
+        "pnl": 525.46,
+        "mdd": 2.87,
+        "pm": 183.1,
+        "tp": 2091,
+        "sl": 693,
+        "rr": 1.801
+      },
+      "wf": {
+        "total_oos": 403.4,
+        "verdict": "PASS"
+      },
+      "params": {
+        "funding_cost_per_8h": 0.05
+      }
+    },
+    "COMBO_TP_VOL+FUND": {
+      "is": {
+        "trades": 3008,
+        "wr": 74.8,
+        "pnl": 560.08,
+        "mdd": 2.9,
+        "pm": 193.1,
+        "tp": 2249,
+        "sl": 750,
+        "rr": 1.639
+      },
+      "wf": {
+        "total_oos": 423.3,
+        "verdict": "PASS"
+      },
+      "params": {
+        "tp_vol_adapt": true,
+        "vol_clamp_lo": 0.5,
+        "vol_clamp_hi": 2.0,
+        "funding_cost_per_8h": 0.01
+      }
+    }
+  },
+  "baseline_oos": 428.3,
+  "elapsed_s": 51.1
+}

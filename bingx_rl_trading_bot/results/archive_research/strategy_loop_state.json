@@ -1,0 +1,142 @@
+{
+  "iteration": 25,
+  "status": "GO",
+  "hypothesis": "Disable MCC, keep Trail only",
+  "previous_findings": [
+    "Cascade SL bug (88.6% SKIP) was root cause of live losses \u2014 fixed in v1.67.1",
+    "Cascade OFF = -90.8% OOS (parity scanner) \u2014 system REQUIRES cascade",
+    "Cascade ON = +521.1% OOS (parity scanner) \u2014 healthy with cascade",
+    "RX1 (cascade 98%/pre 2%) rejected: NON-DISC + 100% cascade dependent",
+    "TP/SL scaling cannot fix R:R without cascade (Track C)",
+    "Vol_adapt + TP decay not yet in scanner (only timeout PnL + TP decay added)",
+    "Scanner-Production parity gaps: vol_adapt, OPP_SIGNAL, early exit, MDD sizing still missing"
+  ],
+  "rejected_hypotheses": [
+    {
+      "iteration": 1,
+      "hypothesis": "Timeout 288 \u2192 192 bars: timeout \uc190\uc2e4 \ucd95\uc18c\ub85c \uc804\uccb4 PnL \uac1c\uc120",
+      "reason": "IS quick check failed"
+    },
+    {
+      "iteration": 2,
+      "hypothesis": "Timeout 288 \u2192 240 bars: \ubcf4\uc218\uc801 timeout \ucd95\uc18c",
+      "reason": "IS quick check failed"
+    },
+    {
+      "iteration": 4,
+      "hypothesis": "Direction Cap 6 \u2192 5: cascade-independent \ud074\ub7ec\uc2a4\ud130 \ubc29\uc5b4",
+      "reason": "IS quick check failed"
+    },
+    {
+      "iteration": 5,
+      "hypothesis": "Momentum Guard 1.5% \u2192 2.0%: \uc9c4\uc785 \uae30\ud68c \uc99d\uac00\ub85c \ubc00\ub3c4 \uc0c1\uc2b9",
+      "reason": "IS quick check failed"
+    },
+    {
+      "iteration": 6,
+      "hypothesis": "preemptive_cascade_pct 2.0 \u2192 1.0",
+      "reason": "REJECT",
+      "score": 0
+    },
+    {
+      "iteration": 7,
+      "hypothesis": "preemptive_cascade_pct 3.0 \u2192 1.5",
+      "reason": "REJECT",
+      "score": 0
+    },
+    {
+      "iteration": 10,
+      "hypothesis": "preemptive_cascade_pct \u2192 3.0",
+      "score": 0
+    },
+    {
+      "iteration": 11,
+      "hypothesis": "preemptive_cascade_pct \u2192 4.0",
+      "score": 0
+    },
+    {
+      "iteration": 12,
+      "hypothesis": "cascade_tighten_pct \u2192 90",
+      "score": 0
+    },
+    {
+      "iteration": 13,
+      "hypothesis": "agg_risk_counter \u2192 5",
+      "score": 0
+    },
+    {
+      "iteration": 14,
+      "hypothesis": "agg_risk_with \u2192 10",
+      "score": 0
+    },
+    {
+      "iteration": 16,
+      "hypothesis": "tp_decay_rate \u2192 0.995",
+      "score": 0
+    },
+    {
+      "iteration": 18,
+      "hypothesis": "cascade_tighten_pct \u2192 93",
+      "score": 0
+    },
+    {
+      "iteration": 21,
+      "hypothesis": "cascade_tighten_pct \u2192 95",
+      "score": 0
+    },
+    {
+      "iteration": 22,
+      "hypothesis": "cascade_tighten_pct \u2192 99",
+      "score": 0
+    },
+    {
+      "iteration": 23,
+      "hypothesis": "direction_cap \u2192 7",
+      "score": 4.53
+    },
+    {
+      "iteration": 24,
+      "hypothesis": "ATR-dynamic trail activation",
+      "score": 0
+    }
+  ],
+  "applied_changes": [
+    {
+      "iteration": 9,
+      "param": "preemptive_cascade_pct",
+      "old": 3.0,
+      "new": 2.0,
+      "score": 8.2
+    },
+    {
+      "iteration": 20,
+      "param": "cascade_tighten_pct",
+      "old": 95,
+      "new": 98,
+      "score": 8.2
+    },
+    {
+      "iteration": 25,
+      "param": "cascade_sl_tightening",
+      "old": "enabled (MCC)",
+      "new": "disabled (Trail only)",
+      "score": 8.0
+    }
+  ],
+  "config_snapshot": {
+    "cascade_tighten_pct": 98,
+    "preemptive_cascade_pct": 2.0,
+    "preemptive_tighten_pct": 95,
+    "direction_cap": 6,
+    "agg_risk_counter": 10.0,
+    "agg_risk_with": 15.0,
+    "timeout_bars": 288,
+    "tp_decay_rate": 0.9975,
+    "momentum_threshold": 1.5,
+    "momentum_lookback": 3,
+    "momentum_cooldown": 12
+  },
+  "parameter_changes": {
+    "timeout_bars": "288 \u2192 192"
+  }
+}

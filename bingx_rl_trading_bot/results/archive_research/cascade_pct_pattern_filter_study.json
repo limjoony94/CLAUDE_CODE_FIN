@@ -1,0 +1,233 @@
+{
+  "timestamp": "2026-03-05T01:23:31.547336",
+  "version": "v1.44.0",
+  "phase1_tighten_sweep": {
+    "t50": {
+      "trades": 1076,
+      "wr": 65.24,
+      "pnl": 454.65,
+      "mdd": 6.98,
+      "pnl_mdd": 65.13
+    },
+    "t60": {
+      "trades": 1073,
+      "wr": 64.68,
+      "pnl": 484.73,
+      "mdd": 12.91,
+      "pnl_mdd": 37.55
+    },
+    "t70": {
+      "trades": 1060,
+      "wr": 67.36,
+      "pnl": 863.72,
+      "mdd": 5.17,
+      "pnl_mdd": 167.11
+    },
+    "t75": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1018.5,
+      "mdd": 5.05,
+      "pnl_mdd": 201.87
+    },
+    "t80": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1215.45,
+      "mdd": 5.05,
+      "pnl_mdd": 240.91
+    },
+    "t85": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1470.63,
+      "mdd": 5.05,
+      "pnl_mdd": 291.49
+    },
+    "t90": {
+      "trades": 1053,
+      "wr": 66.95,
+      "pnl": 1667.01,
+      "mdd": 5.05,
+      "pnl_mdd": 330.41
+    }
+  },
+  "phase2_pattern_filter": {
+    "full_130": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1018.5,
+      "mdd": 5.05,
+      "pnl_mdd": 201.87,
+      "sig_per_day": 54.8
+    },
+    "genuine_marginal_65": {
+      "trades": 1065,
+      "wr": 68.83,
+      "pnl": 1191.21,
+      "mdd": 6.66,
+      "pnl_mdd": 178.73,
+      "sig_per_day": 33.0
+    },
+    "genuine_25": {
+      "trades": 1024,
+      "wr": 66.41,
+      "pnl": 463.44,
+      "mdd": 5.21,
+      "pnl_mdd": 88.94,
+      "sig_per_day": 17.3
+    }
+  },
+  "phase3_top_combos": {
+    "t70_full_130": {
+      "trades": 1060,
+      "wr": 67.36,
+      "pnl": 863.72,
+      "mdd": 5.17,
+      "pnl_mdd": 167.11
+    },
+    "t70_genuine_marginal_65": {
+      "trades": 1077,
+      "wr": 68.25,
+      "pnl": 1006.06,
+      "mdd": 7.44,
+      "pnl_mdd": 135.3
+    },
+    "t70_genuine_25": {
+      "trades": 1025,
+      "wr": 66.34,
+      "pnl": 402.33,
+      "mdd": 5.26,
+      "pnl_mdd": 76.56
+    },
+    "t75_full_130": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1018.5,
+      "mdd": 5.05,
+      "pnl_mdd": 201.87
+    },
+    "t75_genuine_marginal_65": {
+      "trades": 1065,
+      "wr": 68.83,
+      "pnl": 1191.21,
+      "mdd": 6.66,
+      "pnl_mdd": 178.73
+    },
+    "t75_genuine_25": {
+      "trades": 1024,
+      "wr": 66.41,
+      "pnl": 463.44,
+      "mdd": 5.21,
+      "pnl_mdd": 88.94
+    },
+    "t80_full_130": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1215.45,
+      "mdd": 5.05,
+      "pnl_mdd": 240.91
+    },
+    "t80_genuine_marginal_65": {
+      "trades": 1065,
+      "wr": 68.83,
+      "pnl": 1365.01,
+      "mdd": 5.88,
+      "pnl_mdd": 231.95
+    },
+    "t80_genuine_25": {
+      "trades": 1027,
+      "wr": 66.5,
+      "pnl": 538.63,
+      "mdd": 5.58,
+      "pnl_mdd": 96.52
+    },
+    "t85_full_130": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1470.63,
+      "mdd": 5.05,
+      "pnl_mdd": 291.49
+    },
+    "t85_genuine_marginal_65": {
+      "trades": 1064,
+      "wr": 68.8,
+      "pnl": 1625.88,
+      "mdd": 5.1,
+      "pnl_mdd": 319.1
+    },
+    "t85_genuine_25": {
+      "trades": 1027,
+      "wr": 66.31,
+      "pnl": 640.23,
+      "mdd": 5.65,
+      "pnl_mdd": 113.35
+    }
+  },
+  "phase4_wf": {
+    "t85_genuine_marginal_65": {
+      "n_pass": 3,
+      "avg_oos": 108.0,
+      "min_oos": 41.1,
+      "folds_pnl": [
+        41.1,
+        149.6,
+        133.2
+      ]
+    },
+    "t85_full_130": {
+      "n_pass": 3,
+      "avg_oos": 101.0,
+      "min_oos": 64.4,
+      "folds_pnl": [
+        64.4,
+        131.3,
+        107.2
+      ]
+    },
+    "t80_full_130": {
+      "n_pass": 3,
+      "avg_oos": 91.2,
+      "min_oos": 57.9,
+      "folds_pnl": [
+        57.9,
+        120.4,
+        95.3
+      ]
+    },
+    "t80_genuine_marginal_65": {
+      "n_pass": 3,
+      "avg_oos": 99.5,
+      "min_oos": 36.1,
+      "folds_pnl": [
+        36.1,
+        140.2,
+        122.3
+      ]
+    },
+    "t75_full_130": {
+      "n_pass": 3,
+      "avg_oos": 82.7,
+      "min_oos": 54.9,
+      "folds_pnl": [
+        54.9,
+        108.7,
+        84.4
+      ]
+    }
+  },
+  "ranking": [
+    "t85_genuine_marginal_65",
+    "t85_full_130",
+    "t80_full_130",
+    "t80_genuine_marginal_65",
+    "t75_full_130",
+    "t75_genuine_marginal_65",
+    "t70_full_130",
+    "t70_genuine_marginal_65",
+    "t85_genuine_25",
+    "t80_genuine_25",
+    "t75_genuine_25",
+    "t70_genuine_25"
+  ]
+}

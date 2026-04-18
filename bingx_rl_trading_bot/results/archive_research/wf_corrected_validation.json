@@ -1,0 +1,118 @@
+{
+  "is": {
+    "TP0.5_SL1.0 (v1.57.0)": {
+      "trades": 3035,
+      "wr": 83.0,
+      "pnl": 561.1,
+      "mdd": 4.05,
+      "pnl_mdd": 138.5
+    },
+    "TP0.5_SL1.1 (v1.58.0)": {
+      "trades": 2930,
+      "wr": 85.1,
+      "pnl": 567.2,
+      "mdd": 4.46,
+      "pnl_mdd": 127.2
+    },
+    "TP0.5_SL1.1+cascade95": {
+      "trades": 2926,
+      "wr": 85.2,
+      "pnl": 617.2,
+      "mdd": 4.39,
+      "pnl_mdd": 140.6
+    },
+    "TP0.5_SL1.1+timeout96": {
+      "trades": 3434,
+      "wr": 91.2,
+      "pnl": 718.0,
+      "mdd": 2.89,
+      "pnl_mdd": 248.5
+    },
+    "TP0.5_SL1.1+cons_bundle": {
+      "trades": 3569,
+      "wr": 90.3,
+      "pnl": 775.5,
+      "mdd": 3.29,
+      "pnl_mdd": 235.7
+    }
+  },
+  "wf_3fold": {
+    "TP0.5_SL1.0 (v1.57.0)": {
+      "oos_pnls": [
+        116.3,
+        167.8,
+        145.9
+      ],
+      "total": 430.0,
+      "passes": 3
+    },
+    "TP0.5_SL1.1 (v1.58.0)": {
+      "oos_pnls": [
+        110.1,
+        174.6,
+        145.0
+      ],
+      "total": 429.7,
+      "passes": 3
+    },
+    "TP0.5_SL1.1+cascade95": {
+      "oos_pnls": [
+        115.1,
+        192.0,
+        167.0
+      ],
+      "total": 474.0,
+      "passes": 3
+    },
+    "TP0.5_SL1.1+timeout96": {
+      "oos_pnls": [
+        125.1,
+        230.8,
+        201.2
+      ],
+      "total": 557.1,
+      "passes": 3
+    },
+    "TP0.5_SL1.1+cons_bundle": {
+      "oos_pnls": [
+        125.9,
+        256.0,
+        220.3
+      ],
+      "total": 602.2,
+      "passes": 3
+    }
+  },
+  "wf_5fold": {
+    "TP0.5_SL1.0 (v1.57.0)": {
+      "oos_pnls": [
+        70.4,
+        76.2,
+        113.9,
+        90.7,
+        102.3
+      ],
+      "total": 453.5,
+      "passes": 5
+    },
+    "TP0.5_SL1.1 (v1.58.0)": {
+      "oos_pnls": [
+        66.7,
+        70.1,
+        116.2,
+        92.9,
+        108.0
+      ],
+      "total": 453.9,
+      "passes": 5
+    }
+  },
+  "discrimination": {
+    "real_pnl": 567.2,
+    "random_mean": 501.9,
+    "gap": 65.3,
+    "gap_pct": 13.0,
+    "p_value": NaN,
+    "verdict": "NON-DISCRIMINATING"
+  }
+}

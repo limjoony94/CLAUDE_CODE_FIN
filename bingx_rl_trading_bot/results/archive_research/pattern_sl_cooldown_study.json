@@ -1,0 +1,299 @@
+{
+  "timestamp": "2026-03-05T04:43:45.331826",
+  "version": "v1.53.0",
+  "baseline": {
+    "pnl": 3392.7,
+    "mdd": 3.97,
+    "pnl_mdd": 854.6,
+    "wr": 71.8,
+    "trades": 1244,
+    "sl_exits": 346,
+    "sl_clusters": {
+      "24": 0,
+      "48": 0,
+      "72": 0,
+      "144": 0,
+      "288": 4
+    }
+  },
+  "phase1_pattern_cooldown": {
+    "0": {
+      "pnl": 3392.7,
+      "mdd": 3.97,
+      "pm": 854.6,
+      "wr": 71.8,
+      "trades": 1244,
+      "blocks": 0
+    },
+    "6": {
+      "pnl": 3388.2,
+      "mdd": 3.97,
+      "pm": 853.4,
+      "wr": 71.8,
+      "trades": 1244,
+      "blocks": 3
+    },
+    "12": {
+      "pnl": 3370.9,
+      "mdd": 3.97,
+      "pm": 849.1,
+      "wr": 71.8,
+      "trades": 1242,
+      "blocks": 8
+    },
+    "24": {
+      "pnl": 3190.4,
+      "mdd": 3.97,
+      "pm": 803.6,
+      "wr": 71.2,
+      "trades": 1239,
+      "blocks": 18
+    },
+    "48": {
+      "pnl": 3273.5,
+      "mdd": 3.97,
+      "pm": 824.5,
+      "wr": 72.0,
+      "trades": 1236,
+      "blocks": 32
+    },
+    "72": {
+      "pnl": 3282.7,
+      "mdd": 3.97,
+      "pm": 826.9,
+      "wr": 72.2,
+      "trades": 1234,
+      "blocks": 39
+    },
+    "144": {
+      "pnl": 3055.4,
+      "mdd": 3.97,
+      "pm": 769.6,
+      "wr": 71.7,
+      "trades": 1238,
+      "blocks": 55
+    },
+    "288": {
+      "pnl": 2888.2,
+      "mdd": 5.26,
+      "pm": 549.1,
+      "wr": 71.1,
+      "trades": 1237,
+      "blocks": 71
+    }
+  },
+  "phase2_dir_specific": {
+    "6": {
+      "pnl": 3388.2,
+      "mdd": 3.97,
+      "pm": 853.4,
+      "wr": 71.8,
+      "trades": 1244,
+      "blocks": 3
+    },
+    "12": {
+      "pnl": 3370.9,
+      "mdd": 3.97,
+      "pm": 849.1,
+      "wr": 71.8,
+      "trades": 1242,
+      "blocks": 8
+    },
+    "24": {
+      "pnl": 3190.4,
+      "mdd": 3.97,
+      "pm": 803.6,
+      "wr": 71.2,
+      "trades": 1239,
+      "blocks": 18
+    },
+    "48": {
+      "pnl": 3273.5,
+      "mdd": 3.97,
+      "pm": 824.5,
+      "wr": 72.0,
+      "trades": 1236,
+      "blocks": 32
+    },
+    "72": {
+      "pnl": 3282.7,
+      "mdd": 3.97,
+      "pm": 826.9,
+      "wr": 72.2,
+      "trades": 1234,
+      "blocks": 39
+    },
+    "144": {
+      "pnl": 3055.4,
+      "mdd": 3.97,
+      "pm": 769.6,
+      "wr": 71.7,
+      "trades": 1238,
+      "blocks": 55
+    },
+    "288": {
+      "pnl": 2888.2,
+      "mdd": 5.26,
+      "pm": 549.1,
+      "wr": 71.1,
+      "trades": 1237,
+      "blocks": 71
+    }
+  },
+  "phase3_any_sl_dir": {
+    "6": {
+      "pnl": 3079.2,
+      "mdd": 4.34,
+      "pm": 709.5,
+      "wr": 72.2,
+      "trades": 1234,
+      "dir_blocks": 46
+    },
+    "12": {
+      "pnl": 3140.2,
+      "mdd": 3.97,
+      "pm": 791.0,
+      "wr": 72.4,
+      "trades": 1230,
+      "dir_blocks": 87
+    },
+    "24": {
+      "pnl": 2888.6,
+      "mdd": 5.26,
+      "pm": 549.2,
+      "wr": 72.1,
+      "trades": 1226,
+      "dir_blocks": 184
+    },
+    "48": {
+      "pnl": 2902.0,
+      "mdd": 5.26,
+      "pm": 551.7,
+      "wr": 72.5,
+      "trades": 1233,
+      "dir_blocks": 321
+    },
+    "72": {
+      "pnl": 3313.4,
+      "mdd": 5.55,
+      "pm": 597.0,
+      "wr": 74.3,
+      "trades": 1169,
+      "dir_blocks": 445
+    }
+  },
+  "phase3b_combo": {
+    "p6_d12": {
+      "pat_cd": 6,
+      "dir_cd": 12,
+      "pnl": 3140.2,
+      "mdd": 3.97,
+      "pm": 791.0,
+      "wr": 72.4,
+      "trades": 1230,
+      "pat_blocks": 5,
+      "dir_blocks": 82
+    },
+    "p6_d6": {
+      "pat_cd": 6,
+      "dir_cd": 6,
+      "pnl": 3079.2,
+      "mdd": 4.34,
+      "pm": 709.5,
+      "wr": 72.2,
+      "trades": 1234,
+      "pat_blocks": 4,
+      "dir_blocks": 42
+    },
+    "p6_d72": {
+      "pat_cd": 6,
+      "dir_cd": 72,
+      "pnl": 3313.4,
+      "mdd": 5.55,
+      "pm": 597.0,
+      "wr": 74.3,
+      "trades": 1169,
+      "pat_blocks": 4,
+      "dir_blocks": 441
+    },
+    "p12_d12": {
+      "pat_cd": 12,
+      "dir_cd": 12,
+      "pnl": 3140.2,
+      "mdd": 3.97,
+      "pm": 791.0,
+      "wr": 72.4,
+      "trades": 1230,
+      "pat_blocks": 12,
+      "dir_blocks": 75
+    },
+    "p12_d6": {
+      "pat_cd": 12,
+      "dir_cd": 6,
+      "pnl": 3058.1,
+      "mdd": 4.34,
+      "pm": 704.6,
+      "wr": 72.0,
+      "trades": 1239,
+      "pat_blocks": 9,
+      "dir_blocks": 45
+    },
+    "p12_d72": {
+      "pat_cd": 12,
+      "dir_cd": 72,
+      "pnl": 3313.4,
+      "mdd": 5.55,
+      "pm": 597.0,
+      "wr": 74.3,
+      "trades": 1169,
+      "pat_blocks": 12,
+      "dir_blocks": 433
+    }
+  },
+  "wf_results": {
+    "BASELINE": {
+      "pat_cd": 0,
+      "dir_only": false,
+      "dir_cd": 0,
+      "folds": [
+        92.9,
+        183.5,
+        139.3
+      ],
+      "avg": 138.5,
+      "min": 92.9,
+      "n_pass": 3,
+      "is_pnl_mdd": 854.6
+    },
+    "pat_6": {
+      "pat_cd": 6,
+      "dir_only": false,
+      "dir_cd": 0,
+      "folds": [
+        92.8,
+        181.5,
+        139.0
+      ],
+      "avg": 137.8,
+      "min": 92.8,
+      "n_pass": 3,
+      "is_pnl_mdd": 853.4
+    },
+    "patdir_6": {
+      "pat_cd": 6,
+      "dir_only": true,
+      "dir_cd": 0,
+      "folds": [
+        92.8,
+        181.5,
+        139.0
+      ],
+      "avg": 137.8,
+      "min": 92.8,
+      "n_pass": 3,
+      "is_pnl_mdd": 853.4
+    }
+  },
+  "verdict": "KEEP",
+  "recommended": null
+}

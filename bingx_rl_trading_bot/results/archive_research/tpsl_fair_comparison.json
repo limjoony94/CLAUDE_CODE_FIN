@@ -1,0 +1,670 @@
+{
+  "date": "2026-02-15",
+  "edge_threshold": 10.0,
+  "mc_threshold": 0.01,
+  "min_trades": 20,
+  "configs": [
+    {
+      "tp": 0.5,
+      "sl": 0.75,
+      "be_wr": 60.0,
+      "n_patterns": 6,
+      "n_long": 3,
+      "n_short": 3,
+      "trades": 335,
+      "wr": 75.8,
+      "edge": 15.8,
+      "pnl_simple": 165.3,
+      "pnl_compound": 397.8,
+      "mdd": 11.7,
+      "pnl_mdd": 33.9,
+      "pf": 1.87,
+      "avg_hold_h": 4.5,
+      "med_hold_h": 2.2,
+      "p95_hold_h": 15.2,
+      "missed_avg": 1.3,
+      "occupancy": 23.1,
+      "trades_per_day": 1.24,
+      "win_pnl": 1.4,
+      "loss_pnl": 2.35
+    },
+    {
+      "tp": 0.7,
+      "sl": 1.0,
+      "be_wr": 58.8,
+      "n_patterns": 11,
+      "n_long": 9,
+      "n_short": 2,
+      "trades": 332,
+      "wr": 75.3,
+      "edge": 16.5,
+      "pnl_simple": 245.8,
+      "pnl_compound": 968.1,
+      "mdd": 17.4,
+      "pnl_mdd": 55.5,
+      "pf": 1.97,
+      "avg_hold_h": 7.9,
+      "med_hold_h": 4.4,
+      "p95_hold_h": 28.9,
+      "missed_avg": 2.0,
+      "occupancy": 40.4,
+      "trades_per_day": 1.23,
+      "win_pnl": 2.0,
+      "loss_pnl": 3.1
+    },
+    {
+      "tp": 0.8,
+      "sl": 1.2,
+      "be_wr": 60.0,
+      "n_patterns": 9,
+      "n_long": 8,
+      "n_short": 1,
+      "trades": 273,
+      "wr": 73.6,
+      "edge": 13.6,
+      "pnl_simple": 195.9,
+      "pnl_compound": 539.9,
+      "mdd": 17.2,
+      "pnl_mdd": 31.4,
+      "pf": 1.74,
+      "avg_hold_h": 8.9,
+      "med_hold_h": 5.0,
+      "p95_hold_h": 32.6,
+      "missed_avg": 1.8,
+      "occupancy": 37.7,
+      "trades_per_day": 1.01,
+      "win_pnl": 2.3,
+      "loss_pnl": 3.7
+    },
+    {
+      "tp": 1.0,
+      "sl": 1.5,
+      "be_wr": 60.0,
+      "n_patterns": 17,
+      "n_long": 12,
+      "n_short": 5,
+      "trades": 337,
+      "wr": 74.5,
+      "edge": 14.5,
+      "pnl_simple": 332.3,
+      "pnl_compound": 2177.3,
+      "mdd": 27.6,
+      "pnl_mdd": 78.9,
+      "pf": 1.84,
+      "avg_hold_h": 11.4,
+      "med_hold_h": 8.0,
+      "p95_hold_h": 35.2,
+      "missed_avg": 2.7,
+      "occupancy": 59.5,
+      "trades_per_day": 1.25,
+      "win_pnl": 2.9,
+      "loss_pnl": 4.6
+    },
+    {
+      "tp": 1.2,
+      "sl": 1.8,
+      "be_wr": 60.0,
+      "n_patterns": 18,
+      "n_long": 15,
+      "n_short": 3,
+      "trades": 310,
+      "wr": 74.2,
+      "edge": 14.2,
+      "pnl_simple": 365.0,
+      "pnl_compound": 2856.8,
+      "mdd": 22.8,
+      "pnl_mdd": 125.5,
+      "pf": 1.83,
+      "avg_hold_h": 13.6,
+      "med_hold_h": 10.4,
+      "p95_hold_h": 38.4,
+      "missed_avg": 3.2,
+      "occupancy": 65.2,
+      "trades_per_day": 1.15,
+      "win_pnl": 3.5,
+      "loss_pnl": 5.5
+    },
+    {
+      "tp": 1.4,
+      "sl": 2.0,
+      "be_wr": 58.8,
+      "n_patterns": 24,
+      "n_long": 19,
+      "n_short": 5,
+      "trades": 273,
+      "wr": 72.9,
+      "edge": 14.1,
+      "pnl_simple": 364.5,
+      "pnl_compound": 2718.1,
+      "mdd": 39.8,
+      "pnl_mdd": 68.3,
+      "pf": 1.81,
+      "avg_hold_h": 16.2,
+      "med_hold_h": 13.2,
+      "p95_hold_h": 39.9,
+      "missed_avg": 4.5,
+      "occupancy": 68.4,
+      "trades_per_day": 1.01,
+      "win_pnl": 4.1,
+      "loss_pnl": 6.1
+    },
+    {
+      "tp": 1.6,
+      "sl": 2.4,
+      "be_wr": 60.0,
+      "n_patterns": 24,
+      "n_long": 14,
+      "n_short": 10,
+      "trades": 271,
+      "wr": 76.4,
+      "edge": 16.4,
+      "pnl_simple": 505.7,
+      "pnl_compound": 10421.2,
+      "mdd": 21.4,
+      "pnl_mdd": 486.2,
+      "pf": 2.08,
+      "avg_hold_h": 17.2,
+      "med_hold_h": 14.6,
+      "p95_hold_h": 38.8,
+      "missed_avg": 5.0,
+      "occupancy": 71.8,
+      "trades_per_day": 1.0,
+      "win_pnl": 4.7,
+      "loss_pnl": 7.3
+    },
+    {
+      "tp": 1.8,
+      "sl": 2.7,
+      "be_wr": 60.0,
+      "n_patterns": 26,
+      "n_long": 11,
+      "n_short": 15,
+      "trades": 232,
+      "wr": 78.0,
+      "edge": 18.0,
+      "pnl_simple": 541.1,
+      "pnl_compound": 14505.3,
+      "mdd": 28.9,
+      "pnl_mdd": 502.4,
+      "pf": 2.29,
+      "avg_hold_h": 19.8,
+      "med_hold_h": 17.9,
+      "p95_hold_h": 40.5,
+      "missed_avg": 6.6,
+      "occupancy": 70.9,
+      "trades_per_day": 0.86,
+      "win_pnl": 5.3,
+      "loss_pnl": 8.2
+    },
+    {
+      "tp": 2.0,
+      "sl": 3.0,
+      "be_wr": 60.0,
+      "n_patterns": 49,
+      "n_long": 19,
+      "n_short": 30,
+      "trades": 248,
+      "wr": 81.5,
+      "edge": 21.5,
+      "pnl_simple": 773.2,
+      "pnl_compound": 132615.8,
+      "mdd": 27.7,
+      "pnl_mdd": 4788.0,
+      "pf": 2.85,
+      "avg_hold_h": 20.5,
+      "med_hold_h": 19.9,
+      "p95_hold_h": 40.7,
+      "missed_avg": 15.2,
+      "occupancy": 78.6,
+      "trades_per_day": 0.92,
+      "win_pnl": 5.9,
+      "loss_pnl": 9.1
+    },
+    {
+      "tp": 2.5,
+      "sl": 3.5,
+      "be_wr": 58.3,
+      "n_patterns": 62,
+      "n_long": 8,
+      "n_short": 54,
+      "trades": 179,
+      "wr": 82.1,
+      "edge": 23.8,
+      "pnl_simple": 748.6,
+      "pnl_compound": 99999.1,
+      "mdd": 23.3,
+      "pnl_mdd": 4299.0,
+      "pf": 3.21,
+      "avg_hold_h": 23.8,
+      "med_hold_h": 23.7,
+      "p95_hold_h": 41.5,
+      "missed_avg": 25.3,
+      "occupancy": 65.7,
+      "trades_per_day": 0.66,
+      "win_pnl": 7.4,
+      "loss_pnl": 10.6
+    },
+    {
+      "tp": 3.0,
+      "sl": 4.0,
+      "be_wr": 57.1,
+      "n_patterns": 94,
+      "n_long": 9,
+      "n_short": 85,
+      "trades": 141,
+      "wr": 77.3,
+      "edge": 20.2,
+      "pnl_simple": 582.9,
+      "pnl_compound": 17426.0,
+      "mdd": 40.3,
+      "pnl_mdd": 432.4,
+      "pf": 2.51,
+      "avg_hold_h": 27.6,
+      "med_hold_h": 30.2,
+      "p95_hold_h": 41.8,
+      "missed_avg": 52.6,
+      "occupancy": 60.1,
+      "trades_per_day": 0.52,
+      "win_pnl": 8.9,
+      "loss_pnl": 12.1
+    }
+  ],
+  "wf_results": [
+    {
+      "tp": 0.5,
+      "sl": 0.75,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 5,
+          "oos_trades": 109,
+          "oos_wr": 56.0,
+          "oos_edge": -4.0,
+          "oos_pnl": -25.4,
+          "oos_mdd": 35.0
+        },
+        {
+          "fold": 2,
+          "is_patterns": 8,
+          "oos_trades": 115,
+          "oos_wr": 62.6,
+          "oos_edge": 2.6,
+          "oos_pnl": -2.1,
+          "oos_mdd": 20.5
+        },
+        {
+          "fold": 3,
+          "is_patterns": 11,
+          "oos_trades": 160,
+          "oos_wr": 56.2,
+          "oos_edge": -3.8,
+          "oos_pnl": -33.9,
+          "oos_mdd": 42.6
+        }
+      ],
+      "positive": 1,
+      "avg_edge": -1.7,
+      "verdict": "FAIL"
+    },
+    {
+      "tp": 0.7,
+      "sl": 1.0,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 2,
+          "oos_trades": 24,
+          "oos_wr": 75.0,
+          "oos_edge": 16.2,
+          "oos_pnl": 18.2,
+          "oos_mdd": 5.3
+        },
+        {
+          "fold": 2,
+          "is_patterns": 12,
+          "oos_trades": 130,
+          "oos_wr": 60.0,
+          "oos_edge": 1.2,
+          "oos_pnl": -8.9,
+          "oos_mdd": 29.8
+        },
+        {
+          "fold": 3,
+          "is_patterns": 20,
+          "oos_trades": 187,
+          "oos_wr": 56.7,
+          "oos_edge": -2.1,
+          "oos_pnl": -36.3,
+          "oos_mdd": 47.2
+        }
+      ],
+      "positive": 2,
+      "avg_edge": 5.1,
+      "verdict": "WEAK"
+    },
+    {
+      "tp": 0.8,
+      "sl": 1.2,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 4,
+          "oos_trades": 51,
+          "oos_wr": 58.8,
+          "oos_edge": -1.2,
+          "oos_pnl": -10.4,
+          "oos_mdd": 23.6
+        },
+        {
+          "fold": 2,
+          "is_patterns": 10,
+          "oos_trades": 105,
+          "oos_wr": 63.8,
+          "oos_edge": 3.8,
+          "oos_pnl": 9.5,
+          "oos_mdd": 31.1
+        },
+        {
+          "fold": 3,
+          "is_patterns": 23,
+          "oos_trades": 199,
+          "oos_wr": 56.8,
+          "oos_edge": -3.2,
+          "oos_pnl": -49.0,
+          "oos_mdd": 51.2
+        }
+      ],
+      "positive": 1,
+      "avg_edge": -0.2,
+      "verdict": "FAIL"
+    },
+    {
+      "tp": 1.0,
+      "sl": 1.5,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 8,
+          "oos_trades": 80,
+          "oos_wr": 62.5,
+          "oos_edge": 2.5,
+          "oos_pnl": 1.7,
+          "oos_mdd": 23.0
+        },
+        {
+          "fold": 2,
+          "is_patterns": 18,
+          "oos_trades": 121,
+          "oos_wr": 62.8,
+          "oos_edge": 2.8,
+          "oos_pnl": 5.5,
+          "oos_mdd": 32.2
+        },
+        {
+          "fold": 3,
+          "is_patterns": 31,
+          "oos_trades": 178,
+          "oos_wr": 56.7,
+          "oos_edge": -3.3,
+          "oos_pnl": -52.2,
+          "oos_mdd": 56.2
+        }
+      ],
+      "positive": 2,
+      "avg_edge": 0.7,
+      "verdict": "WEAK"
+    },
+    {
+      "tp": 1.2,
+      "sl": 1.8,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 8,
+          "oos_trades": 75,
+          "oos_wr": 70.7,
+          "oos_edge": 10.7,
+          "oos_pnl": 78.4,
+          "oos_mdd": 24.6
+        },
+        {
+          "fold": 2,
+          "is_patterns": 15,
+          "oos_trades": 96,
+          "oos_wr": 56.2,
+          "oos_edge": -3.8,
+          "oos_pnl": -40.4,
+          "oos_mdd": 47.6
+        },
+        {
+          "fold": 3,
+          "is_patterns": 28,
+          "oos_trades": 139,
+          "oos_wr": 59.0,
+          "oos_edge": -1.0,
+          "oos_pnl": -33.2,
+          "oos_mdd": 41.4
+        }
+      ],
+      "positive": 1,
+      "avg_edge": 2.0,
+      "verdict": "FAIL"
+    },
+    {
+      "tp": 1.4,
+      "sl": 2.0,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 13,
+          "oos_trades": 76,
+          "oos_wr": 63.2,
+          "oos_edge": 4.3,
+          "oos_pnl": 18.1,
+          "oos_mdd": 33.3
+        },
+        {
+          "fold": 2,
+          "is_patterns": 23,
+          "oos_trades": 90,
+          "oos_wr": 62.2,
+          "oos_edge": 3.4,
+          "oos_pnl": 11.7,
+          "oos_mdd": 62.5
+        },
+        {
+          "fold": 3,
+          "is_patterns": 32,
+          "oos_trades": 138,
+          "oos_wr": 56.5,
+          "oos_edge": -2.3,
+          "oos_pnl": -47.4,
+          "oos_mdd": 60.6
+        }
+      ],
+      "positive": 2,
+      "avg_edge": 1.8,
+      "verdict": "WEAK"
+    },
+    {
+      "tp": 1.6,
+      "sl": 2.4,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 18,
+          "oos_trades": 81,
+          "oos_wr": 63.0,
+          "oos_edge": 3.0,
+          "oos_pnl": 7.1,
+          "oos_mdd": 30.4
+        },
+        {
+          "fold": 2,
+          "is_patterns": 26,
+          "oos_trades": 85,
+          "oos_wr": 67.1,
+          "oos_edge": 7.1,
+          "oos_pnl": 64.1,
+          "oos_mdd": 45.9
+        },
+        {
+          "fold": 3,
+          "is_patterns": 32,
+          "oos_trades": 106,
+          "oos_wr": 55.7,
+          "oos_edge": -4.3,
+          "oos_pnl": -57.4,
+          "oos_mdd": 63.4
+        }
+      ],
+      "positive": 2,
+      "avg_edge": 1.9,
+      "verdict": "WEAK"
+    },
+    {
+      "tp": 1.8,
+      "sl": 2.7,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 22,
+          "oos_trades": 68,
+          "oos_wr": 61.8,
+          "oos_edge": 1.8,
+          "oos_pnl": -5.4,
+          "oos_mdd": 40.1
+        },
+        {
+          "fold": 2,
+          "is_patterns": 36,
+          "oos_trades": 75,
+          "oos_wr": 65.3,
+          "oos_edge": 5.3,
+          "oos_pnl": 35.8,
+          "oos_mdd": 41.1
+        },
+        {
+          "fold": 3,
+          "is_patterns": 30,
+          "oos_trades": 103,
+          "oos_wr": 58.3,
+          "oos_edge": -1.7,
+          "oos_pnl": -44.0,
+          "oos_mdd": 57.3
+        }
+      ],
+      "positive": 2,
+      "avg_edge": 1.8,
+      "verdict": "WEAK"
+    },
+    {
+      "tp": 2.0,
+      "sl": 3.0,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 37,
+          "oos_trades": 63,
+          "oos_wr": 76.2,
+          "oos_edge": 16.2,
+          "oos_pnl": 274.5,
+          "oos_mdd": 33.0
+        },
+        {
+          "fold": 2,
+          "is_patterns": 45,
+          "oos_trades": 71,
+          "oos_wr": 73.2,
+          "oos_edge": 13.2,
+          "oos_pnl": 221.6,
+          "oos_mdd": 31.7
+        },
+        {
+          "fold": 3,
+          "is_patterns": 38,
+          "oos_trades": 99,
+          "oos_wr": 68.7,
+          "oos_edge": 8.7,
+          "oos_pnl": 156.1,
+          "oos_mdd": 41.4
+        }
+      ],
+      "positive": 3,
+      "avg_edge": 12.7,
+      "verdict": "STRONG"
+    },
+    {
+      "tp": 2.5,
+      "sl": 3.5,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 81,
+          "oos_trades": 46,
+          "oos_wr": 71.7,
+          "oos_edge": 13.4,
+          "oos_pnl": 145.8,
+          "oos_mdd": 36.8
+        },
+        {
+          "fold": 2,
+          "is_patterns": 49,
+          "oos_trades": 48,
+          "oos_wr": 68.8,
+          "oos_edge": 10.4,
+          "oos_pnl": 96.4,
+          "oos_mdd": 23.3
+        },
+        {
+          "fold": 3,
+          "is_patterns": 36,
+          "oos_trades": 78,
+          "oos_wr": 67.9,
+          "oos_edge": 9.6,
+          "oos_pnl": 167.1,
+          "oos_mdd": 61.6
+        }
+      ],
+      "positive": 3,
+      "avg_edge": 11.1,
+      "verdict": "STRONG"
+    },
+    {
+      "tp": 3.0,
+      "sl": 4.0,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 108,
+          "oos_trades": 33,
+          "oos_wr": 54.5,
+          "oos_edge": -2.6,
+          "oos_pnl": -33.0,
+          "oos_mdd": 56.2
+        },
+        {
+          "fold": 2,
+          "is_patterns": 54,
+          "oos_trades": 38,
+          "oos_wr": 65.8,
+          "oos_edge": 8.6,
+          "oos_pnl": 57.6,
+          "oos_mdd": 29.2
+        },
+        {
+          "fold": 3,
+          "is_patterns": 34,
+          "oos_trades": 69,
+          "oos_wr": 79.7,
+          "oos_edge": 22.6,
+          "oos_pnl": 1688.0,
+          "oos_mdd": 22.7
+        }
+      ],
+      "positive": 2,
+      "avg_edge": 9.5,
+      "verdict": "WEAK"
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+{
+  "date_run": "2026-04-18T15:25:16.910974",
+  "p1_split_sensitivity": [
+    {
+      "variant": "BASELINE",
+      "train": {
+        "trades": 424,
+        "WR": 35.8,
+        "PnL": 36.64,
+        "MDD": 4.27
+      },
+      "val": {
+        "trades": 190,
+        "WR": 41.6,
+        "PnL": 58.53,
+        "MDD": 2.84
+      },
+      "test": {
+        "trades": 412,
+        "WR": 35.2,
+        "PnL": 75.42,
+        "MDD": 5.38
+      },
+      "split": "40/20/40",
+      "all_pos": true
+    },
+    {
+      "variant": "BASELINE",
+      "train": {
+        "trades": 522,
+        "WR": 36.0,
+        "PnL": 61.98,
+        "MDD": 4.27
+      },
+      "val": {
+        "trades": 192,
+        "WR": 41.1,
+        "PnL": 46.55,
+        "MDD": 5.38
+      },
+      "test": {
+        "trades": 313,
+        "WR": 34.5,
+        "PnL": 61.84,
+        "MDD": 4.36
+      },
+      "split": "50/20/30",
+      "all_pos": true
+    },
+    {
+      "variant": "BASELINE",
+      "train": {
+        "trades": 615,
+        "WR": 37.6,
+        "PnL": 95.07,
+        "MDD": 4.27
+      },
+      "val": {
+        "trades": 204,
+        "WR": 35.3,
+        "PnL": 21.21,
+        "MDD": 5.38
+      },
+      "test": {
+        "trades": 208,
+        "WR": 35.1,
+        "PnL": 54.2,
+        "MDD": 4.1
+      },
+      "split": "60/20/20",
+      "all_pos": true
+    },
+    {
+      "variant": "BASELINE",
+      "train": {
+        "trades": 714,
+        "WR": 37.4,
+        "PnL": 108.53,
+        "MDD": 5.38
+      },
+      "val": {
+        "trades": 153,
+        "WR": 34.0,
+        "PnL": 42.02,
+        "MDD": 4.36
+      },
+      "test": {
+        "trades": 160,
+        "WR": 35.0,
+        "PnL": 19.68,
+        "MDD": 4.1
+      },
+      "split": "70/15/15",
+      "all_pos": true
+    },
+    {
+      "variant": "C: Channel soft",
+      "train": {
+        "trades": 558,
+        "WR": 34.6,
+        "PnL": 46.06,
+        "MDD": 6.86
+      },
+      "val": {
+        "trades": 267,
+        "WR": 37.1,
+        "PnL": 69.88,
+        "MDD": 6.91
+      },
+      "test": {
+        "trades": 520,
+        "WR": 36.9,
+        "PnL": 110.13,
+        "MDD": 5.15
+      },
+      "split": "40/20/40",
+      "all_pos": true
+    },
+    {
+      "variant": "C: Channel soft",
+      "train": {
+        "trades": 701,
+        "WR": 34.0,
+        "PnL": 72.82,
+        "MDD": 6.86
+      },
+      "val": {
+        "trades": 249,
+        "WR": 41.8,
+        "PnL": 68.71,
+        "MDD": 6.91
+      },
+      "test": {
+        "trades": 395,
+        "WR": 35.7,
+        "PnL": 83.73,
+        "MDD": 3.94
+      },
+      "split": "50/20/30",
+      "all_pos": true
+    },
+    {
+      "variant": "C: Channel soft",
+      "train": {
+        "trades": 825,
+        "WR": 35.4,
+        "PnL": 115.94,
+        "MDD": 6.91
+      },
+      "val": {
+        "trades": 253,
+        "WR": 38.7,
+        "PnL": 39.14,
+        "MDD": 5.15
+      },
+      "test": {
+        "trades": 267,
+        "WR": 35.2,
+        "PnL": 70.99,
+        "MDD": 3.61
+      },
+      "split": "60/20/20",
+      "all_pos": true
+    },
+    {
+      "variant": "C: Channel soft",
+      "train": {
+        "trades": 950,
+        "WR": 36.0,
+        "PnL": 142.22,
+        "MDD": 6.91
+      },
+      "val": {
+        "trades": 189,
+        "WR": 34.9,
+        "PnL": 42.03,
+        "MDD": 3.94
+      },
+      "test": {
+        "trades": 206,
+        "WR": 35.9,
+        "PnL": 40.05,
+        "MDD": 3.61
+      },
+      "split": "70/15/15",
+      "all_pos": true
+    },
+    {
+      "variant": "D: Body 50%",
+      "train": {
+        "trades": 653,
+        "WR": 34.8,
+        "PnL": 46.22,
+        "MDD": 5.45
+      },
+      "val": {
+        "trades": 300,
+        "WR": 34.7,
+        "PnL": 67.41,
+        "MDD": 6.41
+      },
+      "test": {
+        "trades": 636,
+        "WR": 35.7,
+        "PnL": 115.05,
+        "MDD": 6.9
+      },
+      "split": "40/20/40",
+      "all_pos": true
+    },
+    {
+      "variant": "D: Body 50%",
+      "train": {
+        "trades": 806,
+        "WR": 34.4,
+        "PnL": 73.1,
+        "MDD": 5.45
+      },
+      "val": {
+        "trades": 299,
+        "WR": 37.5,
+        "PnL": 83.82,
+        "MDD": 6.9
+      },
+      "test": {
+        "trades": 485,
+        "WR": 34.8,
+        "PnL": 74.4,
+        "MDD": 5.59
+      },
+      "split": "50/20/30",
+      "all_pos": true
+    },
+    {
+      "variant": "D: Body 50%",
+      "train": {
+        "trades": 953,
+        "WR": 34.7,
+        "PnL": 113.63,
+        "MDD": 6.41
+      },
+      "val": {
+        "trades": 323,
+        "WR": 35.6,
+        "PnL": 48.69,
+        "MDD": 6.9
+      },
+      "test": {
+        "trades": 312,
+        "WR": 35.9,
+        "PnL": 66.46,
+        "MDD": 5.57
+      },
+      "split": "60/20/20",
+      "all_pos": true
+    },
+    {
+      "variant": "D: Body 50%",
+      "train": {
+        "trades": 1104,
+        "WR": 35.2,
+        "PnL": 158.14,
+        "MDD": 6.9
+      },
+      "val": {
+        "trades": 247,
+        "WR": 31.6,
+        "PnL": 39.8,
+        "MDD": 5.59
+      },
+      "test": {
+        "trades": 238,
+        "WR": 37.8,
+        "PnL": 33.0,
+        "MDD": 5.09
+      },
+      "split": "70/15/15",
+      "all_pos": true
+    }
+  ],
+  "p3_cd_sensitivity": [
+    {
+      "name": "REFINED CD=0",
+      "full": {
+        "trades": 1612,
+        "WR": 35.7,
+        "PnL": 262.28,
+        "MDD": 8.21
+      },
+      "60_20_20": {
+        "train": {
+          "trades": 974,
+          "WR": 34.4,
+          "PnL": 123.8,
+          "MDD": 8.21
+        },
+        "val": {
+          "trades": 326,
+          "WR": 37.4,
+          "PnL": 48.14,
+          "MDD": 5.46
+        },
+        "test": {
+          "trades": 311,
+          "WR": 37.9,
+          "PnL": 85.93,
+          "MDD": 5.58
+        },
+        "split": "60/20/20"
+      },
+      "calmar": 31.95
+    },
+    {
+      "name": "REFINED CD=1",
+      "full": {
+        "trades": 1490,
+        "WR": 36.8,
+        "PnL": 238.59,
+        "MDD": 10.86
+      },
+      "60_20_20": {
+        "train": {
+          "trades": 895,
+          "WR": 36.0,
+          "PnL": 127.48,
+          "MDD": 7.64
+        },
+        "val": {
+          "trades": 314,
+          "WR": 34.4,
+          "PnL": 25.23,
+          "MDD": 10.86
+        },
+        "test": {
+          "trades": 281,
+          "WR": 41.3,
+          "PnL": 80.66,
+          "MDD": 9.18
+        },
+        "split": "60/20/20"
+      },
+      "calmar": 21.97
+    },
+    {
+      "name": "REFINED CD=2",
+      "full": {
+        "trades": 1394,
+        "WR": 36.2,
+        "PnL": 212.36,
+        "MDD": 10.42
+      },
+      "60_20_20": {
+        "train": {
+          "trades": 826,
+          "WR": 35.7,
+          "PnL": 112.37,
+          "MDD": 6.05
+        },
+        "val": {
+          "trades": 289,
+          "WR": 35.3,
+          "PnL": 30.73,
+          "MDD": 10.06
+        },
+        "test": {
+          "trades": 279,
+          "WR": 38.0,
+          "PnL": 65.77,
+          "MDD": 7.73
+        },
+        "split": "60/20/20"
+      },
+      "calmar": 20.38
+    }
+  ]
+}

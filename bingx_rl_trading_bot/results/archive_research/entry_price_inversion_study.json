@@ -1,0 +1,940 @@
+{
+  "phase1": {
+    "long_avg": 102592.65061487883,
+    "short_avg": 100589.00065998534,
+    "diff": 2003.6499548934953,
+    "diff_pct": 1.9919175473929869,
+    "quarters": [
+      {
+        "q": 1,
+        "long_avg": 107034.21093896714,
+        "short_avg": 107164.10703441295,
+        "diff": -129.89609544581617,
+        "diff_pct": -0.12121231542955276,
+        "n_long": 2130,
+        "n_short": 1976
+      },
+      {
+        "q": 2,
+        "long_avg": 114656.50501760564,
+        "short_avg": 114523.91170868347,
+        "diff": 132.5933089221653,
+        "diff_pct": 0.11577783795880574,
+        "n_long": 2272,
+        "n_short": 1785
+      },
+      {
+        "q": 3,
+        "long_avg": 102989.0122502629,
+        "short_avg": 102490.98180599017,
+        "diff": 498.03044427272107,
+        "diff_pct": 0.4859261132022967,
+        "n_long": 1902,
+        "n_short": 2237
+      },
+      {
+        "q": 4,
+        "long_avg": 82884.17469879518,
+        "short_avg": 81302.8476190476,
+        "diff": 1581.3270797475707,
+        "diff_pct": 1.9449836334848103,
+        "n_long": 1909,
+        "n_short": 2184
+      }
+    ]
+  },
+  "phase2": [
+    {
+      "pattern": "MU-MU-MU",
+      "direction": "LONG",
+      "avg_entry": 111961.44545454546,
+      "n_signals": 55
+    },
+    {
+      "pattern": "H-MU-U",
+      "direction": "LONG",
+      "avg_entry": 108464.29464285714,
+      "n_signals": 56
+    },
+    {
+      "pattern": "MD-MD-MU",
+      "direction": "LONG",
+      "avg_entry": 108365.56,
+      "n_signals": 75
+    },
+    {
+      "pattern": "MU-MD-MD",
+      "direction": "LONG",
+      "avg_entry": 108262.96764705882,
+      "n_signals": 68
+    },
+    {
+      "pattern": "U-MU-MD",
+      "direction": "LONG",
+      "avg_entry": 107155.32105263157,
+      "n_signals": 133
+    },
+    {
+      "pattern": "MU-DN-MD",
+      "direction": "LONG",
+      "avg_entry": 106927.58633093526,
+      "n_signals": 139
+    },
+    {
+      "pattern": "MD-ST-MD",
+      "direction": "LONG",
+      "avg_entry": 106806.90392156864,
+      "n_signals": 51
+    },
+    {
+      "pattern": "MU-IH-DN",
+      "direction": "LONG",
+      "avg_entry": 106575.30416666665,
+      "n_signals": 48
+    },
+    {
+      "pattern": "MD-DN-MD",
+      "direction": "SHORT",
+      "avg_entry": 106247.07399999998,
+      "n_signals": 100
+    },
+    {
+      "pattern": "U-MU-H",
+      "direction": "LONG",
+      "avg_entry": 106231.12686567164,
+      "n_signals": 67
+    },
+    {
+      "pattern": "MU-MU-DN",
+      "direction": "LONG",
+      "avg_entry": 106116.55739130435,
+      "n_signals": 115
+    },
+    {
+      "pattern": "MD-DN-MU",
+      "direction": "LONG",
+      "avg_entry": 106030.35570469798,
+      "n_signals": 149
+    },
+    {
+      "pattern": "MU-DN-BD",
+      "direction": "LONG",
+      "avg_entry": 105766.96153846155,
+      "n_signals": 78
+    },
+    {
+      "pattern": "MD-IH-U",
+      "direction": "LONG",
+      "avg_entry": 105728.0606557377,
+      "n_signals": 61
+    },
+    {
+      "pattern": "MD-IH-DN",
+      "direction": "LONG",
+      "avg_entry": 105418.26458333332,
+      "n_signals": 48
+    },
+    {
+      "pattern": "MU-DN-IH",
+      "direction": "LONG",
+      "avg_entry": 105374.7642857143,
+      "n_signals": 56
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "avg_entry": 105134.8205882353,
+      "n_signals": 68
+    },
+    {
+      "pattern": "U-IH-ST",
+      "direction": "SHORT",
+      "avg_entry": 105059.72372881357,
+      "n_signals": 59
+    },
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "avg_entry": 104991.371875,
+      "n_signals": 64
+    },
+    {
+      "pattern": "DN-MD-IH",
+      "direction": "LONG",
+      "avg_entry": 104925.9126984127,
+      "n_signals": 63
+    },
+    {
+      "pattern": "U-MD-IH",
+      "direction": "LONG",
+      "avg_entry": 104905.58181818182,
+      "n_signals": 55
+    },
+    {
+      "pattern": "ST-DN-MD",
+      "direction": "LONG",
+      "avg_entry": 104603.13311258277,
+      "n_signals": 151
+    },
+    {
+      "pattern": "ST-MU-U",
+      "direction": "LONG",
+      "avg_entry": 104151.576875,
+      "n_signals": 160
+    },
+    {
+      "pattern": "IH-DN-U",
+      "direction": "LONG",
+      "avg_entry": 104129.21574803149,
+      "n_signals": 127
+    },
+    {
+      "pattern": "U-BU-MU",
+      "direction": "SHORT",
+      "avg_entry": 103825.49636363635,
+      "n_signals": 55
+    },
+    {
+      "pattern": "BU-MU-U",
+      "direction": "SHORT",
+      "avg_entry": 103598.08909090907,
+      "n_signals": 55
+    },
+    {
+      "pattern": "ST-DN-MU",
+      "direction": "SHORT",
+      "avg_entry": 103554.52444444444,
+      "n_signals": 180
+    },
+    {
+      "pattern": "MU-ST-U",
+      "direction": "LONG",
+      "avg_entry": 103473.20641711229,
+      "n_signals": 187
+    },
+    {
+      "pattern": "U-MU-DN",
+      "direction": "LONG",
+      "avg_entry": 103384.33395061728,
+      "n_signals": 324
+    },
+    {
+      "pattern": "MU-U-BU",
+      "direction": "SHORT",
+      "avg_entry": 103332.42258064514,
+      "n_signals": 93
+    },
+    {
+      "pattern": "MU-MD-ST",
+      "direction": "LONG",
+      "avg_entry": 103329.58607594937,
+      "n_signals": 79
+    },
+    {
+      "pattern": "H-U-U",
+      "direction": "LONG",
+      "avg_entry": 103312.31188811187,
+      "n_signals": 143
+    },
+    {
+      "pattern": "MU-U-ST",
+      "direction": "LONG",
+      "avg_entry": 103219.77321428573,
+      "n_signals": 168
+    },
+    {
+      "pattern": "BD-U-MD",
+      "direction": "LONG",
+      "avg_entry": 103213.18875,
+      "n_signals": 80
+    },
+    {
+      "pattern": "DN-MU-H",
+      "direction": "SHORT",
+      "avg_entry": 103137.67878787879,
+      "n_signals": 66
+    },
+    {
+      "pattern": "MD-ST-DN",
+      "direction": "SHORT",
+      "avg_entry": 103113.59573170732,
+      "n_signals": 164
+    },
+    {
+      "pattern": "DN-DF-DN",
+      "direction": "SHORT",
+      "avg_entry": 103103.0338028169,
+      "n_signals": 71
+    },
+    {
+      "pattern": "ST-MU-D",
+      "direction": "SHORT",
+      "avg_entry": 103034.0081081081,
+      "n_signals": 37
+    },
+    {
+      "pattern": "DN-U-MD",
+      "direction": "LONG",
+      "avg_entry": 103031.31405750799,
+      "n_signals": 313
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "avg_entry": 102973.96153846153,
+      "n_signals": 78
+    },
+    {
+      "pattern": "U-BU-U",
+      "direction": "SHORT",
+      "avg_entry": 102893.8142857143,
+      "n_signals": 231
+    },
+    {
+      "pattern": "BD-BD-BU",
+      "direction": "LONG",
+      "avg_entry": 102820.42183908045,
+      "n_signals": 87
+    },
+    {
+      "pattern": "DN-MD-ST",
+      "direction": "LONG",
+      "avg_entry": 102806.46734693876,
+      "n_signals": 147
+    },
+    {
+      "pattern": "DN-U-MU",
+      "direction": "LONG",
+      "avg_entry": 102789.63251533742,
+      "n_signals": 326
+    },
+    {
+      "pattern": "ST-MU-DN",
+      "direction": "LONG",
+      "avg_entry": 102718.79899497487,
+      "n_signals": 199
+    },
+    {
+      "pattern": "BD-DN-MU",
+      "direction": "LONG",
+      "avg_entry": 102530.94109589042,
+      "n_signals": 73
+    },
+    {
+      "pattern": "MD-BD-U",
+      "direction": "LONG",
+      "avg_entry": 102511.83363636366,
+      "n_signals": 110
+    },
+    {
+      "pattern": "U-ST-MU",
+      "direction": "LONG",
+      "avg_entry": 102397.53567251463,
+      "n_signals": 171
+    },
+    {
+      "pattern": "DN-ST-MU",
+      "direction": "LONG",
+      "avg_entry": 102363.40000000001,
+      "n_signals": 177
+    },
+    {
+      "pattern": "D-U-MD",
+      "direction": "SHORT",
+      "avg_entry": 102356.58703703704,
+      "n_signals": 54
+    },
+    {
+      "pattern": "MU-DN-BU",
+      "direction": "SHORT",
+      "avg_entry": 102332.97922077922,
+      "n_signals": 77
+    },
+    {
+      "pattern": "D-MU-DN",
+      "direction": "SHORT",
+      "avg_entry": 102292.48421052631,
+      "n_signals": 76
+    },
+    {
+      "pattern": "DN-MU-ST",
+      "direction": "SHORT",
+      "avg_entry": 102222.8606557377,
+      "n_signals": 183
+    },
+    {
+      "pattern": "U-DN-DF",
+      "direction": "SHORT",
+      "avg_entry": 102147.98076923075,
+      "n_signals": 78
+    },
+    {
+      "pattern": "ST-DN-IH",
+      "direction": "LONG",
+      "avg_entry": 101958.39761904762,
+      "n_signals": 84
+    },
+    {
+      "pattern": "U-MD-BD",
+      "direction": "LONG",
+      "avg_entry": 101825.9670212766,
+      "n_signals": 94
+    },
+    {
+      "pattern": "BU-MU-DN",
+      "direction": "SHORT",
+      "avg_entry": 101644.99402985076,
+      "n_signals": 67
+    },
+    {
+      "pattern": "U-BU-MD",
+      "direction": "SHORT",
+      "avg_entry": 101603.8067961165,
+      "n_signals": 103
+    },
+    {
+      "pattern": "IH-U-MD",
+      "direction": "LONG",
+      "avg_entry": 101581.69122807018,
+      "n_signals": 57
+    },
+    {
+      "pattern": "DN-DN-D",
+      "direction": "SHORT",
+      "avg_entry": 101546.49132653061,
+      "n_signals": 196
+    },
+    {
+      "pattern": "ST-MD-ST",
+      "direction": "LONG",
+      "avg_entry": 101535.04591836735,
+      "n_signals": 98
+    },
+    {
+      "pattern": "MU-BU-DN",
+      "direction": "SHORT",
+      "avg_entry": 101531.95161290321,
+      "n_signals": 93
+    },
+    {
+      "pattern": "ST-MD-U",
+      "direction": "SHORT",
+      "avg_entry": 101502.29042553193,
+      "n_signals": 188
+    },
+    {
+      "pattern": "DN-BD-MU",
+      "direction": "LONG",
+      "avg_entry": 101490.85263157893,
+      "n_signals": 76
+    },
+    {
+      "pattern": "BU-U-ST",
+      "direction": "SHORT",
+      "avg_entry": 101441.57655172414,
+      "n_signals": 145
+    },
+    {
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "avg_entry": 101439.97397260275,
+      "n_signals": 73
+    },
+    {
+      "pattern": "ST-U-H",
+      "direction": "SHORT",
+      "avg_entry": 101356.63947368423,
+      "n_signals": 76
+    },
+    {
+      "pattern": "U-MD-D",
+      "direction": "LONG",
+      "avg_entry": 101332.41296296298,
+      "n_signals": 54
+    },
+    {
+      "pattern": "ST-DN-BU",
+      "direction": "SHORT",
+      "avg_entry": 101318.59137931035,
+      "n_signals": 116
+    },
+    {
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "avg_entry": 101231.3670886076,
+      "n_signals": 79
+    },
+    {
+      "pattern": "BD-ST-DN",
+      "direction": "SHORT",
+      "avg_entry": 101195.05066666665,
+      "n_signals": 150
+    },
+    {
+      "pattern": "H-MD-U",
+      "direction": "LONG",
+      "avg_entry": 101153.65522388062,
+      "n_signals": 67
+    },
+    {
+      "pattern": "BD-MD-U",
+      "direction": "LONG",
+      "avg_entry": 101146.1483870968,
+      "n_signals": 62
+    },
+    {
+      "pattern": "DN-ST-ST",
+      "direction": "SHORT",
+      "avg_entry": 101116.45761589405,
+      "n_signals": 302
+    },
+    {
+      "pattern": "DN-BD-BU",
+      "direction": "SHORT",
+      "avg_entry": 100946.18852459016,
+      "n_signals": 122
+    },
+    {
+      "pattern": "BU-BD-U",
+      "direction": "SHORT",
+      "avg_entry": 100927.89189189188,
+      "n_signals": 111
+    },
+    {
+      "pattern": "DN-BD-D",
+      "direction": "SHORT",
+      "avg_entry": 100920.98714285714,
+      "n_signals": 70
+    },
+    {
+      "pattern": "BD-DN-BD",
+      "direction": "LONG",
+      "avg_entry": 100869.94519230768,
+      "n_signals": 104
+    },
+    {
+      "pattern": "DN-U-DN",
+      "direction": "LONG",
+      "avg_entry": 100817.22756964457,
+      "n_signals": 1041
+    },
+    {
+      "pattern": "D-ST-U",
+      "direction": "SHORT",
+      "avg_entry": 100783.64174757281,
+      "n_signals": 103
+    },
+    {
+      "pattern": "ST-H-U",
+      "direction": "SHORT",
+      "avg_entry": 100778.4955882353,
+      "n_signals": 68
+    },
+    {
+      "pattern": "U-BU-BD",
+      "direction": "SHORT",
+      "avg_entry": 100759.77663551403,
+      "n_signals": 107
+    },
+    {
+      "pattern": "BD-DN-DN",
+      "direction": "LONG",
+      "avg_entry": 100652.11106194691,
+      "n_signals": 226
+    },
+    {
+      "pattern": "MD-ST-ST",
+      "direction": "SHORT",
+      "avg_entry": 100611.26339285714,
+      "n_signals": 112
+    },
+    {
+      "pattern": "DN-D-D",
+      "direction": "SHORT",
+      "avg_entry": 100543.00454545458,
+      "n_signals": 44
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "avg_entry": 100534.77738095236,
+      "n_signals": 84
+    },
+    {
+      "pattern": "ST-BD-DN",
+      "direction": "LONG",
+      "avg_entry": 100528.06475409836,
+      "n_signals": 122
+    },
+    {
+      "pattern": "ST-D-U",
+      "direction": "SHORT",
+      "avg_entry": 100495.78076923077,
+      "n_signals": 104
+    },
+    {
+      "pattern": "GS-U-DN",
+      "direction": "SHORT",
+      "avg_entry": 100482.1242857143,
+      "n_signals": 70
+    },
+    {
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "avg_entry": 100443.85100671141,
+      "n_signals": 149
+    },
+    {
+      "pattern": "H-DN-ST",
+      "direction": "SHORT",
+      "avg_entry": 100443.17530864198,
+      "n_signals": 81
+    },
+    {
+      "pattern": "H-U-MD",
+      "direction": "LONG",
+      "avg_entry": 100438.62800000001,
+      "n_signals": 50
+    },
+    {
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "avg_entry": 100366.7876923077,
+      "n_signals": 65
+    },
+    {
+      "pattern": "DN-DN-ST",
+      "direction": "LONG",
+      "avg_entry": 100310.84505494506,
+      "n_signals": 546
+    },
+    {
+      "pattern": "H-MD-DN",
+      "direction": "LONG",
+      "avg_entry": 100303.41612903227,
+      "n_signals": 62
+    },
+    {
+      "pattern": "ST-DN-D",
+      "direction": "LONG",
+      "avg_entry": 100254.11651376147,
+      "n_signals": 109
+    },
+    {
+      "pattern": "U-DN-D",
+      "direction": "LONG",
+      "avg_entry": 100200.64195402301,
+      "n_signals": 174
+    },
+    {
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "avg_entry": 100160.01048951049,
+      "n_signals": 143
+    },
+    {
+      "pattern": "BD-DN-U",
+      "direction": "LONG",
+      "avg_entry": 100053.78480565372,
+      "n_signals": 283
+    },
+    {
+      "pattern": "BU-BU-U",
+      "direction": "SHORT",
+      "avg_entry": 100033.56785714284,
+      "n_signals": 84
+    },
+    {
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "avg_entry": 99937.43654188947,
+      "n_signals": 561
+    },
+    {
+      "pattern": "U-GS-U",
+      "direction": "SHORT",
+      "avg_entry": 99937.02428571427,
+      "n_signals": 70
+    },
+    {
+      "pattern": "ST-ST-DN",
+      "direction": "SHORT",
+      "avg_entry": 99828.17353846155,
+      "n_signals": 325
+    },
+    {
+      "pattern": "ST-IH-DN",
+      "direction": "SHORT",
+      "avg_entry": 99820.20941176472,
+      "n_signals": 85
+    },
+    {
+      "pattern": "DN-BU-BU",
+      "direction": "SHORT",
+      "avg_entry": 99771.76153846155,
+      "n_signals": 91
+    },
+    {
+      "pattern": "DN-H-BD",
+      "direction": "SHORT",
+      "avg_entry": 99669.97291666667,
+      "n_signals": 48
+    },
+    {
+      "pattern": "BU-BU-DN",
+      "direction": "SHORT",
+      "avg_entry": 99655.05042735043,
+      "n_signals": 117
+    },
+    {
+      "pattern": "DN-ST-H",
+      "direction": "SHORT",
+      "avg_entry": 99559.06781609196,
+      "n_signals": 87
+    },
+    {
+      "pattern": "DN-MU-BD",
+      "direction": "LONG",
+      "avg_entry": 99495.18533333334,
+      "n_signals": 75
+    },
+    {
+      "pattern": "DN-ST-D",
+      "direction": "SHORT",
+      "avg_entry": 99430.44791666667,
+      "n_signals": 96
+    },
+    {
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "avg_entry": 99371.79549839228,
+      "n_signals": 311
+    },
+    {
+      "pattern": "ST-BD-U",
+      "direction": "SHORT",
+      "avg_entry": 99274.17000000001,
+      "n_signals": 180
+    },
+    {
+      "pattern": "ST-U-ST",
+      "direction": "SHORT",
+      "avg_entry": 99266.65815384616,
+      "n_signals": 325
+    },
+    {
+      "pattern": "DN-U-DF",
+      "direction": "SHORT",
+      "avg_entry": 99173.52985074627,
+      "n_signals": 67
+    },
+    {
+      "pattern": "D-BD-U",
+      "direction": "LONG",
+      "avg_entry": 99078.57288135593,
+      "n_signals": 59
+    },
+    {
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "avg_entry": 98995.74487179489,
+      "n_signals": 78
+    },
+    {
+      "pattern": "DN-U-GS",
+      "direction": "SHORT",
+      "avg_entry": 98978.00256410257,
+      "n_signals": 78
+    },
+    {
+      "pattern": "ST-BD-ST",
+      "direction": "SHORT",
+      "avg_entry": 98966.91451612905,
+      "n_signals": 62
+    },
+    {
+      "pattern": "U-U-D",
+      "direction": "SHORT",
+      "avg_entry": 98936.38466257669,
+      "n_signals": 163
+    },
+    {
+      "pattern": "DN-D-BD",
+      "direction": "SHORT",
+      "avg_entry": 98788.64444444446,
+      "n_signals": 54
+    },
+    {
+      "pattern": "GS-DN-U",
+      "direction": "SHORT",
+      "avg_entry": 98435.88764044944,
+      "n_signals": 89
+    },
+    {
+      "pattern": "ST-ST-BD",
+      "direction": "LONG",
+      "avg_entry": 98294.79285714286,
+      "n_signals": 84
+    },
+    {
+      "pattern": "IH-BD-U",
+      "direction": "SHORT",
+      "avg_entry": 98290.97647058826,
+      "n_signals": 51
+    },
+    {
+      "pattern": "D-BU-DN",
+      "direction": "SHORT",
+      "avg_entry": 98088.72452830191,
+      "n_signals": 53
+    },
+    {
+      "pattern": "BU-DN-BU",
+      "direction": "SHORT",
+      "avg_entry": 97897.57211538461,
+      "n_signals": 104
+    },
+    {
+      "pattern": "ST-ST-ST",
+      "direction": "SHORT",
+      "avg_entry": 97859.3137755102,
+      "n_signals": 196
+    },
+    {
+      "pattern": "D-DN-MU",
+      "direction": "LONG",
+      "avg_entry": 97403.38490566038,
+      "n_signals": 53
+    },
+    {
+      "pattern": "BD-U-ST",
+      "direction": "SHORT",
+      "avg_entry": 97232.94064516129,
+      "n_signals": 155
+    },
+    {
+      "pattern": "BU-ST-ST",
+      "direction": "SHORT",
+      "avg_entry": 96984.71866666665,
+      "n_signals": 75
+    },
+    {
+      "pattern": "BD-BD-ST",
+      "direction": "SHORT",
+      "avg_entry": 95598.31147540984,
+      "n_signals": 61
+    }
+  ],
+  "phase3": {
+    "window_12": {
+      "window_bars": 12,
+      "window_hours": 1.0,
+      "long_avg_pctile": 45.6575328610911,
+      "short_avg_pctile": 54.241955048502795,
+      "inverted": "False",
+      "long_pctiles_p25_p50_p75": [
+        22.8095238095245,
+        42.63565891473043,
+        68.03030303030366
+      ],
+      "short_pctiles_p25_p50_p75": [
+        31.504155057051666,
+        56.17451389715291,
+        77.23444561800086
+      ]
+    },
+    "window_36": {
+      "window_bars": 36,
+      "window_hours": 3.0,
+      "long_avg_pctile": 48.122747078520796,
+      "short_avg_pctile": 53.92085190664833,
+      "inverted": "False",
+      "long_pctiles_p25_p50_p75": [
+        24.32699431958543,
+        47.980149747518325,
+        71.29144851658009
+      ],
+      "short_pctiles_p25_p50_p75": [
+        30.601240619066377,
+        55.49852505598025,
+        77.8035163193534
+      ]
+    },
+    "window_72": {
+      "window_bars": 72,
+      "window_hours": 6.0,
+      "long_avg_pctile": 49.34983821775834,
+      "short_avg_pctile": 53.043821793123904,
+      "inverted": "False",
+      "long_pctiles_p25_p50_p75": [
+        25.14003660362717,
+        50.05422064950614,
+        73.30045647212242
+      ],
+      "short_pctiles_p25_p50_p75": [
+        29.197173163339585,
+        54.60106307860347,
+        77.19100648690176
+      ]
+    },
+    "window_288": {
+      "window_bars": 288,
+      "window_hours": 24.0,
+      "long_avg_pctile": 50.78115442759186,
+      "short_avg_pctile": 51.9915885638266,
+      "inverted": "False",
+      "long_pctiles_p25_p50_p75": [
+        26.871481198303975,
+        51.470588235293526,
+        74.46767696144279
+      ],
+      "short_pctiles_p25_p50_p75": [
+        27.800302664610626,
+        52.62775459559582,
+        76.88935720243052
+      ]
+    }
+  },
+  "phase4": {
+    "bins": [
+      {
+        "bin": "0-25%",
+        "long_wr": 45.74525745257453,
+        "long_n": 1845,
+        "short_wr": 44.09492273730684,
+        "short_n": 1812
+      },
+      {
+        "bin": "25-50%",
+        "long_wr": 49.04250350303597,
+        "long_n": 2141,
+        "short_wr": 54.33108758421559,
+        "short_n": 2078
+      },
+      {
+        "bin": "50-75%",
+        "long_wr": 53.72124492557511,
+        "long_n": 2217,
+        "short_wr": 52.73512476007678,
+        "short_n": 2084
+      },
+      {
+        "bin": "75-100%",
+        "long_wr": 51.26928820308612,
+        "long_n": 2009,
+        "short_wr": 45.78804347826087,
+        "short_n": 2208
+      }
+    ],
+    "raw_counts": {
+      "long": 8213,
+      "short": 8182
+    }
+  },
+  "phase5": {
+    "long_premove_avg": -0.05865564586046271,
+    "short_premove_avg": 0.041849522392967825,
+    "long_trend_following_pct": 31.147540983606557,
+    "short_trend_following_pct": 43.47826086956522
+  }
+}

@@ -1,0 +1,445 @@
+{
+  "study": "SL Reversal Regret",
+  "date": "2026-03-14T22:56:17.009160",
+  "data_bars": 87315,
+  "neutral_window": [
+    0,
+    74642
+  ],
+  "config": {
+    "n_slots": 9,
+    "direction_cap": 7,
+    "leverage": 3,
+    "fee_pct": 0.1,
+    "max_bars": 288,
+    "tp_scale": 0.72,
+    "cascade_default": 85,
+    "atr_clamp": [
+      0.5,
+      1.5
+    ]
+  },
+  "baseline": {
+    "trades": 1828,
+    "wr": 77.3,
+    "pnl": 406.77,
+    "mdd": 1.76,
+    "mdd_mtm": 3.84,
+    "pnl_mdd": 105.89,
+    "blocked": {
+      "momentum": 37,
+      "agg_risk": 388,
+      "dir_cap": 124,
+      "dup_pat": 377,
+      "max_pos": 6063
+    },
+    "sl_exits_count": 415
+  },
+  "exp1_trajectory": {
+    "total_sl_exits": 415,
+    "by_window": {
+      "10": {
+        "valid_exits": 415,
+        "tp_reached": 0,
+        "tp_reached_pct": 0.0,
+        "entry_recovered": 13,
+        "entry_recovered_pct": 3.1,
+        "breakeven_reached": 13,
+        "breakeven_pct": 3.1
+      },
+      "30": {
+        "valid_exits": 415,
+        "tp_reached": 3,
+        "tp_reached_pct": 0.7,
+        "entry_recovered": 32,
+        "entry_recovered_pct": 7.7,
+        "breakeven_reached": 32,
+        "breakeven_pct": 7.7
+      },
+      "60": {
+        "valid_exits": 415,
+        "tp_reached": 12,
+        "tp_reached_pct": 2.9,
+        "entry_recovered": 59,
+        "entry_recovered_pct": 14.2,
+        "breakeven_reached": 59,
+        "breakeven_pct": 14.2
+      },
+      "144": {
+        "valid_exits": 415,
+        "tp_reached": 24,
+        "tp_reached_pct": 5.8,
+        "entry_recovered": 80,
+        "entry_recovered_pct": 19.3,
+        "breakeven_reached": 80,
+        "breakeven_pct": 19.3
+      },
+      "288": {
+        "valid_exits": 415,
+        "tp_reached": 53,
+        "tp_reached_pct": 12.8,
+        "entry_recovered": 143,
+        "entry_recovered_pct": 34.5,
+        "breakeven_reached": 145,
+        "breakeven_pct": 34.9
+      }
+    },
+    "by_type": {
+      "original": {
+        "count": 107,
+        "windows": {
+          "10": {
+            "valid": 107,
+            "tp_reached": 0,
+            "tp_pct": 0.0
+          },
+          "30": {
+            "valid": 107,
+            "tp_reached": 0,
+            "tp_pct": 0.0
+          },
+          "60": {
+            "valid": 107,
+            "tp_reached": 2,
+            "tp_pct": 1.9
+          },
+          "144": {
+            "valid": 107,
+            "tp_reached": 3,
+            "tp_pct": 2.8
+          },
+          "288": {
+            "valid": 107,
+            "tp_reached": 9,
+            "tp_pct": 8.4
+          }
+        }
+      },
+      "cascaded": {
+        "count": 308,
+        "windows": {
+          "10": {
+            "valid": 308,
+            "tp_reached": 0,
+            "tp_pct": 0.0
+          },
+          "30": {
+            "valid": 308,
+            "tp_reached": 3,
+            "tp_pct": 1.0
+          },
+          "60": {
+            "valid": 308,
+            "tp_reached": 10,
+            "tp_pct": 3.2
+          },
+          "144": {
+            "valid": 308,
+            "tp_reached": 21,
+            "tp_pct": 6.8
+          },
+          "288": {
+            "valid": 308,
+            "tp_reached": 44,
+            "tp_pct": 14.3
+          }
+        }
+      }
+    },
+    "by_direction": {
+      "LONG": {
+        "count": 193,
+        "windows": {
+          "288": {
+            "valid": 193,
+            "tp_reached": 23,
+            "tp_pct": 11.9
+          }
+        }
+      },
+      "SHORT": {
+        "count": 222,
+        "windows": {
+          "288": {
+            "valid": 222,
+            "tp_reached": 30,
+            "tp_pct": 13.5
+          }
+        }
+      }
+    }
+  },
+  "exp2_cascade_vs_original": {
+    "original_count": 107,
+    "cascaded_count": 308,
+    "comparison": {
+      "10": {
+        "original": {
+          "valid": 107,
+          "tp_reached": 0,
+          "tp_pct": 0.0
+        },
+        "cascaded": {
+          "valid": 308,
+          "tp_reached": 0,
+          "tp_pct": 0.0
+        },
+        "cascade_only_stops": 299,
+        "would_orig_also_hit": 9
+      },
+      "30": {
+        "original": {
+          "valid": 107,
+          "tp_reached": 0,
+          "tp_pct": 0.0
+        },
+        "cascaded": {
+          "valid": 308,
+          "tp_reached": 3,
+          "tp_pct": 1.0
+        },
+        "cascade_only_stops": 299,
+        "would_orig_also_hit": 9
+      },
+      "60": {
+        "original": {
+          "valid": 107,
+          "tp_reached": 2,
+          "tp_pct": 1.9
+        },
+        "cascaded": {
+          "valid": 308,
+          "tp_reached": 10,
+          "tp_pct": 3.2
+        },
+        "cascade_only_stops": 299,
+        "would_orig_also_hit": 9
+      },
+      "144": {
+        "original": {
+          "valid": 107,
+          "tp_reached": 3,
+          "tp_pct": 2.8
+        },
+        "cascaded": {
+          "valid": 308,
+          "tp_reached": 21,
+          "tp_pct": 6.8
+        },
+        "cascade_only_stops": 299,
+        "would_orig_also_hit": 9
+      },
+      "288": {
+        "original": {
+          "valid": 107,
+          "tp_reached": 9,
+          "tp_pct": 8.4
+        },
+        "cascaded": {
+          "valid": 308,
+          "tp_reached": 44,
+          "tp_pct": 14.3
+        },
+        "cascade_only_stops": 299,
+        "would_orig_also_hit": 9
+      }
+    },
+    "cascade_only_stops_total": 299,
+    "would_orig_also_hit_total": 9,
+    "false_stop_rate": 97.1,
+    "cascade_only_detail": {
+      "count": 299,
+      "avg_cascade_sl_pct": 0.554,
+      "avg_original_sl_pct": 3.805,
+      "avg_tightening_ratio": 0.145
+    }
+  },
+  "exp3_regret_pnl": {
+    "total_analyzed": 415,
+    "would_tp_count": 36,
+    "would_timeout_count": 379,
+    "would_tp_pct": 8.7,
+    "would_timeout_pct": 91.3,
+    "total_regret_sum": 1709.91,
+    "avg_regret_per_exit": 4.12,
+    "avg_tp_regret": 6.7,
+    "total_tp_regret": 241.21,
+    "original_regret": {
+      "count": 107,
+      "would_tp": 4,
+      "would_tp_pct": 3.7,
+      "avg_regret": 9.136,
+      "total_regret": 977.52
+    },
+    "cascaded_regret": {
+      "count": 308,
+      "would_tp": 32,
+      "would_tp_pct": 10.4,
+      "avg_regret": 2.378,
+      "total_regret": 732.4
+    }
+  },
+  "exp5_reentry": {
+    "cascade_only_false_stops": 299,
+    "strategies": {
+      "cascade_reentry_cd0": {
+        "cooldown_bars": 0,
+        "reentry_count": 299,
+        "trades": 1788,
+        "wr": 77.3,
+        "pnl": 403.84,
+        "mdd_mtm": 5.49,
+        "pnl_mdd": 73.6
+      },
+      "cascade_reentry_cd6": {
+        "cooldown_bars": 6,
+        "reentry_count": 299,
+        "trades": 1807,
+        "wr": 77.3,
+        "pnl": 409.19,
+        "mdd_mtm": 4.55,
+        "pnl_mdd": 90.01
+      },
+      "cascade_reentry_cd12": {
+        "cooldown_bars": 12,
+        "reentry_count": 299,
+        "trades": 1818,
+        "wr": 77.4,
+        "pnl": 417.49,
+        "mdd_mtm": 4.42,
+        "pnl_mdd": 94.42
+      },
+      "cascade_reentry_cd24": {
+        "cooldown_bars": 24,
+        "reentry_count": 299,
+        "trades": 1835,
+        "wr": 76.0,
+        "pnl": 398.63,
+        "mdd_mtm": 4.3,
+        "pnl_mdd": 92.75
+      }
+    }
+  },
+  "exp6_cascade_tradeoff": {
+    "cascade_OFF": {
+      "cascade_pct": 0,
+      "trades": 1579,
+      "wr": 88.3,
+      "pnl": 365.51,
+      "mdd_mtm": 8.19,
+      "pnl_mdd": 44.61,
+      "sl_exits": 185,
+      "cascade_exits": 0,
+      "false_stops": 0,
+      "false_stop_rate": 0,
+      "total_regret": 1844.36
+    },
+    "cascade_85": {
+      "cascade_pct": 85,
+      "trades": 1828,
+      "wr": 77.3,
+      "pnl": 406.77,
+      "mdd_mtm": 3.84,
+      "pnl_mdd": 105.89,
+      "sl_exits": 415,
+      "cascade_exits": 308,
+      "false_stops": 299,
+      "false_stop_rate": 97.1,
+      "total_regret": 1709.91
+    },
+    "cascade_95": {
+      "cascade_pct": 95,
+      "trades": 1830,
+      "wr": 77.2,
+      "pnl": 445.38,
+      "mdd_mtm": 3.77,
+      "pnl_mdd": 118.13,
+      "sl_exits": 417,
+      "cascade_exits": 310,
+      "false_stops": 301,
+      "false_stop_rate": 97.1,
+      "total_regret": 1371.4
+    },
+    "cascade_99": {
+      "cascade_pct": 99,
+      "trades": 1830,
+      "wr": 77.2,
+      "pnl": 452.74,
+      "mdd_mtm": 3.76,
+      "pnl_mdd": 120.47,
+      "sl_exits": 417,
+      "cascade_exits": 310,
+      "false_stops": 301,
+      "false_stop_rate": 97.1,
+      "total_regret": 1305.2
+    }
+  },
+  "wf_baseline_85": {
+    "folds": [
+      {
+        "fold": 1,
+        "is_range": "0-18660",
+        "oos_range": "18660-37321",
+        "oos_pnl": 91.48,
+        "oos_wr": 82.2,
+        "oos_trades": 354,
+        "passed": "True"
+      },
+      {
+        "fold": 2,
+        "is_range": "0-37321",
+        "oos_range": "37321-55981",
+        "oos_pnl": 100.09,
+        "oos_wr": 72.7,
+        "oos_trades": 498,
+        "passed": "True"
+      },
+      {
+        "fold": 3,
+        "is_range": "0-55981",
+        "oos_range": "55981-74642",
+        "oos_pnl": 111.87,
+        "oos_wr": 75.0,
+        "oos_trades": 575,
+        "passed": "True"
+      }
+    ],
+    "all_pass": true,
+    "total_oos": 303.44
+  },
+  "wf_cascade_95": {
+    "folds": [
+      {
+        "fold": 1,
+        "is_range": "0-18660",
+        "oos_range": "18660-37321",
+        "oos_pnl": 97.43,
+        "oos_wr": 82.2,
+        "oos_trades": 354,
+        "passed": "True"
+      },
+      {
+        "fold": 2,
+        "is_range": "0-37321",
+        "oos_range": "37321-55981",
+        "oos_pnl": 113.32,
+        "oos_wr": 72.7,
+        "oos_trades": 498,
+        "passed": "True"
+      },
+      {
+        "fold": 3,
+        "is_range": "0-55981",
+        "oos_range": "55981-74642",
+        "oos_pnl": 125.4,
+        "oos_wr": 74.9,
+        "oos_trades": 577,
+        "passed": "True"
+      }
+    ],
+    "all_pass": true,
+    "total_oos": 336.15
+  },
+  "mc_p_baseline": 0.0,
+  "elapsed_seconds": 35.4
+}

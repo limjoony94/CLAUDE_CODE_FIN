@@ -1,0 +1,311 @@
+{
+  "metadata": {
+    "n": 74643,
+    "q33": 0.8209,
+    "q67": 1.259,
+    "timestamp": "2026-03-26T02:32:33.930567"
+  },
+  "s1_atr_on_ALL": {
+    "trades": 4432,
+    "wins": 3805,
+    "wr": 85.85,
+    "avg_pnl": 2.818
+  },
+  "s1_atr_on_LOW": {
+    "trades": 1708,
+    "wins": 1418,
+    "wr": 83.02,
+    "avg_pnl": 1.567
+  },
+  "s1_atr_on_MED": {
+    "trades": 1492,
+    "wins": 1277,
+    "wr": 85.59,
+    "avg_pnl": 2.879
+  },
+  "s1_atr_on_HIGH": {
+    "trades": 1195,
+    "wins": 1080,
+    "wr": 90.38,
+    "avg_pnl": 4.549
+  },
+  "s1_atr_off_ALL": {
+    "trades": 4117,
+    "wins": 3431,
+    "wr": 83.34,
+    "avg_pnl": 2.537
+  },
+  "s1_atr_off_LOW": {
+    "trades": 1010,
+    "wins": 848,
+    "wr": 83.96,
+    "avg_pnl": 2.613
+  },
+  "s1_atr_off_MED": {
+    "trades": 1490,
+    "wins": 1256,
+    "wr": 84.3,
+    "avg_pnl": 2.65
+  },
+  "s1_atr_off_HIGH": {
+    "trades": 1581,
+    "wins": 1297,
+    "wr": 82.04,
+    "avg_pnl": 2.383
+  },
+  "s1_gap_analysis": {
+    "atr_on_gap": 7.36,
+    "atr_off_gap": -1.92
+  },
+  "s2_vol_sensitive": {
+    "total_compared": 60,
+    "gt_15pp": 18,
+    "individually_significant": 1,
+    "top10": [
+      {
+        "pattern": "BU-DN-BU_SHORT",
+        "low_wr": 63.6,
+        "high_wr": 100.0,
+        "delta": 36.4,
+        "low_t": 11,
+        "high_t": 11,
+        "fisher_p": 0.0902
+      },
+      {
+        "pattern": "DN-BD-BU_SHORT",
+        "low_wr": 66.7,
+        "high_wr": 100.0,
+        "delta": 33.3,
+        "low_t": 12,
+        "high_t": 17,
+        "fisher_p": 0.0208
+      },
+      {
+        "pattern": "ST-MD-MU_SHORT",
+        "low_wr": 72.7,
+        "high_wr": 100.0,
+        "delta": 27.3,
+        "low_t": 11,
+        "high_t": 9,
+        "fisher_p": 0.2184
+      },
+      {
+        "pattern": "DN-ST-BU_SHORT",
+        "low_wr": 73.7,
+        "high_wr": 100.0,
+        "delta": 26.3,
+        "low_t": 19,
+        "high_t": 13,
+        "fisher_p": 0.0641
+      },
+      {
+        "pattern": "ST-H-U_SHORT",
+        "low_wr": 76.9,
+        "high_wr": 100.0,
+        "delta": 23.1,
+        "low_t": 13,
+        "high_t": 8,
+        "fisher_p": 0.2571
+      },
+      {
+        "pattern": "U-GS-DN_SHORT",
+        "low_wr": 80.0,
+        "high_wr": 100.0,
+        "delta": 20.0,
+        "low_t": 10,
+        "high_t": 18,
+        "fisher_p": 0.119
+      },
+      {
+        "pattern": "BD-BU-U_SHORT",
+        "low_wr": 66.7,
+        "high_wr": 86.7,
+        "delta": 20.0,
+        "low_t": 15,
+        "high_t": 15,
+        "fisher_p": 0.3898
+      },
+      {
+        "pattern": "BD-BD-U_LONG",
+        "low_wr": 75.0,
+        "high_wr": 95.0,
+        "delta": 20.0,
+        "low_t": 16,
+        "high_t": 20,
+        "fisher_p": 0.1493
+      },
+      {
+        "pattern": "DN-ST-MU_LONG",
+        "low_wr": 80.6,
+        "high_wr": 100.0,
+        "delta": 19.4,
+        "low_t": 31,
+        "high_t": 12,
+        "fisher_p": 0.1627
+      },
+      {
+        "pattern": "ST-DN-BU_SHORT",
+        "low_wr": 64.7,
+        "high_wr": 83.3,
+        "delta": 18.6,
+        "low_t": 17,
+        "high_t": 12,
+        "fisher_p": 0.4083
+      }
+    ],
+    "bottom5": [
+      {
+        "pattern": "MU-U-ST_LONG",
+        "low_wr": 90.5,
+        "high_wr": 83.3,
+        "delta": -7.1,
+        "low_t": 21,
+        "high_t": 18,
+        "fisher_p": 0.6466
+      },
+      {
+        "pattern": "MD-BD-DN_LONG",
+        "low_wr": 100.0,
+        "high_wr": 90.0,
+        "delta": -10.0,
+        "low_t": 8,
+        "high_t": 10,
+        "fisher_p": 1.0
+      },
+      {
+        "pattern": "MD-DN-H_LONG",
+        "low_wr": 86.7,
+        "high_wr": 75.0,
+        "delta": -11.7,
+        "low_t": 15,
+        "high_t": 8,
+        "fisher_p": 0.5889
+      },
+      {
+        "pattern": "ST-BD-U_SHORT",
+        "low_wr": 93.8,
+        "high_wr": 76.9,
+        "delta": -16.8,
+        "low_t": 16,
+        "high_t": 13,
+        "fisher_p": 0.2994
+      },
+      {
+        "pattern": "MD-BD-U_LONG",
+        "low_wr": 93.3,
+        "high_wr": 75.0,
+        "delta": -18.3,
+        "low_t": 15,
+        "high_t": 12,
+        "fisher_p": 0.294
+      }
+    ]
+  },
+  "s3_temporal": {
+    "window_pcts": [
+      27.2,
+      31.7,
+      37.1,
+      33.4,
+      32.2,
+      32.6,
+      31.2,
+      34.9
+    ],
+    "cv": 0.083,
+    "n_runs": 729,
+    "mean_run": 33.5,
+    "max_run": 390,
+    "clustering": "even"
+  },
+  "s4_uniform": {
+    "pnl": 8.005126525694156e+52,
+    "mdd": 87.57,
+    "pnl_mdd": 9.141060940136367e+50,
+    "trades": 4432,
+    "weights": {
+      "LOW": 1.0,
+      "MED": 1.0,
+      "HIGH": 1.0
+    }
+  },
+  "s4_mild_vol": {
+    "pnl": 2.7707347600731555e+54,
+    "mdd": 89.06,
+    "pnl_mdd": 3.111217463037813e+52,
+    "trades": 4432,
+    "weights": {
+      "LOW": 0.85,
+      "MED": 1.0,
+      "HIGH": 1.15
+    }
+  },
+  "s4_moderate_vol": {
+    "pnl": 7.707573989684717e+55,
+    "mdd": 90.74,
+    "pnl_mdd": 8.493704284199565e+53,
+    "trades": 4432,
+    "weights": {
+      "LOW": 0.7,
+      "MED": 1.0,
+      "HIGH": 1.3
+    }
+  },
+  "s4_aggressive_vol": {
+    "pnl": 4.618883768350287e+57,
+    "mdd": 92.68,
+    "pnl_mdd": 4.983896676508795e+55,
+    "trades": 4432,
+    "weights": {
+      "LOW": 0.5,
+      "MED": 1.0,
+      "HIGH": 1.5
+    }
+  },
+  "s5_fisher_q1_q5": 0.0,
+  "s5_quintile_wrs": [
+    82.92,
+    83.6,
+    84.57,
+    90.28,
+    90.75
+  ],
+  "s5_residual_range": 7.83,
+  "s5_monotonic": true,
+  "s6_wf": {
+    "uniform": {
+      "folds": [
+        986474763.67,
+        848983439.72,
+        11261172326.81,
+        1773482576643071.0,
+        1041395955.14
+      ],
+      "total": 1773496714669556.5,
+      "passes": 5
+    },
+    "vol_moderate": {
+      "folds": [
+        588451980.1,
+        1996616382.62,
+        46907661844.6,
+        1.7713306261165366e+16,
+        5261438633.73
+      ],
+      "total": 1.7713361015334208e+16,
+      "passes": 5
+    },
+    "vol_aggressive": {
+      "folds": [
+        391435813.31,
+        3349299821.33,
+        112557058997.08,
+        7.167341566404733e+16,
+        14180870902.09
+      ],
+      "total": 7.167354614271286e+16,
+      "passes": 5
+    }
+  },
+  "verdict": "GO \u2014 Vol-adaptive sizing shows IS+OOS improvement with residual alpha"
+}

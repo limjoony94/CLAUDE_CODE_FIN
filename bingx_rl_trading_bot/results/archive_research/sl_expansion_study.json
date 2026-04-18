@@ -1,0 +1,595 @@
+{
+  "study": "sl_expansion_study",
+  "date": "2026-03-31T02:20:28.940142",
+  "data_bars": 93864,
+  "data_days": 326.0,
+  "signals": 12941,
+  "patterns": 111,
+  "params": {
+    "n_slots": 9,
+    "direction_cap": 6,
+    "agg_risk": [
+      10.0,
+      15.0
+    ],
+    "momentum": [
+      3,
+      1.5,
+      12
+    ],
+    "atr_clamp": [
+      0.5,
+      1.5
+    ],
+    "tp_decay_rate": 0.9975,
+    "cascade": 98,
+    "timeout_bars": 288,
+    "wf_folds": 5
+  },
+  "results": {
+    "A_NO_VOL_ADAPT": {
+      "label": "A) No vol_adapt (fixed SL)",
+      "tp_clamp": [
+        0.0,
+        0.0
+      ],
+      "sl_clamp": [
+        0.0,
+        0.0
+      ],
+      "is": {
+        "trades": 5975,
+        "wr": 55.7,
+        "pnl": 772.94,
+        "mdd": 1.26,
+        "pnl_mdd": 614.97,
+        "avg_win": 2.78,
+        "avg_loss": 0.87,
+        "rr": 3.201,
+        "wr_margin": 31.9
+      },
+      "is_sl_dist": {
+        "n_sl": 2201,
+        "loss_mean": 0.69,
+        "loss_median": 0.6,
+        "loss_p75": 0.6,
+        "loss_p90": 0.6,
+        "loss_max": 13.24,
+        "eff_sl_mean": 0.131,
+        "eff_sl_median": 0.1,
+        "eff_sl_p90": 0.1,
+        "eff_sl_max": 4.313
+      },
+      "is_tp_dist": {
+        "n_tp": 3219,
+        "gain_mean": 2.85,
+        "gain_median": 2.8,
+        "gain_p75": 3.45,
+        "gain_p90": 4.06,
+        "eff_tp_mean": 1.05,
+        "eff_tp_median": 1.034
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 15644,
+            "oos_end": 31288,
+            "trades": 803,
+            "pnl": 80.3,
+            "wr": 55.0,
+            "mdd": 2.57
+          },
+          {
+            "fold": 2,
+            "oos_start": 31288,
+            "oos_end": 46932,
+            "trades": 856,
+            "pnl": 93.57,
+            "wr": 56.0,
+            "mdd": 1.55
+          },
+          {
+            "fold": 3,
+            "oos_start": 46932,
+            "oos_end": 62576,
+            "trades": 1160,
+            "pnl": 173.16,
+            "wr": 57.2,
+            "mdd": 1.63
+          },
+          {
+            "fold": 4,
+            "oos_start": 62576,
+            "oos_end": 78220,
+            "trades": 936,
+            "pnl": 112.99,
+            "wr": 54.6,
+            "mdd": 0.92
+          },
+          {
+            "fold": 5,
+            "oos_start": 78220,
+            "oos_end": 93864,
+            "trades": 1344,
+            "pnl": 200.53,
+            "wr": 55.7,
+            "mdd": 1.11
+          }
+        ],
+        "total_oos_pnl": 660.55,
+        "pass_count": 5
+      }
+    },
+    "B_CURRENT": {
+      "label": "B) Current [0.5, 2.0]",
+      "tp_clamp": [
+        0.5,
+        2.0
+      ],
+      "sl_clamp": [
+        0.5,
+        2.0
+      ],
+      "is": {
+        "trades": 8288,
+        "wr": 65.7,
+        "pnl": 650.58,
+        "mdd": 1.12,
+        "pnl_mdd": 582.47,
+        "avg_win": 1.66,
+        "avg_loss": 1.12,
+        "rr": 1.482,
+        "wr_margin": 25.4
+      },
+      "is_sl_dist": {
+        "n_sl": 2647,
+        "loss_mean": 1.09,
+        "loss_median": 0.6,
+        "loss_p75": 0.6,
+        "loss_p90": 2.92,
+        "loss_max": 12.07,
+        "eff_sl_mean": 0.263,
+        "eff_sl_median": 0.1,
+        "eff_sl_p90": 0.872,
+        "eff_sl_max": 3.924
+      },
+      "is_tp_dist": {
+        "n_tp": 5431,
+        "gain_mean": 1.66,
+        "gain_median": 1.46,
+        "gain_p75": 1.87,
+        "gain_p90": 2.63,
+        "eff_tp_mean": 0.655,
+        "eff_tp_median": 0.587
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 15644,
+            "oos_end": 31288,
+            "trades": 1168,
+            "pnl": 79.43,
+            "wr": 66.0,
+            "mdd": 1.46
+          },
+          {
+            "fold": 2,
+            "oos_start": 31288,
+            "oos_end": 46932,
+            "trades": 1235,
+            "pnl": 80.05,
+            "wr": 63.6,
+            "mdd": 1.19
+          },
+          {
+            "fold": 3,
+            "oos_start": 46932,
+            "oos_end": 62576,
+            "trades": 1535,
+            "pnl": 131.23,
+            "wr": 67.1,
+            "mdd": 1.67
+          },
+          {
+            "fold": 4,
+            "oos_start": 62576,
+            "oos_end": 78220,
+            "trades": 1257,
+            "pnl": 95.3,
+            "wr": 63.5,
+            "mdd": 1.12
+          },
+          {
+            "fold": 5,
+            "oos_start": 78220,
+            "oos_end": 93864,
+            "trades": 1767,
+            "pnl": 163.95,
+            "wr": 66.6,
+            "mdd": 2.39
+          }
+        ],
+        "total_oos_pnl": 549.96,
+        "pass_count": 5
+      }
+    },
+    "C_TIGHTER": {
+      "label": "C) Tighter [0.5, 1.5]",
+      "tp_clamp": [
+        0.5,
+        1.5
+      ],
+      "sl_clamp": [
+        0.5,
+        1.5
+      ],
+      "is": {
+        "trades": 8288,
+        "wr": 65.7,
+        "pnl": 645.59,
+        "mdd": 1.12,
+        "pnl_mdd": 577.41,
+        "avg_win": 1.65,
+        "avg_loss": 1.12,
+        "rr": 1.472,
+        "wr_margin": 25.3
+      },
+      "is_sl_dist": {
+        "n_sl": 2643,
+        "loss_mean": 1.09,
+        "loss_median": 0.6,
+        "loss_p75": 0.6,
+        "loss_p90": 2.92,
+        "loss_max": 12.42,
+        "eff_sl_mean": 0.263,
+        "eff_sl_median": 0.1,
+        "eff_sl_p90": 0.872,
+        "eff_sl_max": 4.039
+      },
+      "is_tp_dist": {
+        "n_tp": 5435,
+        "gain_mean": 1.65,
+        "gain_median": 1.46,
+        "gain_p75": 1.88,
+        "gain_p90": 2.63,
+        "eff_tp_mean": 0.651,
+        "eff_tp_median": 0.587
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 15644,
+            "oos_end": 31288,
+            "trades": 1168,
+            "pnl": 78.92,
+            "wr": 66.0,
+            "mdd": 1.46
+          },
+          {
+            "fold": 2,
+            "oos_start": 31288,
+            "oos_end": 46932,
+            "trades": 1235,
+            "pnl": 79.79,
+            "wr": 63.6,
+            "mdd": 1.19
+          },
+          {
+            "fold": 3,
+            "oos_start": 46932,
+            "oos_end": 62576,
+            "trades": 1535,
+            "pnl": 130.11,
+            "wr": 67.2,
+            "mdd": 1.68
+          },
+          {
+            "fold": 4,
+            "oos_start": 62576,
+            "oos_end": 78220,
+            "trades": 1257,
+            "pnl": 94.86,
+            "wr": 63.5,
+            "mdd": 1.13
+          },
+          {
+            "fold": 5,
+            "oos_start": 78220,
+            "oos_end": 93864,
+            "trades": 1767,
+            "pnl": 161.88,
+            "wr": 66.7,
+            "mdd": 2.01
+          }
+        ],
+        "total_oos_pnl": 545.56,
+        "pass_count": 5
+      }
+    },
+    "D_TIGHTEST": {
+      "label": "D) Tightest [0.5, 1.2]",
+      "tp_clamp": [
+        0.5,
+        1.2
+      ],
+      "sl_clamp": [
+        0.5,
+        1.2
+      ],
+      "is": {
+        "trades": 8291,
+        "wr": 65.7,
+        "pnl": 637.33,
+        "mdd": 1.12,
+        "pnl_mdd": 568.85,
+        "avg_win": 1.64,
+        "avg_loss": 1.13,
+        "rr": 1.455,
+        "wr_margin": 25.0
+      },
+      "is_sl_dist": {
+        "n_sl": 2646,
+        "loss_mean": 1.1,
+        "loss_median": 0.6,
+        "loss_p75": 0.6,
+        "loss_p90": 2.96,
+        "loss_max": 15.84,
+        "eff_sl_mean": 0.266,
+        "eff_sl_median": 0.1,
+        "eff_sl_p90": 0.886,
+        "eff_sl_max": 5.18
+      },
+      "is_tp_dist": {
+        "n_tp": 5435,
+        "gain_mean": 1.64,
+        "gain_median": 1.46,
+        "gain_p75": 1.88,
+        "gain_p90": 2.64,
+        "eff_tp_mean": 0.648,
+        "eff_tp_median": 0.588
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 15644,
+            "oos_end": 31288,
+            "trades": 1168,
+            "pnl": 78.56,
+            "wr": 66.0,
+            "mdd": 1.46
+          },
+          {
+            "fold": 2,
+            "oos_start": 31288,
+            "oos_end": 46932,
+            "trades": 1235,
+            "pnl": 79.16,
+            "wr": 63.6,
+            "mdd": 1.19
+          },
+          {
+            "fold": 3,
+            "oos_start": 46932,
+            "oos_end": 62576,
+            "trades": 1535,
+            "pnl": 129.9,
+            "wr": 67.2,
+            "mdd": 1.68
+          },
+          {
+            "fold": 4,
+            "oos_start": 62576,
+            "oos_end": 78220,
+            "trades": 1257,
+            "pnl": 92.35,
+            "wr": 63.5,
+            "mdd": 1.38
+          },
+          {
+            "fold": 5,
+            "oos_start": 78220,
+            "oos_end": 93864,
+            "trades": 1769,
+            "pnl": 157.86,
+            "wr": 66.6,
+            "mdd": 2.21
+          }
+        ],
+        "total_oos_pnl": 537.83,
+        "pass_count": 5
+      }
+    },
+    "E_SHRINK_ONLY": {
+      "label": "E) Shrink-only [0.5, 1.0]",
+      "tp_clamp": [
+        0.5,
+        1.0
+      ],
+      "sl_clamp": [
+        0.5,
+        1.0
+      ],
+      "is": {
+        "trades": 8295,
+        "wr": 65.7,
+        "pnl": 621.05,
+        "mdd": 1.12,
+        "pnl_mdd": 553.56,
+        "avg_win": 1.62,
+        "avg_loss": 1.14,
+        "rr": 1.418,
+        "wr_margin": 24.3
+      },
+      "is_sl_dist": {
+        "n_sl": 2648,
+        "loss_mean": 1.11,
+        "loss_median": 0.6,
+        "loss_p75": 0.6,
+        "loss_p90": 3.03,
+        "loss_max": 13.24,
+        "eff_sl_mean": 0.271,
+        "eff_sl_median": 0.1,
+        "eff_sl_p90": 0.911,
+        "eff_sl_max": 4.313
+      },
+      "is_tp_dist": {
+        "n_tp": 5437,
+        "gain_mean": 1.63,
+        "gain_median": 1.47,
+        "gain_p75": 1.89,
+        "gain_p90": 2.65,
+        "eff_tp_mean": 0.642,
+        "eff_tp_median": 0.589
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 15644,
+            "oos_end": 31288,
+            "trades": 1168,
+            "pnl": 77.81,
+            "wr": 66.0,
+            "mdd": 1.36
+          },
+          {
+            "fold": 2,
+            "oos_start": 31288,
+            "oos_end": 46932,
+            "trades": 1237,
+            "pnl": 78.06,
+            "wr": 63.8,
+            "mdd": 1.2
+          },
+          {
+            "fold": 3,
+            "oos_start": 46932,
+            "oos_end": 62576,
+            "trades": 1537,
+            "pnl": 124.47,
+            "wr": 67.1,
+            "mdd": 1.68
+          },
+          {
+            "fold": 4,
+            "oos_start": 62576,
+            "oos_end": 78220,
+            "trades": 1258,
+            "pnl": 90.53,
+            "wr": 63.6,
+            "mdd": 1.31
+          },
+          {
+            "fold": 5,
+            "oos_start": 78220,
+            "oos_end": 93864,
+            "trades": 1770,
+            "pnl": 152.08,
+            "wr": 66.5,
+            "mdd": 2.24
+          }
+        ],
+        "total_oos_pnl": 522.95,
+        "pass_count": 5
+      }
+    },
+    "F_ASYMMETRIC": {
+      "label": "F) Asymmetric TP[0.5,2.0] SL[0.5,1.0]",
+      "tp_clamp": [
+        0.5,
+        2.0
+      ],
+      "sl_clamp": [
+        0.5,
+        1.0
+      ],
+      "is": {
+        "trades": 8286,
+        "wr": 65.7,
+        "pnl": 644.83,
+        "mdd": 1.12,
+        "pnl_mdd": 577.32,
+        "avg_win": 1.66,
+        "avg_loss": 1.14,
+        "rr": 1.459,
+        "wr_margin": 25.0
+      },
+      "is_sl_dist": {
+        "n_sl": 2645,
+        "loss_mean": 1.11,
+        "loss_median": 0.6,
+        "loss_p75": 0.6,
+        "loss_p90": 3.0,
+        "loss_max": 13.24,
+        "eff_sl_mean": 0.269,
+        "eff_sl_median": 0.1,
+        "eff_sl_p90": 0.9,
+        "eff_sl_max": 4.313
+      },
+      "is_tp_dist": {
+        "n_tp": 5431,
+        "gain_mean": 1.66,
+        "gain_median": 1.46,
+        "gain_p75": 1.87,
+        "gain_p90": 2.63,
+        "eff_tp_mean": 0.654,
+        "eff_tp_median": 0.587
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 15644,
+            "oos_end": 31288,
+            "trades": 1168,
+            "pnl": 79.43,
+            "wr": 66.0,
+            "mdd": 1.46
+          },
+          {
+            "fold": 2,
+            "oos_start": 31288,
+            "oos_end": 46932,
+            "trades": 1235,
+            "pnl": 78.9,
+            "wr": 63.7,
+            "mdd": 1.19
+          },
+          {
+            "fold": 3,
+            "oos_start": 46932,
+            "oos_end": 62576,
+            "trades": 1535,
+            "pnl": 130.69,
+            "wr": 67.0,
+            "mdd": 1.67
+          },
+          {
+            "fold": 4,
+            "oos_start": 62576,
+            "oos_end": 78220,
+            "trades": 1257,
+            "pnl": 94.9,
+            "wr": 63.5,
+            "mdd": 1.46
+          },
+          {
+            "fold": 5,
+            "oos_start": 78220,
+            "oos_end": 93864,
+            "trades": 1765,
+            "pnl": 160.29,
+            "wr": 66.6,
+            "mdd": 2.39
+          }
+        ],
+        "total_oos_pnl": 544.21,
+        "pass_count": 5
+      }
+    }
+  }
+}

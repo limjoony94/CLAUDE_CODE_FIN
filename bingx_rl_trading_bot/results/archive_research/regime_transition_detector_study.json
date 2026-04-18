@@ -1,0 +1,1145 @@
+{
+  "study": "regime_transition_detector",
+  "sections": {
+    "period_signals": [
+      {
+        "period": 1,
+        "date": "2025-05",
+        "btc_return": 12.0,
+        "ema20_signal": 0.03,
+        "ema50_signal": 0.04,
+        "momentum_signal": 0.14,
+        "cross_signal": 0.05,
+        "long_rolling_wr": 94.2,
+        "short_rolling_wr": 81.4,
+        "long_direction_acc": 56.5,
+        "short_direction_acc": 50.5,
+        "max_drawdown": -6.7
+      },
+      {
+        "period": 2,
+        "date": "2025-06",
+        "btc_return": 2.7,
+        "ema20_signal": 0.03,
+        "ema50_signal": 0.05,
+        "momentum_signal": 0.02,
+        "cross_signal": 0.02,
+        "long_rolling_wr": 88.8,
+        "short_rolling_wr": 89.7,
+        "long_direction_acc": 52.4,
+        "short_direction_acc": 48.7,
+        "max_drawdown": -7.6
+      },
+      {
+        "period": 3,
+        "date": "2025-07",
+        "btc_return": 5.5,
+        "ema20_signal": 0.03,
+        "ema50_signal": 0.04,
+        "momentum_signal": 0.05,
+        "cross_signal": 0.07,
+        "long_rolling_wr": 91.1,
+        "short_rolling_wr": 86.9,
+        "long_direction_acc": 52.0,
+        "short_direction_acc": 51.9,
+        "max_drawdown": -5.9
+      },
+      {
+        "period": 4,
+        "date": "2025-08",
+        "btc_return": -2.1,
+        "ema20_signal": 0.0,
+        "ema50_signal": -0.02,
+        "momentum_signal": -0.01,
+        "cross_signal": 0.0,
+        "long_rolling_wr": 81.4,
+        "short_rolling_wr": 87.7,
+        "long_direction_acc": 49.9,
+        "short_direction_acc": 52.8,
+        "max_drawdown": -7.8
+      },
+      {
+        "period": 5,
+        "date": "2025-09",
+        "btc_return": 6.8,
+        "ema20_signal": 0.03,
+        "ema50_signal": 0.06,
+        "momentum_signal": 0.17,
+        "cross_signal": 0.08,
+        "long_rolling_wr": 88.0,
+        "short_rolling_wr": 95.7,
+        "long_direction_acc": 54.5,
+        "short_direction_acc": 53.1,
+        "max_drawdown": -6.2
+      },
+      {
+        "period": 6,
+        "date": "2025-10",
+        "btc_return": -7.3,
+        "ema20_signal": 0.0,
+        "ema50_signal": 0.02,
+        "momentum_signal": 0.03,
+        "cross_signal": 0.04,
+        "long_rolling_wr": 78.6,
+        "short_rolling_wr": 78.3,
+        "long_direction_acc": 51.0,
+        "short_direction_acc": 51.1,
+        "max_drawdown": -17.9
+      },
+      {
+        "period": 7,
+        "date": "2025-11",
+        "btc_return": -21.8,
+        "ema20_signal": -0.03,
+        "ema50_signal": -0.05,
+        "momentum_signal": -0.16,
+        "cross_signal": -0.06,
+        "long_rolling_wr": 79.8,
+        "short_rolling_wr": 88.7,
+        "long_direction_acc": 50.8,
+        "short_direction_acc": 52.5,
+        "max_drawdown": -15.6
+      },
+      {
+        "period": 8,
+        "date": "2025-12",
+        "btc_return": 3.2,
+        "ema20_signal": 0.03,
+        "ema50_signal": 0.01,
+        "momentum_signal": -0.01,
+        "cross_signal": 0.05,
+        "long_rolling_wr": 84.9,
+        "short_rolling_wr": 83.4,
+        "long_direction_acc": 52.0,
+        "short_direction_acc": 46.9,
+        "max_drawdown": -9.7
+      },
+      {
+        "period": 9,
+        "date": "2025-12",
+        "btc_return": -6.0,
+        "ema20_signal": -0.0,
+        "ema50_signal": -0.02,
+        "momentum_signal": -0.03,
+        "cross_signal": -0.05,
+        "long_rolling_wr": 70.3,
+        "short_rolling_wr": 85.7,
+        "long_direction_acc": 51.5,
+        "short_direction_acc": 49.7,
+        "max_drawdown": -10.0
+      }
+    ],
+    "correlations": {
+      "Rolling_LONG_WR\u2192LONG": 0.436,
+      "Rolling_SHORT_WR\u2192SHORT": 0.37,
+      "Rolling_SHORT_WR\u2192LONG": -0.216,
+      "BTC_Drawdown\u2192LONG": 0.161,
+      "DirAcc_SHORT\u2192LONG": -0.135,
+      "Rolling_LONG_WR\u2192SHORT": -0.123,
+      "DirAcc_LONG\u2192LONG": 0.122,
+      "Momentum_24h\u2192LONG": 0.118,
+      "BTC_Drawdown\u2192SHORT": 0.113,
+      "DirAcc_LONG\u2192SHORT": -0.092,
+      "DirAcc_SHORT\u2192SHORT": 0.072,
+      "EMA50_slope\u2192SHORT": -0.044,
+      "EMA_Cross_20_50\u2192SHORT": -0.03,
+      "EMA20_slope\u2192SHORT": -0.013,
+      "EMA_Cross_20_50\u2192LONG": 0.011,
+      "Momentum_24h\u2192SHORT": -0.006,
+      "EMA20_slope\u2192LONG": -0.002,
+      "EMA50_slope\u2192LONG": 0.002
+    },
+    "is_scenarios": [
+      {
+        "scenario": "D1: EMA20 slope gate LONG",
+        "trades": 2545,
+        "blocked": 155,
+        "wr": 86.1,
+        "pnl": 503178.4,
+        "mdd": 13.7,
+        "pnl_mdd": 36807.0,
+        "vs_baseline_pnl": -746335.2
+      },
+      {
+        "scenario": "D2: EMA50 slope gate LONG",
+        "trades": 2524,
+        "blocked": 176,
+        "wr": 85.9,
+        "pnl": 383872.0,
+        "mdd": 14.5,
+        "pnl_mdd": 26391.03,
+        "vs_baseline_pnl": -865641.6
+      },
+      {
+        "scenario": "D3a: Momentum 24h gate LONG",
+        "trades": 2363,
+        "blocked": 337,
+        "wr": 86.6,
+        "pnl": 323991.3,
+        "mdd": 17.0,
+        "pnl_mdd": 19058.22,
+        "vs_baseline_pnl": -925522.3
+      },
+      {
+        "scenario": "D3b: Momentum 48h gate LONG",
+        "trades": 2280,
+        "blocked": 420,
+        "wr": 86.9,
+        "pnl": 354674.2,
+        "mdd": 21.3,
+        "pnl_mdd": 16681.86,
+        "vs_baseline_pnl": -894839.4
+      },
+      {
+        "scenario": "D4: Rolling WR<60% gate LONG",
+        "trades": 2572,
+        "blocked": 128,
+        "wr": 87.6,
+        "pnl": 1303088.9,
+        "mdd": 18.7,
+        "pnl_mdd": 69713.9,
+        "vs_baseline_pnl": 53575.3
+      },
+      {
+        "scenario": "D4b: Rolling WR<55% gate LONG",
+        "trades": 2595,
+        "blocked": 105,
+        "wr": 87.6,
+        "pnl": 1423442.0,
+        "mdd": 17.9,
+        "pnl_mdd": 79682.8,
+        "vs_baseline_pnl": 173928.4
+      },
+      {
+        "scenario": "D5: DirAcc<50% gate LONG",
+        "trades": 2353,
+        "blocked": 347,
+        "wr": 86.6,
+        "pnl": 334144.8,
+        "mdd": 15.7,
+        "pnl_mdd": 21321.78,
+        "vs_baseline_pnl": -915368.8
+      },
+      {
+        "scenario": "D6: DD<-3% gate LONG",
+        "trades": 2128,
+        "blocked": 572,
+        "wr": 85.5,
+        "pnl": 121918.9,
+        "mdd": 22.7,
+        "pnl_mdd": 5372.95,
+        "vs_baseline_pnl": -1127594.7
+      },
+      {
+        "scenario": "D6b: DD<-5% gate LONG",
+        "trades": 2399,
+        "blocked": 301,
+        "wr": 86.0,
+        "pnl": 348462.6,
+        "mdd": 22.7,
+        "pnl_mdd": 15356.71,
+        "vs_baseline_pnl": -901051.0
+      },
+      {
+        "scenario": "D7: EMA cross gate LONG",
+        "trades": 2356,
+        "blocked": 344,
+        "wr": 85.1,
+        "pnl": 197131.6,
+        "mdd": 14.5,
+        "pnl_mdd": 13552.71,
+        "vs_baseline_pnl": -1052382.0
+      },
+      {
+        "scenario": "D8: Composite 2/3 gate LONG",
+        "trades": 2452,
+        "blocked": 248,
+        "wr": 85.8,
+        "pnl": 298422.6,
+        "mdd": 13.3,
+        "pnl_mdd": 22418.43,
+        "vs_baseline_pnl": -951091.0
+      },
+      {
+        "scenario": "D9: SHORT-only (all LONG off)",
+        "trades": 1603,
+        "blocked": 1097,
+        "wr": 81.7,
+        "pnl": 8809.4,
+        "mdd": 22.7,
+        "pnl_mdd": 388.23,
+        "vs_baseline_pnl": -1240704.2
+      },
+      {
+        "scenario": "D1s: EMA20 slope gate SHORT",
+        "trades": 2572,
+        "blocked": 128,
+        "wr": 85.5,
+        "pnl": 382840.0,
+        "mdd": 22.8,
+        "pnl_mdd": 16800.47,
+        "vs_baseline_pnl": -866673.6
+      },
+      {
+        "scenario": "D7s: EMA cross gate SHORT",
+        "trades": 2356,
+        "blocked": 344,
+        "wr": 83.7,
+        "pnl": 102133.4,
+        "mdd": 22.2,
+        "pnl_mdd": 4608.32,
+        "vs_baseline_pnl": -1147380.2
+      }
+    ],
+    "lead_times": {
+      "EMA20": {
+        "avg_lead_bars": 836.0,
+        "avg_lead_hours": 69.7,
+        "detection_rate": 100.0,
+        "min_lead": 628,
+        "max_lead": 864
+      },
+      "EMA50": {
+        "avg_lead_bars": 808.0,
+        "avg_lead_hours": 67.3,
+        "detection_rate": 100.0,
+        "min_lead": 559,
+        "max_lead": 864
+      },
+      "Momentum": {
+        "avg_lead_bars": 735.0,
+        "avg_lead_hours": 61.3,
+        "detection_rate": 100.0,
+        "min_lead": 86,
+        "max_lead": 864
+      },
+      "EMA_Cross": {
+        "avg_lead_bars": 834.0,
+        "avg_lead_hours": 69.5,
+        "detection_rate": 100.0,
+        "min_lead": 620,
+        "max_lead": 864
+      },
+      "Drawdown_3%": {
+        "avg_lead_bars": 770.0,
+        "avg_lead_hours": 64.2,
+        "detection_rate": 87.5,
+        "min_lead": 172,
+        "max_lead": 864
+      },
+      "Drawdown_5%": {
+        "avg_lead_bars": 704.0,
+        "avg_lead_hours": 58.7,
+        "detection_rate": 67.2,
+        "min_lead": 90,
+        "max_lead": 864
+      }
+    },
+    "loss_clusters": [
+      {
+        "start_bar": 4878,
+        "end_bar": 5117,
+        "n_losses": 11,
+        "total_loss": -92.29639999999999
+      },
+      {
+        "start_bar": 6839,
+        "end_bar": 7097,
+        "n_losses": 3,
+        "total_loss": -30.4621
+      },
+      {
+        "start_bar": 8716,
+        "end_bar": 8869,
+        "n_losses": 9,
+        "total_loss": -85.76060000000001
+      },
+      {
+        "start_bar": 10550,
+        "end_bar": 10835,
+        "n_losses": 6,
+        "total_loss": -63.685199999999995
+      },
+      {
+        "start_bar": 10843,
+        "end_bar": 10976,
+        "n_losses": 6,
+        "total_loss": -62.11749999999999
+      },
+      {
+        "start_bar": 12151,
+        "end_bar": 12306,
+        "n_losses": 5,
+        "total_loss": -47.662800000000004
+      },
+      {
+        "start_bar": 13227,
+        "end_bar": 13499,
+        "n_losses": 11,
+        "total_loss": -75.3077
+      },
+      {
+        "start_bar": 13519,
+        "end_bar": 13747,
+        "n_losses": 3,
+        "total_loss": -22.826900000000002
+      },
+      {
+        "start_bar": 22977,
+        "end_bar": 23124,
+        "n_losses": 6,
+        "total_loss": -49.6045
+      },
+      {
+        "start_bar": 24686,
+        "end_bar": 24971,
+        "n_losses": 8,
+        "total_loss": -57.059400000000004
+      },
+      {
+        "start_bar": 24988,
+        "end_bar": 25261,
+        "n_losses": 9,
+        "total_loss": -66.9106
+      },
+      {
+        "start_bar": 25493,
+        "end_bar": 25542,
+        "n_losses": 3,
+        "total_loss": -12.546000000000001
+      },
+      {
+        "start_bar": 28937,
+        "end_bar": 28993,
+        "n_losses": 6,
+        "total_loss": -68.75710000000001
+      },
+      {
+        "start_bar": 29874,
+        "end_bar": 29926,
+        "n_losses": 3,
+        "total_loss": -24.0092
+      },
+      {
+        "start_bar": 31737,
+        "end_bar": 31951,
+        "n_losses": 15,
+        "total_loss": -95.08640000000001
+      },
+      {
+        "start_bar": 33077,
+        "end_bar": 33313,
+        "n_losses": 13,
+        "total_loss": -110.52560000000001
+      },
+      {
+        "start_bar": 39923,
+        "end_bar": 40025,
+        "n_losses": 6,
+        "total_loss": -46.791500000000006
+      },
+      {
+        "start_bar": 40934,
+        "end_bar": 41139,
+        "n_losses": 12,
+        "total_loss": -99.894
+      },
+      {
+        "start_bar": 44469,
+        "end_bar": 44521,
+        "n_losses": 3,
+        "total_loss": -22.933699999999998
+      },
+      {
+        "start_bar": 45020,
+        "end_bar": 45298,
+        "n_losses": 6,
+        "total_loss": -56.6272
+      },
+      {
+        "start_bar": 45319,
+        "end_bar": 45553,
+        "n_losses": 20,
+        "total_loss": -239.45629999999994
+      },
+      {
+        "start_bar": 46310,
+        "end_bar": 46482,
+        "n_losses": 11,
+        "total_loss": -94.0784
+      },
+      {
+        "start_bar": 46761,
+        "end_bar": 46876,
+        "n_losses": 4,
+        "total_loss": -24.370800000000003
+      },
+      {
+        "start_bar": 47183,
+        "end_bar": 47418,
+        "n_losses": 12,
+        "total_loss": -134.99200000000002
+      },
+      {
+        "start_bar": 48463,
+        "end_bar": 48482,
+        "n_losses": 4,
+        "total_loss": -25.7183
+      },
+      {
+        "start_bar": 50648,
+        "end_bar": 50914,
+        "n_losses": 7,
+        "total_loss": -60.76129999999999
+      },
+      {
+        "start_bar": 50948,
+        "end_bar": 51117,
+        "n_losses": 4,
+        "total_loss": -39.732
+      },
+      {
+        "start_bar": 52055,
+        "end_bar": 52205,
+        "n_losses": 3,
+        "total_loss": -27.543
+      },
+      {
+        "start_bar": 52500,
+        "end_bar": 52708,
+        "n_losses": 7,
+        "total_loss": -103.4081
+      },
+      {
+        "start_bar": 53084,
+        "end_bar": 53245,
+        "n_losses": 5,
+        "total_loss": -37.508300000000006
+      },
+      {
+        "start_bar": 54979,
+        "end_bar": 55245,
+        "n_losses": 5,
+        "total_loss": -70.16539999999999
+      },
+      {
+        "start_bar": 55275,
+        "end_bar": 55455,
+        "n_losses": 5,
+        "total_loss": -69.8759
+      },
+      {
+        "start_bar": 55737,
+        "end_bar": 56017,
+        "n_losses": 6,
+        "total_loss": -32.8127
+      },
+      {
+        "start_bar": 56047,
+        "end_bar": 56321,
+        "n_losses": 8,
+        "total_loss": -66.6689
+      },
+      {
+        "start_bar": 56363,
+        "end_bar": 56425,
+        "n_losses": 6,
+        "total_loss": -69.10579999999999
+      },
+      {
+        "start_bar": 56763,
+        "end_bar": 57005,
+        "n_losses": 4,
+        "total_loss": -42.9155
+      },
+      {
+        "start_bar": 57151,
+        "end_bar": 57429,
+        "n_losses": 12,
+        "total_loss": -157.5241
+      },
+      {
+        "start_bar": 60089,
+        "end_bar": 60293,
+        "n_losses": 12,
+        "total_loss": -150.6126
+      },
+      {
+        "start_bar": 61450,
+        "end_bar": 61609,
+        "n_losses": 12,
+        "total_loss": -94.95069999999998
+      },
+      {
+        "start_bar": 63532,
+        "end_bar": 63612,
+        "n_losses": 10,
+        "total_loss": -65.562
+      },
+      {
+        "start_bar": 63928,
+        "end_bar": 64152,
+        "n_losses": 11,
+        "total_loss": -55.541
+      },
+      {
+        "start_bar": 64449,
+        "end_bar": 64501,
+        "n_losses": 8,
+        "total_loss": -90.5501
+      },
+      {
+        "start_bar": 70802,
+        "end_bar": 71062,
+        "n_losses": 6,
+        "total_loss": -42.71810000000001
+      },
+      {
+        "start_bar": 74124,
+        "end_bar": 74386,
+        "n_losses": 23,
+        "total_loss": -196.02929999999998
+      },
+      {
+        "start_bar": 74630,
+        "end_bar": 74898,
+        "n_losses": 11,
+        "total_loss": -117.2273
+      },
+      {
+        "start_bar": 75966,
+        "end_bar": 76232,
+        "n_losses": 17,
+        "total_loss": -96.2156
+      },
+      {
+        "start_bar": 77188,
+        "end_bar": 77456,
+        "n_losses": 26,
+        "total_loss": -277.5856999999999
+      },
+      {
+        "start_bar": 77564,
+        "end_bar": 77848,
+        "n_losses": 9,
+        "total_loss": -115.3205
+      },
+      {
+        "start_bar": 77859,
+        "end_bar": 78062,
+        "n_losses": 20,
+        "total_loss": -175.67819999999998
+      },
+      {
+        "start_bar": 78155,
+        "end_bar": 78329,
+        "n_losses": 16,
+        "total_loss": -161.21429999999998
+      },
+      {
+        "start_bar": 78682,
+        "end_bar": 78940,
+        "n_losses": 21,
+        "total_loss": -188.94490000000002
+      },
+      {
+        "start_bar": 78998,
+        "end_bar": 79285,
+        "n_losses": 29,
+        "total_loss": -390.0988
+      },
+      {
+        "start_bar": 79295,
+        "end_bar": 79560,
+        "n_losses": 30,
+        "total_loss": -490.4323999999999
+      },
+      {
+        "start_bar": 79839,
+        "end_bar": 79963,
+        "n_losses": 3,
+        "total_loss": -32.916
+      },
+      {
+        "start_bar": 80337,
+        "end_bar": 80523,
+        "n_losses": 3,
+        "total_loss": -27.0991
+      },
+      {
+        "start_bar": 80707,
+        "end_bar": 80975,
+        "n_losses": 12,
+        "total_loss": -108.4871
+      },
+      {
+        "start_bar": 81005,
+        "end_bar": 81071,
+        "n_losses": 5,
+        "total_loss": -35.300200000000004
+      },
+      {
+        "start_bar": 81340,
+        "end_bar": 81492,
+        "n_losses": 4,
+        "total_loss": -45.9019
+      },
+      {
+        "start_bar": 82155,
+        "end_bar": 82327,
+        "n_losses": 4,
+        "total_loss": -38.708800000000004
+      },
+      {
+        "start_bar": 82786,
+        "end_bar": 83020,
+        "n_losses": 5,
+        "total_loss": -31.8709
+      },
+      {
+        "start_bar": 83121,
+        "end_bar": 83171,
+        "n_losses": 3,
+        "total_loss": -20.384
+      },
+      {
+        "start_bar": 84158,
+        "end_bar": 84434,
+        "n_losses": 22,
+        "total_loss": -179.02179999999998
+      },
+      {
+        "start_bar": 84452,
+        "end_bar": 84683,
+        "n_losses": 8,
+        "total_loss": -104.8231
+      },
+      {
+        "start_bar": 85329,
+        "end_bar": 85485,
+        "n_losses": 3,
+        "total_loss": -23.7133
+      }
+    ],
+    "wf_validation": {
+      "D1: EMA20 gate LONG": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 479,
+            "oos_wr": 88.3,
+            "oos_pnl": 382.3,
+            "oos_mdd": 3.9,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 757,
+            "oos_wr": 86.1,
+            "oos_pnl": 1454.0,
+            "oos_mdd": 8.5,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 730,
+            "oos_wr": 82.1,
+            "oos_pnl": 675.6,
+            "oos_mdd": 13.7,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 2511.9,
+        "avg_oos_wr": 85.5,
+        "verdict": "PASS"
+      },
+      "D3a: Mom24h gate LONG": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 445,
+            "oos_wr": 88.8,
+            "oos_pnl": 333.5,
+            "oos_mdd": 7.8,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 714,
+            "oos_wr": 85.3,
+            "oos_pnl": 1043.6,
+            "oos_mdd": 13.8,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 671,
+            "oos_wr": 84.1,
+            "oos_pnl": 752.9,
+            "oos_mdd": 17.0,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 2130.0,
+        "avg_oos_wr": 86.1,
+        "verdict": "PASS"
+      },
+      "D6: DD<-3% gate LONG": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 419,
+            "oos_wr": 87.4,
+            "oos_pnl": 283.7,
+            "oos_mdd": 10.0,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 629,
+            "oos_wr": 85.1,
+            "oos_pnl": 824.8,
+            "oos_mdd": 13.8,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 596,
+            "oos_wr": 82.7,
+            "oos_pnl": 514.4,
+            "oos_mdd": 22.7,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1622.9,
+        "avg_oos_wr": 85.1,
+        "verdict": "PASS"
+      },
+      "D7: EMA cross gate LONG": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 446,
+            "oos_wr": 87.4,
+            "oos_pnl": 321.0,
+            "oos_mdd": 8.7,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 722,
+            "oos_wr": 85.2,
+            "oos_pnl": 1055.3,
+            "oos_mdd": 12.1,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 681,
+            "oos_wr": 81.8,
+            "oos_pnl": 596.6,
+            "oos_mdd": 14.5,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1972.9,
+        "avg_oos_wr": 84.8,
+        "verdict": "PASS"
+      },
+      "D8: Composite gate LONG": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 466,
+            "oos_wr": 87.8,
+            "oos_pnl": 342.9,
+            "oos_mdd": 8.7,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 736,
+            "oos_wr": 84.9,
+            "oos_pnl": 1090.2,
+            "oos_mdd": 12.1,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 701,
+            "oos_wr": 82.7,
+            "oos_pnl": 678.7,
+            "oos_mdd": 13.3,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 2111.8,
+        "avg_oos_wr": 85.1,
+        "verdict": "PASS"
+      },
+      "D9: SHORT-only": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 289,
+            "oos_wr": 86.2,
+            "oos_pnl": 139.2,
+            "oos_mdd": 11.0,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 523,
+            "oos_wr": 82.4,
+            "oos_pnl": 426.0,
+            "oos_mdd": 13.8,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 482,
+            "oos_wr": 81.7,
+            "oos_pnl": 326.9,
+            "oos_mdd": 22.7,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 892.1,
+        "avg_oos_wr": 83.4,
+        "verdict": "PASS"
+      },
+      "D4: Rolling WR<60%": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 500,
+            "oos_wr": 89.0,
+            "oos_pnl": 461.3,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 818,
+            "oos_wr": 87.8,
+            "oos_pnl": 2397.3,
+            "oos_mdd": 8.1,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 482,
+            "oos_wr": 81.7,
+            "oos_pnl": 326.9,
+            "oos_mdd": 22.7,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 3185.5000000000005,
+        "avg_oos_wr": 86.2,
+        "verdict": "PASS"
+      },
+      "D5: DirAcc<50%": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 21408,
+            "oos_range": [
+              21408,
+              42816
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 435,
+            "oos_wr": 86.9,
+            "oos_pnl": 296.6,
+            "oos_mdd": 8.0,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "is_bars": 42816,
+            "oos_range": [
+              42816,
+              64224
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 704,
+            "oos_wr": 85.7,
+            "oos_pnl": 1070.0,
+            "oos_mdd": 8.1,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "is_bars": 64224,
+            "oos_range": [
+              64224,
+              85632
+            ],
+            "oos_days": 74.0,
+            "oos_trades": 685,
+            "oos_wr": 84.8,
+            "oos_pnl": 769.1,
+            "oos_mdd": 15.7,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 2135.7,
+        "avg_oos_wr": 85.8,
+        "verdict": "PASS"
+      }
+    },
+    "recommendation": {
+      "best_wf_pass": "D4: Rolling WR<60%",
+      "short_only_verdict": "PASS"
+    }
+  },
+  "meta": {
+    "bars": 85634,
+    "days": 297.3,
+    "patterns": 130,
+    "long_patterns": 61,
+    "short_patterns": 69,
+    "total_trades": 6923,
+    "long_trades": 3330,
+    "short_trades": 3593,
+    "breakeven_wr_all": 66.1,
+    "breakeven_wr_long": 67.2,
+    "breakeven_wr_short": 64.9,
+    "elapsed_seconds": 43.1
+  }
+}

@@ -1,0 +1,603 @@
+{
+  "timestamp": "2026-03-05T01:47:06.274716",
+  "version": "v1.46.0",
+  "baseline": {
+    "pnl": 1712.1,
+    "mdd": 4.45,
+    "pnl_mdd": 384.7,
+    "scale_events": 27
+  },
+  "off": {
+    "pnl": 1685.8,
+    "mdd": 4.45,
+    "pnl_mdd": 378.8
+  },
+  "phase1_full_below": {
+    "1.0": {
+      "pnl": 1423.5,
+      "mdd": 4.45,
+      "pm": 319.8876404494382,
+      "wr": 67.3,
+      "trades": 1058,
+      "scales": 539
+    },
+    "2.0": {
+      "pnl": 1684.24,
+      "mdd": 4.45,
+      "pm": 378.48089887640447,
+      "wr": 68.51,
+      "trades": 1051,
+      "scales": 183
+    },
+    "3.0": {
+      "pnl": 1712.09,
+      "mdd": 4.45,
+      "pm": 384.7393258426966,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "4.0": {
+      "pnl": 1718.07,
+      "mdd": 4.45,
+      "pm": 386.0831460674157,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 21
+    },
+    "5.0": {
+      "pnl": 1684.85,
+      "mdd": 4.45,
+      "pm": 378.61797752808985,
+      "wr": 68.37,
+      "trades": 1056,
+      "scales": 16
+    },
+    "6.0": {
+      "pnl": 1685.77,
+      "mdd": 4.45,
+      "pm": 378.82471910112355,
+      "wr": 68.37,
+      "trades": 1056,
+      "scales": 9
+    },
+    "8.0": {
+      "pnl": 1685.81,
+      "mdd": 4.45,
+      "pm": 378.8337078651685,
+      "wr": 68.37,
+      "trades": 1056,
+      "scales": 0
+    }
+  },
+  "phase2_min_above": {
+    "8.0": {
+      "pnl": 1710.77,
+      "mdd": 4.45,
+      "pm": 384.44269662921346,
+      "wr": 68.43,
+      "trades": 1061,
+      "scales": 29
+    },
+    "10.0": {
+      "pnl": 1704.31,
+      "mdd": 4.45,
+      "pm": 382.99101123595506,
+      "wr": 68.36,
+      "trades": 1062,
+      "scales": 29
+    },
+    "12.0": {
+      "pnl": 1714.37,
+      "mdd": 4.45,
+      "pm": 385.2516853932584,
+      "wr": 68.43,
+      "trades": 1061,
+      "scales": 28
+    },
+    "15.0": {
+      "pnl": 1712.09,
+      "mdd": 4.45,
+      "pm": 384.7393258426966,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "20.0": {
+      "pnl": 1715.77,
+      "mdd": 4.45,
+      "pm": 385.56629213483143,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "25.0": {
+      "pnl": 1718.3,
+      "mdd": 4.45,
+      "pm": 386.13483146067415,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 31
+    }
+  },
+  "phase3_min_scale": {
+    "0.1": {
+      "pnl": 1716.23,
+      "mdd": 4.45,
+      "pm": 385.6696629213483,
+      "wr": 68.43,
+      "trades": 1061,
+      "scales": 28
+    },
+    "0.15": {
+      "pnl": 1710.37,
+      "mdd": 4.45,
+      "pm": 384.352808988764,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "0.2": {
+      "pnl": 1711.23,
+      "mdd": 4.45,
+      "pm": 384.5460674157303,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "0.25": {
+      "pnl": 1712.09,
+      "mdd": 4.45,
+      "pm": 384.7393258426966,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "0.3": {
+      "pnl": 1712.94,
+      "mdd": 4.45,
+      "pm": 384.9303370786517,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "0.4": {
+      "pnl": 1714.61,
+      "mdd": 4.45,
+      "pm": 385.3056179775281,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    },
+    "0.5": {
+      "pnl": 1716.24,
+      "mdd": 4.45,
+      "pm": 385.6719101123595,
+      "wr": 68.49,
+      "trades": 1060,
+      "scales": 27
+    }
+  },
+  "grid_results": {
+    "fb3_ma12_ms0.10": {
+      "full_below": 3.0,
+      "min_above": 12.0,
+      "min_scale": 0.1,
+      "pnl": 1710.5,
+      "mdd": 4.45,
+      "pnl_mdd": 384.4,
+      "wr": 68.4,
+      "trades": 1061,
+      "scales": 28
+    },
+    "fb3_ma12_ms0.40": {
+      "full_below": 3.0,
+      "min_above": 12.0,
+      "min_scale": 0.4,
+      "pnl": 1711.2,
+      "mdd": 4.45,
+      "pnl_mdd": 384.5,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 27
+    },
+    "fb3_ma12_ms0.50": {
+      "full_below": 3.0,
+      "min_above": 12.0,
+      "min_scale": 0.5,
+      "pnl": 1713.5,
+      "mdd": 4.45,
+      "pnl_mdd": 385.1,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 27
+    },
+    "CURRENT": {
+      "full_below": 3.0,
+      "min_above": 15.0,
+      "min_scale": 0.25,
+      "pnl": 1712.1,
+      "mdd": 4.45,
+      "pnl_mdd": 384.7,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 27
+    },
+    "fb3_ma20_ms0.10": {
+      "full_below": 3.0,
+      "min_above": 20.0,
+      "min_scale": 0.1,
+      "pnl": 1714.0,
+      "mdd": 4.45,
+      "pnl_mdd": 385.2,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 27
+    },
+    "fb3_ma20_ms0.40": {
+      "full_below": 3.0,
+      "min_above": 20.0,
+      "min_scale": 0.4,
+      "pnl": 1718.0,
+      "mdd": 4.45,
+      "pnl_mdd": 386.1,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 31
+    },
+    "fb3_ma20_ms0.50": {
+      "full_below": 3.0,
+      "min_above": 20.0,
+      "min_scale": 0.5,
+      "pnl": 1719.2,
+      "mdd": 4.45,
+      "pnl_mdd": 386.3,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 31
+    },
+    "fb3_ma25_ms0.10": {
+      "full_below": 3.0,
+      "min_above": 25.0,
+      "min_scale": 0.1,
+      "pnl": 1716.4,
+      "mdd": 4.45,
+      "pnl_mdd": 385.7,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 27
+    },
+    "fb3_ma25_ms0.40": {
+      "full_below": 3.0,
+      "min_above": 25.0,
+      "min_scale": 0.4,
+      "pnl": 1719.7,
+      "mdd": 4.45,
+      "pnl_mdd": 386.4,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 31
+    },
+    "fb3_ma25_ms0.50": {
+      "full_below": 3.0,
+      "min_above": 25.0,
+      "min_scale": 0.5,
+      "pnl": 1720.6,
+      "mdd": 4.45,
+      "pnl_mdd": 386.6,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 31
+    },
+    "fb4_ma12_ms0.10": {
+      "full_below": 4.0,
+      "min_above": 12.0,
+      "min_scale": 0.1,
+      "pnl": 1720.4,
+      "mdd": 4.45,
+      "pnl_mdd": 386.6,
+      "wr": 68.4,
+      "trades": 1061,
+      "scales": 19
+    },
+    "fb4_ma12_ms0.40": {
+      "full_below": 4.0,
+      "min_above": 12.0,
+      "min_scale": 0.4,
+      "pnl": 1717.4,
+      "mdd": 4.45,
+      "pnl_mdd": 385.9,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 21
+    },
+    "fb4_ma12_ms0.50": {
+      "full_below": 4.0,
+      "min_above": 12.0,
+      "min_scale": 0.5,
+      "pnl": 1718.6,
+      "mdd": 4.45,
+      "pnl_mdd": 386.2,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 21
+    },
+    "fb4_ma20_ms0.10": {
+      "full_below": 4.0,
+      "min_above": 20.0,
+      "min_scale": 0.1,
+      "pnl": 1719.1,
+      "mdd": 4.45,
+      "pnl_mdd": 386.3,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 21
+    },
+    "fb4_ma20_ms0.40": {
+      "full_below": 4.0,
+      "min_above": 20.0,
+      "min_scale": 0.4,
+      "pnl": 1721.5,
+      "mdd": 4.45,
+      "pnl_mdd": 386.9,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 22
+    },
+    "fb4_ma20_ms0.50": {
+      "full_below": 4.0,
+      "min_above": 20.0,
+      "min_scale": 0.5,
+      "pnl": 1722.1,
+      "mdd": 4.45,
+      "pnl_mdd": 387.0,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 22
+    },
+    "fb4_ma25_ms0.10": {
+      "full_below": 4.0,
+      "min_above": 25.0,
+      "min_scale": 0.1,
+      "pnl": 1721.0,
+      "mdd": 4.45,
+      "pnl_mdd": 386.7,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 22
+    },
+    "fb4_ma25_ms0.40": {
+      "full_below": 4.0,
+      "min_above": 25.0,
+      "min_scale": 0.4,
+      "pnl": 1722.3,
+      "mdd": 4.45,
+      "pnl_mdd": 387.0,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 22
+    },
+    "fb4_ma25_ms0.50": {
+      "full_below": 4.0,
+      "min_above": 25.0,
+      "min_scale": 0.5,
+      "pnl": 1722.8,
+      "mdd": 4.45,
+      "pnl_mdd": 387.1,
+      "wr": 68.5,
+      "trades": 1060,
+      "scales": 22
+    },
+    "fb8_ma12_ms0.10": {
+      "full_below": 8.0,
+      "min_above": 12.0,
+      "min_scale": 0.1,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma12_ms0.40": {
+      "full_below": 8.0,
+      "min_above": 12.0,
+      "min_scale": 0.4,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma12_ms0.50": {
+      "full_below": 8.0,
+      "min_above": 12.0,
+      "min_scale": 0.5,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma20_ms0.10": {
+      "full_below": 8.0,
+      "min_above": 20.0,
+      "min_scale": 0.1,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma20_ms0.40": {
+      "full_below": 8.0,
+      "min_above": 20.0,
+      "min_scale": 0.4,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma20_ms0.50": {
+      "full_below": 8.0,
+      "min_above": 20.0,
+      "min_scale": 0.5,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma25_ms0.10": {
+      "full_below": 8.0,
+      "min_above": 25.0,
+      "min_scale": 0.1,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma25_ms0.40": {
+      "full_below": 8.0,
+      "min_above": 25.0,
+      "min_scale": 0.4,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "fb8_ma25_ms0.50": {
+      "full_below": 8.0,
+      "min_above": 25.0,
+      "min_scale": 0.5,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    },
+    "OFF": {
+      "full_below": 100.0,
+      "min_above": 101.0,
+      "min_scale": 1.0,
+      "pnl": 1685.8,
+      "mdd": 4.45,
+      "pnl_mdd": 378.8,
+      "wr": 68.4,
+      "trades": 1056,
+      "scales": 0
+    }
+  },
+  "wf_results": {
+    "fb4_ma25_ms0.50": {
+      "full_below": 4.0,
+      "min_above": 25.0,
+      "min_scale": 0.5,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 387.1
+    },
+    "fb4_ma20_ms0.50": {
+      "full_below": 4.0,
+      "min_above": 20.0,
+      "min_scale": 0.5,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 387.0
+    },
+    "fb4_ma25_ms0.40": {
+      "full_below": 4.0,
+      "min_above": 25.0,
+      "min_scale": 0.4,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 387.0
+    },
+    "fb4_ma20_ms0.40": {
+      "full_below": 4.0,
+      "min_above": 20.0,
+      "min_scale": 0.4,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 386.9
+    },
+    "fb4_ma25_ms0.10": {
+      "full_below": 4.0,
+      "min_above": 25.0,
+      "min_scale": 0.1,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 386.7
+    },
+    "CURRENT": {
+      "full_below": 3.0,
+      "min_above": 15.0,
+      "min_scale": 0.25,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 384.7
+    },
+    "OFF": {
+      "full_below": 100.0,
+      "min_above": 101.0,
+      "min_scale": 1.0,
+      "folds": [
+        64.4,
+        152.7,
+        112.5
+      ],
+      "avg": 109.8,
+      "min": 64.4,
+      "n_pass": 3,
+      "is_pnl_mdd": 378.8
+    }
+  },
+  "recommended": "fb4_ma25_ms0.50"
+}

@@ -1,0 +1,541 @@
+{
+  "meta": {
+    "script": "momentum_guard_removal_study.py",
+    "date": "2026-03-15T00:14:07.516684",
+    "elapsed_sec": 27.5,
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "patterns_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\results\\dynamic_patterns.json",
+    "n_patterns": 111,
+    "n_signals": 10158,
+    "nw_range": [
+      0,
+      74642
+    ],
+    "config": {
+      "n_slots": 9,
+      "direction_cap": 7,
+      "leverage": 3,
+      "fee_pct": 0.1,
+      "tp_scale": 0.72,
+      "cascade_tighten_pct": 95,
+      "agg_risk_counter": 8.0,
+      "agg_risk_with": 15.0,
+      "timeout_bars": 288,
+      "momentum_on": {
+        "threshold": 1.5,
+        "lookback": 3,
+        "cooldown": 12
+      },
+      "momentum_off": {
+        "threshold": 999.0
+      },
+      "decay": "linear_144 (12h->24h, 100%->50%)"
+    }
+  },
+  "exp1_is_wf": {
+    "is": {
+      "on": {
+        "pnl": 487.25,
+        "mdd": 4.46,
+        "wr": 80.4,
+        "trades": 2125,
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 391,
+          "dir_cap": 158,
+          "dup_pat": 395,
+          "max_pos": 5939
+        }
+      },
+      "off": {
+        "pnl": 489.37,
+        "mdd": 4.46,
+        "wr": 80.5,
+        "trades": 2120,
+        "blocked": {
+          "momentum": 0,
+          "agg_risk": 403,
+          "dir_cap": 159,
+          "dup_pat": 387,
+          "max_pos": 5967
+        }
+      },
+      "gap": 2.12
+    },
+    "wf": {
+      "on": [
+        {
+          "fold": 1,
+          "is_end": 18660,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 111.72,
+          "wr": 84.4,
+          "trades": 454,
+          "mdd": 7.35
+        },
+        {
+          "fold": 2,
+          "is_end": 37321,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 127.52,
+          "wr": 77.0,
+          "trades": 574,
+          "mdd": 4.03
+        },
+        {
+          "fold": 3,
+          "is_end": 55981,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 125.6,
+          "wr": 75.2,
+          "trades": 645,
+          "mdd": 5.27
+        }
+      ],
+      "off": [
+        {
+          "fold": 1,
+          "pnl": 110.28,
+          "wr": 84.3,
+          "trades": 451,
+          "mdd": 7.38
+        },
+        {
+          "fold": 2,
+          "pnl": 128.32,
+          "wr": 76.6,
+          "trades": 578,
+          "mdd": 4.01
+        },
+        {
+          "fold": 3,
+          "pnl": 128.4,
+          "wr": 75.9,
+          "trades": 639,
+          "mdd": 5.27
+        }
+      ]
+    },
+    "wf_total_on": 364.84,
+    "wf_total_off": 367.0,
+    "off_wins_folds": 2,
+    "discrimination": "NON-DISCRIMINATING"
+  },
+  "exp2_blocked_analysis": {
+    "total_momentum_triggers": 55,
+    "total_blocked_entries": 42,
+    "would_tp": 21,
+    "would_sl": 0,
+    "would_timeout": 21,
+    "harmful_block_pct": 50.0,
+    "useful_block_pct": 0.0,
+    "block_quality_pct": 0.0,
+    "momentum_events_sample": [
+      {
+        "bar": 4637,
+        "pct_change": -1.913,
+        "blocked_direction": "LONG",
+        "cooldown_until": 4649
+      },
+      {
+        "bar": 14198,
+        "pct_change": 1.573,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 14210
+      },
+      {
+        "bar": 19083,
+        "pct_change": 2.551,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 19095
+      },
+      {
+        "bar": 19084,
+        "pct_change": 2.153,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 19096
+      },
+      {
+        "bar": 19085,
+        "pct_change": 1.82,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 19097
+      },
+      {
+        "bar": 29058,
+        "pct_change": -1.683,
+        "blocked_direction": "LONG",
+        "cooldown_until": 29070
+      },
+      {
+        "bar": 29059,
+        "pct_change": -1.638,
+        "blocked_direction": "LONG",
+        "cooldown_until": 29071
+      },
+      {
+        "bar": 31381,
+        "pct_change": 1.996,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 31393
+      },
+      {
+        "bar": 31382,
+        "pct_change": 2.396,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 31394
+      },
+      {
+        "bar": 32023,
+        "pct_change": -1.72,
+        "blocked_direction": "LONG",
+        "cooldown_until": 32035
+      },
+      {
+        "bar": 40212,
+        "pct_change": -1.642,
+        "blocked_direction": "LONG",
+        "cooldown_until": 40224
+      },
+      {
+        "bar": 45575,
+        "pct_change": -2.37,
+        "blocked_direction": "LONG",
+        "cooldown_until": 45587
+      },
+      {
+        "bar": 45576,
+        "pct_change": -1.561,
+        "blocked_direction": "LONG",
+        "cooldown_until": 45588
+      },
+      {
+        "bar": 45578,
+        "pct_change": -1.804,
+        "blocked_direction": "LONG",
+        "cooldown_until": 45590
+      },
+      {
+        "bar": 45579,
+        "pct_change": -10.056,
+        "blocked_direction": "LONG",
+        "cooldown_until": 45591
+      },
+      {
+        "bar": 45580,
+        "pct_change": -5.166,
+        "blocked_direction": "LONG",
+        "cooldown_until": 45592
+      },
+      {
+        "bar": 45581,
+        "pct_change": -2.635,
+        "blocked_direction": "LONG",
+        "cooldown_until": 45593
+      },
+      {
+        "bar": 45582,
+        "pct_change": 7.638,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 45594
+      },
+      {
+        "bar": 45583,
+        "pct_change": 2.795,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 45595
+      },
+      {
+        "bar": 45584,
+        "pct_change": 1.887,
+        "blocked_direction": "SHORT",
+        "cooldown_until": 45596
+      }
+    ]
+  },
+  "exp3_extreme_scenarios": {
+    "top10_moves": [
+      {
+        "rank": 1,
+        "bar": 45579,
+        "pct_change_15min": -10.056,
+        "blocked_direction": "LONG",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 1,
+        "max_adverse_24h_pct": 0.0
+      },
+      {
+        "rank": 2,
+        "bar": 45582,
+        "pct_change_15min": 7.638,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 2,
+        "max_adverse_24h_pct": 2.88
+      },
+      {
+        "rank": 3,
+        "bar": 45580,
+        "pct_change_15min": -5.166,
+        "blocked_direction": "LONG",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 1,
+        "max_adverse_24h_pct": 0.0
+      },
+      {
+        "rank": 4,
+        "bar": 45583,
+        "pct_change_15min": 2.795,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 2,
+        "max_adverse_24h_pct": 2.73
+      },
+      {
+        "rank": 5,
+        "bar": 45581,
+        "pct_change_15min": -2.635,
+        "blocked_direction": "LONG",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 0,
+        "max_adverse_24h_pct": 0.0
+      },
+      {
+        "rank": 6,
+        "bar": 19083,
+        "pct_change_15min": 2.551,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 2,
+        "max_adverse_24h_pct": 2.01
+      },
+      {
+        "rank": 7,
+        "bar": 57572,
+        "pct_change_15min": 2.531,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 0,
+        "max_adverse_24h_pct": 3.02
+      },
+      {
+        "rank": 8,
+        "bar": 65087,
+        "pct_change_15min": 2.49,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 2,
+        "max_adverse_24h_pct": 0.58
+      },
+      {
+        "rank": 9,
+        "bar": 65088,
+        "pct_change_15min": 2.474,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 2,
+        "max_adverse_24h_pct": 0.66
+      },
+      {
+        "rank": 10,
+        "bar": 31382,
+        "pct_change_15min": 2.396,
+        "blocked_direction": "SHORT",
+        "triggers_guard": "True",
+        "signals_in_cooldown": 2,
+        "max_adverse_24h_pct": 1.94
+      }
+    ],
+    "total_triggers_above_threshold": 10
+  },
+  "exp4_threshold_sweep": {
+    "threshold_sweep": [
+      {
+        "threshold": 999.0,
+        "label": "OFF",
+        "pnl": 489.37,
+        "mdd": 4.46,
+        "pnl_mdd": 109.7,
+        "wr": 80.5,
+        "trades": 2120,
+        "blocked": 0
+      },
+      {
+        "threshold": 0.5,
+        "label": "0.5%",
+        "pnl": 455.62,
+        "mdd": 4.47,
+        "pnl_mdd": 101.9,
+        "wr": 81.3,
+        "trades": 2005,
+        "blocked": 771
+      },
+      {
+        "threshold": 1.0,
+        "label": "1.0%",
+        "pnl": 471.38,
+        "mdd": 4.46,
+        "pnl_mdd": 105.7,
+        "wr": 79.3,
+        "trades": 2120,
+        "blocked": 136
+      },
+      {
+        "threshold": 1.5,
+        "label": "1.5%",
+        "pnl": 487.25,
+        "mdd": 4.46,
+        "pnl_mdd": 109.2,
+        "wr": 80.4,
+        "trades": 2125,
+        "blocked": 37
+      },
+      {
+        "threshold": 2.0,
+        "label": "2.0%",
+        "pnl": 488.67,
+        "mdd": 4.46,
+        "pnl_mdd": 109.6,
+        "wr": 80.5,
+        "trades": 2116,
+        "blocked": 12
+      },
+      {
+        "threshold": 3.0,
+        "label": "3.0%",
+        "pnl": 489.01,
+        "mdd": 4.46,
+        "pnl_mdd": 109.6,
+        "wr": 80.5,
+        "trades": 2117,
+        "blocked": 3
+      },
+      {
+        "threshold": 5.0,
+        "label": "5.0%",
+        "pnl": 489.01,
+        "mdd": 4.46,
+        "pnl_mdd": 109.6,
+        "wr": 80.5,
+        "trades": 2117,
+        "blocked": 3
+      }
+    ],
+    "cooldown_sweep": [
+      {
+        "cooldown": 0,
+        "label": "OFF",
+        "pnl": 489.37,
+        "mdd": 4.46,
+        "pnl_mdd": 109.7,
+        "wr": 80.5,
+        "trades": 2120,
+        "blocked": 0
+      },
+      {
+        "cooldown": 6,
+        "label": "6bars",
+        "pnl": 488.47,
+        "mdd": 4.46,
+        "pnl_mdd": 109.5,
+        "wr": 80.3,
+        "trades": 2130,
+        "blocked": 24
+      },
+      {
+        "cooldown": 12,
+        "label": "12bars",
+        "pnl": 487.25,
+        "mdd": 4.46,
+        "pnl_mdd": 109.2,
+        "wr": 80.4,
+        "trades": 2125,
+        "blocked": 37
+      },
+      {
+        "cooldown": 24,
+        "label": "24bars",
+        "pnl": 484.23,
+        "mdd": 4.46,
+        "pnl_mdd": 108.6,
+        "wr": 80.5,
+        "trades": 2109,
+        "blocked": 68
+      },
+      {
+        "cooldown": 48,
+        "label": "48bars",
+        "pnl": 476.5,
+        "mdd": 4.46,
+        "pnl_mdd": 106.8,
+        "wr": 80.0,
+        "trades": 2109,
+        "blocked": 123
+      }
+    ],
+    "best_threshold_wf": {
+      "threshold": 999.0,
+      "label": "OFF",
+      "folds": [
+        {
+          "fold": 1,
+          "pnl": 110.28,
+          "wr": 84.3,
+          "trades": 451
+        },
+        {
+          "fold": 2,
+          "pnl": 128.32,
+          "wr": 76.6,
+          "trades": 578
+        },
+        {
+          "fold": 3,
+          "pnl": 128.4,
+          "wr": 75.9,
+          "trades": 639
+        }
+      ],
+      "total_oos": 367.0
+    }
+  },
+  "exp5_tail_risk": {
+    "ON": {
+      "pnl": 487.25,
+      "mdd_mtm": 4.46,
+      "worst_bar_loss": -4.954,
+      "best_bar_gain": 2.247,
+      "worst_day_loss": -3.52,
+      "best_day_gain": 8.78,
+      "day_p1": -2.08,
+      "day_p5": 0.05,
+      "max_consecutive_sl": 7,
+      "total_sl_trades": 409,
+      "total_trades": 2125,
+      "corr_events": 83,
+      "max_corr_loss": 4.95
+    },
+    "OFF": {
+      "pnl": 489.37,
+      "mdd_mtm": 4.46,
+      "worst_bar_loss": -3.737,
+      "best_bar_gain": 2.379,
+      "worst_day_loss": -2.56,
+      "best_day_gain": 8.78,
+      "day_p1": -1.83,
+      "day_p5": 0.01,
+      "max_consecutive_sl": 7,
+      "total_sl_trades": 406,
+      "total_trades": 2120,
+      "corr_events": 83,
+      "max_corr_loss": 3.74
+    },
+    "insurance_value_mdd_pp": 0.0,
+    "insurance_value_worst_day": -0.96
+  },
+  "verdict": "KEEP_BASELINE (NON-DISCRIMINATING)",
+  "rationale": "Gap +2.1% too small to be meaningful. WF NON-DISCRIMINATING. Keep as insurance."
+}

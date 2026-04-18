@@ -1,0 +1,507 @@
+{
+  "study": "bidirectional_loss_deep_study",
+  "date": "2026-03-27T19:23:57.147556",
+  "data_bars": 87315,
+  "live_trades": 519,
+  "patterns": 111,
+  "phase1_live_decomposition": {
+    "by_direction": {
+      "LONG": {
+        "count": 198,
+        "wr": 56.56565656565656,
+        "avg_win": 3.0898767857142855,
+        "avg_loss": -4.3387220930232555,
+        "total_pnl": -27.063899999999997,
+        "rr": 0.7121628718010918
+      },
+      "SHORT": {
+        "count": 321,
+        "wr": 61.37071651090342,
+        "avg_win": 3.304595939086294,
+        "avg_loss": -6.251452419354838,
+        "total_pnl": -124.1747,
+        "rr": 0.5286125075278642
+      }
+    },
+    "by_exit_reason": {
+      "UNKNOWN": {
+        "count": 9,
+        "avg_pnl": -2.0413444444444444,
+        "total_pnl": -18.3721
+      },
+      "CASCADE_SL": {
+        "count": 20,
+        "avg_pnl": -3.5908299999999995,
+        "total_pnl": -71.81660000000001
+      },
+      "TIMEOUT": {
+        "count": 37,
+        "avg_pnl": -2.8433513513513518,
+        "total_pnl": -105.204
+      },
+      "CRASH_RECOVERY": {
+        "count": 5,
+        "avg_pnl": -1.66046,
+        "total_pnl": -8.302299999999999
+      },
+      "MARKET": {
+        "count": 17,
+        "avg_pnl": -1.9679647058823528,
+        "total_pnl": -33.4554
+      },
+      "SL": {
+        "count": 129,
+        "avg_pnl": -6.77374496124031,
+        "total_pnl": -873.8131
+      },
+      "EARLY_BU": {
+        "count": 9,
+        "avg_pnl": 0.9133888888888888,
+        "total_pnl": 8.2205
+      },
+      "TP": {
+        "count": 231,
+        "avg_pnl": 3.9004047619047615,
+        "total_pnl": 900.9935
+      },
+      "OPP_SIGNAL": {
+        "count": 62,
+        "avg_pnl": 0.8146919354838711,
+        "total_pnl": 50.5109
+      }
+    },
+    "by_day": {
+      "2026-02-24": {
+        "long_pnl": -4.1011,
+        "short_pnl": 26.434,
+        "long_cnt": 1,
+        "short_cnt": 5
+      },
+      "2026-02-25": {
+        "long_pnl": 0,
+        "short_pnl": -77.6422,
+        "long_cnt": 0,
+        "short_cnt": 11
+      },
+      "2026-02-26": {
+        "long_pnl": 0,
+        "short_pnl": -35.0478,
+        "long_cnt": 0,
+        "short_cnt": 3
+      },
+      "2026-02-27": {
+        "long_pnl": -28.7215,
+        "short_pnl": 16.292900000000003,
+        "long_cnt": 4,
+        "short_cnt": 5
+      },
+      "2026-02-28": {
+        "long_pnl": -15.4511,
+        "short_pnl": 27.5513,
+        "long_cnt": 7,
+        "short_cnt": 5
+      },
+      "2026-03-01": {
+        "long_pnl": 45.683499999999995,
+        "short_pnl": -53.4072,
+        "long_cnt": 8,
+        "short_cnt": 4
+      },
+      "2026-03-02": {
+        "long_pnl": 0,
+        "short_pnl": 18.5845,
+        "long_cnt": 0,
+        "short_cnt": 3
+      },
+      "2026-03-03": {
+        "long_pnl": 17.953699999999998,
+        "short_pnl": -45.70980000000001,
+        "long_cnt": 9,
+        "short_cnt": 13
+      },
+      "2026-03-04": {
+        "long_pnl": 23.960399999999996,
+        "short_pnl": -37.477799999999995,
+        "long_cnt": 6,
+        "short_cnt": 10
+      },
+      "2026-03-05": {
+        "long_pnl": -19.8289,
+        "short_pnl": 14.6921,
+        "long_cnt": 5,
+        "short_cnt": 5
+      },
+      "2026-03-06": {
+        "long_pnl": -19.8785,
+        "short_pnl": 68.4175,
+        "long_cnt": 2,
+        "short_cnt": 13
+      },
+      "2026-03-07": {
+        "long_pnl": -3.5351,
+        "short_pnl": 11.4738,
+        "long_cnt": 1,
+        "short_cnt": 2
+      },
+      "2026-03-08": {
+        "long_pnl": -8.660699999999999,
+        "short_pnl": 23.076200000000004,
+        "long_cnt": 2,
+        "short_cnt": 9
+      },
+      "2026-03-09": {
+        "long_pnl": 31.515800000000002,
+        "short_pnl": -35.765100000000004,
+        "long_cnt": 10,
+        "short_cnt": 11
+      },
+      "2026-03-10": {
+        "long_pnl": 57.0654,
+        "short_pnl": 0.178300000000001,
+        "long_cnt": 9,
+        "short_cnt": 4
+      },
+      "2026-03-11": {
+        "long_pnl": -12.8687,
+        "short_pnl": -5.0093000000000005,
+        "long_cnt": 4,
+        "short_cnt": 9
+      },
+      "2026-03-12": {
+        "long_pnl": -15.982500000000002,
+        "short_pnl": 6.621099999999998,
+        "long_cnt": 7,
+        "short_cnt": 16
+      },
+      "2026-03-13": {
+        "long_pnl": 26.4034,
+        "short_pnl": -95.45190000000002,
+        "long_cnt": 8,
+        "short_cnt": 15
+      },
+      "2026-03-14": {
+        "long_pnl": -10.9044,
+        "short_pnl": 19.0255,
+        "long_cnt": 1,
+        "short_cnt": 11
+      },
+      "2026-03-15": {
+        "long_pnl": -6.825800000000001,
+        "short_pnl": -16.971,
+        "long_cnt": 11,
+        "short_cnt": 4
+      },
+      "2026-03-16": {
+        "long_pnl": 25.156100000000002,
+        "short_pnl": -49.10450000000001,
+        "long_cnt": 7,
+        "short_cnt": 18
+      },
+      "2026-03-17": {
+        "long_pnl": 20.041,
+        "short_pnl": -11.0561,
+        "long_cnt": 9,
+        "short_cnt": 14
+      },
+      "2026-03-18": {
+        "long_pnl": -37.109700000000004,
+        "short_pnl": 45.6131,
+        "long_cnt": 13,
+        "short_cnt": 18
+      },
+      "2026-03-19": {
+        "long_pnl": -23.463900000000002,
+        "short_pnl": 32.476,
+        "long_cnt": 12,
+        "short_cnt": 11
+      },
+      "2026-03-20": {
+        "long_pnl": 5.0571,
+        "short_pnl": 6.923399999999997,
+        "long_cnt": 4,
+        "short_cnt": 15
+      },
+      "2026-03-21": {
+        "long_pnl": 4.2088,
+        "short_pnl": -9.3445,
+        "long_cnt": 6,
+        "short_cnt": 7
+      },
+      "2026-03-22": {
+        "long_pnl": -31.353,
+        "short_pnl": 18.7407,
+        "long_cnt": 13,
+        "short_cnt": 13
+      },
+      "2026-03-23": {
+        "long_pnl": -1.452400000000002,
+        "short_pnl": -14.559299999999997,
+        "long_cnt": 11,
+        "short_cnt": 10
+      },
+      "2026-03-24": {
+        "long_pnl": -10.1595,
+        "short_pnl": 5.8361,
+        "long_cnt": 2,
+        "short_cnt": 12
+      },
+      "2026-03-25": {
+        "long_pnl": 3.6543,
+        "short_pnl": -45.836299999999994,
+        "long_cnt": 10,
+        "short_cnt": 16
+      },
+      "2026-03-26": {
+        "long_pnl": -24.2406,
+        "short_pnl": 28.149499999999996,
+        "long_cnt": 9,
+        "short_cnt": 15
+      },
+      "2026-03-27": {
+        "long_pnl": -13.225999999999999,
+        "short_pnl": 38.1221,
+        "long_cnt": 7,
+        "short_cnt": 14
+      }
+    },
+    "rr_analysis": {
+      "avg_win": 3.227,
+      "avg_loss": -5.468,
+      "rr": 0.59,
+      "wr": 59.5,
+      "breakeven_wr": 62.9,
+      "wr_margin": -3.4,
+      "profit_factor": 0.868
+    },
+    "cluster_events": [],
+    "vol_mult_stats": {
+      "mean": 1.108,
+      "median": 1.098,
+      "p10": 0.671,
+      "p90": 1.5,
+      "pct_above_1": 57.2
+    }
+  },
+  "phase2_vol_adapt_impact": {
+    "sl_vol_corr": -0.276,
+    "sl_by_vol_bucket": {
+      "low_<1.0": {
+        "count": 63,
+        "avg_vol": 0.782,
+        "avg_loss": -5.122
+      },
+      "mid_1.0-1.5": {
+        "count": 57,
+        "avg_vol": 1.293,
+        "avg_loss": -6.194
+      }
+    },
+    "tp_avg_vol": 1.1,
+    "tp_avg_pnl": 3.678,
+    "sl_avg_loss_clamp_1.0": -5.83,
+    "sl_avg_loss_clamp_1.5": -6.347,
+    "sl_avg_loss_clamp_2.0": -6.347
+  },
+  "phase3_cascade_effectiveness": {
+    "cascade_exits": 20,
+    "normal_sl_exits": 129,
+    "cascade_ratio": 13.4,
+    "cascade_avg_loss": -3.591,
+    "normal_sl_avg_loss": -6.774,
+    "sl_cluster_events": 38,
+    "sl_cluster_total_loss": -835.31
+  },
+  "phase4_microstructure": {
+    "train_atr": {
+      "mean": 1.1732,
+      "median": 1.0015,
+      "std": 0.6782
+    },
+    "recent_atr": {
+      "mean": 1.1234,
+      "median": 0.9722,
+      "std": 0.4851
+    },
+    "train_bar_range_pct": {
+      "mean": 0.1492,
+      "median": 0.1158
+    },
+    "recent_bar_range_pct": {
+      "mean": 0.2706,
+      "median": 0.213
+    },
+    "train_autocorr_1": -0.0248,
+    "recent_autocorr_1": 0.0133,
+    "train_autocorr_5": 0.0032,
+    "recent_autocorr_5": 0.016,
+    "train_hurst": 0.4943,
+    "recent_hurst": 0.5057,
+    "train_vol_regime": 0.118,
+    "recent_vol_regime": 0.1966
+  },
+  "phase5_npos_simulation": {
+    "full_period": {
+      "trades": 3259,
+      "wr": 63.1,
+      "pnl": 665.27,
+      "mdd": 1.12,
+      "pnl_mdd": 595.44,
+      "pnl_per_trade": 0.204,
+      "mdd_mtm": 2.05
+    },
+    "recent_30d": {
+      "trades": 615,
+      "wr": 60.5,
+      "pnl": 108.82,
+      "mdd": 2.11,
+      "pnl_mdd": 51.64,
+      "pnl_per_trade": 0.177
+    },
+    "recent_rr": {
+      "avg_win": 3.594,
+      "avg_loss": -1.472,
+      "rr": 2.442,
+      "wr": 60.5
+    },
+    "recent_exit_reasons": {
+      "TP": 369,
+      "SL": 241,
+      "OOS_END": 5
+    }
+  },
+  "phase6_parameter_sensitivity": {
+    "baseline_cascade85": {
+      "trades": 615,
+      "wr": 60.7,
+      "pnl": 105.57,
+      "mdd": 2.12,
+      "pnl_mdd": 49.7,
+      "pnl_per_trade": 0.172,
+      "mdd_mtm": 3.21,
+      "rr": 2.227,
+      "wr_margin": 29.7
+    },
+    "production_cascade95": {
+      "trades": 615,
+      "wr": 60.5,
+      "pnl": 108.82,
+      "mdd": 2.11,
+      "pnl_mdd": 51.64,
+      "pnl_per_trade": 0.177,
+      "mdd_mtm": 3.13,
+      "rr": 2.442,
+      "wr_margin": 31.4
+    },
+    "aggressive_cascade98": {
+      "trades": 727,
+      "wr": 52.8,
+      "pnl": 119.33,
+      "mdd": 1.42,
+      "pnl_mdd": 83.9,
+      "pnl_per_trade": 0.164,
+      "mdd_mtm": 2.4,
+      "rr": 4.171,
+      "wr_margin": 33.5
+    },
+    "no_cascade": {
+      "trades": 461,
+      "wr": 76.1,
+      "pnl": 19.7,
+      "mdd": 16.13,
+      "pnl_mdd": 1.22,
+      "pnl_per_trade": 0.043,
+      "mdd_mtm": 17.54,
+      "rr": 0.364,
+      "wr_margin": 2.8
+    },
+    "no_preemptive": {
+      "trades": 497,
+      "wr": 69.0,
+      "pnl": 75.48,
+      "mdd": 6.52,
+      "pnl_mdd": 11.58,
+      "pnl_per_trade": 0.152,
+      "mdd_mtm": 8.36,
+      "rr": 0.992,
+      "wr_margin": 18.8
+    },
+    "tight_agg_risk": {
+      "trades": 591,
+      "wr": 61.3,
+      "pnl": 103.57,
+      "mdd": 2.11,
+      "pnl_mdd": 49.18,
+      "pnl_per_trade": 0.175,
+      "mdd_mtm": 3.12,
+      "rr": 2.261,
+      "wr_margin": 30.6
+    },
+    "dircap_5": {
+      "trades": 572,
+      "wr": 61.0,
+      "pnl": 99.46,
+      "mdd": 2.13,
+      "pnl_mdd": 46.65,
+      "pnl_per_trade": 0.174,
+      "mdd_mtm": 3.09,
+      "rr": 2.3,
+      "wr_margin": 30.7
+    }
+  },
+  "phase7_prescriptions": {
+    "wf_prescriptions": {
+      "CURRENT": {
+        "fold_pnls": [
+          108.7,
+          218.5,
+          198.1
+        ],
+        "total_oos": 525.4,
+        "min_fold": 108.7,
+        "all_positive": true,
+        "verdict": "PASS"
+      },
+      "RX1_cascade98_pre2": {
+        "fold_pnls": [
+          119.8,
+          248.1,
+          214.5
+        ],
+        "total_oos": 582.4,
+        "min_fold": 119.8,
+        "all_positive": true,
+        "verdict": "PASS"
+      },
+      "RX2_dircap5_agg7_12": {
+        "fold_pnls": [
+          96.5,
+          209.1,
+          188.9
+        ],
+        "total_oos": 494.5,
+        "min_fold": 96.5,
+        "all_positive": true,
+        "verdict": "PASS"
+      },
+      "RX3_combo_tight": {
+        "fold_pnls": [
+          105.3,
+          230.3,
+          211.7
+        ],
+        "total_oos": 547.3,
+        "min_fold": 105.3,
+        "all_positive": true,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "synthesis": {
+    "rr": 0.59,
+    "wr_margin": -3.4,
+    "profit_factor": 0.868,
+    "cascade_effectiveness": 13.4,
+    "best_prescription": "RX1_cascade98_pre2",
+    "best_oos": 582.4
+  }
+}

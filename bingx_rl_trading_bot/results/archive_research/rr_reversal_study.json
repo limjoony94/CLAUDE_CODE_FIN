@@ -1,0 +1,464 @@
+{
+  "study": "rr_reversal",
+  "generated_at": "2026-03-01T16:22:39",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "data_bars": 85634,
+  "neutral_window": {
+    "bar_start": 288,
+    "bar_end": 74401,
+    "days": 257.0
+  },
+  "constants": {
+    "leverage": 3,
+    "fee_pct": 0.1,
+    "slippage_buffer": 0.02,
+    "max_bars": 288,
+    "timeout_bars": 864,
+    "edge_threshold_rr1": 5.0,
+    "mc_threshold": 0.01,
+    "min_trades": 25,
+    "atr_period": 14,
+    "atr_window": 576,
+    "clamp": [
+      0.6,
+      1.7
+    ]
+  },
+  "phase1_symmetric": {
+    "grid_summary": [
+      {
+        "tp": 1.5,
+        "sl": 1.5,
+        "rr": 1.0,
+        "baseline_wr": 50.0,
+        "n_tested": 997,
+        "n_passing": 1,
+        "pass_rate": 0.1,
+        "mean_wr": 49.0,
+        "mean_edge": -1.0
+      },
+      {
+        "tp": 2.0,
+        "sl": 2.0,
+        "rr": 1.0,
+        "baseline_wr": 50.0,
+        "n_tested": 744,
+        "n_passing": 2,
+        "pass_rate": 0.27,
+        "mean_wr": 49.1,
+        "mean_edge": -0.9
+      },
+      {
+        "tp": 2.5,
+        "sl": 2.5,
+        "rr": 1.0,
+        "baseline_wr": 50.0,
+        "n_tested": 486,
+        "n_passing": 2,
+        "pass_rate": 0.41,
+        "mean_wr": 49.3,
+        "mean_edge": -0.7
+      },
+      {
+        "tp": 3.0,
+        "sl": 3.0,
+        "rr": 1.0,
+        "baseline_wr": 50.0,
+        "n_tested": 355,
+        "n_passing": 1,
+        "pass_rate": 0.28,
+        "mean_wr": 49.2,
+        "mean_edge": -0.8
+      },
+      {
+        "tp": 3.5,
+        "sl": 3.5,
+        "rr": 1.0,
+        "baseline_wr": 50.0,
+        "n_tested": 231,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 49.1,
+        "mean_edge": -0.9
+      },
+      {
+        "tp": 4.0,
+        "sl": 4.0,
+        "rr": 1.0,
+        "baseline_wr": 50.0,
+        "n_tested": 146,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 49.1,
+        "mean_edge": -0.9
+      }
+    ],
+    "total_passing": 6
+  },
+  "phase2_favorable": {
+    "grid_summary": [
+      {
+        "tp": 2.25,
+        "sl": 1.5,
+        "rr": 1.5,
+        "baseline_wr": 40.0,
+        "n_tested": 851,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 34.0,
+        "mean_edge": -6.0
+      },
+      {
+        "tp": 3.0,
+        "sl": 2.0,
+        "rr": 1.5,
+        "baseline_wr": 40.0,
+        "n_tested": 540,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 31.2,
+        "mean_edge": -8.8
+      },
+      {
+        "tp": 3.75,
+        "sl": 2.5,
+        "rr": 1.5,
+        "baseline_wr": 40.0,
+        "n_tested": 371,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 28.8,
+        "mean_edge": -11.2
+      },
+      {
+        "tp": 4.5,
+        "sl": 3.0,
+        "rr": 1.5,
+        "baseline_wr": 40.0,
+        "n_tested": 219,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 27.0,
+        "mean_edge": -13.0
+      },
+      {
+        "tp": 3.0,
+        "sl": 1.5,
+        "rr": 2.0,
+        "baseline_wr": 33.3,
+        "n_tested": 742,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 22.5,
+        "mean_edge": -10.8
+      },
+      {
+        "tp": 4.0,
+        "sl": 2.0,
+        "rr": 2.0,
+        "baseline_wr": 33.3,
+        "n_tested": 461,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 19.1,
+        "mean_edge": -14.3
+      },
+      {
+        "tp": 5.0,
+        "sl": 2.5,
+        "rr": 2.0,
+        "baseline_wr": 33.3,
+        "n_tested": 299,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 16.2,
+        "mean_edge": -17.2
+      },
+      {
+        "tp": 6.0,
+        "sl": 3.0,
+        "rr": 2.0,
+        "baseline_wr": 33.3,
+        "n_tested": 168,
+        "n_passing": 0,
+        "pass_rate": 0.0,
+        "mean_wr": 13.8,
+        "mean_edge": -19.6
+      }
+    ],
+    "total_passing": 0
+  },
+  "phase3_per_pattern_optimal": {
+    "total_patterns": 5,
+    "long_count": 4,
+    "short_count": 1,
+    "mean_wr": 72.8,
+    "mean_wr_excess": 22.8,
+    "rr_distribution": {
+      "min": 1.0,
+      "max": 1.0,
+      "mean": 1.0,
+      "median": 1.0
+    },
+    "tp_range": [
+      1.5,
+      2.5
+    ],
+    "sl_range": [
+      1.5,
+      2.5
+    ],
+    "selected_patterns": [
+      {
+        "pattern": "MD-MU-ST",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 2.0,
+        "trades": 35,
+        "wr": 68.6,
+        "edge": 18.6,
+        "mc_p": 0.009,
+        "baseline_wr": 50.0
+      },
+      {
+        "pattern": "MU-U-DN",
+        "direction": "LONG",
+        "tp": 2.5,
+        "sl": 2.5,
+        "trades": 87,
+        "wr": 64.4,
+        "edge": 14.4,
+        "mc_p": 0.008,
+        "baseline_wr": 50.0
+      },
+      {
+        "pattern": "ST-MU-D",
+        "direction": "SHORT",
+        "tp": 1.5,
+        "sl": 1.5,
+        "trades": 25,
+        "wr": 80.0,
+        "edge": 30.0,
+        "mc_p": 0.0094,
+        "baseline_wr": 50.0
+      },
+      {
+        "pattern": "ST-MU-U",
+        "direction": "LONG",
+        "tp": 2.5,
+        "sl": 2.5,
+        "trades": 53,
+        "wr": 71.7,
+        "edge": 21.7,
+        "mc_p": 0.0038,
+        "baseline_wr": 50.0
+      },
+      {
+        "pattern": "U-MU-H",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 2.0,
+        "trades": 34,
+        "wr": 79.4,
+        "edge": 29.4,
+        "mc_p": 0.0026,
+        "baseline_wr": 50.0
+      }
+    ]
+  },
+  "phase4_portfolio_wf": {
+    "is_stats": {
+      "1pos": {
+        "pnl": 200.4,
+        "trades": 129,
+        "wr": 64.3,
+        "mdd": 44.7,
+        "pf": 1.69,
+        "avg_win": 5.89,
+        "avg_loss": -6.28
+      },
+      "compound": {
+        "compound_pnl": 77.6,
+        "mdd": 9.7,
+        "trades": 234,
+        "wr": 70.5
+      }
+    },
+    "wf_results": {
+      "n_folds": 3,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 18600,
+          "oos_bars": 18600,
+          "oos_trades": 0,
+          "oos_wr": 0,
+          "oos_pnl": 0,
+          "oos_mdd": 0,
+          "oos_compound_pnl": 0,
+          "oos_compound_mdd": 0,
+          "oos_compound_trades": 0,
+          "oos_positive": false
+        },
+        {
+          "fold": 2,
+          "is_bars": 37200,
+          "oos_bars": 18600,
+          "oos_trades": 0,
+          "oos_wr": 0,
+          "oos_pnl": 0,
+          "oos_mdd": 0,
+          "oos_compound_pnl": 0,
+          "oos_compound_mdd": 0,
+          "oos_compound_trades": 0,
+          "oos_positive": false
+        },
+        {
+          "fold": 3,
+          "is_bars": 55800,
+          "oos_bars": 18601,
+          "oos_trades": 21,
+          "oos_wr": 66.7,
+          "oos_pnl": 34.1,
+          "oos_mdd": 14.8,
+          "oos_compound_pnl": 4.7,
+          "oos_compound_mdd": 3.0,
+          "oos_compound_trades": 29,
+          "oos_positive": "True"
+        }
+      ],
+      "positive_folds": 1,
+      "total_oos_pnl": 34.1,
+      "total_oos_trades": 21,
+      "wf_pass": false
+    },
+    "wf_pass": false
+  },
+  "phase5_random_comparison": {
+    "prod_filter_pass": 2,
+    "prod_filter_tested": 744,
+    "prod_filter_pass_rate": 0.3,
+    "random_trials": [
+      {
+        "trial": 1,
+        "n_sampled": 5,
+        "is_trades": 129,
+        "is_wr": 39.5,
+        "is_pnl": -136.8,
+        "compound_pnl": -31.9,
+        "filter_pass": 0,
+        "filter_tested": 2,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 2,
+        "n_sampled": 5,
+        "is_trades": 71,
+        "is_wr": 35.2,
+        "is_pnl": -94.9,
+        "compound_pnl": -9.4,
+        "filter_pass": 0,
+        "filter_tested": 1,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 3,
+        "n_sampled": 5,
+        "is_trades": 86,
+        "is_wr": 73.3,
+        "is_pnl": 132.7,
+        "compound_pnl": 14.1,
+        "filter_pass": 0,
+        "filter_tested": 1,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 4,
+        "n_sampled": 5,
+        "is_trades": 105,
+        "is_wr": 54.3,
+        "is_pnl": 68.4,
+        "compound_pnl": -3.6,
+        "filter_pass": 0,
+        "filter_tested": 2,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 5,
+        "n_sampled": 5,
+        "is_trades": 66,
+        "is_wr": 54.5,
+        "is_pnl": 23.6,
+        "compound_pnl": 2.7,
+        "filter_pass": 0,
+        "filter_tested": 2,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 6,
+        "n_sampled": 5,
+        "is_trades": 50,
+        "is_wr": 32.0,
+        "is_pnl": -86.6,
+        "compound_pnl": -9.6,
+        "filter_pass": 0,
+        "filter_tested": 1,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 7,
+        "n_sampled": 5,
+        "is_trades": 131,
+        "is_wr": 62.6,
+        "is_pnl": 92.2,
+        "compound_pnl": 3.0,
+        "filter_pass": 0,
+        "filter_tested": 3,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 8,
+        "n_sampled": 5,
+        "is_trades": 123,
+        "is_wr": 36.6,
+        "is_pnl": -168.6,
+        "compound_pnl": -23.8,
+        "filter_pass": 0,
+        "filter_tested": 2,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 9,
+        "n_sampled": 5,
+        "is_trades": 128,
+        "is_wr": 50.0,
+        "is_pnl": 3.7,
+        "compound_pnl": -7.1,
+        "filter_pass": 0,
+        "filter_tested": 2,
+        "filter_pass_rate": 0.0
+      },
+      {
+        "trial": 10,
+        "n_sampled": 5,
+        "is_trades": 38,
+        "is_wr": 55.3,
+        "is_pnl": 21.5,
+        "compound_pnl": 0.8,
+        "filter_pass": 0,
+        "filter_tested": 0,
+        "filter_pass_rate": 0
+      }
+    ],
+    "random_mean_is_wr": 49.3,
+    "random_mean_is_pnl": -14.5,
+    "random_mean_compound_pnl": -6.5,
+    "random_mean_pass_rate": 0.0,
+    "edge_over_random_pp": 0.3
+  },
+  "verdict": {
+    "rr1_viable": false,
+    "genuine_edge_pp": 0.3,
+    "recommendation": "R:R >= 1:1 shows SOME genuine edge (0.3pp) with 5 patterns, but WF FAIL. Current R:R<1 strategy may still be better for stability."
+  }
+}

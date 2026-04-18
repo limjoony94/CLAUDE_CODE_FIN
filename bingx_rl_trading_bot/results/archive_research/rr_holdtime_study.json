@@ -1,0 +1,2234 @@
+{
+  "metadata": {
+    "script": "rr_holdtime_study.py",
+    "date": "2026-03-08T14:59:12.395700",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "data_bars": 87315,
+    "neutral_window": {
+      "start_bar": 0,
+      "end_bar": 74642,
+      "days": 259.2
+    },
+    "patterns": 131,
+    "protocol": {
+      "leverage": 3,
+      "fee_pct": 0.1,
+      "slippage": 0.02,
+      "atr": "14/576/[0.5,1.5]",
+      "n_slots": 9,
+      "direction_cap": 7,
+      "timeout_bars": 288,
+      "cascade_tighten_pct": 85,
+      "mc_sims": 10000,
+      "mc_seeds": [
+        42,
+        123,
+        7
+      ],
+      "wf_folds": 3
+    },
+    "timing_sec": 80.9
+  },
+  "baseline": {
+    "trades": 1182,
+    "wr": 70.8,
+    "pnl": 235.31,
+    "mdd": 1.37,
+    "pnl_mdd": 171.58,
+    "pnl_per_trade": 0.199,
+    "avg_win": 5.386,
+    "avg_loss": 3.888,
+    "rr": 1.385,
+    "breakeven_wr": 41.9,
+    "max_corr_loss": 4.02,
+    "max_sim_positions": 9,
+    "blocked": {
+      "momentum": 49,
+      "agg_risk": 174,
+      "dir_cap": 228,
+      "dup_pat": 227,
+      "max_pos": 10069
+    },
+    "mc_p": 0.0,
+    "wf": {
+      "label": "baseline",
+      "n_folds": 3,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 37320,
+          "oos_bars": 18660,
+          "oos_trades": 338,
+          "oos_wr": 71.0,
+          "oos_pnl": 74.95,
+          "oos_mdd": 1.97,
+          "oos_rr": 1.246,
+          "oos_breakeven_wr": 44.5
+        },
+        {
+          "fold": 2,
+          "is_bars": 55980,
+          "oos_bars": 18660,
+          "oos_trades": 381,
+          "oos_wr": 65.6,
+          "oos_pnl": 56.52,
+          "oos_mdd": 3.3,
+          "oos_rr": 1.401,
+          "oos_breakeven_wr": 41.7
+        },
+        {
+          "fold": 3,
+          "is_bars": 74640,
+          "oos_bars": 2,
+          "oos_trades": 0,
+          "oos_wr": 0.0,
+          "oos_pnl": 0.0
+        }
+      ],
+      "all_positive": true,
+      "total_oos_pnl": 131.47,
+      "min_oos_pnl": 56.52,
+      "verdict": "PASS"
+    }
+  },
+  "H1_tighter_sl": {
+    "baseline": {
+      "trades": 1182,
+      "wr": 70.8,
+      "pnl": 235.31,
+      "mdd": 1.37,
+      "pnl_mdd": 171.58,
+      "pnl_per_trade": 0.199,
+      "avg_win": 5.386,
+      "avg_loss": 3.888,
+      "rr": 1.385,
+      "breakeven_wr": 41.9,
+      "max_corr_loss": 4.02,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 174,
+        "dir_cap": 228,
+        "dup_pat": 227,
+        "max_pos": 10069
+      },
+      "mc_p": 0.0
+    },
+    "sl_mult_0.5": {
+      "trades": 2150,
+      "wr": 37.3,
+      "pnl": 104.67,
+      "mdd": 5.0,
+      "pnl_mdd": 20.92,
+      "pnl_per_trade": 0.049,
+      "avg_win": 5.856,
+      "avg_loss": 2.429,
+      "rr": 2.41,
+      "breakeven_wr": 29.3,
+      "max_corr_loss": 2.58,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 47,
+        "agg_risk": 0,
+        "dir_cap": 252,
+        "dup_pat": 232,
+        "max_pos": 9140
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "sl_mult_0.5",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 616,
+            "oos_wr": 40.4,
+            "oos_pnl": 51.05,
+            "oos_mdd": 4.59,
+            "oos_rr": 2.469,
+            "oos_breakeven_wr": 28.8
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 637,
+            "oos_wr": 35.0,
+            "oos_pnl": 19.7,
+            "oos_mdd": 5.42,
+            "oos_rr": 2.494,
+            "oos_breakeven_wr": 28.6
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 70.75,
+        "min_oos_pnl": 19.7,
+        "verdict": "PASS"
+      }
+    },
+    "sl_mult_0.6": {
+      "trades": 1922,
+      "wr": 41.9,
+      "pnl": 97.11,
+      "mdd": 5.36,
+      "pnl_mdd": 18.11,
+      "pnl_per_trade": 0.051,
+      "avg_win": 5.806,
+      "avg_loss": 2.825,
+      "rr": 2.055,
+      "breakeven_wr": 32.7,
+      "max_corr_loss": 2.93,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 0,
+        "dir_cap": 234,
+        "dup_pat": 225,
+        "max_pos": 9662
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "sl_mult_0.6",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 533,
+            "oos_wr": 44.3,
+            "oos_pnl": 48.67,
+            "oos_mdd": 3.46,
+            "oos_rr": 2.19,
+            "oos_breakeven_wr": 31.4
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 585,
+            "oos_wr": 40.5,
+            "oos_pnl": 19.71,
+            "oos_mdd": 4.16,
+            "oos_rr": 1.972,
+            "oos_breakeven_wr": 33.6
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 68.38,
+        "min_oos_pnl": 19.71,
+        "verdict": "PASS"
+      }
+    },
+    "sl_mult_0.7": {
+      "trades": 1709,
+      "wr": 48.9,
+      "pnl": 147.68,
+      "mdd": 4.08,
+      "pnl_mdd": 36.21,
+      "pnl_per_trade": 0.086,
+      "avg_win": 5.582,
+      "avg_loss": 2.872,
+      "rr": 1.944,
+      "breakeven_wr": 34.0,
+      "max_corr_loss": 4.71,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 5,
+        "dir_cap": 283,
+        "dup_pat": 256,
+        "max_pos": 9864
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "sl_mult_0.7",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 423,
+            "oos_wr": 55.6,
+            "oos_pnl": 53.95,
+            "oos_mdd": 5.57,
+            "oos_rr": 1.772,
+            "oos_breakeven_wr": 36.1
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 533,
+            "oos_wr": 44.8,
+            "oos_pnl": 28.82,
+            "oos_mdd": 4.03,
+            "oos_rr": 1.939,
+            "oos_breakeven_wr": 34.0
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 82.77,
+        "min_oos_pnl": 28.82,
+        "verdict": "PASS"
+      }
+    },
+    "sl_mult_0.8": {
+      "trades": 1517,
+      "wr": 56.2,
+      "pnl": 175.74,
+      "mdd": 3.79,
+      "pnl_mdd": 46.33,
+      "pnl_per_trade": 0.116,
+      "avg_win": 5.437,
+      "avg_loss": 3.176,
+      "rr": 1.712,
+      "breakeven_wr": 36.9,
+      "max_corr_loss": 5.36,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 48,
+        "agg_risk": 23,
+        "dir_cap": 241,
+        "dup_pat": 216,
+        "max_pos": 10039
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "sl_mult_0.8",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 404,
+            "oos_wr": 58.7,
+            "oos_pnl": 56.89,
+            "oos_mdd": 6.73,
+            "oos_rr": 1.494,
+            "oos_breakeven_wr": 40.1
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 460,
+            "oos_wr": 51.5,
+            "oos_pnl": 35.1,
+            "oos_mdd": 3.65,
+            "oos_rr": 1.658,
+            "oos_breakeven_wr": 37.6
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 91.99,
+        "min_oos_pnl": 35.1,
+        "verdict": "PASS"
+      }
+    },
+    "sl_mult_0.9": {
+      "trades": 1339,
+      "wr": 63.9,
+      "pnl": 208.38,
+      "mdd": 2.87,
+      "pnl_mdd": 72.64,
+      "pnl_per_trade": 0.156,
+      "avg_win": 5.403,
+      "avg_loss": 3.464,
+      "rr": 1.56,
+      "breakeven_wr": 39.1,
+      "max_corr_loss": 2.56,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 86,
+        "dir_cap": 234,
+        "dup_pat": 220,
+        "max_pos": 10076
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "sl_mult_0.9",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 375,
+            "oos_wr": 62.9,
+            "oos_pnl": 71.06,
+            "oos_mdd": 3.02,
+            "oos_rr": 1.496,
+            "oos_breakeven_wr": 40.1
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 396,
+            "oos_wr": 63.9,
+            "oos_pnl": 54.1,
+            "oos_mdd": 3.14,
+            "oos_rr": 1.475,
+            "oos_breakeven_wr": 40.4
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 125.16,
+        "min_oos_pnl": 54.1,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "H2_wider_tp": {
+    "tp_mult_1.1": {
+      "trades": 1048,
+      "wr": 67.3,
+      "pnl": 205.66,
+      "mdd": 1.83,
+      "pnl_mdd": 112.55,
+      "pnl_per_trade": 0.196,
+      "avg_win": 5.821,
+      "avg_loss": 3.572,
+      "rr": 1.63,
+      "breakeven_wr": 38.0,
+      "max_corr_loss": 2.41,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 126,
+        "dir_cap": 260,
+        "dup_pat": 230,
+        "max_pos": 10162
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp_mult_1.1",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 270,
+            "oos_wr": 69.6,
+            "oos_pnl": 72.66,
+            "oos_mdd": 1.51,
+            "oos_rr": 1.465,
+            "oos_breakeven_wr": 40.6
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 349,
+            "oos_wr": 65.9,
+            "oos_pnl": 52.57,
+            "oos_mdd": 3.04,
+            "oos_rr": 1.521,
+            "oos_breakeven_wr": 39.7
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 125.23,
+        "min_oos_pnl": 52.57,
+        "verdict": "PASS"
+      }
+    },
+    "tp_mult_1.2": {
+      "trades": 951,
+      "wr": 61.1,
+      "pnl": 174.6,
+      "mdd": 1.93,
+      "pnl_mdd": 90.64,
+      "pnl_per_trade": 0.184,
+      "avg_win": 6.24,
+      "avg_loss": 3.49,
+      "rr": 1.788,
+      "breakeven_wr": 35.9,
+      "max_corr_loss": 2.39,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 42,
+        "agg_risk": 110,
+        "dir_cap": 249,
+        "dup_pat": 230,
+        "max_pos": 10250
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp_mult_1.2",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 252,
+            "oos_wr": 64.3,
+            "oos_pnl": 66.33,
+            "oos_mdd": 2.81,
+            "oos_rr": 1.699,
+            "oos_breakeven_wr": 37.0
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 330,
+            "oos_wr": 59.1,
+            "oos_pnl": 43.51,
+            "oos_mdd": 3.34,
+            "oos_rr": 1.646,
+            "oos_breakeven_wr": 37.8
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 109.84,
+        "min_oos_pnl": 43.51,
+        "verdict": "PASS"
+      }
+    },
+    "tp_mult_1.3": {
+      "trades": 911,
+      "wr": 55.8,
+      "pnl": 138.48,
+      "mdd": 1.97,
+      "pnl_mdd": 70.17,
+      "pnl_per_trade": 0.152,
+      "avg_win": 6.551,
+      "avg_loss": 3.675,
+      "rr": 1.782,
+      "breakeven_wr": 35.9,
+      "max_corr_loss": 2.95,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 37,
+        "agg_risk": 100,
+        "dir_cap": 211,
+        "dup_pat": 218,
+        "max_pos": 10345
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp_mult_1.3",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 247,
+            "oos_wr": 61.9,
+            "oos_pnl": 57.65,
+            "oos_mdd": 2.68,
+            "oos_rr": 1.56,
+            "oos_breakeven_wr": 39.1
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 295,
+            "oos_wr": 53.9,
+            "oos_pnl": 31.72,
+            "oos_mdd": 3.72,
+            "oos_rr": 1.717,
+            "oos_breakeven_wr": 36.8
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 89.37,
+        "min_oos_pnl": 31.72,
+        "verdict": "PASS"
+      }
+    },
+    "tp_mult_1.5": {
+      "trades": 781,
+      "wr": 51.9,
+      "pnl": 116.49,
+      "mdd": 2.72,
+      "pnl_mdd": 42.81,
+      "pnl_per_trade": 0.149,
+      "avg_win": 7.283,
+      "avg_loss": 3.521,
+      "rr": 2.068,
+      "breakeven_wr": 32.6,
+      "max_corr_loss": 2.95,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 42,
+        "agg_risk": 63,
+        "dir_cap": 217,
+        "dup_pat": 210,
+        "max_pos": 10430
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp_mult_1.5",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 221,
+            "oos_wr": 56.1,
+            "oos_pnl": 51.73,
+            "oos_mdd": 2.31,
+            "oos_rr": 1.93,
+            "oos_breakeven_wr": 34.1
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 260,
+            "oos_wr": 49.2,
+            "oos_pnl": 27.43,
+            "oos_mdd": 4.58,
+            "oos_rr": 1.905,
+            "oos_breakeven_wr": 34.4
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 79.16,
+        "min_oos_pnl": 27.43,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "H3_grid_search": {
+    "tp0.9_sl0.5": {
+      "trades": 2253,
+      "wr": 40.5,
+      "pnl": 119.32,
+      "mdd": 3.2,
+      "pnl_mdd": 37.25,
+      "pnl_per_trade": 0.053,
+      "avg_win": 5.396,
+      "avg_loss": 2.392,
+      "rr": 2.256,
+      "breakeven_wr": 30.7,
+      "max_corr_loss": 2.92,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 0,
+        "dir_cap": 268,
+        "dup_pat": 266,
+        "max_pos": 9025
+      },
+      "mc_p": 0.0
+    },
+    "tp0.9_sl0.6": {
+      "trades": 2042,
+      "wr": 45.8,
+      "pnl": 126.39,
+      "mdd": 3.57,
+      "pnl_mdd": 35.45,
+      "pnl_per_trade": 0.062,
+      "avg_win": 5.272,
+      "avg_loss": 2.78,
+      "rr": 1.897,
+      "breakeven_wr": 34.5,
+      "max_corr_loss": 3.67,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 0,
+        "dir_cap": 250,
+        "dup_pat": 240,
+        "max_pos": 9559
+      },
+      "mc_p": 0.0
+    },
+    "tp0.9_sl0.7": {
+      "trades": 1807,
+      "wr": 52.3,
+      "pnl": 174.1,
+      "mdd": 4.52,
+      "pnl_mdd": 38.48,
+      "pnl_per_trade": 0.096,
+      "avg_win": 5.125,
+      "avg_loss": 2.793,
+      "rr": 1.835,
+      "breakeven_wr": 35.3,
+      "max_corr_loss": 4.71,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 7,
+        "dir_cap": 302,
+        "dup_pat": 260,
+        "max_pos": 9778
+      },
+      "mc_p": 0.0
+    },
+    "tp0.9_sl0.8": {
+      "trades": 1631,
+      "wr": 58.2,
+      "pnl": 193.86,
+      "mdd": 3.91,
+      "pnl_mdd": 49.61,
+      "pnl_per_trade": 0.119,
+      "avg_win": 5.007,
+      "avg_loss": 3.073,
+      "rr": 1.629,
+      "breakeven_wr": 38.0,
+      "max_corr_loss": 5.36,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 40,
+        "dir_cap": 253,
+        "dup_pat": 232,
+        "max_pos": 9914
+      },
+      "mc_p": 0.0
+    },
+    "tp0.9_sl0.9": {
+      "trades": 1437,
+      "wr": 66.6,
+      "pnl": 230.99,
+      "mdd": 2.59,
+      "pnl_mdd": 89.34,
+      "pnl_per_trade": 0.161,
+      "avg_win": 5.001,
+      "avg_loss": 3.481,
+      "rr": 1.437,
+      "breakeven_wr": 41.0,
+      "max_corr_loss": 2.61,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 67,
+        "dir_cap": 277,
+        "dup_pat": 231,
+        "max_pos": 9969
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp0.9_sl0.9",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 390,
+            "oos_wr": 68.7,
+            "oos_pnl": 79.25,
+            "oos_mdd": 4.93,
+            "oos_rr": 1.265,
+            "oos_breakeven_wr": 44.2
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 467,
+            "oos_wr": 63.6,
+            "oos_pnl": 59.36,
+            "oos_mdd": 3.38,
+            "oos_rr": 1.454,
+            "oos_breakeven_wr": 40.7
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 138.61,
+        "min_oos_pnl": 59.36,
+        "verdict": "PASS"
+      }
+    },
+    "tp0.9_sl1.0": {
+      "trades": 1260,
+      "wr": 74.6,
+      "pnl": 265.6,
+      "mdd": 1.48,
+      "pnl_mdd": 180.01,
+      "pnl_per_trade": 0.211,
+      "avg_win": 4.978,
+      "avg_loss": 3.659,
+      "rr": 1.36,
+      "breakeven_wr": 42.4,
+      "max_corr_loss": 2.63,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 47,
+        "agg_risk": 129,
+        "dir_cap": 312,
+        "dup_pat": 233,
+        "max_pos": 9970
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp0.9_sl1.0",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 358,
+            "oos_wr": 74.0,
+            "oos_pnl": 85.24,
+            "oos_mdd": 2.4,
+            "oos_rr": 1.287,
+            "oos_breakeven_wr": 43.7
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 425,
+            "oos_wr": 67.8,
+            "oos_pnl": 65.6,
+            "oos_mdd": 3.25,
+            "oos_rr": 1.429,
+            "oos_breakeven_wr": 41.2
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 150.84,
+        "min_oos_pnl": 65.6,
+        "verdict": "PASS"
+      }
+    },
+    "tp1.0_sl0.5": {
+      "trades": 2150,
+      "wr": 37.3,
+      "pnl": 104.67,
+      "mdd": 5.0,
+      "pnl_mdd": 20.92,
+      "pnl_per_trade": 0.049,
+      "avg_win": 5.856,
+      "avg_loss": 2.429,
+      "rr": 2.41,
+      "breakeven_wr": 29.3,
+      "max_corr_loss": 2.58,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 47,
+        "agg_risk": 0,
+        "dir_cap": 252,
+        "dup_pat": 232,
+        "max_pos": 9140
+      },
+      "mc_p": 0.0
+    },
+    "tp1.0_sl0.6": {
+      "trades": 1922,
+      "wr": 41.9,
+      "pnl": 97.11,
+      "mdd": 5.36,
+      "pnl_mdd": 18.11,
+      "pnl_per_trade": 0.051,
+      "avg_win": 5.806,
+      "avg_loss": 2.825,
+      "rr": 2.055,
+      "breakeven_wr": 32.7,
+      "max_corr_loss": 2.93,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 0,
+        "dir_cap": 234,
+        "dup_pat": 225,
+        "max_pos": 9662
+      },
+      "mc_p": 0.0
+    },
+    "tp1.0_sl0.7": {
+      "trades": 1709,
+      "wr": 48.9,
+      "pnl": 147.68,
+      "mdd": 4.08,
+      "pnl_mdd": 36.21,
+      "pnl_per_trade": 0.086,
+      "avg_win": 5.582,
+      "avg_loss": 2.872,
+      "rr": 1.944,
+      "breakeven_wr": 34.0,
+      "max_corr_loss": 4.71,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 5,
+        "dir_cap": 283,
+        "dup_pat": 256,
+        "max_pos": 9864
+      },
+      "mc_p": 0.0
+    },
+    "tp1.0_sl0.8": {
+      "trades": 1517,
+      "wr": 56.2,
+      "pnl": 175.74,
+      "mdd": 3.79,
+      "pnl_mdd": 46.33,
+      "pnl_per_trade": 0.116,
+      "avg_win": 5.437,
+      "avg_loss": 3.176,
+      "rr": 1.712,
+      "breakeven_wr": 36.9,
+      "max_corr_loss": 5.36,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 48,
+        "agg_risk": 23,
+        "dir_cap": 241,
+        "dup_pat": 216,
+        "max_pos": 10039
+      },
+      "mc_p": 0.0
+    },
+    "tp1.0_sl0.9": {
+      "trades": 1339,
+      "wr": 63.9,
+      "pnl": 208.38,
+      "mdd": 2.87,
+      "pnl_mdd": 72.64,
+      "pnl_per_trade": 0.156,
+      "avg_win": 5.403,
+      "avg_loss": 3.464,
+      "rr": 1.56,
+      "breakeven_wr": 39.1,
+      "max_corr_loss": 2.56,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 86,
+        "dir_cap": 234,
+        "dup_pat": 220,
+        "max_pos": 10076
+      },
+      "mc_p": 0.0
+    },
+    "tp1.1_sl0.5": {
+      "trades": 1994,
+      "wr": 33.2,
+      "pnl": 80.18,
+      "mdd": 5.61,
+      "pnl_mdd": 14.29,
+      "pnl_per_trade": 0.04,
+      "avg_win": 6.367,
+      "avg_loss": 2.374,
+      "rr": 2.681,
+      "breakeven_wr": 27.2,
+      "max_corr_loss": 2.92,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 44,
+        "agg_risk": 0,
+        "dir_cap": 257,
+        "dup_pat": 227,
+        "max_pos": 9236
+      },
+      "mc_p": 0.0
+    },
+    "tp1.1_sl0.6": {
+      "trades": 1733,
+      "wr": 38.8,
+      "pnl": 74.7,
+      "mdd": 7.84,
+      "pnl_mdd": 9.53,
+      "pnl_per_trade": 0.043,
+      "avg_win": 6.237,
+      "avg_loss": 2.878,
+      "rr": 2.167,
+      "breakeven_wr": 31.6,
+      "max_corr_loss": 3.42,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 46,
+        "agg_risk": 0,
+        "dir_cap": 268,
+        "dup_pat": 208,
+        "max_pos": 9742
+      },
+      "mc_p": 0.0001
+    },
+    "tp1.1_sl0.7": {
+      "trades": 1524,
+      "wr": 45.8,
+      "pnl": 123.68,
+      "mdd": 4.77,
+      "pnl_mdd": 25.93,
+      "pnl_per_trade": 0.081,
+      "avg_win": 5.992,
+      "avg_loss": 2.853,
+      "rr": 2.101,
+      "breakeven_wr": 32.3,
+      "max_corr_loss": 4.71,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 46,
+        "agg_risk": 11,
+        "dir_cap": 263,
+        "dup_pat": 239,
+        "max_pos": 10010
+      },
+      "mc_p": 0.0
+    },
+    "tp1.1_sl0.8": {
+      "trades": 1365,
+      "wr": 51.4,
+      "pnl": 154.9,
+      "mdd": 5.0,
+      "pnl_mdd": 30.99,
+      "pnl_per_trade": 0.113,
+      "avg_win": 5.933,
+      "avg_loss": 3.05,
+      "rr": 1.945,
+      "breakeven_wr": 34.0,
+      "max_corr_loss": 5.36,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 45,
+        "agg_risk": 29,
+        "dir_cap": 240,
+        "dup_pat": 221,
+        "max_pos": 10109
+      },
+      "mc_p": 0.0
+    },
+    "tp1.1_sl0.9": {
+      "trades": 1220,
+      "wr": 58.4,
+      "pnl": 177.88,
+      "mdd": 2.25,
+      "pnl_mdd": 79.07,
+      "pnl_per_trade": 0.146,
+      "avg_win": 5.819,
+      "avg_loss": 3.352,
+      "rr": 1.736,
+      "breakeven_wr": 36.5,
+      "max_corr_loss": 2.15,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 46,
+        "agg_risk": 65,
+        "dir_cap": 247,
+        "dup_pat": 226,
+        "max_pos": 10147
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp1.1_sl0.9",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 335,
+            "oos_wr": 60.3,
+            "oos_pnl": 67.01,
+            "oos_mdd": 1.6,
+            "oos_rr": 1.63,
+            "oos_breakeven_wr": 38.0
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 372,
+            "oos_wr": 57.8,
+            "oos_pnl": 50.96,
+            "oos_mdd": 3.1,
+            "oos_rr": 1.772,
+            "oos_breakeven_wr": 36.1
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 117.97,
+        "min_oos_pnl": 50.96,
+        "verdict": "PASS"
+      }
+    },
+    "tp1.1_sl1.0": {
+      "trades": 1048,
+      "wr": 67.3,
+      "pnl": 205.66,
+      "mdd": 1.83,
+      "pnl_mdd": 112.55,
+      "pnl_per_trade": 0.196,
+      "avg_win": 5.821,
+      "avg_loss": 3.572,
+      "rr": 1.63,
+      "breakeven_wr": 38.0,
+      "max_corr_loss": 2.41,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 126,
+        "dir_cap": 260,
+        "dup_pat": 230,
+        "max_pos": 10162
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp1.1_sl1.0",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 270,
+            "oos_wr": 69.6,
+            "oos_pnl": 72.66,
+            "oos_mdd": 1.51,
+            "oos_rr": 1.465,
+            "oos_breakeven_wr": 40.6
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 349,
+            "oos_wr": 65.9,
+            "oos_pnl": 52.57,
+            "oos_mdd": 3.04,
+            "oos_rr": 1.521,
+            "oos_breakeven_wr": 39.7
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 125.23,
+        "min_oos_pnl": 52.57,
+        "verdict": "PASS"
+      }
+    },
+    "tp1.2_sl0.5": {
+      "trades": 1874,
+      "wr": 29.7,
+      "pnl": 46.43,
+      "mdd": 8.14,
+      "pnl_mdd": 5.7,
+      "pnl_per_trade": 0.025,
+      "avg_win": 6.794,
+      "avg_loss": 2.406,
+      "rr": 2.824,
+      "breakeven_wr": 26.2,
+      "max_corr_loss": 2.92,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 44,
+        "agg_risk": 0,
+        "dir_cap": 278,
+        "dup_pat": 238,
+        "max_pos": 9250
+      },
+      "mc_p": 0.004
+    },
+    "tp1.2_sl0.6": {
+      "trades": 1668,
+      "wr": 34.2,
+      "pnl": 44.78,
+      "mdd": 9.87,
+      "pnl_mdd": 4.54,
+      "pnl_per_trade": 0.027,
+      "avg_win": 6.621,
+      "avg_loss": 2.822,
+      "rr": 2.346,
+      "breakeven_wr": 29.9,
+      "max_corr_loss": 3.01,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 45,
+        "agg_risk": 0,
+        "dir_cap": 264,
+        "dup_pat": 231,
+        "max_pos": 9749
+      },
+      "mc_p": 0.0057
+    },
+    "tp1.2_sl0.7": {
+      "trades": 1399,
+      "wr": 43.1,
+      "pnl": 108.93,
+      "mdd": 4.09,
+      "pnl_mdd": 26.61,
+      "pnl_per_trade": 0.078,
+      "avg_win": 6.352,
+      "avg_loss": 2.856,
+      "rr": 2.224,
+      "breakeven_wr": 31.0,
+      "max_corr_loss": 2.64,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 46,
+        "agg_risk": 2,
+        "dir_cap": 287,
+        "dup_pat": 243,
+        "max_pos": 10038
+      },
+      "mc_p": 0.0
+    },
+    "tp1.2_sl0.8": {
+      "trades": 1252,
+      "wr": 47.7,
+      "pnl": 124.92,
+      "mdd": 4.51,
+      "pnl_mdd": 27.69,
+      "pnl_per_trade": 0.1,
+      "avg_win": 6.305,
+      "avg_loss": 3.072,
+      "rr": 2.053,
+      "breakeven_wr": 32.8,
+      "max_corr_loss": 5.59,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 48,
+        "agg_risk": 37,
+        "dir_cap": 229,
+        "dup_pat": 215,
+        "max_pos": 10167
+      },
+      "mc_p": 0.0
+    },
+    "tp1.2_sl0.9": {
+      "trades": 1082,
+      "wr": 54.3,
+      "pnl": 145.32,
+      "mdd": 3.67,
+      "pnl_mdd": 39.55,
+      "pnl_per_trade": 0.134,
+      "avg_win": 6.25,
+      "avg_loss": 3.372,
+      "rr": 1.854,
+      "breakeven_wr": 35.0,
+      "max_corr_loss": 2.81,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 41,
+        "agg_risk": 38,
+        "dir_cap": 270,
+        "dup_pat": 215,
+        "max_pos": 10231
+      },
+      "mc_p": 0.0
+    },
+    "tp1.2_sl1.0": {
+      "trades": 951,
+      "wr": 61.1,
+      "pnl": 174.6,
+      "mdd": 1.93,
+      "pnl_mdd": 90.64,
+      "pnl_per_trade": 0.184,
+      "avg_win": 6.24,
+      "avg_loss": 3.49,
+      "rr": 1.788,
+      "breakeven_wr": 35.9,
+      "max_corr_loss": 2.39,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 42,
+        "agg_risk": 110,
+        "dir_cap": 249,
+        "dup_pat": 230,
+        "max_pos": 10250
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "tp1.2_sl1.0",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 252,
+            "oos_wr": 64.3,
+            "oos_pnl": 66.33,
+            "oos_mdd": 2.81,
+            "oos_rr": 1.699,
+            "oos_breakeven_wr": 37.0
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 330,
+            "oos_wr": 59.1,
+            "oos_pnl": 43.51,
+            "oos_mdd": 3.34,
+            "oos_rr": 1.646,
+            "oos_breakeven_wr": 37.8
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 109.84,
+        "min_oos_pnl": 43.51,
+        "verdict": "PASS"
+      }
+    },
+    "tp1.3_sl0.5": {
+      "trades": 1758,
+      "wr": 26.7,
+      "pnl": 19.09,
+      "mdd": 21.91,
+      "pnl_mdd": 0.87,
+      "pnl_per_trade": 0.011,
+      "avg_win": 7.29,
+      "avg_loss": 2.429,
+      "rr": 3.001,
+      "breakeven_wr": 25.0,
+      "max_corr_loss": 2.92,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 43,
+        "agg_risk": 0,
+        "dir_cap": 300,
+        "dup_pat": 229,
+        "max_pos": 9314
+      },
+      "mc_p": 0.1332
+    },
+    "tp1.3_sl0.6": {
+      "trades": 1536,
+      "wr": 31.2,
+      "pnl": 27.32,
+      "mdd": 15.28,
+      "pnl_mdd": 1.79,
+      "pnl_per_trade": 0.018,
+      "avg_win": 6.999,
+      "avg_loss": 2.813,
+      "rr": 2.489,
+      "breakeven_wr": 28.7,
+      "max_corr_loss": 3.01,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 42,
+        "agg_risk": 0,
+        "dir_cap": 232,
+        "dup_pat": 211,
+        "max_pos": 9878
+      },
+      "mc_p": 0.0544
+    },
+    "tp1.3_sl0.7": {
+      "trades": 1313,
+      "wr": 39.3,
+      "pnl": 76.93,
+      "mdd": 5.65,
+      "pnl_mdd": 13.6,
+      "pnl_per_trade": 0.059,
+      "avg_win": 6.726,
+      "avg_loss": 2.846,
+      "rr": 2.363,
+      "breakeven_wr": 29.7,
+      "max_corr_loss": 4.71,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 42,
+        "agg_risk": 6,
+        "dir_cap": 234,
+        "dup_pat": 231,
+        "max_pos": 10157
+      },
+      "mc_p": 0.0
+    },
+    "tp1.3_sl0.8": {
+      "trades": 1179,
+      "wr": 43.3,
+      "pnl": 92.18,
+      "mdd": 5.92,
+      "pnl_mdd": 15.57,
+      "pnl_per_trade": 0.078,
+      "avg_win": 6.569,
+      "avg_loss": 3.102,
+      "rr": 2.118,
+      "breakeven_wr": 32.1,
+      "max_corr_loss": 5.36,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 39,
+        "agg_risk": 14,
+        "dir_cap": 226,
+        "dup_pat": 201,
+        "max_pos": 10245
+      },
+      "mc_p": 0.0
+    },
+    "tp1.3_sl0.9": {
+      "trades": 992,
+      "wr": 52.3,
+      "pnl": 132.34,
+      "mdd": 4.27,
+      "pnl_mdd": 30.96,
+      "pnl_per_trade": 0.133,
+      "avg_win": 6.607,
+      "avg_loss": 3.345,
+      "rr": 1.975,
+      "breakeven_wr": 33.6,
+      "max_corr_loss": 2.81,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 44,
+        "agg_risk": 60,
+        "dir_cap": 167,
+        "dup_pat": 230,
+        "max_pos": 10338
+      },
+      "mc_p": 0.0
+    },
+    "tp1.3_sl1.0": {
+      "trades": 911,
+      "wr": 55.8,
+      "pnl": 138.48,
+      "mdd": 1.97,
+      "pnl_mdd": 70.17,
+      "pnl_per_trade": 0.152,
+      "avg_win": 6.551,
+      "avg_loss": 3.675,
+      "rr": 1.782,
+      "breakeven_wr": 35.9,
+      "max_corr_loss": 2.95,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 37,
+        "agg_risk": 100,
+        "dir_cap": 211,
+        "dup_pat": 218,
+        "max_pos": 10345
+      },
+      "mc_p": 0.0
+    },
+    "_best": "tp0.9_sl1.0"
+  },
+  "H4_timeout_reduction": {
+    "timeout_72bars_6h": {
+      "trades": 951,
+      "wr": 77.4,
+      "pnl": 197.41,
+      "mdd": 1.06,
+      "pnl_mdd": 185.99,
+      "pnl_per_trade": 0.208,
+      "avg_win": 4.469,
+      "avg_loss": 3.16,
+      "rr": 1.414,
+      "breakeven_wr": 41.4,
+      "max_corr_loss": 1.52,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 53,
+        "agg_risk": 136,
+        "dir_cap": 414,
+        "dup_pat": 594,
+        "max_pos": 4304
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "timeout_72bars_6h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 278,
+            "oos_wr": 71.2,
+            "oos_pnl": 55.2,
+            "oos_mdd": 1.7,
+            "oos_rr": 1.484,
+            "oos_breakeven_wr": 40.3
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 346,
+            "oos_wr": 73.7,
+            "oos_pnl": 64.18,
+            "oos_mdd": 1.41,
+            "oos_rr": 1.429,
+            "oos_breakeven_wr": 41.2
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 119.38,
+        "min_oos_pnl": 55.2,
+        "verdict": "PASS"
+      }
+    },
+    "timeout_144bars_12h": {
+      "trades": 1266,
+      "wr": 71.1,
+      "pnl": 225.08,
+      "mdd": 1.42,
+      "pnl_mdd": 158.18,
+      "pnl_per_trade": 0.178,
+      "avg_win": 4.649,
+      "avg_loss": 3.237,
+      "rr": 1.436,
+      "breakeven_wr": 41.0,
+      "max_corr_loss": 2.29,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 50,
+        "agg_risk": 134,
+        "dir_cap": 344,
+        "dup_pat": 409,
+        "max_pos": 7759
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "timeout_144bars_12h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 381,
+            "oos_wr": 65.9,
+            "oos_pnl": 59.32,
+            "oos_mdd": 2.15,
+            "oos_rr": 1.486,
+            "oos_breakeven_wr": 40.2
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 411,
+            "oos_wr": 66.9,
+            "oos_pnl": 61.31,
+            "oos_mdd": 3.45,
+            "oos_rr": 1.438,
+            "oos_breakeven_wr": 41.0
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 120.63,
+        "min_oos_pnl": 59.32,
+        "verdict": "PASS"
+      }
+    },
+    "timeout_192bars_16h": {
+      "trades": 1321,
+      "wr": 69.6,
+      "pnl": 211.2,
+      "mdd": 1.52,
+      "pnl_mdd": 138.54,
+      "pnl_per_trade": 0.16,
+      "avg_win": 4.734,
+      "avg_loss": 3.461,
+      "rr": 1.368,
+      "breakeven_wr": 42.2,
+      "max_corr_loss": 1.95,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 50,
+        "agg_risk": 137,
+        "dir_cap": 341,
+        "dup_pat": 338,
+        "max_pos": 8767
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "timeout_192bars_16h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 384,
+            "oos_wr": 64.1,
+            "oos_pnl": 62.38,
+            "oos_mdd": 1.61,
+            "oos_rr": 1.515,
+            "oos_breakeven_wr": 39.8
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 405,
+            "oos_wr": 68.6,
+            "oos_pnl": 54.77,
+            "oos_mdd": 3.39,
+            "oos_rr": 1.281,
+            "oos_breakeven_wr": 43.8
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 117.15,
+        "min_oos_pnl": 54.77,
+        "verdict": "PASS"
+      }
+    },
+    "timeout_288bars_24h": {
+      "trades": 1182,
+      "wr": 70.8,
+      "pnl": 235.31,
+      "mdd": 1.37,
+      "pnl_mdd": 171.58,
+      "pnl_per_trade": 0.199,
+      "avg_win": 5.386,
+      "avg_loss": 3.888,
+      "rr": 1.385,
+      "breakeven_wr": 41.9,
+      "max_corr_loss": 4.02,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 174,
+        "dir_cap": 228,
+        "dup_pat": 227,
+        "max_pos": 10069
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "timeout_288bars_24h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 338,
+            "oos_wr": 71.0,
+            "oos_pnl": 74.95,
+            "oos_mdd": 1.97,
+            "oos_rr": 1.246,
+            "oos_breakeven_wr": 44.5
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 381,
+            "oos_wr": 65.6,
+            "oos_pnl": 56.52,
+            "oos_mdd": 3.3,
+            "oos_rr": 1.401,
+            "oos_breakeven_wr": 41.7
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 131.47,
+        "min_oos_pnl": 56.52,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "H5_breakeven_stop": {
+    "breakeven_after_6h": {
+      "trades": 3875,
+      "wr": 25.0,
+      "pnl": 91.87,
+      "mdd": 8.33,
+      "pnl_mdd": 11.03,
+      "pnl_per_trade": 0.024,
+      "avg_win": 5.372,
+      "avg_loss": 1.291,
+      "rr": 4.161,
+      "breakeven_wr": 19.4,
+      "max_corr_loss": 1.89,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 51,
+        "agg_risk": 93,
+        "dir_cap": 425,
+        "dup_pat": 297,
+        "max_pos": 8118
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "breakeven_after_6h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 1034,
+            "oos_wr": 24.6,
+            "oos_pnl": 29.74,
+            "oos_mdd": 5.69,
+            "oos_rr": 4.053,
+            "oos_breakeven_wr": 19.8
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 1007,
+            "oos_wr": 30.3,
+            "oos_pnl": 31.74,
+            "oos_mdd": 5.08,
+            "oos_rr": 3.718,
+            "oos_breakeven_wr": 21.2
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 61.48,
+        "min_oos_pnl": 29.74,
+        "verdict": "PASS"
+      }
+    },
+    "breakeven_after_8h": {
+      "trades": 3267,
+      "wr": 27.7,
+      "pnl": 113.54,
+      "mdd": 5.73,
+      "pnl_mdd": 19.82,
+      "pnl_per_trade": 0.035,
+      "avg_win": 5.354,
+      "avg_loss": 1.316,
+      "rr": 4.069,
+      "breakeven_wr": 19.7,
+      "max_corr_loss": 1.73,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 50,
+        "agg_risk": 80,
+        "dir_cap": 402,
+        "dup_pat": 273,
+        "max_pos": 8698
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "breakeven_after_8h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 954,
+            "oos_wr": 27.4,
+            "oos_pnl": 34.83,
+            "oos_mdd": 5.83,
+            "oos_rr": 3.988,
+            "oos_breakeven_wr": 20.0
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 827,
+            "oos_wr": 33.5,
+            "oos_pnl": 46.98,
+            "oos_mdd": 2.42,
+            "oos_rr": 3.688,
+            "oos_breakeven_wr": 21.3
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 81.81,
+        "min_oos_pnl": 34.83,
+        "verdict": "PASS"
+      }
+    },
+    "breakeven_after_10h": {
+      "trades": 2876,
+      "wr": 31.8,
+      "pnl": 146.61,
+      "mdd": 5.58,
+      "pnl_mdd": 26.26,
+      "pnl_per_trade": 0.051,
+      "avg_win": 5.5,
+      "avg_loss": 1.479,
+      "rr": 3.719,
+      "breakeven_wr": 21.2,
+      "max_corr_loss": 3.02,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 50,
+        "agg_risk": 118,
+        "dir_cap": 398,
+        "dup_pat": 271,
+        "max_pos": 8974
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "breakeven_after_10h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 744,
+            "oos_wr": 35.6,
+            "oos_pnl": 58.44,
+            "oos_mdd": 4.35,
+            "oos_rr": 3.563,
+            "oos_breakeven_wr": 21.9
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 817,
+            "oos_wr": 32.7,
+            "oos_pnl": 32.87,
+            "oos_mdd": 6.69,
+            "oos_rr": 3.287,
+            "oos_breakeven_wr": 23.3
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 91.31,
+        "min_oos_pnl": 32.87,
+        "verdict": "PASS"
+      }
+    },
+    "breakeven_after_12h": {
+      "trades": 2716,
+      "wr": 33.2,
+      "pnl": 161.56,
+      "mdd": 3.26,
+      "pnl_mdd": 49.58,
+      "pnl_per_trade": 0.059,
+      "avg_win": 5.516,
+      "avg_loss": 1.463,
+      "rr": 3.771,
+      "breakeven_wr": 21.0,
+      "max_corr_loss": 2.75,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 47,
+        "agg_risk": 118,
+        "dir_cap": 307,
+        "dup_pat": 260,
+        "max_pos": 9200
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "breakeven_after_12h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 768,
+            "oos_wr": 34.6,
+            "oos_pnl": 56.31,
+            "oos_mdd": 2.9,
+            "oos_rr": 3.551,
+            "oos_breakeven_wr": 22.0
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 694,
+            "oos_wr": 37.0,
+            "oos_pnl": 38.18,
+            "oos_mdd": 4.41,
+            "oos_rr": 3.146,
+            "oos_breakeven_wr": 24.1
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 94.49,
+        "min_oos_pnl": 38.18,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "H6_partial_exit": {
+    "partial_exit_6h": {
+      "trades": 2245,
+      "wr": 84.2,
+      "pnl": 220.93,
+      "mdd": 1.34,
+      "pnl_mdd": 164.39,
+      "pnl_per_trade": 0.098,
+      "avg_win": 2.796,
+      "avg_loss": 3.949,
+      "rr": 0.708,
+      "breakeven_wr": 58.5,
+      "max_corr_loss": 3.39,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 50,
+        "agg_risk": 103,
+        "dir_cap": 242,
+        "dup_pat": 209,
+        "max_pos": 10135
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "partial_exit_6h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 613,
+            "oos_wr": 83.0,
+            "oos_pnl": 69.47,
+            "oos_mdd": 2.06,
+            "oos_rr": 0.684,
+            "oos_breakeven_wr": 59.4
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 646,
+            "oos_wr": 78.9,
+            "oos_pnl": 51.22,
+            "oos_mdd": 3.33,
+            "oos_rr": 0.76,
+            "oos_breakeven_wr": 56.8
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 120.69,
+        "min_oos_pnl": 51.22,
+        "verdict": "PASS"
+      }
+    },
+    "partial_exit_8h": {
+      "trades": 2156,
+      "wr": 84.0,
+      "pnl": 224.83,
+      "mdd": 1.34,
+      "pnl_mdd": 167.69,
+      "pnl_per_trade": 0.104,
+      "avg_win": 2.944,
+      "avg_loss": 3.907,
+      "rr": 0.753,
+      "breakeven_wr": 57.0,
+      "max_corr_loss": 3.39,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 105,
+        "dir_cap": 239,
+        "dup_pat": 216,
+        "max_pos": 10139
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "partial_exit_8h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 578,
+            "oos_wr": 83.0,
+            "oos_pnl": 68.55,
+            "oos_mdd": 2.03,
+            "oos_rr": 0.714,
+            "oos_breakeven_wr": 58.3
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 621,
+            "oos_wr": 78.3,
+            "oos_pnl": 54.74,
+            "oos_mdd": 3.32,
+            "oos_rr": 0.85,
+            "oos_breakeven_wr": 54.1
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 123.29,
+        "min_oos_pnl": 54.74,
+        "verdict": "PASS"
+      }
+    },
+    "partial_exit_12h": {
+      "trades": 2065,
+      "wr": 83.3,
+      "pnl": 239.29,
+      "mdd": 1.29,
+      "pnl_mdd": 185.47,
+      "pnl_per_trade": 0.116,
+      "avg_win": 3.121,
+      "avg_loss": 3.91,
+      "rr": 0.798,
+      "breakeven_wr": 55.6,
+      "max_corr_loss": 3.41,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 49,
+        "agg_risk": 110,
+        "dir_cap": 239,
+        "dup_pat": 216,
+        "max_pos": 10132
+      },
+      "mc_p": 0.0,
+      "wf": {
+        "label": "partial_exit_12h",
+        "n_folds": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "is_bars": 37320,
+            "oos_bars": 18660,
+            "oos_trades": 534,
+            "oos_wr": 82.0,
+            "oos_pnl": 74.06,
+            "oos_mdd": 1.97,
+            "oos_rr": 0.77,
+            "oos_breakeven_wr": 56.5
+          },
+          {
+            "fold": 2,
+            "is_bars": 55980,
+            "oos_bars": 18660,
+            "oos_trades": 587,
+            "oos_wr": 77.0,
+            "oos_pnl": 56.89,
+            "oos_mdd": 3.35,
+            "oos_rr": 0.911,
+            "oos_breakeven_wr": 52.3
+          },
+          {
+            "fold": 3,
+            "is_bars": 74640,
+            "oos_bars": 2,
+            "oos_trades": 0,
+            "oos_wr": 0.0,
+            "oos_pnl": 0.0
+          }
+        ],
+        "all_positive": true,
+        "total_oos_pnl": 130.95,
+        "min_oos_pnl": 56.89,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "verdicts": {
+    "H1_sl_mult_0.5": "GO (R:R 1.385->2.410; WF PASS)",
+    "H1_sl_mult_0.6": "GO (R:R 1.385->2.055; WF PASS)",
+    "H1_sl_mult_0.7": "GO (R:R 1.385->1.944; WF PASS)",
+    "H1_sl_mult_0.8": "GO (R:R 1.385->1.712; WF PASS)",
+    "H1_sl_mult_0.9": "GO (R:R 1.385->1.560; WF PASS)",
+    "H2_tp_mult_1.1": "GO (R:R 1.385->1.630; WF PASS)",
+    "H2_tp_mult_1.2": "GO (R:R 1.385->1.788; WF PASS)",
+    "H2_tp_mult_1.3": "GO (R:R 1.385->1.782; WF PASS)",
+    "H2_tp_mult_1.5": "GO (R:R 1.385->2.068; WF PASS)",
+    "H3_tp0.9_sl1.0": "GO (PnL 235.3->265.6; WF PASS)",
+    "H3_tp1.1_sl1.0": "GO (R:R 1.385->1.630; WF PASS)",
+    "H3_tp1.2_sl1.0": "GO (R:R 1.385->1.788; WF PASS)",
+    "H3_tp0.9_sl0.9": "GO (R:R 1.385->1.437; WF PASS)",
+    "H3_tp1.1_sl0.9": "GO (R:R 1.385->1.736; WF PASS)",
+    "H4_timeout_72bars_6h": "GO (R:R 1.385->1.414; WF PASS)",
+    "H4_timeout_144bars_12h": "GO (R:R 1.385->1.436; WF PASS)",
+    "H4_timeout_192bars_16h": "GO (WF PASS)",
+    "H4_timeout_288bars_24h": "GO (WF PASS)",
+    "H5_breakeven_after_6h": "GO (R:R 1.385->4.161; WF PASS)",
+    "H5_breakeven_after_8h": "GO (R:R 1.385->4.069; WF PASS)",
+    "H5_breakeven_after_10h": "GO (R:R 1.385->3.719; WF PASS)",
+    "H5_breakeven_after_12h": "GO (R:R 1.385->3.771; WF PASS)",
+    "H6_partial_exit_6h": "GO (WF PASS)",
+    "H6_partial_exit_8h": "GO (WF PASS)",
+    "H6_partial_exit_12h": "GO (PnL 235.3->239.3; WF PASS)"
+  }
+}

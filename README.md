@@ -60,8 +60,18 @@ bingx_rl_trading_bot/
 └── archive/                      # 레거시 봇 (Pattern 5m 등)
 ```
 
+## 테스트
+
+```bash
+cd bingx_rl_trading_bot && python -m pytest scripts/tests/ -v
+```
+**113 cases** (~5s), coverage **71%** (signals/indicators/config **100%**).
+
 ## 문서
 
-- [CLAUDE.md](CLAUDE.md) — 전략 상세, 검증 결과, 연구 프로토콜
-- [AGENTS.md](AGENTS.md) — 에이전트 규칙
-- [claudedocs/c1_breakout_v2_design.md](bingx_rl_trading_bot/claudedocs/c1_breakout_v2_design.md) — 설계 문서
+- [CLAUDE.md](CLAUDE.md) — 전략 상세, 검증 결과, 버전 히스토리
+- [AGENTS.md](AGENTS.md) — 에이전트 규칙, 금지사항, trail 원칙
+- [설계 문서](bingx_rl_trading_bot/claudedocs/c1_breakout_v2_design.md)
+- [BUG 히스토리](bingx_rl_trading_bot/claudedocs/BUG_HISTORY.md) — BUG#1~65 연대기
+- [백테스트-라이브 정합성](bingx_rl_trading_bot/claudedocs/BACKTEST_LIVE_PARITY.md) — 20/22 달성
+- [연구 프로토콜](bingx_rl_trading_bot/claudedocs/STANDARD_RESEARCH_PROTOCOL.md)

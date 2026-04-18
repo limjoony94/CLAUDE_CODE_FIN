@@ -1,0 +1,389 @@
+{
+  "study": "adaptive_leverage_risk",
+  "date": "2026-03-02T18:02:50.530379",
+  "elapsed_seconds": 133.5,
+  "expected_wr": 0.732,
+  "ref_edge": 0.00126,
+  "phase1_is_risk": {
+    "Fixed_3x": {
+      "trades": 834,
+      "wr": 74.0,
+      "total_pnl": 126.41,
+      "max_dd": 4.75,
+      "pnl_mdd": 26.6,
+      "max_dd_duration_bars": 3736,
+      "max_dd_duration_hours": 311.3,
+      "worst_daily_pnl": -2.45,
+      "daily_pnl_std": 0.832,
+      "daily_sharpe": 0.384,
+      "max_consec_losses": 6,
+      "worst_streak_pnl": -89.08,
+      "tail_10pct_avg": -14.53,
+      "tail_10pct_sum": -1206.03,
+      "avg_loss_pnl": -10.02,
+      "worst_single_trade": -24.57,
+      "avg_leverage": 3.0,
+      "leverage_std": 0.0,
+      "avg_loss_leverage": 3.0,
+      "recovery_factor": 26.6,
+      "calmar_ratio": 37.4,
+      "ulcer_index": 1.121
+    },
+    "Fixed_1x": {
+      "trades": 738,
+      "wr": 77.8,
+      "total_pnl": 47.94,
+      "max_dd": 1.9,
+      "pnl_mdd": 25.29,
+      "max_dd_duration_bars": 5360,
+      "max_dd_duration_hours": 446.7,
+      "worst_daily_pnl": -1.43,
+      "daily_pnl_std": 0.341,
+      "daily_sharpe": 0.445,
+      "max_consec_losses": 7,
+      "worst_streak_pnl": -15.73,
+      "tail_10pct_avg": -5.4,
+      "tail_10pct_sum": -394.1,
+      "avg_loss_pnl": -3.79,
+      "worst_single_trade": -7.65,
+      "avg_leverage": 1.0,
+      "leverage_std": 0.0,
+      "avg_loss_leverage": 1.0,
+      "recovery_factor": 25.29,
+      "calmar_ratio": 35.6,
+      "ulcer_index": 0.464
+    },
+    "H1_StepTiers_w10": {
+      "trades": 799,
+      "wr": 76.3,
+      "total_pnl": 128.12,
+      "max_dd": 4.42,
+      "pnl_mdd": 29.01,
+      "max_dd_duration_bars": 5033,
+      "max_dd_duration_hours": 419.4,
+      "worst_daily_pnl": -2.44,
+      "daily_pnl_std": 0.764,
+      "daily_sharpe": 0.421,
+      "max_consec_losses": 6,
+      "worst_streak_pnl": -76.05,
+      "tail_10pct_avg": -13.25,
+      "tail_10pct_sum": -1046.9,
+      "avg_loss_pnl": -9.44,
+      "worst_single_trade": -20.47,
+      "avg_leverage": 2.59,
+      "leverage_std": 0.55,
+      "avg_loss_leverage": 2.61,
+      "recovery_factor": 29.01,
+      "calmar_ratio": 40.8,
+      "ulcer_index": 1.198
+    },
+    "H5_WRConf_w8": {
+      "trades": 812,
+      "wr": 75.5,
+      "total_pnl": 116.68,
+      "max_dd": 3.81,
+      "pnl_mdd": 30.63,
+      "max_dd_duration_bars": 8549,
+      "max_dd_duration_hours": 712.4,
+      "worst_daily_pnl": -2.05,
+      "daily_pnl_std": 0.794,
+      "daily_sharpe": 0.38,
+      "max_consec_losses": 6,
+      "worst_streak_pnl": -89.08,
+      "tail_10pct_avg": -12.66,
+      "tail_10pct_sum": -1025.73,
+      "avg_loss_pnl": -8.52,
+      "worst_single_trade": -21.76,
+      "avg_leverage": 2.43,
+      "leverage_std": 0.88,
+      "avg_loss_leverage": 2.41,
+      "recovery_factor": 30.63,
+      "calmar_ratio": 43.1,
+      "ulcer_index": 1.175
+    },
+    "H5_WRConf_w12": {
+      "trades": 809,
+      "wr": 76.9,
+      "total_pnl": 119.73,
+      "max_dd": 3.24,
+      "pnl_mdd": 36.93,
+      "max_dd_duration_bars": 5741,
+      "max_dd_duration_hours": 478.4,
+      "worst_daily_pnl": -2.41,
+      "daily_pnl_std": 0.795,
+      "daily_sharpe": 0.387,
+      "max_consec_losses": 6,
+      "worst_streak_pnl": -89.08,
+      "tail_10pct_avg": -14.33,
+      "tail_10pct_sum": -1146.14,
+      "avg_loss_pnl": -9.43,
+      "worst_single_trade": -22.73,
+      "avg_leverage": 2.55,
+      "leverage_std": 0.83,
+      "avg_loss_leverage": 2.65,
+      "recovery_factor": 36.93,
+      "calmar_ratio": 52.0,
+      "ulcer_index": 1.052
+    },
+    "H8_Combined_w10": {
+      "trades": 801,
+      "wr": 78.5,
+      "total_pnl": 126.93,
+      "max_dd": 3.72,
+      "pnl_mdd": 34.1,
+      "max_dd_duration_bars": 4841,
+      "max_dd_duration_hours": 403.4,
+      "worst_daily_pnl": -1.8,
+      "daily_pnl_std": 0.69,
+      "daily_sharpe": 0.462,
+      "max_consec_losses": 6,
+      "worst_streak_pnl": -70.75,
+      "tail_10pct_avg": -12.75,
+      "tail_10pct_sum": -1020.06,
+      "avg_loss_pnl": -8.91,
+      "worst_single_trade": -21.81,
+      "avg_leverage": 2.35,
+      "leverage_std": 0.67,
+      "avg_loss_leverage": 2.4,
+      "recovery_factor": 34.1,
+      "calmar_ratio": 48.0,
+      "ulcer_index": 1.009
+    },
+    "H9_ExpDecay_w10": {
+      "trades": 803,
+      "wr": 76.3,
+      "total_pnl": 126.62,
+      "max_dd": 4.55,
+      "pnl_mdd": 27.81,
+      "max_dd_duration_bars": 5033,
+      "max_dd_duration_hours": 419.4,
+      "worst_daily_pnl": -1.69,
+      "daily_pnl_std": 0.759,
+      "daily_sharpe": 0.421,
+      "max_consec_losses": 6,
+      "worst_streak_pnl": -89.08,
+      "tail_10pct_avg": -12.97,
+      "tail_10pct_sum": -1037.78,
+      "avg_loss_pnl": -9.08,
+      "worst_single_trade": -21.1,
+      "avg_leverage": 2.53,
+      "leverage_std": 0.64,
+      "avg_loss_leverage": 2.6,
+      "recovery_factor": 27.81,
+      "calmar_ratio": 39.1,
+      "ulcer_index": 1.11
+    }
+  },
+  "phase3_wf_folds": {
+    "Fixed_3x": {
+      "fold_pnls": [
+        18.35,
+        23.5,
+        43.56
+      ],
+      "fold_mdds": [
+        4.84,
+        6.63,
+        5.31
+      ],
+      "min_fold_pnl": 18.35,
+      "pnl_std": 10.88,
+      "max_fold_mdd": 6.63,
+      "all_pass": true
+    },
+    "Fixed_1x": {
+      "fold_pnls": [
+        10.06,
+        15.94,
+        13.42
+      ],
+      "fold_mdds": [
+        1.35,
+        0.64,
+        2.51
+      ],
+      "min_fold_pnl": 10.06,
+      "pnl_std": 2.41,
+      "max_fold_mdd": 2.51,
+      "all_pass": true
+    },
+    "H1_StepTiers_w10": {
+      "fold_pnls": [
+        20.46,
+        27.47,
+        38.73
+      ],
+      "fold_mdds": [
+        3.23,
+        4.7,
+        4.17
+      ],
+      "min_fold_pnl": 20.46,
+      "pnl_std": 7.53,
+      "max_fold_mdd": 4.7,
+      "all_pass": true
+    },
+    "H5_WRConf_w8": {
+      "fold_pnls": [
+        19.01,
+        29.19,
+        39.52
+      ],
+      "fold_mdds": [
+        2.86,
+        3.3,
+        2.27
+      ],
+      "min_fold_pnl": 19.01,
+      "pnl_std": 8.37,
+      "max_fold_mdd": 3.3,
+      "all_pass": true
+    },
+    "H5_WRConf_w12": {
+      "fold_pnls": [
+        24.8,
+        30.46,
+        35.12
+      ],
+      "fold_mdds": [
+        3.45,
+        4.99,
+        4.82
+      ],
+      "min_fold_pnl": 24.8,
+      "pnl_std": 4.22,
+      "max_fold_mdd": 4.99,
+      "all_pass": true
+    },
+    "H8_Combined_w10": {
+      "fold_pnls": [
+        22.49,
+        31.36,
+        30.41
+      ],
+      "fold_mdds": [
+        3.15,
+        4.18,
+        3.68
+      ],
+      "min_fold_pnl": 22.49,
+      "pnl_std": 3.98,
+      "max_fold_mdd": 4.18,
+      "all_pass": true
+    },
+    "H9_ExpDecay_w10": {
+      "fold_pnls": [
+        15.9,
+        26.86,
+        34.12
+      ],
+      "fold_mdds": [
+        4.04,
+        3.58,
+        3.69
+      ],
+      "min_fold_pnl": 15.9,
+      "pnl_std": 7.49,
+      "max_fold_mdd": 4.04,
+      "all_pass": true
+    }
+  },
+  "phase4_mc": {
+    "Fixed_3x": {
+      "mdd_mean": 6.59,
+      "mdd_median": 6.2,
+      "mdd_95pct": 10.41,
+      "mdd_99pct": 13.05,
+      "mdd_max": 19.38,
+      "pnl_5pct": 125.21,
+      "pnl_median": 125.21
+    },
+    "Fixed_1x": {
+      "mdd_mean": 1.87,
+      "mdd_median": 1.8,
+      "mdd_95pct": 2.73,
+      "mdd_99pct": 3.32,
+      "mdd_max": 4.84,
+      "pnl_5pct": 47.67,
+      "pnl_median": 47.67
+    },
+    "H1_StepTiers_w10": {
+      "mdd_mean": 5.35,
+      "mdd_median": 5.04,
+      "mdd_95pct": 8.38,
+      "mdd_99pct": 9.85,
+      "mdd_max": 13.93,
+      "pnl_5pct": 126.87,
+      "pnl_median": 126.87
+    },
+    "H5_WRConf_w8": {
+      "mdd_mean": 5.29,
+      "mdd_median": 5.02,
+      "mdd_95pct": 8.11,
+      "mdd_99pct": 9.64,
+      "mdd_max": 11.9,
+      "pnl_5pct": 116.4,
+      "pnl_median": 116.4
+    },
+    "H5_WRConf_w12": {
+      "mdd_mean": 5.67,
+      "mdd_median": 5.34,
+      "mdd_95pct": 8.95,
+      "mdd_99pct": 10.79,
+      "mdd_max": 17.71,
+      "pnl_5pct": 119.32,
+      "pnl_median": 119.32
+    },
+    "H8_Combined_w10": {
+      "mdd_mean": 4.76,
+      "mdd_median": 4.5,
+      "mdd_95pct": 7.15,
+      "mdd_99pct": 9.06,
+      "mdd_max": 11.48,
+      "pnl_5pct": 126.47,
+      "pnl_median": 126.47
+    },
+    "H9_ExpDecay_w10": {
+      "mdd_mean": 5.3,
+      "mdd_median": 5.01,
+      "mdd_95pct": 8.31,
+      "mdd_99pct": 10.35,
+      "mdd_max": 12.32,
+      "pnl_5pct": 125.43,
+      "pnl_median": 125.43
+    }
+  },
+  "phase5_stress": {
+    "Fixed_3x": {
+      "worst_30d_pnl": -0.6,
+      "worst_30d_start_bar": 74409
+    },
+    "Fixed_1x": {
+      "worst_30d_pnl": -0.21,
+      "worst_30d_start_bar": 74409
+    },
+    "H1_StepTiers_w10": {
+      "worst_30d_pnl": -0.64,
+      "worst_30d_start_bar": 73734
+    },
+    "H5_WRConf_w8": {
+      "worst_30d_pnl": -2.84,
+      "worst_30d_start_bar": 36935
+    },
+    "H5_WRConf_w12": {
+      "worst_30d_pnl": -0.42,
+      "worst_30d_start_bar": 39626
+    },
+    "H8_Combined_w10": {
+      "worst_30d_pnl": -0.47,
+      "worst_30d_start_bar": 72859
+    },
+    "H9_ExpDecay_w10": {
+      "worst_30d_pnl": -0.67,
+      "worst_30d_start_bar": 72876
+    }
+  },
+  "verdict": "GO (risk-superior)",
+  "best_risk_scenario": "H5_WRConf_w12",
+  "best_risk_score": "7/9"
+}

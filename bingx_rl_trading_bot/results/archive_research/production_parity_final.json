@@ -1,0 +1,2392 @@
+{
+  "version": "production_parity_final_v1.69.1",
+  "generated_at": "2026-03-31T20:48:08.222494",
+  "data_bars": 93864,
+  "config": {
+    "n_slots": 9,
+    "direction_cap": 6,
+    "timeout_bars": 576,
+    "atr_clamp": [
+      1.0,
+      1.5
+    ],
+    "cascade_tighten_pct": 98,
+    "preemptive_threshold": 1.5,
+    "preemptive_tighten_pct": 98,
+    "fallback_margin": 0.004,
+    "tp_decay_rate": 0.9975,
+    "tp_mode": "mfe_median",
+    "momentum": [
+      3,
+      1.5,
+      12
+    ],
+    "agg_risk": [
+      10.0,
+      15.0
+    ],
+    "fee": 0.30000000000000004,
+    "leverage": 3,
+    "vol_adapt": "disabled"
+  },
+  "results": {
+    "scanner_parity_full": {
+      "trades": 6058,
+      "wr": 51.5,
+      "pnl": 846.31,
+      "mdd_trade": 0.69,
+      "mdd_mtm": 1.29,
+      "pnl_mdd": 1228.91,
+      "pnl_mdd_mtm": 654.1,
+      "rr": 4.767,
+      "avg_win": 3.039,
+      "avg_loss": 0.638,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 91,
+        "agg_risk": 0,
+        "dir_cap": 654,
+        "dup_pat": 383,
+        "max_pos": 5751
+      },
+      "cascade_stats": {
+        "preemptive_triggers": 598,
+        "preemptive_fires": 2881,
+        "preemptive_fallback": 0,
+        "preemptive_only_tighten_skip": 0,
+        "reactive_triggers": 10,
+        "reactive_fires": 9,
+        "reactive_fallback": 0,
+        "reactive_skipped_chain": 0,
+        "cascade_fail_count": 0
+      },
+      "reason_breakdown": {
+        "TP": {
+          "count": 3117,
+          "pct": 51.5,
+          "avg_pnl": 3.044,
+          "total_pnl": 9487.52,
+          "wr": 100.0
+        },
+        "CASCADE_SL": {
+          "count": 2889,
+          "pct": 47.7,
+          "avg_pnl": -0.6,
+          "total_pnl": -1733.4,
+          "wr": 0.0
+        },
+        "TIMEOUT": {
+          "count": 40,
+          "pct": 0.7,
+          "avg_pnl": -1.209,
+          "total_pnl": -48.36,
+          "wr": 10.0
+        },
+        "SL": {
+          "count": 10,
+          "pct": 0.2,
+          "avg_pnl": -8.925,
+          "total_pnl": -89.25,
+          "wr": 0.0
+        },
+        "OOS_END": {
+          "count": 2,
+          "pct": 0.0,
+          "avg_pnl": 0.123,
+          "total_pnl": 0.25,
+          "wr": 50.0
+        }
+      }
+    },
+    "scanner_parity_wf": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 15644,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 939,
+            "wr": 52.1,
+            "pnl": 128.43,
+            "mdd_trade": 0.47,
+            "mdd_mtm": 1.29,
+            "pnl_mdd": 276.16,
+            "pnl_mdd_mtm": 99.26,
+            "rr": 4.84,
+            "avg_win": 2.919,
+            "avg_loss": 0.603,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 0,
+              "dir_cap": 63,
+              "dup_pat": 61,
+              "max_pos": 1092
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 86,
+              "preemptive_fires": 439,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 0,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 487,
+                "pct": 51.9,
+                "avg_pnl": 2.93,
+                "total_pnl": 1426.88,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 438,
+                "pct": 46.6,
+                "avg_pnl": -0.6,
+                "total_pnl": -262.8,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 5,
+                "pct": 0.5,
+                "avg_pnl": -0.828,
+                "total_pnl": -4.14,
+                "wr": 20.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.0,
+                "avg_pnl": -0.451,
+                "total_pnl": -4.06,
+                "wr": 11.1
+              }
+            }
+          },
+          "oos": {
+            "trades": 816,
+            "wr": 48.9,
+            "pnl": 95.35,
+            "mdd_trade": 0.81,
+            "mdd_mtm": 1.52,
+            "pnl_mdd": 118.25,
+            "pnl_mdd_mtm": 62.67,
+            "rr": 4.593,
+            "avg_win": 2.784,
+            "avg_loss": 0.606,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 3,
+              "agg_risk": 0,
+              "dir_cap": 83,
+              "dup_pat": 53,
+              "max_pos": 1110
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 81,
+              "preemptive_fires": 411,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 0,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 394,
+                "pct": 48.3,
+                "avg_pnl": 2.799,
+                "total_pnl": 1102.9,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 411,
+                "pct": 50.4,
+                "avg_pnl": -0.6,
+                "total_pnl": -246.6,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 2,
+                "pct": 0.2,
+                "avg_pnl": -2.286,
+                "total_pnl": -4.57,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.1,
+                "avg_pnl": 0.714,
+                "total_pnl": 6.42,
+                "wr": 55.6
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": 31288,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 1759,
+            "wr": 50.5,
+            "pnl": 224.34,
+            "mdd_trade": 0.47,
+            "mdd_mtm": 1.29,
+            "pnl_mdd": 482.39,
+            "pnl_mdd_mtm": 173.39,
+            "rr": 4.732,
+            "avg_win": 2.863,
+            "avg_loss": 0.605,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 5,
+              "agg_risk": 0,
+              "dir_cap": 141,
+              "dup_pat": 112,
+              "max_pos": 2205
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 169,
+              "preemptive_fires": 861,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 0,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 883,
+                "pct": 50.2,
+                "avg_pnl": 2.874,
+                "total_pnl": 2537.34,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 860,
+                "pct": 48.9,
+                "avg_pnl": -0.6,
+                "total_pnl": -516.0,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 7,
+                "pct": 0.4,
+                "avg_pnl": -1.245,
+                "total_pnl": -8.71,
+                "wr": 14.3
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 0.5,
+                "avg_pnl": 0.714,
+                "total_pnl": 6.42,
+                "wr": 55.6
+              }
+            }
+          },
+          "oos": {
+            "trades": 823,
+            "wr": 53.2,
+            "pnl": 105.7,
+            "mdd_trade": 1.51,
+            "mdd_mtm": 1.91,
+            "pnl_mdd": 70.16,
+            "pnl_mdd_mtm": 55.36,
+            "rr": 3.906,
+            "avg_win": 2.803,
+            "avg_loss": 0.718,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 13,
+              "agg_risk": 0,
+              "dir_cap": 83,
+              "dup_pat": 54,
+              "max_pos": 1125
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 73,
+              "preemptive_fires": 356,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 2,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 436,
+                "pct": 53.0,
+                "avg_pnl": 2.814,
+                "total_pnl": 1226.97,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 356,
+                "pct": 43.3,
+                "avg_pnl": -0.6,
+                "total_pnl": -213.6,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 25,
+                "pct": 3.0,
+                "avg_pnl": -1.386,
+                "total_pnl": -34.65,
+                "wr": 4.0
+              },
+              "SL": {
+                "count": 2,
+                "pct": 0.2,
+                "avg_pnl": -12.77,
+                "total_pnl": -25.54,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 4,
+                "pct": 0.5,
+                "avg_pnl": -0.479,
+                "total_pnl": -1.92,
+                "wr": 25.0
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": 46932,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 2573,
+            "wr": 51.4,
+            "pnl": 329.39,
+            "mdd_trade": 0.69,
+            "mdd_mtm": 1.29,
+            "pnl_mdd": 478.31,
+            "pnl_mdd_mtm": 254.59,
+            "rr": 4.448,
+            "avg_win": 2.848,
+            "avg_loss": 0.64,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 18,
+              "agg_risk": 0,
+              "dir_cap": 224,
+              "dup_pat": 166,
+              "max_pos": 3339
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 242,
+              "preemptive_fires": 1217,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 2,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 1319,
+                "pct": 51.3,
+                "avg_pnl": 2.854,
+                "total_pnl": 3764.96,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1216,
+                "pct": 47.3,
+                "avg_pnl": -0.6,
+                "total_pnl": -729.6,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 32,
+                "pct": 1.2,
+                "avg_pnl": -1.355,
+                "total_pnl": -43.36,
+                "wr": 6.2
+              },
+              "SL": {
+                "count": 2,
+                "pct": 0.1,
+                "avg_pnl": -12.77,
+                "total_pnl": -25.54,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 4,
+                "pct": 0.2,
+                "avg_pnl": -0.479,
+                "total_pnl": -1.92,
+                "wr": 25.0
+              }
+            }
+          },
+          "oos": {
+            "trades": 1177,
+            "wr": 52.8,
+            "pnl": 184.69,
+            "mdd_trade": 0.62,
+            "mdd_mtm": 1.95,
+            "pnl_mdd": 298.06,
+            "pnl_mdd_mtm": 94.79,
+            "rr": 5.252,
+            "avg_win": 3.227,
+            "avg_loss": 0.614,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 14,
+              "agg_risk": 0,
+              "dir_cap": 150,
+              "dup_pat": 75,
+              "max_pos": 743
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 120,
+              "preemptive_fires": 550,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 0,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 620,
+                "pct": 52.7,
+                "avg_pnl": 3.225,
+                "total_pnl": 1999.72,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 550,
+                "pct": 46.7,
+                "avg_pnl": -0.6,
+                "total_pnl": -330.0,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "pct": 0.1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 6,
+                "pct": 0.5,
+                "avg_pnl": -1.152,
+                "total_pnl": -6.91,
+                "wr": 16.7
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": 62576,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 3741,
+            "wr": 51.9,
+            "pnl": 513.99,
+            "mdd_trade": 0.69,
+            "mdd_mtm": 1.29,
+            "pnl_mdd": 746.36,
+            "pnl_mdd_mtm": 397.26,
+            "rr": 4.697,
+            "avg_win": 2.97,
+            "avg_loss": 0.632,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 32,
+              "agg_risk": 0,
+              "dir_cap": 369,
+              "dup_pat": 242,
+              "max_pos": 4095
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 361,
+              "preemptive_fires": 1763,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 2,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 1938,
+                "pct": 51.8,
+                "avg_pnl": 2.972,
+                "total_pnl": 5759.49,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1762,
+                "pct": 47.1,
+                "avg_pnl": -0.6,
+                "total_pnl": -1057.2,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 33,
+                "pct": 0.9,
+                "avg_pnl": -1.331,
+                "total_pnl": -43.92,
+                "wr": 6.1
+              },
+              "SL": {
+                "count": 2,
+                "pct": 0.1,
+                "avg_pnl": -12.77,
+                "total_pnl": -25.54,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 6,
+                "pct": 0.2,
+                "avg_pnl": -1.152,
+                "total_pnl": -6.91,
+                "wr": 16.7
+              }
+            }
+          },
+          "oos": {
+            "trades": 913,
+            "wr": 50.5,
+            "pnl": 121.48,
+            "mdd_trade": 0.55,
+            "mdd_mtm": 1.46,
+            "pnl_mdd": 220.21,
+            "pnl_mdd_mtm": 83.28,
+            "rr": 4.907,
+            "avg_win": 2.964,
+            "avg_loss": 0.604,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 17,
+              "agg_risk": 0,
+              "dir_cap": 121,
+              "dup_pat": 53,
+              "max_pos": 1076
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 89,
+              "preemptive_fires": 442,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 0,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 456,
+                "pct": 49.9,
+                "avg_pnl": 2.995,
+                "total_pnl": 1365.62,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 442,
+                "pct": 48.4,
+                "avg_pnl": -0.6,
+                "total_pnl": -265.2,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 7,
+                "pct": 0.8,
+                "avg_pnl": -0.635,
+                "total_pnl": -4.44,
+                "wr": 28.6
+              },
+              "OOS_END": {
+                "count": 8,
+                "pct": 0.9,
+                "avg_pnl": -0.335,
+                "total_pnl": -2.68,
+                "wr": 37.5
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": 78220,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 4650,
+            "wr": 51.7,
+            "pnl": 637.2,
+            "mdd_trade": 0.69,
+            "mdd_mtm": 1.29,
+            "pnl_mdd": 925.27,
+            "pnl_mdd_mtm": 492.49,
+            "rr": 4.766,
+            "avg_win": 2.969,
+            "avg_loss": 0.623,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 49,
+              "agg_risk": 0,
+              "dir_cap": 493,
+              "dup_pat": 295,
+              "max_pos": 5172
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 450,
+              "preemptive_fires": 2205,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 2,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 2396,
+                "pct": 51.5,
+                "avg_pnl": 2.977,
+                "total_pnl": 7133.82,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 2204,
+                "pct": 47.4,
+                "avg_pnl": -0.6,
+                "total_pnl": -1322.4,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 40,
+                "pct": 0.9,
+                "avg_pnl": -1.209,
+                "total_pnl": -48.36,
+                "wr": 10.0
+              },
+              "SL": {
+                "count": 2,
+                "pct": 0.0,
+                "avg_pnl": -12.77,
+                "total_pnl": -25.54,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 8,
+                "pct": 0.2,
+                "avg_pnl": -0.335,
+                "total_pnl": -2.68,
+                "wr": 37.5
+              }
+            }
+          },
+          "oos": {
+            "trades": 1410,
+            "wr": 51.1,
+            "pnl": 208.56,
+            "mdd_trade": 1.3,
+            "mdd_mtm": 2.11,
+            "pnl_mdd": 161.04,
+            "pnl_mdd_mtm": 98.93,
+            "rr": 4.764,
+            "avg_win": 3.263,
+            "avg_loss": 0.685,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 42,
+              "agg_risk": 0,
+              "dir_cap": 161,
+              "dup_pat": 87,
+              "max_pos": 578
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 147,
+              "preemptive_fires": 672,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 8,
+              "reactive_fires": 9,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 719,
+                "pct": 51.0,
+                "avg_pnl": 3.267,
+                "total_pnl": 2349.07,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 681,
+                "pct": 48.3,
+                "avg_pnl": -0.6,
+                "total_pnl": -408.6,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 8,
+                "pct": 0.6,
+                "avg_pnl": -7.963,
+                "total_pnl": -63.71,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 2,
+                "pct": 0.1,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25,
+                "wr": 50.0
+              }
+            }
+          }
+        }
+      ],
+      "oos_pnls": [
+        95.4,
+        105.7,
+        184.7,
+        121.5,
+        208.6
+      ],
+      "oos_total": 715.8,
+      "all_pass": true
+    },
+    "production_exact_full": {
+      "trades": 5275,
+      "wr": 58.1,
+      "pnl": -90.03,
+      "mdd_trade": 99.02,
+      "mdd_mtm": 99.09,
+      "pnl_mdd": -0.91,
+      "pnl_mdd_mtm": -0.91,
+      "rr": 0.661,
+      "avg_win": 2.946,
+      "avg_loss": 4.455,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 91,
+        "agg_risk": 0,
+        "dir_cap": 814,
+        "dup_pat": 349,
+        "max_pos": 6408
+      },
+      "cascade_stats": {
+        "preemptive_triggers": 745,
+        "preemptive_fires": 2605,
+        "preemptive_fallback": 2532,
+        "preemptive_only_tighten_skip": 27,
+        "reactive_triggers": 23,
+        "reactive_fires": 9,
+        "reactive_fallback": 9,
+        "reactive_skipped_chain": 12,
+        "cascade_fail_count": 0
+      },
+      "reason_breakdown": {
+        "TP": {
+          "count": 3059,
+          "pct": 58.0,
+          "avg_pnl": 2.952,
+          "total_pnl": 9029.54,
+          "wr": 100.0
+        },
+        "CASCADE_SL": {
+          "count": 2112,
+          "pct": 40.0,
+          "avg_pnl": -4.52,
+          "total_pnl": -9546.75,
+          "wr": 0.0
+        },
+        "SL": {
+          "count": 24,
+          "pct": 0.5,
+          "avg_pnl": -7.243,
+          "total_pnl": -173.84,
+          "wr": 0.0
+        },
+        "TIMEOUT": {
+          "count": 42,
+          "pct": 0.8,
+          "avg_pnl": -1.261,
+          "total_pnl": -52.98,
+          "wr": 11.9
+        },
+        "TIMEOUT_CASCADED": {
+          "count": 36,
+          "pct": 0.7,
+          "avg_pnl": -1.846,
+          "total_pnl": -66.46,
+          "wr": 2.8
+        },
+        "OOS_END": {
+          "count": 2,
+          "pct": 0.0,
+          "avg_pnl": 0.123,
+          "total_pnl": 0.25,
+          "wr": 50.0
+        }
+      }
+    },
+    "production_exact_wf": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 15644,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 809,
+            "wr": 59.7,
+            "pnl": 0.25,
+            "mdd_trade": 16.07,
+            "mdd_mtm": 16.62,
+            "pnl_mdd": 0.02,
+            "pnl_mdd_mtm": 0.02,
+            "rr": 0.676,
+            "avg_win": 2.806,
+            "avg_loss": 4.151,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 0,
+              "dir_cap": 106,
+              "dup_pat": 48,
+              "max_pos": 1192
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 104,
+              "preemptive_fires": 393,
+              "preemptive_fallback": 383,
+              "preemptive_only_tighten_skip": 6,
+              "reactive_triggers": 2,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 481,
+                "pct": 59.5,
+                "avg_pnl": 2.817,
+                "total_pnl": 1355.13,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 311,
+                "pct": 38.4,
+                "avg_pnl": -4.277,
+                "total_pnl": -1330.2,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 2,
+                "pct": 0.2,
+                "avg_pnl": -5.917,
+                "total_pnl": -11.83,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 6,
+                "pct": 0.7,
+                "avg_pnl": -1.147,
+                "total_pnl": -6.88,
+                "wr": 16.7
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.1,
+                "avg_pnl": -0.439,
+                "total_pnl": -3.95,
+                "wr": 11.1
+              }
+            }
+          },
+          "oos": {
+            "trades": 664,
+            "wr": 58.6,
+            "pnl": -7.06,
+            "mdd_trade": 11.15,
+            "mdd_mtm": 11.31,
+            "pnl_mdd": -0.63,
+            "pnl_mdd_mtm": -0.62,
+            "rr": 0.666,
+            "avg_win": 2.635,
+            "avg_loss": 3.958,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 3,
+              "agg_risk": 0,
+              "dir_cap": 110,
+              "dup_pat": 50,
+              "max_pos": 1238
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 94,
+              "preemptive_fires": 345,
+              "preemptive_fallback": 327,
+              "preemptive_only_tighten_skip": 1,
+              "reactive_triggers": 1,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 385,
+                "pct": 58.0,
+                "avg_pnl": 2.644,
+                "total_pnl": 1017.85,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 248,
+                "pct": 37.3,
+                "avg_pnl": -4.127,
+                "total_pnl": -1023.54,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 1,
+                "pct": 0.2,
+                "avg_pnl": -8.88,
+                "total_pnl": -8.88,
+                "wr": 0.0
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 18,
+                "pct": 2.7,
+                "avg_pnl": -1.822,
+                "total_pnl": -32.8,
+                "wr": 5.6
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "pct": 0.5,
+                "avg_pnl": -2.208,
+                "total_pnl": -6.62,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.4,
+                "avg_pnl": -1.056,
+                "total_pnl": -9.51,
+                "wr": 33.3
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": 31288,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 1477,
+            "wr": 59.0,
+            "pnl": -9.69,
+            "mdd_trade": 24.42,
+            "mdd_mtm": 24.55,
+            "pnl_mdd": -0.4,
+            "pnl_mdd_mtm": -0.39,
+            "rr": 0.669,
+            "avg_win": 2.733,
+            "avg_loss": 4.084,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 5,
+              "agg_risk": 0,
+              "dir_cap": 203,
+              "dup_pat": 97,
+              "max_pos": 2440
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 200,
+              "preemptive_fires": 745,
+              "preemptive_fallback": 717,
+              "preemptive_only_tighten_skip": 7,
+              "reactive_triggers": 3,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 867,
+                "pct": 58.7,
+                "avg_pnl": 2.741,
+                "total_pnl": 2376.06,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 569,
+                "pct": 38.5,
+                "avg_pnl": -4.184,
+                "total_pnl": -2380.7,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 3,
+                "pct": 0.2,
+                "avg_pnl": -6.905,
+                "total_pnl": -20.71,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 9,
+                "pct": 0.6,
+                "avg_pnl": -1.501,
+                "total_pnl": -13.51,
+                "wr": 11.1
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 20,
+                "pct": 1.4,
+                "avg_pnl": -1.944,
+                "total_pnl": -38.87,
+                "wr": 5.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 0.6,
+                "avg_pnl": -1.056,
+                "total_pnl": -9.51,
+                "wr": 33.3
+              }
+            }
+          },
+          "oos": {
+            "trades": 748,
+            "wr": 59.2,
+            "pnl": -6.4,
+            "mdd_trade": 13.5,
+            "mdd_mtm": 13.67,
+            "pnl_mdd": -0.47,
+            "pnl_mdd_mtm": -0.47,
+            "rr": 0.657,
+            "avg_win": 2.735,
+            "avg_loss": 4.162,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 13,
+              "agg_risk": 0,
+              "dir_cap": 95,
+              "dup_pat": 53,
+              "max_pos": 1189
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 93,
+              "preemptive_fires": 321,
+              "preemptive_fallback": 314,
+              "preemptive_only_tighten_skip": 5,
+              "reactive_triggers": 3,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 438,
+                "pct": 58.6,
+                "avg_pnl": 2.763,
+                "total_pnl": 1210.17,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 277,
+                "pct": 37.0,
+                "avg_pnl": -4.374,
+                "total_pnl": -1211.56,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 3,
+                "pct": 0.4,
+                "avg_pnl": -8.363,
+                "total_pnl": -25.09,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 26,
+                "pct": 3.5,
+                "avg_pnl": -1.122,
+                "total_pnl": -29.17,
+                "wr": 15.4
+              },
+              "OOS_END": {
+                "count": 4,
+                "pct": 0.5,
+                "avg_pnl": -0.479,
+                "total_pnl": -1.92,
+                "wr": 25.0
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": 46932,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 2213,
+            "wr": 59.0,
+            "pnl": -17.19,
+            "mdd_trade": 33.06,
+            "mdd_mtm": 33.22,
+            "pnl_mdd": -0.52,
+            "pnl_mdd_mtm": -0.52,
+            "rr": 0.666,
+            "avg_win": 2.732,
+            "avg_loss": 4.105,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 18,
+              "agg_risk": 0,
+              "dir_cap": 298,
+              "dup_pat": 150,
+              "max_pos": 3641
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 291,
+              "preemptive_fires": 1058,
+              "preemptive_fallback": 1023,
+              "preemptive_only_tighten_skip": 12,
+              "reactive_triggers": 6,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 1299,
+                "pct": 58.7,
+                "avg_pnl": 2.746,
+                "total_pnl": 3566.69,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 849,
+                "pct": 38.4,
+                "avg_pnl": -4.231,
+                "total_pnl": -3592.16,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 6,
+                "pct": 0.3,
+                "avg_pnl": -7.634,
+                "total_pnl": -45.8,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 35,
+                "pct": 1.6,
+                "avg_pnl": -1.219,
+                "total_pnl": -42.68,
+                "wr": 14.3
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 20,
+                "pct": 0.9,
+                "avg_pnl": -1.944,
+                "total_pnl": -38.87,
+                "wr": 5.0
+              },
+              "OOS_END": {
+                "count": 4,
+                "pct": 0.2,
+                "avg_pnl": -0.479,
+                "total_pnl": -1.92,
+                "wr": 25.0
+              }
+            }
+          },
+          "oos": {
+            "trades": 1057,
+            "wr": 58.7,
+            "pnl": -8.95,
+            "mdd_trade": 17.0,
+            "mdd_mtm": 16.86,
+            "pnl_mdd": -0.53,
+            "pnl_mdd_mtm": -0.53,
+            "rr": 0.677,
+            "avg_win": 3.151,
+            "avg_loss": 4.655,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 14,
+              "agg_risk": 0,
+              "dir_cap": 168,
+              "dup_pat": 71,
+              "max_pos": 849
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 168,
+              "preemptive_fires": 530,
+              "preemptive_fallback": 511,
+              "preemptive_only_tighten_skip": 3,
+              "reactive_triggers": 3,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 5,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 619,
+                "pct": 58.6,
+                "avg_pnl": 3.149,
+                "total_pnl": 1949.53,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 427,
+                "pct": 40.4,
+                "avg_pnl": -4.673,
+                "total_pnl": -1995.28,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 3,
+                "pct": 0.3,
+                "avg_pnl": -7.698,
+                "total_pnl": -23.1,
+                "wr": 0.0
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 2,
+                "pct": 0.2,
+                "avg_pnl": -2.41,
+                "total_pnl": -4.82,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 6,
+                "pct": 0.6,
+                "avg_pnl": -1.152,
+                "total_pnl": -6.91,
+                "wr": 16.7
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": 62576,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 3267,
+            "wr": 58.9,
+            "pnl": -26.93,
+            "mdd_trade": 40.73,
+            "mdd_mtm": 40.6,
+            "pnl_mdd": -0.66,
+            "pnl_mdd_mtm": -0.66,
+            "rr": 0.669,
+            "avg_win": 2.87,
+            "avg_loss": 4.292,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 32,
+              "agg_risk": 0,
+              "dir_cap": 455,
+              "dup_pat": 222,
+              "max_pos": 4503
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 458,
+              "preemptive_fires": 1584,
+              "preemptive_fallback": 1530,
+              "preemptive_only_tighten_skip": 15,
+              "reactive_triggers": 9,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 5,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 1917,
+                "pct": 58.7,
+                "avg_pnl": 2.878,
+                "total_pnl": 5516.26,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1278,
+                "pct": 39.1,
+                "avg_pnl": -4.379,
+                "total_pnl": -5596.43,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 9,
+                "pct": 0.3,
+                "avg_pnl": -7.655,
+                "total_pnl": -68.9,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 35,
+                "pct": 1.1,
+                "avg_pnl": -1.219,
+                "total_pnl": -42.68,
+                "wr": 14.3
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 22,
+                "pct": 0.7,
+                "avg_pnl": -1.986,
+                "total_pnl": -43.7,
+                "wr": 4.5
+              },
+              "OOS_END": {
+                "count": 6,
+                "pct": 0.2,
+                "avg_pnl": -1.152,
+                "total_pnl": -6.91,
+                "wr": 16.7
+              }
+            }
+          },
+          "oos": {
+            "trades": 801,
+            "wr": 55.6,
+            "pnl": -30.69,
+            "mdd_trade": 35.18,
+            "mdd_mtm": 35.18,
+            "pnl_mdd": -0.87,
+            "pnl_mdd_mtm": -0.87,
+            "rr": 0.66,
+            "avg_win": 2.915,
+            "avg_loss": 4.42,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 17,
+              "agg_risk": 0,
+              "dir_cap": 138,
+              "dup_pat": 44,
+              "max_pos": 1180
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 111,
+              "preemptive_fires": 408,
+              "preemptive_fallback": 392,
+              "preemptive_only_tighten_skip": 1,
+              "reactive_triggers": 1,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 444,
+                "pct": 55.4,
+                "avg_pnl": 2.922,
+                "total_pnl": 1297.29,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 326,
+                "pct": 40.7,
+                "avg_pnl": -4.649,
+                "total_pnl": -1515.55,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 1,
+                "pct": 0.1,
+                "avg_pnl": -4.56,
+                "total_pnl": -4.56,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 7,
+                "pct": 0.9,
+                "avg_pnl": -1.472,
+                "total_pnl": -10.3,
+                "wr": 0.0
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 14,
+                "pct": 1.7,
+                "avg_pnl": -1.626,
+                "total_pnl": -22.77,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.1,
+                "avg_pnl": -2.255,
+                "total_pnl": -20.29,
+                "wr": 11.1
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": 78220,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 4064,
+            "wr": 58.3,
+            "pnl": -56.0,
+            "mdd_trade": 65.64,
+            "mdd_mtm": 65.64,
+            "pnl_mdd": -0.85,
+            "pnl_mdd_mtm": -0.85,
+            "rr": 0.666,
+            "avg_win": 2.879,
+            "avg_loss": 4.326,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 49,
+              "agg_risk": 0,
+              "dir_cap": 596,
+              "dup_pat": 266,
+              "max_pos": 5684
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 569,
+              "preemptive_fires": 1992,
+              "preemptive_fallback": 1922,
+              "preemptive_only_tighten_skip": 16,
+              "reactive_triggers": 10,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 5,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 2363,
+                "pct": 58.1,
+                "avg_pnl": 2.887,
+                "total_pnl": 6822.27,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1604,
+                "pct": 39.5,
+                "avg_pnl": -4.435,
+                "total_pnl": -7113.08,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 10,
+                "pct": 0.2,
+                "avg_pnl": -7.346,
+                "total_pnl": -73.46,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 42,
+                "pct": 1.0,
+                "avg_pnl": -1.261,
+                "total_pnl": -52.98,
+                "wr": 11.9
+              },
+              "TIMEOUT_CASCADED": {
+                "count": 36,
+                "pct": 0.9,
+                "avg_pnl": -1.846,
+                "total_pnl": -66.46,
+                "wr": 2.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 0.2,
+                "avg_pnl": -2.255,
+                "total_pnl": -20.29,
+                "wr": 11.1
+              }
+            }
+          },
+          "oos": {
+            "trades": 1220,
+            "wr": 57.1,
+            "pnl": -35.84,
+            "mdd_trade": 48.62,
+            "mdd_mtm": 48.61,
+            "pnl_mdd": -0.74,
+            "pnl_mdd_mtm": -0.74,
+            "rr": 0.655,
+            "avg_win": 3.171,
+            "avg_loss": 4.843,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 42,
+              "agg_risk": 0,
+              "dir_cap": 217,
+              "dup_pat": 84,
+              "max_pos": 715
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 177,
+              "preemptive_fires": 613,
+              "preemptive_fallback": 610,
+              "preemptive_only_tighten_skip": 11,
+              "reactive_triggers": 13,
+              "reactive_fires": 9,
+              "reactive_fallback": 9,
+              "reactive_skipped_chain": 7,
+              "cascade_fail_count": 0
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 696,
+                "pct": 57.0,
+                "avg_pnl": 3.175,
+                "total_pnl": 2209.79,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 508,
+                "pct": 41.6,
+                "avg_pnl": -4.788,
+                "total_pnl": -2432.22,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 14,
+                "pct": 1.1,
+                "avg_pnl": -7.17,
+                "total_pnl": -100.39,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 2,
+                "pct": 0.2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25,
+                "wr": 50.0
+              }
+            }
+          }
+        }
+      ],
+      "oos_pnls": [
+        -7.1,
+        -6.4,
+        -9.0,
+        -30.7,
+        -35.8
+      ],
+      "oos_total": -88.9,
+      "all_pass": false
+    },
+    "degraded_50pct_full": {
+      "trades": 5706,
+      "wr": 53.6,
+      "pnl": 761.49,
+      "mdd_trade": 0.75,
+      "mdd_mtm": 1.56,
+      "pnl_mdd": 1016.43,
+      "pnl_mdd_mtm": 488.02,
+      "rr": 3.454,
+      "avg_win": 2.989,
+      "avg_loss": 0.865,
+      "max_sim_positions": 9,
+      "blocked": {
+        "momentum": 90,
+        "agg_risk": 0,
+        "dir_cap": 595,
+        "dup_pat": 412,
+        "max_pos": 6134
+      },
+      "cascade_stats": {
+        "preemptive_triggers": 1134,
+        "preemptive_fires": 2481,
+        "preemptive_fallback": 0,
+        "preemptive_only_tighten_skip": 0,
+        "reactive_triggers": 53,
+        "reactive_fires": 19,
+        "reactive_fallback": 0,
+        "reactive_skipped_chain": 0,
+        "cascade_fail_count": 2501
+      },
+      "reason_breakdown": {
+        "TP": {
+          "count": 3050,
+          "pct": 53.5,
+          "avg_pnl": 2.997,
+          "total_pnl": 9141.07,
+          "wr": 100.0
+        },
+        "CASCADE_SL": {
+          "count": 2499,
+          "pct": 43.8,
+          "avg_pnl": -0.6,
+          "total_pnl": -1499.4,
+          "wr": 0.0
+        },
+        "TIMEOUT": {
+          "count": 100,
+          "pct": 1.8,
+          "avg_pnl": -2.341,
+          "total_pnl": -234.09,
+          "wr": 8.0
+        },
+        "SL": {
+          "count": 54,
+          "pct": 0.9,
+          "avg_pnl": -10.107,
+          "total_pnl": -545.78,
+          "wr": 0.0
+        },
+        "OOS_END": {
+          "count": 3,
+          "pct": 0.1,
+          "avg_pnl": -2.786,
+          "total_pnl": -8.36,
+          "wr": 33.3
+        }
+      }
+    },
+    "degraded_50pct_wf": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 15644,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 909,
+            "wr": 53.1,
+            "pnl": 122.14,
+            "mdd_trade": 0.75,
+            "mdd_mtm": 1.56,
+            "pnl_mdd": 163.02,
+            "pnl_mdd_mtm": 78.27,
+            "rr": 4.158,
+            "avg_win": 2.888,
+            "avg_loss": 0.695,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 0,
+              "dir_cap": 89,
+              "dup_pat": 65,
+              "max_pos": 1092
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 170,
+              "preemptive_fires": 403,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 3,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 391
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 481,
+                "pct": 52.9,
+                "avg_pnl": 2.9,
+                "total_pnl": 1394.81,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 402,
+                "pct": 44.2,
+                "avg_pnl": -0.6,
+                "total_pnl": -241.2,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 14,
+                "pct": 1.5,
+                "avg_pnl": -2.379,
+                "total_pnl": -33.31,
+                "wr": 7.1
+              },
+              "SL": {
+                "count": 3,
+                "pct": 0.3,
+                "avg_pnl": -5.675,
+                "total_pnl": -17.02,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.0,
+                "avg_pnl": -0.451,
+                "total_pnl": -4.06,
+                "wr": 11.1
+              }
+            }
+          },
+          "oos": {
+            "trades": 764,
+            "wr": 51.6,
+            "pnl": 83.65,
+            "mdd_trade": 2.67,
+            "mdd_mtm": 1.91,
+            "pnl_mdd": 31.35,
+            "pnl_mdd_mtm": 43.84,
+            "rr": 3.165,
+            "avg_win": 2.717,
+            "avg_loss": 0.858,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 3,
+              "agg_risk": 0,
+              "dir_cap": 75,
+              "dup_pat": 65,
+              "max_pos": 1158
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 146,
+              "preemptive_fires": 335,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 3,
+              "reactive_fires": 1,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 325
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 389,
+                "pct": 50.9,
+                "avg_pnl": 2.737,
+                "total_pnl": 1064.83,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 336,
+                "pct": 44.0,
+                "avg_pnl": -0.6,
+                "total_pnl": -201.6,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 27,
+                "pct": 3.5,
+                "avg_pnl": -2.628,
+                "total_pnl": -70.97,
+                "wr": 3.7
+              },
+              "SL": {
+                "count": 3,
+                "pct": 0.4,
+                "avg_pnl": -11.955,
+                "total_pnl": -35.87,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.2,
+                "avg_pnl": -0.394,
+                "total_pnl": -3.55,
+                "wr": 44.4
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": 31288,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 1637,
+            "wr": 52.9,
+            "pnl": 203.78,
+            "mdd_trade": 0.75,
+            "mdd_mtm": 1.56,
+            "pnl_mdd": 272.0,
+            "pnl_mdd_mtm": 130.6,
+            "rr": 3.583,
+            "avg_win": 2.818,
+            "avg_loss": 0.786,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 5,
+              "agg_risk": 0,
+              "dir_cap": 155,
+              "dup_pat": 116,
+              "max_pos": 2309
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 309,
+              "preemptive_fires": 721,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 6,
+              "reactive_fires": 2,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 712
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 862,
+                "pct": 52.7,
+                "avg_pnl": 2.824,
+                "total_pnl": 2434.47,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 722,
+                "pct": 44.1,
+                "avg_pnl": -0.6,
+                "total_pnl": -433.2,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 38,
+                "pct": 2.3,
+                "avg_pnl": -2.797,
+                "total_pnl": -106.3,
+                "wr": 5.3
+              },
+              "SL": {
+                "count": 6,
+                "pct": 0.4,
+                "avg_pnl": -9.086,
+                "total_pnl": -54.51,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 0.5,
+                "avg_pnl": -0.713,
+                "total_pnl": -6.42,
+                "wr": 22.2
+              }
+            }
+          },
+          "oos": {
+            "trades": 783,
+            "wr": 55.8,
+            "pnl": 100.52,
+            "mdd_trade": 1.54,
+            "mdd_mtm": 1.95,
+            "pnl_mdd": 65.3,
+            "pnl_mdd_mtm": 51.52,
+            "rr": 3.225,
+            "avg_win": 2.744,
+            "avg_loss": 0.851,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 12,
+              "agg_risk": 0,
+              "dir_cap": 78,
+              "dup_pat": 59,
+              "max_pos": 1166
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 133,
+              "preemptive_fires": 307,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 6,
+              "reactive_fires": 2,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 278
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 432,
+                "pct": 55.2,
+                "avg_pnl": 2.772,
+                "total_pnl": 1197.55,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 308,
+                "pct": 39.3,
+                "avg_pnl": -0.6,
+                "total_pnl": -184.8,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 32,
+                "pct": 4.1,
+                "avg_pnl": -1.295,
+                "total_pnl": -41.46,
+                "wr": 12.5
+              },
+              "SL": {
+                "count": 6,
+                "pct": 0.8,
+                "avg_pnl": -9.449,
+                "total_pnl": -56.69,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 5,
+                "pct": 0.6,
+                "avg_pnl": -1.978,
+                "total_pnl": -9.89,
+                "wr": 20.0
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": 46932,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 2422,
+            "wr": 53.0,
+            "pnl": 293.34,
+            "mdd_trade": 0.75,
+            "mdd_mtm": 1.56,
+            "pnl_mdd": 391.55,
+            "pnl_mdd_mtm": 187.99,
+            "rr": 3.411,
+            "avg_win": 2.782,
+            "avg_loss": 0.816,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 18,
+              "agg_risk": 0,
+              "dir_cap": 233,
+              "dup_pat": 174,
+              "max_pos": 3473
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 454,
+              "preemptive_fires": 1057,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 13,
+              "reactive_fires": 4,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 1037
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 1276,
+                "pct": 52.7,
+                "avg_pnl": 2.795,
+                "total_pnl": 3566.17,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1060,
+                "pct": 43.8,
+                "avg_pnl": -0.6,
+                "total_pnl": -636.0,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 69,
+                "pct": 2.8,
+                "avg_pnl": -2.263,
+                "total_pnl": -156.13,
+                "wr": 8.7
+              },
+              "SL": {
+                "count": 13,
+                "pct": 0.5,
+                "avg_pnl": -9.908,
+                "total_pnl": -128.81,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 4,
+                "pct": 0.2,
+                "avg_pnl": -1.291,
+                "total_pnl": -5.16,
+                "wr": 25.0
+              }
+            }
+          },
+          "oos": {
+            "trades": 1108,
+            "wr": 57.6,
+            "pnl": 175.49,
+            "mdd_trade": 0.95,
+            "mdd_mtm": 2.57,
+            "pnl_mdd": 183.85,
+            "pnl_mdd_mtm": 68.35,
+            "rr": 3.349,
+            "avg_win": 3.174,
+            "avg_loss": 0.948,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 13,
+              "agg_risk": 0,
+              "dir_cap": 129,
+              "dup_pat": 75,
+              "max_pos": 834
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 221,
+              "preemptive_fires": 448,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 15,
+              "reactive_fires": 1,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 445
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 636,
+                "pct": 57.4,
+                "avg_pnl": 3.174,
+                "total_pnl": 2018.35,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 449,
+                "pct": 40.5,
+                "avg_pnl": -0.6,
+                "total_pnl": -269.4,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 15,
+                "pct": 1.4,
+                "avg_pnl": -10.89,
+                "total_pnl": -163.35,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "pct": 0.1,
+                "avg_pnl": -1.657,
+                "total_pnl": -1.66,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 7,
+                "pct": 0.6,
+                "avg_pnl": -0.654,
+                "total_pnl": -4.57,
+                "wr": 28.6
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": 62576,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 3535,
+            "wr": 53.9,
+            "pnl": 466.18,
+            "mdd_trade": 0.75,
+            "mdd_mtm": 1.56,
+            "pnl_mdd": 622.25,
+            "pnl_mdd_mtm": 298.76,
+            "rr": 3.504,
+            "avg_win": 2.914,
+            "avg_loss": 0.832,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 31,
+              "agg_risk": 0,
+              "dir_cap": 331,
+              "dup_pat": 257,
+              "max_pos": 4325
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 678,
+              "preemptive_fires": 1525,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 23,
+              "reactive_fires": 7,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 1501
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 1897,
+                "pct": 53.7,
+                "avg_pnl": 2.923,
+                "total_pnl": 5544.43,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1531,
+                "pct": 43.3,
+                "avg_pnl": -0.6,
+                "total_pnl": -918.6,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 76,
+                "pct": 2.1,
+                "avg_pnl": -2.368,
+                "total_pnl": -179.98,
+                "wr": 7.9
+              },
+              "SL": {
+                "count": 23,
+                "pct": 0.7,
+                "avg_pnl": -10.506,
+                "total_pnl": -241.64,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 8,
+                "pct": 0.2,
+                "avg_pnl": -1.071,
+                "total_pnl": -8.57,
+                "wr": 25.0
+              }
+            }
+          },
+          "oos": {
+            "trades": 869,
+            "wr": 52.6,
+            "pnl": 110.68,
+            "mdd_trade": 1.63,
+            "mdd_mtm": 1.64,
+            "pnl_mdd": 67.87,
+            "pnl_mdd_mtm": 67.48,
+            "rr": 3.503,
+            "avg_win": 2.935,
+            "avg_loss": 0.838,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 17,
+              "agg_risk": 0,
+              "dir_cap": 115,
+              "dup_pat": 47,
+              "max_pos": 1132
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 171,
+              "preemptive_fires": 376,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 6,
+              "reactive_fires": 0,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 372
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 454,
+                "pct": 52.2,
+                "avg_pnl": 2.953,
+                "total_pnl": 1340.79,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 376,
+                "pct": 43.3,
+                "avg_pnl": -0.6,
+                "total_pnl": -225.6,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 6,
+                "pct": 0.7,
+                "avg_pnl": -10.93,
+                "total_pnl": -65.58,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 24,
+                "pct": 2.8,
+                "avg_pnl": -1.896,
+                "total_pnl": -45.5,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 1.0,
+                "avg_pnl": -0.892,
+                "total_pnl": -8.03,
+                "wr": 33.3
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": 78220,
+          "oos_bars": 15644,
+          "is": {
+            "trades": 4401,
+            "wr": 53.6,
+            "pnl": 577.97,
+            "mdd_trade": 0.75,
+            "mdd_mtm": 1.56,
+            "pnl_mdd": 771.46,
+            "pnl_mdd_mtm": 370.4,
+            "rr": 3.519,
+            "avg_win": 2.92,
+            "avg_loss": 0.83,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 48,
+              "agg_risk": 0,
+              "dir_cap": 445,
+              "dup_pat": 319,
+              "max_pos": 5446
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 849,
+              "preemptive_fires": 1904,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 29,
+              "reactive_fires": 11,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 1889
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 2350,
+                "pct": 53.4,
+                "avg_pnl": 2.933,
+                "total_pnl": 6891.53,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 1914,
+                "pct": 43.5,
+                "avg_pnl": -0.6,
+                "total_pnl": -1148.4,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 99,
+                "pct": 2.2,
+                "avg_pnl": -2.319,
+                "total_pnl": -229.56,
+                "wr": 8.1
+              },
+              "SL": {
+                "count": 29,
+                "pct": 0.7,
+                "avg_pnl": -10.476,
+                "total_pnl": -303.8,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "pct": 0.2,
+                "avg_pnl": -0.892,
+                "total_pnl": -8.03,
+                "wr": 33.3
+              }
+            }
+          },
+          "oos": {
+            "trades": 1329,
+            "wr": 53.5,
+            "pnl": 188.4,
+            "mdd_trade": 1.72,
+            "mdd_mtm": 2.19,
+            "pnl_mdd": 109.59,
+            "pnl_mdd_mtm": 85.95,
+            "rr": 3.393,
+            "avg_win": 3.206,
+            "avg_loss": 0.945,
+            "max_sim_positions": 9,
+            "blocked": {
+              "momentum": 41,
+              "agg_risk": 0,
+              "dir_cap": 140,
+              "dup_pat": 112,
+              "max_pos": 656
+            },
+            "cascade_stats": {
+              "preemptive_triggers": 273,
+              "preemptive_fires": 584,
+              "preemptive_fallback": 0,
+              "preemptive_only_tighten_skip": 0,
+              "reactive_triggers": 22,
+              "reactive_fires": 8,
+              "reactive_fallback": 0,
+              "reactive_skipped_chain": 0,
+              "cascade_fail_count": 578
+            },
+            "reason_breakdown": {
+              "TP": {
+                "count": 710,
+                "pct": 53.4,
+                "avg_pnl": 3.21,
+                "total_pnl": 2278.98,
+                "wr": 100.0
+              },
+              "CASCADE_SL": {
+                "count": 592,
+                "pct": 44.5,
+                "avg_pnl": -0.6,
+                "total_pnl": -355.2,
+                "wr": 0.0
+              },
+              "SL": {
+                "count": 22,
+                "pct": 1.7,
+                "avg_pnl": -9.698,
+                "total_pnl": -213.35,
+                "wr": 0.0
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "pct": 0.2,
+                "avg_pnl": -5.036,
+                "total_pnl": -15.11,
+                "wr": 0.0
+              },
+              "OOS_END": {
+                "count": 2,
+                "pct": 0.2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25,
+                "wr": 50.0
+              }
+            }
+          }
+        }
+      ],
+      "oos_pnls": [
+        83.6,
+        100.5,
+        175.5,
+        110.7,
+        188.4
+      ],
+      "oos_total": 658.7,
+      "all_pass": true
+    }
+  }
+}

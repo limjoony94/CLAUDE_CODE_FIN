@@ -1,0 +1,87 @@
+{
+  "date_run": "2026-04-18T12:04:18.276400",
+  "strategies": {
+    "BASELINE": {
+      "fee_0.1": {
+        "trades": 1027,
+        "WR": 36.6,
+        "PnL": 170.49,
+        "MDD": 5.38
+      },
+      "fee_0.13": {
+        "trades": 1027,
+        "WR": 35.4,
+        "PnL": 139.68,
+        "MDD": 5.74
+      },
+      "fee_0.15": {
+        "trades": 1027,
+        "WR": 34.5,
+        "PnL": 119.14,
+        "MDD": 6.72
+      },
+      "fee_0.2": {
+        "trades": 1027,
+        "WR": 31.6,
+        "PnL": 67.79,
+        "MDD": 11.48
+      },
+      "fee_0.25": {
+        "trades": 1027,
+        "WR": 29.7,
+        "PnL": 16.44,
+        "MDD": 33.88
+      },
+      "rolling50_mdd": 5.38,
+      "max_consec_losses": 13,
+      "direction_mc": {
+        "actual_pnl": 170.49,
+        "sim_mean": -100.48,
+        "sim_max": -0.04,
+        "p_value": 0.0,
+        "n_sims": 200
+      }
+    },
+    "REFINED": {
+      "fee_0.1": {
+        "trades": 1612,
+        "WR": 35.7,
+        "PnL": 262.28,
+        "MDD": 8.21
+      },
+      "fee_0.13": {
+        "trades": 1612,
+        "WR": 33.9,
+        "PnL": 213.92,
+        "MDD": 9.05
+      },
+      "fee_0.15": {
+        "trades": 1612,
+        "WR": 33.1,
+        "PnL": 181.68,
+        "MDD": 9.61
+      },
+      "fee_0.2": {
+        "trades": 1612,
+        "WR": 31.2,
+        "PnL": 101.08,
+        "MDD": 25.05
+      },
+      "fee_0.25": {
+        "trades": 1612,
+        "WR": 29.3,
+        "PnL": 20.48,
+        "MDD": 57.67
+      },
+      "rolling50_mdd": 8.21,
+      "max_consec_losses": 14,
+      "direction_mc": {
+        "actual_pnl": 262.28,
+        "sim_mean": -159.15,
+        "sim_max": -37.2,
+        "p_value": 0.0,
+        "n_sims": 200
+      }
+    }
+  }
+}

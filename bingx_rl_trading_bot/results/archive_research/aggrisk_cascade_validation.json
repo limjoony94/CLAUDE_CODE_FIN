@@ -1,0 +1,180 @@
+{
+  "timestamp": "2026-03-04T23:16:15.477141",
+  "version": "v1.42.0",
+  "q1_cascade_cross": {
+    "A_baseline_3_7_CascON": {
+      "trades": 1074,
+      "wr": 62.76,
+      "pnl": 429.07,
+      "mdd": 4.42,
+      "pnl_mdd": 97.01,
+      "max_daily_loss": -3.3
+    },
+    "A_baseline_3_7_CascOFF": {
+      "trades": 934,
+      "wr": 74.52,
+      "pnl": 180.72,
+      "mdd": 8.84,
+      "pnl_mdd": 20.45,
+      "max_daily_loss": -4.28
+    },
+    "D_relax_5_15_CascON": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1018.5,
+      "mdd": 5.05,
+      "pnl_mdd": 201.87,
+      "max_daily_loss": -3.63
+    },
+    "D_relax_5_15_CascOFF": {
+      "trades": 865,
+      "wr": 78.38,
+      "pnl": 491.37,
+      "mdd": 12.57,
+      "pnl_mdd": 39.09,
+      "max_daily_loss": -7.81
+    },
+    "H_counter_5_CascON": {
+      "trades": 1039,
+      "wr": 67.37,
+      "pnl": 1023.11,
+      "mdd": 5.05,
+      "pnl_mdd": 202.79,
+      "max_daily_loss": -3.63
+    },
+    "H_counter_5_CascOFF": {
+      "trades": 863,
+      "wr": 78.33,
+      "pnl": 485.19,
+      "mdd": 12.57,
+      "pnl_mdd": 38.6,
+      "max_daily_loss": -7.81
+    },
+    "J_OFF_CascON": {
+      "trades": 1017,
+      "wr": 67.75,
+      "pnl": 1207.19,
+      "mdd": 5.8,
+      "pnl_mdd": 208.26,
+      "max_daily_loss": -3.66
+    },
+    "J_OFF_CascOFF": {
+      "trades": 802,
+      "wr": 79.55,
+      "pnl": 552.83,
+      "mdd": 13.54,
+      "pnl_mdd": 40.82,
+      "max_daily_loss": -6.45
+    }
+  },
+  "q2_random_discrimination": {
+    "n_trials": 15,
+    "aggrisk_off_cascade_on_pass_rate": 0.0,
+    "aggrisk_off_cascade_off_pass_rate": 0.0
+  },
+  "q3_correlated_loss": {
+    "A_baseline_3_7": {
+      "sl_count": 394,
+      "max_same_dir_sl_day": 9,
+      "worst_burst_loss": -5.01,
+      "max_consecutive_sl_1h": 7,
+      "sl_days": 90,
+      "avg_sl_per_sl_day": 4.4
+    },
+    "D_relax_5_15": {
+      "sl_count": 338,
+      "max_same_dir_sl_day": 9,
+      "worst_burst_loss": -8.13,
+      "max_consecutive_sl_1h": 8,
+      "sl_days": 69,
+      "avg_sl_per_sl_day": 4.9
+    },
+    "H_counter_5": {
+      "sl_count": 332,
+      "max_same_dir_sl_day": 9,
+      "worst_burst_loss": -8.13,
+      "max_consecutive_sl_1h": 7,
+      "sl_days": 68,
+      "avg_sl_per_sl_day": 4.9
+    },
+    "J_OFF": {
+      "sl_count": 321,
+      "max_same_dir_sl_day": 8,
+      "worst_burst_loss": -4.69,
+      "max_consecutive_sl_1h": 8,
+      "sl_days": 61,
+      "avg_sl_per_sl_day": 5.3
+    },
+    "A_baseline_3_7_CascOFF": {
+      "sl_count": 231,
+      "max_same_dir_sl_day": 7,
+      "worst_burst_loss": -8.41,
+      "max_consecutive_sl_1h": 5,
+      "sl_days": 113,
+      "avg_sl_per_sl_day": 2.0
+    },
+    "D_relax_5_15_CascOFF": {
+      "sl_count": 179,
+      "max_same_dir_sl_day": 8,
+      "worst_burst_loss": -9.64,
+      "max_consecutive_sl_1h": 6,
+      "sl_days": 85,
+      "avg_sl_per_sl_day": 2.1
+    },
+    "H_counter_5_CascOFF": {
+      "sl_count": 179,
+      "max_same_dir_sl_day": 8,
+      "worst_burst_loss": -9.64,
+      "max_consecutive_sl_1h": 6,
+      "sl_days": 85,
+      "avg_sl_per_sl_day": 2.1
+    },
+    "J_OFF_CascOFF": {
+      "sl_count": 158,
+      "max_same_dir_sl_day": 6,
+      "worst_burst_loss": -10.59,
+      "max_consecutive_sl_1h": 6,
+      "sl_days": 81,
+      "avg_sl_per_sl_day": 2.0
+    }
+  },
+  "q4_cascade_off_wf": {
+    "A_baseline_3_7": {
+      "n_pass": 3,
+      "avg_oos": 26.9,
+      "folds_pnl": [
+        42.4,
+        11.4,
+        27.0
+      ]
+    },
+    "D_relax_5_15": {
+      "n_pass": 3,
+      "avg_oos": 48.6,
+      "folds_pnl": [
+        24.8,
+        73.4,
+        47.8
+      ]
+    },
+    "H_counter_5": {
+      "n_pass": 3,
+      "avg_oos": 48.6,
+      "folds_pnl": [
+        24.8,
+        73.4,
+        47.8
+      ]
+    },
+    "J_OFF": {
+      "n_pass": 3,
+      "avg_oos": 65.8,
+      "folds_pnl": [
+        57.5,
+        56.5,
+        83.3
+      ]
+    }
+  },
+  "recommendation": "J_OFF"
+}

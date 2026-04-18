@@ -58,6 +58,8 @@ bingx_rl_trading_bot/archive/
 # Cache
 .pytest_cache/
 bingx_rl_trading_bot/data/cache/
+bingx_rl_trading_bot/.hypothesis/
+.hypothesis/
 
 # Coverage
 .coverage
@@ -65,3 +67,7 @@ bingx_rl_trading_bot/data/cache/
 # bkit temp files
 docs/.bkit-memory.json
 docs/.pdca-*
+bingx_rl_trading_bot/.bkit-memory.json
+
+# Serena session state
+.serena/

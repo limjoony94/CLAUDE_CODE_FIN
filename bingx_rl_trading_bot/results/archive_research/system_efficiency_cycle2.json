@@ -1,0 +1,68 @@
+{
+  "c21": {
+    "actual_gap": 191.00614105792818,
+    "shuffle_disc": "DISCRIMINATING",
+    "shuffle_pass": 4,
+    "block_disc": "DISCRIMINATING",
+    "block_pass": 6
+  },
+  "c22": {
+    "wf_results": [
+      {
+        "fold": 1,
+        "gap": -83.53343782950475,
+        "regime": "BULL"
+      },
+      {
+        "fold": 2,
+        "gap": 147.49277164449106,
+        "regime": "SIDE"
+      },
+      {
+        "fold": 3,
+        "gap": 267.61538538143634,
+        "regime": "BEAR"
+      },
+      {
+        "fold": 4,
+        "gap": 96.93330890313382,
+        "regime": "BEAR"
+      },
+      {
+        "fold": 5,
+        "gap": -122.63830964454297,
+        "regime": "BEAR"
+      }
+    ],
+    "wf_positive": 3
+  },
+  "c23": {
+    "disc": "DISCRIMINATING",
+    "shuffle_pass": 6,
+    "wf_positive": 2
+  },
+  "c24": {
+    "disc": "DISCRIMINATING",
+    "shuffle_pass": 0,
+    "wf_positive": 2
+  },
+  "c25": {
+    "baseline": {
+      "label": "Baseline",
+      "trades": 4051,
+      "wr": 61.02196988397927,
+      "pnl": -48.24955496555475,
+      "mdd": 60.94537426239716,
+      "pnl_mdd": -0.7916852681520797
+    },
+    "atr_sized": {
+      "label": "ATR Pro-vol",
+      "trades": 4051,
+      "wr": 61.02196988397927,
+      "pnl": -49.88480822081249,
+      "mdd": 64.94406066225618,
+      "pnl_mdd": -0.7681196357622316
+    }
+  },
+  "c26": {}
+}

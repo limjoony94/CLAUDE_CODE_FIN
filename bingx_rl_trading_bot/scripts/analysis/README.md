@@ -1,93 +1,92 @@
-# Analysis Scripts
+# Analysis Scripts (C1 Breakout v2.6)
 
-> **Updated**: 2026-03-12 | **217 scripts** | **Bot Version**: v1.56.2
+> **Updated**: 2026-04-18 | **Active Strategy**: C1 Breakout v2.6
+> **레거시 (Pattern 5m, MAVS-15, CP, BTV, Volspike 등)**: `archive/cleanup_20260418/analysis/` 참조
 
-연구, 백테스트, 검증, 최적화를 위한 분석 스크립트입니다.
+연구·백테스트·검증·정합성 스크립트. C1 관련만 유지.
 
-## v1.56.x 연구 (2026-03-11~12)
+## 카테고리
 
-| 스크립트 | 설명 |
+### 백테스트 (C1 baseline 검증)
+| 스크립트 | 내용 |
 |---------|------|
-| `mechanism_cross_validation_study.py` | 6-mechanism 교차검증 (15-seed, NON-DISC) |
-| `timeout_cross_validation_study.py` | Timeout 독립 효과 6-phase 검증 |
-| `mechanism_disc_followup.py` | Mechanism discriminating power 후속 분석 |
-| `na_contamination_study.py` | N/A 오염 정화 + Duplicate Guard 연구 |
-| `candle_classification_consistency.py` | 캔들 분류 일관성 점검 |
+| `c1_last_7days_backtest.py` | 최근 7일 |
+| `c1_last_30days_backtest.py` | 최근 30일 |
+| `c1_reverse_30days_backtest.py` | 30일 역방향 |
+| `c1_reverse_full_backtest.py` | 전체 역방향 |
+| `c1_v2_deep_validation.py` | v2 전반 심층 검증 |
+| `c1_v25_verify.py` | v2.5 확인 |
 
-## v1.54.0~v1.55.0 연구 (2026-03-05~08)
-
-| 스크립트 | 설명 |
+### 적대적 감사 (Overfit / Look-ahead / Fee)
+| 스크립트 | 내용 |
 |---------|------|
-| `cascade_sl_optimization.py` | Cascade SL scanner 구현 검증 |
-| `wr_gap_study.py` | Live WR gap 분석 (mechanism dominance 86%) |
-| `live_pattern_audit.py` | Live 패턴 성과 감사 |
+| `c1_bias_overfit_audit.py` | 전반 bias/overfit |
+| `c1_lookahead_overfit_fee_audit.py` | 3-section 18-test 감사 |
+| `c1_deep_stress_test.py` | 10 stress tests |
+| `c1_emergency_audit.py` | Emergency SL 엣지 |
+| `c1_extreme_audit.py` | 극단 시나리오 |
 
-## v1.44.0~v1.53.0 파라미터 Sweep (2026-03-05)
-
-| 스크립트 | 설명 |
+### 비판 평가 (Critical Cycles)
+| 스크립트 | 내용 |
 |---------|------|
-| `atr_infra_sweep_study.py` | ATR period/window + momentum threshold 4-Phase |
-| `atr_mdd_param_sweep_study.py` | ATR clamp_hi + MDD sizing 5-Phase |
-| `atr_clamp_resweep_study.py` | ATR clamp 2D grid resweep |
-| `aggrisk_resweep_study.py` | AggRisk counter re-sweep |
-| `timeout_sweep_study.py` | Timeout 12-config sweep |
-| `position_sizing_study.py` | Position sizing 연구 |
-| `pattern_sl_cooldown_study.py` | SL cooldown 연구 |
-| `time_of_day_study.py` | 시간대별 필터 연구 |
-| `interaction_effect_study.py` | 파라미터 상호작용 효과 |
-| `nslots_sweep_study.py` | N-slots sweep |
-| `counter_regime_cap_study.py` | Counter-regime cap 연구 |
+| `c1_critical_3x.py` | 3배 레버리지 크리티컬 |
+| `c1_critical_new_angles.py` | 새 각도 비판 |
+| `c1_critical_new2.py` | 추가 비판 |
+| `c1_loss_verification.py` | 손실 검증 |
+| `c1_compound_reality_check.py` | Compound 수익 현실 검증 |
 
-## v1.38.0~v1.42.0 메커니즘 연구 (2026-03-01~03)
-
-| 스크립트 | 설명 |
+### Trail · SL 메커니즘
+| 스크립트 | 내용 |
 |---------|------|
-| `correlated_loss_study.py` | Cascade SL Tightening 발견 (H5_Cascade) |
-| `guard_ablation_study.py` | Guard mechanism ablation (3개 비활성화) |
-| `equity_curve_mdd_study.py` | Equity Curve Trading + Correlation-Aware |
-| `npos_scanner_validation.py` | N-pos Scanner production alignment |
-| `loss_burst_brake_study.py` | Loss Burst Brake 연구 |
+| `c1_trail_comparison.py` | Trail 변종 비교 |
+| `c1_trail_math_verify.py` | Trail 수식 검증 |
+| `trail_alternatives_comparison.py` | 9 trail variants |
+| `intrabar_trail_impact.py` | Intrabar bar vs tick 영향 |
 
-## v1.35.0~v1.36.x 연구 (2026-02-25~27)
-
-| 스크립트 | 설명 |
+### Refined 변종 연구 (최종 baseline 유지 결론)
+| 스크립트 | 내용 |
 |---------|------|
-| `neutral_window_discovery.py` | Neutral window 자동 발견 |
-| `direction_cap_study.py` | Direction Cap portfolio 최적화 |
-| `momentum_guard_study.py` | Momentum Guard spike protection |
-| `aggregate_risk_study.py` | Directional risk cap 연구 |
-| `emergency_sl_study.py` | Emergency SL overhaul |
-| `hedge_vs_oneway_reverification.py` | Hedge vs One-Way 재검증 |
-| `direction_regime_study.py` | Direction regime filter 연구 |
+| `c1_refined_variants.py` | A/B/C/D 변종 |
+| `c1_refined_validation.py` | 변종 검증 |
+| `c1_refined_bootstrap_mdd.py` | Stationary bootstrap MDD |
+| `c1_refined_dmining_check.py` | Data mining 차단 |
+| `c1_refined_stress.py` | Stress 확장 |
 
-## v1.28.x~v1.34.0 기반 연구 (2026-02-12~24)
-
-| 스크립트 | 설명 |
+### 라이브 vs 백테스트 정합성
+| 스크립트 | 내용 |
 |---------|------|
-| `mae_mfe_discovery.py` | MAE/MFE TP/SL discovery |
-| `holdout_validation.py` | Holdout 7일 OOS 검증 |
-| `mdd_sizing_study.py` | MDD-based position sizing |
-| `h7_critical_validation.py` | Entry Optimization (ROLLBACK) |
-| `strategy_foundation_study.py` | WF non-discrimination 발견 |
+| `live_vs_backtest_verification.py` | 1:1 trade matching |
+| `live_window_analysis.py` | 13-trade windows |
+| `live_pattern_analysis.py` | 15-trade pattern breakdown |
+| `live_pattern_audit.py` | Live 패턴 감사 |
+| `live_atr_regime_check.py` | Live ATR 레짐 확인 |
+| `shake_out_pattern_verification.py` | 털어내기 패턴 검증 |
+| `forward_path_simulation.py` | MC forward simulation |
 
-## v1.26.x~v1.27.x 기초 연구 (2026-02-08~12)
-
-| 스크립트 | 설명 |
+### 파라미터 / 레짐 / 리스크
+| 스크립트 | 내용 |
 |---------|------|
-| `uniform_tp_validation.py` | Uniform TP 70% 검증 |
-| `risk_management_research.py` | Daily limit sweep, MC MDD, Kelly |
-| `tp_sl_optimization_v1264.py` | 52패턴 TP/SL grid search |
-| `tp_sl_deep_validation.py` | 5-phase deep validation |
-| `context_filter_research_v2.py` | Context filter 연구 (FAIL) |
-| `distance_edge_decomposition.py` | WR = distance + edge 분해 |
-| `portfolio_pruning_v4.py` | Leave-one-out 포트폴리오 프루닝 |
+| `extended_param_grid.py` | 35/35 ±50% 양수 검증 |
+| `c1_lookback_comparison.py` | Lookback 비교 |
+| `c1_regime_classifier.py` | 레짐 분류기 |
+| `regime_asymmetry_test.py` | LONG/SHORT WR by regime |
+| `low_vol_same_price_regime.py` | 저변동성 레짐 |
+| `liquidation_risk_check.py` | 청산 리스크 (0/1028) |
+| `c1_npos_leverage.py` | N-pos / 레버리지 |
+| `c1_oracle_switching.py` | Oracle switching |
 
-## Usage
+### 대체 전략 비교
+| 스크립트 | 내용 |
+|---------|------|
+| `mean_reversion_vs_breakout_research.py` | 하따/상따 vs 돌파 |
+| `c1_vs_mavs15_critical_eval.py` | C1 vs MAVS-15 |
+| `c1_ablation_study.py` | Ablation study |
+
+## 사용법
 
 ```bash
 cd bingx_rl_trading_bot
 python scripts/analysis/<script_name>.py
 ```
 
-결과는 `results/` 디렉토리에 JSON으로 저장됩니다.
-모든 연구는 CLAUDE.md의 Standard Research Protocol을 따릅니다.
+결과는 `results/`에 JSON으로 저장. 모든 연구는 `claudedocs/STANDARD_RESEARCH_PROTOCOL.md` 준수.

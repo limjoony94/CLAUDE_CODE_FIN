@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "script": "extended_data_rediscovery.py",
+    "timestamp": "2026-02-12T14:34:32.614534",
+    "data_days": 720,
+    "data_bars": 207360,
+    "data_range": "2024-02-23 05:00:00 ~ 2026-02-12 04:55:00",
+    "oos_days": 90,
+    "min_train_days": 360,
+    "mc_threshold": 0.01,
+    "edge_threshold": 5.0
+  },
+  "data_validation": {
+    "overlap_match_rate": 82.31738683127571
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "train_days": 450,
+      "discovered": 35,
+      "options": {
+        "Top10": {
+          "patterns": 10,
+          "pnl": 4.71,
+          "trades": 56,
+          "wr": 48.2,
+          "mdd": 9.67,
+          "pf": 1.1
+        },
+        "Top20": {
+          "patterns": 20,
+          "pnl": 8.34,
+          "trades": 62,
+          "wr": 53.2,
+          "mdd": 11.82,
+          "pf": 1.19
+        },
+        "Top30": {
+          "patterns": 30,
+          "pnl": 6.77,
+          "trades": 68,
+          "wr": 52.9,
+          "mdd": 10.07,
+          "pf": 1.15
+        },
+        "Top50": {
+          "patterns": 35,
+          "pnl": 12.47,
+          "trades": 70,
+          "wr": 55.7,
+          "mdd": 10.07,
+          "pf": 1.28
+        },
+        "Top35": {
+          "patterns": 35,
+          "pnl": 12.47,
+          "trades": 70,
+          "wr": 55.7,
+          "mdd": 10.07,
+          "pf": 1.28
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "train_days": 540,
+      "discovered": 43,
+      "options": {
+        "Top10": {
+          "patterns": 10,
+          "pnl": -17.11,
+          "trades": 72,
+          "wr": 40.3,
+          "mdd": 21.07,
+          "pf": 0.75
+        },
+        "Top20": {
+          "patterns": 20,
+          "pnl": -50.86,
+          "trades": 79,
+          "wr": 30.4,
+          "mdd": 50.73,
+          "pf": 0.46
+        },
+        "Top30": {
+          "patterns": 30,
+          "pnl": -51.19,
+          "trades": 80,
+          "wr": 30.0,
+          "mdd": 51.06,
+          "pf": 0.46
+        },
+        "Top50": {
+          "patterns": 43,
+          "pnl": -43.21,
+          "trades": 87,
+          "wr": 37.9,
+          "mdd": 43.08,
+          "pf": 0.53
+        },
+        "Top43": {
+          "patterns": 43,
+          "pnl": -43.21,
+          "trades": 87,
+          "wr": 37.9,
+          "mdd": 43.08,
+          "pf": 0.53
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "train_days": 630,
+      "discovered": 27,
+      "options": {
+        "Top10": {
+          "patterns": 10,
+          "pnl": -26.28,
+          "trades": 91,
+          "wr": 33.0,
+          "mdd": 29.03,
+          "pf": 0.74
+        },
+        "Top20": {
+          "patterns": 20,
+          "pnl": -20.17,
+          "trades": 94,
+          "wr": 35.1,
+          "mdd": 26.74,
+          "pf": 0.79
+        },
+        "Top30": {
+          "patterns": 27,
+          "pnl": -25.02,
+          "trades": 100,
+          "wr": 37.0,
+          "mdd": 27.84,
+          "pf": 0.76
+        },
+        "Top50": {
+          "patterns": 27,
+          "pnl": -25.02,
+          "trades": 100,
+          "wr": 37.0,
+          "mdd": 27.84,
+          "pf": 0.76
+        },
+        "Top27": {
+          "patterns": 27,
+          "pnl": -25.02,
+          "trades": 100,
+          "wr": 37.0,
+          "mdd": 27.84,
+          "pf": 0.76
+        }
+      }
+    }
+  ],
+  "summary": {
+    "Top10": {
+      "total_pnl": -38.7,
+      "total_trades": 219,
+      "avg_wr": 38.8,
+      "fold_pnls": [
+        4.71,
+        -17.11,
+        -26.28
+      ],
+      "folds_positive": 1
+    },
+    "Top20": {
+      "total_pnl": -62.7,
+      "total_trades": 235,
+      "avg_wr": 37.4,
+      "fold_pnls": [
+        8.34,
+        -50.86,
+        -20.17
+      ],
+      "folds_positive": 1
+    },
+    "Top30": {
+      "total_pnl": -69.4,
+      "total_trades": 248,
+      "avg_wr": 38.7,
+      "fold_pnls": [
+        6.77,
+        -51.19,
+        -25.02
+      ],
+      "folds_positive": 1
+    },
+    "Top50": {
+      "total_pnl": -55.8,
+      "total_trades": 257,
+      "avg_wr": 41.6,
+      "fold_pnls": [
+        12.47,
+        -43.21,
+        -25.02
+      ],
+      "folds_positive": 1
+    },
+    "All": {
+      "total_pnl": 0,
+      "total_trades": 0,
+      "avg_wr": 0,
+      "fold_pnls": [],
+      "folds_positive": 0
+    }
+  },
+  "comparison": {
+    "original_short_training": {
+      "E_Fresh50_short": {
+        "pnl": 8.6,
+        "wr": 68.2,
+        "mdd": 101.7,
+        "train_range": "54-216d",
+        "trades": 346
+      },
+      "F_Fresh20_short": {
+        "pnl": -27.4,
+        "wr": 63.6,
+        "mdd": 89.7,
+        "train_range": "54-216d",
+        "trades": 283
+      },
+      "D_Dynamic_short": {
+        "pnl": 80.5,
+        "wr": 68.5,
+        "mdd": 31.7,
+        "train_range": "54-216d",
+        "trades": 89
+      }
+    },
+    "extended_best": {
+      "option": "All",
+      "total_pnl": 0,
+      "total_trades": 0,
+      "avg_wr": 0,
+      "fold_pnls": [],
+      "folds_positive": 0
+    },
+    "improvement_vs_E": -8.6,
+    "verdict": "HYPOTHESIS REJECTED \u2014 training length is not the bottleneck"
+  }
+}

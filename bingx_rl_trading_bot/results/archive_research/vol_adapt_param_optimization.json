@@ -1,0 +1,745 @@
+{
+  "study": "vol_adapt_param_optimization",
+  "date": "2026-03-16T02:22:00.282370",
+  "baseline_oos": 428.3,
+  "phase2_best": {
+    "lo": 0.3,
+    "hi": 2.5,
+    "interval": 1,
+    "oos": 452.0
+  },
+  "results": {
+    "BASELINE": {
+      "is": {
+        "trades": 2793,
+        "wr": 74.9,
+        "pnl": 558.41,
+        "mdd": 2.86,
+        "pm": 195.2,
+        "tp": 2091,
+        "sl": 693,
+        "rr": 2.027
+      },
+      "wf": {
+        "total_oos": 428.3,
+        "verdict": "PASS"
+      }
+    },
+    "lo0.3_hi1.3": {
+      "is": {
+        "trades": 3302,
+        "wr": 73.8,
+        "pnl": 561.33,
+        "mdd": 3.21,
+        "pm": 174.9,
+        "tp": 2435,
+        "sl": 858,
+        "rr": 1.56
+      },
+      "wf": {
+        "total_oos": 432.3,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 1.3
+    },
+    "lo0.3_hi1.5": {
+      "is": {
+        "trades": 3225,
+        "wr": 73.6,
+        "pnl": 565.51,
+        "mdd": 3.2,
+        "pm": 176.7,
+        "tp": 2371,
+        "sl": 845,
+        "rr": 1.655
+      },
+      "wf": {
+        "total_oos": 438.9,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 1.5
+    },
+    "lo0.3_hi1.8": {
+      "is": {
+        "trades": 3158,
+        "wr": 73.3,
+        "pnl": 570.39,
+        "mdd": 3.3,
+        "pm": 172.8,
+        "tp": 2313,
+        "sl": 836,
+        "rr": 1.738
+      },
+      "wf": {
+        "total_oos": 441.9,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 1.8
+    },
+    "lo0.3_hi2.0": {
+      "is": {
+        "trades": 3119,
+        "wr": 73.5,
+        "pnl": 580.32,
+        "mdd": 3.31,
+        "pm": 175.3,
+        "tp": 2291,
+        "sl": 819,
+        "rr": 1.837
+      },
+      "wf": {
+        "total_oos": 450.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.0
+    },
+    "lo0.3_hi2.5": {
+      "is": {
+        "trades": 3110,
+        "wr": 73.4,
+        "pnl": 580.96,
+        "mdd": 3.3,
+        "pm": 176.0,
+        "tp": 2281,
+        "sl": 820,
+        "rr": 1.838
+      },
+      "wf": {
+        "total_oos": 452.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.5
+    },
+    "lo0.4_hi1.3": {
+      "is": {
+        "trades": 3259,
+        "wr": 74.3,
+        "pnl": 560.84,
+        "mdd": 3.21,
+        "pm": 174.7,
+        "tp": 2421,
+        "sl": 829,
+        "rr": 1.54
+      },
+      "wf": {
+        "total_oos": 433.6,
+        "verdict": "PASS"
+      },
+      "lo": 0.4,
+      "hi": 1.3
+    },
+    "lo0.4_hi1.5": {
+      "is": {
+        "trades": 3187,
+        "wr": 74.0,
+        "pnl": 565.82,
+        "mdd": 3.2,
+        "pm": 176.8,
+        "tp": 2355,
+        "sl": 823,
+        "rr": 1.66
+      },
+      "wf": {
+        "total_oos": 439.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.4,
+      "hi": 1.5
+    },
+    "lo0.4_hi1.8": {
+      "is": {
+        "trades": 3144,
+        "wr": 73.4,
+        "pnl": 572.62,
+        "mdd": 3.3,
+        "pm": 173.5,
+        "tp": 2307,
+        "sl": 828,
+        "rr": 1.765
+      },
+      "wf": {
+        "total_oos": 444.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.4,
+      "hi": 1.8
+    },
+    "lo0.4_hi2.0": {
+      "is": {
+        "trades": 3100,
+        "wr": 73.5,
+        "pnl": 576.51,
+        "mdd": 3.31,
+        "pm": 174.2,
+        "tp": 2277,
+        "sl": 814,
+        "rr": 1.835
+      },
+      "wf": {
+        "total_oos": 446.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.4,
+      "hi": 2.0
+    },
+    "lo0.4_hi2.5": {
+      "is": {
+        "trades": 3094,
+        "wr": 73.4,
+        "pnl": 577.99,
+        "mdd": 3.3,
+        "pm": 175.1,
+        "tp": 2270,
+        "sl": 815,
+        "rr": 1.835
+      },
+      "wf": {
+        "total_oos": 449.1,
+        "verdict": "PASS"
+      },
+      "lo": 0.4,
+      "hi": 2.5
+    },
+    "lo0.5_hi1.3": {
+      "is": {
+        "trades": 3200,
+        "wr": 74.8,
+        "pnl": 553.8,
+        "mdd": 3.14,
+        "pm": 176.4,
+        "tp": 2393,
+        "sl": 798,
+        "rr": 1.482
+      },
+      "wf": {
+        "total_oos": 429.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.5,
+      "hi": 1.3
+    },
+    "lo0.5_hi1.5": {
+      "is": {
+        "trades": 3148,
+        "wr": 74.6,
+        "pnl": 567.69,
+        "mdd": 3.13,
+        "pm": 181.4,
+        "tp": 2347,
+        "sl": 792,
+        "rr": 1.6
+      },
+      "wf": {
+        "total_oos": 434.5,
+        "verdict": "PASS"
+      },
+      "lo": 0.5,
+      "hi": 1.5
+    },
+    "lo0.5_hi1.8": {
+      "is": {
+        "trades": 3090,
+        "wr": 74.3,
+        "pnl": 580.26,
+        "mdd": 3.12,
+        "pm": 186.0,
+        "tp": 2293,
+        "sl": 788,
+        "rr": 1.774
+      },
+      "wf": {
+        "total_oos": 442.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.5,
+      "hi": 1.8
+    },
+    "lo0.5_hi2.0": {
+      "is": {
+        "trades": 3061,
+        "wr": 74.3,
+        "pnl": 584.1,
+        "mdd": 2.84,
+        "pm": 205.7,
+        "tp": 2272,
+        "sl": 780,
+        "rr": 1.82
+      },
+      "wf": {
+        "total_oos": 448.1,
+        "verdict": "PASS"
+      },
+      "lo": 0.5,
+      "hi": 2.0
+    },
+    "lo0.5_hi2.5": {
+      "is": {
+        "trades": 3054,
+        "wr": 74.2,
+        "pnl": 584.49,
+        "mdd": 2.84,
+        "pm": 205.8,
+        "tp": 2264,
+        "sl": 781,
+        "rr": 1.811
+      },
+      "wf": {
+        "total_oos": 448.2,
+        "verdict": "PASS"
+      },
+      "lo": 0.5,
+      "hi": 2.5
+    },
+    "lo0.6_hi1.3": {
+      "is": {
+        "trades": 3112,
+        "wr": 75.6,
+        "pnl": 563.36,
+        "mdd": 3.14,
+        "pm": 179.4,
+        "tp": 2350,
+        "sl": 753,
+        "rr": 1.534
+      },
+      "wf": {
+        "total_oos": 434.5,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 1.3
+    },
+    "lo0.6_hi1.5": {
+      "is": {
+        "trades": 3075,
+        "wr": 75.1,
+        "pnl": 581.07,
+        "mdd": 3.04,
+        "pm": 191.1,
+        "tp": 2307,
+        "sl": 759,
+        "rr": 1.716
+      },
+      "wf": {
+        "total_oos": 439.8,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 1.5
+    },
+    "lo0.6_hi1.8": {
+      "is": {
+        "trades": 2991,
+        "wr": 75.1,
+        "pnl": 587.39,
+        "mdd": 3.04,
+        "pm": 193.2,
+        "tp": 2243,
+        "sl": 739,
+        "rr": 1.887
+      },
+      "wf": {
+        "total_oos": 444.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 1.8
+    },
+    "lo0.6_hi2.0": {
+      "is": {
+        "trades": 2983,
+        "wr": 75.0,
+        "pnl": 594.96,
+        "mdd": 2.82,
+        "pm": 211.0,
+        "tp": 2236,
+        "sl": 738,
+        "rr": 1.962
+      },
+      "wf": {
+        "total_oos": 450.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.0
+    },
+    "lo0.6_hi2.5": {
+      "is": {
+        "trades": 2987,
+        "wr": 74.8,
+        "pnl": 592.76,
+        "mdd": 2.82,
+        "pm": 210.2,
+        "tp": 2231,
+        "sl": 747,
+        "rr": 1.949
+      },
+      "wf": {
+        "total_oos": 450.9,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.5
+    },
+    "lo0.7_hi1.3": {
+      "is": {
+        "trades": 2997,
+        "wr": 75.5,
+        "pnl": 557.57,
+        "mdd": 3.05,
+        "pm": 182.8,
+        "tp": 2261,
+        "sl": 727,
+        "rr": 1.59
+      },
+      "wf": {
+        "total_oos": 431.3,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 1.3
+    },
+    "lo0.7_hi1.5": {
+      "is": {
+        "trades": 2928,
+        "wr": 75.5,
+        "pnl": 575.7,
+        "mdd": 3.04,
+        "pm": 189.4,
+        "tp": 2209,
+        "sl": 710,
+        "rr": 1.788
+      },
+      "wf": {
+        "total_oos": 438.6,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 1.5
+    },
+    "lo0.7_hi1.8": {
+      "is": {
+        "trades": 2875,
+        "wr": 75.5,
+        "pnl": 587.15,
+        "mdd": 3.03,
+        "pm": 193.8,
+        "tp": 2168,
+        "sl": 698,
+        "rr": 1.994
+      },
+      "wf": {
+        "total_oos": 445.5,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 1.8
+    },
+    "lo0.7_hi2.0": {
+      "is": {
+        "trades": 2876,
+        "wr": 75.4,
+        "pnl": 590.38,
+        "mdd": 2.82,
+        "pm": 209.4,
+        "tp": 2166,
+        "sl": 701,
+        "rr": 2.009
+      },
+      "wf": {
+        "total_oos": 450.2,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 2.0
+    },
+    "lo0.7_hi2.5": {
+      "is": {
+        "trades": 2863,
+        "wr": 75.4,
+        "pnl": 592.38,
+        "mdd": 2.81,
+        "pm": 210.8,
+        "tp": 2157,
+        "sl": 697,
+        "rr": 2.027
+      },
+      "wf": {
+        "total_oos": 448.9,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 2.5
+    },
+    "lo0.3_hi2.5_iv1": {
+      "wf": {
+        "total_oos": 452.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.5,
+      "interval": 1
+    },
+    "lo0.3_hi2.5_iv3": {
+      "wf": {
+        "total_oos": 440.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.5,
+      "interval": 3
+    },
+    "lo0.3_hi2.5_iv6": {
+      "wf": {
+        "total_oos": 425.8,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.5,
+      "interval": 6
+    },
+    "lo0.3_hi2.5_iv12": {
+      "wf": {
+        "total_oos": 423.5,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.5,
+      "interval": 12
+    },
+    "lo0.6_hi2.5_iv1": {
+      "wf": {
+        "total_oos": 450.9,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.5,
+      "interval": 1
+    },
+    "lo0.6_hi2.5_iv3": {
+      "wf": {
+        "total_oos": 434.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.5,
+      "interval": 3
+    },
+    "lo0.6_hi2.5_iv6": {
+      "wf": {
+        "total_oos": 433.7,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.5,
+      "interval": 6
+    },
+    "lo0.6_hi2.5_iv12": {
+      "wf": {
+        "total_oos": 431.6,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.5,
+      "interval": 12
+    },
+    "lo0.6_hi2.0_iv1": {
+      "wf": {
+        "total_oos": 450.4,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.0,
+      "interval": 1
+    },
+    "lo0.6_hi2.0_iv3": {
+      "wf": {
+        "total_oos": 433.1,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.0,
+      "interval": 3
+    },
+    "lo0.6_hi2.0_iv6": {
+      "wf": {
+        "total_oos": 429.7,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.0,
+      "interval": 6
+    },
+    "lo0.6_hi2.0_iv12": {
+      "wf": {
+        "total_oos": 430.5,
+        "verdict": "PASS"
+      },
+      "lo": 0.6,
+      "hi": 2.0,
+      "interval": 12
+    },
+    "lo0.7_hi2.0_iv1": {
+      "wf": {
+        "total_oos": 450.2,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 2.0,
+      "interval": 1
+    },
+    "lo0.7_hi2.0_iv3": {
+      "wf": {
+        "total_oos": 446.1,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 2.0,
+      "interval": 3
+    },
+    "lo0.7_hi2.0_iv6": {
+      "wf": {
+        "total_oos": 448.5,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 2.0,
+      "interval": 6
+    },
+    "lo0.7_hi2.0_iv12": {
+      "wf": {
+        "total_oos": 443.8,
+        "verdict": "PASS"
+      },
+      "lo": 0.7,
+      "hi": 2.0,
+      "interval": 12
+    },
+    "lo0.3_hi2.0_iv1": {
+      "wf": {
+        "total_oos": 450.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.0,
+      "interval": 1
+    },
+    "lo0.3_hi2.0_iv3": {
+      "wf": {
+        "total_oos": 440.8,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.0,
+      "interval": 3
+    },
+    "lo0.3_hi2.0_iv6": {
+      "wf": {
+        "total_oos": 424.0,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.0,
+      "interval": 6
+    },
+    "lo0.3_hi2.0_iv12": {
+      "wf": {
+        "total_oos": 427.7,
+        "verdict": "PASS"
+      },
+      "lo": 0.3,
+      "hi": 2.0,
+      "interval": 12
+    },
+    "BEST_pre3": {
+      "is": {
+        "trades": 3562,
+        "wr": 66.5,
+        "pnl": 589.8,
+        "mdd": 2.41,
+        "pm": 244.7,
+        "tp": 2366,
+        "sl": 1187,
+        "rr": 2.422
+      },
+      "wf": {
+        "total_oos": 453.9,
+        "verdict": "PASS"
+      },
+      "pre_threshold": 3
+    },
+    "BEST_pre4": {
+      "is": {
+        "trades": 3110,
+        "wr": 73.4,
+        "pnl": 580.96,
+        "mdd": 3.3,
+        "pm": 176.0,
+        "tp": 2281,
+        "sl": 820,
+        "rr": 1.838
+      },
+      "wf": {
+        "total_oos": 452.0,
+        "verdict": "PASS"
+      },
+      "pre_threshold": 4
+    },
+    "BEST_pre5": {
+      "is": {
+        "trades": 2978,
+        "wr": 74.8,
+        "pnl": 535.37,
+        "mdd": 4.33,
+        "pm": 123.6,
+        "tp": 2224,
+        "sl": 745,
+        "rr": 1.405
+      },
+      "wf": {
+        "total_oos": 409.4,
+        "verdict": "PASS"
+      },
+      "pre_threshold": 5
+    },
+    "BEST_pre6": {
+      "is": {
+        "trades": 2892,
+        "wr": 76.2,
+        "pnl": 508.69,
+        "mdd": 5.02,
+        "pm": 101.3,
+        "tp": 2203,
+        "sl": 680,
+        "rr": 1.149
+      },
+      "wf": {
+        "total_oos": 384.3,
+        "verdict": "PASS"
+      },
+      "pre_threshold": 6
+    },
+    "BEST_pre8": {
+      "is": {
+        "trades": 2837,
+        "wr": 77.0,
+        "pnl": 481.38,
+        "mdd": 6.51,
+        "pm": 73.9,
+        "tp": 2185,
+        "sl": 643,
+        "rr": 0.974
+      },
+      "wf": {
+        "total_oos": 368.1,
+        "verdict": "PASS"
+      },
+      "pre_threshold": 8
+    }
+  },
+  "elapsed_s": 171.5
+}

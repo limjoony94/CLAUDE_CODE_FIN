@@ -1,0 +1,1018 @@
+{
+  "timestamp": "2026-02-23T09:18:08.022468",
+  "study": "LONG Pattern Restoration + Direction Cap",
+  "data_bars": 207360,
+  "overlap_bar": 125976,
+  "current_patterns": 15,
+  "dropped_longs_evaluated": 10,
+  "parameters": {
+    "max_positions": 9,
+    "timeout": 864,
+    "tp_grid": [
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.5,
+      3.0,
+      3.5
+    ],
+    "sl_grid_eff": [
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0
+    ],
+    "symmetric_levels": [
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0
+    ],
+    "direction_caps": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "leverage": 3,
+    "fee": 0.30000000000000004
+  },
+  "phase1_reevaluation": [
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "orig_tp": 1.35,
+      "orig_sl": 3.08,
+      "orig_wr": 76.9,
+      "orig_n": 52,
+      "p1_excess": 7.4,
+      "p1_pass": true,
+      "optimal_tp": 2.5,
+      "optimal_sl": 2.0,
+      "optimal_wr": 62.7,
+      "optimal_excess": 18.3,
+      "optimal_edge": 1.358,
+      "optimal_n": 51,
+      "p4_pass": true,
+      "flip_wr": 32.0,
+      "random_wr_opt": 44.4,
+      "p2_genuine": true,
+      "sym_above": 6,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 60.9,
+          "n": 64,
+          "above_50": true
+        },
+        {
+          "level": 1.0,
+          "wr": 56.2,
+          "n": 64,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 52.5,
+          "n": 61,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 64.2,
+          "n": 53,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 66.7,
+          "n": 48,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 59.5,
+          "n": 42,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": true,
+      "score": 4,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "orig_tp": 1.62,
+      "orig_sl": 3.19,
+      "orig_wr": 74.5,
+      "orig_n": 55,
+      "p1_excess": 8.2,
+      "p1_pass": true,
+      "optimal_tp": 1.75,
+      "optimal_sl": 2.0,
+      "optimal_wr": 69.0,
+      "optimal_excess": 15.6,
+      "optimal_edge": 1.721,
+      "optimal_n": 58,
+      "p4_pass": true,
+      "flip_wr": 41.7,
+      "random_wr_opt": 53.3,
+      "p2_genuine": true,
+      "sym_above": 6,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 52.2,
+          "n": 67,
+          "above_50": true
+        },
+        {
+          "level": 1.0,
+          "wr": 53.7,
+          "n": 67,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 55.6,
+          "n": 63,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 64.9,
+          "n": 57,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 60.0,
+          "n": 50,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 55.3,
+          "n": 47,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": true,
+      "score": 4,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "MD-DN-DN",
+      "direction": "LONG",
+      "orig_tp": 1.95,
+      "orig_sl": 3.7,
+      "orig_wr": 72.0,
+      "orig_n": 207,
+      "p1_excess": 6.5,
+      "p1_pass": true,
+      "optimal_tp": 1.5,
+      "optimal_sl": 2.5,
+      "optimal_wr": 72.0,
+      "optimal_excess": 9.5,
+      "optimal_edge": 1.071,
+      "optimal_n": 236,
+      "p4_pass": true,
+      "flip_wr": 58.5,
+      "random_wr_opt": 62.5,
+      "p2_genuine": true,
+      "sym_above": 5,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 47.4,
+          "n": 268,
+          "above_50": false
+        },
+        {
+          "level": 1.0,
+          "wr": 50.6,
+          "n": 267,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 55.9,
+          "n": 261,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 55.5,
+          "n": 227,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 55.4,
+          "n": 193,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 51.2,
+          "n": 166,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 3,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "orig_tp": 1.74,
+      "orig_sl": 3.49,
+      "orig_wr": 77.4,
+      "orig_n": 62,
+      "p1_excess": 10.7,
+      "p1_pass": true,
+      "optimal_tp": 2.5,
+      "optimal_sl": 4.0,
+      "optimal_wr": 77.1,
+      "optimal_excess": 15.5,
+      "optimal_edge": 2.91,
+      "optimal_n": 48,
+      "p4_pass": true,
+      "flip_wr": 59.1,
+      "random_wr_opt": 61.5,
+      "p2_genuine": true,
+      "sym_above": 5,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 45.7,
+          "n": 81,
+          "above_50": false
+        },
+        {
+          "level": 1.0,
+          "wr": 59.3,
+          "n": 81,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 60.8,
+          "n": 74,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 59.4,
+          "n": 69,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 57.6,
+          "n": 59,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 59.6,
+          "n": 47,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 3,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "H-U-MU",
+      "direction": "LONG",
+      "orig_tp": 1.36,
+      "orig_sl": 2.96,
+      "orig_wr": 77.5,
+      "orig_n": 40,
+      "p1_excess": 9.0,
+      "p1_pass": true,
+      "optimal_tp": 1.75,
+      "optimal_sl": 1.0,
+      "optimal_wr": 52.5,
+      "optimal_excess": 16.1,
+      "optimal_edge": 0.939,
+      "optimal_n": 40,
+      "p4_pass": true,
+      "flip_wr": 31.0,
+      "random_wr_opt": 36.4,
+      "p2_genuine": true,
+      "sym_above": 5,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 45.2,
+          "n": 42,
+          "above_50": false
+        },
+        {
+          "level": 1.0,
+          "wr": 59.5,
+          "n": 42,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 58.5,
+          "n": 41,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 60.5,
+          "n": 38,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 54.5,
+          "n": 33,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 56.7,
+          "n": 30,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 3,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "orig_tp": 1.55,
+      "orig_sl": 3.08,
+      "orig_wr": 75.8,
+      "orig_n": 62,
+      "p1_excess": 9.3,
+      "p1_pass": true,
+      "optimal_tp": 2.5,
+      "optimal_sl": 4.0,
+      "optimal_wr": 72.9,
+      "optimal_excess": 11.4,
+      "optimal_edge": 1.988,
+      "optimal_n": 48,
+      "p4_pass": true,
+      "flip_wr": 57.4,
+      "random_wr_opt": 61.5,
+      "p2_genuine": true,
+      "sym_above": 3,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 48.7,
+          "n": 76,
+          "above_50": false
+        },
+        {
+          "level": 1.0,
+          "wr": 46.1,
+          "n": 76,
+          "above_50": false
+        },
+        {
+          "level": 1.5,
+          "wr": 48.6,
+          "n": 74,
+          "above_50": false
+        },
+        {
+          "level": 2.0,
+          "wr": 50.7,
+          "n": 69,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 55.7,
+          "n": 61,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 52.1,
+          "n": 48,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 3,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "orig_tp": 1.93,
+      "orig_sl": 3.32,
+      "orig_wr": 70.0,
+      "orig_n": 60,
+      "p1_excess": 6.8,
+      "p1_pass": true,
+      "optimal_tp": 1.75,
+      "optimal_sl": 2.0,
+      "optimal_wr": 64.2,
+      "optimal_excess": 10.8,
+      "optimal_edge": 0.909,
+      "optimal_n": 67,
+      "p4_pass": true,
+      "flip_wr": 43.8,
+      "random_wr_opt": 53.3,
+      "p2_genuine": true,
+      "sym_above": 5,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 44.3,
+          "n": 79,
+          "above_50": false
+        },
+        {
+          "level": 1.0,
+          "wr": 50.6,
+          "n": 77,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 54.8,
+          "n": 73,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 60.3,
+          "n": 63,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 58.9,
+          "n": 56,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 57.1,
+          "n": 49,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 3,
+      "overall": "STRONG"
+    },
+    {
+      "pattern": "BD-BD-BU",
+      "direction": "LONG",
+      "orig_tp": 1.67,
+      "orig_sl": 3.14,
+      "orig_wr": 80.0,
+      "orig_n": 60,
+      "p1_excess": 14.7,
+      "p1_pass": true,
+      "optimal_tp": 1.75,
+      "optimal_sl": 3.0,
+      "optimal_wr": 78.0,
+      "optimal_excess": 14.8,
+      "optimal_edge": 2.282,
+      "optimal_n": 59,
+      "p4_pass": true,
+      "flip_wr": 69.6,
+      "random_wr_opt": 63.2,
+      "p2_genuine": false,
+      "sym_above": 4,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 57.8,
+          "n": 83,
+          "above_50": true
+        },
+        {
+          "level": 1.0,
+          "wr": 59.8,
+          "n": 82,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 56.8,
+          "n": 74,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 56.2,
+          "n": 64,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 49.1,
+          "n": 53,
+          "above_50": false
+        },
+        {
+          "level": 3.0,
+          "wr": 48.8,
+          "n": 43,
+          "above_50": false
+        }
+      ],
+      "p3_all_above": false,
+      "score": 2,
+      "overall": "MODERATE"
+    },
+    {
+      "pattern": "DN-ST-H",
+      "direction": "LONG",
+      "orig_tp": 1.85,
+      "orig_sl": 3.61,
+      "orig_wr": 65.6,
+      "orig_n": 61,
+      "p1_excess": -0.5,
+      "p1_pass": false,
+      "optimal_tp": 0.5,
+      "optimal_sl": 1.0,
+      "optimal_wr": 77.8,
+      "optimal_excess": 11.1,
+      "optimal_edge": 0.279,
+      "optimal_n": 81,
+      "p4_pass": true,
+      "flip_wr": 55.6,
+      "random_wr_opt": 66.7,
+      "p2_genuine": true,
+      "sym_above": 5,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 60.5,
+          "n": 81,
+          "above_50": true
+        },
+        {
+          "level": 1.0,
+          "wr": 59.5,
+          "n": 79,
+          "above_50": true
+        },
+        {
+          "level": 1.5,
+          "wr": 52.1,
+          "n": 73,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 50.0,
+          "n": 66,
+          "above_50": false
+        },
+        {
+          "level": 2.5,
+          "wr": 53.3,
+          "n": 60,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 50.9,
+          "n": 55,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 2,
+      "overall": "MODERATE"
+    },
+    {
+      "pattern": "BD-DN-MU",
+      "direction": "LONG",
+      "orig_tp": 1.78,
+      "orig_sl": 3.57,
+      "orig_wr": 71.4,
+      "orig_n": 49,
+      "p1_excess": 4.7,
+      "p1_pass": false,
+      "optimal_tp": 2.0,
+      "optimal_sl": 1.5,
+      "optimal_wr": 53.6,
+      "optimal_excess": 10.7,
+      "optimal_edge": 0.822,
+      "optimal_n": 56,
+      "p4_pass": true,
+      "flip_wr": 35.0,
+      "random_wr_opt": 42.9,
+      "p2_genuine": true,
+      "sym_above": 4,
+      "sym_total": 6,
+      "sym_details": [
+        {
+          "level": 0.5,
+          "wr": 50.0,
+          "n": 68,
+          "above_50": false
+        },
+        {
+          "level": 1.0,
+          "wr": 50.0,
+          "n": 68,
+          "above_50": false
+        },
+        {
+          "level": 1.5,
+          "wr": 58.7,
+          "n": 63,
+          "above_50": true
+        },
+        {
+          "level": 2.0,
+          "wr": 59.6,
+          "n": 52,
+          "above_50": true
+        },
+        {
+          "level": 2.5,
+          "wr": 59.1,
+          "n": 44,
+          "above_50": true
+        },
+        {
+          "level": 3.0,
+          "wr": 58.5,
+          "n": 41,
+          "above_50": true
+        }
+      ],
+      "p3_all_above": false,
+      "score": 2,
+      "overall": "MODERATE"
+    }
+  ],
+  "restored_longs": [
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "tp": 2.5,
+      "sl": 2.0
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0
+    },
+    {
+      "pattern": "MD-DN-DN",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5
+    },
+    {
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "tp": 2.5,
+      "sl": 4.0
+    },
+    {
+      "pattern": "H-U-MU",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 1.0
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "tp": 2.5,
+      "sl": 4.0
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0
+    }
+  ],
+  "phase2_portfolio_comparison": {
+    "baseline_15": {
+      "trades": 455,
+      "wr": 70.5,
+      "pf": 1.95,
+      "add_pnl": 128.1,
+      "add_edge": 0.281,
+      "add_mdd": 12.6,
+      "cmp_pnl": 252.3,
+      "cmp_mdd": 12.0,
+      "pnl_mdd_ratio": 21.02,
+      "long_trades": 62,
+      "short_trades": 393,
+      "n_patterns": 15
+    },
+    "expanded": {
+      "trades": 691,
+      "wr": 69.2,
+      "pf": 1.79,
+      "add_pnl": 159.4,
+      "add_edge": 0.231,
+      "add_mdd": 7.9,
+      "cmp_pnl": 378.6,
+      "cmp_mdd": 7.7,
+      "pnl_mdd_ratio": 49.17,
+      "long_trades": 346,
+      "short_trades": 345,
+      "n_patterns": 22
+    }
+  },
+  "phase3_direction_cap": {
+    "baseline_15": {
+      "5": {
+        "trades": 370,
+        "wr": 69.2,
+        "pf": 1.8,
+        "add_pnl": 95.1,
+        "add_edge": 0.257,
+        "add_mdd": 12.4,
+        "cmp_pnl": 154.1,
+        "cmp_mdd": 11.8,
+        "pnl_mdd_ratio": 13.06,
+        "long_trades": 63,
+        "short_trades": 307
+      },
+      "6": {
+        "trades": 411,
+        "wr": 69.1,
+        "pf": 1.81,
+        "add_pnl": 104.6,
+        "add_edge": 0.254,
+        "add_mdd": 12.1,
+        "cmp_pnl": 179.0,
+        "cmp_mdd": 11.6,
+        "pnl_mdd_ratio": 15.43,
+        "long_trades": 63,
+        "short_trades": 348
+      },
+      "7": {
+        "trades": 438,
+        "wr": 69.9,
+        "pf": 1.88,
+        "add_pnl": 118.3,
+        "add_edge": 0.27,
+        "add_mdd": 12.7,
+        "cmp_pnl": 219.6,
+        "cmp_mdd": 12.1,
+        "pnl_mdd_ratio": 18.15,
+        "long_trades": 63,
+        "short_trades": 375
+      },
+      "8": {
+        "trades": 453,
+        "wr": 70.2,
+        "pf": 1.92,
+        "add_pnl": 125.5,
+        "add_edge": 0.277,
+        "add_mdd": 12.6,
+        "cmp_pnl": 243.3,
+        "cmp_mdd": 12.0,
+        "pnl_mdd_ratio": 20.28,
+        "long_trades": 62,
+        "short_trades": 391
+      },
+      "9": {
+        "trades": 455,
+        "wr": 70.5,
+        "pf": 1.95,
+        "add_pnl": 128.1,
+        "add_edge": 0.281,
+        "add_mdd": 12.6,
+        "cmp_pnl": 252.3,
+        "cmp_mdd": 12.0,
+        "pnl_mdd_ratio": 21.02,
+        "long_trades": 62,
+        "short_trades": 393
+      }
+    },
+    "expanded": {
+      "5": {
+        "trades": 662,
+        "wr": 67.8,
+        "pf": 1.68,
+        "add_pnl": 135.7,
+        "add_edge": 0.205,
+        "add_mdd": 6.0,
+        "cmp_pnl": 277.9,
+        "cmp_mdd": 5.9,
+        "pnl_mdd_ratio": 47.1,
+        "long_trades": 366,
+        "short_trades": 296
+      },
+      "6": {
+        "trades": 679,
+        "wr": 68.5,
+        "pf": 1.72,
+        "add_pnl": 145.8,
+        "add_edge": 0.215,
+        "add_mdd": 6.4,
+        "cmp_pnl": 317.8,
+        "cmp_mdd": 6.3,
+        "pnl_mdd_ratio": 50.44,
+        "long_trades": 356,
+        "short_trades": 323
+      },
+      "7": {
+        "trades": 688,
+        "wr": 68.5,
+        "pf": 1.74,
+        "add_pnl": 151.3,
+        "add_edge": 0.22,
+        "add_mdd": 7.9,
+        "cmp_pnl": 341.3,
+        "cmp_mdd": 7.7,
+        "pnl_mdd_ratio": 44.32,
+        "long_trades": 347,
+        "short_trades": 341
+      },
+      "8": {
+        "trades": 691,
+        "wr": 68.9,
+        "pf": 1.78,
+        "add_pnl": 157.6,
+        "add_edge": 0.228,
+        "add_mdd": 7.9,
+        "cmp_pnl": 369.9,
+        "cmp_mdd": 7.7,
+        "pnl_mdd_ratio": 48.04,
+        "long_trades": 345,
+        "short_trades": 346
+      },
+      "9": {
+        "trades": 691,
+        "wr": 69.2,
+        "pf": 1.79,
+        "add_pnl": 159.4,
+        "add_edge": 0.231,
+        "add_mdd": 7.9,
+        "cmp_pnl": 378.6,
+        "cmp_mdd": 7.7,
+        "pnl_mdd_ratio": 49.17,
+        "long_trades": 346,
+        "short_trades": 345
+      }
+    }
+  },
+  "phase4_wf_validation": {
+    "with_cap": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_trades": 132,
+          "oos_wr": 66.7,
+          "oos_pnl": 27.2,
+          "oos_mdd": 3.6,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 214,
+          "oos_wr": 72.4,
+          "oos_pnl": 91.4,
+          "oos_mdd": 6.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 189,
+          "oos_wr": 65.1,
+          "oos_pnl": 41.7,
+          "oos_mdd": 4.4,
+          "pass": "True"
+        }
+      ],
+      "verdict": "PASS (3/3)"
+    },
+    "no_cap": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_trades": 133,
+          "oos_wr": 66.9,
+          "oos_pnl": 26.9,
+          "oos_mdd": 4.8,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 219,
+          "oos_wr": 73.5,
+          "oos_pnl": 109.5,
+          "oos_mdd": 7.7,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 195,
+          "oos_wr": 65.6,
+          "oos_pnl": 45.7,
+          "oos_mdd": 5.2,
+          "pass": "True"
+        }
+      ],
+      "verdict": "PASS (3/3)"
+    }
+  },
+  "best_combination": {
+    "pattern_set": "expanded",
+    "n_patterns": 22,
+    "direction_cap": 6,
+    "wf_verdict": "PASS (3/3)"
+  },
+  "phase5_recommendation": {
+    "strong_longs_restored": 7,
+    "strong_patterns": [
+      {
+        "pattern": "U-MD-H",
+        "tp": 2.5,
+        "sl": 2.0,
+        "excess": 18.3,
+        "score": 4
+      },
+      {
+        "pattern": "MD-MU-ST",
+        "tp": 1.75,
+        "sl": 2.0,
+        "excess": 15.6,
+        "score": 4
+      },
+      {
+        "pattern": "MD-DN-DN",
+        "tp": 1.5,
+        "sl": 2.5,
+        "excess": 9.5,
+        "score": 3
+      },
+      {
+        "pattern": "H-ST-DN",
+        "tp": 2.5,
+        "sl": 4.0,
+        "excess": 15.5,
+        "score": 3
+      },
+      {
+        "pattern": "H-U-MU",
+        "tp": 1.75,
+        "sl": 1.0,
+        "excess": 16.1,
+        "score": 3
+      },
+      {
+        "pattern": "MD-DN-BU",
+        "tp": 2.5,
+        "sl": 4.0,
+        "excess": 11.4,
+        "score": 3
+      },
+      {
+        "pattern": "MD-BD-DN",
+        "tp": 1.75,
+        "sl": 2.0,
+        "excess": 10.8,
+        "score": 3
+      }
+    ],
+    "direction_cap": 6,
+    "wf_verdict": "PASS (3/3)",
+    "pnl_change": 126.3,
+    "mdd_change": -4.3
+  }
+}

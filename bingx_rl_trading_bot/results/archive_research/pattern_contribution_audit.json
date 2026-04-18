@@ -1,0 +1,452 @@
+{
+  "metadata": {
+    "date": "2026-03-31T17:52:31.399212",
+    "script": "pattern_contribution_audit.py",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "patterns_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\results\\dynamic_patterns.json",
+    "n_bars": 93864,
+    "neutral_window": [
+      0,
+      74567
+    ],
+    "n_days": 258.9,
+    "n_folds": 5,
+    "params": {
+      "n_slots": 9,
+      "direction_cap": 6,
+      "cascade_tighten_pct": 98,
+      "preemptive_cascade_pct": 2.0,
+      "preemptive_tighten_pct": 98,
+      "tp_decay_rate": 0.9975,
+      "atr_clamp": [
+        0.5,
+        1.5
+      ],
+      "timeout_bars": 288
+    },
+    "elapsed_seconds": 63.9
+  },
+  "is_baseline": {
+    "stats": {
+      "trades": 4424,
+      "wr": 56.0,
+      "pnl": 547.04,
+      "mdd": 1.22,
+      "pnl_mdd": 448.04,
+      "pnl_per_trade": 0.124
+    },
+    "mdd_mtm": 1.96,
+    "blocked": {
+      "momentum": 42,
+      "agg_risk": 0,
+      "dir_cap": 650,
+      "dup_pat": 300,
+      "max_pos": 4725
+    }
+  },
+  "per_pattern_performance": {
+    "n_patterns_with_trades": 111,
+    "n_patterns_zero_trades": 0,
+    "zero_trade_patterns": [],
+    "top_10": [
+      {
+        "key": "U-U-ST_SHORT",
+        "trades": 196,
+        "wr": 53.1,
+        "avg_pnl": 1.091,
+        "total_pnl": 23.752
+      },
+      {
+        "key": "BD-DN-U_LONG",
+        "trades": 114,
+        "wr": 60.5,
+        "avg_pnl": 1.213,
+        "total_pnl": 15.36
+      },
+      {
+        "key": "ST-U-ST_SHORT",
+        "trades": 117,
+        "wr": 51.3,
+        "avg_pnl": 1.044,
+        "total_pnl": 13.577
+      },
+      {
+        "key": "ST-ST-U_SHORT",
+        "trades": 120,
+        "wr": 45.0,
+        "avg_pnl": 0.912,
+        "total_pnl": 12.164
+      },
+      {
+        "key": "MU-ST-U_LONG",
+        "trades": 85,
+        "wr": 61.2,
+        "avg_pnl": 1.029,
+        "total_pnl": 9.718
+      },
+      {
+        "key": "DN-D-DN_SHORT",
+        "trades": 70,
+        "wr": 55.7,
+        "avg_pnl": 1.24,
+        "total_pnl": 9.644
+      },
+      {
+        "key": "ST-DN-BU_SHORT",
+        "trades": 56,
+        "wr": 62.5,
+        "avg_pnl": 1.503,
+        "total_pnl": 9.35
+      },
+      {
+        "key": "DN-DN-BU_SHORT",
+        "trades": 89,
+        "wr": 52.8,
+        "avg_pnl": 0.931,
+        "total_pnl": 9.206
+      },
+      {
+        "key": "BD-BD-U_LONG",
+        "trades": 57,
+        "wr": 63.2,
+        "avg_pnl": 1.436,
+        "total_pnl": 9.094
+      },
+      {
+        "key": "DN-ST-MU_LONG",
+        "trades": 69,
+        "wr": 65.2,
+        "avg_pnl": 1.174,
+        "total_pnl": 9.004
+      }
+    ],
+    "bottom_10": [
+      {
+        "key": "IH-U-MD_LONG",
+        "trades": 17,
+        "wr": 52.9,
+        "avg_pnl": 0.809,
+        "total_pnl": 1.529
+      },
+      {
+        "key": "MU-U-ST_LONG",
+        "trades": 54,
+        "wr": 51.9,
+        "avg_pnl": 0.253,
+        "total_pnl": 1.515
+      },
+      {
+        "key": "ST-MD-MU_SHORT",
+        "trades": 19,
+        "wr": 52.6,
+        "avg_pnl": 0.681,
+        "total_pnl": 1.438
+      },
+      {
+        "key": "H-ST-U_SHORT",
+        "trades": 22,
+        "wr": 50.0,
+        "avg_pnl": 0.584,
+        "total_pnl": 1.427
+      },
+      {
+        "key": "U-D-MU_LONG",
+        "trades": 22,
+        "wr": 63.6,
+        "avg_pnl": 0.549,
+        "total_pnl": 1.342
+      },
+      {
+        "key": "ST-H-U_SHORT",
+        "trades": 24,
+        "wr": 45.8,
+        "avg_pnl": 0.467,
+        "total_pnl": 1.245
+      },
+      {
+        "key": "DN-ST-H_SHORT",
+        "trades": 32,
+        "wr": 40.6,
+        "avg_pnl": 0.333,
+        "total_pnl": 1.183
+      },
+      {
+        "key": "U-D-BU_SHORT",
+        "trades": 15,
+        "wr": 46.7,
+        "avg_pnl": 0.623,
+        "total_pnl": 1.039
+      },
+      {
+        "key": "U-MU-H_LONG",
+        "trades": 24,
+        "wr": 58.3,
+        "avg_pnl": 0.125,
+        "total_pnl": 0.333
+      },
+      {
+        "key": "BD-MU-MU_LONG",
+        "trades": 10,
+        "wr": 60.0,
+        "avg_pnl": 0.081,
+        "total_pnl": 0.09
+      }
+    ],
+    "negative_pnl_patterns": 0,
+    "negative_pattern_keys": []
+  },
+  "signal_density": {
+    "total_signals": 10141,
+    "pareto_80_pct_patterns": 72,
+    "pareto_ratio_pct": 64.9,
+    "top_20_by_density": [
+      {
+        "key": "U-U-ST_SHORT",
+        "signals": 471,
+        "signals_per_day": 1.819
+      },
+      {
+        "key": "ST-U-ST_SHORT",
+        "signals": 265,
+        "signals_per_day": 1.024
+      },
+      {
+        "key": "ST-ST-U_SHORT",
+        "signals": 260,
+        "signals_per_day": 1.004
+      },
+      {
+        "key": "BD-DN-U_LONG",
+        "signals": 237,
+        "signals_per_day": 0.915
+      },
+      {
+        "key": "DN-DN-BU_SHORT",
+        "signals": 201,
+        "signals_per_day": 0.776
+      },
+      {
+        "key": "MU-ST-U_LONG",
+        "signals": 172,
+        "signals_per_day": 0.664
+      },
+      {
+        "key": "DN-D-DN_SHORT",
+        "signals": 159,
+        "signals_per_day": 0.614
+      },
+      {
+        "key": "D-DN-DN_SHORT",
+        "signals": 156,
+        "signals_per_day": 0.603
+      },
+      {
+        "key": "DN-ST-MU_LONG",
+        "signals": 153,
+        "signals_per_day": 0.591
+      },
+      {
+        "key": "ST-BD-U_SHORT",
+        "signals": 151,
+        "signals_per_day": 0.583
+      },
+      {
+        "key": "ST-MU-U_LONG",
+        "signals": 147,
+        "signals_per_day": 0.568
+      },
+      {
+        "key": "MU-U-ST_LONG",
+        "signals": 145,
+        "signals_per_day": 0.56
+      },
+      {
+        "key": "U-D-DN_SHORT",
+        "signals": 136,
+        "signals_per_day": 0.525
+      },
+      {
+        "key": "ST-BU-DN_SHORT",
+        "signals": 135,
+        "signals_per_day": 0.521
+      },
+      {
+        "key": "BD-ST-DN_SHORT",
+        "signals": 131,
+        "signals_per_day": 0.506
+      },
+      {
+        "key": "DN-MD-ST_LONG",
+        "signals": 129,
+        "signals_per_day": 0.498
+      },
+      {
+        "key": "U-BU-ST_SHORT",
+        "signals": 128,
+        "signals_per_day": 0.494
+      },
+      {
+        "key": "MU-DN-MD_LONG",
+        "signals": 128,
+        "signals_per_day": 0.494
+      },
+      {
+        "key": "DN-ST-BU_SHORT",
+        "signals": 128,
+        "signals_per_day": 0.494
+      },
+      {
+        "key": "H-U-U_LONG",
+        "signals": 127,
+        "signals_per_day": 0.491
+      }
+    ]
+  },
+  "pruning_experiments": [
+    {
+      "name": "ALL-111 (baseline)",
+      "n_patterns": 111,
+      "is_pnl": 547.04,
+      "is_wr": 56.0,
+      "is_trades": 4424,
+      "trades_per_day": 17.1,
+      "oos_pnl": 439.85,
+      "oos_wr": 55.6,
+      "verdict": "BASELINE"
+    },
+    {
+      "name": "TOP-50 (signal count)",
+      "n_patterns": 50,
+      "is_pnl": 451.9,
+      "is_wr": 58.2,
+      "is_trades": 3784,
+      "trades_per_day": 14.6,
+      "oos_pnl": 369.88,
+      "oos_wr": 57.5,
+      "verdict": "TOP50"
+    },
+    {
+      "name": "TOP-30 (signal count)",
+      "n_patterns": 30,
+      "is_pnl": 353.22,
+      "is_wr": 59.4,
+      "is_trades": 3149,
+      "trades_per_day": 12.2,
+      "oos_pnl": 288.15,
+      "oos_wr": 58.8,
+      "verdict": "TOP30"
+    },
+    {
+      "name": "REMOVE-NEGATIVE (0 removed)",
+      "n_patterns": 111,
+      "is_pnl": 547.04,
+      "is_wr": 56.0,
+      "is_trades": 4424,
+      "trades_per_day": 17.1,
+      "oos_pnl": 439.85,
+      "oos_wr": 55.6,
+      "verdict": "NONNEG"
+    },
+    {
+      "name": "RANDOM-50 (avg 3 seeds)",
+      "n_patterns": 50,
+      "is_pnl": 342.9,
+      "is_wr": 58.6,
+      "is_trades": 3109,
+      "trades_per_day": 12.0,
+      "oos_pnl": 274.4,
+      "oos_wr": 58.3,
+      "verdict": "RANDOM50"
+    },
+    {
+      "name": "DENSE (>37 sig, >1/wk)",
+      "n_patterns": 109,
+      "is_pnl": 546.97,
+      "is_wr": 55.9,
+      "is_trades": 4433,
+      "trades_per_day": 17.1,
+      "oos_pnl": 437.43,
+      "oos_wr": 55.4,
+      "verdict": "DENSE"
+    },
+    {
+      "name": "RANDOM-111 (replace all)",
+      "n_patterns": 111,
+      "is_pnl": 282.2,
+      "is_wr": 56.7,
+      "is_trades": 2870,
+      "trades_per_day": 11.1,
+      "oos_pnl": 231.4,
+      "oos_wr": 56.3,
+      "verdict": "53% of baseline"
+    }
+  ],
+  "random_50_detail": [
+    {
+      "seed": 42,
+      "oos_pnl": 265.77,
+      "oos_wr": 58.6,
+      "is_pnl": 336.12,
+      "is_wr": 59.3,
+      "is_trades": 3044
+    },
+    {
+      "seed": 123,
+      "oos_pnl": 291.35,
+      "oos_wr": 59.1,
+      "is_pnl": 361.96,
+      "is_wr": 59.3,
+      "is_trades": 3138
+    },
+    {
+      "seed": 7,
+      "oos_pnl": 265.98,
+      "oos_wr": 57.1,
+      "is_pnl": 330.69,
+      "is_wr": 57.3,
+      "is_trades": 3146
+    }
+  ],
+  "random_111_replacement": {
+    "per_seed": [
+      {
+        "seed": 42,
+        "is_pnl": 292.58,
+        "is_wr": 56.7,
+        "is_trades": 2897,
+        "oos_pnl": 238.0,
+        "oos_wr": 56.3,
+        "n_unique_patterns_with_signals": 106
+      },
+      {
+        "seed": 123,
+        "is_pnl": 250.96,
+        "is_wr": 58.2,
+        "is_trades": 2617,
+        "oos_pnl": 203.26,
+        "oos_wr": 57.8,
+        "n_unique_patterns_with_signals": 107
+      },
+      {
+        "seed": 7,
+        "is_pnl": 303.05,
+        "is_wr": 55.2,
+        "is_trades": 3096,
+        "oos_pnl": 252.82,
+        "oos_wr": 54.7,
+        "n_unique_patterns_with_signals": 108
+      }
+    ],
+    "avg_oos_pnl": 231.4,
+    "avg_is_pnl": 282.2,
+    "ratio_to_validated_pct": 52.6
+  },
+  "conclusions": {
+    "pareto": "72 patterns (65%) generate 80% of signals",
+    "random50_vs_all111": "RANDOM-50 achieves 62% of ALL-111 OOS",
+    "random_replacement": "RANDOM-111 achieves 53% of validated OOS",
+    "density_vs_identity": "Identity has SOME value",
+    "mechanism_dominance": true,
+    "pruning_recommendation": "KEEP ALL"
+  }
+}

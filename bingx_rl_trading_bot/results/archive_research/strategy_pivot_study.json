@@ -1,0 +1,177 @@
+{
+  "study": "Strategy Pivot Study",
+  "date": "2026-03-01 17:56",
+  "data_bars": 74114,
+  "data_days": 257.3,
+  "phases": {
+    "phase1_funding_rate": {
+      "verdict": "STOP",
+      "best_hour": 22,
+      "worst_hour": 0,
+      "note": "Hourly returns are small and likely noise. Funding rate data not available in OHLCV. Time-of-day effect too weak for standalone strategy."
+    },
+    "phase2_mean_reversion": {
+      "verdict": "PARTIAL",
+      "best_mr": "MR3_VWAP1.5_TP2.0_SL3.0",
+      "best_mr_metrics": {
+        "n_trades": 7635,
+        "wr": 67.5,
+        "pnl": 9.493376274513483e+26,
+        "mdd": 100.0,
+        "pnl_mdd": 9.493379651222243e+24,
+        "avg_win": 5.548,
+        "avg_loss": 8.421,
+        "pnl_per_trade": 1.2434022625426957e+23,
+        "long_trades": 3928,
+        "short_trades": 3707,
+        "mc_p": 0.0
+      },
+      "n_tested": 49,
+      "n_positive": 15
+    },
+    "phase3_volatility_trading": {
+      "verdict": "PARTIAL",
+      "best_vol": "V4_regime0.5_TP2.0_SL2.5",
+      "best_vol_metrics": {
+        "n_trades": 3296,
+        "wr": 60.3,
+        "pnl": 457782.38,
+        "mdd": 99.34,
+        "pnl_mdd": 4608.17,
+        "avg_win": 5.763,
+        "avg_loss": 7.514,
+        "pnl_per_trade": 138.89,
+        "long_trades": 1679,
+        "short_trades": 1617,
+        "mc_p": 0.0
+      },
+      "n_tested": 43,
+      "n_positive": 27
+    },
+    "phase4_statistical_patterns": {
+      "verdict": "INFORMATIONAL",
+      "volatile_hours": [
+        0,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "quiet_hours": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11
+      ],
+      "pattern_volatile_pnl": 2.8521107454916087e+25,
+      "pattern_quiet_pnl": 5.794254158931252e+22,
+      "pattern_all_pnl": 2.0890636736930322e+69
+    },
+    "phase5_hybrid": {
+      "verdict": "STOP",
+      "baseline_pnl": 2.0890636736930322e+69,
+      "improvements": {
+        "H1_pattern_volatile_hours": -2.0890636736930322e+69,
+        "H2_pattern_bb_confirm": -2.0890636736930322e+69,
+        "H3_pattern_rsi_confirm": -2.089063673558744e+69,
+        "H4_pattern_vol_filter": -2.0890636736930322e+69
+      }
+    },
+    "walk_forward_validation": {
+      "n_tested": 10,
+      "n_passed": 4,
+      "passed_strategies": [
+        "MR3_VWAP1.5_TP2.0_SL3.0",
+        "MR3_VWAP2.0_TP2.0_SL3.0",
+        "MR1_BB2.0_TP2.0_SL3.0",
+        "MR5_RSI30_TP2.0_SL3.0"
+      ],
+      "best_wf_strategy": "MR3_VWAP1.5_TP2.0_SL3.0",
+      "best_wf_pnl": 1178493954.23
+    },
+    "phase6_feasibility": {
+      "current_pattern_v1.36.4": {
+        "description": "3-candle pattern with ATR-scaled TP/SL",
+        "implementation_difficulty": "DONE (live)",
+        "capital_requirement": "$2,261 (current)",
+        "expected_frequency": "~1.0 trades/day",
+        "wf_validated": true,
+        "key_risk": "N=9 correlation, R:R < 1, direction-dependent",
+        "infra_reuse": "100%",
+        "verdict": "BASELINE"
+      },
+      "mean_reversion": {
+        "description": "BB/VWAP/KC/RSI mean reversion signals",
+        "best_variant": "MR3_VWAP1.5_TP2.0_SL3.0",
+        "best_pnl": 9.493376274513483e+26,
+        "implementation_difficulty": "MEDIUM (indicator-based, same infra)",
+        "capital_requirement": "$2,261 (same)",
+        "expected_frequency": "Varies (typically 1-5/day for MR)",
+        "wf_validated": false,
+        "key_risk": "Mean reversion fails in trending markets",
+        "infra_reuse": "~80% (same bot framework, different signals)",
+        "verdict": "NEEDS_WF"
+      },
+      "volatility_trading": {
+        "description": "ATR-based volatility breakout/selling/range",
+        "best_variant": "V4_regime0.5_TP2.0_SL2.5",
+        "best_pnl": 457782.38,
+        "implementation_difficulty": "MEDIUM (ATR infrastructure already exists)",
+        "capital_requirement": "$2,261 (same)",
+        "expected_frequency": "Varies (regime-dependent)",
+        "wf_validated": false,
+        "key_risk": "Regime classification accuracy",
+        "infra_reuse": "~75% (ATR already in production)",
+        "verdict": "NEEDS_WF"
+      },
+      "time_filter": {
+        "description": "Hour/day seasonality filter on existing pattern strategy",
+        "implementation_difficulty": "LOW (config change only)",
+        "capital_requirement": "$2,261 (same)",
+        "expected_frequency": "Reduced (filter removes ~33% signals)",
+        "wf_validated": false,
+        "key_risk": "Seasonality may be spurious",
+        "infra_reuse": "~95% (add time check to signal filter)",
+        "verdict": "NEEDS_WF"
+      },
+      "hybrid": {
+        "description": "Pattern + indicator confirmation/time filter",
+        "best_variant": "H3_pattern_rsi_confirm",
+        "best_improvement": -2.089063673558744e+69,
+        "implementation_difficulty": "LOW-MEDIUM (add filters to existing bot)",
+        "capital_requirement": "$2,261 (same)",
+        "expected_frequency": "Reduced by filter",
+        "wf_validated": false,
+        "key_risk": "Overfitting to IS data with indicator thresholds",
+        "infra_reuse": "~90%",
+        "verdict": "STOP"
+      },
+      "funding_rate_proxy": {
+        "description": "8h price cycle exploitation",
+        "implementation_difficulty": "HIGH (need real funding data from API)",
+        "capital_requirement": "$2,261 (same) but need additional API calls",
+        "expected_frequency": "3/day (1 per funding window)",
+        "wf_validated": false,
+        "key_risk": "No actual funding data in OHLCV, proxy unreliable",
+        "infra_reuse": "~60% (need new data pipeline)",
+        "verdict": "STOP"
+      }
+    }
+  },
+  "verdict": "PARTIAL",
+  "viable_strategies": [
+    "MR3_VWAP1.5_TP2.0_SL3.0",
+    "MR3_VWAP2.0_TP2.0_SL3.0",
+    "MR1_BB2.0_TP2.0_SL3.0",
+    "MR5_RSI30_TP2.0_SL3.0"
+  ],
+  "recommendation": "Found 4 strategies that survived WF validation: MR3_VWAP1.5_TP2.0_SL3.0, MR3_VWAP2.0_TP2.0_SL3.0, MR1_BB2.0_TP2.0_SL3.0, MR5_RSI30_TP2.0_SL3.0. Recommend further investigation with full portfolio simulation and MC significance testing before deployment. Current pattern strategy remains stronger in WF OOS PnL (+872.7%) but these alternatives may provide diversification benefit.",
+  "execution_time_sec": 112.5
+}

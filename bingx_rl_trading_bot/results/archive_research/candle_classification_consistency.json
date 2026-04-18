@@ -1,0 +1,100 @@
+{
+  "study": "candle_classification_consistency",
+  "timestamp": "2026-03-12T02:34:47.644293",
+  "avg_body_window": 20,
+  "production_window": 600,
+  "data_bars": 87315,
+  "phase1_avg_body": {
+    "total_bars": 87296,
+    "mean_abs_diff": 0.0,
+    "median_abs_diff": 0.0,
+    "max_abs_diff": 0.0,
+    "mean_pct_diff": 0.0,
+    "p95_pct_diff": 0.0,
+    "p99_pct_diff": 0.0,
+    "exact_match_pct": 100.0
+  },
+  "phase2_classification": {
+    "total_classified": 87315,
+    "mismatch_count": 0,
+    "mismatch_pct": 0.0
+  },
+  "phase3_signals": {
+    "active_patterns_count": 131,
+    "total_full_signals": 16005,
+    "total_window_signals": 16005,
+    "signal_count_diff": 0,
+    "signal_count_diff_pct": 0.0,
+    "both_match": 16005,
+    "full_only": 0,
+    "window_only": 0,
+    "different_active_pattern": 0
+  },
+  "phase4_edge_effect": {
+    "avg_body_stats": {
+      "mean": 83.94978349523456,
+      "std": 51.2697333195006,
+      "min": 7.989999999997963,
+      "max": 1382.694999999999,
+      "cv": 0.6107190654328603
+    },
+    "nan_bars_in_600_window": 19,
+    "signal_bar_position": "last (idx=-1 or -2)",
+    "nan_bars_affect_signal": false,
+    "conclusion": "rolling(20) is local \u2014 uses last 20 bars only. 600-bar vs full-history produces IDENTICAL avg_body_20 for all bars that exist in both windows. Classification CANNOT differ due to window size. If classifications differ, it must be due to OHLCV DATA differences (API rounding, timestamp alignment, etc)."
+  },
+  "phase5_sensitivity": {
+    "\u00b11%": {
+      "tested": 87295,
+      "changed": 697,
+      "change_pct": 0.7984420642648491
+    },
+    "\u00b12%": {
+      "tested": 87295,
+      "changed": 1379,
+      "change_pct": 1.5797010138037688
+    },
+    "\u00b15%": {
+      "tested": 87295,
+      "changed": 3441,
+      "change_pct": 3.941806518128186
+    },
+    "\u00b110%": {
+      "tested": 87295,
+      "changed": 6923,
+      "change_pct": 7.930580216507245
+    },
+    "\u00b120%": {
+      "tested": 87295,
+      "changed": 14068,
+      "change_pct": 16.115470530958245
+    }
+  },
+  "phase6_data_source": {
+    "scanner_data_source": "CSV file (btc_5m_270days_reclassified.csv)",
+    "scanner_bars": 87315,
+    "production_data_source": "BingX API fetch_ohlcv (live, 600 bars)",
+    "production_bars": 600,
+    "potential_differences": [
+      "Decimal precision: API may return different precision than CSV",
+      "Timestamp alignment: API bars may start at different offset",
+      "OHLCV rounding: Exchange API might round differently than historical data",
+      "Missing bars: API might skip low-volume periods",
+      "Data lag: API data updates in real-time vs CSV is snapshot"
+    ],
+    "classification_impact": "NONE from window size (rolling(20) is local)",
+    "real_risk": "OHLCV data precision/rounding differences between API and CSV",
+    "csv_decimal_precision": {
+      "close_decimals_mode": 1,
+      "close_decimals_range": "1-1"
+    }
+  },
+  "verdict": "CONSISTENT",
+  "explanation": "rolling(20) is a LOCAL operation \u2014 it only uses the last 20 bars. Window size (600 vs 87K) does NOT affect avg_body_20 for any bar that exists in both windows. Classification is mathematically identical. Trade count differences must come from OTHER sources (timeout drop mechanism, API data rounding, or temporal regime).",
+  "trade_count_diff_real_causes": [
+    "Timeout drop: Scanner drops 73% of entries (timeout\u2192PnL=0, not counted). Scanner IS 4.6 trades/day = only survivors. Live records ALL trades including timeout losses.",
+    "Temporal regime: Live period may have different pattern frequency than full IS period.",
+    "API data precision: Minor OHLCV rounding differences could cause ~0.01% classification divergence.",
+    "N/A contamination (FIXED v1.56.1): 22 ghost trades inflated live trade count."
+  ]
+}

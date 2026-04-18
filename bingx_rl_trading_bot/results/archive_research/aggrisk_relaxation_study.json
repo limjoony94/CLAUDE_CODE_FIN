@@ -1,0 +1,202 @@
+{
+  "timestamp": "2026-03-04T23:15:15.063650",
+  "version": "v1.42.0",
+  "is_results": {
+    "A_baseline_3_7": {
+      "trades": 1074,
+      "wr": 62.76,
+      "pnl": 429.07,
+      "mdd": 4.42,
+      "pnl_mdd": 97.01,
+      "max_daily_loss": -3.3
+    },
+    "B_relax_5_7": {
+      "trades": 1101,
+      "wr": 61.94,
+      "pnl": 412.56,
+      "mdd": 5.63,
+      "pnl_mdd": 73.33,
+      "max_daily_loss": -3.93
+    },
+    "C_relax_5_10": {
+      "trades": 1099,
+      "wr": 63.51,
+      "pnl": 596.44,
+      "mdd": 8.23,
+      "pnl_mdd": 72.43,
+      "max_daily_loss": -3.04
+    },
+    "D_relax_5_15": {
+      "trades": 1053,
+      "wr": 67.24,
+      "pnl": 1018.5,
+      "mdd": 5.05,
+      "pnl_mdd": 201.87,
+      "max_daily_loss": -3.63
+    },
+    "E_relax_7_10": {
+      "trades": 1125,
+      "wr": 65.51,
+      "pnl": 941.23,
+      "mdd": 5.63,
+      "pnl_mdd": 167.14,
+      "max_daily_loss": -3.0
+    },
+    "F_relax_7_15": {
+      "trades": 1008,
+      "wr": 68.95,
+      "pnl": 1181.12,
+      "mdd": 8.69,
+      "pnl_mdd": 135.96,
+      "max_daily_loss": -6.33
+    },
+    "G_relax_10_15": {
+      "trades": 1031,
+      "wr": 67.51,
+      "pnl": 1153.55,
+      "mdd": 6.75,
+      "pnl_mdd": 170.92,
+      "max_daily_loss": -3.83
+    },
+    "H_counter_only_5": {
+      "trades": 1039,
+      "wr": 67.37,
+      "pnl": 1023.11,
+      "mdd": 5.05,
+      "pnl_mdd": 202.79,
+      "max_daily_loss": -3.63
+    },
+    "I_counter_only_10": {
+      "trades": 1028,
+      "wr": 67.41,
+      "pnl": 1130.5,
+      "mdd": 6.75,
+      "pnl_mdd": 167.5,
+      "max_daily_loss": -3.83
+    },
+    "J_OFF": {
+      "trades": 1017,
+      "wr": 67.75,
+      "pnl": 1207.19,
+      "mdd": 5.8,
+      "pnl_mdd": 208.26,
+      "max_daily_loss": -3.66
+    }
+  },
+  "wf_results": {
+    "A_baseline_3_7": {
+      "n_pass": 3,
+      "avg_oos": 55.2,
+      "min_oos": 30.9,
+      "folds_pnl": [
+        30.9,
+        53.04,
+        81.8
+      ]
+    },
+    "B_relax_5_7": {
+      "n_pass": 3,
+      "avg_oos": 47.5,
+      "min_oos": 30.5,
+      "folds_pnl": [
+        30.54,
+        50.31,
+        61.51
+      ]
+    },
+    "C_relax_5_10": {
+      "n_pass": 3,
+      "avg_oos": 66.3,
+      "min_oos": 56.8,
+      "folds_pnl": [
+        56.84,
+        73.96,
+        68.01
+      ]
+    },
+    "D_relax_5_15": {
+      "n_pass": 3,
+      "avg_oos": 82.7,
+      "min_oos": 54.9,
+      "folds_pnl": [
+        54.94,
+        108.74,
+        84.45
+      ]
+    },
+    "E_relax_7_10": {
+      "n_pass": 3,
+      "avg_oos": 81.8,
+      "min_oos": 59.3,
+      "folds_pnl": [
+        59.31,
+        106.14,
+        79.92
+      ]
+    },
+    "F_relax_7_15": {
+      "n_pass": 3,
+      "avg_oos": 94.5,
+      "min_oos": 57.5,
+      "folds_pnl": [
+        57.5,
+        126.96,
+        99.01
+      ]
+    },
+    "G_relax_10_15": {
+      "n_pass": 3,
+      "avg_oos": 100.7,
+      "min_oos": 72.8,
+      "folds_pnl": [
+        72.85,
+        116.25,
+        113.1
+      ]
+    },
+    "H_counter_only_5": {
+      "n_pass": 3,
+      "avg_oos": 84.1,
+      "min_oos": 59.0,
+      "folds_pnl": [
+        59.04,
+        108.75,
+        84.45
+      ]
+    },
+    "I_counter_only_10": {
+      "n_pass": 3,
+      "avg_oos": 99.7,
+      "min_oos": 69.3,
+      "folds_pnl": [
+        69.35,
+        116.65,
+        113.1
+      ]
+    },
+    "J_OFF": {
+      "n_pass": 3,
+      "avg_oos": 98.4,
+      "min_oos": 70.9,
+      "folds_pnl": [
+        70.94,
+        107.49,
+        116.91
+      ]
+    }
+  },
+  "ranking": [
+    "J_OFF",
+    "H_counter_only_5",
+    "D_relax_5_15",
+    "G_relax_10_15",
+    "I_counter_only_10",
+    "E_relax_7_10",
+    "F_relax_7_15",
+    "A_baseline_3_7",
+    "B_relax_5_7",
+    "C_relax_5_10"
+  ],
+  "recommended": "J_OFF",
+  "baseline_max_daily_loss": -3.3
+}

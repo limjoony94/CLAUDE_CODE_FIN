@@ -1,0 +1,409 @@
+{
+  "metadata": {
+    "n_bars": 74643,
+    "n_days": 259.2,
+    "timestamp": "2026-03-25T21:40:42.300659"
+  },
+  "study_a": {
+    "EMA20": {
+      "UP": {
+        "trades": 537,
+        "wins": 461,
+        "wr": 85.85,
+        "avg_pnl": 3.503,
+        "label": "Slope20_UP"
+      },
+      "FLAT": {
+        "trades": 3298,
+        "wins": 2813,
+        "wr": 85.29,
+        "avg_pnl": 2.525,
+        "label": "Slope20_FLAT"
+      },
+      "DOWN": {
+        "trades": 597,
+        "wins": 531,
+        "wr": 88.94,
+        "avg_pnl": 3.823,
+        "label": "Slope20_DOWN"
+      },
+      "fisher_up_vs_down_p": 0.1268,
+      "regime_sensitive": [
+        {
+          "pattern": "ST-ST-U_SHORT",
+          "up_wr": 76.2,
+          "down_wr": 91.7,
+          "delta": -15.5,
+          "up_trades": 21,
+          "down_trades": 12
+        }
+      ],
+      "distribution": {
+        "up": 12.6,
+        "flat": 74.9,
+        "down": 12.5
+      }
+    },
+    "EMA50": {
+      "UP": {
+        "trades": 266,
+        "wins": 222,
+        "wr": 83.46,
+        "avg_pnl": 3.185,
+        "label": "Slope50_UP"
+      },
+      "FLAT": {
+        "trades": 3813,
+        "wins": 3261,
+        "wr": 85.52,
+        "avg_pnl": 2.645,
+        "label": "Slope50_FLAT"
+      },
+      "DOWN": {
+        "trades": 353,
+        "wins": 322,
+        "wr": 91.22,
+        "avg_pnl": 4.41,
+        "label": "Slope50_DOWN"
+      },
+      "fisher_up_vs_down_p": 0.0041,
+      "regime_sensitive": [],
+      "distribution": {
+        "up": 6.7,
+        "flat": 86.1,
+        "down": 7.2
+      }
+    },
+    "EMA100": {
+      "UP": {
+        "trades": 150,
+        "wins": 132,
+        "wr": 88.0,
+        "avg_pnl": 4.111,
+        "label": "Slope100_UP"
+      },
+      "FLAT": {
+        "trades": 4065,
+        "wins": 3480,
+        "wr": 85.61,
+        "avg_pnl": 2.695,
+        "label": "Slope100_FLAT"
+      },
+      "DOWN": {
+        "trades": 217,
+        "wins": 193,
+        "wr": 88.94,
+        "avg_pnl": 4.236,
+        "label": "Slope100_DOWN"
+      },
+      "fisher_up_vs_down_p": 0.8678,
+      "regime_sensitive": [],
+      "distribution": {
+        "up": 3.6,
+        "flat": 91.9,
+        "down": 4.4
+      }
+    }
+  },
+  "study_b": {
+    "band_1.0": {
+      "band": 1.0,
+      "distribution": {
+        "above": 8.0,
+        "near": 83.4,
+        "below": 8.6
+      },
+      "ABOVE": {
+        "trades": 312,
+        "wins": 270,
+        "wr": 86.54,
+        "avg_pnl": 3.65,
+        "label": "\u00b11.0%_ABOVE"
+      },
+      "NEAR": {
+        "trades": 3690,
+        "wins": 3152,
+        "wr": 85.42,
+        "avg_pnl": 2.605,
+        "label": "\u00b11.0%_NEAR"
+      },
+      "BELOW": {
+        "trades": 421,
+        "wins": 375,
+        "wr": 89.07,
+        "avg_pnl": 4.071,
+        "label": "\u00b11.0%_BELOW"
+      }
+    },
+    "band_2.0": {
+      "band": 2.0,
+      "distribution": {
+        "above": 1.2,
+        "near": 96.8,
+        "below": 1.9
+      },
+      "ABOVE": {
+        "trades": 41,
+        "wins": 38,
+        "wr": 92.68,
+        "avg_pnl": 5.322,
+        "label": "\u00b12.0%_ABOVE"
+      },
+      "NEAR": {
+        "trades": 4274,
+        "wins": 3669,
+        "wr": 85.84,
+        "avg_pnl": 2.786,
+        "label": "\u00b12.0%_NEAR"
+      },
+      "BELOW": {
+        "trades": 108,
+        "wins": 90,
+        "wr": 83.33,
+        "avg_pnl": 3.148,
+        "label": "\u00b12.0%_BELOW"
+      }
+    },
+    "band_3.0": {
+      "band": 3.0,
+      "distribution": {
+        "above": 0.2,
+        "near": 99.3,
+        "below": 0.5
+      },
+      "ABOVE": {
+        "trades": 10,
+        "wins": 9,
+        "wr": 90.0,
+        "avg_pnl": 4.086,
+        "label": "\u00b13.0%_ABOVE"
+      },
+      "NEAR": {
+        "trades": 4384,
+        "wins": 3764,
+        "wr": 85.86,
+        "avg_pnl": 2.814,
+        "label": "\u00b13.0%_NEAR"
+      },
+      "BELOW": {
+        "trades": 29,
+        "wins": 24,
+        "wr": 82.76,
+        "avg_pnl": 3.013,
+        "label": "\u00b13.0%_BELOW"
+      }
+    },
+    "band_5.0": {
+      "band": 5.0,
+      "distribution": {
+        "above": 0.0,
+        "near": 100.0,
+        "below": 0.0
+      },
+      "ABOVE": {
+        "trades": 0,
+        "wins": 0,
+        "wr": 0,
+        "avg_pnl": 0,
+        "label": "\u00b15.0%_ABOVE"
+      },
+      "NEAR": {
+        "trades": 4421,
+        "wins": 3796,
+        "wr": 85.86,
+        "avg_pnl": 2.821,
+        "label": "\u00b15.0%_NEAR"
+      },
+      "BELOW": {
+        "trades": 2,
+        "wins": 1,
+        "wr": 50.0,
+        "avg_pnl": -2.615,
+        "label": "\u00b15.0%_BELOW"
+      }
+    }
+  },
+  "study_c": {
+    "q33": 0.8209,
+    "q67": 1.259,
+    "LOW": {
+      "trades": 1708,
+      "wins": 1418,
+      "wr": 83.02,
+      "avg_pnl": 1.567,
+      "label": "VOL_LOW"
+    },
+    "MED": {
+      "trades": 1492,
+      "wins": 1277,
+      "wr": 85.59,
+      "avg_pnl": 2.879,
+      "label": "VOL_MED"
+    },
+    "HIGH": {
+      "trades": 1195,
+      "wins": 1080,
+      "wr": 90.38,
+      "avg_pnl": 4.549,
+      "label": "VOL_HIGH"
+    },
+    "fisher_low_vs_high_p": 0.0,
+    "vol_sensitive": [
+      {
+        "pattern": "BU-DN-BU_SHORT",
+        "low_wr": 63.6,
+        "high_wr": 100.0,
+        "delta": -36.4
+      },
+      {
+        "pattern": "DN-BD-BU_SHORT",
+        "low_wr": 66.7,
+        "high_wr": 100.0,
+        "delta": -33.3
+      },
+      {
+        "pattern": "ST-MD-MU_SHORT",
+        "low_wr": 72.7,
+        "high_wr": 100.0,
+        "delta": -27.3
+      },
+      {
+        "pattern": "DN-ST-BU_SHORT",
+        "low_wr": 73.7,
+        "high_wr": 100.0,
+        "delta": -26.3
+      },
+      {
+        "pattern": "ST-H-U_SHORT",
+        "low_wr": 76.9,
+        "high_wr": 100.0,
+        "delta": -23.1
+      },
+      {
+        "pattern": "BD-BU-U_SHORT",
+        "low_wr": 66.7,
+        "high_wr": 86.7,
+        "delta": -20.0
+      },
+      {
+        "pattern": "BD-BD-U_LONG",
+        "low_wr": 75.0,
+        "high_wr": 95.0,
+        "delta": -20.0
+      },
+      {
+        "pattern": "U-GS-DN_SHORT",
+        "low_wr": 80.0,
+        "high_wr": 100.0,
+        "delta": -20.0
+      },
+      {
+        "pattern": "DN-ST-MU_LONG",
+        "low_wr": 80.6,
+        "high_wr": 100.0,
+        "delta": -19.4
+      },
+      {
+        "pattern": "ST-DN-BU_SHORT",
+        "low_wr": 64.7,
+        "high_wr": 83.3,
+        "delta": -18.6
+      },
+      {
+        "pattern": "MD-BD-U_LONG",
+        "low_wr": 93.3,
+        "high_wr": 75.0,
+        "delta": 18.3
+      },
+      {
+        "pattern": "U-GS-U_SHORT",
+        "low_wr": 81.8,
+        "high_wr": 100.0,
+        "delta": -18.2
+      },
+      {
+        "pattern": "ST-BU-U_SHORT",
+        "low_wr": 73.7,
+        "high_wr": 90.9,
+        "delta": -17.2
+      },
+      {
+        "pattern": "ST-BD-U_SHORT",
+        "low_wr": 93.8,
+        "high_wr": 76.9,
+        "delta": 16.9
+      },
+      {
+        "pattern": "BD-DN-BD_SHORT",
+        "low_wr": 77.8,
+        "high_wr": 93.8,
+        "delta": -16.0
+      },
+      {
+        "pattern": "U-D-DN_SHORT",
+        "low_wr": 72.2,
+        "high_wr": 88.2,
+        "delta": -16.0
+      },
+      {
+        "pattern": "BU-ST-DN_SHORT",
+        "low_wr": 78.6,
+        "high_wr": 94.4,
+        "delta": -15.8
+      },
+      {
+        "pattern": "MD-MU-ST_LONG",
+        "low_wr": 84.2,
+        "high_wr": 100.0,
+        "delta": -15.8
+      }
+    ]
+  },
+  "study_d_combined": {
+    "UP+HIGH_VOL": {
+      "trades": 181,
+      "wins": 158,
+      "wr": 87.29,
+      "avg_pnl": 4.017,
+      "label": "UP+HIGH_VOL"
+    },
+    "UP+LOW_VOL": {
+      "trades": 9,
+      "wins": 7,
+      "wr": 77.78,
+      "avg_pnl": 0.801,
+      "label": "UP+LOW_VOL"
+    },
+    "DOWN+HIGH_VOL": {
+      "trades": 268,
+      "wins": 243,
+      "wr": 90.67,
+      "avg_pnl": 4.549,
+      "label": "DOWN+HIGH_VOL"
+    },
+    "DOWN+LOW_VOL": {
+      "trades": 15,
+      "wins": 13,
+      "wr": 86.67,
+      "avg_pnl": 2.144,
+      "label": "DOWN+LOW_VOL"
+    }
+  },
+  "study_e": {
+    "overall": {
+      "trades": 4432,
+      "wins": 3805,
+      "wr": 85.85,
+      "avg_pnl": 2.818,
+      "label": "ALL"
+    },
+    "best_slope": {
+      "zone": "DOWN",
+      "wr": 91.22
+    },
+    "best_vol": {
+      "zone": "HIGH",
+      "wr": 90.38
+    }
+  }
+}

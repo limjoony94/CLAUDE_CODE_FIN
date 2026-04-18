@@ -1,0 +1,344 @@
+{
+  "timestamp": "2026-03-05T02:08:31.485066",
+  "version": "v1.47.0",
+  "phase1_confirm": {
+    "2": {
+      "pnl": 1276.07,
+      "mdd": 5.07,
+      "pm": 251.69033530571988,
+      "wr": 73.13,
+      "trades": 1634,
+      "early": 662
+    },
+    "3": {
+      "pnl": 1841.49,
+      "mdd": 3.32,
+      "pm": 554.6656626506025,
+      "wr": 68.35,
+      "trades": 1071,
+      "early": 110
+    },
+    "4": {
+      "pnl": 1550.9,
+      "mdd": 4.42,
+      "pm": 350.8823529411765,
+      "wr": 64.17,
+      "trades": 1016,
+      "early": 12
+    },
+    "5": {
+      "pnl": 1486.74,
+      "mdd": 4.42,
+      "pm": 336.3665158371041,
+      "wr": 63.99,
+      "trades": 1008,
+      "early": 1
+    }
+  },
+  "phase2_min_profit": {
+    "0.0": {
+      "pnl": 1903.32,
+      "mdd": 3.32,
+      "pm": 573.289156626506,
+      "wr": 67.94,
+      "trades": 1076,
+      "early": 119
+    },
+    "0.1": {
+      "pnl": 1921.39,
+      "mdd": 3.32,
+      "pm": 578.7319277108435,
+      "wr": 68.22,
+      "trades": 1073,
+      "early": 116
+    },
+    "0.2": {
+      "pnl": 1898.96,
+      "mdd": 3.32,
+      "pm": 571.9759036144578,
+      "wr": 68.33,
+      "trades": 1064,
+      "early": 112
+    },
+    "0.3": {
+      "pnl": 1841.49,
+      "mdd": 3.32,
+      "pm": 554.6656626506025,
+      "wr": 68.35,
+      "trades": 1071,
+      "early": 110
+    },
+    "0.5": {
+      "pnl": 1786.02,
+      "mdd": 4.28,
+      "pm": 417.2943925233645,
+      "wr": 67.51,
+      "trades": 1065,
+      "early": 94
+    },
+    "0.7": {
+      "pnl": 1902.23,
+      "mdd": 3.53,
+      "pm": 538.8753541076487,
+      "wr": 68.12,
+      "trades": 1029,
+      "early": 86
+    },
+    "1.0": {
+      "pnl": 1909.45,
+      "mdd": 3.53,
+      "pm": 540.9206798866855,
+      "wr": 67.96,
+      "trades": 1027,
+      "early": 83
+    },
+    "1.5": {
+      "pnl": 1923.06,
+      "mdd": 3.69,
+      "pm": 521.1544715447154,
+      "wr": 67.16,
+      "trades": 1020,
+      "early": 57
+    },
+    "2.0": {
+      "pnl": 1836.21,
+      "mdd": 3.69,
+      "pm": 497.6178861788618,
+      "wr": 66.67,
+      "trades": 1011,
+      "early": 42
+    }
+  },
+  "grid_results": {
+    "c3_mp0.0": {
+      "confirm": 3,
+      "min_profit": 0.0,
+      "enabled": true,
+      "pnl": 1903.3,
+      "mdd": 3.32,
+      "pnl_mdd": 573.3,
+      "wr": 67.9,
+      "trades": 1076,
+      "early": 119
+    },
+    "c3_mp0.1": {
+      "confirm": 3,
+      "min_profit": 0.1,
+      "enabled": true,
+      "pnl": 1921.4,
+      "mdd": 3.32,
+      "pnl_mdd": 578.7,
+      "wr": 68.2,
+      "trades": 1073,
+      "early": 116
+    },
+    "c3_mp0.2": {
+      "confirm": 3,
+      "min_profit": 0.2,
+      "enabled": true,
+      "pnl": 1899.0,
+      "mdd": 3.32,
+      "pnl_mdd": 572.0,
+      "wr": 68.3,
+      "trades": 1064,
+      "early": 112
+    },
+    "OFF": {
+      "confirm": 3,
+      "min_profit": 0.3,
+      "enabled": false,
+      "pnl": 1492.6,
+      "mdd": 4.42,
+      "pnl_mdd": 337.7,
+      "wr": 64.0,
+      "trades": 1007,
+      "early": 0
+    },
+    "CURRENT": {
+      "confirm": 3,
+      "min_profit": 0.3,
+      "enabled": true,
+      "pnl": 1841.5,
+      "mdd": 3.32,
+      "pnl_mdd": 554.7,
+      "wr": 68.3,
+      "trades": 1071,
+      "early": 110
+    },
+    "c4_mp0.0": {
+      "confirm": 4,
+      "min_profit": 0.0,
+      "enabled": true,
+      "pnl": 1576.4,
+      "mdd": 4.42,
+      "pnl_mdd": 356.7,
+      "wr": 64.2,
+      "trades": 1021,
+      "early": 14
+    },
+    "c4_mp0.1": {
+      "confirm": 4,
+      "min_profit": 0.1,
+      "enabled": true,
+      "pnl": 1576.4,
+      "mdd": 4.42,
+      "pnl_mdd": 356.7,
+      "wr": 64.2,
+      "trades": 1021,
+      "early": 14
+    },
+    "c4_mp0.2": {
+      "confirm": 4,
+      "min_profit": 0.2,
+      "enabled": true,
+      "pnl": 1576.4,
+      "mdd": 4.42,
+      "pnl_mdd": 356.7,
+      "wr": 64.2,
+      "trades": 1021,
+      "early": 14
+    },
+    "c4_mp0.3": {
+      "confirm": 4,
+      "min_profit": 0.3,
+      "enabled": true,
+      "pnl": 1550.9,
+      "mdd": 4.42,
+      "pnl_mdd": 350.9,
+      "wr": 64.2,
+      "trades": 1016,
+      "early": 12
+    },
+    "c5_mp0.0": {
+      "confirm": 5,
+      "min_profit": 0.0,
+      "enabled": true,
+      "pnl": 1486.7,
+      "mdd": 4.42,
+      "pnl_mdd": 336.4,
+      "wr": 64.0,
+      "trades": 1008,
+      "early": 1
+    },
+    "c5_mp0.1": {
+      "confirm": 5,
+      "min_profit": 0.1,
+      "enabled": true,
+      "pnl": 1486.7,
+      "mdd": 4.42,
+      "pnl_mdd": 336.4,
+      "wr": 64.0,
+      "trades": 1008,
+      "early": 1
+    },
+    "c5_mp0.2": {
+      "confirm": 5,
+      "min_profit": 0.2,
+      "enabled": true,
+      "pnl": 1486.7,
+      "mdd": 4.42,
+      "pnl_mdd": 336.4,
+      "wr": 64.0,
+      "trades": 1008,
+      "early": 1
+    },
+    "c5_mp0.3": {
+      "confirm": 5,
+      "min_profit": 0.3,
+      "enabled": true,
+      "pnl": 1486.7,
+      "mdd": 4.42,
+      "pnl_mdd": 336.4,
+      "wr": 64.0,
+      "trades": 1008,
+      "early": 1
+    }
+  },
+  "wf_results": {
+    "c3_mp0.1": {
+      "confirm": 3,
+      "min_profit": 0.1,
+      "enabled": true,
+      "folds": [
+        74.3,
+        147.6,
+        116.3
+      ],
+      "avg": 112.7,
+      "min": 74.3,
+      "n_pass": 3,
+      "is_pnl_mdd": 578.7
+    },
+    "c3_mp0.0": {
+      "confirm": 3,
+      "min_profit": 0.0,
+      "enabled": true,
+      "folds": [
+        74.3,
+        144.9,
+        116.7
+      ],
+      "avg": 112.0,
+      "min": 74.3,
+      "n_pass": 3,
+      "is_pnl_mdd": 573.3
+    },
+    "c3_mp0.2": {
+      "confirm": 3,
+      "min_profit": 0.2,
+      "enabled": true,
+      "folds": [
+        74.3,
+        146.4,
+        115.0
+      ],
+      "avg": 111.9,
+      "min": 74.3,
+      "n_pass": 3,
+      "is_pnl_mdd": 572.0
+    },
+    "CURRENT": {
+      "confirm": 3,
+      "min_profit": 0.3,
+      "enabled": true,
+      "folds": [
+        69.8,
+        146.5,
+        114.2
+      ],
+      "avg": 110.2,
+      "min": 69.8,
+      "n_pass": 3,
+      "is_pnl_mdd": 554.7
+    },
+    "c4_mp0.0": {
+      "confirm": 4,
+      "min_profit": 0.0,
+      "enabled": true,
+      "folds": [
+        76.0,
+        133.3,
+        115.7
+      ],
+      "avg": 108.3,
+      "min": 76.0,
+      "n_pass": 3,
+      "is_pnl_mdd": 356.7
+    },
+    "OFF": {
+      "confirm": 3,
+      "min_profit": 0.3,
+      "enabled": false,
+      "folds": [
+        76.0,
+        123.3,
+        113.4
+      ],
+      "avg": 104.3,
+      "min": 76.0,
+      "n_pass": 3,
+      "is_pnl_mdd": 337.7
+    }
+  },
+  "recommended": "c4_mp0.0"
+}

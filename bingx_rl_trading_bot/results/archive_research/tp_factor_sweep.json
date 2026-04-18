@@ -1,0 +1,576 @@
+{
+  "study": "tp_factor_sweep",
+  "timestamp": "2026-03-13T15:59:58",
+  "data_bars": 87315,
+  "neutral_window": [
+    0,
+    74642
+  ],
+  "neutral_days": 259.2,
+  "patterns": 131,
+  "tp_factors_tested": [
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "config": {
+    "n_slots": 9,
+    "direction_cap": 7,
+    "cascade_tighten_pct": 85,
+    "agg_risk_counter": 8.0,
+    "agg_risk_with": 15.0,
+    "timeout_bars": 288,
+    "regime_mult": 1.0,
+    "momentum_threshold": 1.5
+  },
+  "sweep_results": [
+    {
+      "tp_factor": 0.5,
+      "is": {
+        "pnl": 448.92,
+        "mdd": 4.93,
+        "pnl_mdd": 91.06,
+        "wr": 83.5,
+        "trades": 2726,
+        "trades_per_day": 10.52,
+        "avg_win": 2.54,
+        "avg_loss": 3.855,
+        "be_wr": 60.3,
+        "wr_margin": 23.2
+      },
+      "tp_range": "0.42-1.40%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 94.84,
+            "wr": 85.5,
+            "trades": 510,
+            "mdd": 4.78,
+            "be_wr": 56.2,
+            "wr_margin": 29.3
+          },
+          {
+            "fold": 2,
+            "pnl": 138.5,
+            "wr": 81.5,
+            "trades": 949,
+            "mdd": 4.82,
+            "be_wr": 62.5,
+            "wr_margin": 18.9
+          },
+          {
+            "fold": 3,
+            "pnl": 65.75,
+            "wr": 81.7,
+            "trades": 449,
+            "mdd": 7.63,
+            "be_wr": 61.8,
+            "wr_margin": 19.9
+          }
+        ],
+        "oos_pnl": 299.1,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.55,
+      "is": {
+        "pnl": 443.33,
+        "mdd": 5.42,
+        "pnl_mdd": 81.8,
+        "wr": 81.3,
+        "trades": 2520,
+        "trades_per_day": 9.72,
+        "avg_win": 2.822,
+        "avg_loss": 3.817,
+        "be_wr": 57.5,
+        "wr_margin": 23.8
+      },
+      "tp_range": "0.47-1.54%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 89.03,
+            "wr": 82.8,
+            "trades": 459,
+            "mdd": 4.72,
+            "be_wr": 53.0,
+            "wr_margin": 29.8
+          },
+          {
+            "fold": 2,
+            "pnl": 137.39,
+            "wr": 79.4,
+            "trades": 898,
+            "mdd": 6.33,
+            "be_wr": 60.8,
+            "wr_margin": 18.6
+          },
+          {
+            "fold": 3,
+            "pnl": 69.68,
+            "wr": 79.0,
+            "trades": 429,
+            "mdd": 7.1,
+            "be_wr": 56.3,
+            "wr_margin": 22.7
+          }
+        ],
+        "oos_pnl": 296.1,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.6,
+      "is": {
+        "pnl": 447.71,
+        "mdd": 5.39,
+        "pnl_mdd": 83.06,
+        "wr": 80.9,
+        "trades": 2294,
+        "trades_per_day": 8.85,
+        "avg_win": 3.072,
+        "avg_loss": 3.816,
+        "be_wr": 55.4,
+        "wr_margin": 25.5
+      },
+      "tp_range": "0.51-1.68%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 93.6,
+            "wr": 84.6,
+            "trades": 416,
+            "mdd": 5.11,
+            "be_wr": 52.7,
+            "wr_margin": 32.0
+          },
+          {
+            "fold": 2,
+            "pnl": 145.94,
+            "wr": 78.5,
+            "trades": 836,
+            "mdd": 4.0,
+            "be_wr": 57.1,
+            "wr_margin": 21.4
+          },
+          {
+            "fold": 3,
+            "pnl": 66.66,
+            "wr": 78.6,
+            "trades": 379,
+            "mdd": 6.76,
+            "be_wr": 54.9,
+            "wr_margin": 23.7
+          }
+        ],
+        "oos_pnl": 306.2,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.65,
+      "is": {
+        "pnl": 423.58,
+        "mdd": 4.52,
+        "pnl_mdd": 93.71,
+        "wr": 78.6,
+        "trades": 2115,
+        "trades_per_day": 8.16,
+        "avg_win": 3.34,
+        "avg_loss": 3.854,
+        "be_wr": 53.6,
+        "wr_margin": 25.1
+      },
+      "tp_range": "0.55-1.82%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 78.31,
+            "wr": 80.5,
+            "trades": 365,
+            "mdd": 5.31,
+            "be_wr": 51.6,
+            "wr_margin": 28.9
+          },
+          {
+            "fold": 2,
+            "pnl": 138.94,
+            "wr": 75.6,
+            "trades": 784,
+            "mdd": 6.04,
+            "be_wr": 54.6,
+            "wr_margin": 21.0
+          },
+          {
+            "fold": 3,
+            "pnl": 63.69,
+            "wr": 77.6,
+            "trades": 353,
+            "mdd": 7.15,
+            "be_wr": 55.3,
+            "wr_margin": 22.3
+          }
+        ],
+        "oos_pnl": 280.9,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.7,
+      "is": {
+        "pnl": 418.02,
+        "mdd": 3.66,
+        "pnl_mdd": 114.21,
+        "wr": 78.0,
+        "trades": 1969,
+        "trades_per_day": 7.6,
+        "avg_win": 3.584,
+        "avg_loss": 4.007,
+        "be_wr": 52.8,
+        "wr_margin": 25.2
+      },
+      "tp_range": "0.59-1.96%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 83.75,
+            "wr": 81.5,
+            "trades": 335,
+            "mdd": 4.04,
+            "be_wr": 49.7,
+            "wr_margin": 31.8
+          },
+          {
+            "fold": 2,
+            "pnl": 138.37,
+            "wr": 75.0,
+            "trades": 737,
+            "mdd": 5.36,
+            "be_wr": 53.9,
+            "wr_margin": 21.2
+          },
+          {
+            "fold": 3,
+            "pnl": 58.2,
+            "wr": 74.6,
+            "trades": 335,
+            "mdd": 7.43,
+            "be_wr": 54.2,
+            "wr_margin": 20.4
+          }
+        ],
+        "oos_pnl": 280.3,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.75,
+      "is": {
+        "pnl": 424.27,
+        "mdd": 3.71,
+        "pnl_mdd": 114.36,
+        "wr": 77.2,
+        "trades": 1857,
+        "trades_per_day": 7.17,
+        "avg_win": 3.831,
+        "avg_loss": 3.943,
+        "be_wr": 50.7,
+        "wr_margin": 26.4
+      },
+      "tp_range": "0.64-2.10%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 83.18,
+            "wr": 82.3,
+            "trades": 305,
+            "mdd": 5.21,
+            "be_wr": 49.6,
+            "wr_margin": 32.7
+          },
+          {
+            "fold": 2,
+            "pnl": 143.77,
+            "wr": 74.9,
+            "trades": 692,
+            "mdd": 6.02,
+            "be_wr": 52.3,
+            "wr_margin": 22.5
+          },
+          {
+            "fold": 3,
+            "pnl": 59.74,
+            "wr": 73.0,
+            "trades": 319,
+            "mdd": 6.74,
+            "be_wr": 50.7,
+            "wr_margin": 22.4
+          }
+        ],
+        "oos_pnl": 286.7,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.8,
+      "is": {
+        "pnl": 411.39,
+        "mdd": 3.88,
+        "pnl_mdd": 106.03,
+        "wr": 76.5,
+        "trades": 1726,
+        "trades_per_day": 6.66,
+        "avg_win": 4.078,
+        "avg_loss": 4.158,
+        "be_wr": 50.5,
+        "wr_margin": 26.0
+      },
+      "tp_range": "0.68-2.24%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 81.82,
+            "wr": 80.0,
+            "trades": 290,
+            "mdd": 4.74,
+            "be_wr": 46.7,
+            "wr_margin": 33.3
+          },
+          {
+            "fold": 2,
+            "pnl": 139.71,
+            "wr": 74.4,
+            "trades": 648,
+            "mdd": 5.98,
+            "be_wr": 52.4,
+            "wr_margin": 22.0
+          },
+          {
+            "fold": 3,
+            "pnl": 56.87,
+            "wr": 70.9,
+            "trades": 306,
+            "mdd": 6.66,
+            "be_wr": 49.6,
+            "wr_margin": 21.3
+          }
+        ],
+        "oos_pnl": 278.4,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.85,
+      "is": {
+        "pnl": 404.18,
+        "mdd": 3.63,
+        "pnl_mdd": 111.34,
+        "wr": 75.7,
+        "trades": 1615,
+        "trades_per_day": 6.23,
+        "avg_win": 4.304,
+        "avg_loss": 4.126,
+        "be_wr": 48.9,
+        "wr_margin": 26.7
+      },
+      "tp_range": "0.72-2.38%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 76.36,
+            "wr": 78.1,
+            "trades": 265,
+            "mdd": 4.29,
+            "be_wr": 45.0,
+            "wr_margin": 33.1
+          },
+          {
+            "fold": 2,
+            "pnl": 135.88,
+            "wr": 71.7,
+            "trades": 626,
+            "mdd": 6.1,
+            "be_wr": 49.5,
+            "wr_margin": 22.3
+          },
+          {
+            "fold": 3,
+            "pnl": 55.76,
+            "wr": 72.6,
+            "trades": 277,
+            "mdd": 7.27,
+            "be_wr": 50.7,
+            "wr_margin": 21.8
+          }
+        ],
+        "oos_pnl": 268.0,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.9,
+      "is": {
+        "pnl": 386.87,
+        "mdd": 3.35,
+        "pnl_mdd": 115.48,
+        "wr": 74.3,
+        "trades": 1503,
+        "trades_per_day": 5.8,
+        "avg_win": 4.555,
+        "avg_loss": 4.138,
+        "be_wr": 47.6,
+        "wr_margin": 26.6
+      },
+      "tp_range": "0.77-2.52%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 64.97,
+            "wr": 76.5,
+            "trades": 238,
+            "mdd": 5.53,
+            "be_wr": 47.8,
+            "wr_margin": 28.7
+          },
+          {
+            "fold": 2,
+            "pnl": 137.09,
+            "wr": 70.5,
+            "trades": 597,
+            "mdd": 6.44,
+            "be_wr": 47.7,
+            "wr_margin": 22.9
+          },
+          {
+            "fold": 3,
+            "pnl": 55.31,
+            "wr": 70.1,
+            "trades": 271,
+            "mdd": 7.23,
+            "be_wr": 48.2,
+            "wr_margin": 21.9
+          }
+        ],
+        "oos_pnl": 257.4,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 0.95,
+      "is": {
+        "pnl": 372.16,
+        "mdd": 3.82,
+        "pnl_mdd": 97.42,
+        "wr": 72.1,
+        "trades": 1457,
+        "trades_per_day": 5.62,
+        "avg_win": 4.768,
+        "avg_loss": 4.092,
+        "be_wr": 46.2,
+        "wr_margin": 25.9
+      },
+      "tp_range": "0.81-2.66%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 61.79,
+            "wr": 72.8,
+            "trades": 232,
+            "mdd": 5.87,
+            "be_wr": 44.3,
+            "wr_margin": 28.5
+          },
+          {
+            "fold": 2,
+            "pnl": 141.76,
+            "wr": 70.9,
+            "trades": 574,
+            "mdd": 5.77,
+            "be_wr": 47.1,
+            "wr_margin": 23.8
+          },
+          {
+            "fold": 3,
+            "pnl": 47.32,
+            "wr": 66.9,
+            "trades": 257,
+            "mdd": 7.46,
+            "be_wr": 47.9,
+            "wr_margin": 19.0
+          }
+        ],
+        "oos_pnl": 250.9,
+        "all_pass": true
+      }
+    },
+    {
+      "tp_factor": 1.0,
+      "is": {
+        "pnl": 370.94,
+        "mdd": 4.43,
+        "pnl_mdd": 83.73,
+        "wr": 71.0,
+        "trades": 1419,
+        "trades_per_day": 5.48,
+        "avg_win": 5.008,
+        "avg_loss": 4.137,
+        "be_wr": 45.2,
+        "wr_margin": 25.7
+      },
+      "tp_range": "0.85-2.80%",
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 62.29,
+            "wr": 72.6,
+            "trades": 230,
+            "mdd": 5.58,
+            "be_wr": 44.7,
+            "wr_margin": 27.9
+          },
+          {
+            "fold": 2,
+            "pnl": 141.86,
+            "wr": 69.9,
+            "trades": 559,
+            "mdd": 5.78,
+            "be_wr": 46.2,
+            "wr_margin": 23.7
+          },
+          {
+            "fold": 3,
+            "pnl": 51.29,
+            "wr": 67.3,
+            "trades": 245,
+            "mdd": 7.42,
+            "be_wr": 46.1,
+            "wr_margin": 21.3
+          }
+        ],
+        "oos_pnl": 255.4,
+        "all_pass": true
+      }
+    }
+  ],
+  "elapsed_seconds": 60.5
+}

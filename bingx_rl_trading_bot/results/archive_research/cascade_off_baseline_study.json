@@ -1,0 +1,865 @@
+{
+  "study": "cascade_off_baseline_study",
+  "date": "2026-03-27 20:46",
+  "purpose": "Find realistic live expectations with cascade SL completely disabled",
+  "rationale": "Cascade SL works in backtest but API delay + 5min loop prevents timely application live",
+  "params": {
+    "cascade_tighten_pct": 0,
+    "preemptive_cascade_pct": 999.0,
+    "preemptive_tighten_pct": 0,
+    "n_slots": 9,
+    "tp_mode": "mfe_median",
+    "timeout_bars": 288,
+    "clamp": [
+      0.5,
+      1.5
+    ],
+    "momentum": [
+      3,
+      1.5,
+      12
+    ],
+    "regime_mult": 1.0,
+    "n_folds": 5,
+    "data_bars": 74643
+  },
+  "scenarios": [
+    {
+      "label": "A_dc6_ar10_15",
+      "dir_cap": 6,
+      "agg_risk_counter": 10,
+      "agg_risk_with": 15,
+      "is": {
+        "trades": 1649,
+        "wr": 87.6,
+        "pnl": 346.3,
+        "mdd": 6.51,
+        "pnl_mdd": 53.2,
+        "rr": 0.357,
+        "be_wr": 73.7,
+        "wr_margin": 13.9,
+        "tp_exits": 1444,
+        "sl_exits": 196,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 35,
+          "agg_risk": 0,
+          "dir_cap": 777,
+          "dup_pat": 267,
+          "max_pos": 5985
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 48.3,
+            "oos_wr": 89.7,
+            "oos_trades": 204,
+            "oos_mdd": 6.59,
+            "oos_rr": 0.318,
+            "oos_be_wr": 75.9
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 49.3,
+            "oos_wr": 87.6,
+            "oos_trades": 209,
+            "oos_mdd": 7.66,
+            "oos_rr": 0.374,
+            "oos_be_wr": 72.8
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 47.0,
+            "oos_wr": 83.4,
+            "oos_trades": 290,
+            "oos_mdd": 6.53,
+            "oos_rr": 0.361,
+            "oos_be_wr": 73.5
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 77.9,
+            "oos_wr": 85.6,
+            "oos_trades": 425,
+            "oos_mdd": 6.14,
+            "oos_rr": 0.343,
+            "oos_be_wr": 74.5
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 48.9,
+            "oos_wr": 85.0,
+            "oos_trades": 266,
+            "oos_mdd": 6.2,
+            "oos_rr": 0.351,
+            "oos_be_wr": 74.0
+          }
+        ],
+        "total_oos_pnl": 271.4,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 87.8,
+        "overall_oos_rr": 0.348,
+        "overall_oos_be_wr": 74.2,
+        "overall_oos_wr_margin": 13.6
+      },
+      "elapsed_s": 2.8
+    },
+    {
+      "label": "B_dc5_ar10_15",
+      "dir_cap": 5,
+      "agg_risk_counter": 10,
+      "agg_risk_with": 15,
+      "is": {
+        "trades": 1609,
+        "wr": 85.9,
+        "pnl": 296.3,
+        "mdd": 5.1,
+        "pnl_mdd": 58.1,
+        "rr": 0.358,
+        "be_wr": 73.6,
+        "wr_margin": 12.3,
+        "tp_exits": 1381,
+        "sl_exits": 219,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 39,
+          "agg_risk": 0,
+          "dir_cap": 1654,
+          "dup_pat": 249,
+          "max_pos": 5198
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 44.3,
+            "oos_wr": 88.3,
+            "oos_trades": 197,
+            "oos_mdd": 5.42,
+            "oos_rr": 0.335,
+            "oos_be_wr": 74.9
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 45.9,
+            "oos_wr": 85.2,
+            "oos_trades": 209,
+            "oos_mdd": 6.56,
+            "oos_rr": 0.429,
+            "oos_be_wr": 70.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 43.7,
+            "oos_wr": 83.5,
+            "oos_trades": 284,
+            "oos_mdd": 5.41,
+            "oos_rr": 0.361,
+            "oos_be_wr": 73.5
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 63.7,
+            "oos_wr": 83.7,
+            "oos_trades": 412,
+            "oos_mdd": 5.34,
+            "oos_rr": 0.343,
+            "oos_be_wr": 74.5
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 38.9,
+            "oos_wr": 82.8,
+            "oos_trades": 268,
+            "oos_mdd": 6.61,
+            "oos_rr": 0.334,
+            "oos_be_wr": 75.0
+          }
+        ],
+        "total_oos_pnl": 236.5,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 86.3,
+        "overall_oos_rr": 0.352,
+        "overall_oos_be_wr": 74.0,
+        "overall_oos_wr_margin": 12.3
+      },
+      "elapsed_s": 2.8
+    },
+    {
+      "label": "C_dc4_ar10_15",
+      "dir_cap": 4,
+      "agg_risk_counter": 10,
+      "agg_risk_with": 15,
+      "is": {
+        "trades": 1414,
+        "wr": 84.7,
+        "pnl": 238.1,
+        "mdd": 4.33,
+        "pnl_mdd": 55.0,
+        "rr": 0.363,
+        "be_wr": 73.4,
+        "wr_margin": 11.3,
+        "tp_exits": 1196,
+        "sl_exits": 210,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 33,
+          "agg_risk": 0,
+          "dir_cap": 7285,
+          "dup_pat": 194,
+          "max_pos": 0
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 36.6,
+            "oos_wr": 87.0,
+            "oos_trades": 177,
+            "oos_mdd": 4.51,
+            "oos_rr": 0.362,
+            "oos_be_wr": 73.4
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 36.7,
+            "oos_wr": 85.5,
+            "oos_trades": 173,
+            "oos_mdd": 5.49,
+            "oos_rr": 0.401,
+            "oos_be_wr": 71.4
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 35.7,
+            "oos_wr": 83.5,
+            "oos_trades": 243,
+            "oos_mdd": 5.62,
+            "oos_rr": 0.347,
+            "oos_be_wr": 74.2
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 52.4,
+            "oos_wr": 82.8,
+            "oos_trades": 367,
+            "oos_mdd": 4.46,
+            "oos_rr": 0.349,
+            "oos_be_wr": 74.1
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 30.4,
+            "oos_wr": 82.1,
+            "oos_trades": 229,
+            "oos_mdd": 5.27,
+            "oos_rr": 0.338,
+            "oos_be_wr": 74.7
+          }
+        ],
+        "total_oos_pnl": 191.8,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 85.4,
+        "overall_oos_rr": 0.352,
+        "overall_oos_be_wr": 74.0,
+        "overall_oos_wr_margin": 11.4
+      },
+      "elapsed_s": 2.5
+    },
+    {
+      "label": "D_dc3_ar10_15",
+      "dir_cap": 3,
+      "agg_risk_counter": 10,
+      "agg_risk_with": 15,
+      "is": {
+        "trades": 1077,
+        "wr": 84.6,
+        "pnl": 179.4,
+        "mdd": 3.36,
+        "pnl_mdd": 53.4,
+        "rr": 0.358,
+        "be_wr": 73.6,
+        "wr_margin": 11.0,
+        "tp_exits": 910,
+        "sl_exits": 161,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 28,
+          "agg_risk": 0,
+          "dir_cap": 8001,
+          "dup_pat": 99,
+          "max_pos": 0
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 27.5,
+            "oos_wr": 87.7,
+            "oos_trades": 130,
+            "oos_mdd": 3.43,
+            "oos_rr": 0.337,
+            "oos_be_wr": 74.8
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 28.2,
+            "oos_wr": 85.9,
+            "oos_trades": 128,
+            "oos_mdd": 3.75,
+            "oos_rr": 0.388,
+            "oos_be_wr": 72.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 25.8,
+            "oos_wr": 82.8,
+            "oos_trades": 186,
+            "oos_mdd": 4.72,
+            "oos_rr": 0.35,
+            "oos_be_wr": 74.1
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 40.8,
+            "oos_wr": 82.7,
+            "oos_trades": 283,
+            "oos_mdd": 3.95,
+            "oos_rr": 0.355,
+            "oos_be_wr": 73.8
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 21.6,
+            "oos_wr": 81.6,
+            "oos_trades": 179,
+            "oos_mdd": 4.75,
+            "oos_rr": 0.334,
+            "oos_be_wr": 75.0
+          }
+        ],
+        "total_oos_pnl": 143.9,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 85.2,
+        "overall_oos_rr": 0.35,
+        "overall_oos_be_wr": 74.1,
+        "overall_oos_wr_margin": 11.1
+      },
+      "elapsed_s": 2.0
+    },
+    {
+      "label": "E_dc5_ar7_12",
+      "dir_cap": 5,
+      "agg_risk_counter": 7,
+      "agg_risk_with": 12,
+      "is": {
+        "trades": 1607,
+        "wr": 85.7,
+        "pnl": 296.4,
+        "mdd": 4.99,
+        "pnl_mdd": 59.4,
+        "rr": 0.363,
+        "be_wr": 73.4,
+        "wr_margin": 12.3,
+        "tp_exits": 1377,
+        "sl_exits": 221,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 39,
+          "agg_risk": 197,
+          "dir_cap": 1547,
+          "dup_pat": 260,
+          "max_pos": 5110
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 46.7,
+            "oos_wr": 88.3,
+            "oos_trades": 196,
+            "oos_mdd": 4.66,
+            "oos_rr": 0.367,
+            "oos_be_wr": 73.2
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 47.9,
+            "oos_wr": 85.6,
+            "oos_trades": 215,
+            "oos_mdd": 5.53,
+            "oos_rr": 0.427,
+            "oos_be_wr": 70.1
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 42.8,
+            "oos_wr": 83.5,
+            "oos_trades": 284,
+            "oos_mdd": 5.47,
+            "oos_rr": 0.355,
+            "oos_be_wr": 73.8
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 62.9,
+            "oos_wr": 83.7,
+            "oos_trades": 412,
+            "oos_mdd": 5.57,
+            "oos_rr": 0.341,
+            "oos_be_wr": 74.6
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 36.2,
+            "oos_wr": 81.9,
+            "oos_trades": 265,
+            "oos_mdd": 7.62,
+            "oos_rr": 0.345,
+            "oos_be_wr": 74.3
+          }
+        ],
+        "total_oos_pnl": 236.5,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 86.1,
+        "overall_oos_rr": 0.355,
+        "overall_oos_be_wr": 73.8,
+        "overall_oos_wr_margin": 12.3
+      },
+      "elapsed_s": 2.8
+    },
+    {
+      "label": "F_dc4_ar7_12",
+      "dir_cap": 4,
+      "agg_risk_counter": 7,
+      "agg_risk_with": 12,
+      "is": {
+        "trades": 1414,
+        "wr": 84.7,
+        "pnl": 238.1,
+        "mdd": 4.33,
+        "pnl_mdd": 55.0,
+        "rr": 0.363,
+        "be_wr": 73.4,
+        "wr_margin": 11.3,
+        "tp_exits": 1196,
+        "sl_exits": 210,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 33,
+          "agg_risk": 0,
+          "dir_cap": 7285,
+          "dup_pat": 194,
+          "max_pos": 0
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 36.6,
+            "oos_wr": 87.0,
+            "oos_trades": 177,
+            "oos_mdd": 4.51,
+            "oos_rr": 0.362,
+            "oos_be_wr": 73.4
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 36.7,
+            "oos_wr": 85.5,
+            "oos_trades": 173,
+            "oos_mdd": 5.49,
+            "oos_rr": 0.401,
+            "oos_be_wr": 71.4
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 35.7,
+            "oos_wr": 83.5,
+            "oos_trades": 243,
+            "oos_mdd": 5.62,
+            "oos_rr": 0.347,
+            "oos_be_wr": 74.2
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 52.4,
+            "oos_wr": 82.8,
+            "oos_trades": 367,
+            "oos_mdd": 4.46,
+            "oos_rr": 0.349,
+            "oos_be_wr": 74.1
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 30.4,
+            "oos_wr": 82.1,
+            "oos_trades": 229,
+            "oos_mdd": 5.27,
+            "oos_rr": 0.338,
+            "oos_be_wr": 74.7
+          }
+        ],
+        "total_oos_pnl": 191.8,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 85.4,
+        "overall_oos_rr": 0.352,
+        "overall_oos_be_wr": 74.0,
+        "overall_oos_wr_margin": 11.4
+      },
+      "elapsed_s": 2.5
+    },
+    {
+      "label": "G_dc4_ar5_10",
+      "dir_cap": 4,
+      "agg_risk_counter": 5,
+      "agg_risk_with": 10,
+      "is": {
+        "trades": 1382,
+        "wr": 85.0,
+        "pnl": 241.6,
+        "mdd": 4.18,
+        "pnl_mdd": 57.8,
+        "rr": 0.372,
+        "be_wr": 72.9,
+        "wr_margin": 12.1,
+        "tp_exits": 1174,
+        "sl_exits": 200,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 683,
+          "dir_cap": 6625,
+          "dup_pat": 223,
+          "max_pos": 0
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 36.0,
+            "oos_wr": 87.4,
+            "oos_trades": 167,
+            "oos_mdd": 4.02,
+            "oos_rr": 0.357,
+            "oos_be_wr": 73.7
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 38.3,
+            "oos_wr": 86.0,
+            "oos_trades": 178,
+            "oos_mdd": 3.71,
+            "oos_rr": 0.408,
+            "oos_be_wr": 71.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 37.2,
+            "oos_wr": 83.6,
+            "oos_trades": 244,
+            "oos_mdd": 3.95,
+            "oos_rr": 0.358,
+            "oos_be_wr": 73.6
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 50.8,
+            "oos_wr": 83.1,
+            "oos_trades": 350,
+            "oos_mdd": 4.95,
+            "oos_rr": 0.351,
+            "oos_be_wr": 74.0
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 31.9,
+            "oos_wr": 82.4,
+            "oos_trades": 227,
+            "oos_mdd": 4.81,
+            "oos_rr": 0.357,
+            "oos_be_wr": 73.7
+          }
+        ],
+        "total_oos_pnl": 194.2,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 85.7,
+        "overall_oos_rr": 0.359,
+        "overall_oos_be_wr": 73.6,
+        "overall_oos_wr_margin": 12.1
+      },
+      "elapsed_s": 2.5
+    },
+    {
+      "label": "H_dc3_ar5_10",
+      "dir_cap": 3,
+      "agg_risk_counter": 5,
+      "agg_risk_with": 10,
+      "is": {
+        "trades": 1077,
+        "wr": 84.6,
+        "pnl": 179.4,
+        "mdd": 3.36,
+        "pnl_mdd": 53.4,
+        "rr": 0.358,
+        "be_wr": 73.6,
+        "wr_margin": 11.0,
+        "tp_exits": 910,
+        "sl_exits": 161,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 28,
+          "agg_risk": 0,
+          "dir_cap": 8001,
+          "dup_pat": 99,
+          "max_pos": 0
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 27.5,
+            "oos_wr": 87.7,
+            "oos_trades": 130,
+            "oos_mdd": 3.43,
+            "oos_rr": 0.337,
+            "oos_be_wr": 74.8
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 28.2,
+            "oos_wr": 85.9,
+            "oos_trades": 128,
+            "oos_mdd": 3.75,
+            "oos_rr": 0.388,
+            "oos_be_wr": 72.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 25.8,
+            "oos_wr": 82.8,
+            "oos_trades": 186,
+            "oos_mdd": 4.72,
+            "oos_rr": 0.35,
+            "oos_be_wr": 74.1
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 40.8,
+            "oos_wr": 82.7,
+            "oos_trades": 283,
+            "oos_mdd": 3.95,
+            "oos_rr": 0.355,
+            "oos_be_wr": 73.8
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 21.6,
+            "oos_wr": 81.6,
+            "oos_trades": 179,
+            "oos_mdd": 4.75,
+            "oos_rr": 0.334,
+            "oos_be_wr": 75.0
+          }
+        ],
+        "total_oos_pnl": 143.9,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 85.2,
+        "overall_oos_rr": 0.35,
+        "overall_oos_be_wr": 74.1,
+        "overall_oos_wr_margin": 11.1
+      },
+      "elapsed_s": 1.9
+    },
+    {
+      "label": "I_dc6_ar5_10",
+      "dir_cap": 6,
+      "agg_risk_counter": 5,
+      "agg_risk_with": 10,
+      "is": {
+        "trades": 1618,
+        "wr": 86.7,
+        "pnl": 317.0,
+        "mdd": 4.96,
+        "pnl_mdd": 63.9,
+        "rr": 0.368,
+        "be_wr": 73.1,
+        "wr_margin": 13.6,
+        "tp_exits": 1402,
+        "sl_exits": 207,
+        "timeouts": 0,
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 1461,
+          "dir_cap": 457,
+          "dup_pat": 393,
+          "max_pos": 4829
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 46.9,
+            "oos_wr": 89.6,
+            "oos_trades": 201,
+            "oos_mdd": 5.7,
+            "oos_rr": 0.341,
+            "oos_be_wr": 74.6
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 50.5,
+            "oos_wr": 86.2,
+            "oos_trades": 225,
+            "oos_mdd": 5.5,
+            "oos_rr": 0.441,
+            "oos_be_wr": 69.4
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 42.3,
+            "oos_wr": 83.0,
+            "oos_trades": 271,
+            "oos_mdd": 4.48,
+            "oos_rr": 0.377,
+            "oos_be_wr": 72.6
+          },
+          {
+            "fold": 4,
+            "oos_pnl": 62.2,
+            "oos_wr": 83.7,
+            "oos_trades": 412,
+            "oos_mdd": 7.47,
+            "oos_rr": 0.339,
+            "oos_be_wr": 74.7
+          },
+          {
+            "fold": 5,
+            "oos_pnl": 45.2,
+            "oos_wr": 84.2,
+            "oos_trades": 266,
+            "oos_mdd": 5.77,
+            "oos_rr": 0.345,
+            "oos_be_wr": 74.3
+          }
+        ],
+        "total_oos_pnl": 247.1,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "5/5 PASS",
+        "overall_oos_wr": 86.8,
+        "overall_oos_rr": 0.357,
+        "overall_oos_be_wr": 73.7,
+        "overall_oos_wr_margin": 13.1
+      },
+      "elapsed_s": 2.7
+    }
+  ],
+  "ranking": [
+    {
+      "rank": 1,
+      "label": "A_dc6_ar10_15",
+      "oos_pnl": 271.4,
+      "is_pnl_mdd": 53.2,
+      "oos_wr_margin": 13.6,
+      "oos_rr": 0.348
+    },
+    {
+      "rank": 2,
+      "label": "I_dc6_ar5_10",
+      "oos_pnl": 247.1,
+      "is_pnl_mdd": 63.9,
+      "oos_wr_margin": 13.1,
+      "oos_rr": 0.357
+    },
+    {
+      "rank": 3,
+      "label": "B_dc5_ar10_15",
+      "oos_pnl": 236.5,
+      "is_pnl_mdd": 58.1,
+      "oos_wr_margin": 12.3,
+      "oos_rr": 0.352
+    },
+    {
+      "rank": 4,
+      "label": "E_dc5_ar7_12",
+      "oos_pnl": 236.5,
+      "is_pnl_mdd": 59.4,
+      "oos_wr_margin": 12.3,
+      "oos_rr": 0.355
+    },
+    {
+      "rank": 5,
+      "label": "G_dc4_ar5_10",
+      "oos_pnl": 194.2,
+      "is_pnl_mdd": 57.8,
+      "oos_wr_margin": 12.1,
+      "oos_rr": 0.359
+    },
+    {
+      "rank": 6,
+      "label": "C_dc4_ar10_15",
+      "oos_pnl": 191.8,
+      "is_pnl_mdd": 55.0,
+      "oos_wr_margin": 11.4,
+      "oos_rr": 0.352
+    },
+    {
+      "rank": 7,
+      "label": "F_dc4_ar7_12",
+      "oos_pnl": 191.8,
+      "is_pnl_mdd": 55.0,
+      "oos_wr_margin": 11.4,
+      "oos_rr": 0.352
+    },
+    {
+      "rank": 8,
+      "label": "D_dc3_ar10_15",
+      "oos_pnl": 143.9,
+      "is_pnl_mdd": 53.4,
+      "oos_wr_margin": 11.1,
+      "oos_rr": 0.35
+    },
+    {
+      "rank": 9,
+      "label": "H_dc3_ar5_10",
+      "oos_pnl": 143.9,
+      "is_pnl_mdd": 53.4,
+      "oos_wr_margin": 11.1,
+      "oos_rr": 0.35
+    }
+  ],
+  "cascade_on_reference": {
+    "version": "v1.67.0",
+    "is_pnl_mdd": 149.3,
+    "oos5_pnl": 385,
+    "wr_margin": 36.6
+  },
+  "total_elapsed_s": 25.3
+}

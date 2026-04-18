@@ -1,0 +1,108 @@
+{
+  "fold_boundaries": [
+    {
+      "fold": 1,
+      "is_start": 0,
+      "is_end": 21831,
+      "oos_start": 21831,
+      "oos_end": 43659
+    },
+    {
+      "fold": 2,
+      "is_start": 0,
+      "is_end": 43659,
+      "oos_start": 43659,
+      "oos_end": 65487
+    },
+    {
+      "fold": 3,
+      "is_start": 0,
+      "is_end": 65487,
+      "oos_start": 65487,
+      "oos_end": 87315
+    }
+  ],
+  "fold_npos": [
+    {
+      "fold": 1,
+      "is_trades": 587,
+      "is_pnl": 135.06,
+      "oos_trades": 483,
+      "oos_pnl": 110.03,
+      "oos_wr": 89.0,
+      "oos_signals": 3800
+    },
+    {
+      "fold": 2,
+      "is_trades": 1063,
+      "is_pnl": 246.2,
+      "oos_trades": 922,
+      "oos_pnl": 174.56,
+      "oos_wr": 83.3,
+      "oos_signals": 4146
+    },
+    {
+      "fold": 3,
+      "is_trades": 1972,
+      "is_pnl": 420.83,
+      "oos_trades": 968,
+      "oos_pnl": 145.0,
+      "oos_wr": 80.1,
+      "oos_signals": 4082
+    }
+  ],
+  "fold3_deep": {
+    "oos_signals": 4082,
+    "long_signals": 1457,
+    "short_signals": 2625,
+    "relaxed_trades": 912,
+    "relaxed_pnl": 100.56,
+    "1pos_trades": 4082,
+    "1pos_wr": 68.2,
+    "1pos_cum_pnl": -415.75
+  },
+  "fold3_regime": {
+    "period_return": -13.79,
+    "volatility": 0.1656,
+    "max_dd": 38.58
+  },
+  "vary_folds": {
+    "3_fold": {
+      "oos_pnls": [
+        110.0,
+        174.6,
+        145.0
+      ],
+      "total": 429.6,
+      "passes": 3
+    },
+    "4_fold": {
+      "oos_pnls": [
+        91.3,
+        106.6,
+        129.6,
+        122.0
+      ],
+      "total": 449.5,
+      "passes": 4
+    },
+    "5_fold": {
+      "oos_pnls": [
+        66.7,
+        70.0,
+        116.6,
+        93.0,
+        108.0
+      ],
+      "total": 454.3,
+      "passes": 5
+    }
+  },
+  "fold3_full_vs_oos": {
+    "full_trades": 2930,
+    "full_pnl": 567.16,
+    "oos_exit_trades": 967,
+    "oos_only_trades": 968,
+    "oos_only_pnl": 145.0
+  }
+}

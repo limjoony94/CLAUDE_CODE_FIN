@@ -1,0 +1,127 @@
+{
+  "metadata": {
+    "script": "cross_direction_offset_study.py",
+    "date": "2026-03-08T23:53:40.564503",
+    "n_patterns": 131,
+    "n_signals": 13546,
+    "neutral_window": [
+      0,
+      74642
+    ],
+    "runtime_sec": 505.8
+  },
+  "baseline": {
+    "trades": 1182,
+    "wr": 70.8,
+    "pnl": 235.3,
+    "mdd": 1.37,
+    "pnl_mdd": 171.8
+  },
+  "phase1": {
+    "total_overlaps": 1461,
+    "net_negative": 404,
+    "net_positive": 1057,
+    "net_zero": 0,
+    "avg_combined_pnl": 2.373,
+    "median_combined_pnl": 2.949,
+    "total_combined_pnl": 3467.6,
+    "sl_wipes_tp_count": 191,
+    "tp_wipes_sl_count": 349,
+    "pct_negative": 27.7,
+    "sl_wipes_tp_avg_loss": -4.63
+  },
+  "phase2": {
+    "strict": {
+      "ratio": 1.0,
+      "trades": 999,
+      "wr": 66.4,
+      "pnl": 133.1,
+      "mdd": 3.6,
+      "pnl_mdd": 37.0,
+      "blocked": 9304,
+      "blocked_pct": 68.7,
+      "delta_pnl": -102.2,
+      "delta_mdd": 2.23
+    },
+    "relaxed": {
+      "ratio": 1.5,
+      "trades": 1017,
+      "wr": 74.8,
+      "pnl": 159.2,
+      "mdd": 2.36,
+      "pnl_mdd": 67.5,
+      "blocked": 10263,
+      "blocked_pct": 75.8,
+      "delta_pnl": -76.1,
+      "delta_mdd": 0.99
+    },
+    "loose": {
+      "ratio": 2.0,
+      "trades": 1156,
+      "wr": 74.2,
+      "pnl": 150.3,
+      "mdd": 1.33,
+      "pnl_mdd": 113.0,
+      "blocked": 9422,
+      "blocked_pct": 69.6,
+      "delta_pnl": -85.0,
+      "delta_mdd": -0.04
+    },
+    "baseline": {
+      "trades": 1182,
+      "wr": 70.8,
+      "pnl": 235.3,
+      "mdd": 1.37,
+      "pnl_mdd": 171.8
+    }
+  },
+  "phase3": {
+    "baseline": {
+      "label": "baseline",
+      "filter_ratio": null,
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 162,
+          "oos_trades": 356,
+          "oos_wr": 62.4,
+          "oos_pnl": 49.0,
+          "status": "PASS"
+        },
+        {
+          "fold": 2,
+          "is_patterns": 158,
+          "oos_trades": 468,
+          "oos_wr": 60.0,
+          "oos_pnl": 70.6,
+          "status": "PASS"
+        },
+        {
+          "fold": 3,
+          "is_patterns": 180,
+          "oos_trades": 1,
+          "oos_wr": 0.0,
+          "oos_pnl": -0.0,
+          "status": "FAIL"
+        }
+      ],
+      "pass_count": 2,
+      "total_folds": 3,
+      "verdict": "FAIL"
+    }
+  },
+  "phase4": {
+    "baseline": {
+      "n_seeds": 10,
+      "pass_count": 0,
+      "pass_pct": 0.0,
+      "verdict": "DISCRIMINATING"
+    }
+  },
+  "verdict": {
+    "decision": "STOP",
+    "best_ratio": null,
+    "baseline_pnl_mdd": 171.8,
+    "best_pnl_mdd": 171.8
+  }
+}

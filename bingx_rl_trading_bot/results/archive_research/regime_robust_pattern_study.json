@@ -1,0 +1,3918 @@
+{
+  "phase1_regime": {
+    "regime_window": 2016,
+    "bull_thr": 2.0,
+    "bear_thr": -2.0
+  },
+  "phase2_current": [
+    {
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 20,
+          "wr": 80.0,
+          "wr_excess": 24.444444444444443,
+          "avg_pnl": 2.962710548633024
+        },
+        "SIDE": {
+          "trades": 21,
+          "wr": 52.38095238095239,
+          "wr_excess": -3.1746031746031704,
+          "avg_pnl": 0.013845260902968363
+        },
+        "BULL": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 26.26262626262627,
+          "avg_pnl": 4.597786780179865
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "DN-MU-H",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 19,
+          "wr": 42.10526315789473,
+          "wr_excess": 5.741626794258366,
+          "avg_pnl": -0.048658301821344126
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 52.0,
+          "wr_excess": 15.636363636363633,
+          "avg_pnl": 0.7507238510096907
+        },
+        "BULL": {
+          "trades": 19,
+          "wr": 31.57894736842105,
+          "wr_excess": -4.7846889952153155,
+          "avg_pnl": -0.4059486689467667
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_BULL"
+    },
+    {
+      "pattern": "BU-MU-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 14,
+          "wr": 78.57142857142857,
+          "wr_excess": 23.015873015873012,
+          "avg_pnl": 3.5585768200182533
+        },
+        "SIDE": {
+          "trades": 17,
+          "wr": 70.58823529411765,
+          "wr_excess": 15.032679738562095,
+          "avg_pnl": 2.319592550986913
+        },
+        "BULL": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 11.1111111111111,
+          "avg_pnl": 1.7818510083362327
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "U-MU-H",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 63.63636363636363,
+          "wr_excess": 13.636363636363633,
+          "avg_pnl": 0.5938179941651401
+        },
+        "SIDE": {
+          "trades": 35,
+          "wr": 71.42857142857143,
+          "wr_excess": 21.42857142857143,
+          "avg_pnl": 1.9336515263854122
+        },
+        "BULL": {
+          "trades": 12,
+          "wr": 83.33333333333334,
+          "wr_excess": 33.33333333333334,
+          "avg_pnl": 3.0551093287033715
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "MD-MU-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 23,
+          "wr": 86.95652173913044,
+          "wr_excess": 28.132992327365727,
+          "avg_pnl": 2.92947446983188
+        },
+        "SIDE": {
+          "trades": 41,
+          "wr": 70.73170731707317,
+          "wr_excess": 11.908177905308463,
+          "avg_pnl": 1.7981479783996575
+        },
+        "BULL": {
+          "trades": 30,
+          "wr": 60.0,
+          "wr_excess": 1.17647058823529,
+          "avg_pnl": 0.19130075927206977
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "DN-ST-BU",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 55,
+          "wr": 70.9090909090909,
+          "wr_excess": 12.085561497326196,
+          "avg_pnl": 1.8986734197846051
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 53.333333333333336,
+          "wr_excess": -5.490196078431374,
+          "avg_pnl": -0.5490440772092079
+        },
+        "BULL": {
+          "trades": 28,
+          "wr": 71.42857142857143,
+          "wr_excess": 12.60504201680672,
+          "avg_pnl": 1.578318359466469
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "ST-BD-BU",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 16,
+          "wr": 87.5,
+          "wr_excess": 28.67647058823529,
+          "avg_pnl": 3.6378953079490257
+        },
+        "SIDE": {
+          "trades": 7,
+          "wr": 42.857142857142854,
+          "wr_excess": -15.966386554621856,
+          "avg_pnl": -0.602572115276818
+        },
+        "BULL": {
+          "trades": 14,
+          "wr": 64.28571428571429,
+          "wr_excess": 5.462184873949582,
+          "avg_pnl": 1.551228928259788
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "DN-BD-BU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 47,
+          "wr": 78.72340425531915,
+          "wr_excess": 12.056737588652496,
+          "avg_pnl": 0.42414491834989176
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 70.0,
+          "wr_excess": 3.333333333333343,
+          "avg_pnl": -0.018809646460404696
+        },
+        "BULL": {
+          "trades": 34,
+          "wr": 82.35294117647058,
+          "wr_excess": 15.686274509803923,
+          "avg_pnl": 0.46454561787285403
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "DN-GS-ST",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.75,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 12,
+          "wr": 66.66666666666666,
+          "wr_excess": 3.030303030303024,
+          "avg_pnl": 0.5573406282893282
+        },
+        "SIDE": {
+          "trades": 10,
+          "wr": 100.0,
+          "wr_excess": 36.36363636363637,
+          "avg_pnl": 3.854643566835533
+        },
+        "BULL": {
+          "trades": 14,
+          "wr": 85.71428571428571,
+          "wr_excess": 22.077922077922075,
+          "avg_pnl": 1.8135404886786877
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "ST-IH-DN",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 16,
+          "wr": 75.0,
+          "wr_excess": 12.5,
+          "avg_pnl": 1.964442775770613
+        },
+        "SIDE": {
+          "trades": 27,
+          "wr": 66.66666666666666,
+          "wr_excess": 4.166666666666657,
+          "avg_pnl": 1.1454789020155844
+        },
+        "BULL": {
+          "trades": 19,
+          "wr": 73.68421052631578,
+          "wr_excess": 11.18421052631578,
+          "avg_pnl": 0.7033265866161891
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "MU-ST-MD",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 26.26262626262627,
+          "avg_pnl": 3.4149333394503745
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 11.1111111111111,
+          "avg_pnl": 0.9750382107765004
+        },
+        "BULL": {
+          "trades": 8,
+          "wr": 62.5,
+          "wr_excess": 6.944444444444443,
+          "avg_pnl": 1.3101757192832708
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 21,
+          "wr": 57.14285714285714,
+          "wr_excess": -5.357142857142861,
+          "avg_pnl": -0.904529886018968
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 82.6086956521739,
+          "wr_excess": 20.108695652173907,
+          "avg_pnl": 2.657007016676435
+        },
+        "BULL": {
+          "trades": 18,
+          "wr": 83.33333333333334,
+          "wr_excess": 20.833333333333343,
+          "avg_pnl": 2.0765040006043165
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_BEAR"
+    },
+    {
+      "pattern": "IH-ST-ST",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 13,
+          "wr": 92.3076923076923,
+          "wr_excess": 25.64102564102565,
+          "avg_pnl": 3.0961124905440567
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 90.9090909090909,
+          "wr_excess": 24.24242424242425,
+          "avg_pnl": 2.543465177064496
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 92.3076923076923,
+          "wr_excess": 25.64102564102565,
+          "avg_pnl": 3.1956400748633254
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "IH-DN-MD",
+      "direction": "LONG",
+      "tp": 0.75,
+      "sl": 1.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 12,
+          "wr": 66.66666666666666,
+          "wr_excess": 0.0,
+          "avg_pnl": 0.01729842588332442
+        },
+        "SIDE": {
+          "trades": 17,
+          "wr": 82.35294117647058,
+          "wr_excess": 15.686274509803923,
+          "avg_pnl": 1.0781913408705108
+        },
+        "BULL": {
+          "trades": 11,
+          "wr": 100.0,
+          "wr_excess": 33.33333333333334,
+          "avg_pnl": 1.6305408959370928
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_BEAR"
+    },
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 18,
+          "wr": 61.111111111111114,
+          "wr_excess": 11.111111111111114,
+          "avg_pnl": 0.4962583694005176
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 16.666666666666657,
+          "avg_pnl": 1.5210831420855508
+        },
+        "BULL": {
+          "trades": 17,
+          "wr": 64.70588235294117,
+          "wr_excess": 14.705882352941174,
+          "avg_pnl": 0.5403777029745326
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 20,
+          "wr": 70.0,
+          "wr_excess": 16.666666666666664,
+          "avg_pnl": 2.04526650719306
+        },
+        "SIDE": {
+          "trades": 21,
+          "wr": 71.42857142857143,
+          "wr_excess": 18.095238095238095,
+          "avg_pnl": 1.5924273081353237
+        },
+        "BULL": {
+          "trades": 17,
+          "wr": 64.70588235294117,
+          "wr_excess": 11.372549019607838,
+          "avg_pnl": 1.4999522958283886
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "MD-DN-DN",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 89,
+          "wr": 69.66292134831461,
+          "wr_excess": 7.162921348314612,
+          "avg_pnl": 0.821657075044209
+        },
+        "SIDE": {
+          "trades": 90,
+          "wr": 72.22222222222221,
+          "wr_excess": 9.722222222222214,
+          "avg_pnl": 1.2793450119188767
+        },
+        "BULL": {
+          "trades": 57,
+          "wr": 75.43859649122807,
+          "wr_excess": 12.938596491228068,
+          "avg_pnl": 1.1322929935119033
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.25,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 30,
+          "wr": 76.66666666666667,
+          "wr_excess": 21.111111111111114,
+          "avg_pnl": 1.5418331620382484
+        },
+        "SIDE": {
+          "trades": 27,
+          "wr": 55.55555555555556,
+          "wr_excess": 0.0,
+          "avg_pnl": -0.2798084433134278
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 69.56521739130434,
+          "wr_excess": 14.009661835748787,
+          "avg_pnl": 0.5476451479192329
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "H-U-MU",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 1.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 12,
+          "wr": 33.33333333333333,
+          "wr_excess": -3.0303030303030383,
+          "avg_pnl": -0.6299359657290265
+        },
+        "SIDE": {
+          "trades": 16,
+          "wr": 50.0,
+          "wr_excess": 13.636363636363633,
+          "avg_pnl": 0.8702966578353312
+        },
+        "BULL": {
+          "trades": 12,
+          "wr": 75.0,
+          "wr_excess": 38.63636363636363,
+          "avg_pnl": 2.5994859123609633
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_BEAR"
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 28,
+          "wr": 53.57142857142857,
+          "wr_excess": -5.252100840336141,
+          "avg_pnl": -0.8774887364352005
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 73.91304347826086,
+          "wr_excess": 15.08951406649615,
+          "avg_pnl": 1.9156656030262642
+        },
+        "BULL": {
+          "trades": 15,
+          "wr": 80.0,
+          "wr_excess": 21.17647058823529,
+          "avg_pnl": 2.161642679556453
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_BEAR"
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 28,
+          "wr": 64.28571428571429,
+          "wr_excess": 10.952380952380956,
+          "avg_pnl": 0.6143464808331124
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 58.333333333333336,
+          "wr_excess": 5.0,
+          "avg_pnl": 0.943322286512406
+        },
+        "BULL": {
+          "trades": 15,
+          "wr": 73.33333333333333,
+          "wr_excess": 19.999999999999993,
+          "avg_pnl": 1.4025314765079362
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "BU-BU-U",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.75,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 25,
+          "wr": 88.0,
+          "wr_excess": 29.666666666666664,
+          "avg_pnl": 3.404749322150966
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 39.130434782608695,
+          "wr_excess": -19.20289855072464,
+          "avg_pnl": -3.2239458517604054
+        },
+        "BULL": {
+          "trades": 25,
+          "wr": 80.0,
+          "wr_excess": 21.666666666666664,
+          "avg_pnl": 2.2139743128858966
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "D-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 22,
+          "wr": 68.18181818181817,
+          "wr_excess": 9.358288770053463,
+          "avg_pnl": 0.8585468332135631
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 22.994652406417117,
+          "avg_pnl": 2.618180912767787
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 69.56521739130434,
+          "wr_excess": 10.741687979539634,
+          "avg_pnl": 1.347799767412633
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 95,
+          "wr": 65.26315789473685,
+          "wr_excess": 9.707602339181292,
+          "avg_pnl": 1.1275026259648604
+        },
+        "SIDE": {
+          "trades": 58,
+          "wr": 62.06896551724138,
+          "wr_excess": 6.513409961685824,
+          "avg_pnl": 1.050376807852628
+        },
+        "BULL": {
+          "trades": 72,
+          "wr": 63.888888888888886,
+          "wr_excess": 8.333333333333329,
+          "avg_pnl": 1.36100056049607
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "IH-U-DN",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 40,
+          "wr": 90.0,
+          "wr_excess": 13.076923076923066,
+          "avg_pnl": 1.0153801445601984
+        },
+        "SIDE": {
+          "trades": 40,
+          "wr": 80.0,
+          "wr_excess": 3.076923076923066,
+          "avg_pnl": 0.15538675351579603
+        },
+        "BULL": {
+          "trades": 42,
+          "wr": 76.19047619047619,
+          "wr_excess": -0.7326007326007442,
+          "avg_pnl": 0.07278677394698706
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_BULL"
+    },
+    {
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 43,
+          "wr": 69.76744186046511,
+          "wr_excess": 10.943912448700402,
+          "avg_pnl": 1.1739648664747133
+        },
+        "SIDE": {
+          "trades": 34,
+          "wr": 58.82352941176471,
+          "wr_excess": 0.0,
+          "avg_pnl": 0.4117976760585759
+        },
+        "BULL": {
+          "trades": 34,
+          "wr": 64.70588235294117,
+          "wr_excess": 5.882352941176464,
+          "avg_pnl": 0.6268810661039924
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "ST-D-U",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 38,
+          "wr": 81.57894736842105,
+          "wr_excess": 4.655870445344121,
+          "avg_pnl": 0.4847904485593245
+        },
+        "SIDE": {
+          "trades": 27,
+          "wr": 85.18518518518519,
+          "wr_excess": 8.262108262108256,
+          "avg_pnl": 0.6822610901417179
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 91.30434782608695,
+          "wr_excess": 14.38127090301002,
+          "avg_pnl": 1.6245782262984358
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "DN-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 69.38775510204081,
+          "wr_excess": 9.387755102040813,
+          "avg_pnl": 0.5510367947310262
+        },
+        "SIDE": {
+          "trades": 38,
+          "wr": 63.1578947368421,
+          "wr_excess": 3.1578947368421026,
+          "avg_pnl": 0.4115202558112086
+        },
+        "BULL": {
+          "trades": 29,
+          "wr": 82.75862068965517,
+          "wr_excess": 22.758620689655174,
+          "avg_pnl": 1.5773086407304735
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "DN-BU-BU",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 34,
+          "wr": 73.52941176470588,
+          "wr_excess": 11.990950226244344,
+          "avg_pnl": 1.3762872810546956
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 60.0,
+          "wr_excess": -1.53846153846154,
+          "avg_pnl": -0.21162157668067944
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 69.56521739130434,
+          "wr_excess": 8.026755852842804,
+          "avg_pnl": 0.49948380784514035
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "ST-DN-BU",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.25,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 41,
+          "wr": 58.536585365853654,
+          "wr_excess": 20.075046904315187,
+          "avg_pnl": 2.2984676540173328
+        },
+        "SIDE": {
+          "trades": 34,
+          "wr": 35.294117647058826,
+          "wr_excess": -3.167420814479641,
+          "avg_pnl": -0.8993619702059519
+        },
+        "BULL": {
+          "trades": 28,
+          "wr": 50.0,
+          "wr_excess": 11.538461538461533,
+          "avg_pnl": 0.9862563301601063
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "BU-BD-U",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 33,
+          "wr": 78.78787878787878,
+          "wr_excess": 7.359307359307351,
+          "avg_pnl": 1.2301623798267574
+        },
+        "SIDE": {
+          "trades": 27,
+          "wr": 70.37037037037037,
+          "wr_excess": -1.058201058201064,
+          "avg_pnl": -0.28328536101607854
+        },
+        "BULL": {
+          "trades": 30,
+          "wr": 86.66666666666667,
+          "wr_excess": 15.23809523809524,
+          "avg_pnl": 2.237941205807831
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "GS-U-DN",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.75,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 84.61538461538461,
+          "wr_excess": 26.282051282051277,
+          "avg_pnl": 2.382704954892748
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 8.333333333333321,
+          "avg_pnl": 0.49688164980658656
+        },
+        "BULL": {
+          "trades": 22,
+          "wr": 63.63636363636363,
+          "wr_excess": 5.303030303030297,
+          "avg_pnl": 0.747304730889827
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "BD-BU-U",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 37,
+          "wr": 89.1891891891892,
+          "wr_excess": 22.522522522522536,
+          "avg_pnl": 2.83249605277275
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 53.333333333333336,
+          "wr_excess": -13.333333333333321,
+          "avg_pnl": -1.3827090527038224
+        },
+        "BULL": {
+          "trades": 24,
+          "wr": 83.33333333333334,
+          "wr_excess": 16.666666666666686,
+          "avg_pnl": 2.0017586488996826
+        }
+      },
+      "is_robust": false,
+      "category": "vulnerable_in_SIDE"
+    },
+    {
+      "pattern": "ST-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 28,
+          "wr": 71.42857142857143,
+          "wr_excess": 12.60504201680672,
+          "avg_pnl": 1.7712439705192804
+        },
+        "SIDE": {
+          "trades": 15,
+          "wr": 60.0,
+          "wr_excess": 1.17647058823529,
+          "avg_pnl": -0.2959969973558342
+        },
+        "BULL": {
+          "trades": 16,
+          "wr": 62.5,
+          "wr_excess": 3.67647058823529,
+          "avg_pnl": 0.7354477800327344
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    },
+    {
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 17,
+          "wr": 82.35294117647058,
+          "wr_excess": 20.81447963800904,
+          "avg_pnl": 2.0965514978161117
+        },
+        "SIDE": {
+          "trades": 26,
+          "wr": 69.23076923076923,
+          "wr_excess": 7.692307692307686,
+          "avg_pnl": 0.6602682744714626
+        },
+        "BULL": {
+          "trades": 16,
+          "wr": 62.5,
+          "wr_excess": 0.9615384615384599,
+          "avg_pnl": -0.020904788123220608
+        }
+      },
+      "is_robust": true,
+      "category": "robust"
+    }
+  ],
+  "phase3_robust": [
+    {
+      "pattern": "BD-BD-BU",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5,
+      "min_wr_excess": 10.833333333333329,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 30,
+          "wr": 73.33333333333333,
+          "wr_excess": 10.833333333333329,
+          "avg_pnl": 1.7672815144041145
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 76.0,
+          "wr_excess": 13.5,
+          "avg_pnl": 1.5592359840322514
+        },
+        "BULL": {
+          "trades": 12,
+          "wr": 75.0,
+          "wr_excess": 12.5,
+          "avg_pnl": 1.2715576993296407
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 7.492260061919495,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 95,
+          "wr": 66.3157894736842,
+          "wr_excess": 7.492260061919495,
+          "avg_pnl": 0.7224923426685872
+        },
+        "SIDE": {
+          "trades": 60,
+          "wr": 66.66666666666666,
+          "wr_excess": 7.843137254901947,
+          "avg_pnl": 0.9818715272716823
+        },
+        "BULL": {
+          "trades": 76,
+          "wr": 68.42105263157895,
+          "wr_excess": 9.597523219814235,
+          "avg_pnl": 1.5890314749785888
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-DN-DN",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5,
+      "min_wr_excess": 7.162921348314612,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 89,
+          "wr": 69.66292134831461,
+          "wr_excess": 7.162921348314612,
+          "avg_pnl": 0.821657075044209
+        },
+        "SIDE": {
+          "trades": 90,
+          "wr": 72.22222222222221,
+          "wr_excess": 9.722222222222214,
+          "avg_pnl": 1.2793450119188767
+        },
+        "BULL": {
+          "trades": 57,
+          "wr": 75.43859649122807,
+          "wr_excess": 12.938596491228068,
+          "avg_pnl": 1.1322929935119033
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "IH-U-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "min_wr_excess": 1.2012012012012008,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 37,
+          "wr": 56.75675675675676,
+          "wr_excess": 1.2012012012012008,
+          "avg_pnl": 0.4745801304438958
+        },
+        "SIDE": {
+          "trades": 34,
+          "wr": 61.76470588235294,
+          "wr_excess": 6.209150326797385,
+          "avg_pnl": 0.9207655886608461
+        },
+        "BULL": {
+          "trades": 33,
+          "wr": 57.57575757575758,
+          "wr_excess": 2.0202020202020208,
+          "avg_pnl": 0.0027435287356836133
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-ST-H",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0,
+      "min_wr_excess": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 24,
+          "wr": 70.83333333333334,
+          "wr_excess": 20.833333333333343,
+          "avg_pnl": 1.1471129251785313
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 56.666666666666664,
+          "wr_excess": 6.666666666666664,
+          "avg_pnl": 0.3151856328830363
+        },
+        "BULL": {
+          "trades": 25,
+          "wr": 52.0,
+          "wr_excess": 2.0,
+          "avg_pnl": 0.024290942605820973
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "tp": 1.25,
+      "sl": 1.0,
+      "min_wr_excess": 3.555555555555557,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 30,
+          "wr": 50.0,
+          "wr_excess": 5.555555555555557,
+          "avg_pnl": 0.334822534843493
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 48.0,
+          "wr_excess": 3.555555555555557,
+          "avg_pnl": -0.15334499487825545
+        },
+        "BULL": {
+          "trades": 24,
+          "wr": 54.166666666666664,
+          "wr_excess": 9.722222222222221,
+          "avg_pnl": 0.42576562008645896
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-H-DN",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "min_wr_excess": 3.7037037037037095,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 54,
+          "wr": 70.37037037037037,
+          "wr_excess": 3.7037037037037095,
+          "avg_pnl": 0.4599744654761172
+        },
+        "SIDE": {
+          "trades": 42,
+          "wr": 73.80952380952381,
+          "wr_excess": 7.142857142857153,
+          "avg_pnl": 0.8316525854025206
+        },
+        "BULL": {
+          "trades": 37,
+          "wr": 72.97297297297297,
+          "wr_excess": 6.306306306306311,
+          "avg_pnl": 0.778534404861123
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.5,
+      "min_wr_excess": 1.1363636363636331,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 21,
+          "wr": 80.95238095238095,
+          "wr_excess": 18.45238095238095,
+          "avg_pnl": 1.9554608989365572
+        },
+        "SIDE": {
+          "trades": 22,
+          "wr": 63.63636363636363,
+          "wr_excess": 1.1363636363636331,
+          "avg_pnl": 0.29550317564271256
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 84.61538461538461,
+          "wr_excess": 22.115384615384613,
+          "avg_pnl": 3.430390713542854
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 11.111111111111114,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 18,
+          "wr": 61.111111111111114,
+          "wr_excess": 11.111111111111114,
+          "avg_pnl": 0.4962583694005176
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 16.666666666666657,
+          "avg_pnl": 1.5210831420855508
+        },
+        "BULL": {
+          "trades": 17,
+          "wr": 64.70588235294117,
+          "wr_excess": 14.705882352941174,
+          "avg_pnl": 0.5403777029745326
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.0,
+      "min_wr_excess": 4.897959183673471,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 44.89795918367347,
+          "wr_excess": 4.897959183673471,
+          "avg_pnl": 0.35188340245711014
+        },
+        "SIDE": {
+          "trades": 40,
+          "wr": 47.5,
+          "wr_excess": 7.5,
+          "avg_pnl": 0.6132127044048257
+        },
+        "BULL": {
+          "trades": 42,
+          "wr": 45.23809523809524,
+          "wr_excess": 5.238095238095241,
+          "avg_pnl": 0.2785951187831915
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-D-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": 6.140350877192972,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 38,
+          "wr": 89.47368421052632,
+          "wr_excess": 6.140350877192972,
+          "avg_pnl": 0.3734844756108817
+        },
+        "SIDE": {
+          "trades": 29,
+          "wr": 93.10344827586206,
+          "wr_excess": 9.770114942528721,
+          "avg_pnl": 0.6795977558161937
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 91.30434782608695,
+          "wr_excess": 7.971014492753611,
+          "avg_pnl": 0.8060210994085473
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.5,
+      "min_wr_excess": 4.638218923933216,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 59.183673469387756,
+          "wr_excess": 4.638218923933216,
+          "avg_pnl": 0.39306210862723845
+        },
+        "SIDE": {
+          "trades": 37,
+          "wr": 59.45945945945946,
+          "wr_excess": 4.91400491400492,
+          "avg_pnl": 0.604404535692397
+        },
+        "BULL": {
+          "trades": 29,
+          "wr": 68.96551724137932,
+          "wr_excess": 14.420062695924777,
+          "avg_pnl": 1.2367496529452615
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "D-ST-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": 2.3809523809523654,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 44,
+          "wr": 86.36363636363636,
+          "wr_excess": 3.030303030303017,
+          "avg_pnl": -0.16717198487919885
+        },
+        "SIDE": {
+          "trades": 21,
+          "wr": 85.71428571428571,
+          "wr_excess": 2.3809523809523654,
+          "avg_pnl": 0.11637652768091135
+        },
+        "BULL": {
+          "trades": 33,
+          "wr": 96.96969696969697,
+          "wr_excess": 13.636363636363626,
+          "avg_pnl": 1.0898537102955745
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "D-U-MU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.5,
+      "min_wr_excess": 4.166666666666657,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 17,
+          "wr": 82.35294117647058,
+          "wr_excess": 7.35294117647058,
+          "avg_pnl": 0.18978620945495195
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 79.16666666666666,
+          "wr_excess": 4.166666666666657,
+          "avg_pnl": 0.06410320993698611
+        },
+        "BULL": {
+          "trades": 25,
+          "wr": 84.0,
+          "wr_excess": 9.0,
+          "avg_pnl": 0.5693955407136011
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BU-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.5,
+      "min_wr_excess": 11.904761904761912,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 15,
+          "wr": 86.66666666666667,
+          "wr_excess": 15.23809523809524,
+          "avg_pnl": 1.892445934467378
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 83.33333333333334,
+          "wr_excess": 11.904761904761912,
+          "avg_pnl": 1.236335303405061
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 86.95652173913044,
+          "wr_excess": 15.527950310559007,
+          "avg_pnl": 1.4962171211180908
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 13.157894736842103,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 19,
+          "wr": 63.1578947368421,
+          "wr_excess": 13.157894736842103,
+          "avg_pnl": 1.7583334467740228
+        },
+        "SIDE": {
+          "trades": 21,
+          "wr": 66.66666666666666,
+          "wr_excess": 16.666666666666657,
+          "avg_pnl": 1.7132415677735804
+        },
+        "BULL": {
+          "trades": 17,
+          "wr": 64.70588235294117,
+          "wr_excess": 14.705882352941174,
+          "avg_pnl": 1.9923777194672618
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BU-BU",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.0,
+      "min_wr_excess": 2.857142857142854,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 37,
+          "wr": 51.35135135135135,
+          "wr_excess": 11.351351351351347,
+          "avg_pnl": 0.7193752784509797
+        },
+        "SIDE": {
+          "trades": 28,
+          "wr": 42.857142857142854,
+          "wr_excess": 2.857142857142854,
+          "avg_pnl": -0.2780516403185157
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 43.47826086956522,
+          "wr_excess": 3.4782608695652186,
+          "avg_pnl": 0.18591987961786502
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BU-BD-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 3.081232492997195,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 31,
+          "wr": 67.74193548387096,
+          "wr_excess": 8.91840607210625,
+          "avg_pnl": 2.112429093286518
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 62.5,
+          "wr_excess": 3.67647058823529,
+          "avg_pnl": 0.04989921630482833
+        },
+        "BULL": {
+          "trades": 21,
+          "wr": 61.904761904761905,
+          "wr_excess": 3.081232492997195,
+          "avg_pnl": 1.2898753495247925
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-ST-ST",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": 5.83554376657824,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 39,
+          "wr": 84.61538461538461,
+          "wr_excess": 7.692307692307679,
+          "avg_pnl": 0.6715217961743005
+        },
+        "SIDE": {
+          "trades": 29,
+          "wr": 82.75862068965517,
+          "wr_excess": 5.83554376657824,
+          "avg_pnl": 0.12388130954100643
+        },
+        "BULL": {
+          "trades": 30,
+          "wr": 83.33333333333334,
+          "wr_excess": 6.410256410256409,
+          "avg_pnl": 0.49991529793284284
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MU-DN-ST",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.75,
+      "min_wr_excess": 3.4722222222222143,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 64,
+          "wr": 81.25,
+          "wr_excess": 3.4722222222222143,
+          "avg_pnl": -0.03030846282847935
+        },
+        "SIDE": {
+          "trades": 43,
+          "wr": 81.3953488372093,
+          "wr_excess": 3.617571059431512,
+          "avg_pnl": 0.34410006662539455
+        },
+        "BULL": {
+          "trades": 54,
+          "wr": 81.48148148148148,
+          "wr_excess": 3.7037037037036953,
+          "avg_pnl": -0.1255025440812469
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-MU-H",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 1.75,
+      "min_wr_excess": 21.153846153846153,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 13,
+          "wr": 76.92307692307693,
+          "wr_excess": 23.076923076923087,
+          "avg_pnl": 1.4699086206105902
+        },
+        "SIDE": {
+          "trades": 36,
+          "wr": 75.0,
+          "wr_excess": 21.153846153846153,
+          "avg_pnl": 1.2722666362512272
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 76.92307692307693,
+          "wr_excess": 23.076923076923087,
+          "avg_pnl": 1.5205279059121695
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-MU-U",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.25,
+      "min_wr_excess": 4.970760233918128,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 76.92307692307693,
+          "wr_excess": 21.367521367521377,
+          "avg_pnl": 1.3268542786474262
+        },
+        "SIDE": {
+          "trades": 47,
+          "wr": 65.95744680851064,
+          "wr_excess": 10.401891252955082,
+          "avg_pnl": 0.8981741580875493
+        },
+        "BULL": {
+          "trades": 38,
+          "wr": 60.526315789473685,
+          "wr_excess": 4.970760233918128,
+          "avg_pnl": 0.04195887594696839
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-DN-IH",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 1.4285714285714235,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 57.14285714285714,
+          "wr_excess": 7.142857142857139,
+          "avg_pnl": 0.8867962322525754
+        },
+        "SIDE": {
+          "trades": 35,
+          "wr": 51.42857142857142,
+          "wr_excess": 1.4285714285714235,
+          "avg_pnl": 0.29595617786036454
+        },
+        "BULL": {
+          "trades": 32,
+          "wr": 62.5,
+          "wr_excess": 12.5,
+          "avg_pnl": 1.6870301766092823
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "D-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 9.358288770053463,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 22,
+          "wr": 68.18181818181817,
+          "wr_excess": 9.358288770053463,
+          "avg_pnl": 0.8585468332135631
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 22.994652406417117,
+          "avg_pnl": 2.618180912767787
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 69.56521739130434,
+          "wr_excess": 10.741687979539634,
+          "avg_pnl": 1.347799767412633
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "GS-U-DN",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.75,
+      "min_wr_excess": 5.303030303030297,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 84.61538461538461,
+          "wr_excess": 26.282051282051277,
+          "avg_pnl": 2.382704954892748
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 8.333333333333321,
+          "avg_pnl": 0.49688164980658656
+        },
+        "BULL": {
+          "trades": 22,
+          "wr": 63.63636363636363,
+          "wr_excess": 5.303030303030297,
+          "avg_pnl": 0.747304730889827
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-H-DN",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 1.75,
+      "min_wr_excess": 1.4285714285714306,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 27,
+          "wr": 74.07407407407408,
+          "wr_excess": 4.074074074074076,
+          "avg_pnl": -0.22040903718762075
+        },
+        "SIDE": {
+          "trades": 29,
+          "wr": 75.86206896551724,
+          "wr_excess": 5.862068965517238,
+          "avg_pnl": -0.03776942561467393
+        },
+        "BULL": {
+          "trades": 21,
+          "wr": 71.42857142857143,
+          "wr_excess": 1.4285714285714306,
+          "avg_pnl": -0.09152377512881757
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-IH-MD",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.0,
+      "min_wr_excess": 0.5555555555555571,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 17,
+          "wr": 76.47058823529412,
+          "wr_excess": 32.02614379084967,
+          "avg_pnl": 1.9137431531715952
+        },
+        "SIDE": {
+          "trades": 20,
+          "wr": 45.0,
+          "wr_excess": 0.5555555555555571,
+          "avg_pnl": 0.20512049118846232
+        },
+        "BULL": {
+          "trades": 18,
+          "wr": 50.0,
+          "wr_excess": 5.555555555555557,
+          "avg_pnl": 0.44511198221836346
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-BD-BU",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.25,
+      "min_wr_excess": 1.1904761904761827,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 20,
+          "wr": 45.0,
+          "wr_excess": 3.3333333333333286,
+          "avg_pnl": 0.22923123959078867
+        },
+        "SIDE": {
+          "trades": 7,
+          "wr": 42.857142857142854,
+          "wr_excess": 1.1904761904761827,
+          "avg_pnl": 1.230660122412921
+        },
+        "BULL": {
+          "trades": 16,
+          "wr": 43.75,
+          "wr_excess": 2.0833333333333286,
+          "avg_pnl": 0.41275396446184814
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.0,
+      "min_wr_excess": 2.1052631578947327,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 33,
+          "wr": 42.42424242424242,
+          "wr_excess": 2.424242424242422,
+          "avg_pnl": 0.21550080844825117
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 50.0,
+          "wr_excess": 10.0,
+          "avg_pnl": 0.28591202426803114
+        },
+        "BULL": {
+          "trades": 19,
+          "wr": 42.10526315789473,
+          "wr_excess": 2.1052631578947327,
+          "avg_pnl": -0.1689065562105736
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-BU-ST",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "min_wr_excess": 1.5873015873015817,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 65.38461538461539,
+          "wr_excess": 9.82905982905983,
+          "avg_pnl": 1.4699046853233437
+        },
+        "SIDE": {
+          "trades": 15,
+          "wr": 60.0,
+          "wr_excess": 4.444444444444443,
+          "avg_pnl": 0.16306598348758286
+        },
+        "BULL": {
+          "trades": 14,
+          "wr": 57.14285714285714,
+          "wr_excess": 1.5873015873015817,
+          "avg_pnl": 0.42171382286257203
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BD-BU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.0,
+      "min_wr_excess": 3.333333333333343,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 47,
+          "wr": 78.72340425531915,
+          "wr_excess": 12.056737588652496,
+          "avg_pnl": 0.42414491834989176
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 70.0,
+          "wr_excess": 3.333333333333343,
+          "avg_pnl": -0.018809646460404696
+        },
+        "BULL": {
+          "trades": 34,
+          "wr": 82.35294117647058,
+          "wr_excess": 15.686274509803923,
+          "avg_pnl": 0.46454561787285403
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-GS-ST",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.25,
+      "min_wr_excess": 11.1111111111111,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 12,
+          "wr": 66.66666666666666,
+          "wr_excess": 11.1111111111111,
+          "avg_pnl": 0.9600123805646117
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 72.72727272727273,
+          "wr_excess": 17.171717171717177,
+          "avg_pnl": 1.1337359624422798
+        },
+        "BULL": {
+          "trades": 14,
+          "wr": 71.42857142857143,
+          "wr_excess": 15.873015873015873,
+          "avg_pnl": 0.7030136587731887
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "H-U-MU",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 4.54545454545454,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 54.54545454545454,
+          "wr_excess": 4.54545454545454,
+          "avg_pnl": -0.8728160946496838
+        },
+        "SIDE": {
+          "trades": 16,
+          "wr": 56.25,
+          "wr_excess": 6.25,
+          "avg_pnl": 0.6736446268963034
+        },
+        "BULL": {
+          "trades": 11,
+          "wr": 72.72727272727273,
+          "wr_excess": 22.727272727272734,
+          "avg_pnl": 1.972653105530095
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": 0.4962779156327457,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 31,
+          "wr": 77.41935483870968,
+          "wr_excess": 0.4962779156327457,
+          "avg_pnl": 0.07804889644191555
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 78.26086956521739,
+          "wr_excess": 1.3377926421404567,
+          "avg_pnl": -0.0043354355747398
+        },
+        "BULL": {
+          "trades": 18,
+          "wr": 88.88888888888889,
+          "wr_excess": 11.965811965811952,
+          "avg_pnl": 0.8107540296055888
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BD-DN-MU",
+      "direction": "LONG",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": 0.8547008547008517,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 84.61538461538461,
+          "wr_excess": 7.692307692307679,
+          "avg_pnl": 0.7338080778391249
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 77.77777777777779,
+          "wr_excess": 0.8547008547008517,
+          "avg_pnl": 0.6649502277221551
+        },
+        "BULL": {
+          "trades": 20,
+          "wr": 80.0,
+          "wr_excess": 3.076923076923066,
+          "avg_pnl": 0.47045153323755995
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-IH-DN",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.5,
+      "min_wr_excess": 5.384615384615387,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 18,
+          "wr": 72.22222222222221,
+          "wr_excess": 12.222222222222214,
+          "avg_pnl": 0.9352409674978251
+        },
+        "SIDE": {
+          "trades": 31,
+          "wr": 67.74193548387096,
+          "wr_excess": 7.741935483870961,
+          "avg_pnl": 0.6376433889241943
+        },
+        "BULL": {
+          "trades": 26,
+          "wr": 65.38461538461539,
+          "wr_excess": 5.384615384615387,
+          "avg_pnl": -0.06887183887707843
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MU-ST-MD",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 7.843137254901947,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 22.994652406417117,
+          "avg_pnl": 2.737347413662128
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 7.843137254901947,
+          "avg_pnl": 0.531623943551295
+        },
+        "BULL": {
+          "trades": 9,
+          "wr": 66.66666666666666,
+          "wr_excess": 7.843137254901947,
+          "avg_pnl": 1.175639923660889
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 6.25,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 16,
+          "wr": 62.5,
+          "wr_excess": 12.5,
+          "avg_pnl": 2.0515155381715218
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 56.52173913043478,
+          "wr_excess": 6.521739130434781,
+          "avg_pnl": -0.16679784029097328
+        },
+        "BULL": {
+          "trades": 16,
+          "wr": 56.25,
+          "wr_excess": 6.25,
+          "avg_pnl": 0.6973865101368326
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0,
+      "min_wr_excess": 5.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 28,
+          "wr": 64.28571428571429,
+          "wr_excess": 10.952380952380956,
+          "avg_pnl": 0.6143464808331124
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 58.333333333333336,
+          "wr_excess": 5.0,
+          "avg_pnl": 0.943322286512406
+        },
+        "BULL": {
+          "trades": 15,
+          "wr": 73.33333333333333,
+          "wr_excess": 19.999999999999993,
+          "avg_pnl": 1.4025314765079362
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "IH-ST-ST",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "min_wr_excess": 24.24242424242425,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 13,
+          "wr": 92.3076923076923,
+          "wr_excess": 25.64102564102565,
+          "avg_pnl": 3.0961124905440567
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 90.9090909090909,
+          "wr_excess": 24.24242424242425,
+          "avg_pnl": 2.543465177064496
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 92.3076923076923,
+          "wr_excess": 25.64102564102565,
+          "avg_pnl": 3.1956400748633254
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "IH-DN-MD",
+      "direction": "LONG",
+      "tp": 1.25,
+      "sl": 1.75,
+      "min_wr_excess": 12.254901960784316,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 72.72727272727273,
+          "wr_excess": 14.393939393939398,
+          "avg_pnl": 1.1885430026062094
+        },
+        "SIDE": {
+          "trades": 17,
+          "wr": 70.58823529411765,
+          "wr_excess": 12.254901960784316,
+          "avg_pnl": 0.9801346431925128
+        },
+        "BULL": {
+          "trades": 10,
+          "wr": 80.0,
+          "wr_excess": 21.666666666666664,
+          "avg_pnl": 1.319376567269004
+        }
+      },
+      "is_robust": true
+    }
+  ],
+  "phase3_all": [
+    {
+      "pattern": "BD-BD-BU",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5,
+      "min_wr_excess": 10.833333333333329,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 30,
+          "wr": 73.33333333333333,
+          "wr_excess": 10.833333333333329,
+          "avg_pnl": 1.7672815144041145
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 76.0,
+          "wr_excess": 13.5,
+          "avg_pnl": 1.5592359840322514
+        },
+        "BULL": {
+          "trades": 12,
+          "wr": 75.0,
+          "wr_excess": 12.5,
+          "avg_pnl": 1.2715576993296407
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-U-BD",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.75,
+      "min_wr_excess": -3.8461538461538467,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 42,
+          "wr": 47.61904761904761,
+          "wr_excess": -2.3809523809523867,
+          "avg_pnl": -0.34325704249902805
+        },
+        "SIDE": {
+          "trades": 53,
+          "wr": 47.16981132075472,
+          "wr_excess": -2.830188679245282,
+          "avg_pnl": -0.344586582960454
+        },
+        "BULL": {
+          "trades": 26,
+          "wr": 46.15384615384615,
+          "wr_excess": -3.8461538461538467,
+          "avg_pnl": -0.9480113348433252
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 7.492260061919495,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 95,
+          "wr": 66.3157894736842,
+          "wr_excess": 7.492260061919495,
+          "avg_pnl": 0.7224923426685872
+        },
+        "SIDE": {
+          "trades": 60,
+          "wr": 66.66666666666666,
+          "wr_excess": 7.843137254901947,
+          "avg_pnl": 0.9818715272716823
+        },
+        "BULL": {
+          "trades": 76,
+          "wr": 68.42105263157895,
+          "wr_excess": 9.597523219814235,
+          "avg_pnl": 1.5890314749785888
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BU-IH-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.25,
+      "min_wr_excess": -0.49019607843138147,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 17,
+          "wr": 41.17647058823529,
+          "wr_excess": -0.49019607843138147,
+          "avg_pnl": -1.0691831577998876
+        },
+        "SIDE": {
+          "trades": 17,
+          "wr": 41.17647058823529,
+          "wr_excess": -0.49019607843138147,
+          "avg_pnl": -0.6564775501651766
+        },
+        "BULL": {
+          "trades": 11,
+          "wr": 45.45454545454545,
+          "wr_excess": 3.787878787878782,
+          "avg_pnl": -0.00791423738043686
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "MD-DN-DN",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 2.5,
+      "min_wr_excess": 7.162921348314612,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 89,
+          "wr": 69.66292134831461,
+          "wr_excess": 7.162921348314612,
+          "avg_pnl": 0.821657075044209
+        },
+        "SIDE": {
+          "trades": 90,
+          "wr": 72.22222222222221,
+          "wr_excess": 9.722222222222214,
+          "avg_pnl": 1.2793450119188767
+        },
+        "BULL": {
+          "trades": 57,
+          "wr": 75.43859649122807,
+          "wr_excess": 12.938596491228068,
+          "avg_pnl": 1.1322929935119033
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-IH-U",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": -10.256410256410277,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 85.71428571428571,
+          "wr_excess": 8.791208791208774,
+          "avg_pnl": 0.6071511331114295
+        },
+        "SIDE": {
+          "trades": 45,
+          "wr": 66.66666666666666,
+          "wr_excess": -10.256410256410277,
+          "avg_pnl": -1.1593754357862878
+        },
+        "BULL": {
+          "trades": 47,
+          "wr": 87.2340425531915,
+          "wr_excess": 10.310965630114566,
+          "avg_pnl": 0.6206944029348812
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "IH-U-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "min_wr_excess": 1.2012012012012008,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 37,
+          "wr": 56.75675675675676,
+          "wr_excess": 1.2012012012012008,
+          "avg_pnl": 0.4745801304438958
+        },
+        "SIDE": {
+          "trades": 34,
+          "wr": 61.76470588235294,
+          "wr_excess": 6.209150326797385,
+          "avg_pnl": 0.9207655886608461
+        },
+        "BULL": {
+          "trades": 33,
+          "wr": 57.57575757575758,
+          "wr_excess": 2.0202020202020208,
+          "avg_pnl": 0.0027435287356836133
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "IH-U-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.5,
+      "min_wr_excess": -3.8461538461538396,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 52,
+          "wr": 71.15384615384616,
+          "wr_excess": -3.8461538461538396,
+          "avg_pnl": -0.6122799993061446
+        },
+        "SIDE": {
+          "trades": 56,
+          "wr": 73.21428571428571,
+          "wr_excess": -1.7857142857142918,
+          "avg_pnl": -0.2739787092608727
+        },
+        "BULL": {
+          "trades": 40,
+          "wr": 72.5,
+          "wr_excess": -2.5,
+          "avg_pnl": -0.0706782831925882
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "DN-ST-H",
+      "direction": "LONG",
+      "tp": 1.0,
+      "sl": 1.0,
+      "min_wr_excess": 2.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 24,
+          "wr": 70.83333333333334,
+          "wr_excess": 20.833333333333343,
+          "avg_pnl": 1.1471129251785313
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 56.666666666666664,
+          "wr_excess": 6.666666666666664,
+          "avg_pnl": 0.3151856328830363
+        },
+        "BULL": {
+          "trades": 25,
+          "wr": 52.0,
+          "wr_excess": 2.0,
+          "avg_pnl": 0.024290942605820973
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "tp": 1.25,
+      "sl": 1.0,
+      "min_wr_excess": 3.555555555555557,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 30,
+          "wr": 50.0,
+          "wr_excess": 5.555555555555557,
+          "avg_pnl": 0.334822534843493
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 48.0,
+          "wr_excess": 3.555555555555557,
+          "avg_pnl": -0.15334499487825545
+        },
+        "BULL": {
+          "trades": 24,
+          "wr": 54.166666666666664,
+          "wr_excess": 9.722222222222221,
+          "avg_pnl": 0.42576562008645896
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-H-DN",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "min_wr_excess": 3.7037037037037095,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 54,
+          "wr": 70.37037037037037,
+          "wr_excess": 3.7037037037037095,
+          "avg_pnl": 0.4599744654761172
+        },
+        "SIDE": {
+          "trades": 42,
+          "wr": 73.80952380952381,
+          "wr_excess": 7.142857142857153,
+          "avg_pnl": 0.8316525854025206
+        },
+        "BULL": {
+          "trades": 37,
+          "wr": 72.97297297297297,
+          "wr_excess": 6.306306306306311,
+          "avg_pnl": 0.778534404861123
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 2.5,
+      "min_wr_excess": 1.1363636363636331,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 21,
+          "wr": 80.95238095238095,
+          "wr_excess": 18.45238095238095,
+          "avg_pnl": 1.9554608989365572
+        },
+        "SIDE": {
+          "trades": 22,
+          "wr": 63.63636363636363,
+          "wr_excess": 1.1363636363636331,
+          "avg_pnl": 0.29550317564271256
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 84.61538461538461,
+          "wr_excess": 22.115384615384613,
+          "avg_pnl": 3.430390713542854
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-MD-H",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 11.111111111111114,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 18,
+          "wr": 61.111111111111114,
+          "wr_excess": 11.111111111111114,
+          "avg_pnl": 0.4962583694005176
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 16.666666666666657,
+          "avg_pnl": 1.5210831420855508
+        },
+        "BULL": {
+          "trades": 17,
+          "wr": 64.70588235294117,
+          "wr_excess": 14.705882352941174,
+          "avg_pnl": 0.5403777029745326
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BU-BU-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.25,
+      "min_wr_excess": -8.026755852842811,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 24,
+          "wr": 58.333333333333336,
+          "wr_excess": 19.87179487179487,
+          "avg_pnl": 2.6509780333315955
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 30.434782608695656,
+          "wr_excess": -8.026755852842811,
+          "avg_pnl": -1.9656599086493005
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 47.82608695652174,
+          "wr_excess": 9.364548494983275,
+          "avg_pnl": 0.9750104120560544
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "DN-MU-H",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.0,
+      "min_wr_excess": -1.7543859649122773,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 19,
+          "wr": 31.57894736842105,
+          "wr_excess": -1.7543859649122773,
+          "avg_pnl": -0.5708924304202864
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 52.0,
+          "wr_excess": 18.66666666666667,
+          "avg_pnl": 1.0962789475476502
+        },
+        "BULL": {
+          "trades": 19,
+          "wr": 31.57894736842105,
+          "wr_excess": -1.7543859649122773,
+          "avg_pnl": -0.14499562895537607
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.0,
+      "min_wr_excess": 4.897959183673471,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 44.89795918367347,
+          "wr_excess": 4.897959183673471,
+          "avg_pnl": 0.35188340245711014
+        },
+        "SIDE": {
+          "trades": 40,
+          "wr": 47.5,
+          "wr_excess": 7.5,
+          "avg_pnl": 0.6132127044048257
+        },
+        "BULL": {
+          "trades": 42,
+          "wr": 45.23809523809524,
+          "wr_excess": 5.238095238095241,
+          "avg_pnl": 0.2785951187831915
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-D-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": 6.140350877192972,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 38,
+          "wr": 89.47368421052632,
+          "wr_excess": 6.140350877192972,
+          "avg_pnl": 0.3734844756108817
+        },
+        "SIDE": {
+          "trades": 29,
+          "wr": 93.10344827586206,
+          "wr_excess": 9.770114942528721,
+          "avg_pnl": 0.6795977558161937
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 91.30434782608695,
+          "wr_excess": 7.971014492753611,
+          "avg_pnl": 0.8060210994085473
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BU-ST",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.5,
+      "min_wr_excess": 4.638218923933216,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 59.183673469387756,
+          "wr_excess": 4.638218923933216,
+          "avg_pnl": 0.39306210862723845
+        },
+        "SIDE": {
+          "trades": 37,
+          "wr": 59.45945945945946,
+          "wr_excess": 4.91400491400492,
+          "avg_pnl": 0.604404535692397
+        },
+        "BULL": {
+          "trades": 29,
+          "wr": 68.96551724137932,
+          "wr_excess": 14.420062695924777,
+          "avg_pnl": 1.2367496529452615
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "D-ST-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": 2.3809523809523654,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 44,
+          "wr": 86.36363636363636,
+          "wr_excess": 3.030303030303017,
+          "avg_pnl": -0.16717198487919885
+        },
+        "SIDE": {
+          "trades": 21,
+          "wr": 85.71428571428571,
+          "wr_excess": 2.3809523809523654,
+          "avg_pnl": 0.11637652768091135
+        },
+        "BULL": {
+          "trades": 33,
+          "wr": 96.96969696969697,
+          "wr_excess": 13.636363636363626,
+          "avg_pnl": 1.0898537102955745
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "D-U-MU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.5,
+      "min_wr_excess": 4.166666666666657,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 17,
+          "wr": 82.35294117647058,
+          "wr_excess": 7.35294117647058,
+          "avg_pnl": 0.18978620945495195
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 79.16666666666666,
+          "wr_excess": 4.166666666666657,
+          "avg_pnl": 0.06410320993698611
+        },
+        "BULL": {
+          "trades": 25,
+          "wr": 84.0,
+          "wr_excess": 9.0,
+          "avg_pnl": 0.5693955407136011
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-BU-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.0,
+      "min_wr_excess": -6.060606060606059,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 32,
+          "wr": 37.5,
+          "wr_excess": 4.166666666666671,
+          "avg_pnl": -0.10099713698629059
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 29.166666666666668,
+          "wr_excess": -4.166666666666661,
+          "avg_pnl": -0.22058984902634213
+        },
+        "BULL": {
+          "trades": 22,
+          "wr": 27.27272727272727,
+          "wr_excess": -6.060606060606059,
+          "avg_pnl": -0.4569711746865646
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "BU-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 2.5,
+      "min_wr_excess": 11.904761904761912,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 15,
+          "wr": 86.66666666666667,
+          "wr_excess": 15.23809523809524,
+          "avg_pnl": 1.892445934467378
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 83.33333333333334,
+          "wr_excess": 11.904761904761912,
+          "avg_pnl": 1.236335303405061
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 86.95652173913044,
+          "wr_excess": 15.527950310559007,
+          "avg_pnl": 1.4962171211180908
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-DN-BD",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.0,
+      "min_wr_excess": -7.511737089201873,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 101,
+          "wr": 64.35643564356435,
+          "wr_excess": -2.310231023102304,
+          "avg_pnl": -0.42070231803260416
+        },
+        "SIDE": {
+          "trades": 61,
+          "wr": 62.295081967213115,
+          "wr_excess": -4.3715846994535426,
+          "avg_pnl": -0.509204433402576
+        },
+        "BULL": {
+          "trades": 71,
+          "wr": 59.154929577464785,
+          "wr_excess": -7.511737089201873,
+          "avg_pnl": -0.6568392675340349
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "MD-MU-ST",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 13.157894736842103,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 19,
+          "wr": 63.1578947368421,
+          "wr_excess": 13.157894736842103,
+          "avg_pnl": 1.7583334467740228
+        },
+        "SIDE": {
+          "trades": 21,
+          "wr": 66.66666666666666,
+          "wr_excess": 16.666666666666657,
+          "avg_pnl": 1.7132415677735804
+        },
+        "BULL": {
+          "trades": 17,
+          "wr": 64.70588235294117,
+          "wr_excess": 14.705882352941174,
+          "avg_pnl": 1.9923777194672618
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BU-BU",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.0,
+      "min_wr_excess": 2.857142857142854,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 37,
+          "wr": 51.35135135135135,
+          "wr_excess": 11.351351351351347,
+          "avg_pnl": 0.7193752784509797
+        },
+        "SIDE": {
+          "trades": 28,
+          "wr": 42.857142857142854,
+          "wr_excess": 2.857142857142854,
+          "avg_pnl": -0.2780516403185157
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 43.47826086956522,
+          "wr_excess": 3.4782608695652186,
+          "avg_pnl": 0.18591987961786502
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-DN-BU",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.25,
+      "min_wr_excess": -3.167420814479641,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 41,
+          "wr": 58.536585365853654,
+          "wr_excess": 20.075046904315187,
+          "avg_pnl": 2.2984676540173328
+        },
+        "SIDE": {
+          "trades": 34,
+          "wr": 35.294117647058826,
+          "wr_excess": -3.167420814479641,
+          "avg_pnl": -0.8993619702059519
+        },
+        "BULL": {
+          "trades": 28,
+          "wr": 50.0,
+          "wr_excess": 11.538461538461533,
+          "avg_pnl": 0.9862563301601063
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "BU-BD-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 3.081232492997195,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 31,
+          "wr": 67.74193548387096,
+          "wr_excess": 8.91840607210625,
+          "avg_pnl": 2.112429093286518
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 62.5,
+          "wr_excess": 3.67647058823529,
+          "avg_pnl": 0.04989921630482833
+        },
+        "BULL": {
+          "trades": 21,
+          "wr": 61.904761904761905,
+          "wr_excess": 3.081232492997195,
+          "avg_pnl": 1.2898753495247925
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-DN-H",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": 0.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 48,
+          "wr": 83.33333333333334,
+          "wr_excess": 0.0,
+          "avg_pnl": -0.3274893674479973
+        },
+        "SIDE": {
+          "trades": 48,
+          "wr": 85.41666666666666,
+          "wr_excess": 2.0833333333333144,
+          "avg_pnl": -0.08200617119590703
+        },
+        "BULL": {
+          "trades": 51,
+          "wr": 84.31372549019608,
+          "wr_excess": 0.9803921568627345,
+          "avg_pnl": -0.030593374747437247
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "H-DN-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": -7.017543859649123,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 50,
+          "wr": 84.0,
+          "wr_excess": 0.6666666666666572,
+          "avg_pnl": -0.3843926649136458
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 80.0,
+          "wr_excess": -3.333333333333343,
+          "avg_pnl": -0.26092316281586897
+        },
+        "BULL": {
+          "trades": 38,
+          "wr": 76.31578947368422,
+          "wr_excess": -7.017543859649123,
+          "avg_pnl": -0.8001849854086579
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "MD-ST-ST",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": 5.83554376657824,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 39,
+          "wr": 84.61538461538461,
+          "wr_excess": 7.692307692307679,
+          "avg_pnl": 0.6715217961743005
+        },
+        "SIDE": {
+          "trades": 29,
+          "wr": 82.75862068965517,
+          "wr_excess": 5.83554376657824,
+          "avg_pnl": 0.12388130954100643
+        },
+        "BULL": {
+          "trades": 30,
+          "wr": 83.33333333333334,
+          "wr_excess": 6.410256410256409,
+          "avg_pnl": 0.49991529793284284
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MU-DN-ST",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.75,
+      "min_wr_excess": 3.4722222222222143,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 64,
+          "wr": 81.25,
+          "wr_excess": 3.4722222222222143,
+          "avg_pnl": -0.03030846282847935
+        },
+        "SIDE": {
+          "trades": 43,
+          "wr": 81.3953488372093,
+          "wr_excess": 3.617571059431512,
+          "avg_pnl": 0.34410006662539455
+        },
+        "BULL": {
+          "trades": 54,
+          "wr": 81.48148148148148,
+          "wr_excess": 3.7037037037036953,
+          "avg_pnl": -0.1255025440812469
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-MU-H",
+      "direction": "LONG",
+      "tp": 1.5,
+      "sl": 1.75,
+      "min_wr_excess": 21.153846153846153,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 13,
+          "wr": 76.92307692307693,
+          "wr_excess": 23.076923076923087,
+          "avg_pnl": 1.4699086206105902
+        },
+        "SIDE": {
+          "trades": 36,
+          "wr": 75.0,
+          "wr_excess": 21.153846153846153,
+          "avg_pnl": 1.2722666362512272
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 76.92307692307693,
+          "wr_excess": 23.076923076923087,
+          "avg_pnl": 1.5205279059121695
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-MU-U",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.25,
+      "min_wr_excess": 4.970760233918128,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 76.92307692307693,
+          "wr_excess": 21.367521367521377,
+          "avg_pnl": 1.3268542786474262
+        },
+        "SIDE": {
+          "trades": 47,
+          "wr": 65.95744680851064,
+          "wr_excess": 10.401891252955082,
+          "avg_pnl": 0.8981741580875493
+        },
+        "BULL": {
+          "trades": 38,
+          "wr": 60.526315789473685,
+          "wr_excess": 4.970760233918128,
+          "avg_pnl": 0.04195887594696839
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "U-D-DN",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.5,
+      "min_wr_excess": -10.599078341013822,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 67,
+          "wr": 41.7910447761194,
+          "wr_excess": -1.0660980810234548,
+          "avg_pnl": -0.5309814376906236
+        },
+        "SIDE": {
+          "trades": 31,
+          "wr": 32.25806451612903,
+          "wr_excess": -10.599078341013822,
+          "avg_pnl": -0.8652671947617746
+        },
+        "BULL": {
+          "trades": 37,
+          "wr": 37.83783783783784,
+          "wr_excess": -5.0193050193050155,
+          "avg_pnl": -0.3633638104739935
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "DN-DN-IH",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 1.4285714285714235,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 49,
+          "wr": 57.14285714285714,
+          "wr_excess": 7.142857142857139,
+          "avg_pnl": 0.8867962322525754
+        },
+        "SIDE": {
+          "trades": 35,
+          "wr": 51.42857142857142,
+          "wr_excess": 1.4285714285714235,
+          "avg_pnl": 0.29595617786036454
+        },
+        "BULL": {
+          "trades": 32,
+          "wr": 62.5,
+          "wr_excess": 12.5,
+          "avg_pnl": 1.6870301766092823
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "D-MU-DN",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 9.358288770053463,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 22,
+          "wr": 68.18181818181817,
+          "wr_excess": 9.358288770053463,
+          "avg_pnl": 0.8585468332135631
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 22.994652406417117,
+          "avg_pnl": 2.618180912767787
+        },
+        "BULL": {
+          "trades": 23,
+          "wr": 69.56521739130434,
+          "wr_excess": 10.741687979539634,
+          "avg_pnl": 1.347799767412633
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BD-ST-U",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.0,
+      "min_wr_excess": -6.060606060606059,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 54,
+          "wr": 40.74074074074074,
+          "wr_excess": 7.407407407407412,
+          "avg_pnl": 0.7379302510611603
+        },
+        "SIDE": {
+          "trades": 55,
+          "wr": 27.27272727272727,
+          "wr_excess": -6.060606060606059,
+          "avg_pnl": -1.0363578169951833
+        },
+        "BULL": {
+          "trades": 29,
+          "wr": 31.03448275862069,
+          "wr_excess": -2.298850574712638,
+          "avg_pnl": -0.4231715165617701
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "GS-U-DN",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.75,
+      "min_wr_excess": 5.303030303030297,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 84.61538461538461,
+          "wr_excess": 26.282051282051277,
+          "avg_pnl": 2.382704954892748
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 8.333333333333321,
+          "avg_pnl": 0.49688164980658656
+        },
+        "BULL": {
+          "trades": 22,
+          "wr": 63.63636363636363,
+          "wr_excess": 5.303030303030297,
+          "avg_pnl": 0.747304730889827
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-MU-MU",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 1.25,
+      "min_wr_excess": -1.5050167224080369,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 30,
+          "wr": 43.333333333333336,
+          "wr_excess": 4.871794871794869,
+          "avg_pnl": 0.7706305081967568
+        },
+        "SIDE": {
+          "trades": 47,
+          "wr": 38.297872340425535,
+          "wr_excess": -0.16366612111293222,
+          "avg_pnl": -0.40709490481747107
+        },
+        "BULL": {
+          "trades": 46,
+          "wr": 36.95652173913043,
+          "wr_excess": -1.5050167224080369,
+          "avg_pnl": -0.12899802180626208
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "BD-BU-U",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.0,
+      "min_wr_excess": -5.555555555555543,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 43,
+          "wr": 79.06976744186046,
+          "wr_excess": 12.403100775193806,
+          "avg_pnl": 0.5805028094326503
+        },
+        "SIDE": {
+          "trades": 36,
+          "wr": 61.111111111111114,
+          "wr_excess": -5.555555555555543,
+          "avg_pnl": -0.44890883367083034
+        },
+        "BULL": {
+          "trades": 30,
+          "wr": 66.66666666666666,
+          "wr_excess": 0.0,
+          "avg_pnl": -0.3206177665710817
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "DN-ST-BU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 2.5,
+      "min_wr_excess": -0.4761904761904816,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 64,
+          "wr": 85.9375,
+          "wr_excess": 2.604166666666657,
+          "avg_pnl": 0.17343045704894822
+        },
+        "SIDE": {
+          "trades": 35,
+          "wr": 82.85714285714286,
+          "wr_excess": -0.4761904761904816,
+          "avg_pnl": -0.041862819221214355
+        },
+        "BULL": {
+          "trades": 35,
+          "wr": 88.57142857142857,
+          "wr_excess": 5.238095238095227,
+          "avg_pnl": 0.2254430044470991
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "ST-H-DN",
+      "direction": "SHORT",
+      "tp": 0.75,
+      "sl": 1.75,
+      "min_wr_excess": 1.4285714285714306,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 27,
+          "wr": 74.07407407407408,
+          "wr_excess": 4.074074074074076,
+          "avg_pnl": -0.22040903718762075
+        },
+        "SIDE": {
+          "trades": 29,
+          "wr": 75.86206896551724,
+          "wr_excess": 5.862068965517238,
+          "avg_pnl": -0.03776942561467393
+        },
+        "BULL": {
+          "trades": 21,
+          "wr": 71.42857142857143,
+          "wr_excess": 1.4285714285714306,
+          "avg_pnl": -0.09152377512881757
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-IH-MD",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 1.0,
+      "min_wr_excess": 0.5555555555555571,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 17,
+          "wr": 76.47058823529412,
+          "wr_excess": 32.02614379084967,
+          "avg_pnl": 1.9137431531715952
+        },
+        "SIDE": {
+          "trades": 20,
+          "wr": 45.0,
+          "wr_excess": 0.5555555555555571,
+          "avg_pnl": 0.20512049118846232
+        },
+        "BULL": {
+          "trades": 18,
+          "wr": 50.0,
+          "wr_excess": 5.555555555555557,
+          "avg_pnl": 0.44511198221836346
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-BD-BU",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.25,
+      "min_wr_excess": 1.1904761904761827,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 20,
+          "wr": 45.0,
+          "wr_excess": 3.3333333333333286,
+          "avg_pnl": 0.22923123959078867
+        },
+        "SIDE": {
+          "trades": 7,
+          "wr": 42.857142857142854,
+          "wr_excess": 1.1904761904761827,
+          "avg_pnl": 1.230660122412921
+        },
+        "BULL": {
+          "trades": 16,
+          "wr": 43.75,
+          "wr_excess": 2.0833333333333286,
+          "avg_pnl": 0.41275396446184814
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.0,
+      "min_wr_excess": 2.1052631578947327,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 33,
+          "wr": 42.42424242424242,
+          "wr_excess": 2.424242424242422,
+          "avg_pnl": 0.21550080844825117
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 50.0,
+          "wr_excess": 10.0,
+          "avg_pnl": 0.28591202426803114
+        },
+        "BULL": {
+          "trades": 19,
+          "wr": 42.10526315789473,
+          "wr_excess": 2.1052631578947327,
+          "avg_pnl": -0.1689065562105736
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-BU-ST",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.5,
+      "min_wr_excess": 1.5873015873015817,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 65.38461538461539,
+          "wr_excess": 9.82905982905983,
+          "avg_pnl": 1.4699046853233437
+        },
+        "SIDE": {
+          "trades": 15,
+          "wr": 60.0,
+          "wr_excess": 4.444444444444443,
+          "avg_pnl": 0.16306598348758286
+        },
+        "BULL": {
+          "trades": 14,
+          "wr": 57.14285714285714,
+          "wr_excess": 1.5873015873015817,
+          "avg_pnl": 0.42171382286257203
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-BD-BU",
+      "direction": "SHORT",
+      "tp": 0.5,
+      "sl": 1.0,
+      "min_wr_excess": 3.333333333333343,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 47,
+          "wr": 78.72340425531915,
+          "wr_excess": 12.056737588652496,
+          "avg_pnl": 0.42414491834989176
+        },
+        "SIDE": {
+          "trades": 30,
+          "wr": 70.0,
+          "wr_excess": 3.333333333333343,
+          "avg_pnl": -0.018809646460404696
+        },
+        "BULL": {
+          "trades": 34,
+          "wr": 82.35294117647058,
+          "wr_excess": 15.686274509803923,
+          "avg_pnl": 0.46454561787285403
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DN-GS-ST",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.25,
+      "min_wr_excess": 11.1111111111111,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 12,
+          "wr": 66.66666666666666,
+          "wr_excess": 11.1111111111111,
+          "avg_pnl": 0.9600123805646117
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 72.72727272727273,
+          "wr_excess": 17.171717171717177,
+          "avg_pnl": 1.1337359624422798
+        },
+        "BULL": {
+          "trades": 14,
+          "wr": 71.42857142857143,
+          "wr_excess": 15.873015873015873,
+          "avg_pnl": 0.7030136587731887
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "H-U-MU",
+      "direction": "LONG",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 4.54545454545454,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 54.54545454545454,
+          "wr_excess": 4.54545454545454,
+          "avg_pnl": -0.8728160946496838
+        },
+        "SIDE": {
+          "trades": 16,
+          "wr": 56.25,
+          "wr_excess": 6.25,
+          "avg_pnl": 0.6736446268963034
+        },
+        "BULL": {
+          "trades": 11,
+          "wr": 72.72727272727273,
+          "wr_excess": 22.727272727272734,
+          "avg_pnl": 1.972653105530095
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "DF-U-U",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 1.25,
+      "min_wr_excess": -1.6666666666666714,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 20,
+          "wr": 40.0,
+          "wr_excess": -1.6666666666666714,
+          "avg_pnl": -0.6765328965280994
+        },
+        "SIDE": {
+          "trades": 15,
+          "wr": 40.0,
+          "wr_excess": -1.6666666666666714,
+          "avg_pnl": -1.2890020629523868
+        },
+        "BULL": {
+          "trades": 20,
+          "wr": 40.0,
+          "wr_excess": -1.6666666666666714,
+          "avg_pnl": 0.10499360012875592
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "MD-DN-BU",
+      "direction": "LONG",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": 0.4962779156327457,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 31,
+          "wr": 77.41935483870968,
+          "wr_excess": 0.4962779156327457,
+          "avg_pnl": 0.07804889644191555
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 78.26086956521739,
+          "wr_excess": 1.3377926421404567,
+          "avg_pnl": -0.0043354355747398
+        },
+        "BULL": {
+          "trades": 18,
+          "wr": 88.88888888888889,
+          "wr_excess": 11.965811965811952,
+          "avg_pnl": 0.8107540296055888
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "BD-DN-MU",
+      "direction": "LONG",
+      "tp": 0.75,
+      "sl": 2.5,
+      "min_wr_excess": 0.8547008547008517,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 26,
+          "wr": 84.61538461538461,
+          "wr_excess": 7.692307692307679,
+          "avg_pnl": 0.7338080778391249
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 77.77777777777779,
+          "wr_excess": 0.8547008547008517,
+          "avg_pnl": 0.6649502277221551
+        },
+        "BULL": {
+          "trades": 20,
+          "wr": 80.0,
+          "wr_excess": 3.076923076923066,
+          "avg_pnl": 0.47045153323755995
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-IH-DN",
+      "direction": "SHORT",
+      "tp": 1.0,
+      "sl": 1.5,
+      "min_wr_excess": 5.384615384615387,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 18,
+          "wr": 72.22222222222221,
+          "wr_excess": 12.222222222222214,
+          "avg_pnl": 0.9352409674978251
+        },
+        "SIDE": {
+          "trades": 31,
+          "wr": 67.74193548387096,
+          "wr_excess": 7.741935483870961,
+          "avg_pnl": 0.6376433889241943
+        },
+        "BULL": {
+          "trades": 26,
+          "wr": 65.38461538461539,
+          "wr_excess": 5.384615384615387,
+          "avg_pnl": -0.06887183887707843
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MU-ST-MD",
+      "direction": "SHORT",
+      "tp": 1.75,
+      "sl": 2.5,
+      "min_wr_excess": 7.843137254901947,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 81.81818181818183,
+          "wr_excess": 22.994652406417117,
+          "avg_pnl": 2.737347413662128
+        },
+        "SIDE": {
+          "trades": 18,
+          "wr": 66.66666666666666,
+          "wr_excess": 7.843137254901947,
+          "avg_pnl": 0.531623943551295
+        },
+        "BULL": {
+          "trades": 9,
+          "wr": 66.66666666666666,
+          "wr_excess": 7.843137254901947,
+          "avg_pnl": 1.175639923660889
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "ST-MU-ST",
+      "direction": "SHORT",
+      "tp": 1.5,
+      "sl": 1.25,
+      "min_wr_excess": -3.787878787878782,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 24,
+          "wr": 41.66666666666667,
+          "wr_excess": -3.787878787878782,
+          "avg_pnl": -0.6704272969498657
+        },
+        "SIDE": {
+          "trades": 25,
+          "wr": 60.0,
+          "wr_excess": 14.545454545454547,
+          "avg_pnl": 1.3908755792293528
+        },
+        "BULL": {
+          "trades": 20,
+          "wr": 65.0,
+          "wr_excess": 19.545454545454547,
+          "avg_pnl": 1.291524682632242
+        }
+      },
+      "is_robust": false
+    },
+    {
+      "pattern": "DN-BU-MD",
+      "direction": "SHORT",
+      "tp": 2.0,
+      "sl": 2.0,
+      "min_wr_excess": 6.25,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 16,
+          "wr": 62.5,
+          "wr_excess": 12.5,
+          "avg_pnl": 2.0515155381715218
+        },
+        "SIDE": {
+          "trades": 23,
+          "wr": 56.52173913043478,
+          "wr_excess": 6.521739130434781,
+          "avg_pnl": -0.16679784029097328
+        },
+        "BULL": {
+          "trades": 16,
+          "wr": 56.25,
+          "wr_excess": 6.25,
+          "avg_pnl": 0.6973865101368326
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "MD-BD-DN",
+      "direction": "LONG",
+      "tp": 1.75,
+      "sl": 2.0,
+      "min_wr_excess": 5.0,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 28,
+          "wr": 64.28571428571429,
+          "wr_excess": 10.952380952380956,
+          "avg_pnl": 0.6143464808331124
+        },
+        "SIDE": {
+          "trades": 24,
+          "wr": 58.333333333333336,
+          "wr_excess": 5.0,
+          "avg_pnl": 0.943322286512406
+        },
+        "BULL": {
+          "trades": 15,
+          "wr": 73.33333333333333,
+          "wr_excess": 19.999999999999993,
+          "avg_pnl": 1.4025314765079362
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "IH-ST-ST",
+      "direction": "SHORT",
+      "tp": 1.25,
+      "sl": 2.5,
+      "min_wr_excess": 24.24242424242425,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 13,
+          "wr": 92.3076923076923,
+          "wr_excess": 25.64102564102565,
+          "avg_pnl": 3.0961124905440567
+        },
+        "SIDE": {
+          "trades": 11,
+          "wr": 90.9090909090909,
+          "wr_excess": 24.24242424242425,
+          "avg_pnl": 2.543465177064496
+        },
+        "BULL": {
+          "trades": 13,
+          "wr": 92.3076923076923,
+          "wr_excess": 25.64102564102565,
+          "avg_pnl": 3.1956400748633254
+        }
+      },
+      "is_robust": true
+    },
+    {
+      "pattern": "IH-DN-MD",
+      "direction": "LONG",
+      "tp": 1.25,
+      "sl": 1.75,
+      "min_wr_excess": 12.254901960784316,
+      "regime_stats": {
+        "BEAR": {
+          "trades": 11,
+          "wr": 72.72727272727273,
+          "wr_excess": 14.393939393939398,
+          "avg_pnl": 1.1885430026062094
+        },
+        "SIDE": {
+          "trades": 17,
+          "wr": 70.58823529411765,
+          "wr_excess": 12.254901960784316,
+          "avg_pnl": 0.9801346431925128
+        },
+        "BULL": {
+          "trades": 10,
+          "wr": 80.0,
+          "wr_excess": 21.666666666666664,
+          "avg_pnl": 1.319376567269004
+        }
+      },
+      "is_robust": true
+    }
+  ],
+  "phase4_portfolios": {
+    "current_35pat": {
+      "patterns": 35,
+      "long": 9,
+      "short": 26,
+      "trades": 1651,
+      "trades_per_day": 5.84,
+      "wr": 65.8,
+      "pnl": 88.4,
+      "mdd": 10.8,
+      "pnl_mdd": 8.19
+    },
+    "robust_current": {
+      "patterns": 29,
+      "long": 9,
+      "short": 20,
+      "trades": 1469,
+      "trades_per_day": 5.2,
+      "wr": 67.5,
+      "pnl": 85.4,
+      "mdd": 11.7,
+      "pnl_mdd": 7.3
+    },
+    "robust_59": {
+      "patterns": 41,
+      "long": 12,
+      "short": 29,
+      "trades": 2087,
+      "trades_per_day": 7.39,
+      "wr": 65.4,
+      "pnl": 37.1,
+      "mdd": 17.1,
+      "pnl_mdd": 2.17
+    }
+  },
+  "phase5_wf": {
+    "current_35pat": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_trades": 323,
+          "oos_wr": 65.9,
+          "oos_pnl": 13.7,
+          "oos_mdd": 5.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 495,
+          "oos_wr": 66.5,
+          "oos_pnl": 28.4,
+          "oos_mdd": 12.0,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 477,
+          "oos_wr": 66.7,
+          "oos_pnl": 27.5,
+          "oos_mdd": 10.2,
+          "pass": "True"
+        }
+      ],
+      "verdict": "PASS (3/3)"
+    },
+    "robust_current": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_trades": 295,
+          "oos_wr": 67.5,
+          "oos_pnl": 11.5,
+          "oos_mdd": 5.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 435,
+          "oos_wr": 67.8,
+          "oos_pnl": 23.5,
+          "oos_mdd": 11.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 414,
+          "oos_wr": 67.9,
+          "oos_pnl": 23.7,
+          "oos_mdd": 9.6,
+          "pass": "True"
+        }
+      ],
+      "verdict": "PASS (3/3)"
+    },
+    "robust_59": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_trades": 405,
+          "oos_wr": 66.9,
+          "oos_pnl": 7.6,
+          "oos_mdd": 11.3,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 638,
+          "oos_wr": 67.2,
+          "oos_pnl": 29.3,
+          "oos_mdd": 12.1,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 583,
+          "oos_wr": 65.4,
+          "oos_pnl": 14.4,
+          "oos_mdd": 13.6,
+          "pass": "True"
+        }
+      ],
+      "verdict": "PASS (3/3)"
+    }
+  },
+  "best": "current_35pat"
+}

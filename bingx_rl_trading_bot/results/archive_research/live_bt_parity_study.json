@@ -1,0 +1,737 @@
+{
+  "study": "live_bt_parity_study",
+  "generated_at": "2026-03-31T02:20:00.746898",
+  "n_trades": 96,
+  "date_range": "2026-03-27T19:37 to 2026-03-31T02:16",
+  "overall_stats": {
+    "wr": 52.1,
+    "total_pnl": -55.961,
+    "avg_win": 1.428,
+    "avg_loss": -2.768,
+    "rr_ratio": 0.516
+  },
+  "analyses": {
+    "sl_distribution": {
+      "n_losses": 46,
+      "avg_live_sl_loss_pct": 2.768,
+      "avg_live_sl_dist_pct": 2.271,
+      "avg_expected_sl_pct": 3.691,
+      "avg_sl_dist_to_expected_ratio": 0.612,
+      "sl_losses_by_exit": {
+        "SL": 17,
+        "OPP_SIGNAL": 19,
+        "MCC_CLOSE": 4,
+        "CASCADE_SL": 2,
+        "CRASH_RECOVERY": 4
+      },
+      "vol_mult_of_losses": {
+        "mean": 1.174,
+        "max": 1.5,
+        "min": 0.5
+      },
+      "detail": [
+        {
+          "pattern": "MU-DN-BD_LONG",
+          "exit_reason": "SL",
+          "pnl_pct": -16.5492,
+          "sl_dist_pct": 5.360575539568354,
+          "expected_sl_pct": 4.02,
+          "sl_ratio": 1.3334765023801878,
+          "hold_minutes": 1422,
+          "vol_mult": 1.5
+        },
+        {
+          "pattern": "U-D-ST_LONG",
+          "exit_reason": "OPP_SIGNAL",
+          "pnl_pct": -0.3081,
+          "sl_dist_pct": 2.1567303431415423,
+          "expected_sl_pct": 3.93,
+          "sl_ratio": 0.5487863468553542,
+          "hold_minutes": 1004,
+          "vol_mult": 1.4851287631483656
+        },
+        {
+          "pattern": "BU-ST-DN_SHORT",
+          "exit_reason": "OPP_SIGNAL",
+          "pnl_pct": -0.0251,
+          "sl_dist_pct": 2.1566478806578515,
+          "expected_sl_pct": 3.64,
+          "sl_ratio": 0.5924856814994097,
+          "hold_minutes": 1184,
+          "vol_mult": 1.5
+        },
+        {
+          "pattern": "MD-BD-DN_LONG",
+          "exit_reason": "OPP_SIGNAL",
+          "pnl_pct": -0.2629,
+          "sl_dist_pct": 0.8249935229648511,
+          "expected_sl_pct": 3.34,
+          "sl_ratio": 0.2470040487918716,
+          "hold_minutes": 264,
+          "vol_mult": 0.5
+        },
+        {
+          "pattern": "MD-ST-ST_SHORT",
+          "exit_reason": "SL",
+          "pnl_pct": -5.8775,
+          "sl_dist_pct": 1.868593707740887,
+          "expected_sl_pct": 2.84,
+          "sl_ratio": 0.6579555308946785,
+          "hold_minutes": 1200,
+          "vol_mult": 1.3229355579736297
+        },
+        {
+          "pattern": "U-BU-ST_SHORT",
+          "exit_reason": "SL",
+          "pnl_pct": -3.0999,
+          "sl_dist_pct": 0.9250169274780005,
+          "expected_sl_pct": 3.74,
+          "sl_ratio": 0.24733072927219263,
+          "hold_minutes": 210,
+          "vol_mult": 0.5
+        },
+        {
+          "pattern": "DN-U-DF_SHORT",
+          "exit_reason": "SL",
+          "pnl_pct": -5.7521,
+          "sl_dist_pct": 1.720461095100869,
+          "expected_sl_pct": 3.05,
+          "sl_ratio": 0.5640856049511046,
+          "hold_minutes": 1380,
+          "vol_mult": 1.5
+        },
+        {
+          "pattern": "U-DF-DN_SHORT",
+          "exit_reason": "SL",
+          "pnl_pct": -6.3996,
+          "sl_dist_pct": 1.8993381186524123,
+          "expected_sl_pct": 3.97,
+          "sl_ratio": 0.4784226999124464,
+          "hold_minutes": 1375,
+          "vol_mult": 1.5
+        },
+        {
+          "pattern": "ST-DN-BU_SHORT",
+          "exit_reason": "SL",
+          "pnl_pct": -5.7386,
+          "sl_dist_pct": 1.6528036278319704,
+          "expected_sl_pct": 3.18,
+          "sl_ratio": 0.5197495685006196,
+          "hold_minutes": 1356,
+          "vol_mult": 1.364708015959358
+        },
+        {
+          "pattern": "DN-DN-BU_SHORT",
+          "exit_reason": "SL",
+          "pnl_pct": -4.1128,
+          "sl_dist_pct": 1.1654846407013075,
+          "expected_sl_pct": 4.0,
+          "sl_ratio": 0.2913711601753269,
+          "hold_minutes": 191,
+          "vol_mult": 0.5
+        }
+      ]
+    },
+    "tp_and_broken_tp": {
+      "n_total": 96,
+      "n_normal_tp": 44,
+      "n_broken_tp": 52,
+      "first_broken_tp_time": "2026-03-30T03:20:06.593634",
+      "exit_distribution": {
+        "TP": 13,
+        "OPP_SIGNAL": 43,
+        "SL": 17,
+        "MCC_CLOSE": 4,
+        "CRASH_RECOVERY": 8,
+        "CASCADE_SL": 2,
+        "UNKNOWN": 9
+      },
+      "normal_trades": {
+        "tp_hits": 13,
+        "tp_hit_rate": 29.5,
+        "win_rate": 52.3,
+        "total_pnl": -24.641,
+        "avg_pnl": -0.56,
+        "avg_win": 1.757,
+        "avg_loss": -3.098
+      },
+      "broken_tp_trades": {
+        "count": 52,
+        "win_rate": 51.9,
+        "total_pnl": -31.316,
+        "avg_pnl": -0.602,
+        "examples": [
+          {
+            "pattern": "DN-DN-BU_SHORT",
+            "tp_dist_pct": 23.92,
+            "expected_mfe_tp": 1.146,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": 0.683,
+            "close_time": "2026-03-30T03:20:06.593634",
+            "vol_mult": 0.8787164906579668
+          },
+          {
+            "pattern": "DN-ST-H_SHORT",
+            "tp_dist_pct": 14.46,
+            "expected_mfe_tp": 0.94,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": 0.263,
+            "close_time": "2026-03-30T05:20:06.570829",
+            "vol_mult": 0.6419346878341979
+          },
+          {
+            "pattern": "MD-BD-U_LONG",
+            "tp_dist_pct": 19.46,
+            "expected_mfe_tp": 1.121,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": 0.909,
+            "close_time": "2026-03-30T06:10:07.239757",
+            "vol_mult": 0.9346430282702546
+          },
+          {
+            "pattern": "H-ST-U_SHORT",
+            "tp_dist_pct": 22.11,
+            "expected_mfe_tp": 0.849,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": -0.132,
+            "close_time": "2026-03-30T06:20:09.605819",
+            "vol_mult": 1.2692675463759446
+          },
+          {
+            "pattern": "U-D-ST_LONG",
+            "tp_dist_pct": 19.61,
+            "expected_mfe_tp": 1.329,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": -0.242,
+            "close_time": "2026-03-30T06:55:06.762405",
+            "vol_mult": 1.0764008414610124
+          },
+          {
+            "pattern": "DN-DF-ST_LONG",
+            "tp_dist_pct": 15.8,
+            "expected_mfe_tp": 1.191,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": 0.29,
+            "close_time": "2026-03-30T07:00:09.811826",
+            "vol_mult": 0.907099588078557
+          },
+          {
+            "pattern": "BU-ST-DN_SHORT",
+            "tp_dist_pct": 24.07,
+            "expected_mfe_tp": 1.303,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": -0.099,
+            "close_time": "2026-03-30T07:10:07.690157",
+            "vol_mult": 1.2934595524956776
+          },
+          {
+            "pattern": "ST-ST-U_SHORT",
+            "tp_dist_pct": 23.76,
+            "expected_mfe_tp": 1.393,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": -0.211,
+            "close_time": "2026-03-30T07:15:12.147530",
+            "vol_mult": 1.0365251727542009
+          },
+          {
+            "pattern": "U-BU-MD_SHORT",
+            "tp_dist_pct": 15.1,
+            "expected_mfe_tp": 1.174,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": -0.127,
+            "close_time": "2026-03-30T07:20:12.187590",
+            "vol_mult": 1.0847778874629794
+          },
+          {
+            "pattern": "MU-U-ST_LONG",
+            "tp_dist_pct": 22.39,
+            "expected_mfe_tp": 0.938,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": -0.027,
+            "close_time": "2026-03-30T07:25:09.196379",
+            "vol_mult": 1.4399410464258944
+          },
+          {
+            "pattern": "ST-U-ST_SHORT",
+            "tp_dist_pct": 18.92,
+            "expected_mfe_tp": 1.314,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": 0.119,
+            "close_time": "2026-03-30T07:40:13.656995",
+            "vol_mult": 1.0861038383638657
+          },
+          {
+            "pattern": "MU-ST-U_LONG",
+            "tp_dist_pct": 12.15,
+            "expected_mfe_tp": 1.147,
+            "exit_reason": "SL",
+            "pnl_pct": -4.202,
+            "close_time": "2026-03-30T07:41:43.621796",
+            "vol_mult": 0.7136788445199557
+          },
+          {
+            "pattern": "DN-D-ST_LONG",
+            "tp_dist_pct": 10.54,
+            "expected_mfe_tp": null,
+            "exit_reason": "SL",
+            "pnl_pct": -3.692,
+            "close_time": "2026-03-30T07:41:55.769333",
+            "vol_mult": 1.0520265291083304
+          },
+          {
+            "pattern": "MD-BD-U_LONG",
+            "tp_dist_pct": 20.82,
+            "expected_mfe_tp": 1.121,
+            "exit_reason": "SL",
+            "pnl_pct": -7.174,
+            "close_time": "2026-03-30T07:45:39.440758",
+            "vol_mult": 1.0
+          },
+          {
+            "pattern": "MU-U-ST_LONG",
+            "tp_dist_pct": 22.39,
+            "expected_mfe_tp": 0.938,
+            "exit_reason": "OPP_SIGNAL",
+            "pnl_pct": 1.611,
+            "close_time": "2026-03-30T08:00:13.363973",
+            "vol_mult": 1.5
+          }
+        ]
+      },
+      "IMPACT_broken_tp_pnl": -31.316
+    },
+    "holding_time": {
+      "overall": {
+        "mean_minutes": 315.6,
+        "median_minutes": 170.0,
+        "p90_minutes": 1043.0
+      },
+      "by_exit": {
+        "TP_mean_min": 220.7,
+        "SL_mean_min": 570.2,
+        "OPP_mean_min": 314.4
+      },
+      "timeout_288bars_equivalent_min": 1440
+    },
+    "exit_classification": {
+      "n_misclassified": 0,
+      "misclassified_examples": [],
+      "unknown_crash_trades": {
+        "count": 17,
+        "total_pnl": 11.368,
+        "analysis": [
+          {
+            "pattern": "DN-D-BD",
+            "direction": "SHORT",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": 0.809,
+            "tp_proximity": 0.348,
+            "sl_proximity": 1.367,
+            "likely_exit": "TP"
+          },
+          {
+            "pattern": "ST-MU-U",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 0.91,
+            "tp_proximity": 19.979,
+            "sl_proximity": 1.869,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 0.701,
+            "tp_proximity": 13.589,
+            "sl_proximity": 1.67,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 3.162,
+            "tp_proximity": 21.24,
+            "sl_proximity": 3.311,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 3.342,
+            "tp_proximity": 21.18,
+            "sl_proximity": 6.148,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 2.51,
+            "tp_proximity": 21.457,
+            "sl_proximity": 6.006,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 2.204,
+            "tp_proximity": 21.559,
+            "sl_proximity": 6.067,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 2.007,
+            "tp_proximity": 21.625,
+            "sl_proximity": 2.926,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 2.018,
+            "tp_proximity": 21.621,
+            "sl_proximity": 2.929,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "ST-DN-ST",
+            "direction": "LONG",
+            "exit_reason": "UNKNOWN",
+            "pnl_pct": 2.531,
+            "tp_proximity": 20.014,
+            "sl_proximity": 5.257,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "ST-U-ST",
+            "direction": "SHORT",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": -5.492,
+            "tp_proximity": 24.124,
+            "sl_proximity": 0.426,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "ST-U-ST",
+            "direction": "SHORT",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": -5.451,
+            "tp_proximity": 24.111,
+            "sl_proximity": 0.44,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "direction": "LONG",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": 1.518,
+            "tp_proximity": 18.514,
+            "sl_proximity": 2.763,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "ST-DN-ST",
+            "direction": "LONG",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": 1.679,
+            "tp_proximity": 15.16,
+            "sl_proximity": 2.823,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "BD-BU-U",
+            "direction": "SHORT",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": -0.891,
+            "tp_proximity": 24.667,
+            "sl_proximity": 1.803,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "ST-ST-DN",
+            "direction": "LONG",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": 1.502,
+            "tp_proximity": 17.869,
+            "sl_proximity": 2.308,
+            "likely_exit": "SL"
+          },
+          {
+            "pattern": "DN-BD-ST",
+            "direction": "SHORT",
+            "exit_reason": "CRASH_RECOVERY",
+            "pnl_pct": -1.691,
+            "tp_proximity": 23.059,
+            "sl_proximity": 1.611,
+            "likely_exit": "SL"
+          }
+        ]
+      }
+    },
+    "pattern_performance": {
+      "n_patterns": 50,
+      "worst_5": [
+        {
+          "pattern": "ST-U-ST_SHORT",
+          "live_trades": 12,
+          "live_wr": 41.7,
+          "live_pnl": -17.872,
+          "bt_wr": 85.2,
+          "wr_gap": -43.5
+        },
+        {
+          "pattern": "MU-DN-BD_LONG",
+          "live_trades": 1,
+          "live_wr": 0.0,
+          "live_pnl": -16.549,
+          "bt_wr": 86.2,
+          "wr_gap": -86.2
+        },
+        {
+          "pattern": "ST-ST-U_SHORT",
+          "live_trades": 2,
+          "live_wr": 0.0,
+          "live_pnl": -6.672,
+          "bt_wr": 85.4,
+          "wr_gap": -85.4
+        },
+        {
+          "pattern": "D-DN-U_SHORT",
+          "live_trades": 1,
+          "live_wr": 0.0,
+          "live_pnl": -6.644,
+          "bt_wr": null,
+          "wr_gap": null
+        },
+        {
+          "pattern": "U-DF-DN_SHORT",
+          "live_trades": 1,
+          "live_wr": 0.0,
+          "live_pnl": -6.4,
+          "bt_wr": 89.3,
+          "wr_gap": -89.3
+        }
+      ],
+      "best_5": [
+        {
+          "pattern": "MU-U-ST_LONG",
+          "live_trades": 17,
+          "live_wr": 76.5,
+          "live_pnl": 19.088,
+          "bt_wr": 87.0,
+          "wr_gap": -10.5
+        },
+        {
+          "pattern": "U-U-ST_SHORT",
+          "live_trades": 2,
+          "live_wr": 100.0,
+          "live_pnl": 5.201,
+          "bt_wr": 85.4,
+          "wr_gap": 14.6
+        },
+        {
+          "pattern": "DN-D-BD_SHORT",
+          "live_trades": 3,
+          "live_wr": 100.0,
+          "live_pnl": 4.533,
+          "bt_wr": 88.0,
+          "wr_gap": 12.0
+        },
+        {
+          "pattern": "ST-DN-ST_LONG",
+          "live_trades": 2,
+          "live_wr": 100.0,
+          "live_pnl": 4.21,
+          "bt_wr": null,
+          "wr_gap": null
+        },
+        {
+          "pattern": "ST-BU-U_SHORT",
+          "live_trades": 1,
+          "live_wr": 100.0,
+          "live_pnl": 3.634,
+          "bt_wr": 79.5,
+          "wr_gap": 20.5
+        }
+      ]
+    },
+    "vol_adapt_impact": {
+      "total_losses": 46,
+      "expanded_sl_losses": {
+        "count": 3,
+        "total_pnl": -24.763,
+        "avg_expansion": 1.81,
+        "examples": [
+          {
+            "pattern": "MU-DN-BD_LONG",
+            "sl_dist_pct": 5.361,
+            "expected_sl": 4.02,
+            "expansion_ratio": 1.333,
+            "vol_mult": 1.5,
+            "exit_reason": "SL",
+            "pnl_pct": -16.549,
+            "hold_minutes": 1422
+          },
+          {
+            "pattern": "ST-U-ST_SHORT",
+            "sl_dist_pct": 8.627,
+            "expected_sl": 4.21,
+            "expansion_ratio": 2.049,
+            "vol_mult": 1.5,
+            "exit_reason": "CASCADE_SL",
+            "pnl_pct": -3.286,
+            "hold_minutes": 30
+          },
+          {
+            "pattern": "ST-U-ST_SHORT",
+            "sl_dist_pct": 8.627,
+            "expected_sl": 4.21,
+            "expansion_ratio": 2.049,
+            "vol_mult": 1.5,
+            "exit_reason": "CASCADE_SL",
+            "pnl_pct": -4.928,
+            "hold_minutes": 26
+          }
+        ]
+      },
+      "normal_sl_losses": {
+        "count": 39,
+        "total_pnl": -86.547
+      },
+      "IMPACT_expanded_sl_pnl": -18.106
+    },
+    "time_segments": {
+      "pre_break": {
+        "label": "pre_break (normal TPs)",
+        "n": 41,
+        "wins": 20,
+        "losses": 21,
+        "wr": 48.8,
+        "total_pnl": -32.232,
+        "avg_pnl": -0.786,
+        "avg_win": 1.641,
+        "avg_loss": -3.098,
+        "rr_ratio": 0.53,
+        "time_range": "2026-03-27T19:37 to 2026-03-30T00:32"
+      },
+      "post_break": {
+        "label": "post_break (broken TPs)",
+        "n": 55,
+        "wins": 30,
+        "losses": 25,
+        "wr": 54.5,
+        "total_pnl": -23.73,
+        "avg_pnl": -0.431,
+        "avg_win": 1.285,
+        "avg_loss": -2.492,
+        "rr_ratio": 0.516,
+        "time_range": "2026-03-30T03:20 to 2026-03-31T02:16"
+      },
+      "break_trade_index": 41
+    },
+    "mcc_cascade": {
+      "mcc_close": {
+        "count": 4,
+        "total_pnl": -8.069,
+        "avg_pnl": -2.017,
+        "trades": [
+          {
+            "pattern": "ST-DN-IH",
+            "pnl": -2.6125,
+            "time": "2026-03-29T08:10"
+          },
+          {
+            "pattern": "MD-BD-DN",
+            "pnl": -1.6285,
+            "time": "2026-03-29T08:10"
+          },
+          {
+            "pattern": "BD-DN-MU",
+            "pnl": -2.0081,
+            "time": "2026-03-29T08:10"
+          },
+          {
+            "pattern": "MU-U-ST",
+            "pnl": -1.8197,
+            "time": "2026-03-29T08:10"
+          }
+        ]
+      },
+      "cascade_sl": {
+        "count": 2,
+        "total_pnl": -8.215,
+        "avg_pnl": -4.107,
+        "trades": [
+          {
+            "pattern": "ST-U-ST",
+            "pnl": -3.2862,
+            "time": "2026-03-30T08:15"
+          },
+          {
+            "pattern": "ST-U-ST",
+            "pnl": -4.9285,
+            "time": "2026-03-30T08:16"
+          }
+        ]
+      }
+    }
+  },
+  "root_causes": [
+    {
+      "rank": 1,
+      "cause": "VOL_ADAPT_SL_TIGHTENING_AND_CLUSTER_WIPEOUT",
+      "description": "vol_adaptation with clamp_lo=0.5 tightens SLs to 50% of original in low-vol periods. On 2026-03-29T00:20, 6 SHORT positions had SLs tightened to 0.45-1.90% (expected 2.78-4.01%) and ALL hit SL within 1 minute when BTC spiked. Combined cluster loss: -27.8%. This SINGLE event accounts for 50% of all losses. Vol_adapt also expanded MU-DN-BD SL from 4.02% to 5.36% (vol=1.5 clamp_hi), causing -16.55% single trade. Total vol-related losses: 32 trades, -75.8%.",
+      "estimated_pnl_impact": -75.75,
+      "fix": "DISABLE vol_adaptation entirely or set clamp_lo=0.8 (min 80% of original SL). SL distances at entry (ATR-scaled) are already optimal from scanner. Dynamic SL modification introduces fragility: tight SLs cluster at same price, then a single spike wipes all positions simultaneously.",
+      "severity": "CRITICAL"
+    },
+    {
+      "rank": 2,
+      "cause": "BROKEN_TP_PLACEMENT",
+      "description": "Starting 2026-03-30T03:20, TP prices are placed 15-25% from entry instead of the expected 0.8-1.7% (MFE median). 52/96 trades affected. TP never realistically hit -> all exits via OPP_SIGNAL, SL, or CRASH_RECOVERY. Config shows tp_scale_factor was changed from x10 to x1.0 (v1.69.0 note) -- at some point between v1.68 and v1.69, tp_scale_factor was set to 10 which multiplied MFE median TP by 10x, making TP unreachable. Current config is tp_mode: mfe_median with tp_scale_factor: 1.0 (correct) but the broken trades were opened while the scale was wrong.",
+      "estimated_pnl_impact": -31.32,
+      "fix": "Verify tp_scale_factor=1.0 is active NOW. All trades opened after the fix should have normal TPs. Close any currently open positions that have broken TPs (>5% distance) and re-enter.",
+      "severity": "CRITICAL"
+    },
+    {
+      "rank": 3,
+      "cause": "VOL_ADAPT_SL_EXPANSION_OUTLIER",
+      "description": "vol_adaptation clamp_hi=2.0 expanded SL for 3 trades. MU-DN-BD_LONG: SL expanded from 4.02% to 5.36% (vol=1.5), held 1422min (23.7h), single loss -16.55%. This is the largest single loss in the dataset.",
+      "estimated_pnl_impact": -24.76,
+      "fix": "Reduce vol_adapt clamp_hi from 2.0 to 1.5 or disable vol_adapt. With ATR-scaled SL at entry, dynamic expansion is unnecessary and harmful.",
+      "severity": "HIGH"
+    },
+    {
+      "rank": 4,
+      "cause": "MCC_CASCADE_LOSSES",
+      "description": "MCC_CLOSE: 4 trades, PnL=-8.1%. CASCADE_SL: 2 trades, PnL=-8.2%. Combined: -16.3%. Config now has cascade_sl_tightening and preemptive_cascade DISABLED (v1.68.0), so these are legacy exits from the period when they were enabled.",
+      "estimated_pnl_impact": -16.28,
+      "fix": "Already disabled in config. Monitor that no new MCC/CASCADE exits occur.",
+      "severity": "MEDIUM"
+    },
+    {
+      "rank": 5,
+      "cause": "OPP_SIGNAL_AS_PRIMARY_EXIT",
+      "description": "With broken TP, OPP_SIGNAL became the primary exit (43/96 trades). OPP_SIGNAL exits at marginal profit/loss (~0.1-0.5%) instead of TP profit (~2-3%). This destroyed the R:R ratio. config shows opposite_signal_exit: enabled: false but 43 OPP_SIGNAL exits recorded. NOTE: OPP_SIGNAL exit may have been enabled during the affected period.",
+      "estimated_pnl_impact": 8.49,
+      "fix": "With correct TP placement, OPP_SIGNAL exits are fewer because TP fires first. After fixing TP, monitor OPP_SIGNAL ratio - it should drop from ~45% to <10% of exits.",
+      "severity": "HIGH"
+    },
+    {
+      "rank": 6,
+      "cause": "CRASH_RECOVERY_EXITS",
+      "description": "8 CRASH_RECOVERY exits with combined PnL=-8.0%. Bot restarts force-close positions at market price. With broken TP, these positions had SL as only protection and drifted in both directions.",
+      "estimated_pnl_impact": -8.02,
+      "fix": "Reduce bot restarts. Ensure crash recovery restores positions with correct TP/SL.",
+      "severity": "MEDIUM"
+    }
+  ]
+}

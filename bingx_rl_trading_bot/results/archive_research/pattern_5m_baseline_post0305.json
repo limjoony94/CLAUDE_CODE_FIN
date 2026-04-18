@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-03-08T18:01:16.332753",
+  "cutoff_date": "2026-03-05",
+  "reason": "v1.53.0 pattern rescan + bot restart on 03-05. Pre-03-05 data contaminated with old patterns and N/A crashes.",
+  "pre_0305": {
+    "label": "PRE-03-05 (contaminated)",
+    "period": "2026-02-24 ~ 2026-03-04",
+    "trades": 110,
+    "wins": 55,
+    "losses": 55,
+    "wr": 50.0,
+    "total_pnl": -159.73,
+    "avg_win": 4.223,
+    "avg_loss": -7.128,
+    "rr": 0.593,
+    "breakeven_wr": 62.8,
+    "wr_vs_breakeven": -12.8,
+    "mdd": 182.07,
+    "direction": {
+      "LONG": {
+        "n": 42,
+        "wr": 64.28571428571429,
+        "pnl": 35.5887
+      },
+      "SHORT": {
+        "n": 68,
+        "wr": 41.17647058823529,
+        "pnl": -195.3209
+      }
+    },
+    "exit_reasons": {
+      "SL": {
+        "n": 45,
+        "pnl": -338.5750999999999
+      },
+      "TP": {
+        "n": 47,
+        "pnl": 220.69269999999995
+      },
+      "MARKET": {
+        "n": 13,
+        "pnl": -44.93890000000001
+      },
+      "EARLY_BU": {
+        "n": 5,
+        "pnl": 3.0891
+      }
+    },
+    "daily_count": 9,
+    "trades_per_day": 12.2
+  },
+  "post_0305": {
+    "label": "POST-03-05 (clean baseline)",
+    "period": "2026-03-05 ~ 2026-03-08",
+    "trades": 44,
+    "wins": 29,
+    "losses": 15,
+    "wr": 65.9,
+    "total_pnl": 40.89,
+    "avg_win": 4.057,
+    "avg_loss": -5.118,
+    "rr": 0.793,
+    "breakeven_wr": 55.8,
+    "wr_vs_breakeven": 10.1,
+    "mdd": 28.7,
+    "direction": {
+      "LONG": {
+        "n": 15,
+        "wr": 0.0,
+        "pnl": -76.7739
+      },
+      "SHORT": {
+        "n": 29,
+        "wr": 100.0,
+        "pnl": 117.6596
+      }
+    },
+    "exit_reasons": {
+      "TP": {
+        "n": 19,
+        "pnl": 95.1206
+      },
+      "UNKNOWN": {
+        "n": 6,
+        "pnl": -19.6015
+      },
+      "MARKET": {
+        "n": 7,
+        "pnl": -2.6560999999999977
+      },
+      "SL": {
+        "n": 5,
+        "pnl": -34.786199999999994
+      },
+      "TIMEOUT": {
+        "n": 7,
+        "pnl": 2.8089000000000004
+      }
+    },
+    "daily_count": 4,
+    "trades_per_day": 11.0
+  },
+  "recommendation": {
+    "expected_wr": 65.9,
+    "expected_rr": 0.793,
+    "expected_trades_per_day": 11.0,
+    "note": "Monitor post-03-05 stats only. Pre-03-05 data is invalid baseline."
+  }
+}

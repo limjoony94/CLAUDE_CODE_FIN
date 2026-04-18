@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "script": "c1_reverse_full_backtest.py",
+    "date_run": "2026-04-18T10:45:44.435665",
+    "total_bars": 31946,
+    "days": 332,
+    "btc_return_pct": -29.29
+  },
+  "summary": {
+    "total_trades": 983,
+    "wins": 373,
+    "losses": 610,
+    "win_rate_pct": 37.9,
+    "total_pnl_1x": 160.5152,
+    "total_pnl_3x": 481.5425,
+    "mdd_1x": 6.7407,
+    "avg_win_pct": 0.9127,
+    "avg_loss_pct": -0.2949,
+    "risk_reward": 3.09,
+    "long_count": 487,
+    "short_count": 496,
+    "long_pnl_1x": 68.2753,
+    "short_pnl_1x": 92.2399,
+    "exit_breakdown": {
+      "TRAIL_TP": 846,
+      "SL": 137
+    }
+  },
+  "daily_pnl_1x": 0.4835,
+  "trades_per_day": 2.96,
+  "folds_pnl": [
+    19.5226,
+    18.0936,
+    23.0744,
+    25.7776,
+    74.047
+  ],
+  "folds_passed": 5
+}

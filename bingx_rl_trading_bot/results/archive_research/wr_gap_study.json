@@ -1,0 +1,158 @@
+{
+  "metadata": {
+    "script": "wr_gap_study.py",
+    "date": "2026-03-11T20:58:46.563827",
+    "runtime_sec": 6.5,
+    "live_period": "2026-02-24 ~ 2026-03-11",
+    "live_tp_sl_trades": 146
+  },
+  "phase1_statistics": {
+    "live_wr": 61.64383561643836,
+    "scanner_wr": 72.8,
+    "gap_pp": 11.156164383561638,
+    "binom_p": 0.0021905583333993134,
+    "ci_95": [
+      53.42465753424658,
+      69.17808219178082
+    ],
+    "significant": "True"
+  },
+  "phase2_temporal": {
+    "scanner_period_wr": 53.5,
+    "scanner_period_trades": 101,
+    "live_wr": 61.64383561643836,
+    "live_trades": 146,
+    "period_gap": -8.14383561643836,
+    "scanner_tp_sl": [
+      50,
+      43
+    ],
+    "live_tp_sl": [
+      90,
+      56
+    ]
+  },
+  "phase3_slippage": {
+    "tp_slippage_mean": 0.009539764067225702,
+    "sl_slippage_mean": 0.014608798194878984,
+    "tp_exact_rate": 0.9444444444444444,
+    "sl_exact_rate": 0.8392857142857143,
+    "total_slippage_pct": 1.6766714649635364,
+    "avg_slippage_per_trade": 0.011484051129887235
+  },
+  "phase4_patterns": {
+    "common_patterns": 45,
+    "pattern_gaps": [
+      {
+        "pattern": "BD-DN-BU_SHORT",
+        "live_wr": 60.0,
+        "scanner_wr": 50.0,
+        "gap": -10.0,
+        "live_n": 5,
+        "scanner_n": 2
+      },
+      {
+        "pattern": "BD-DN-MU_LONG",
+        "live_wr": 100.0,
+        "scanner_wr": 100.0,
+        "gap": 0.0,
+        "live_n": 2,
+        "scanner_n": 2
+      },
+      {
+        "pattern": "BD-ST-DN_SHORT",
+        "live_wr": 50.0,
+        "scanner_wr": 25.0,
+        "gap": -25.0,
+        "live_n": 2,
+        "scanner_n": 4
+      },
+      {
+        "pattern": "DN-BD-ST_SHORT",
+        "live_wr": 50.0,
+        "scanner_wr": 0.0,
+        "gap": -50.0,
+        "live_n": 4,
+        "scanner_n": 2
+      },
+      {
+        "pattern": "DN-ST-ST_SHORT",
+        "live_wr": 50.0,
+        "scanner_wr": 50.0,
+        "gap": 0.0,
+        "live_n": 2,
+        "scanner_n": 2
+      },
+      {
+        "pattern": "H-ST-DN_LONG",
+        "live_wr": 50.0,
+        "scanner_wr": 66.66666666666666,
+        "gap": 16.666666666666657,
+        "live_n": 2,
+        "scanner_n": 3
+      },
+      {
+        "pattern": "ST-BD-DN_LONG",
+        "live_wr": 100.0,
+        "scanner_wr": 50.0,
+        "gap": -50.0,
+        "live_n": 3,
+        "scanner_n": 4
+      },
+      {
+        "pattern": "ST-ST-U_SHORT",
+        "live_wr": 40.0,
+        "scanner_wr": 50.0,
+        "gap": 10.0,
+        "live_n": 5,
+        "scanner_n": 2
+      },
+      {
+        "pattern": "U-U-ST_SHORT",
+        "live_wr": 71.42857142857143,
+        "scanner_wr": 66.66666666666666,
+        "gap": -4.761904761904773,
+        "live_n": 7,
+        "scanner_n": 3
+      }
+    ],
+    "avg_gap": -12.566137566137568,
+    "weighted_gap": -12.500000000000004,
+    "live_only_patterns": 38
+  },
+  "phase5_atr": {
+    "full_atr_mean": 1.168224838331933,
+    "period_atr_mean": 1.1445580953646863,
+    "atr_delta": -0.02366674296724658
+  },
+  "phase6_cross_validation": {
+    "n_windows": 31,
+    "wr_mean": 71.16451612903225,
+    "wr_std": 7.670914837442026,
+    "wr_min": 56.2,
+    "wr_max": 90.6,
+    "live_wr_percentile": 9.67741935483871,
+    "windows_below_live": 3
+  },
+  "phase7_fidelity": {
+    "tp_price_deviation_rate": 0.022222222222222223,
+    "sl_price_deviation_rate": 0.125,
+    "cascade_sl_sequences": 33
+  },
+  "phase8_direction": {
+    "LONG": {
+      "live_wr": 71.1864406779661,
+      "scanner_wr": 66.66666666666666,
+      "gap": -4.519774011299447,
+      "live_n": 59,
+      "scanner_n": 42
+    },
+    "SHORT": {
+      "live_wr": 55.172413793103445,
+      "scanner_wr": 44.06779661016949,
+      "gap": -11.104617182933957,
+      "live_n": 87,
+      "scanner_n": 59
+    }
+  }
+}

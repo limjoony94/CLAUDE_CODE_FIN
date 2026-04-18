@@ -1,0 +1,290 @@
+{
+  "timestamp": "2026-03-31T03:11:33.868943",
+  "script": "combined_v169_validation.py",
+  "data_bars": 93864,
+  "data_days": 325.9,
+  "n_patterns": 111,
+  "n_signals": 12937,
+  "configs": {
+    "A_current": {
+      "cascade_pct": 98,
+      "pre_pct": 2.0,
+      "pre_tighten": 98,
+      "clamp_lo": 0.5,
+      "clamp_hi": 1.5,
+      "timeout": 288,
+      "decay": 0.9975,
+      "early_exit": true
+    },
+    "B_proposed": {
+      "cascade_pct": 98,
+      "pre_pct": 1.5,
+      "pre_tighten": 98,
+      "clamp_lo": 1.0,
+      "clamp_hi": 1.5,
+      "timeout": 576,
+      "decay": 0.9975,
+      "early_exit": false
+    }
+  },
+  "results": {
+    "v1.69.0 CURRENT": {
+      "is_full": {
+        "pnl": 577.1,
+        "wr": 55.8
+      },
+      "oos_folds": [
+        {
+          "pnl": 80.2,
+          "wr": 55.0,
+          "trades": 803,
+          "rr": 2.395,
+          "wr_margin": 25.5,
+          "exit_reasons": {
+            "TP": 415,
+            "TIMEOUT": 136,
+            "EARLY_EXIT": 1,
+            "SL": 242,
+            "OOS_END": 9
+          }
+        },
+        {
+          "pnl": 93.3,
+          "wr": 56.0,
+          "trades": 856,
+          "rr": 2.528,
+          "wr_margin": 27.7,
+          "exit_reasons": {
+            "TP": 443,
+            "SL": 270,
+            "TIMEOUT": 140,
+            "EARLY_EXIT": 1,
+            "OOS_END": 2
+          }
+        },
+        {
+          "pnl": 172.2,
+          "wr": 57.2,
+          "trades": 1160,
+          "rr": 3.501,
+          "wr_margin": 35.0,
+          "exit_reasons": {
+            "TP": 653,
+            "TIMEOUT": 53,
+            "SL": 445,
+            "EARLY_EXIT": 3,
+            "OOS_END": 6
+          }
+        },
+        {
+          "pnl": 113.0,
+          "wr": 54.6,
+          "trades": 936,
+          "rr": 3.23,
+          "wr_margin": 31.0,
+          "exit_reasons": {
+            "TP": 485,
+            "SL": 339,
+            "TIMEOUT": 104,
+            "OOS_END": 8
+          }
+        },
+        {
+          "pnl": 199.6,
+          "wr": 55.7,
+          "trades": 1344,
+          "rr": 3.934,
+          "wr_margin": 35.4,
+          "exit_reasons": {
+            "TP": 740,
+            "SL": 580,
+            "TIMEOUT": 18,
+            "EARLY_EXIT": 4,
+            "OOS_END": 2
+          }
+        }
+      ],
+      "oos_total": 658.3,
+      "oos_avg_wr": 55.7,
+      "oos_avg_rr": 3.118,
+      "wf_pass": 5,
+      "wf_verdict": "PASS",
+      "discrimination": {
+        "shuffled_results": [
+          {
+            "seed": 42,
+            "folds": [
+              75.7,
+              88.6,
+              161.3,
+              108.6,
+              194.2
+            ],
+            "total": 628.4,
+            "wf_pass": true
+          },
+          {
+            "seed": 123,
+            "folds": [
+              73.4,
+              86.7,
+              165.8,
+              105.1,
+              197.2
+            ],
+            "total": 628.2,
+            "wf_pass": true
+          },
+          {
+            "seed": 7,
+            "folds": [
+              71.4,
+              90.8,
+              160.9,
+              105.1,
+              202.8
+            ],
+            "total": 631.1,
+            "wf_pass": true
+          }
+        ],
+        "n_shuffled_pass": 3,
+        "real_oos_total": 658.3,
+        "shuffled_avg": 629.2,
+        "gap": 29.1,
+        "verdict": "NON-DISCRIMINATING"
+      }
+    },
+    "v1.69.1 PROPOSED": {
+      "is_full": {
+        "pnl": 637.2,
+        "wr": 51.7
+      },
+      "oos_folds": [
+        {
+          "pnl": 95.4,
+          "wr": 48.9,
+          "trades": 816,
+          "rr": 4.593,
+          "wr_margin": 31.0,
+          "exit_reasons": {
+            "TP": 394,
+            "SL": 411,
+            "TIMEOUT": 2,
+            "OOS_END": 9
+          }
+        },
+        {
+          "pnl": 105.7,
+          "wr": 53.2,
+          "trades": 823,
+          "rr": 3.906,
+          "wr_margin": 32.8,
+          "exit_reasons": {
+            "TP": 436,
+            "SL": 358,
+            "TIMEOUT": 25,
+            "OOS_END": 4
+          }
+        },
+        {
+          "pnl": 184.7,
+          "wr": 52.8,
+          "trades": 1177,
+          "rr": 5.252,
+          "wr_margin": 36.8,
+          "exit_reasons": {
+            "TP": 620,
+            "SL": 550,
+            "TIMEOUT": 1,
+            "OOS_END": 6
+          }
+        },
+        {
+          "pnl": 121.5,
+          "wr": 50.5,
+          "trades": 913,
+          "rr": 4.907,
+          "wr_margin": 33.6,
+          "exit_reasons": {
+            "TP": 456,
+            "SL": 442,
+            "TIMEOUT": 7,
+            "OOS_END": 8
+          }
+        },
+        {
+          "pnl": 208.6,
+          "wr": 51.1,
+          "trades": 1410,
+          "rr": 4.764,
+          "wr_margin": 33.8,
+          "exit_reasons": {
+            "TP": 719,
+            "SL": 689,
+            "OOS_END": 2
+          }
+        }
+      ],
+      "oos_total": 715.8,
+      "oos_avg_wr": 51.3,
+      "oos_avg_rr": 4.684,
+      "wf_pass": 5,
+      "wf_verdict": "PASS",
+      "discrimination": {
+        "shuffled_results": [
+          {
+            "seed": 42,
+            "folds": [
+              87.7,
+              97.6,
+              155.5,
+              110.1,
+              198.2
+            ],
+            "total": 649.2,
+            "wf_pass": true
+          },
+          {
+            "seed": 123,
+            "folds": [
+              88.2,
+              100.9,
+              165.7,
+              114.2,
+              206.5
+            ],
+            "total": 675.4,
+            "wf_pass": true
+          },
+          {
+            "seed": 7,
+            "folds": [
+              93.4,
+              96.1,
+              159.2,
+              118.5,
+              208.4
+            ],
+            "total": 675.6,
+            "wf_pass": true
+          }
+        ],
+        "n_shuffled_pass": 3,
+        "real_oos_total": 715.8,
+        "shuffled_avg": 666.7,
+        "gap": 49.1,
+        "verdict": "NON-DISCRIMINATING"
+      }
+    }
+  },
+  "recommendation": "GO v1.69.1 \u2014 substantial OOS improvement with WF validation",
+  "notes": [
+    "Early exit approximated post-hoc for Config A (not in scanner sim loop)",
+    "MFE median TP from exc_stats.mfe_median per pattern",
+    "Fee = 0.001 * 3 = 0.30% (BingX notional)",
+    "Compound sizing, 1/9 per slot",
+    "5-fold expanding window WF: is_end = int(n*(fi+1)/(n_folds+1))",
+    "Discrimination: 3-seed direction shuffle [42, 123, 7]"
+  ]
+}

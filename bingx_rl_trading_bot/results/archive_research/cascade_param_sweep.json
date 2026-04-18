@@ -1,0 +1,2222 @@
+{
+  "metadata": {
+    "script": "cascade_param_sweep.py",
+    "date": "2026-03-31 03:07:49",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "patterns_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\results\\dynamic_patterns.json",
+    "n_bars": 93864,
+    "neutral_window": [
+      0,
+      74567
+    ],
+    "n_signals": 12937,
+    "n_patterns": 111,
+    "wf_folds": 5,
+    "vol_adapt": "OFF",
+    "tp_mode": "mfe_median",
+    "tp_decay_rate": 0.9975,
+    "sweep_grid": {
+      "tighten_pct": [
+        90,
+        92,
+        95,
+        97,
+        98,
+        99
+      ],
+      "preemptive_threshold": [
+        0.0,
+        1.0,
+        1.5,
+        2.0,
+        3.0,
+        4.0
+      ]
+    },
+    "current_config": {
+      "tighten_pct": 98,
+      "preemptive_threshold": 2.0,
+      "preemptive_tighten": 98
+    },
+    "elapsed_seconds": 240.7
+  },
+  "is_baseline": {
+    "pnl": 547.04,
+    "wr": 56.0,
+    "trades": 4424,
+    "mdd": 1.96,
+    "pnl_mdd": 279.1
+  },
+  "results_by_oos_pnl": [
+    {
+      "tighten_pct": 98,
+      "pre_threshold": 1.5,
+      "pre_tighten": 98,
+      "is_pnl": 580.98,
+      "is_wr": 52.6,
+      "is_trades": 4781,
+      "is_mdd": 1.43,
+      "is_pnl_mdd": 406.28,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 67.14,
+          "wr": 48.3,
+          "trades": 715,
+          "mdd": 1.71
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 72.21,
+          "wr": 50.6,
+          "trades": 724,
+          "mdd": 1.96
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 84.67,
+          "wr": 51.9,
+          "trades": 759,
+          "mdd": 2.46
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 151.81,
+          "wr": 55.4,
+          "trades": 1001,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 94.44,
+          "wr": 52.8,
+          "trades": 765,
+          "mdd": 1.5
+        }
+      ],
+      "oos_pnl": 470.27,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.1
+    },
+    {
+      "tighten_pct": 99,
+      "pre_threshold": 1.5,
+      "pre_tighten": 99,
+      "is_pnl": 580.98,
+      "is_wr": 52.6,
+      "is_trades": 4781,
+      "is_mdd": 1.43,
+      "is_pnl_mdd": 406.28,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 67.14,
+          "wr": 48.3,
+          "trades": 715,
+          "mdd": 1.71
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 72.21,
+          "wr": 50.6,
+          "trades": 724,
+          "mdd": 1.96
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 84.67,
+          "wr": 51.9,
+          "trades": 759,
+          "mdd": 2.46
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 151.81,
+          "wr": 55.4,
+          "trades": 1001,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 94.44,
+          "wr": 52.8,
+          "trades": 765,
+          "mdd": 1.5
+        }
+      ],
+      "oos_pnl": 470.27,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.1
+    },
+    {
+      "tighten_pct": 97,
+      "pre_threshold": 1.5,
+      "pre_tighten": 97,
+      "is_pnl": 577.34,
+      "is_wr": 52.6,
+      "is_trades": 4781,
+      "is_mdd": 1.43,
+      "is_pnl_mdd": 403.73,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 66.6,
+          "wr": 48.3,
+          "trades": 715,
+          "mdd": 1.73
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 71.62,
+          "wr": 50.6,
+          "trades": 724,
+          "mdd": 1.96
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 84.14,
+          "wr": 51.9,
+          "trades": 759,
+          "mdd": 2.46
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 151.12,
+          "wr": 55.4,
+          "trades": 1001,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 93.79,
+          "wr": 52.8,
+          "trades": 765,
+          "mdd": 1.5
+        }
+      ],
+      "oos_pnl": 467.27,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.1
+    },
+    {
+      "tighten_pct": 98,
+      "pre_threshold": 2.0,
+      "pre_tighten": 98,
+      "is_pnl": 547.04,
+      "is_wr": 56.0,
+      "is_trades": 4424,
+      "is_mdd": 1.96,
+      "is_pnl_mdd": 279.1,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 57.64,
+          "wr": 53.2,
+          "trades": 620,
+          "mdd": 3.67
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 66.06,
+          "wr": 56.6,
+          "trades": 650,
+          "mdd": 2.06
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 88.7,
+          "wr": 55.9,
+          "trades": 716,
+          "mdd": 1.89
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 138.66,
+          "wr": 57.3,
+          "trades": 932,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 88.79,
+          "wr": 55.1,
+          "trades": 732,
+          "mdd": 1.79
+        }
+      ],
+      "oos_pnl": 439.85,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.6
+    },
+    {
+      "tighten_pct": 99,
+      "pre_threshold": 2.0,
+      "pre_tighten": 99,
+      "is_pnl": 547.04,
+      "is_wr": 56.0,
+      "is_trades": 4424,
+      "is_mdd": 1.96,
+      "is_pnl_mdd": 279.1,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 57.64,
+          "wr": 53.2,
+          "trades": 620,
+          "mdd": 3.67
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 66.06,
+          "wr": 56.6,
+          "trades": 650,
+          "mdd": 2.06
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 88.7,
+          "wr": 55.9,
+          "trades": 716,
+          "mdd": 1.89
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 138.66,
+          "wr": 57.3,
+          "trades": 932,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 88.79,
+          "wr": 55.1,
+          "trades": 732,
+          "mdd": 1.79
+        }
+      ],
+      "oos_pnl": 439.85,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.6
+    },
+    {
+      "tighten_pct": 97,
+      "pre_threshold": 2.0,
+      "pre_tighten": 97,
+      "is_pnl": 544.29,
+      "is_wr": 56.0,
+      "is_trades": 4424,
+      "is_mdd": 1.97,
+      "is_pnl_mdd": 276.29,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 57.33,
+          "wr": 53.2,
+          "trades": 620,
+          "mdd": 3.67
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 65.68,
+          "wr": 56.6,
+          "trades": 650,
+          "mdd": 2.07
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 88.29,
+          "wr": 55.9,
+          "trades": 716,
+          "mdd": 1.89
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 138.08,
+          "wr": 57.3,
+          "trades": 932,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 88.24,
+          "wr": 55.1,
+          "trades": 732,
+          "mdd": 1.79
+        }
+      ],
+      "oos_pnl": 437.62,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.6
+    },
+    {
+      "tighten_pct": 95,
+      "pre_threshold": 1.5,
+      "pre_tighten": 95,
+      "is_pnl": 534.72,
+      "is_wr": 52.6,
+      "is_trades": 4781,
+      "is_mdd": 1.48,
+      "is_pnl_mdd": 361.3,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 60.44,
+          "wr": 48.3,
+          "trades": 714,
+          "mdd": 1.76
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 64.89,
+          "wr": 50.6,
+          "trades": 724,
+          "mdd": 2.0
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 77.67,
+          "wr": 51.9,
+          "trades": 759,
+          "mdd": 2.52
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 142.49,
+          "wr": 55.4,
+          "trades": 1001,
+          "mdd": 1.98
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 86.76,
+          "wr": 52.8,
+          "trades": 765,
+          "mdd": 1.63
+        }
+      ],
+      "oos_pnl": 432.25,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.2
+    },
+    {
+      "tighten_pct": 98,
+      "pre_threshold": 1.0,
+      "pre_tighten": 98,
+      "is_pnl": 538.43,
+      "is_wr": 44.7,
+      "is_trades": 5510,
+      "is_mdd": 1.49,
+      "is_pnl_mdd": 361.36,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 66.53,
+          "wr": 43.6,
+          "trades": 801,
+          "mdd": 1.5
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 61.67,
+          "wr": 41.7,
+          "trades": 809,
+          "mdd": 1.7
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 85.61,
+          "wr": 45.5,
+          "trades": 888,
+          "mdd": 2.43
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 130.45,
+          "wr": 46.2,
+          "trades": 1120,
+          "mdd": 1.62
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 87.18,
+          "wr": 45.7,
+          "trades": 855,
+          "mdd": 1.27
+        }
+      ],
+      "oos_pnl": 431.44,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 99,
+      "pre_threshold": 1.0,
+      "pre_tighten": 99,
+      "is_pnl": 538.43,
+      "is_wr": 44.7,
+      "is_trades": 5510,
+      "is_mdd": 1.49,
+      "is_pnl_mdd": 361.36,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 66.53,
+          "wr": 43.6,
+          "trades": 801,
+          "mdd": 1.5
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 61.67,
+          "wr": 41.7,
+          "trades": 809,
+          "mdd": 1.7
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 85.61,
+          "wr": 45.5,
+          "trades": 888,
+          "mdd": 2.43
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 130.45,
+          "wr": 46.2,
+          "trades": 1120,
+          "mdd": 1.62
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 87.18,
+          "wr": 45.7,
+          "trades": 855,
+          "mdd": 1.27
+        }
+      ],
+      "oos_pnl": 431.44,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 97,
+      "pre_threshold": 1.0,
+      "pre_tighten": 97,
+      "is_pnl": 533.58,
+      "is_wr": 44.7,
+      "is_trades": 5510,
+      "is_mdd": 1.52,
+      "is_pnl_mdd": 351.04,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 65.84,
+          "wr": 43.6,
+          "trades": 801,
+          "mdd": 1.51
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 60.9,
+          "wr": 41.7,
+          "trades": 809,
+          "mdd": 1.71
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 84.88,
+          "wr": 45.5,
+          "trades": 888,
+          "mdd": 2.43
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 129.58,
+          "wr": 46.2,
+          "trades": 1120,
+          "mdd": 1.64
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 86.32,
+          "wr": 45.7,
+          "trades": 855,
+          "mdd": 1.27
+        }
+      ],
+      "oos_pnl": 427.52,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 95,
+      "pre_threshold": 2.0,
+      "pre_tighten": 95,
+      "is_pnl": 511.49,
+      "is_wr": 56.0,
+      "is_trades": 4424,
+      "is_mdd": 2.03,
+      "is_pnl_mdd": 251.97,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 53.59,
+          "wr": 53.2,
+          "trades": 620,
+          "mdd": 3.71
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 61.29,
+          "wr": 56.6,
+          "trades": 650,
+          "mdd": 2.09
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 83.2,
+          "wr": 55.9,
+          "trades": 716,
+          "mdd": 1.9
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 130.74,
+          "wr": 57.3,
+          "trades": 932,
+          "mdd": 2.08
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 82.28,
+          "wr": 55.1,
+          "trades": 732,
+          "mdd": 1.91
+        }
+      ],
+      "oos_pnl": 411.1,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.6
+    },
+    {
+      "tighten_pct": 95,
+      "pre_threshold": 1.0,
+      "pre_tighten": 95,
+      "is_pnl": 477.82,
+      "is_wr": 44.9,
+      "is_trades": 5498,
+      "is_mdd": 1.8,
+      "is_pnl_mdd": 265.46,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 57.92,
+          "wr": 43.8,
+          "trades": 800,
+          "mdd": 1.65
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 52.08,
+          "wr": 41.8,
+          "trades": 809,
+          "mdd": 1.99
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 75.88,
+          "wr": 45.5,
+          "trades": 888,
+          "mdd": 2.51
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 118.77,
+          "wr": 46.3,
+          "trades": 1119,
+          "mdd": 1.81
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 76.59,
+          "wr": 45.6,
+          "trades": 855,
+          "mdd": 1.29
+        }
+      ],
+      "oos_pnl": 381.24,
+      "wf_all_pass": true,
+      "is_oos_gap": 20.2
+    },
+    {
+      "tighten_pct": 92,
+      "pre_threshold": 1.5,
+      "pre_tighten": 92,
+      "is_pnl": 463.15,
+      "is_wr": 52.7,
+      "is_trades": 4780,
+      "is_mdd": 1.71,
+      "is_pnl_mdd": 270.85,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 49.43,
+          "wr": 48.3,
+          "trades": 714,
+          "mdd": 1.93
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 53.72,
+          "wr": 50.8,
+          "trades": 723,
+          "mdd": 2.06
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 67.13,
+          "wr": 52.0,
+          "trades": 759,
+          "mdd": 2.63
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 127.35,
+          "wr": 55.4,
+          "trades": 1001,
+          "mdd": 2.06
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 75.34,
+          "wr": 52.8,
+          "trades": 765,
+          "mdd": 1.85
+        }
+      ],
+      "oos_pnl": 372.97,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.5
+    },
+    {
+      "tighten_pct": 92,
+      "pre_threshold": 2.0,
+      "pre_tighten": 92,
+      "is_pnl": 456.81,
+      "is_wr": 56.1,
+      "is_trades": 4421,
+      "is_mdd": 2.14,
+      "is_pnl_mdd": 213.46,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 47.05,
+          "wr": 53.2,
+          "trades": 620,
+          "mdd": 3.77
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 53.44,
+          "wr": 56.5,
+          "trades": 649,
+          "mdd": 2.23
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 75.15,
+          "wr": 56.3,
+          "trades": 714,
+          "mdd": 1.93
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 117.9,
+          "wr": 57.3,
+          "trades": 932,
+          "mdd": 2.41
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 72.62,
+          "wr": 55.1,
+          "trades": 732,
+          "mdd": 2.14
+        }
+      ],
+      "oos_pnl": 366.16,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.8
+    },
+    {
+      "tighten_pct": 98,
+      "pre_threshold": 3.0,
+      "pre_tighten": 98,
+      "is_pnl": 447.81,
+      "is_wr": 60.1,
+      "is_trades": 3944,
+      "is_mdd": 2.94,
+      "is_pnl_mdd": 152.32,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 41.69,
+          "wr": 55.1,
+          "trades": 574,
+          "mdd": 5.06
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 53.22,
+          "wr": 60.4,
+          "trades": 588,
+          "mdd": 3.07
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 72.57,
+          "wr": 58.1,
+          "trades": 654,
+          "mdd": 3.69
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 122.29,
+          "wr": 61.8,
+          "trades": 816,
+          "mdd": 2.69
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 68.93,
+          "wr": 59.3,
+          "trades": 648,
+          "mdd": 3.16
+        }
+      ],
+      "oos_pnl": 358.7,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 99,
+      "pre_threshold": 3.0,
+      "pre_tighten": 99,
+      "is_pnl": 447.81,
+      "is_wr": 60.1,
+      "is_trades": 3944,
+      "is_mdd": 2.94,
+      "is_pnl_mdd": 152.32,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 41.69,
+          "wr": 55.1,
+          "trades": 574,
+          "mdd": 5.06
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 53.22,
+          "wr": 60.4,
+          "trades": 588,
+          "mdd": 3.07
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 72.57,
+          "wr": 58.1,
+          "trades": 654,
+          "mdd": 3.69
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 122.29,
+          "wr": 61.8,
+          "trades": 816,
+          "mdd": 2.69
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 68.93,
+          "wr": 59.3,
+          "trades": 648,
+          "mdd": 3.16
+        }
+      ],
+      "oos_pnl": 358.7,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 97,
+      "pre_threshold": 3.0,
+      "pre_tighten": 97,
+      "is_pnl": 446.01,
+      "is_wr": 60.1,
+      "is_trades": 3944,
+      "is_mdd": 2.95,
+      "is_pnl_mdd": 151.19,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 41.45,
+          "wr": 55.1,
+          "trades": 574,
+          "mdd": 5.06
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 52.99,
+          "wr": 60.4,
+          "trades": 588,
+          "mdd": 3.07
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 72.25,
+          "wr": 58.1,
+          "trades": 654,
+          "mdd": 3.69
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 121.87,
+          "wr": 61.8,
+          "trades": 816,
+          "mdd": 2.69
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 68.6,
+          "wr": 59.3,
+          "trades": 648,
+          "mdd": 3.16
+        }
+      ],
+      "oos_pnl": 357.16,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 95,
+      "pre_threshold": 3.0,
+      "pre_tighten": 95,
+      "is_pnl": 425.68,
+      "is_wr": 60.1,
+      "is_trades": 3944,
+      "is_mdd": 3.0,
+      "is_pnl_mdd": 141.89,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 38.82,
+          "wr": 55.1,
+          "trades": 574,
+          "mdd": 5.1
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 50.45,
+          "wr": 60.4,
+          "trades": 588,
+          "mdd": 3.08
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 68.52,
+          "wr": 58.1,
+          "trades": 654,
+          "mdd": 3.7
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 116.62,
+          "wr": 61.8,
+          "trades": 816,
+          "mdd": 2.69
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 65.1,
+          "wr": 59.3,
+          "trades": 648,
+          "mdd": 3.16
+        }
+      ],
+      "oos_pnl": 339.51,
+      "wf_all_pass": true,
+      "is_oos_gap": 20.2
+    },
+    {
+      "tighten_pct": 90,
+      "pre_threshold": 1.5,
+      "pre_tighten": 90,
+      "is_pnl": 418.93,
+      "is_wr": 53.0,
+      "is_trades": 4776,
+      "is_mdd": 1.86,
+      "is_pnl_mdd": 225.23,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 42.53,
+          "wr": 48.5,
+          "trades": 714,
+          "mdd": 2.17
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 48.11,
+          "wr": 51.6,
+          "trades": 719,
+          "mdd": 2.3
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 60.77,
+          "wr": 52.3,
+          "trades": 759,
+          "mdd": 2.71
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 117.1,
+          "wr": 55.4,
+          "trades": 1001,
+          "mdd": 2.28
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 67.63,
+          "wr": 52.8,
+          "trades": 765,
+          "mdd": 2.01
+        }
+      ],
+      "oos_pnl": 336.14,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.8
+    },
+    {
+      "tighten_pct": 90,
+      "pre_threshold": 2.0,
+      "pre_tighten": 90,
+      "is_pnl": 419.39,
+      "is_wr": 56.1,
+      "is_trades": 4421,
+      "is_mdd": 2.24,
+      "is_pnl_mdd": 187.23,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 42.65,
+          "wr": 53.2,
+          "trades": 620,
+          "mdd": 3.82
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 48.8,
+          "wr": 56.5,
+          "trades": 649,
+          "mdd": 2.39
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 69.29,
+          "wr": 56.3,
+          "trades": 714,
+          "mdd": 2.22
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 109.21,
+          "wr": 57.3,
+          "trades": 932,
+          "mdd": 2.64
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 66.12,
+          "wr": 55.1,
+          "trades": 732,
+          "mdd": 2.29
+        }
+      ],
+      "oos_pnl": 336.07,
+      "wf_all_pass": true,
+      "is_oos_gap": 19.9
+    },
+    {
+      "tighten_pct": 92,
+      "pre_threshold": 3.0,
+      "pre_tighten": 92,
+      "is_pnl": 393.01,
+      "is_wr": 60.3,
+      "is_trades": 3943,
+      "is_mdd": 3.07,
+      "is_pnl_mdd": 128.02,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 34.56,
+          "wr": 55.1,
+          "trades": 574,
+          "mdd": 5.16
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 46.14,
+          "wr": 60.4,
+          "trades": 588,
+          "mdd": 3.09
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 62.13,
+          "wr": 58.0,
+          "trades": 653,
+          "mdd": 3.74
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 107.73,
+          "wr": 61.8,
+          "trades": 816,
+          "mdd": 2.73
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 59.51,
+          "wr": 59.3,
+          "trades": 648,
+          "mdd": 3.16
+        }
+      ],
+      "oos_pnl": 310.07,
+      "wf_all_pass": true,
+      "is_oos_gap": 21.1
+    },
+    {
+      "tighten_pct": 92,
+      "pre_threshold": 1.0,
+      "pre_tighten": 92,
+      "is_pnl": 380.16,
+      "is_wr": 45.2,
+      "is_trades": 5488,
+      "is_mdd": 2.09,
+      "is_pnl_mdd": 181.89,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 44.12,
+          "wr": 44.1,
+          "trades": 798,
+          "mdd": 2.05
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 37.39,
+          "wr": 42.2,
+          "trades": 809,
+          "mdd": 2.8
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 60.25,
+          "wr": 45.5,
+          "trades": 888,
+          "mdd": 2.66
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 99.05,
+          "wr": 46.6,
+          "trades": 1117,
+          "mdd": 2.08
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 60.81,
+          "wr": 45.7,
+          "trades": 852,
+          "mdd": 1.42
+        }
+      ],
+      "oos_pnl": 301.62,
+      "wf_all_pass": true,
+      "is_oos_gap": 20.7
+    },
+    {
+      "tighten_pct": 90,
+      "pre_threshold": 3.0,
+      "pre_tighten": 90,
+      "is_pnl": 370.53,
+      "is_wr": 60.3,
+      "is_trades": 3943,
+      "is_mdd": 3.14,
+      "is_pnl_mdd": 118.0,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 31.72,
+          "wr": 55.1,
+          "trades": 574,
+          "mdd": 5.2
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 43.26,
+          "wr": 60.4,
+          "trades": 588,
+          "mdd": 3.1
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 58.5,
+          "wr": 58.2,
+          "trades": 653,
+          "mdd": 3.76
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 101.75,
+          "wr": 61.8,
+          "trades": 816,
+          "mdd": 2.8
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 55.76,
+          "wr": 59.3,
+          "trades": 648,
+          "mdd": 3.16
+        }
+      ],
+      "oos_pnl": 290.99,
+      "wf_all_pass": true,
+      "is_oos_gap": 21.5
+    },
+    {
+      "tighten_pct": 98,
+      "pre_threshold": 4.0,
+      "pre_tighten": 98,
+      "is_pnl": 351.32,
+      "is_wr": 61.3,
+      "is_trades": 3726,
+      "is_mdd": 4.01,
+      "is_pnl_mdd": 87.61,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 32.94,
+          "wr": 57.6,
+          "trades": 559,
+          "mdd": 5.71
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 32.23,
+          "wr": 60.1,
+          "trades": 552,
+          "mdd": 5.51
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 48.57,
+          "wr": 57.2,
+          "trades": 614,
+          "mdd": 7.04
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 105.79,
+          "wr": 65.0,
+          "trades": 746,
+          "mdd": 3.83
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 57.36,
+          "wr": 60.5,
+          "trades": 625,
+          "mdd": 3.37
+        }
+      ],
+      "oos_pnl": 276.89,
+      "wf_all_pass": true,
+      "is_oos_gap": 21.2
+    },
+    {
+      "tighten_pct": 99,
+      "pre_threshold": 4.0,
+      "pre_tighten": 99,
+      "is_pnl": 351.32,
+      "is_wr": 61.3,
+      "is_trades": 3726,
+      "is_mdd": 4.01,
+      "is_pnl_mdd": 87.61,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 32.94,
+          "wr": 57.6,
+          "trades": 559,
+          "mdd": 5.71
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 32.23,
+          "wr": 60.1,
+          "trades": 552,
+          "mdd": 5.51
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 48.57,
+          "wr": 57.2,
+          "trades": 614,
+          "mdd": 7.04
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 105.79,
+          "wr": 65.0,
+          "trades": 746,
+          "mdd": 3.83
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 57.36,
+          "wr": 60.5,
+          "trades": 625,
+          "mdd": 3.37
+        }
+      ],
+      "oos_pnl": 276.89,
+      "wf_all_pass": true,
+      "is_oos_gap": 21.2
+    },
+    {
+      "tighten_pct": 97,
+      "pre_threshold": 4.0,
+      "pre_tighten": 97,
+      "is_pnl": 350.08,
+      "is_wr": 61.3,
+      "is_trades": 3726,
+      "is_mdd": 4.01,
+      "is_pnl_mdd": 87.3,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 32.77,
+          "wr": 57.6,
+          "trades": 559,
+          "mdd": 5.71
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 32.1,
+          "wr": 60.1,
+          "trades": 552,
+          "mdd": 5.51
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 48.36,
+          "wr": 57.2,
+          "trades": 614,
+          "mdd": 7.04
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 105.49,
+          "wr": 65.0,
+          "trades": 746,
+          "mdd": 3.83
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 57.12,
+          "wr": 60.5,
+          "trades": 625,
+          "mdd": 3.38
+        }
+      ],
+      "oos_pnl": 275.84,
+      "wf_all_pass": true,
+      "is_oos_gap": 21.2
+    },
+    {
+      "tighten_pct": 95,
+      "pre_threshold": 4.0,
+      "pre_tighten": 95,
+      "is_pnl": 335.55,
+      "is_wr": 61.3,
+      "is_trades": 3726,
+      "is_mdd": 4.08,
+      "is_pnl_mdd": 82.24,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 31.03,
+          "wr": 57.6,
+          "trades": 559,
+          "mdd": 5.75
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 30.49,
+          "wr": 60.1,
+          "trades": 552,
+          "mdd": 5.51
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 45.66,
+          "wr": 57.2,
+          "trades": 614,
+          "mdd": 7.06
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 101.79,
+          "wr": 65.0,
+          "trades": 746,
+          "mdd": 3.83
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 54.43,
+          "wr": 60.5,
+          "trades": 625,
+          "mdd": 3.43
+        }
+      ],
+      "oos_pnl": 263.4,
+      "wf_all_pass": true,
+      "is_oos_gap": 21.5
+    },
+    {
+      "tighten_pct": 90,
+      "pre_threshold": 1.0,
+      "pre_tighten": 90,
+      "is_pnl": 317.49,
+      "is_wr": 45.4,
+      "is_trades": 5468,
+      "is_mdd": 2.65,
+      "is_pnl_mdd": 119.81,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 34.75,
+          "wr": 44.2,
+          "trades": 797,
+          "mdd": 2.55
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 27.65,
+          "wr": 42.6,
+          "trades": 796,
+          "mdd": 4.11
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 51.34,
+          "wr": 45.8,
+          "trades": 889,
+          "mdd": 2.77
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 86.96,
+          "wr": 47.0,
+          "trades": 1113,
+          "mdd": 2.08
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 51.76,
+          "wr": 46.0,
+          "trades": 850,
+          "mdd": 1.75
+        }
+      ],
+      "oos_pnl": 252.46,
+      "wf_all_pass": true,
+      "is_oos_gap": 20.5
+    },
+    {
+      "tighten_pct": 92,
+      "pre_threshold": 4.0,
+      "pre_tighten": 92,
+      "is_pnl": 311.44,
+      "is_wr": 61.3,
+      "is_trades": 3725,
+      "is_mdd": 4.27,
+      "is_pnl_mdd": 72.94,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 28.3,
+          "wr": 57.6,
+          "trades": 559,
+          "mdd": 5.8
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 27.79,
+          "wr": 60.1,
+          "trades": 552,
+          "mdd": 5.52
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 40.47,
+          "wr": 56.9,
+          "trades": 613,
+          "mdd": 7.12
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 95.69,
+          "wr": 65.0,
+          "trades": 746,
+          "mdd": 3.84
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 50.12,
+          "wr": 60.5,
+          "trades": 625,
+          "mdd": 3.51
+        }
+      ],
+      "oos_pnl": 242.37,
+      "wf_all_pass": true,
+      "is_oos_gap": 22.2
+    },
+    {
+      "tighten_pct": 90,
+      "pre_threshold": 4.0,
+      "pre_tighten": 90,
+      "is_pnl": 295.3,
+      "is_wr": 61.3,
+      "is_trades": 3724,
+      "is_mdd": 4.42,
+      "is_pnl_mdd": 66.81,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 26.48,
+          "wr": 57.6,
+          "trades": 559,
+          "mdd": 5.83
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 26.13,
+          "wr": 60.3,
+          "trades": 551,
+          "mdd": 5.53
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 37.29,
+          "wr": 56.8,
+          "trades": 613,
+          "mdd": 7.21
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 91.59,
+          "wr": 65.0,
+          "trades": 746,
+          "mdd": 3.84
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 47.25,
+          "wr": 60.5,
+          "trades": 625,
+          "mdd": 3.57
+        }
+      ],
+      "oos_pnl": 228.74,
+      "wf_all_pass": true,
+      "is_oos_gap": 22.5
+    },
+    {
+      "tighten_pct": 98,
+      "pre_threshold": 0.0,
+      "pre_tighten": 98,
+      "is_pnl": 161.29,
+      "is_wr": 61.7,
+      "is_trades": 3552,
+      "is_mdd": 6.88,
+      "is_pnl_mdd": 23.44,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 12.83,
+          "wr": 57.9,
+          "trades": 535,
+          "mdd": 9.63
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 6.77,
+          "wr": 60.0,
+          "trades": 530,
+          "mdd": 8.43
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 23.06,
+          "wr": 57.8,
+          "trades": 597,
+          "mdd": 8.21
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 57.68,
+          "wr": 66.9,
+          "trades": 695,
+          "mdd": 8.46
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 13.86,
+          "wr": 59.8,
+          "trades": 589,
+          "mdd": 9.73
+        }
+      ],
+      "oos_pnl": 114.2,
+      "wf_all_pass": true,
+      "is_oos_gap": 29.2
+    },
+    {
+      "tighten_pct": 99,
+      "pre_threshold": 0.0,
+      "pre_tighten": 99,
+      "is_pnl": 161.29,
+      "is_wr": 61.7,
+      "is_trades": 3552,
+      "is_mdd": 6.88,
+      "is_pnl_mdd": 23.44,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 12.83,
+          "wr": 57.9,
+          "trades": 535,
+          "mdd": 9.63
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 6.77,
+          "wr": 60.0,
+          "trades": 530,
+          "mdd": 8.43
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 23.06,
+          "wr": 57.8,
+          "trades": 597,
+          "mdd": 8.21
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 57.68,
+          "wr": 66.9,
+          "trades": 695,
+          "mdd": 8.46
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 13.86,
+          "wr": 59.8,
+          "trades": 589,
+          "mdd": 9.73
+        }
+      ],
+      "oos_pnl": 114.2,
+      "wf_all_pass": true,
+      "is_oos_gap": 29.2
+    },
+    {
+      "tighten_pct": 97,
+      "pre_threshold": 0.0,
+      "pre_tighten": 97,
+      "is_pnl": 160.67,
+      "is_wr": 61.7,
+      "is_trades": 3552,
+      "is_mdd": 6.89,
+      "is_pnl_mdd": 23.32,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 12.74,
+          "wr": 57.9,
+          "trades": 535,
+          "mdd": 9.65
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 6.73,
+          "wr": 60.0,
+          "trades": 530,
+          "mdd": 8.43
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 22.92,
+          "wr": 57.8,
+          "trades": 597,
+          "mdd": 8.21
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 57.53,
+          "wr": 66.9,
+          "trades": 695,
+          "mdd": 8.48
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 13.73,
+          "wr": 59.8,
+          "trades": 589,
+          "mdd": 9.74
+        }
+      ],
+      "oos_pnl": 113.65,
+      "wf_all_pass": true,
+      "is_oos_gap": 29.3
+    },
+    {
+      "tighten_pct": 95,
+      "pre_threshold": 0.0,
+      "pre_tighten": 95,
+      "is_pnl": 153.07,
+      "is_wr": 61.7,
+      "is_trades": 3552,
+      "is_mdd": 7.2,
+      "is_pnl_mdd": 21.26,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 11.81,
+          "wr": 57.9,
+          "trades": 535,
+          "mdd": 9.83
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 6.15,
+          "wr": 60.0,
+          "trades": 530,
+          "mdd": 8.43
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 21.16,
+          "wr": 57.8,
+          "trades": 597,
+          "mdd": 8.23
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 55.72,
+          "wr": 66.9,
+          "trades": 695,
+          "mdd": 8.7
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 12.32,
+          "wr": 59.8,
+          "trades": 589,
+          "mdd": 9.87
+        }
+      ],
+      "oos_pnl": 107.16,
+      "wf_all_pass": true,
+      "is_oos_gap": 30.0
+    },
+    {
+      "tighten_pct": 92,
+      "pre_threshold": 0.0,
+      "pre_tighten": 92,
+      "is_pnl": 139.47,
+      "is_wr": 61.7,
+      "is_trades": 3551,
+      "is_mdd": 8.02,
+      "is_pnl_mdd": 17.39,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 10.34,
+          "wr": 57.9,
+          "trades": 535,
+          "mdd": 10.11
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 5.04,
+          "wr": 60.0,
+          "trades": 530,
+          "mdd": 8.45
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 17.68,
+          "wr": 57.6,
+          "trades": 596,
+          "mdd": 8.3
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 52.65,
+          "wr": 66.9,
+          "trades": 695,
+          "mdd": 9.03
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 10.04,
+          "wr": 59.8,
+          "trades": 589,
+          "mdd": 10.09
+        }
+      ],
+      "oos_pnl": 95.75,
+      "wf_all_pass": true,
+      "is_oos_gap": 31.3
+    },
+    {
+      "tighten_pct": 90,
+      "pre_threshold": 0.0,
+      "pre_tighten": 90,
+      "is_pnl": 130.59,
+      "is_wr": 61.6,
+      "is_trades": 3551,
+      "is_mdd": 8.6,
+      "is_pnl_mdd": 15.18,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 12427,
+          "oos_end": 24855,
+          "pnl": 9.36,
+          "wr": 57.9,
+          "trades": 535,
+          "mdd": 10.3
+        },
+        {
+          "fold": 2,
+          "oos_start": 24855,
+          "oos_end": 37283,
+          "pnl": 4.3,
+          "wr": 60.0,
+          "trades": 530,
+          "mdd": 8.45
+        },
+        {
+          "fold": 3,
+          "oos_start": 37283,
+          "oos_end": 49711,
+          "pnl": 15.64,
+          "wr": 57.4,
+          "trades": 596,
+          "mdd": 8.39
+        },
+        {
+          "fold": 4,
+          "oos_start": 49711,
+          "oos_end": 62139,
+          "pnl": 50.57,
+          "wr": 66.9,
+          "trades": 695,
+          "mdd": 9.25
+        },
+        {
+          "fold": 5,
+          "oos_start": 62139,
+          "oos_end": 74567,
+          "pnl": 8.51,
+          "wr": 59.8,
+          "trades": 589,
+          "mdd": 10.23
+        }
+      ],
+      "oos_pnl": 88.38,
+      "wf_all_pass": true,
+      "is_oos_gap": 32.3
+    }
+  ],
+  "current_config_rank": 4,
+  "recommendation": {
+    "best_tighten": 98,
+    "best_pre_threshold": 1.5,
+    "best_oos_pnl": 470.27,
+    "best_wf_pass": true,
+    "best_is_oos_gap": 19.1,
+    "current_oos_pnl": 439.85,
+    "delta_oos": 30.42
+  }
+}

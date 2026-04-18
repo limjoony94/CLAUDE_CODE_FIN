@@ -1,0 +1,304 @@
+{
+  "metadata": {
+    "script": "na_contamination_study.py",
+    "date": "2026-03-11T21:09:54.677308",
+    "runtime_sec": 0.8
+  },
+  "phase1_inventory": {
+    "total_entries": 198,
+    "na_trades": 22,
+    "na_unique": 12,
+    "duplicates_all": 10,
+    "duplicates_na": 10,
+    "duplicates_valid": 0,
+    "na_pnl": -7.52,
+    "na_unique_pnl": -5.3007,
+    "dup_pnl": -2.2193
+  },
+  "phase2_clean_metrics": {
+    "original": {
+      "trades": 198,
+      "tp_sl_trades": 148,
+      "tp_sl_wr": 62.16,
+      "all_wr": 56.06,
+      "simple_pnl": -8.806,
+      "compound_pnl": -8.874,
+      "max_dd": 21.88
+    },
+    "clean": {
+      "trades": 176,
+      "tp_sl_trades": 129,
+      "tp_sl_wr": 67.44,
+      "all_wr": 60.23,
+      "simple_pnl": -1.286,
+      "compound_pnl": -1.726,
+      "max_dd": 16.61
+    },
+    "removed_trades": 22
+  },
+  "phase3_wr_gap": {
+    "clean_wr": 67.44,
+    "clean_n": 129,
+    "gap": 5.36,
+    "binom_p": 0.1037,
+    "ci_95": [
+      58.9,
+      75.2
+    ],
+    "significant": "False",
+    "gap_reduction": 5.84
+  },
+  "phase4_temporal": {
+    "crash_events": [
+      {
+        "hour": "2026-02-26T08:00:00",
+        "total_records": 1,
+        "unique_positions": 1,
+        "duplicates": 0,
+        "pnl": -1.193,
+        "directions": {
+          "SHORT": 1
+        },
+        "reasons": {
+          "SL": 1
+        }
+      },
+      {
+        "hour": "2026-02-27T18:00:00",
+        "total_records": 1,
+        "unique_positions": 1,
+        "duplicates": 0,
+        "pnl": 0.31,
+        "directions": {
+          "SHORT": 1
+        },
+        "reasons": {
+          "TP": 1
+        }
+      },
+      {
+        "hour": "2026-02-27T19:00:00",
+        "total_records": 2,
+        "unique_positions": 1,
+        "duplicates": 1,
+        "pnl": -0.716,
+        "directions": {
+          "LONG": 2
+        },
+        "reasons": {
+          "SL": 2
+        }
+      },
+      {
+        "hour": "2026-02-28T17:00:00",
+        "total_records": 1,
+        "unique_positions": 1,
+        "duplicates": 0,
+        "pnl": -0.974,
+        "directions": {
+          "LONG": 1
+        },
+        "reasons": {
+          "SL": 1
+        }
+      },
+      {
+        "hour": "2026-02-28T22:00:00",
+        "total_records": 1,
+        "unique_positions": 1,
+        "duplicates": 0,
+        "pnl": -0.359,
+        "directions": {
+          "SHORT": 1
+        },
+        "reasons": {
+          "SL": 1
+        }
+      },
+      {
+        "hour": "2026-03-04T17:00:00",
+        "total_records": 1,
+        "unique_positions": 1,
+        "duplicates": 0,
+        "pnl": -0.826,
+        "directions": {
+          "SHORT": 1
+        },
+        "reasons": {
+          "SL": 1
+        }
+      },
+      {
+        "hour": "2026-03-04T22:00:00",
+        "total_records": 2,
+        "unique_positions": 1,
+        "duplicates": 1,
+        "pnl": -0.748,
+        "directions": {
+          "SHORT": 2
+        },
+        "reasons": {
+          "SL": 2
+        }
+      },
+      {
+        "hour": "2026-03-04T23:00:00",
+        "total_records": 7,
+        "unique_positions": 3,
+        "duplicates": 4,
+        "pnl": 0.215,
+        "directions": {
+          "SHORT": 3,
+          "LONG": 4
+        },
+        "reasons": {
+          "SL": 3,
+          "TP": 4
+        }
+      },
+      {
+        "hour": "2026-03-05T23:00:00",
+        "total_records": 5,
+        "unique_positions": 1,
+        "duplicates": 4,
+        "pnl": -2.619,
+        "directions": {
+          "LONG": 5
+        },
+        "reasons": {
+          "SL": 2,
+          "MARKET": 3
+        }
+      },
+      {
+        "hour": "2026-03-06T00:00:00",
+        "total_records": 1,
+        "unique_positions": 1,
+        "duplicates": 0,
+        "pnl": -0.609,
+        "directions": {
+          "LONG": 1
+        },
+        "reasons": {
+          "SL": 1
+        }
+      }
+    ],
+    "n_events": 10,
+    "total_na_records": 22,
+    "total_unique_na": 12
+  },
+  "phase5_recovery": {
+    "recovered": 0,
+    "unrecovered": 12,
+    "recovery_rate": 0.0,
+    "recovered_details": [],
+    "unrecovered_details": [
+      {
+        "timestamp": "2026-02-26T08:07:54.091189",
+        "entry": 66244.2,
+        "direction": "SHORT",
+        "exit_reason": "SL",
+        "pnl": -1.1934
+      },
+      {
+        "timestamp": "2026-02-27T18:45:53.821537",
+        "entry": 68105.9,
+        "direction": "SHORT",
+        "exit_reason": "TP",
+        "pnl": 0.3099
+      },
+      {
+        "timestamp": "2026-02-27T19:11:09.362535",
+        "entry": 67735.6,
+        "direction": "LONG",
+        "exit_reason": "SL",
+        "pnl": -0.358
+      },
+      {
+        "timestamp": "2026-02-28T17:20:38.167932",
+        "entry": 65298.8,
+        "direction": "LONG",
+        "exit_reason": "SL",
+        "pnl": -0.9741
+      },
+      {
+        "timestamp": "2026-02-28T22:49:25.622137",
+        "entry": 63982.3,
+        "direction": "SHORT",
+        "exit_reason": "SL",
+        "pnl": -0.3595
+      },
+      {
+        "timestamp": "2026-03-04T17:41:24.138769",
+        "entry": 68091.9,
+        "direction": "SHORT",
+        "exit_reason": "SL",
+        "pnl": -0.8258
+      },
+      {
+        "timestamp": "2026-03-04T22:06:56.221705",
+        "entry": 70787.7,
+        "direction": "SHORT",
+        "exit_reason": "SL",
+        "pnl": -0.3741
+      },
+      {
+        "timestamp": "2026-03-04T23:07:10.808055",
+        "entry": 70837.7,
+        "direction": "SHORT",
+        "exit_reason": "SL",
+        "pnl": -0.363
+      },
+      {
+        "timestamp": "2026-03-04T23:16:09.471416",
+        "entry": 71137.0,
+        "direction": "SHORT",
+        "exit_reason": "SL",
+        "pnl": -0.3488
+      },
+      {
+        "timestamp": "2026-03-04T23:31:24.381298",
+        "entry": 71443.4,
+        "direction": "LONG",
+        "exit_reason": "TP",
+        "pnl": 0.3188
+      },
+      {
+        "timestamp": "2026-03-05T23:43:43.750447",
+        "entry": 73110.7,
+        "direction": "LONG",
+        "exit_reason": "SL",
+        "pnl": -0.5237
+      },
+      {
+        "timestamp": "2026-03-06T00:08:40.553702",
+        "entry": 73110.7,
+        "direction": "LONG",
+        "exit_reason": "SL",
+        "pnl": -0.609
+      }
+    ]
+  },
+  "phase6_cross_validation": {
+    "week_wrs": {
+      "W10": {
+        "wr": 72.5,
+        "n": 51
+      },
+      "W11": {
+        "wr": 81.2,
+        "n": 32
+      },
+      "W9": {
+        "wr": 52.2,
+        "n": 46
+      }
+    },
+    "pre_fix_wr": 55.8,
+    "pre_fix_n": 77,
+    "post_fix_wr": 84.6,
+    "post_fix_n": 52,
+    "fisher_p": 0.0005
+  }
+}

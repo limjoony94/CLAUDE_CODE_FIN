@@ -1,0 +1,311 @@
+{
+  "config": {
+    "data_file": "btc_5m_270days_reclassified.csv",
+    "edge_threshold": 18.0,
+    "mc_threshold": 0.01,
+    "min_trades": 25,
+    "neutral_tol": 1.0,
+    "holdout_days": 7,
+    "wf_folds": 3,
+    "dist_hit_probs": [
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.92,
+      0.95
+    ],
+    "tp_percentiles": [
+      40,
+      50,
+      60,
+      70,
+      80
+    ]
+  },
+  "phase1": {
+    "fit_counts": {
+      "acceptable": 79,
+      "good": 1185,
+      "poor": 30
+    },
+    "total_tested": 1294,
+    "alt_better_pct": 81.2,
+    "good_acceptable_pct": 97.7
+  },
+  "phase2": {
+    "total_compared": 1294,
+    "dist_wider_pct": 100.0,
+    "avg_dist_candidates": 10.9
+  },
+  "phase3": {
+    "percentile": {
+      "patterns": 137,
+      "long": 61,
+      "short": 76,
+      "pnl": 1385.4,
+      "trades": 320,
+      "wr": 95.0,
+      "mdd": 27.8,
+      "pf": 10.89,
+      "pnl_mdd": 49.8,
+      "time_sec": 34.2
+    },
+    "distribution": {
+      "patterns": 44,
+      "long": 16,
+      "short": 28,
+      "pnl": 819.3,
+      "trades": 353,
+      "wr": 88.1,
+      "mdd": 19.4,
+      "pf": 3.82,
+      "pnl_mdd": 42.2,
+      "time_sec": 18.0,
+      "hit_probs": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.55,
+        0.55,
+        0.8,
+        0.55,
+        0.65,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.85,
+        0.5,
+        0.5,
+        0.55,
+        0.6,
+        0.5,
+        0.55,
+        0.85,
+        0.5,
+        0.5,
+        0.5,
+        0.55,
+        0.5,
+        0.6,
+        0.55,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.6,
+        0.65,
+        0.6
+      ]
+    }
+  },
+  "phase4": {
+    "percentile": {
+      "wf_pass": true,
+      "positive_folds": 3,
+      "total_oos_pnl": 872.7,
+      "total_oos_trades": 269,
+      "stable_patterns": 7,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 18024,
+          "oos_bars": 18024,
+          "is_patterns": 37,
+          "is_long": 28,
+          "is_short": 9,
+          "oos_trades": 84,
+          "oos_wr": 88.1,
+          "oos_pnl": 241.2,
+          "oos_mdd": 14.2,
+          "oos_pf": 5.2,
+          "oos_positive": true
+        },
+        {
+          "fold": 2,
+          "is_bars": 36048,
+          "oos_bars": 18024,
+          "is_patterns": 93,
+          "is_long": 65,
+          "is_short": 28,
+          "oos_trades": 95,
+          "oos_wr": 88.4,
+          "oos_pnl": 269.3,
+          "oos_mdd": 31.2,
+          "oos_pf": 3.87,
+          "oos_positive": true
+        },
+        {
+          "fold": 3,
+          "is_bars": 54072,
+          "oos_bars": 18026,
+          "is_patterns": 95,
+          "is_long": 50,
+          "is_short": 45,
+          "oos_trades": 90,
+          "oos_wr": 90.0,
+          "oos_pnl": 362.2,
+          "oos_mdd": 29.2,
+          "oos_pf": 4.57,
+          "oos_positive": true
+        }
+      ],
+      "time_sec": 134.7
+    },
+    "distribution": {
+      "wf_pass": true,
+      "positive_folds": 3,
+      "total_oos_pnl": 280.7,
+      "total_oos_trades": 291,
+      "stable_patterns": 2,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": 18024,
+          "oos_bars": 18024,
+          "is_patterns": 15,
+          "is_long": 11,
+          "is_short": 4,
+          "oos_trades": 86,
+          "oos_wr": 74.4,
+          "oos_pnl": 52.8,
+          "oos_mdd": 25.4,
+          "oos_pf": 1.38,
+          "oos_positive": true
+        },
+        {
+          "fold": 2,
+          "is_bars": 36048,
+          "oos_bars": 18024,
+          "is_patterns": 41,
+          "is_long": 26,
+          "is_short": 15,
+          "oos_trades": 104,
+          "oos_wr": 81.7,
+          "oos_pnl": 129.5,
+          "oos_mdd": 19.4,
+          "oos_pf": 1.98,
+          "oos_positive": true
+        },
+        {
+          "fold": 3,
+          "is_bars": 54072,
+          "oos_bars": 18026,
+          "is_patterns": 30,
+          "is_long": 19,
+          "is_short": 11,
+          "oos_trades": 101,
+          "oos_wr": 76.2,
+          "oos_pnl": 98.4,
+          "oos_mdd": 35.0,
+          "oos_pf": 1.58,
+          "oos_positive": true
+        }
+      ],
+      "time_sec": 50.3
+    },
+    "verdict": "INFORMATIONAL",
+    "reason": "Distribution WF PASS but OOS 280.7% < Percentile 872.7% (keep as option)"
+  },
+  "phase5": {
+    "resolution": {
+      "6pt": {
+        "n_probs": 6,
+        "patterns": 41,
+        "pnl": 811.9,
+        "mdd": 19.6,
+        "pnl_mdd": 41.4,
+        "wr": 88.2,
+        "trades": 346
+      },
+      "11pt": {
+        "n_probs": 11,
+        "patterns": 44,
+        "pnl": 819.3,
+        "mdd": 19.4,
+        "pnl_mdd": 42.2,
+        "wr": 88.1,
+        "trades": 353
+      },
+      "20pt": {
+        "n_probs": 20,
+        "patterns": 90,
+        "pnl": 1210.1,
+        "mdd": 15.9,
+        "pnl_mdd": 76.1,
+        "wr": 92.7,
+        "trades": 371
+      }
+    },
+    "baseline_wr": {
+      "65.0": {
+        "patterns": 23,
+        "pnl": 677.7,
+        "mdd": 15.5,
+        "pnl_mdd": 43.7,
+        "wr": 87.2
+      },
+      "70.0": {
+        "patterns": 44,
+        "pnl": 819.3,
+        "mdd": 19.4,
+        "pnl_mdd": 42.2,
+        "wr": 88.1
+      },
+      "75.0": {
+        "patterns": 77,
+        "pnl": 1108.9,
+        "mdd": 20.3,
+        "pnl_mdd": 54.6,
+        "wr": 92.8
+      }
+    },
+    "edge_threshold": {
+      "15.0": {
+        "patterns": 63,
+        "pnl": 1028.6,
+        "mdd": 15.1,
+        "pnl_mdd": 68.1,
+        "wr": 90.8
+      },
+      "18.0": {
+        "patterns": 44,
+        "pnl": 819.3,
+        "mdd": 19.4,
+        "pnl_mdd": 42.2,
+        "wr": 88.1
+      },
+      "20.0": {
+        "patterns": 35,
+        "pnl": 751.5,
+        "mdd": 17.8,
+        "pnl_mdd": 42.2,
+        "wr": 86.7
+      },
+      "21.8": {
+        "patterns": 19,
+        "pnl": 656.2,
+        "mdd": 13.9,
+        "pnl_mdd": 47.2,
+        "wr": 89.2
+      }
+    }
+  },
+  "total_time_sec": 468.0
+}

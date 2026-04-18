@@ -1,0 +1,572 @@
+{
+  "study": "vol_adaptive_trail",
+  "date": "2026-03-30T20:22:04.625381",
+  "script": "scripts/analysis/vol_adaptive_trail.py",
+  "hypothesis": "Trail parameters should scale with ATR to match SL scaling",
+  "data_bars": 93864,
+  "neutral_window": [
+    0,
+    74567
+  ],
+  "decay_rate": 0.9975,
+  "tp_mode": "mfe_median",
+  "baseline_no_trail": {
+    "is": {
+      "trades": 2554,
+      "wr": 81.2,
+      "pnl": 424.33,
+      "mdd": 2.05,
+      "pnl_mdd": 207.03,
+      "mdd_mtm": 3.87,
+      "pnl_mdd_mtm": 109.6,
+      "timeouts": 999,
+      "avg_holding_bars": 163.2,
+      "tp_exits": 2073,
+      "sl_exits": 472,
+      "trail_exits": 0,
+      "rr_tp_only": 0.728,
+      "rr_with_trail": 0.728,
+      "be_wr": 57.9,
+      "wr_margin": 23.3,
+      "avg_win": 2.688,
+      "avg_loss": -3.657,
+      "blocked": {
+        "momentum": 33,
+        "agg_risk": 0,
+        "dir_cap": 987,
+        "dup_pat": 294,
+        "max_pos": 5274
+      },
+      "elapsed_s": 3.1
+    },
+    "wf": {
+      "folds": [
+        {
+          "fold": 1,
+          "oos_trades": 341,
+          "oos_wr": 83.6,
+          "oos_pnl": 58.05,
+          "oos_mdd_mtm": 5.45,
+          "timeouts": 194,
+          "oos_rr": 0.639,
+          "oos_be_wr": 61.0,
+          "oos_trail_exits": 0
+        },
+        {
+          "fold": 2,
+          "oos_trades": 342,
+          "oos_wr": 86.8,
+          "oos_pnl": 66.55,
+          "oos_mdd_mtm": 3.62,
+          "timeouts": 188,
+          "oos_rr": 0.854,
+          "oos_be_wr": 53.9,
+          "oos_trail_exits": 0
+        },
+        {
+          "fold": 3,
+          "oos_trades": 424,
+          "oos_wr": 75.9,
+          "oos_pnl": 60.35,
+          "oos_mdd_mtm": 4.51,
+          "timeouts": 173,
+          "oos_rr": 0.803,
+          "oos_be_wr": 55.5,
+          "oos_trail_exits": 0
+        },
+        {
+          "fold": 4,
+          "oos_trades": 576,
+          "oos_wr": 78.6,
+          "oos_pnl": 93.46,
+          "oos_mdd_mtm": 6.36,
+          "timeouts": 119,
+          "oos_rr": 0.723,
+          "oos_be_wr": 58.0,
+          "oos_trail_exits": 0
+        },
+        {
+          "fold": 5,
+          "oos_trades": 424,
+          "oos_wr": 77.8,
+          "oos_pnl": 52.52,
+          "oos_mdd_mtm": 7.78,
+          "timeouts": 165,
+          "oos_rr": 0.586,
+          "oos_be_wr": 63.1,
+          "oos_trail_exits": 0
+        }
+      ],
+      "total_oos_pnl": 330.9,
+      "n_pass": 5,
+      "n_folds": 5,
+      "verdict": "PASS"
+    },
+    "discrimination": {
+      "n_shuffles": 15,
+      "n_wf_pass": 15,
+      "pass_rate": 100.0,
+      "discriminating": false,
+      "verdict": "NON-DISCRIMINATING"
+    }
+  },
+  "strategies": {
+    "A_FIXED": {
+      "config": {
+        "mode": "fixed",
+        "activation_pct": 0.5,
+        "trail_pct": 0.2
+      },
+      "label": "FIXED (baseline)",
+      "is": {
+        "trades": 4520,
+        "wr": 89.8,
+        "pnl": 284.45,
+        "mdd": 3.19,
+        "pnl_mdd": 89.13,
+        "mdd_mtm": 4.75,
+        "pnl_mdd_mtm": 59.9,
+        "timeouts": 773,
+        "avg_holding_bars": 96.7,
+        "tp_exits": 227,
+        "sl_exits": 450,
+        "trail_exits": 3834,
+        "rr_tp_only": 0.414,
+        "rr_with_trail": 0.284,
+        "be_wr": 77.9,
+        "wr_margin": 11.9,
+        "avg_win": 1.039,
+        "avg_loss": -3.617,
+        "trail_stats": {
+          "trail_count": 3834,
+          "trail_pct_of_exits": 85.0,
+          "trail_avg_pnl": 1.011,
+          "trail_p25": 0.719,
+          "trail_p50": 0.89,
+          "trail_p75": 1.169,
+          "trail_p90": 1.516,
+          "tp_count": 227,
+          "sl_count": 450
+        },
+        "blocked": {
+          "momentum": 38,
+          "agg_risk": 0,
+          "dir_cap": 1321,
+          "dup_pat": 338,
+          "max_pos": 3151
+        },
+        "elapsed_s": 3.4
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_trades": 658,
+            "oos_wr": 92.7,
+            "oos_pnl": 49.06,
+            "oos_mdd_mtm": 6.9,
+            "timeouts": 153,
+            "oos_rr": 0.245,
+            "oos_be_wr": 80.3,
+            "oos_trail_exits": 560
+          },
+          {
+            "fold": 2,
+            "oos_trades": 667,
+            "oos_wr": 91.6,
+            "oos_pnl": 50.51,
+            "oos_mdd_mtm": 5.16,
+            "timeouts": 145,
+            "oos_rr": 0.321,
+            "oos_be_wr": 75.7,
+            "oos_trail_exits": 566
+          },
+          {
+            "fold": 3,
+            "oos_trades": 735,
+            "oos_wr": 87.9,
+            "oos_pnl": 43.91,
+            "oos_mdd_mtm": 4.86,
+            "timeouts": 139,
+            "oos_rr": 0.318,
+            "oos_be_wr": 75.9,
+            "oos_trail_exits": 616
+          },
+          {
+            "fold": 4,
+            "oos_trades": 1009,
+            "oos_wr": 87.7,
+            "oos_pnl": 52.11,
+            "oos_mdd_mtm": 5.42,
+            "timeouts": 74,
+            "oos_rr": 0.262,
+            "oos_be_wr": 79.2,
+            "oos_trail_exits": 843
+          },
+          {
+            "fold": 5,
+            "oos_trades": 699,
+            "oos_wr": 88.3,
+            "oos_pnl": 35.32,
+            "oos_mdd_mtm": 8.13,
+            "timeouts": 139,
+            "oos_rr": 0.251,
+            "oos_be_wr": 79.9,
+            "oos_trail_exits": 592
+          }
+        ],
+        "total_oos_pnl": 230.9,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "PASS"
+      },
+      "discrimination": null
+    },
+    "B_ATR_SCALED": {
+      "config": {
+        "mode": "atr_scaled",
+        "base_activation_pct": 0.5,
+        "base_trail_pct": 0.2
+      },
+      "label": "ATR-SCALED",
+      "is": {
+        "trades": 4492,
+        "wr": 90.1,
+        "pnl": 297.07,
+        "mdd": 2.62,
+        "pnl_mdd": 113.36,
+        "mdd_mtm": 4.48,
+        "pnl_mdd_mtm": 66.3,
+        "timeouts": 781,
+        "avg_holding_bars": 97.9,
+        "tp_exits": 105,
+        "sl_exits": 436,
+        "trail_exits": 3942,
+        "rr_tp_only": 0.637,
+        "rr_with_trail": 0.29,
+        "be_wr": 77.5,
+        "wr_margin": 12.6,
+        "avg_win": 1.054,
+        "avg_loss": -3.592,
+        "trail_stats": {
+          "trail_count": 3942,
+          "trail_pct_of_exits": 87.9,
+          "trail_avg_pnl": 1.021,
+          "trail_p25": 0.685,
+          "trail_p50": 0.932,
+          "trail_p75": 1.262,
+          "trail_p90": 1.649,
+          "tp_count": 105,
+          "sl_count": 436
+        },
+        "blocked": {
+          "momentum": 38,
+          "agg_risk": 0,
+          "dir_cap": 1320,
+          "dup_pat": 323,
+          "max_pos": 3187
+        },
+        "elapsed_s": 3.5
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_trades": 637,
+            "oos_wr": 92.3,
+            "oos_pnl": 46.88,
+            "oos_mdd_mtm": 6.79,
+            "timeouts": 156,
+            "oos_rr": 0.253,
+            "oos_be_wr": 79.8,
+            "oos_trail_exits": 568
+          },
+          {
+            "fold": 2,
+            "oos_trades": 642,
+            "oos_wr": 91.3,
+            "oos_pnl": 48.2,
+            "oos_mdd_mtm": 4.81,
+            "timeouts": 148,
+            "oos_rr": 0.306,
+            "oos_be_wr": 76.6,
+            "oos_trail_exits": 571
+          },
+          {
+            "fold": 3,
+            "oos_trades": 741,
+            "oos_wr": 88.1,
+            "oos_pnl": 44.41,
+            "oos_mdd_mtm": 4.8,
+            "timeouts": 134,
+            "oos_rr": 0.303,
+            "oos_be_wr": 76.7,
+            "oos_trail_exits": 640
+          },
+          {
+            "fold": 4,
+            "oos_trades": 1047,
+            "oos_wr": 88.5,
+            "oos_pnl": 55.35,
+            "oos_mdd_mtm": 5.21,
+            "timeouts": 69,
+            "oos_rr": 0.256,
+            "oos_be_wr": 79.6,
+            "oos_trail_exits": 902
+          },
+          {
+            "fold": 5,
+            "oos_trades": 694,
+            "oos_wr": 88.6,
+            "oos_pnl": 41.72,
+            "oos_mdd_mtm": 8.0,
+            "timeouts": 138,
+            "oos_rr": 0.277,
+            "oos_be_wr": 78.3,
+            "oos_trail_exits": 603
+          }
+        ],
+        "total_oos_pnl": 236.6,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "PASS"
+      },
+      "discrimination": null
+    },
+    "C_SL_PROPORTIONAL": {
+      "config": {
+        "mode": "sl_proportional",
+        "activation_mult": 0.15,
+        "trail_mult": 0.06
+      },
+      "label": "SL-PROPORTIONAL",
+      "is": {
+        "trades": 4364,
+        "wr": 89.8,
+        "pnl": 295.14,
+        "mdd": 3.87,
+        "pnl_mdd": 76.19,
+        "mdd_mtm": 5.14,
+        "pnl_mdd_mtm": 57.4,
+        "timeouts": 794,
+        "avg_holding_bars": 100.9,
+        "tp_exits": 167,
+        "sl_exits": 429,
+        "trail_exits": 3759,
+        "rr_tp_only": 0.581,
+        "rr_with_trail": 0.288,
+        "be_wr": 77.6,
+        "wr_margin": 12.2,
+        "avg_win": 1.096,
+        "avg_loss": -3.706,
+        "trail_stats": {
+          "trail_count": 3759,
+          "trail_pct_of_exits": 86.3,
+          "trail_avg_pnl": 1.045,
+          "trail_p25": 0.675,
+          "trail_p50": 0.988,
+          "trail_p75": 1.317,
+          "trail_p90": 1.718,
+          "tp_count": 167,
+          "sl_count": 429
+        },
+        "blocked": {
+          "momentum": 36,
+          "agg_risk": 0,
+          "dir_cap": 1360,
+          "dup_pat": 349,
+          "max_pos": 3238
+        },
+        "elapsed_s": 3.6
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_trades": 628,
+            "oos_wr": 91.7,
+            "oos_pnl": 41.47,
+            "oos_mdd_mtm": 7.09,
+            "timeouts": 159,
+            "oos_rr": 0.22,
+            "oos_be_wr": 82.0,
+            "oos_trail_exits": 551
+          },
+          {
+            "fold": 2,
+            "oos_trades": 631,
+            "oos_wr": 91.4,
+            "oos_pnl": 49.64,
+            "oos_mdd_mtm": 5.01,
+            "timeouts": 150,
+            "oos_rr": 0.3,
+            "oos_be_wr": 76.9,
+            "oos_trail_exits": 549
+          },
+          {
+            "fold": 3,
+            "oos_trades": 753,
+            "oos_wr": 87.4,
+            "oos_pnl": 46.08,
+            "oos_mdd_mtm": 5.53,
+            "timeouts": 129,
+            "oos_rr": 0.312,
+            "oos_be_wr": 76.2,
+            "oos_trail_exits": 626
+          },
+          {
+            "fold": 4,
+            "oos_trades": 1010,
+            "oos_wr": 87.9,
+            "oos_pnl": 57.64,
+            "oos_mdd_mtm": 6.73,
+            "timeouts": 74,
+            "oos_rr": 0.272,
+            "oos_be_wr": 78.6,
+            "oos_trail_exits": 853
+          },
+          {
+            "fold": 5,
+            "oos_trades": 671,
+            "oos_wr": 88.2,
+            "oos_pnl": 39.3,
+            "oos_mdd_mtm": 7.64,
+            "timeouts": 135,
+            "oos_rr": 0.272,
+            "oos_be_wr": 78.6,
+            "oos_trail_exits": 578
+          }
+        ],
+        "total_oos_pnl": 234.1,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "PASS"
+      },
+      "discrimination": null
+    },
+    "D_HYBRID": {
+      "config": {
+        "mode": "hybrid",
+        "base_activation_pct": 0.5,
+        "base_trail_pct": 0.2,
+        "act_min": 0.3,
+        "act_max": 1.5,
+        "trail_min": 0.1,
+        "trail_max": 0.5
+      },
+      "label": "HYBRID (ATR + clamp)",
+      "is": {
+        "trades": 4450,
+        "wr": 90.1,
+        "pnl": 301.2,
+        "mdd": 2.62,
+        "pnl_mdd": 114.94,
+        "mdd_mtm": 4.49,
+        "pnl_mdd_mtm": 67.1,
+        "timeouts": 788,
+        "avg_holding_bars": 98.7,
+        "tp_exits": 112,
+        "sl_exits": 434,
+        "trail_exits": 3895,
+        "rr_tp_only": 0.621,
+        "rr_with_trail": 0.297,
+        "be_wr": 77.1,
+        "wr_margin": 13.0,
+        "avg_win": 1.068,
+        "avg_loss": -3.554,
+        "trail_stats": {
+          "trail_count": 3895,
+          "trail_pct_of_exits": 87.7,
+          "trail_avg_pnl": 1.035,
+          "trail_p25": 0.697,
+          "trail_p50": 0.938,
+          "trail_p75": 1.267,
+          "trail_p90": 1.653,
+          "tp_count": 112,
+          "sl_count": 434
+        },
+        "blocked": {
+          "momentum": 38,
+          "agg_risk": 0,
+          "dir_cap": 1314,
+          "dup_pat": 321,
+          "max_pos": 3230
+        },
+        "elapsed_s": 3.7
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_trades": 627,
+            "oos_wr": 92.2,
+            "oos_pnl": 46.91,
+            "oos_mdd_mtm": 6.78,
+            "timeouts": 158,
+            "oos_rr": 0.257,
+            "oos_be_wr": 79.6,
+            "oos_trail_exits": 557
+          },
+          {
+            "fold": 2,
+            "oos_trades": 640,
+            "oos_wr": 91.1,
+            "oos_pnl": 48.78,
+            "oos_mdd_mtm": 4.79,
+            "timeouts": 149,
+            "oos_rr": 0.318,
+            "oos_be_wr": 75.9,
+            "oos_trail_exits": 568
+          },
+          {
+            "fold": 3,
+            "oos_trades": 725,
+            "oos_wr": 88.7,
+            "oos_pnl": 47.28,
+            "oos_mdd_mtm": 4.71,
+            "timeouts": 139,
+            "oos_rr": 0.313,
+            "oos_be_wr": 76.2,
+            "oos_trail_exits": 629
+          },
+          {
+            "fold": 4,
+            "oos_trades": 1046,
+            "oos_wr": 88.4,
+            "oos_pnl": 56.34,
+            "oos_mdd_mtm": 5.2,
+            "timeouts": 69,
+            "oos_rr": 0.261,
+            "oos_be_wr": 79.3,
+            "oos_trail_exits": 898
+          },
+          {
+            "fold": 5,
+            "oos_trades": 691,
+            "oos_wr": 88.6,
+            "oos_pnl": 42.09,
+            "oos_mdd_mtm": 7.99,
+            "timeouts": 137,
+            "oos_rr": 0.28,
+            "oos_be_wr": 78.1,
+            "oos_trail_exits": 597
+          }
+        ],
+        "total_oos_pnl": 241.4,
+        "n_pass": 5,
+        "n_folds": 5,
+        "verdict": "PASS"
+      },
+      "discrimination": {
+        "n_shuffles": 15,
+        "n_wf_pass": 15,
+        "pass_rate": 100.0,
+        "discriminating": false,
+        "verdict": "NON-DISCRIMINATING"
+      }
+    }
+  },
+  "elapsed_s": 140.8,
+  "best_strategy": "D_HYBRID",
+  "best_oos": 241.4
+}

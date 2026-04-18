@@ -1,0 +1,1197 @@
+{
+  "metadata": {
+    "script": "entry_signal_contribution.py",
+    "generated_at": "2026-03-14T22:50:01.043370",
+    "elapsed_seconds": 174.6,
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "patterns_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\results\\dynamic_patterns.json",
+    "tp_scale_factor": 0.72,
+    "cascade_tighten_pct": 95,
+    "n_random_seeds": 30,
+    "wf_folds": 3,
+    "leverage": 3,
+    "fee_pct": 0.1,
+    "max_bars": 288
+  },
+  "exp1_random_baseline": {
+    "pattern_baseline": {
+      "is_pnl": 445.1,
+      "is_wr": 77.0,
+      "is_mdd": 1.7,
+      "is_trades": 1840,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_pnl": 96.4,
+          "oos_wr": 81.0,
+          "oos_trades": 363,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_pnl": 112.3,
+          "oos_wr": 71.8,
+          "oos_trades": 507,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_pnl": 124.2,
+          "oos_wr": 73.9,
+          "oos_trades": 586,
+          "pass": "True"
+        }
+      ],
+      "wf_oos_total": 332.9,
+      "wf_pass": 3
+    },
+    "random_summary": {
+      "n_seeds": 30,
+      "is_pnl_mean": 385.3,
+      "is_pnl_std": 14.3,
+      "is_pnl_min": 359.2,
+      "is_pnl_max": 412.2,
+      "is_wr_mean": 68.5,
+      "is_mdd_mean": 3.01,
+      "oos_total_mean": 297.9,
+      "oos_total_std": 13.8,
+      "oos_total_min": 272.7,
+      "oos_total_max": 326.9,
+      "wf_3_3_pass_count": 30
+    },
+    "pattern_contribution_is_pct": 13.4,
+    "pattern_contribution_oos_pct": 10.5,
+    "pattern_beats_random_is": "30/30",
+    "pattern_beats_random_oos": "30/30",
+    "p_value_is": 0.0,
+    "p_value_oos": 0.0,
+    "random_detail": [
+      {
+        "seed": 42,
+        "is_pnl": 377.4,
+        "is_wr": 67.9,
+        "is_mdd": 2.32,
+        "is_trades": 2077
+      },
+      {
+        "seed": 43,
+        "is_pnl": 378.1,
+        "is_wr": 68.8,
+        "is_mdd": 2.5,
+        "is_trades": 2113
+      },
+      {
+        "seed": 44,
+        "is_pnl": 368.3,
+        "is_wr": 66.8,
+        "is_mdd": 2.58,
+        "is_trades": 2114
+      },
+      {
+        "seed": 45,
+        "is_pnl": 411.8,
+        "is_wr": 71.2,
+        "is_mdd": 3.84,
+        "is_trades": 2105
+      },
+      {
+        "seed": 46,
+        "is_pnl": 395.2,
+        "is_wr": 69.0,
+        "is_mdd": 1.44,
+        "is_trades": 2076
+      },
+      {
+        "seed": 47,
+        "is_pnl": 359.2,
+        "is_wr": 66.5,
+        "is_mdd": 3.19,
+        "is_trades": 2121
+      },
+      {
+        "seed": 48,
+        "is_pnl": 394.7,
+        "is_wr": 68.2,
+        "is_mdd": 3.09,
+        "is_trades": 2182
+      },
+      {
+        "seed": 49,
+        "is_pnl": 389.7,
+        "is_wr": 68.0,
+        "is_mdd": 2.52,
+        "is_trades": 2179
+      },
+      {
+        "seed": 50,
+        "is_pnl": 402.5,
+        "is_wr": 69.7,
+        "is_mdd": 3.02,
+        "is_trades": 2140
+      },
+      {
+        "seed": 51,
+        "is_pnl": 382.5,
+        "is_wr": 69.4,
+        "is_mdd": 2.1,
+        "is_trades": 2064
+      },
+      {
+        "seed": 52,
+        "is_pnl": 394.2,
+        "is_wr": 69.7,
+        "is_mdd": 4.52,
+        "is_trades": 2126
+      },
+      {
+        "seed": 53,
+        "is_pnl": 373.8,
+        "is_wr": 66.8,
+        "is_mdd": 3.75,
+        "is_trades": 2158
+      },
+      {
+        "seed": 54,
+        "is_pnl": 383.5,
+        "is_wr": 67.4,
+        "is_mdd": 3.83,
+        "is_trades": 2168
+      },
+      {
+        "seed": 55,
+        "is_pnl": 382.3,
+        "is_wr": 68.5,
+        "is_mdd": 3.2,
+        "is_trades": 2150
+      },
+      {
+        "seed": 56,
+        "is_pnl": 366.0,
+        "is_wr": 67.9,
+        "is_mdd": 2.56,
+        "is_trades": 2122
+      },
+      {
+        "seed": 57,
+        "is_pnl": 403.5,
+        "is_wr": 68.2,
+        "is_mdd": 3.62,
+        "is_trades": 2192
+      },
+      {
+        "seed": 58,
+        "is_pnl": 373.8,
+        "is_wr": 68.0,
+        "is_mdd": 2.15,
+        "is_trades": 2126
+      },
+      {
+        "seed": 59,
+        "is_pnl": 389.1,
+        "is_wr": 68.7,
+        "is_mdd": 2.45,
+        "is_trades": 2108
+      },
+      {
+        "seed": 60,
+        "is_pnl": 383.0,
+        "is_wr": 68.7,
+        "is_mdd": 6.39,
+        "is_trades": 2105
+      },
+      {
+        "seed": 61,
+        "is_pnl": 379.7,
+        "is_wr": 66.6,
+        "is_mdd": 1.88,
+        "is_trades": 2191
+      },
+      {
+        "seed": 62,
+        "is_pnl": 383.5,
+        "is_wr": 69.0,
+        "is_mdd": 1.82,
+        "is_trades": 2092
+      },
+      {
+        "seed": 63,
+        "is_pnl": 390.7,
+        "is_wr": 69.1,
+        "is_mdd": 2.59,
+        "is_trades": 2099
+      },
+      {
+        "seed": 64,
+        "is_pnl": 399.0,
+        "is_wr": 71.6,
+        "is_mdd": 4.73,
+        "is_trades": 2044
+      },
+      {
+        "seed": 65,
+        "is_pnl": 407.8,
+        "is_wr": 69.0,
+        "is_mdd": 1.55,
+        "is_trades": 2117
+      },
+      {
+        "seed": 66,
+        "is_pnl": 412.2,
+        "is_wr": 68.4,
+        "is_mdd": 2.92,
+        "is_trades": 2209
+      },
+      {
+        "seed": 67,
+        "is_pnl": 384.2,
+        "is_wr": 69.9,
+        "is_mdd": 3.47,
+        "is_trades": 2094
+      },
+      {
+        "seed": 68,
+        "is_pnl": 378.4,
+        "is_wr": 67.7,
+        "is_mdd": 3.06,
+        "is_trades": 2109
+      },
+      {
+        "seed": 69,
+        "is_pnl": 361.6,
+        "is_wr": 67.1,
+        "is_mdd": 2.75,
+        "is_trades": 2068
+      },
+      {
+        "seed": 70,
+        "is_pnl": 361.2,
+        "is_wr": 68.8,
+        "is_mdd": 2.36,
+        "is_trades": 2026
+      },
+      {
+        "seed": 71,
+        "is_pnl": 392.1,
+        "is_wr": 69.4,
+        "is_mdd": 3.95,
+        "is_trades": 2042
+      }
+    ],
+    "random_wf_detail": [
+      {
+        "seed": 42,
+        "oos_total": 288.3,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 76.9,
+            "oos_wr": 67.2,
+            "oos_trades": 458,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 109.3,
+            "oos_wr": 67.9,
+            "oos_trades": 567,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 102.1,
+            "oos_wr": 66.5,
+            "oos_trades": 624,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 43,
+        "oos_total": 305.1,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 69.6,
+            "oos_wr": 70.4,
+            "oos_trades": 398,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 115.5,
+            "oos_wr": 67.8,
+            "oos_trades": 602,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 120.0,
+            "oos_wr": 69.1,
+            "oos_trades": 666,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 44,
+        "oos_total": 283.8,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 75.2,
+            "oos_wr": 69.9,
+            "oos_trades": 418,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 114.4,
+            "oos_wr": 67.0,
+            "oos_trades": 610,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 94.2,
+            "oos_wr": 62.9,
+            "oos_trades": 631,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 45,
+        "oos_total": 323.3,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 86.8,
+            "oos_wr": 75.8,
+            "oos_trades": 421,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 113.0,
+            "oos_wr": 68.8,
+            "oos_trades": 599,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 123.5,
+            "oos_wr": 68.7,
+            "oos_trades": 658,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 46,
+        "oos_total": 305.3,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 75.8,
+            "oos_wr": 69.4,
+            "oos_trades": 409,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 121.0,
+            "oos_wr": 67.6,
+            "oos_trades": 618,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 108.5,
+            "oos_wr": 68.5,
+            "oos_trades": 584,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 47,
+        "oos_total": 272.7,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 68.8,
+            "oos_wr": 68.6,
+            "oos_trades": 423,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 98.8,
+            "oos_wr": 66.3,
+            "oos_trades": 584,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 105.1,
+            "oos_wr": 64.7,
+            "oos_trades": 651,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 48,
+        "oos_total": 314.5,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 86.5,
+            "oos_wr": 70.7,
+            "oos_trades": 461,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 116.2,
+            "oos_wr": 66.7,
+            "oos_trades": 649,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 111.8,
+            "oos_wr": 68.5,
+            "oos_trades": 629,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 49,
+        "oos_total": 299.6,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 75.9,
+            "oos_wr": 65.7,
+            "oos_trades": 475,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 122.5,
+            "oos_wr": 71.0,
+            "oos_trades": 611,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 101.2,
+            "oos_wr": 64.7,
+            "oos_trades": 634,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 50,
+        "oos_total": 326.9,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 91.9,
+            "oos_wr": 72.5,
+            "oos_trades": 448,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 108.2,
+            "oos_wr": 68.7,
+            "oos_trades": 581,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 126.8,
+            "oos_wr": 71.3,
+            "oos_trades": 655,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 51,
+        "oos_total": 290.7,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 79.1,
+            "oos_wr": 73.0,
+            "oos_trades": 407,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 102.2,
+            "oos_wr": 65.8,
+            "oos_trades": 587,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 109.4,
+            "oos_wr": 66.7,
+            "oos_trades": 651,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 52,
+        "oos_total": 306.8,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 80.3,
+            "oos_wr": 71.4,
+            "oos_trades": 423,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 114.7,
+            "oos_wr": 69.6,
+            "oos_trades": 588,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 111.8,
+            "oos_wr": 68.3,
+            "oos_trades": 675,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 53,
+        "oos_total": 287.9,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 69.6,
+            "oos_wr": 68.8,
+            "oos_trades": 407,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 110.8,
+            "oos_wr": 64.7,
+            "oos_trades": 629,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 107.5,
+            "oos_wr": 65.9,
+            "oos_trades": 671,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 54,
+        "oos_total": 300.8,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 74.9,
+            "oos_wr": 68.6,
+            "oos_trades": 424,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 121.7,
+            "oos_wr": 68.5,
+            "oos_trades": 629,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 104.2,
+            "oos_wr": 64.1,
+            "oos_trades": 661,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 55,
+        "oos_total": 287.6,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 75.2,
+            "oos_wr": 67.1,
+            "oos_trades": 465,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 95.6,
+            "oos_wr": 64.5,
+            "oos_trades": 580,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 116.8,
+            "oos_wr": 70.0,
+            "oos_trades": 654,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 56,
+        "oos_total": 275.3,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 68.0,
+            "oos_wr": 69.9,
+            "oos_trades": 405,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 111.3,
+            "oos_wr": 64.7,
+            "oos_trades": 634,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 96.0,
+            "oos_wr": 65.5,
+            "oos_trades": 614,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 57,
+        "oos_total": 311.5,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 77.8,
+            "oos_wr": 68.2,
+            "oos_trades": 456,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 110.9,
+            "oos_wr": 69.1,
+            "oos_trades": 569,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 122.8,
+            "oos_wr": 67.9,
+            "oos_trades": 669,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 58,
+        "oos_total": 284.4,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 77.2,
+            "oos_wr": 69.6,
+            "oos_trades": 431,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 110.8,
+            "oos_wr": 66.5,
+            "oos_trades": 612,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 96.4,
+            "oos_wr": 63.5,
+            "oos_trades": 643,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 59,
+        "oos_total": 299.2,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 79.0,
+            "oos_wr": 69.0,
+            "oos_trades": 422,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 113.7,
+            "oos_wr": 71.5,
+            "oos_trades": 561,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 106.5,
+            "oos_wr": 64.3,
+            "oos_trades": 663,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 60,
+        "oos_total": 294.6,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 83.3,
+            "oos_wr": 73.7,
+            "oos_trades": 395,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 114.0,
+            "oos_wr": 68.7,
+            "oos_trades": 597,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 97.3,
+            "oos_wr": 65.1,
+            "oos_trades": 628,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 61,
+        "oos_total": 287.1,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 71.3,
+            "oos_wr": 63.5,
+            "oos_trades": 455,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 99.5,
+            "oos_wr": 64.2,
+            "oos_trades": 614,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 116.3,
+            "oos_wr": 67.2,
+            "oos_trades": 670,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 62,
+        "oos_total": 291.8,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 81.6,
+            "oos_wr": 71.9,
+            "oos_trades": 434,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 112.4,
+            "oos_wr": 69.2,
+            "oos_trades": 600,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 97.8,
+            "oos_wr": 65.2,
+            "oos_trades": 621,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 63,
+        "oos_total": 307.6,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 84.3,
+            "oos_wr": 70.4,
+            "oos_trades": 442,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 116.5,
+            "oos_wr": 68.0,
+            "oos_trades": 607,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 106.8,
+            "oos_wr": 67.6,
+            "oos_trades": 615,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 64,
+        "oos_total": 307.7,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 72.4,
+            "oos_wr": 70.2,
+            "oos_trades": 413,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 125.1,
+            "oos_wr": 75.7,
+            "oos_trades": 548,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 110.2,
+            "oos_wr": 67.5,
+            "oos_trades": 655,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 65,
+        "oos_total": 313.3,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 83.5,
+            "oos_wr": 70.6,
+            "oos_trades": 419,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 115.2,
+            "oos_wr": 68.4,
+            "oos_trades": 595,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 114.6,
+            "oos_wr": 68.3,
+            "oos_trades": 621,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 66,
+        "oos_total": 314.0,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 73.4,
+            "oos_wr": 64.0,
+            "oos_trades": 478,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 110.8,
+            "oos_wr": 65.7,
+            "oos_trades": 627,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 129.8,
+            "oos_wr": 69.8,
+            "oos_trades": 659,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 67,
+        "oos_total": 302.2,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 81.7,
+            "oos_wr": 72.1,
+            "oos_trades": 426,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 118.7,
+            "oos_wr": 69.5,
+            "oos_trades": 603,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 101.8,
+            "oos_wr": 68.3,
+            "oos_trades": 602,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 68,
+        "oos_total": 289.5,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 75.0,
+            "oos_wr": 67.3,
+            "oos_trades": 450,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 98.8,
+            "oos_wr": 64.0,
+            "oos_trades": 606,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 115.7,
+            "oos_wr": 67.6,
+            "oos_trades": 666,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 69,
+        "oos_total": 273.2,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 66.8,
+            "oos_wr": 65.8,
+            "oos_trades": 421,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 99.8,
+            "oos_wr": 63.8,
+            "oos_trades": 585,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 106.6,
+            "oos_wr": 67.3,
+            "oos_trades": 643,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 70,
+        "oos_total": 288.7,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 77.9,
+            "oos_wr": 67.3,
+            "oos_trades": 450,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 107.7,
+            "oos_wr": 72.2,
+            "oos_trades": 539,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 103.1,
+            "oos_wr": 68.7,
+            "oos_trades": 623,
+            "pass": "True"
+          }
+        ]
+      },
+      {
+        "seed": 71,
+        "oos_total": 302.7,
+        "n_pass": 3,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 76.2,
+            "oos_wr": 69.6,
+            "oos_trades": 425,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 119.0,
+            "oos_wr": 68.8,
+            "oos_trades": 584,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 107.5,
+            "oos_wr": 68.7,
+            "oos_trades": 591,
+            "pass": "True"
+          }
+        ]
+      }
+    ]
+  },
+  "exp2_timing_value": {
+    "5": {
+      "pattern_accuracy": 49.97,
+      "pattern_n": 10158,
+      "random_mean": 49.75,
+      "random_std": 0.47,
+      "edge_pp": 0.22,
+      "significant": "False"
+    },
+    "10": {
+      "pattern_accuracy": 50.95,
+      "pattern_n": 10158,
+      "random_mean": 49.77,
+      "random_std": 0.42,
+      "edge_pp": 1.18,
+      "significant": "True"
+    },
+    "20": {
+      "pattern_accuracy": 51.29,
+      "pattern_n": 10158,
+      "random_mean": 49.56,
+      "random_std": 0.56,
+      "edge_pp": 1.73,
+      "significant": "True"
+    },
+    "50": {
+      "pattern_accuracy": 52.32,
+      "pattern_n": 10158,
+      "random_mean": 49.63,
+      "random_std": 0.34,
+      "edge_pp": 2.69,
+      "significant": "True"
+    }
+  },
+  "exp3_attribution": {
+    "flat_tp": 1.2528,
+    "flat_sl": 3.43,
+    "a_entry_flat_no_mech": {
+      "pnl": 404.8,
+      "wr": 88.9,
+      "trades": 1672
+    },
+    "b_entry_pp_no_mech": {
+      "pnl": 389.6,
+      "wr": 88.9,
+      "trades": 1553
+    },
+    "c_random_pp_all_mech": {
+      "pnl": 396.0,
+      "wr": 69.4,
+      "pnl_seeds": [
+        377.4,
+        410.0,
+        400.6
+      ]
+    },
+    "d_full_system": {
+      "pnl": 445.1,
+      "wr": 77.0,
+      "trades": 1840
+    },
+    "attribution": {
+      "entry_pure_pnl": 404.8,
+      "tpsl_placement_pnl": -15.2,
+      "mechanism_pure_pnl": 396.0,
+      "interaction_pnl": -340.5,
+      "total_pnl": 445.1
+    },
+    "simplified": {
+      "entry_contribution_pct": 90.9,
+      "mechanism_contribution_pct": 9.1,
+      "pattern_vs_random_gap": 49.1
+    }
+  }
+}

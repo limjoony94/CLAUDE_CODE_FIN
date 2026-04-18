@@ -1,0 +1,1523 @@
+{
+  "study": "regime_filter_study",
+  "version": "1.0",
+  "generated_at": "2026-03-01T07:08:08.896956",
+  "elapsed_seconds": 45.0,
+  "data": {
+    "file": "btc_5m_270days_reclassified.csv",
+    "bars": 85634,
+    "is_bars": "0-54432",
+    "oos_bars": "54432-85634"
+  },
+  "patterns": {
+    "count": 130,
+    "source": "dynamic_patterns.json"
+  },
+  "baseline": {
+    "full": {
+      "pnl": 8339876.8,
+      "trades": 477,
+      "wr": 86.6,
+      "mdd": 60.7,
+      "pf": 2.94,
+      "edge_per_trade": 2.54
+    },
+    "is": {
+      "pnl": 380541.9,
+      "trades": 265,
+      "wr": 90.9,
+      "mdd": 19.3,
+      "pf": 5.14,
+      "edge_per_trade": 3.24
+    },
+    "oos": {
+      "pnl": 2024.1,
+      "trades": 211,
+      "wr": 81.0,
+      "mdd": 60.7,
+      "pf": 1.84,
+      "edge_per_trade": 1.65
+    }
+  },
+  "scenarios_tested": 79,
+  "is_results_top20": [
+    {
+      "name": "PPP_lb576_lo0.3_hi0.7",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 576,
+        "low_threshold": 0.3,
+        "high_threshold": 0.7
+      },
+      "trades": 139,
+      "wr": 92.1,
+      "pnl": 9806.2,
+      "mdd": 14.8,
+      "pf": 5.91,
+      "edge_per_trade": 3.44,
+      "filtered_pct": 47.5,
+      "wr_delta": 1.2,
+      "pnl_delta": -370735.7,
+      "pnl_mdd": 662.58
+    },
+    {
+      "name": "PPP_lb576_lo0.4_hi0.6",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 576,
+        "low_threshold": 0.4,
+        "high_threshold": 0.6
+      },
+      "trades": 126,
+      "wr": 92.1,
+      "pnl": 6259.3,
+      "mdd": 14.8,
+      "pf": 5.78,
+      "edge_per_trade": 3.43,
+      "filtered_pct": 52.5,
+      "wr_delta": 1.2,
+      "pnl_delta": -374282.6,
+      "pnl_mdd": 422.93
+    },
+    {
+      "name": "PPP_lb288_lo0.3_hi0.7",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 288,
+        "low_threshold": 0.3,
+        "high_threshold": 0.7
+      },
+      "trades": 127,
+      "wr": 92.1,
+      "pnl": 6209.2,
+      "mdd": 14.8,
+      "pf": 5.89,
+      "edge_per_trade": 3.39,
+      "filtered_pct": 52.1,
+      "wr_delta": 1.2,
+      "pnl_delta": -374332.7,
+      "pnl_mdd": 419.54
+    },
+    {
+      "name": "PPP_lb288_lo0.4_hi0.6",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 288,
+        "low_threshold": 0.4,
+        "high_threshold": 0.6
+      },
+      "trades": 117,
+      "wr": 92.3,
+      "pnl": 4551.8,
+      "mdd": 14.8,
+      "pf": 5.88,
+      "edge_per_trade": 3.42,
+      "filtered_pct": 55.8,
+      "wr_delta": 1.4,
+      "pnl_delta": -375990.1,
+      "pnl_mdd": 307.55
+    },
+    {
+      "name": "PPP_lb288_lo0.5_hi0.5",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 288,
+        "low_threshold": 0.5,
+        "high_threshold": 0.5
+      },
+      "trades": 109,
+      "wr": 93.6,
+      "pnl": 4444.8,
+      "mdd": 14.8,
+      "pf": 7.61,
+      "edge_per_trade": 3.63,
+      "filtered_pct": 58.9,
+      "wr_delta": 2.7,
+      "pnl_delta": -376097.1,
+      "pnl_mdd": 300.32
+    },
+    {
+      "name": "PPP_lb96_lo0.3_hi0.7",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 96,
+        "low_threshold": 0.3,
+        "high_threshold": 0.7
+      },
+      "trades": 114,
+      "wr": 92.1,
+      "pnl": 4146.9,
+      "mdd": 14.8,
+      "pf": 6.17,
+      "edge_per_trade": 3.42,
+      "filtered_pct": 57.0,
+      "wr_delta": 1.2,
+      "pnl_delta": -376395.0,
+      "pnl_mdd": 280.2
+    },
+    {
+      "name": "CBF_lb48_thr0.0",
+      "indicator": "CBF",
+      "params": {
+        "lookback": 48,
+        "threshold": 0.0
+      },
+      "trades": 109,
+      "wr": 92.7,
+      "pnl": 3939.0,
+      "mdd": 14.8,
+      "pf": 6.69,
+      "edge_per_trade": 3.52,
+      "filtered_pct": 58.9,
+      "wr_delta": 1.8,
+      "pnl_delta": -376602.9,
+      "pnl_mdd": 266.15
+    },
+    {
+      "name": "PPP_lb576_lo0.5_hi0.5",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 576,
+        "low_threshold": 0.5,
+        "high_threshold": 0.5
+      },
+      "trades": 112,
+      "wr": 92.0,
+      "pnl": 3740.1,
+      "mdd": 14.8,
+      "pf": 5.65,
+      "edge_per_trade": 3.39,
+      "filtered_pct": 57.7,
+      "wr_delta": 1.1,
+      "pnl_delta": -376801.8,
+      "pnl_mdd": 252.71
+    },
+    {
+      "name": "VND_lb96_thr0.3",
+      "indicator": "VND",
+      "params": {
+        "lookback": 96,
+        "threshold": 0.3
+      },
+      "trades": 101,
+      "wr": 93.1,
+      "pnl": 2996.0,
+      "mdd": 14.8,
+      "pf": 6.95,
+      "edge_per_trade": 3.52,
+      "filtered_pct": 61.9,
+      "wr_delta": 2.2,
+      "pnl_delta": -377545.9,
+      "pnl_mdd": 202.43
+    },
+    {
+      "name": "VND_lb96_thr0.5",
+      "indicator": "VND",
+      "params": {
+        "lookback": 96,
+        "threshold": 0.5
+      },
+      "trades": 101,
+      "wr": 93.1,
+      "pnl": 2996.0,
+      "mdd": 14.8,
+      "pf": 6.95,
+      "edge_per_trade": 3.52,
+      "filtered_pct": 61.9,
+      "wr_delta": 2.2,
+      "pnl_delta": -377545.9,
+      "pnl_mdd": 202.43
+    },
+    {
+      "name": "PPP_lb96_lo0.4_hi0.6",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 96,
+        "low_threshold": 0.4,
+        "high_threshold": 0.6
+      },
+      "trades": 106,
+      "wr": 91.5,
+      "pnl": 2878.8,
+      "mdd": 14.8,
+      "pf": 5.69,
+      "edge_per_trade": 3.33,
+      "filtered_pct": 60.0,
+      "wr_delta": 0.6,
+      "pnl_delta": -377663.1,
+      "pnl_mdd": 194.51
+    },
+    {
+      "name": "CBF_lb24_thr0.0",
+      "indicator": "CBF",
+      "params": {
+        "lookback": 24,
+        "threshold": 0.0
+      },
+      "trades": 98,
+      "wr": 92.9,
+      "pnl": 2653.6,
+      "mdd": 14.8,
+      "pf": 6.75,
+      "edge_per_trade": 3.51,
+      "filtered_pct": 63.0,
+      "wr_delta": 2.0,
+      "pnl_delta": -377888.3,
+      "pnl_mdd": 179.3
+    },
+    {
+      "name": "VND_lb96_thr1.0",
+      "indicator": "VND",
+      "params": {
+        "lookback": 96,
+        "threshold": 1.0
+      },
+      "trades": 94,
+      "wr": 92.6,
+      "pnl": 2134.2,
+      "mdd": 14.8,
+      "pf": 6.39,
+      "edge_per_trade": 3.43,
+      "filtered_pct": 64.5,
+      "wr_delta": 1.7,
+      "pnl_delta": -378407.7,
+      "pnl_mdd": 144.2
+    },
+    {
+      "name": "PPP_lb96_lo0.5_hi0.5",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 96,
+        "low_threshold": 0.5,
+        "high_threshold": 0.5
+      },
+      "trades": 98,
+      "wr": 90.8,
+      "pnl": 2043.5,
+      "mdd": 14.8,
+      "pf": 5.24,
+      "edge_per_trade": 3.26,
+      "filtered_pct": 63.0,
+      "wr_delta": -0.1,
+      "pnl_delta": -378498.4,
+      "pnl_mdd": 138.07
+    },
+    {
+      "name": "VND_lb48_thr0.3",
+      "indicator": "VND",
+      "params": {
+        "lookback": 48,
+        "threshold": 0.3
+      },
+      "trades": 95,
+      "wr": 90.5,
+      "pnl": 1924.0,
+      "mdd": 14.8,
+      "pf": 5.17,
+      "edge_per_trade": 3.3,
+      "filtered_pct": 64.2,
+      "wr_delta": -0.4,
+      "pnl_delta": -378617.9,
+      "pnl_mdd": 130.0
+    },
+    {
+      "name": "VND_lb48_thr0.5",
+      "indicator": "VND",
+      "params": {
+        "lookback": 48,
+        "threshold": 0.5
+      },
+      "trades": 93,
+      "wr": 90.3,
+      "pnl": 1767.1,
+      "mdd": 14.8,
+      "pf": 5.06,
+      "edge_per_trade": 3.28,
+      "filtered_pct": 64.9,
+      "wr_delta": -0.6,
+      "pnl_delta": -378774.8,
+      "pnl_mdd": 119.4
+    },
+    {
+      "name": "VND_lb96_thr1.5",
+      "indicator": "VND",
+      "params": {
+        "lookback": 96,
+        "threshold": 1.5
+      },
+      "trades": 89,
+      "wr": 92.1,
+      "pnl": 1691.7,
+      "mdd": 14.8,
+      "pf": 6.02,
+      "edge_per_trade": 3.37,
+      "filtered_pct": 66.4,
+      "wr_delta": 1.2,
+      "pnl_delta": -378850.2,
+      "pnl_mdd": 114.3
+    },
+    {
+      "name": "VND_lb24_thr0.3",
+      "indicator": "VND",
+      "params": {
+        "lookback": 24,
+        "threshold": 0.3
+      },
+      "trades": 88,
+      "wr": 90.9,
+      "pnl": 1615.5,
+      "mdd": 14.8,
+      "pf": 5.44,
+      "edge_per_trade": 3.37,
+      "filtered_pct": 66.8,
+      "wr_delta": 0.0,
+      "pnl_delta": -378926.4,
+      "pnl_mdd": 109.16
+    },
+    {
+      "name": "CBF_lb12_thr0.0",
+      "indicator": "CBF",
+      "params": {
+        "lookback": 12,
+        "threshold": 0.0
+      },
+      "trades": 93,
+      "wr": 89.2,
+      "pnl": 1458.2,
+      "mdd": 14.8,
+      "pf": 4.55,
+      "edge_per_trade": 3.09,
+      "filtered_pct": 64.9,
+      "wr_delta": -1.7,
+      "pnl_delta": -379083.7,
+      "pnl_mdd": 98.53
+    },
+    {
+      "name": "VND_lb24_thr0.5",
+      "indicator": "VND",
+      "params": {
+        "lookback": 24,
+        "threshold": 0.5
+      },
+      "trades": 83,
+      "wr": 91.6,
+      "pnl": 1452.9,
+      "mdd": 14.8,
+      "pf": 5.78,
+      "edge_per_trade": 3.44,
+      "filtered_pct": 68.7,
+      "wr_delta": 0.7,
+      "pnl_delta": -379089.0,
+      "pnl_mdd": 98.17
+    }
+  ],
+  "wf_results": [
+    {
+      "name": "PPP_lb576_lo0.3_hi0.7",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 576,
+        "low_threshold": 0.3,
+        "high_threshold": 0.7
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 109.1,
+            "trades": 26,
+            "wr": 88.5,
+            "mdd": 11.6,
+            "pf": 3.73,
+            "edge_per_trade": 2.99
+          },
+          "wr_delta": -5.9,
+          "pnl_delta": -508.9
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 432.1,
+            "trades": 46,
+            "wr": 93.5,
+            "mdd": 14.8,
+            "pf": 7.53,
+            "edge_per_trade": 3.78
+          },
+          "wr_delta": 0.4,
+          "pnl_delta": -769.7
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 399.1,
+            "trades": 90,
+            "wr": 83.3,
+            "mdd": 39.4,
+            "pf": 2.17,
+            "edge_per_trade": 1.97
+          },
+          "wr_delta": -0.9,
+          "pnl_delta": -1265.2
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -2.1,
+        "avg_pnl_delta": -847.9,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 940.3,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "PPP_lb576_lo0.4_hi0.6",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 576,
+        "low_threshold": 0.4,
+        "high_threshold": 0.6
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 77.8,
+            "trades": 22,
+            "wr": 86.4,
+            "mdd": 11.6,
+            "pf": 3.15,
+            "edge_per_trade": 2.78
+          },
+          "wr_delta": -8.0,
+          "pnl_delta": -540.2
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 383.4,
+            "trades": 41,
+            "wr": 95.1,
+            "mdd": 14.8,
+            "pf": 9.28,
+            "edge_per_trade": 3.99
+          },
+          "wr_delta": 2.0,
+          "pnl_delta": -818.4
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 310.8,
+            "trades": 82,
+            "wr": 82.9,
+            "mdd": 42.1,
+            "pf": 2.11,
+            "edge_per_trade": 1.91
+          },
+          "wr_delta": -1.3,
+          "pnl_delta": -1353.5
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -2.4,
+        "avg_pnl_delta": -904.0,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 772.0,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "PPP_lb288_lo0.3_hi0.7",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 288,
+        "low_threshold": 0.3,
+        "high_threshold": 0.7
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 106.8,
+            "trades": 23,
+            "wr": 91.3,
+            "mdd": 11.6,
+            "pf": 4.83,
+            "edge_per_trade": 3.3
+          },
+          "wr_delta": -3.1,
+          "pnl_delta": -511.2
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 359.6,
+            "trades": 40,
+            "wr": 95.0,
+            "mdd": 14.8,
+            "pf": 9.01,
+            "edge_per_trade": 3.95
+          },
+          "wr_delta": 1.9,
+          "pnl_delta": -842.2
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 300.8,
+            "trades": 85,
+            "wr": 82.4,
+            "mdd": 39.9,
+            "pf": 2.03,
+            "edge_per_trade": 1.82
+          },
+          "wr_delta": -1.8,
+          "pnl_delta": -1363.5
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -1.0,
+        "avg_pnl_delta": -905.6,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 767.2,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "PPP_lb288_lo0.4_hi0.6",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 288,
+        "low_threshold": 0.4,
+        "high_threshold": 0.6
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 97.0,
+            "trades": 22,
+            "wr": 90.9,
+            "mdd": 11.6,
+            "pf": 4.58,
+            "edge_per_trade": 3.23
+          },
+          "wr_delta": -3.5,
+          "pnl_delta": -521.0
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 347.4,
+            "trades": 39,
+            "wr": 94.9,
+            "mdd": 14.8,
+            "pf": 8.88,
+            "edge_per_trade": 3.99
+          },
+          "wr_delta": 1.8,
+          "pnl_delta": -854.4
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 231.7,
+            "trades": 78,
+            "wr": 82.1,
+            "mdd": 42.7,
+            "pf": 1.95,
+            "edge_per_trade": 1.73
+          },
+          "wr_delta": -2.1,
+          "pnl_delta": -1432.6
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -1.3,
+        "avg_pnl_delta": -936.0,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 676.1,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "PPP_lb288_lo0.5_hi0.5",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 288,
+        "low_threshold": 0.5,
+        "high_threshold": 0.5
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 92.1,
+            "trades": 18,
+            "wr": 94.4,
+            "mdd": 8.2,
+            "pf": 9.22,
+            "edge_per_trade": 3.74
+          },
+          "wr_delta": 0.0,
+          "pnl_delta": -525.9
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 323.2,
+            "trades": 38,
+            "wr": 94.7,
+            "mdd": 14.8,
+            "pf": 8.59,
+            "edge_per_trade": 3.94
+          },
+          "wr_delta": 1.6,
+          "pnl_delta": -878.6
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 127.6,
+            "trades": 67,
+            "wr": 79.1,
+            "mdd": 46.2,
+            "pf": 1.68,
+            "edge_per_trade": 1.44
+          },
+          "wr_delta": -5.1,
+          "pnl_delta": -1536.7
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -1.2,
+        "avg_pnl_delta": -980.4,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 542.9,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "PPP_lb96_lo0.3_hi0.7",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 96,
+        "low_threshold": 0.3,
+        "high_threshold": 0.7
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 81.2,
+            "trades": 20,
+            "wr": 90.0,
+            "mdd": 8.6,
+            "pf": 4.68,
+            "edge_per_trade": 3.1
+          },
+          "wr_delta": -4.4,
+          "pnl_delta": -536.8
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 281.1,
+            "trades": 38,
+            "wr": 92.1,
+            "mdd": 14.8,
+            "pf": 6.24,
+            "edge_per_trade": 3.67
+          },
+          "wr_delta": -1.0,
+          "pnl_delta": -920.7
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 232.5,
+            "trades": 80,
+            "wr": 81.2,
+            "mdd": 44.7,
+            "pf": 1.9,
+            "edge_per_trade": 1.69
+          },
+          "wr_delta": -3.0,
+          "pnl_delta": -1431.8
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -2.8,
+        "avg_pnl_delta": -963.1,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 594.8,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "CBF_lb48_thr0.0",
+      "indicator": "CBF",
+      "params": {
+        "lookback": 48,
+        "threshold": 0.0
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 97.0,
+            "trades": 19,
+            "wr": 94.7,
+            "mdd": 8.2,
+            "pf": 9.53,
+            "edge_per_trade": 3.68
+          },
+          "wr_delta": 0.3,
+          "pnl_delta": -521.0
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 228.2,
+            "trades": 33,
+            "wr": 93.9,
+            "mdd": 14.8,
+            "pf": 7.26,
+            "edge_per_trade": 3.74
+          },
+          "wr_delta": 0.8,
+          "pnl_delta": -973.6
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 207.8,
+            "trades": 67,
+            "wr": 83.6,
+            "mdd": 38.1,
+            "pf": 2.05,
+            "edge_per_trade": 1.87
+          },
+          "wr_delta": -0.6,
+          "pnl_delta": -1456.5
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": 0.2,
+        "avg_pnl_delta": -983.7,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 533.0,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "PPP_lb576_lo0.5_hi0.5",
+      "indicator": "PPP",
+      "params": {
+        "lookback": 576,
+        "low_threshold": 0.5,
+        "high_threshold": 0.5
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 94.6,
+            "trades": 21,
+            "wr": 90.5,
+            "mdd": 11.6,
+            "pf": 4.52,
+            "edge_per_trade": 3.32
+          },
+          "wr_delta": -3.9,
+          "pnl_delta": -523.4
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 343.3,
+            "trades": 39,
+            "wr": 94.9,
+            "mdd": 14.8,
+            "pf": 8.83,
+            "edge_per_trade": 3.96
+          },
+          "wr_delta": 1.8,
+          "pnl_delta": -858.5
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 221.8,
+            "trades": 73,
+            "wr": 82.2,
+            "mdd": 40.2,
+            "pf": 1.98,
+            "edge_per_trade": 1.79
+          },
+          "wr_delta": -2.0,
+          "pnl_delta": -1442.5
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -1.4,
+        "avg_pnl_delta": -941.5,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 659.7,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "VND_lb96_thr0.3",
+      "indicator": "VND",
+      "params": {
+        "lookback": 96,
+        "threshold": 0.3
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 81.5,
+            "trades": 17,
+            "wr": 94.1,
+            "mdd": 8.2,
+            "pf": 8.51,
+            "edge_per_trade": 3.62
+          },
+          "wr_delta": -0.3,
+          "pnl_delta": -536.5
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 243.3,
+            "trades": 34,
+            "wr": 94.1,
+            "mdd": 14.8,
+            "pf": 7.5,
+            "edge_per_trade": 3.77
+          },
+          "wr_delta": 1.0,
+          "pnl_delta": -958.5
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 169.7,
+            "trades": 72,
+            "wr": 80.6,
+            "mdd": 44.4,
+            "pf": 1.8,
+            "edge_per_trade": 1.58
+          },
+          "wr_delta": -3.6,
+          "pnl_delta": -1494.6
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -1.0,
+        "avg_pnl_delta": -996.5,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 494.5,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    },
+    {
+      "name": "VND_lb96_thr0.5",
+      "indicator": "VND",
+      "params": {
+        "lookback": 96,
+        "threshold": 0.5
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-25920",
+          "oos_bars": "25920-38880",
+          "baseline_oos": {
+            "pnl": 618.0,
+            "trades": 54,
+            "wr": 94.4,
+            "mdd": 11.6,
+            "pf": 8.17,
+            "edge_per_trade": 3.78
+          },
+          "filtered_oos": {
+            "pnl": 81.5,
+            "trades": 17,
+            "wr": 94.1,
+            "mdd": 8.2,
+            "pf": 8.51,
+            "edge_per_trade": 3.62
+          },
+          "wr_delta": -0.3,
+          "pnl_delta": -536.5
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-38880",
+          "oos_bars": "38880-51840",
+          "baseline_oos": {
+            "pnl": 1201.8,
+            "trades": 72,
+            "wr": 93.1,
+            "mdd": 14.8,
+            "pf": 6.96,
+            "edge_per_trade": 3.7
+          },
+          "filtered_oos": {
+            "pnl": 243.3,
+            "trades": 34,
+            "wr": 94.1,
+            "mdd": 14.8,
+            "pf": 7.5,
+            "edge_per_trade": 3.77
+          },
+          "wr_delta": 1.0,
+          "pnl_delta": -958.5
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-51840",
+          "oos_bars": "51840-77760",
+          "baseline_oos": {
+            "pnl": 1664.3,
+            "trades": 152,
+            "wr": 84.2,
+            "mdd": 41.9,
+            "pf": 2.31,
+            "edge_per_trade": 2.06
+          },
+          "filtered_oos": {
+            "pnl": 145.9,
+            "trades": 70,
+            "wr": 80.0,
+            "mdd": 44.4,
+            "pf": 1.73,
+            "edge_per_trade": 1.49
+          },
+          "wr_delta": -4.2,
+          "pnl_delta": -1518.4
+        }
+      ],
+      "summary": {
+        "avg_wr_delta": -1.2,
+        "avg_pnl_delta": -1004.5,
+        "total_oos_pnl_baseline": 3484.1,
+        "total_oos_pnl_filtered": 470.7,
+        "all_oos_positive": true,
+        "folds_improved": 0,
+        "verdict": "FAIL"
+      }
+    }
+  ],
+  "oos_holdout_results": [
+    {
+      "name": "PPP_lb576_lo0.3_hi0.7",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 469.1,
+        "trades": 122,
+        "wr": 81.1,
+        "mdd": 39.4,
+        "pf": 1.82,
+        "edge_per_trade": 1.63
+      },
+      "wr_delta": 0.1,
+      "pnl_delta": -1555.0
+    },
+    {
+      "name": "PPP_lb576_lo0.4_hi0.6",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 423.7,
+        "trades": 113,
+        "wr": 81.4,
+        "mdd": 42.1,
+        "pf": 1.85,
+        "edge_per_trade": 1.67
+      },
+      "wr_delta": 0.4,
+      "pnl_delta": -1600.4
+    },
+    {
+      "name": "PPP_lb288_lo0.3_hi0.7",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 443.3,
+        "trades": 114,
+        "wr": 81.6,
+        "mdd": 39.9,
+        "pf": 1.87,
+        "edge_per_trade": 1.68
+      },
+      "wr_delta": 0.6,
+      "pnl_delta": -1580.8
+    },
+    {
+      "name": "PPP_lb288_lo0.4_hi0.6",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 317.2,
+        "trades": 106,
+        "wr": 81.1,
+        "mdd": 42.7,
+        "pf": 1.77,
+        "edge_per_trade": 1.55
+      },
+      "wr_delta": 0.1,
+      "pnl_delta": -1706.9
+    },
+    {
+      "name": "PPP_lb288_lo0.5_hi0.5",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 179.2,
+        "trades": 94,
+        "wr": 78.7,
+        "mdd": 46.2,
+        "pf": 1.58,
+        "edge_per_trade": 1.31
+      },
+      "wr_delta": -2.3,
+      "pnl_delta": -1844.9
+    },
+    {
+      "name": "PPP_lb96_lo0.3_hi0.7",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 207.6,
+        "trades": 106,
+        "wr": 78.3,
+        "mdd": 44.7,
+        "pf": 1.57,
+        "edge_per_trade": 1.27
+      },
+      "wr_delta": -2.7,
+      "pnl_delta": -1816.5
+    },
+    {
+      "name": "CBF_lb48_thr0.0",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 238.1,
+        "trades": 93,
+        "wr": 80.6,
+        "mdd": 38.1,
+        "pf": 1.72,
+        "edge_per_trade": 1.52
+      },
+      "wr_delta": -0.4,
+      "pnl_delta": -1786.0
+    },
+    {
+      "name": "PPP_lb576_lo0.5_hi0.5",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 277.1,
+        "trades": 102,
+        "wr": 80.4,
+        "mdd": 40.2,
+        "pf": 1.72,
+        "edge_per_trade": 1.52
+      },
+      "wr_delta": -0.6,
+      "pnl_delta": -1747.0
+    },
+    {
+      "name": "VND_lb96_thr0.3",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 122.2,
+        "trades": 93,
+        "wr": 77.4,
+        "mdd": 44.4,
+        "pf": 1.46,
+        "edge_per_trade": 1.08
+      },
+      "wr_delta": -3.6,
+      "pnl_delta": -1901.9
+    },
+    {
+      "name": "VND_lb96_thr0.5",
+      "baseline": {
+        "pnl": 2024.1,
+        "trades": 211,
+        "wr": 81.0,
+        "mdd": 60.7,
+        "pf": 1.84,
+        "edge_per_trade": 1.65
+      },
+      "filtered": {
+        "pnl": 89.6,
+        "trades": 89,
+        "wr": 76.4,
+        "mdd": 44.4,
+        "pf": 1.38,
+        "edge_per_trade": 0.95
+      },
+      "wr_delta": -4.6,
+      "pnl_delta": -1934.5
+    }
+  ],
+  "conclusion": {
+    "wf_passed": 0,
+    "wf_total": 10,
+    "oos_improved": 0,
+    "oos_total": 10,
+    "best_filter": null,
+    "recommendation": "No regime filter recommended \u2014 none passed WF validation"
+  }
+}

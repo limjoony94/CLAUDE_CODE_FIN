@@ -1,0 +1,979 @@
+{
+  "study": "selective_cascade_study",
+  "date": "2026-03-31 23:25:43",
+  "data_bars": 93864,
+  "neutral_window": [
+    0,
+    74567
+  ],
+  "n_patterns": 111,
+  "n_signals": 12937,
+  "params": {
+    "n_slots": 9,
+    "direction_cap": 6,
+    "agg_risk_counter": 10.0,
+    "agg_risk_with": 15.0,
+    "cascade_tighten_pct": 98,
+    "timeout_bars": 576,
+    "tp_decay_rate": 0.9975,
+    "clamp": [
+      1.0,
+      1.5
+    ],
+    "tp_mode": "mfe_median",
+    "wf_folds": 5,
+    "realistic_cascade_pricing": true
+  },
+  "configs": {
+    "BASELINE": {
+      "config": {
+        "desc": "Current: preemptive tightens ALL same-dir, threshold 1.0%",
+        "preemptive_mode": "all",
+        "preemptive_threshold": 1.0,
+        "individual_threshold": 0.0
+      },
+      "is": {
+        "pnl": 125.16,
+        "wr": 43.1,
+        "trades": 5194,
+        "mdd": 8.89,
+        "pnl_mdd": 14.08,
+        "rr": 1.586,
+        "cascade_fires": 641,
+        "preemptive_fires": 638,
+        "reactive_fires": 3,
+        "false_tightens": 23,
+        "total_tightens": 2940,
+        "false_tighten_pct": 0.8,
+        "exit_reasons": {
+          "TP": 2231,
+          "CASCADE_SL": 2622,
+          "SL": 315,
+          "TIMEOUT": 19,
+          "OOS_END": 7
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": 13.92,
+            "wr": 43.8,
+            "trades": 733,
+            "mdd": 4.23,
+            "cascade_fires": 85,
+            "false_tightens": 4,
+            "total_tightens": 407,
+            "rr": 1.492,
+            "exit_reasons": {
+              "CASCADE_SL": 367,
+              "TP": 319,
+              "SL": 39,
+              "TIMEOUT": 3,
+              "OOS_END": 5
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": 1.98,
+            "wr": 39.3,
+            "trades": 765,
+            "mdd": 6.89,
+            "cascade_fires": 94,
+            "false_tightens": 7,
+            "total_tightens": 459,
+            "rr": 1.575,
+            "exit_reasons": {
+              "CASCADE_SL": 414,
+              "TP": 297,
+              "SL": 45,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": 17.88,
+            "wr": 43.2,
+            "trades": 843,
+            "mdd": 7.45,
+            "cascade_fires": 104,
+            "false_tightens": 1,
+            "total_tightens": 464,
+            "rr": 1.547,
+            "exit_reasons": {
+              "CASCADE_SL": 422,
+              "TP": 359,
+              "SL": 44,
+              "TIMEOUT": 9,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 45.44,
+            "wr": 45.1,
+            "trades": 1069,
+            "mdd": 6.82,
+            "cascade_fires": 135,
+            "false_tightens": 1,
+            "total_tightens": 579,
+            "rr": 1.646,
+            "exit_reasons": {
+              "TP": 480,
+              "CASCADE_SL": 490,
+              "SL": 90,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": 28.58,
+            "wr": 44.4,
+            "trades": 800,
+            "mdd": 2.44,
+            "cascade_fires": 95,
+            "false_tightens": 4,
+            "total_tightens": 437,
+            "rr": 1.653,
+            "exit_reasons": {
+              "TP": 350,
+              "CASCADE_SL": 385,
+              "SL": 51,
+              "TIMEOUT": 7,
+              "OOS_END": 7
+            }
+          }
+        ],
+        "oos_total_pnl": 107.8,
+        "all_pass": true,
+        "pass_count": 5
+      },
+      "elapsed_s": 3.4
+    },
+    "LOSERS_ONLY": {
+      "config": {
+        "desc": "Threshold 1.0%, only tighten positions with unrealized_pnl < 0",
+        "preemptive_mode": "losers_only",
+        "preemptive_threshold": 1.0,
+        "individual_threshold": 0.0
+      },
+      "is": {
+        "pnl": 127.56,
+        "wr": 43.2,
+        "trades": 5185,
+        "mdd": 7.42,
+        "pnl_mdd": 17.2,
+        "rr": 1.582,
+        "cascade_fires": 640,
+        "preemptive_fires": 637,
+        "reactive_fires": 3,
+        "false_tightens": 0,
+        "total_tightens": 2920,
+        "false_tighten_pct": 0.0,
+        "exit_reasons": {
+          "TP": 2235,
+          "CASCADE_SL": 2626,
+          "SL": 297,
+          "TIMEOUT": 20,
+          "OOS_END": 7
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": 12.75,
+            "wr": 43.4,
+            "trades": 735,
+            "mdd": 4.38,
+            "cascade_fires": 86,
+            "false_tightens": 0,
+            "total_tightens": 410,
+            "rr": 1.496,
+            "exit_reasons": {
+              "CASCADE_SL": 375,
+              "TP": 317,
+              "SL": 35,
+              "TIMEOUT": 3,
+              "OOS_END": 5
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": 1.96,
+            "wr": 39.3,
+            "trades": 758,
+            "mdd": 6.96,
+            "cascade_fires": 93,
+            "false_tightens": 0,
+            "total_tightens": 454,
+            "rr": 1.577,
+            "exit_reasons": {
+              "CASCADE_SL": 416,
+              "TP": 294,
+              "SL": 38,
+              "TIMEOUT": 1,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": 20.57,
+            "wr": 44.1,
+            "trades": 842,
+            "mdd": 6.23,
+            "cascade_fires": 103,
+            "false_tightens": 0,
+            "total_tightens": 456,
+            "rr": 1.528,
+            "exit_reasons": {
+              "CASCADE_SL": 416,
+              "TP": 366,
+              "SL": 42,
+              "TIMEOUT": 9,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 45.87,
+            "wr": 45.2,
+            "trades": 1069,
+            "mdd": 6.54,
+            "cascade_fires": 135,
+            "false_tightens": 0,
+            "total_tightens": 578,
+            "rr": 1.644,
+            "exit_reasons": {
+              "TP": 481,
+              "CASCADE_SL": 490,
+              "SL": 89,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": 28.88,
+            "wr": 44.6,
+            "trades": 799,
+            "mdd": 2.5,
+            "cascade_fires": 95,
+            "false_tightens": 0,
+            "total_tightens": 434,
+            "rr": 1.645,
+            "exit_reasons": {
+              "TP": 351,
+              "CASCADE_SL": 386,
+              "SL": 48,
+              "TIMEOUT": 7,
+              "OOS_END": 7
+            }
+          }
+        ],
+        "oos_total_pnl": 110.03,
+        "all_pass": true,
+        "pass_count": 5
+      },
+      "elapsed_s": 3.2
+    },
+    "LOSERS_ONLY_0.5": {
+      "config": {
+        "desc": "Threshold 0.5%, only tighten losing positions",
+        "preemptive_mode": "losers_only",
+        "preemptive_threshold": 0.5,
+        "individual_threshold": 0.0
+      },
+      "is": {
+        "pnl": 102.02,
+        "wr": 31.3,
+        "trades": 6654,
+        "mdd": 11.49,
+        "pnl_mdd": 8.88,
+        "rr": 2.563,
+        "cascade_fires": 1176,
+        "preemptive_fires": 1175,
+        "reactive_fires": 1,
+        "false_tightens": 0,
+        "total_tightens": 4577,
+        "false_tighten_pct": 0.0,
+        "exit_reasons": {
+          "CASCADE_SL": 3405,
+          "SL": 1163,
+          "TP": 2076,
+          "TIMEOUT": 2,
+          "OOS_END": 8
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": -6.75,
+            "wr": 28.1,
+            "trades": 991,
+            "mdd": 11.57,
+            "cascade_fires": 177,
+            "false_tightens": 0,
+            "total_tightens": 709,
+            "rr": 2.385,
+            "exit_reasons": {
+              "CASCADE_SL": 555,
+              "SL": 154,
+              "TP": 277,
+              "OOS_END": 5
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": -0.56,
+            "wr": 28.8,
+            "trades": 1026,
+            "mdd": 7.32,
+            "cascade_fires": 176,
+            "false_tightens": 0,
+            "total_tightens": 726,
+            "rr": 2.452,
+            "exit_reasons": {
+              "CASCADE_SL": 567,
+              "SL": 158,
+              "TP": 292,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": 20.82,
+            "wr": 31.8,
+            "trades": 1096,
+            "mdd": 7.62,
+            "cascade_fires": 186,
+            "false_tightens": 0,
+            "total_tightens": 748,
+            "rr": 2.603,
+            "exit_reasons": {
+              "CASCADE_SL": 544,
+              "SL": 203,
+              "TP": 344,
+              "OOS_END": 5
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 38.2,
+            "wr": 33.8,
+            "trades": 1284,
+            "mdd": 3.53,
+            "cascade_fires": 241,
+            "false_tightens": 0,
+            "total_tightens": 847,
+            "rr": 2.574,
+            "exit_reasons": {
+              "TP": 431,
+              "CASCADE_SL": 600,
+              "SL": 245,
+              "OOS_END": 8
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": 21.19,
+            "wr": 31.6,
+            "trades": 1063,
+            "mdd": 4.57,
+            "cascade_fires": 187,
+            "false_tightens": 0,
+            "total_tightens": 723,
+            "rr": 2.653,
+            "exit_reasons": {
+              "TP": 332,
+              "CASCADE_SL": 532,
+              "SL": 189,
+              "TIMEOUT": 2,
+              "OOS_END": 8
+            }
+          }
+        ],
+        "oos_total_pnl": 72.9,
+        "all_pass": false,
+        "pass_count": 3
+      },
+      "elapsed_s": 2.9
+    },
+    "LOSERS_ONLY_1.5": {
+      "config": {
+        "desc": "Threshold 1.5%, only tighten losing positions",
+        "preemptive_mode": "losers_only",
+        "preemptive_threshold": 1.5,
+        "individual_threshold": 0.0
+      },
+      "is": {
+        "pnl": 145.92,
+        "wr": 51.9,
+        "trades": 4395,
+        "mdd": 6.58,
+        "pnl_mdd": 22.18,
+        "rr": 1.148,
+        "cascade_fires": 424,
+        "preemptive_fires": 422,
+        "reactive_fires": 2,
+        "false_tightens": 0,
+        "total_tightens": 2067,
+        "false_tighten_pct": 0.0,
+        "exit_reasons": {
+          "TP": 2278,
+          "CASCADE_SL": 1957,
+          "SL": 111,
+          "TIMEOUT": 40,
+          "OOS_END": 9
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": 3.71,
+            "wr": 47.9,
+            "trades": 652,
+            "mdd": 4.56,
+            "cascade_fires": 64,
+            "false_tightens": 0,
+            "total_tightens": 330,
+            "rr": 1.133,
+            "exit_reasons": {
+              "CASCADE_SL": 317,
+              "TP": 310,
+              "SL": 13,
+              "TIMEOUT": 7,
+              "OOS_END": 5
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": 4.56,
+            "wr": 49.5,
+            "trades": 658,
+            "mdd": 9.13,
+            "cascade_fires": 65,
+            "false_tightens": 0,
+            "total_tightens": 324,
+            "rr": 1.068,
+            "exit_reasons": {
+              "TP": 321,
+              "CASCADE_SL": 306,
+              "SL": 18,
+              "TIMEOUT": 4,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": 20.04,
+            "wr": 52.1,
+            "trades": 704,
+            "mdd": 7.0,
+            "cascade_fires": 67,
+            "false_tightens": 0,
+            "total_tightens": 316,
+            "rr": 1.105,
+            "exit_reasons": {
+              "CASCADE_SL": 303,
+              "TP": 365,
+              "TIMEOUT": 19,
+              "SL": 15,
+              "OOS_END": 2
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 55.33,
+            "wr": 54.6,
+            "trades": 938,
+            "mdd": 2.96,
+            "cascade_fires": 92,
+            "false_tightens": 0,
+            "total_tightens": 419,
+            "rr": 1.191,
+            "exit_reasons": {
+              "TP": 510,
+              "CASCADE_SL": 393,
+              "SL": 26,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": 26.03,
+            "wr": 51.6,
+            "trades": 700,
+            "mdd": 3.41,
+            "cascade_fires": 66,
+            "false_tightens": 0,
+            "total_tightens": 326,
+            "rr": 1.202,
+            "exit_reasons": {
+              "TP": 358,
+              "CASCADE_SL": 310,
+              "SL": 16,
+              "TIMEOUT": 7,
+              "OOS_END": 9
+            }
+          }
+        ],
+        "oos_total_pnl": 109.67,
+        "all_pass": true,
+        "pass_count": 5
+      },
+      "elapsed_s": 3.3
+    },
+    "INDIVIDUAL": {
+      "config": {
+        "desc": "No total threshold, per-position loss > 1.0% triggers individual tighten",
+        "preemptive_mode": "individual",
+        "preemptive_threshold": 0.0,
+        "individual_threshold": 1.0
+      },
+      "is": {
+        "pnl": 140.6,
+        "wr": 28.7,
+        "trades": 7192,
+        "mdd": 6.31,
+        "pnl_mdd": 22.28,
+        "rr": 3.111,
+        "cascade_fires": 5124,
+        "preemptive_fires": 5124,
+        "reactive_fires": 0,
+        "false_tightens": 0,
+        "total_tightens": 5124,
+        "false_tighten_pct": 0.0,
+        "exit_reasons": {
+          "CASCADE_SL": 4464,
+          "TP": 2057,
+          "SL": 660,
+          "TIMEOUT": 4,
+          "OOS_END": 7
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": 9.54,
+            "wr": 27.9,
+            "trades": 1097,
+            "mdd": 7.1,
+            "cascade_fires": 788,
+            "false_tightens": 0,
+            "total_tightens": 788,
+            "rr": 2.861,
+            "exit_reasons": {
+              "CASCADE_SL": 718,
+              "TP": 305,
+              "SL": 70,
+              "OOS_END": 4
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": 7.94,
+            "wr": 27.8,
+            "trades": 1118,
+            "mdd": 6.48,
+            "cascade_fires": 803,
+            "false_tightens": 0,
+            "total_tightens": 803,
+            "rr": 2.815,
+            "exit_reasons": {
+              "CASCADE_SL": 748,
+              "TP": 308,
+              "SL": 55,
+              "OOS_END": 7
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": 23.47,
+            "wr": 29.3,
+            "trades": 1152,
+            "mdd": 5.31,
+            "cascade_fires": 811,
+            "false_tightens": 0,
+            "total_tightens": 811,
+            "rr": 3.046,
+            "exit_reasons": {
+              "CASCADE_SL": 712,
+              "TP": 332,
+              "SL": 99,
+              "TIMEOUT": 3,
+              "OOS_END": 6
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 48.1,
+            "wr": 29.7,
+            "trades": 1382,
+            "mdd": 2.68,
+            "cascade_fires": 966,
+            "false_tightens": 0,
+            "total_tightens": 966,
+            "rr": 3.506,
+            "exit_reasons": {
+              "CASCADE_SL": 779,
+              "TP": 407,
+              "SL": 187,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": 22.18,
+            "wr": 27.9,
+            "trades": 1146,
+            "mdd": 3.0,
+            "cascade_fires": 821,
+            "false_tightens": 0,
+            "total_tightens": 821,
+            "rr": 3.241,
+            "exit_reasons": {
+              "CASCADE_SL": 675,
+              "TP": 317,
+              "SL": 146,
+              "TIMEOUT": 1,
+              "OOS_END": 7
+            }
+          }
+        ],
+        "oos_total_pnl": 111.23,
+        "all_pass": true,
+        "pass_count": 5
+      },
+      "elapsed_s": 2.5
+    },
+    "INDIVIDUAL_2.0": {
+      "config": {
+        "desc": "Per-position loss > 2.0% triggers individual tighten",
+        "preemptive_mode": "individual",
+        "preemptive_threshold": 0.0,
+        "individual_threshold": 2.0
+      },
+      "is": {
+        "pnl": 167.7,
+        "wr": 44.1,
+        "trades": 5367,
+        "mdd": 4.82,
+        "pnl_mdd": 34.78,
+        "rr": 1.606,
+        "cascade_fires": 2976,
+        "preemptive_fires": 2976,
+        "reactive_fires": 0,
+        "false_tightens": 0,
+        "total_tightens": 2976,
+        "false_tighten_pct": 0.0,
+        "exit_reasons": {
+          "CASCADE_SL": 2909,
+          "TP": 2361,
+          "SL": 67,
+          "TIMEOUT": 22,
+          "OOS_END": 8
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": 9.06,
+            "wr": 42.9,
+            "trades": 763,
+            "mdd": 4.42,
+            "cascade_fires": 430,
+            "false_tightens": 0,
+            "total_tightens": 430,
+            "rr": 1.462,
+            "exit_reasons": {
+              "CASCADE_SL": 427,
+              "TP": 326,
+              "SL": 3,
+              "TIMEOUT": 3,
+              "OOS_END": 4
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": 5.51,
+            "wr": 41.9,
+            "trades": 800,
+            "mdd": 5.76,
+            "cascade_fires": 459,
+            "false_tightens": 0,
+            "total_tightens": 459,
+            "rr": 1.465,
+            "exit_reasons": {
+              "CASCADE_SL": 454,
+              "TP": 331,
+              "TIMEOUT": 1,
+              "SL": 5,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": 24.56,
+            "wr": 44.0,
+            "trades": 877,
+            "mdd": 4.6,
+            "cascade_fires": 480,
+            "false_tightens": 0,
+            "total_tightens": 480,
+            "rr": 1.582,
+            "exit_reasons": {
+              "CASCADE_SL": 469,
+              "TP": 379,
+              "TIMEOUT": 10,
+              "SL": 11,
+              "OOS_END": 8
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 60.94,
+            "wr": 45.4,
+            "trades": 1105,
+            "mdd": 2.95,
+            "cascade_fires": 596,
+            "false_tightens": 0,
+            "total_tightens": 596,
+            "rr": 1.813,
+            "exit_reasons": {
+              "TP": 500,
+              "CASCADE_SL": 569,
+              "SL": 27,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": 29.07,
+            "wr": 43.6,
+            "trades": 848,
+            "mdd": 3.33,
+            "cascade_fires": 467,
+            "false_tightens": 0,
+            "total_tightens": 467,
+            "rr": 1.69,
+            "exit_reasons": {
+              "CASCADE_SL": 451,
+              "TP": 365,
+              "SL": 16,
+              "TIMEOUT": 8,
+              "OOS_END": 8
+            }
+          }
+        ],
+        "oos_total_pnl": 129.14,
+        "all_pass": true,
+        "pass_count": 5
+      },
+      "elapsed_s": 3.0
+    },
+    "NO_PREEMPTIVE": {
+      "config": {
+        "desc": "No preemptive cascade, reactive only (SL exit triggers cascade on non-cascaded)",
+        "preemptive_mode": "none",
+        "preemptive_threshold": 0.0,
+        "individual_threshold": 0.0
+      },
+      "is": {
+        "pnl": -10.76,
+        "wr": 70.0,
+        "trades": 2709,
+        "mdd": 40.64,
+        "pnl_mdd": -0.26,
+        "rr": 0.42,
+        "cascade_fires": 98,
+        "preemptive_fires": 0,
+        "reactive_fires": 98,
+        "false_tightens": 1,
+        "total_tightens": 358,
+        "false_tighten_pct": 0.3,
+        "exit_reasons": {
+          "TP": 1888,
+          "SL": 125,
+          "CASCADE_SL": 356,
+          "TIMEOUT": 331,
+          "OOS_END": 9
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "pnl": -5.81,
+            "wr": 66.7,
+            "trades": 393,
+            "mdd": 21.48,
+            "cascade_fires": 9,
+            "false_tightens": 0,
+            "total_tightens": 40,
+            "rr": 0.464,
+            "exit_reasons": {
+              "TP": 260,
+              "TIMEOUT": 74,
+              "SL": 10,
+              "CASCADE_SL": 40,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 2,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "pnl": -25.44,
+            "wr": 63.8,
+            "trades": 389,
+            "mdd": 26.64,
+            "cascade_fires": 12,
+            "false_tightens": 0,
+            "total_tightens": 52,
+            "rr": 0.415,
+            "exit_reasons": {
+              "TP": 243,
+              "SL": 17,
+              "CASCADE_SL": 51,
+              "TIMEOUT": 69,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 3,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "pnl": -2.55,
+            "wr": 67.9,
+            "trades": 473,
+            "mdd": 12.45,
+            "cascade_fires": 19,
+            "false_tightens": 0,
+            "total_tightens": 74,
+            "rr": 0.461,
+            "exit_reasons": {
+              "TP": 317,
+              "TIMEOUT": 49,
+              "SL": 24,
+              "CASCADE_SL": 74,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 4,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "pnl": 10.22,
+            "wr": 74.3,
+            "trades": 575,
+            "mdd": 12.3,
+            "cascade_fires": 28,
+            "false_tightens": 0,
+            "total_tightens": 88,
+            "rr": 0.374,
+            "exit_reasons": {
+              "TP": 427,
+              "SL": 38,
+              "CASCADE_SL": 88,
+              "TIMEOUT": 13,
+              "OOS_END": 9
+            }
+          },
+          {
+            "fold": 5,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "pnl": -4.14,
+            "wr": 68.1,
+            "trades": 430,
+            "mdd": 13.28,
+            "cascade_fires": 12,
+            "false_tightens": 1,
+            "total_tightens": 42,
+            "rr": 0.447,
+            "exit_reasons": {
+              "TP": 289,
+              "SL": 17,
+              "CASCADE_SL": 41,
+              "TIMEOUT": 74,
+              "OOS_END": 9
+            }
+          }
+        ],
+        "oos_total_pnl": -27.72,
+        "all_pass": false,
+        "pass_count": 1
+      },
+      "elapsed_s": 2.8
+    }
+  },
+  "baseline_oos": 107.8,
+  "best_config": "INDIVIDUAL_2.0",
+  "elapsed_total_s": 26.0
+}

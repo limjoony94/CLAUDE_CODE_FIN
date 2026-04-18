@@ -1,0 +1,494 @@
+{
+  "study": "realistic_cascade_npos",
+  "date": "2026-04-02T20:19:20.548335",
+  "params": {
+    "cascade_tighten_pct": 98,
+    "preemptive_cascade_pct": 1.5,
+    "preemptive_tighten_pct": 98,
+    "timeout_bars": 576,
+    "tp_decay_rate": 0.0,
+    "clamp_lo": 1.0,
+    "clamp_hi": 1.5,
+    "n_slots": 9,
+    "direction_cap": 6,
+    "wf_folds": 5
+  },
+  "results": {
+    "A_cascade_scanner": {
+      "is": {
+        "trades": 5157,
+        "wr": 46.8,
+        "pnl": 834.2,
+        "mdd": 0.73,
+        "pnl_mdd": 1149.94,
+        "pnl_per_trade": 0.162
+      },
+      "cascade_sl_count": 2668,
+      "cascade_pnl_portfolio": -177.87,
+      "wf": [
+        {
+          "fold": 1,
+          "is_range": "0-15644",
+          "oos_range": "15644-31288",
+          "is": {
+            "trades": 766,
+            "wr": 46.1,
+            "pnl": 119.38,
+            "mdd": 0.54,
+            "pnl_mdd": 220.46,
+            "pnl_per_trade": 0.156
+          },
+          "oos": {
+            "trades": 650,
+            "wr": 42.9,
+            "pnl": 90.67,
+            "mdd": 0.79,
+            "pnl_mdd": 114.12,
+            "pnl_per_trade": 0.139
+          }
+        },
+        {
+          "fold": 2,
+          "is_range": "0-31288",
+          "oos_range": "31288-46932",
+          "is": {
+            "trades": 1405,
+            "wr": 44.3,
+            "pnl": 209.48,
+            "mdd": 0.54,
+            "pnl_mdd": 386.85,
+            "pnl_per_trade": 0.149
+          },
+          "oos": {
+            "trades": 662,
+            "wr": 45.3,
+            "pnl": 92.52,
+            "mdd": 1.59,
+            "pnl_mdd": 58.32,
+            "pnl_per_trade": 0.14
+          }
+        },
+        {
+          "fold": 3,
+          "is_range": "0-46932",
+          "oos_range": "46932-62576",
+          "is": {
+            "trades": 2058,
+            "wr": 44.8,
+            "pnl": 304.84,
+            "mdd": 0.73,
+            "pnl_mdd": 420.22,
+            "pnl_per_trade": 0.148
+          },
+          "oos": {
+            "trades": 1059,
+            "wr": 49.5,
+            "pnl": 191.9,
+            "mdd": 0.68,
+            "pnl_mdd": 283.85,
+            "pnl_per_trade": 0.181
+          }
+        },
+        {
+          "fold": 4,
+          "is_range": "0-62576",
+          "oos_range": "62576-78220",
+          "is": {
+            "trades": 3107,
+            "wr": 46.3,
+            "pnl": 494.2,
+            "mdd": 0.73,
+            "pnl_mdd": 681.25,
+            "pnl_per_trade": 0.159
+          },
+          "oos": {
+            "trades": 785,
+            "wr": 45.7,
+            "pnl": 121.85,
+            "mdd": 0.52,
+            "pnl_mdd": 232.72,
+            "pnl_per_trade": 0.155
+          }
+        },
+        {
+          "fold": 5,
+          "is_range": "0-78220",
+          "oos_range": "78220-93864",
+          "is": {
+            "trades": 3885,
+            "wr": 46.2,
+            "pnl": 616.9,
+            "mdd": 0.73,
+            "pnl_mdd": 850.4,
+            "pnl_per_trade": 0.159
+          },
+          "oos": {
+            "trades": 1274,
+            "wr": 48.9,
+            "pnl": 216.64,
+            "mdd": 1.28,
+            "pnl_mdd": 169.07,
+            "pnl_per_trade": 0.17
+          }
+        }
+      ],
+      "oos_total": 713.6
+    },
+    "B_cascade_realistic": {
+      "is": {
+        "trades": 5157,
+        "wr": 47.5,
+        "pnl": 238.11,
+        "mdd": 5.15,
+        "pnl_mdd": 46.25,
+        "pnl_per_trade": 0.046
+      },
+      "adjusted_cascade_count": 2668,
+      "wf": [
+        {
+          "fold": 1,
+          "is_range": "0-15644",
+          "oos_range": "15644-31288",
+          "is": {
+            "trades": 766,
+            "wr": 46.3,
+            "pnl": 30.93,
+            "mdd": 4.32,
+            "pnl_mdd": 7.16,
+            "pnl_per_trade": 0.04
+          },
+          "oos": {
+            "trades": 650,
+            "wr": 43.5,
+            "pnl": 10.23,
+            "mdd": 5.19,
+            "pnl_mdd": 1.97,
+            "pnl_per_trade": 0.016
+          }
+        },
+        {
+          "fold": 2,
+          "is_range": "0-31288",
+          "oos_range": "31288-46932",
+          "is": {
+            "trades": 1405,
+            "wr": 44.8,
+            "pnl": 38.95,
+            "mdd": 5.15,
+            "pnl_mdd": 7.56,
+            "pnl_per_trade": 0.028
+          },
+          "oos": {
+            "trades": 662,
+            "wr": 46.4,
+            "pnl": 22.28,
+            "mdd": 4.76,
+            "pnl_mdd": 4.68,
+            "pnl_per_trade": 0.034
+          }
+        },
+        {
+          "fold": 3,
+          "is_range": "0-46932",
+          "oos_range": "46932-62576",
+          "is": {
+            "trades": 2058,
+            "wr": 45.3,
+            "pnl": 64.77,
+            "mdd": 5.15,
+            "pnl_mdd": 12.58,
+            "pnl_per_trade": 0.031
+          },
+          "oos": {
+            "trades": 1059,
+            "wr": 50.0,
+            "pnl": 64.17,
+            "mdd": 6.01,
+            "pnl_mdd": 10.67,
+            "pnl_per_trade": 0.061
+          }
+        },
+        {
+          "fold": 4,
+          "is_range": "0-62576",
+          "oos_range": "62576-78220",
+          "is": {
+            "trades": 3107,
+            "wr": 46.8,
+            "pnl": 127.53,
+            "mdd": 5.15,
+            "pnl_mdd": 24.77,
+            "pnl_per_trade": 0.041
+          },
+          "oos": {
+            "trades": 785,
+            "wr": 46.4,
+            "pnl": 36.21,
+            "mdd": 3.59,
+            "pnl_mdd": 10.08,
+            "pnl_per_trade": 0.046
+          }
+        },
+        {
+          "fold": 5,
+          "is_range": "0-78220",
+          "oos_range": "78220-93864",
+          "is": {
+            "trades": 3885,
+            "wr": 46.8,
+            "pnl": 164.8,
+            "mdd": 5.15,
+            "pnl_mdd": 32.01,
+            "pnl_per_trade": 0.042
+          },
+          "oos": {
+            "trades": 1274,
+            "wr": 49.6,
+            "pnl": 73.86,
+            "mdd": 6.94,
+            "pnl_mdd": 10.64,
+            "pnl_per_trade": 0.058
+          }
+        }
+      ],
+      "oos_total": 206.8
+    },
+    "C_no_cascade": {
+      "is": {
+        "trades": 2850,
+        "wr": 66.4,
+        "pnl": -2.01,
+        "mdd": 28.64,
+        "pnl_mdd": -0.07,
+        "pnl_per_trade": -0.001
+      },
+      "wf": [
+        {
+          "fold": 1,
+          "is_range": "0-15644",
+          "oos_range": "15644-31288",
+          "is": {
+            "trades": 422,
+            "wr": 61.8,
+            "pnl": -13.45,
+            "mdd": 19.48,
+            "pnl_mdd": -0.69,
+            "pnl_per_trade": -0.032
+          },
+          "oos": {
+            "trades": 376,
+            "wr": 60.9,
+            "pnl": -2.12,
+            "mdd": 12.3,
+            "pnl_mdd": -0.17,
+            "pnl_per_trade": -0.006
+          }
+        },
+        {
+          "fold": 2,
+          "is_range": "0-31288",
+          "oos_range": "31288-46932",
+          "is": {
+            "trades": 793,
+            "wr": 61.0,
+            "pnl": -17.25,
+            "mdd": 27.32,
+            "pnl_mdd": -0.63,
+            "pnl_per_trade": -0.022
+          },
+          "oos": {
+            "trades": 396,
+            "wr": 63.6,
+            "pnl": 5.73,
+            "mdd": 10.5,
+            "pnl_mdd": 0.55,
+            "pnl_per_trade": 0.014
+          }
+        },
+        {
+          "fold": 3,
+          "is_range": "0-46932",
+          "oos_range": "46932-62576",
+          "is": {
+            "trades": 1179,
+            "wr": 62.0,
+            "pnl": -12.29,
+            "mdd": 27.32,
+            "pnl_mdd": -0.45,
+            "pnl_per_trade": -0.01
+          },
+          "oos": {
+            "trades": 559,
+            "wr": 69.9,
+            "pnl": 13.87,
+            "mdd": 15.98,
+            "pnl_mdd": 0.87,
+            "pnl_per_trade": 0.025
+          }
+        },
+        {
+          "fold": 4,
+          "is_range": "0-62576",
+          "oos_range": "62576-78220",
+          "is": {
+            "trades": 1736,
+            "wr": 64.6,
+            "pnl": 0.7,
+            "mdd": 28.64,
+            "pnl_mdd": 0.02,
+            "pnl_per_trade": 0.0
+          },
+          "oos": {
+            "trades": 433,
+            "wr": 63.0,
+            "pnl": -0.22,
+            "mdd": 11.36,
+            "pnl_mdd": -0.02,
+            "pnl_per_trade": -0.0
+          }
+        },
+        {
+          "fold": 5,
+          "is_range": "0-78220",
+          "oos_range": "78220-93864",
+          "is": {
+            "trades": 2156,
+            "wr": 64.5,
+            "pnl": 6.39,
+            "mdd": 28.64,
+            "pnl_mdd": 0.22,
+            "pnl_per_trade": 0.003
+          },
+          "oos": {
+            "trades": 706,
+            "wr": 71.7,
+            "pnl": -9.74,
+            "mdd": 23.24,
+            "pnl_mdd": -0.42,
+            "pnl_per_trade": -0.014
+          }
+        }
+      ],
+      "oos_total": 7.5
+    },
+    "D_partial_close": {
+      "is": {
+        "trades": 3713,
+        "wr": 65.6,
+        "pnl": 636.25,
+        "mdd": 1.59,
+        "pnl_mdd": 401.09,
+        "pnl_per_trade": 0.171
+      },
+      "partial_close_count": 1224,
+      "wf": [
+        {
+          "fold": 1,
+          "is_range": "0-15644",
+          "oos_range": "15644-31288",
+          "is": {
+            "trades": 553,
+            "wr": 64.2,
+            "pnl": 88.78,
+            "mdd": 1.59,
+            "pnl_mdd": 55.97,
+            "pnl_per_trade": 0.161
+          },
+          "oos": {
+            "trades": 457,
+            "wr": 61.7,
+            "pnl": 65.45,
+            "mdd": 1.65,
+            "pnl_mdd": 39.73,
+            "pnl_per_trade": 0.143
+          }
+        },
+        {
+          "fold": 2,
+          "is_range": "0-31288",
+          "oos_range": "31288-46932",
+          "is": {
+            "trades": 997,
+            "wr": 63.0,
+            "pnl": 153.62,
+            "mdd": 1.59,
+            "pnl_mdd": 96.84,
+            "pnl_per_trade": 0.154
+          },
+          "oos": {
+            "trades": 480,
+            "wr": 63.5,
+            "pnl": 73.5,
+            "mdd": 1.78,
+            "pnl_mdd": 41.34,
+            "pnl_per_trade": 0.153
+          }
+        },
+        {
+          "fold": 3,
+          "is_range": "0-46932",
+          "oos_range": "46932-62576",
+          "is": {
+            "trades": 1470,
+            "wr": 63.3,
+            "pnl": 229.96,
+            "mdd": 1.59,
+            "pnl_mdd": 144.97,
+            "pnl_per_trade": 0.156
+          },
+          "oos": {
+            "trades": 774,
+            "wr": 68.2,
+            "pnl": 144.58,
+            "mdd": 1.63,
+            "pnl_mdd": 88.61,
+            "pnl_per_trade": 0.187
+          }
+        },
+        {
+          "fold": 4,
+          "is_range": "0-62576",
+          "oos_range": "62576-78220",
+          "is": {
+            "trades": 2233,
+            "wr": 64.9,
+            "pnl": 372.06,
+            "mdd": 1.59,
+            "pnl_mdd": 234.55,
+            "pnl_per_trade": 0.167
+          },
+          "oos": {
+            "trades": 564,
+            "wr": 64.4,
+            "pnl": 97.16,
+            "mdd": 1.05,
+            "pnl_mdd": 92.18,
+            "pnl_per_trade": 0.172
+          }
+        },
+        {
+          "fold": 5,
+          "is_range": "0-78220",
+          "oos_range": "78220-93864",
+          "is": {
+            "trades": 2790,
+            "wr": 64.9,
+            "pnl": 470.44,
+            "mdd": 1.59,
+            "pnl_mdd": 296.57,
+            "pnl_per_trade": 0.169
+          },
+          "oos": {
+            "trades": 927,
+            "wr": 67.5,
+            "pnl": 165.71,
+            "mdd": 1.44,
+            "pnl_mdd": 115.16,
+            "pnl_per_trade": 0.179
+          }
+        }
+      ],
+      "oos_total": 546.4
+    }
+  }
+}

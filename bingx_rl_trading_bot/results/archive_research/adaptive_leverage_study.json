@@ -1,0 +1,626 @@
+{
+  "study": "adaptive_leverage",
+  "date": "2026-03-02T16:14:33.828192",
+  "elapsed_seconds": 54.1,
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "patterns_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\results\\dynamic_patterns.json",
+  "n_patterns": 130,
+  "neutral_window": {
+    "start": 1,
+    "end": 74723,
+    "bars": 74722
+  },
+  "phase1_is": {
+    "Fixed_3x (baseline)": {
+      "trades": 834,
+      "wr": 74.0,
+      "pnl": 125.21,
+      "mdd": 4.44,
+      "pnl_mdd": 28.18,
+      "pnl_per_trade": 0.15,
+      "avg_leverage": 3.0
+    },
+    "Fixed_1x (min)": {
+      "trades": 738,
+      "wr": 77.8,
+      "pnl": 47.67,
+      "mdd": 2.58,
+      "pnl_mdd": 18.48,
+      "pnl_per_trade": 0.065,
+      "avg_leverage": 1.0
+    },
+    "H1_StepTiers_w10": {
+      "trades": 799,
+      "wr": 76.3,
+      "pnl": 126.87,
+      "mdd": 3.73,
+      "pnl_mdd": 33.98,
+      "pnl_per_trade": 0.159,
+      "avg_leverage": 2.59
+    },
+    "H1_StepTiers_w15": {
+      "trades": 794,
+      "wr": 75.4,
+      "pnl": 114.3,
+      "mdd": 4.41,
+      "pnl_mdd": 25.92,
+      "pnl_per_trade": 0.144,
+      "avg_leverage": 2.58
+    },
+    "H1_StepTiers_w20": {
+      "trades": 815,
+      "wr": 74.6,
+      "pnl": 113.86,
+      "mdd": 4.75,
+      "pnl_mdd": 23.97,
+      "pnl_per_trade": 0.14,
+      "avg_leverage": 2.55
+    },
+    "H1_StepTiers_w30": {
+      "trades": 794,
+      "wr": 75.4,
+      "pnl": 117.95,
+      "mdd": 4.93,
+      "pnl_mdd": 23.93,
+      "pnl_per_trade": 0.149,
+      "avg_leverage": 2.62
+    },
+    "H2_Continuous_w10": {
+      "trades": 810,
+      "wr": 74.8,
+      "pnl": 103.51,
+      "mdd": 3.96,
+      "pnl_mdd": 26.13,
+      "pnl_per_trade": 0.128,
+      "avg_leverage": 2.47
+    },
+    "H2_Continuous_w15": {
+      "trades": 805,
+      "wr": 74.0,
+      "pnl": 98.52,
+      "mdd": 4.54,
+      "pnl_mdd": 21.72,
+      "pnl_per_trade": 0.122,
+      "avg_leverage": 2.52
+    },
+    "H2_Continuous_w20": {
+      "trades": 805,
+      "wr": 74.9,
+      "pnl": 109.84,
+      "mdd": 6.71,
+      "pnl_mdd": 16.37,
+      "pnl_per_trade": 0.136,
+      "avg_leverage": 2.56
+    },
+    "H2_Continuous_w30": {
+      "trades": 801,
+      "wr": 75.4,
+      "pnl": 124.54,
+      "mdd": 4.88,
+      "pnl_mdd": 25.51,
+      "pnl_per_trade": 0.155,
+      "avg_leverage": 2.65
+    },
+    "H3_Conservative_w10_warmup10": {
+      "trades": 812,
+      "wr": 74.6,
+      "pnl": 99.39,
+      "mdd": 3.81,
+      "pnl_mdd": 26.07,
+      "pnl_per_trade": 0.122,
+      "avg_leverage": 2.43
+    },
+    "H3_Conservative_w15_warmup20": {
+      "trades": 803,
+      "wr": 74.5,
+      "pnl": 96.98,
+      "mdd": 4.58,
+      "pnl_mdd": 21.16,
+      "pnl_per_trade": 0.121,
+      "avg_leverage": 2.49
+    },
+    "H4_PerDirection_w15": {
+      "trades": 808,
+      "wr": 74.9,
+      "pnl": 106.82,
+      "mdd": 5.67,
+      "pnl_mdd": 18.84,
+      "pnl_per_trade": 0.132,
+      "avg_leverage": 2.33
+    },
+    "H4_PerDirection_w20": {
+      "trades": 811,
+      "wr": 75.1,
+      "pnl": 101.24,
+      "mdd": 6.73,
+      "pnl_mdd": 15.04,
+      "pnl_per_trade": 0.125,
+      "avg_leverage": 2.39
+    }
+  },
+  "phase2_sweep": {
+    "H1_StepTiers_w5": {
+      "trades": 827,
+      "wr": 75.8,
+      "pnl": 113.89,
+      "mdd": 4.11,
+      "pnl_mdd": 27.68,
+      "pnl_per_trade": 0.138,
+      "avg_leverage": 2.48
+    },
+    "H1_StepTiers_w8": {
+      "trades": 843,
+      "wr": 75.9,
+      "pnl": 116.06,
+      "mdd": 4.64,
+      "pnl_mdd": 25.04,
+      "pnl_per_trade": 0.138,
+      "avg_leverage": 2.47
+    },
+    "H1_StepTiers_w10": {
+      "trades": 799,
+      "wr": 76.3,
+      "pnl": 126.87,
+      "mdd": 3.73,
+      "pnl_mdd": 33.98,
+      "pnl_per_trade": 0.159,
+      "avg_leverage": 2.59
+    },
+    "H1_StepTiers_w12": {
+      "trades": 798,
+      "wr": 74.7,
+      "pnl": 109.57,
+      "mdd": 4.68,
+      "pnl_mdd": 23.39,
+      "pnl_per_trade": 0.137,
+      "avg_leverage": 2.46
+    },
+    "H1_StepTiers_w15": {
+      "trades": 794,
+      "wr": 75.4,
+      "pnl": 114.3,
+      "mdd": 4.41,
+      "pnl_mdd": 25.92,
+      "pnl_per_trade": 0.144,
+      "avg_leverage": 2.58
+    },
+    "H1_StepTiers_w20": {
+      "trades": 815,
+      "wr": 74.6,
+      "pnl": 113.86,
+      "mdd": 4.75,
+      "pnl_mdd": 23.97,
+      "pnl_per_trade": 0.14,
+      "avg_leverage": 2.55
+    },
+    "H1_StepTiers_w25": {
+      "trades": 822,
+      "wr": 74.7,
+      "pnl": 114.03,
+      "mdd": 4.71,
+      "pnl_mdd": 24.19,
+      "pnl_per_trade": 0.139,
+      "avg_leverage": 2.53
+    },
+    "H1_StepTiers_w30": {
+      "trades": 794,
+      "wr": 75.4,
+      "pnl": 117.95,
+      "mdd": 4.93,
+      "pnl_mdd": 23.93,
+      "pnl_per_trade": 0.149,
+      "avg_leverage": 2.62
+    },
+    "H2_Continuous_w5": {
+      "trades": 825,
+      "wr": 76.5,
+      "pnl": 109.92,
+      "mdd": 3.59,
+      "pnl_mdd": 30.6,
+      "pnl_per_trade": 0.133,
+      "avg_leverage": 2.45
+    },
+    "H2_Continuous_w8": {
+      "trades": 810,
+      "wr": 75.8,
+      "pnl": 107.14,
+      "mdd": 4.64,
+      "pnl_mdd": 23.07,
+      "pnl_per_trade": 0.132,
+      "avg_leverage": 2.4
+    },
+    "H2_Continuous_w10": {
+      "trades": 810,
+      "wr": 74.8,
+      "pnl": 103.51,
+      "mdd": 3.96,
+      "pnl_mdd": 26.13,
+      "pnl_per_trade": 0.128,
+      "avg_leverage": 2.47
+    },
+    "H2_Continuous_w12": {
+      "trades": 801,
+      "wr": 73.9,
+      "pnl": 89.8,
+      "mdd": 4.27,
+      "pnl_mdd": 21.02,
+      "pnl_per_trade": 0.112,
+      "avg_leverage": 2.42
+    },
+    "H2_Continuous_w15": {
+      "trades": 805,
+      "wr": 74.0,
+      "pnl": 98.52,
+      "mdd": 4.54,
+      "pnl_mdd": 21.72,
+      "pnl_per_trade": 0.122,
+      "avg_leverage": 2.52
+    },
+    "H2_Continuous_w20": {
+      "trades": 805,
+      "wr": 74.9,
+      "pnl": 109.84,
+      "mdd": 6.71,
+      "pnl_mdd": 16.37,
+      "pnl_per_trade": 0.136,
+      "avg_leverage": 2.56
+    },
+    "H2_Continuous_w25": {
+      "trades": 825,
+      "wr": 74.1,
+      "pnl": 105.04,
+      "mdd": 6.66,
+      "pnl_mdd": 15.76,
+      "pnl_per_trade": 0.127,
+      "avg_leverage": 2.51
+    },
+    "H2_Continuous_w30": {
+      "trades": 801,
+      "wr": 75.4,
+      "pnl": 124.54,
+      "mdd": 4.88,
+      "pnl_mdd": 25.51,
+      "pnl_per_trade": 0.155,
+      "avg_leverage": 2.65
+    },
+    "H3_Conservative_w5": {
+      "trades": 825,
+      "wr": 76.6,
+      "pnl": 108.82,
+      "mdd": 3.62,
+      "pnl_mdd": 30.02,
+      "pnl_per_trade": 0.132,
+      "avg_leverage": 2.44
+    },
+    "H3_Conservative_w8": {
+      "trades": 796,
+      "wr": 75.8,
+      "pnl": 106.38,
+      "mdd": 4.67,
+      "pnl_mdd": 22.8,
+      "pnl_per_trade": 0.134,
+      "avg_leverage": 2.38
+    },
+    "H3_Conservative_w10": {
+      "trades": 812,
+      "wr": 74.6,
+      "pnl": 98.59,
+      "mdd": 3.83,
+      "pnl_mdd": 25.72,
+      "pnl_per_trade": 0.121,
+      "avg_leverage": 2.42
+    },
+    "H3_Conservative_w12": {
+      "trades": 806,
+      "wr": 74.1,
+      "pnl": 91.12,
+      "mdd": 4.23,
+      "pnl_mdd": 21.55,
+      "pnl_per_trade": 0.113,
+      "avg_leverage": 2.4
+    },
+    "H3_Conservative_w15": {
+      "trades": 803,
+      "wr": 74.5,
+      "pnl": 96.98,
+      "mdd": 4.58,
+      "pnl_mdd": 21.16,
+      "pnl_per_trade": 0.121,
+      "avg_leverage": 2.49
+    },
+    "H3_Conservative_w20": {
+      "trades": 830,
+      "wr": 75.9,
+      "pnl": 125.02,
+      "mdd": 4.33,
+      "pnl_mdd": 28.89,
+      "pnl_per_trade": 0.151,
+      "avg_leverage": 2.59
+    },
+    "H3_Conservative_w25": {
+      "trades": 847,
+      "wr": 74.7,
+      "pnl": 113.97,
+      "mdd": 5.05,
+      "pnl_mdd": 22.56,
+      "pnl_per_trade": 0.135,
+      "avg_leverage": 2.52
+    },
+    "H3_Conservative_w30": {
+      "trades": 809,
+      "wr": 75.4,
+      "pnl": 123.69,
+      "mdd": 4.91,
+      "pnl_mdd": 25.17,
+      "pnl_per_trade": 0.153,
+      "avg_leverage": 2.62
+    }
+  },
+  "phase3_wf": {
+    "Fixed_3x (baseline)": {
+      "pass": true,
+      "folds": [
+        {
+          "trades": 164,
+          "wr": 67.1,
+          "pnl": 16.8,
+          "mdd": 5.82,
+          "pnl_mdd": 2.89,
+          "pnl_per_trade": 0.102,
+          "avg_leverage": 3.0,
+          "fold": 1,
+          "oos_start": 18681,
+          "oos_end": 37361,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 231,
+          "wr": 68.8,
+          "pnl": 20.65,
+          "mdd": 7.47,
+          "pnl_mdd": 2.76,
+          "pnl_per_trade": 0.089,
+          "avg_leverage": 3.0,
+          "fold": 2,
+          "oos_start": 37361,
+          "oos_end": 56041,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 272,
+          "wr": 75.7,
+          "pnl": 42.36,
+          "mdd": 5.66,
+          "pnl_mdd": 7.49,
+          "pnl_per_trade": 0.156,
+          "avg_leverage": 3.0,
+          "fold": 3,
+          "oos_start": 56041,
+          "oos_end": 74723,
+          "oos_bars": 18682
+        }
+      ]
+    },
+    "H1_StepTiers_w10": {
+      "pass": true,
+      "folds": [
+        {
+          "trades": 165,
+          "wr": 72.1,
+          "pnl": 19.03,
+          "mdd": 4.21,
+          "pnl_mdd": 4.52,
+          "pnl_per_trade": 0.115,
+          "avg_leverage": 2.55,
+          "fold": 1,
+          "oos_start": 18681,
+          "oos_end": 37361,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 240,
+          "wr": 69.2,
+          "pnl": 24.27,
+          "mdd": 5.16,
+          "pnl_mdd": 4.7,
+          "pnl_per_trade": 0.101,
+          "avg_leverage": 2.49,
+          "fold": 2,
+          "oos_start": 37361,
+          "oos_end": 56041,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 266,
+          "wr": 75.6,
+          "pnl": 37.47,
+          "mdd": 4.77,
+          "pnl_mdd": 7.86,
+          "pnl_per_trade": 0.141,
+          "avg_leverage": 2.55,
+          "fold": 3,
+          "oos_start": 56041,
+          "oos_end": 74723,
+          "oos_bars": 18682
+        }
+      ]
+    },
+    "H2_Continuous_w5": {
+      "pass": true,
+      "folds": [
+        {
+          "trades": 154,
+          "wr": 70.8,
+          "pnl": 12.26,
+          "mdd": 5.62,
+          "pnl_mdd": 2.18,
+          "pnl_per_trade": 0.08,
+          "avg_leverage": 2.42,
+          "fold": 1,
+          "oos_start": 18681,
+          "oos_end": 37361,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 245,
+          "wr": 71.4,
+          "pnl": 17.28,
+          "mdd": 5.4,
+          "pnl_mdd": 3.2,
+          "pnl_per_trade": 0.071,
+          "avg_leverage": 2.28,
+          "fold": 2,
+          "oos_start": 37361,
+          "oos_end": 56041,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 252,
+          "wr": 75.0,
+          "pnl": 26.37,
+          "mdd": 6.88,
+          "pnl_mdd": 3.83,
+          "pnl_per_trade": 0.105,
+          "avg_leverage": 2.39,
+          "fold": 3,
+          "oos_start": 56041,
+          "oos_end": 74723,
+          "oos_bars": 18682
+        }
+      ]
+    },
+    "H3_Conservative_w5": {
+      "pass": true,
+      "folds": [
+        {
+          "trades": 169,
+          "wr": 75.1,
+          "pnl": 24.08,
+          "mdd": 3.66,
+          "pnl_mdd": 6.58,
+          "pnl_per_trade": 0.142,
+          "avg_leverage": 2.55,
+          "fold": 1,
+          "oos_start": 18681,
+          "oos_end": 37361,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 233,
+          "wr": 72.1,
+          "pnl": 20.63,
+          "mdd": 4.97,
+          "pnl_mdd": 4.15,
+          "pnl_per_trade": 0.089,
+          "avg_leverage": 2.16,
+          "fold": 2,
+          "oos_start": 37361,
+          "oos_end": 56041,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 250,
+          "wr": 74.4,
+          "pnl": 22.83,
+          "mdd": 7.11,
+          "pnl_mdd": 3.21,
+          "pnl_per_trade": 0.091,
+          "avg_leverage": 2.3,
+          "fold": 3,
+          "oos_start": 56041,
+          "oos_end": 74723,
+          "oos_bars": 18682
+        }
+      ]
+    },
+    "H3_Conservative_w20": {
+      "pass": true,
+      "folds": [
+        {
+          "trades": 166,
+          "wr": 73.5,
+          "pnl": 15.38,
+          "mdd": 4.54,
+          "pnl_mdd": 3.39,
+          "pnl_per_trade": 0.093,
+          "avg_leverage": 2.41,
+          "fold": 1,
+          "oos_start": 18681,
+          "oos_end": 37361,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 216,
+          "wr": 71.8,
+          "pnl": 24.48,
+          "mdd": 5.16,
+          "pnl_mdd": 4.74,
+          "pnl_per_trade": 0.113,
+          "avg_leverage": 2.3,
+          "fold": 2,
+          "oos_start": 37361,
+          "oos_end": 56041,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 261,
+          "wr": 75.1,
+          "pnl": 40.99,
+          "mdd": 5.67,
+          "pnl_mdd": 7.22,
+          "pnl_per_trade": 0.157,
+          "avg_leverage": 2.54,
+          "fold": 3,
+          "oos_start": 56041,
+          "oos_end": 74723,
+          "oos_bars": 18682
+        }
+      ]
+    },
+    "H1_StepTiers_w5": {
+      "pass": true,
+      "folds": [
+        {
+          "trades": 156,
+          "wr": 74.4,
+          "pnl": 22.4,
+          "mdd": 5.66,
+          "pnl_mdd": 3.96,
+          "pnl_per_trade": 0.144,
+          "avg_leverage": 2.66,
+          "fold": 1,
+          "oos_start": 18681,
+          "oos_end": 37361,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 256,
+          "wr": 71.9,
+          "pnl": 21.46,
+          "mdd": 5.47,
+          "pnl_mdd": 3.93,
+          "pnl_per_trade": 0.084,
+          "avg_leverage": 2.34,
+          "fold": 2,
+          "oos_start": 37361,
+          "oos_end": 56041,
+          "oos_bars": 18680
+        },
+        {
+          "trades": 258,
+          "wr": 74.8,
+          "pnl": 27.43,
+          "mdd": 7.28,
+          "pnl_mdd": 3.77,
+          "pnl_per_trade": 0.106,
+          "avg_leverage": 2.42,
+          "fold": 3,
+          "oos_start": 56041,
+          "oos_end": 74723,
+          "oos_bars": 18682
+        }
+      ]
+    }
+  },
+  "verdict": "GO"
+}

@@ -1,0 +1,419 @@
+{
+  "timestamp": "2026-03-30T20:31:14.545923",
+  "script": "revert_validation.py",
+  "data_bars": 93864,
+  "data_days": 325.9,
+  "neutral_window": {
+    "start": 0,
+    "end": 74567,
+    "days": 258.9
+  },
+  "configs": {
+    "A": {
+      "name": "v1.67.0 (12-type, MFE+decay)",
+      "is_stats": {
+        "trades": 2264,
+        "wr": 90.5,
+        "pnl": 377.0,
+        "mdd": 4.75,
+        "pnl_mdd": 79.42,
+        "rr": 0.275,
+        "avg_win": 2.678,
+        "avg_loss": 9.744,
+        "wr_margin": 12.1,
+        "trades_per_day": 8.74,
+        "mdd_mtm": 6.42,
+        "blocked": {
+          "momentum": 34,
+          "agg_risk": 0,
+          "dir_cap": 962,
+          "dup_pat": 286,
+          "max_pos": 5468
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 12427,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "is_pnl": 86.06,
+            "is_wr": 92.5,
+            "oos_pnl": 55.5,
+            "oos_wr": 91.6,
+            "oos_trades": 299,
+            "passed": "True"
+          },
+          {
+            "fold": 2,
+            "is_end": 24855,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "is_pnl": 142.68,
+            "is_wr": 92.4,
+            "oos_pnl": 55.81,
+            "oos_wr": 92.2,
+            "oos_trades": 309,
+            "passed": "True"
+          },
+          {
+            "fold": 3,
+            "is_end": 37283,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "is_pnl": 204.7,
+            "is_wr": 93.3,
+            "oos_pnl": 50.23,
+            "oos_wr": 87.7,
+            "oos_trades": 367,
+            "passed": "True"
+          },
+          {
+            "fold": 4,
+            "is_end": 49711,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "is_pnl": 257.2,
+            "is_wr": 92.2,
+            "oos_pnl": 64.77,
+            "oos_wr": 85.5,
+            "oos_trades": 511,
+            "passed": "True"
+          },
+          {
+            "fold": 5,
+            "is_end": 62139,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "is_pnl": 323.0,
+            "is_wr": 90.6,
+            "oos_pnl": 53.55,
+            "oos_wr": 88.1,
+            "oos_trades": 378,
+            "passed": "True"
+          }
+        ],
+        "total_oos_pnl": 279.86,
+        "n_pass": 5,
+        "n_folds": 5,
+        "all_pass": true
+      },
+      "mc_pvalue": 0.0
+    },
+    "B": {
+      "name": "v1.67.0 + 8-type merge",
+      "is_stats": {
+        "trades": 2426,
+        "wr": 87.9,
+        "pnl": 352.24,
+        "mdd": 6.59,
+        "pnl_mdd": 53.42,
+        "rr": 0.294,
+        "avg_win": 2.788,
+        "avg_loss": 9.479,
+        "wr_margin": 10.7,
+        "trades_per_day": 9.37,
+        "mdd_mtm": 8.54,
+        "blocked": {
+          "momentum": 61,
+          "agg_risk": 0,
+          "dir_cap": 823,
+          "dup_pat": 379,
+          "max_pos": 16589
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 12427,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "is_pnl": 74.67,
+            "is_wr": 88.3,
+            "oos_pnl": 54.31,
+            "oos_wr": 89.7,
+            "oos_trades": 320,
+            "passed": "True"
+          },
+          {
+            "fold": 2,
+            "is_end": 24855,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "is_pnl": 130.0,
+            "is_wr": 89.4,
+            "oos_pnl": 63.41,
+            "oos_wr": 92.2,
+            "oos_trades": 333,
+            "passed": "True"
+          },
+          {
+            "fold": 3,
+            "is_end": 37283,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "is_pnl": 192.8,
+            "is_wr": 90.8,
+            "oos_pnl": 53.49,
+            "oos_wr": 86.3,
+            "oos_trades": 417,
+            "passed": "True"
+          },
+          {
+            "fold": 4,
+            "is_end": 49711,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "is_pnl": 245.18,
+            "is_wr": 89.8,
+            "oos_pnl": 54.71,
+            "oos_wr": 82.4,
+            "oos_trades": 598,
+            "passed": "True"
+          },
+          {
+            "fold": 5,
+            "is_end": 62139,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "is_pnl": 300.14,
+            "is_wr": 87.9,
+            "oos_pnl": 53.69,
+            "oos_wr": 86.7,
+            "oos_trades": 398,
+            "passed": "True"
+          }
+        ],
+        "total_oos_pnl": 279.61,
+        "n_pass": 5,
+        "n_folds": 5,
+        "all_pass": true
+      },
+      "mc_pvalue": 0.0
+    },
+    "C": {
+      "name": "v1.67.0 + 8-type + VB",
+      "is_stats": {
+        "trades": 2499,
+        "wr": 88.0,
+        "pnl": 365.87,
+        "mdd": 6.5,
+        "pnl_mdd": 56.25,
+        "rr": 0.292,
+        "avg_win": 2.823,
+        "avg_loss": 9.672,
+        "wr_margin": 10.5,
+        "trades_per_day": 9.65,
+        "mdd_mtm": 9.11,
+        "blocked": {
+          "momentum": 114,
+          "agg_risk": 0,
+          "dir_cap": 1115,
+          "dup_pat": 3396,
+          "max_pos": 28217
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 12427,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "is_pnl": 70.85,
+            "is_wr": 88.2,
+            "oos_pnl": 51.62,
+            "oos_wr": 89.2,
+            "oos_trades": 314,
+            "passed": "True"
+          },
+          {
+            "fold": 2,
+            "is_end": 24855,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "is_pnl": 128.05,
+            "is_wr": 89.5,
+            "oos_pnl": 66.35,
+            "oos_wr": 92.1,
+            "oos_trades": 340,
+            "passed": "True"
+          },
+          {
+            "fold": 3,
+            "is_end": 37283,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "is_pnl": 193.91,
+            "is_wr": 90.9,
+            "oos_pnl": 61.46,
+            "oos_wr": 86.7,
+            "oos_trades": 435,
+            "passed": "True"
+          },
+          {
+            "fold": 4,
+            "is_end": 49711,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "is_pnl": 257.03,
+            "is_wr": 90.0,
+            "oos_pnl": 53.36,
+            "oos_wr": 82.3,
+            "oos_trades": 622,
+            "passed": "True"
+          },
+          {
+            "fold": 5,
+            "is_end": 62139,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "is_pnl": 311.43,
+            "is_wr": 88.0,
+            "oos_pnl": 54.66,
+            "oos_wr": 86.0,
+            "oos_trades": 413,
+            "passed": "True"
+          }
+        ],
+        "total_oos_pnl": 287.45,
+        "n_pass": 5,
+        "n_folds": 5,
+        "all_pass": true
+      },
+      "mc_pvalue": 0.0,
+      "discrimination": {
+        "shuffled_results": [
+          {
+            "seed": 42,
+            "oos_pnl": 271.58,
+            "n_pass": 5,
+            "all_pass": true
+          },
+          {
+            "seed": 123,
+            "oos_pnl": 275.45,
+            "n_pass": 5,
+            "all_pass": true
+          },
+          {
+            "seed": 7,
+            "oos_pnl": 273.5,
+            "n_pass": 5,
+            "all_pass": true
+          }
+        ],
+        "n_shuffled_all_pass": 3,
+        "discriminating": false
+      },
+      "bootstrap_ci": {
+        "ci_lo": 55.88,
+        "ci_hi": 176.4,
+        "median": 104.66
+      }
+    },
+    "D": {
+      "name": "v1.68.0 (trail 0.5/0.2)",
+      "is_stats": {
+        "trades": 5187,
+        "wr": 93.4,
+        "pnl": 223.88,
+        "mdd": 6.78,
+        "pnl_mdd": 33.03,
+        "rr": 0.113,
+        "avg_win": 1.106,
+        "avg_loss": 9.751,
+        "wr_margin": 3.6,
+        "trades_per_day": 20.03,
+        "mdd_mtm": 9.94,
+        "blocked": {
+          "momentum": 127,
+          "agg_risk": 0,
+          "dir_cap": 2251,
+          "dup_pat": 4821,
+          "max_pos": 23099
+        }
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_end": 12427,
+            "oos_start": 12427,
+            "oos_end": 24855,
+            "is_pnl": 29.64,
+            "is_wr": 93.0,
+            "oos_pnl": 38.84,
+            "oos_wr": 93.6,
+            "oos_trades": 686,
+            "passed": "True"
+          },
+          {
+            "fold": 2,
+            "is_end": 24855,
+            "oos_start": 24855,
+            "oos_end": 37283,
+            "is_pnl": 69.51,
+            "is_wr": 93.6,
+            "oos_pnl": 54.94,
+            "oos_wr": 94.9,
+            "oos_trades": 711,
+            "passed": "True"
+          },
+          {
+            "fold": 3,
+            "is_end": 37283,
+            "oos_start": 37283,
+            "oos_end": 49711,
+            "is_pnl": 126.67,
+            "is_wr": 94.4,
+            "oos_pnl": 34.19,
+            "oos_wr": 92.5,
+            "oos_trades": 851,
+            "passed": "True"
+          },
+          {
+            "fold": 4,
+            "is_end": 49711,
+            "oos_start": 49711,
+            "oos_end": 62139,
+            "is_pnl": 163.6,
+            "is_wr": 94.1,
+            "oos_pnl": 23.44,
+            "oos_wr": 91.0,
+            "oos_trades": 1304,
+            "passed": "True"
+          },
+          {
+            "fold": 5,
+            "is_end": 62139,
+            "oos_start": 62139,
+            "oos_end": 74567,
+            "is_pnl": 186.16,
+            "is_wr": 93.3,
+            "oos_pnl": 37.47,
+            "oos_wr": 93.1,
+            "oos_trades": 832,
+            "passed": "True"
+          }
+        ],
+        "total_oos_pnl": 188.88,
+        "n_pass": 5,
+        "n_folds": 5,
+        "all_pass": true
+      },
+      "mc_pvalue": 0.0
+    }
+  },
+  "best_config": "C",
+  "revert_recommended": true,
+  "verdict": {
+    "a_vs_d_is_pnl_delta": 153.1,
+    "a_vs_d_oos_delta": 91.0,
+    "merge_effect_oos": -0.2,
+    "vb_effect_oos": 7.8
+  },
+  "elapsed_seconds": 102.3
+}

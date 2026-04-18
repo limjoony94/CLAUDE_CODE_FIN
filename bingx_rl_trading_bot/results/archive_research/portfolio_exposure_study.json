@@ -1,0 +1,962 @@
+{
+  "study": "portfolio_exposure_management",
+  "sections": {
+    "is_comparison": [
+      {
+        "scenario": "H0: Baseline (cap7, regime\u00d70.3)",
+        "trades": 2700,
+        "wr": 86.7,
+        "pnl": 79144.4,
+        "mdd": 6.9,
+        "pnl_mdd": 11455.44,
+        "burst_count": 44,
+        "burst_pnl": -168.8,
+        "max_daily_loss": -5.17
+      },
+      {
+        "scenario": "H1a: DynCap regime L7/S3\u2194L3/S7",
+        "trades": 2503,
+        "wr": 82.9,
+        "pnl": 39824.6,
+        "mdd": 6.8,
+        "pnl_mdd": 5841.09,
+        "burst_count": 76,
+        "burst_pnl": -297.1,
+        "max_daily_loss": -4.64
+      },
+      {
+        "scenario": "H1b: DynCap moderate L7/S5\u2194L5/S7",
+        "trades": 2633,
+        "wr": 85.2,
+        "pnl": 61561.3,
+        "mdd": 6.6,
+        "pnl_mdd": 9354.41,
+        "burst_count": 64,
+        "burst_pnl": -236.1,
+        "max_daily_loss": -3.86
+      },
+      {
+        "scenario": "H1c: DynCap aggressive L7/S2\u2194L2/S7",
+        "trades": 2341,
+        "wr": 81.5,
+        "pnl": 21668.4,
+        "mdd": 8.9,
+        "pnl_mdd": 2438.01,
+        "burst_count": 75,
+        "burst_pnl": -319.3,
+        "max_daily_loss": -5.26
+      },
+      {
+        "scenario": "H2a: NetExp cap=5",
+        "trades": 2528,
+        "wr": 85.3,
+        "pnl": 25828.3,
+        "mdd": 6.9,
+        "pnl_mdd": 3738.42,
+        "burst_count": 57,
+        "burst_pnl": -215.1,
+        "max_daily_loss": -5.17
+      },
+      {
+        "scenario": "H2b: NetExp cap=3",
+        "trades": 2176,
+        "wr": 81.2,
+        "pnl": 3330.0,
+        "mdd": 7.2,
+        "pnl_mdd": 463.02,
+        "burst_count": 79,
+        "burst_pnl": -294.2,
+        "max_daily_loss": -3.49
+      },
+      {
+        "scenario": "H3a: Cooldown 3bars (15min)",
+        "trades": 2656,
+        "wr": 86.2,
+        "pnl": 60323.9,
+        "mdd": 5.4,
+        "pnl_mdd": 11204.7,
+        "burst_count": 46,
+        "burst_pnl": -180.8,
+        "max_daily_loss": -5.17
+      },
+      {
+        "scenario": "H3b: Cooldown 6bars (30min)",
+        "trades": 2620,
+        "wr": 85.5,
+        "pnl": 48247.5,
+        "mdd": 6.2,
+        "pnl_mdd": 7748.17,
+        "burst_count": 49,
+        "burst_pnl": -188.7,
+        "max_daily_loss": -4.96
+      },
+      {
+        "scenario": "H3c: Cooldown 12bars (60min)",
+        "trades": 2483,
+        "wr": 84.2,
+        "pnl": 22835.8,
+        "mdd": 6.4,
+        "pnl_mdd": 3542.17,
+        "burst_count": 60,
+        "burst_pnl": -223.3,
+        "max_daily_loss": -3.94
+      },
+      {
+        "scenario": "H4a: RollingWR sizing (LONG only)",
+        "trades": 2700,
+        "wr": 86.7,
+        "pnl": 1194035.3,
+        "mdd": 15.8,
+        "pnl_mdd": 75510.38,
+        "burst_count": 44,
+        "burst_pnl": -184.1,
+        "max_daily_loss": -9.28
+      },
+      {
+        "scenario": "H4b: RollingWR sizing (both dirs)",
+        "trades": 2700,
+        "wr": 86.7,
+        "pnl": 846540.7,
+        "mdd": 15.7,
+        "pnl_mdd": 53952.59,
+        "burst_count": 44,
+        "burst_pnl": -168.4,
+        "max_daily_loss": -7.36
+      },
+      {
+        "scenario": "H5: Adaptive regime (WR-based mult)",
+        "trades": 2700,
+        "wr": 86.7,
+        "pnl": 811958.8,
+        "mdd": 14.1,
+        "pnl_mdd": 57783.69,
+        "burst_count": 44,
+        "burst_pnl": -186.5,
+        "max_daily_loss": -5.88
+      },
+      {
+        "scenario": "H6a: LossBrake 2in24h\u2192block6h",
+        "trades": 2688,
+        "wr": 88.7,
+        "pnl": 169791.2,
+        "mdd": 4.7,
+        "pnl_mdd": 35788.3,
+        "burst_count": 34,
+        "burst_pnl": -108.0,
+        "max_daily_loss": -1.25
+      },
+      {
+        "scenario": "H6b: LossBrake 2in24h\u2192block12h",
+        "trades": 2658,
+        "wr": 89.2,
+        "pnl": 186049.6,
+        "mdd": 4.4,
+        "pnl_mdd": 42113.91,
+        "burst_count": 28,
+        "burst_pnl": -83.8,
+        "max_daily_loss": -1.25
+      }
+    ],
+    "recent_period": [
+      {
+        "scenario": "H0: Baseline (cap7, regime\u00d70.3)",
+        "trades": 1060,
+        "wr": 83.2,
+        "pnl": 846.9,
+        "mdd": 6.9,
+        "burst_count": 23,
+        "burst_pnl": -105.8
+      },
+      {
+        "scenario": "H1a: DynCap regime L7/S3\u2194L3/S7",
+        "trades": 984,
+        "wr": 80.4,
+        "pnl": 668.8,
+        "mdd": 6.8,
+        "burst_count": 33,
+        "burst_pnl": -152.6
+      },
+      {
+        "scenario": "H1b: DynCap moderate L7/S5\u2194L5/S7",
+        "trades": 1034,
+        "wr": 82.4,
+        "pnl": 790.6,
+        "mdd": 6.6,
+        "burst_count": 29,
+        "burst_pnl": -126.3
+      },
+      {
+        "scenario": "H1c: DynCap aggressive L7/S2\u2194L2/S7",
+        "trades": 918,
+        "wr": 78.5,
+        "pnl": 482.8,
+        "mdd": 8.9,
+        "burst_count": 31,
+        "burst_pnl": -157.2
+      },
+      {
+        "scenario": "H2a: NetExp cap=5",
+        "trades": 1007,
+        "wr": 82.0,
+        "pnl": 556.0,
+        "mdd": 6.9,
+        "burst_count": 26,
+        "burst_pnl": -117.7
+      },
+      {
+        "scenario": "H2b: NetExp cap=3",
+        "trades": 897,
+        "wr": 78.7,
+        "pnl": 250.3,
+        "mdd": 7.2,
+        "burst_count": 37,
+        "burst_pnl": -147.3
+      },
+      {
+        "scenario": "H3a: Cooldown 3bars (15min)",
+        "trades": 1049,
+        "wr": 82.6,
+        "pnl": 696.7,
+        "mdd": 5.4,
+        "burst_count": 26,
+        "burst_pnl": -119.9
+      },
+      {
+        "scenario": "H3b: Cooldown 6bars (30min)",
+        "trades": 1038,
+        "wr": 81.9,
+        "pnl": 635.4,
+        "mdd": 6.2,
+        "burst_count": 27,
+        "burst_pnl": -122.1
+      },
+      {
+        "scenario": "H3c: Cooldown 12bars (60min)",
+        "trades": 980,
+        "wr": 80.0,
+        "pnl": 403.4,
+        "mdd": 6.4,
+        "burst_count": 30,
+        "burst_pnl": -136.0
+      },
+      {
+        "scenario": "H4a: RollingWR sizing (LONG only)",
+        "trades": 1060,
+        "wr": 83.2,
+        "pnl": 2283.8,
+        "mdd": 25.3,
+        "burst_count": 23,
+        "burst_pnl": -164.9
+      },
+      {
+        "scenario": "H4b: RollingWR sizing (both dirs)",
+        "trades": 1060,
+        "wr": 83.2,
+        "pnl": 2283.8,
+        "mdd": 25.3,
+        "burst_count": 23,
+        "burst_pnl": -164.9
+      },
+      {
+        "scenario": "H5: Adaptive regime (WR-based mult)",
+        "trades": 1060,
+        "wr": 83.2,
+        "pnl": 2283.8,
+        "mdd": 25.3,
+        "burst_count": 23,
+        "burst_pnl": -164.9
+      },
+      {
+        "scenario": "H6a: LossBrake 2in24h\u2192block6h",
+        "trades": 1051,
+        "wr": 86.5,
+        "pnl": 1433.8,
+        "mdd": 4.7,
+        "burst_count": 22,
+        "burst_pnl": -74.8
+      },
+      {
+        "scenario": "H6b: LossBrake 2in24h\u2192block12h",
+        "trades": 1037,
+        "wr": 87.9,
+        "pnl": 1665.2,
+        "mdd": 4.4,
+        "burst_count": 17,
+        "burst_pnl": -51.7
+      }
+    ],
+    "wf_validation": [
+      {
+        "scenario": "H0: Baseline (cap7, regime\u00d70.3)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 500,
+            "oos_wr": 89.0,
+            "oos_pnl": 258.8,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 818,
+            "oos_wr": 87.8,
+            "oos_pnl": 689.4,
+            "oos_mdd": 5.0,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 777,
+            "oos_wr": 81.7,
+            "oos_pnl": 407.9,
+            "oos_mdd": 6.9,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1356.1,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H1a: DynCap regime L7/S3\u2194L3/S7",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 462,
+            "oos_wr": 84.8,
+            "oos_pnl": 180.9,
+            "oos_mdd": 4.5,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 764,
+            "oos_wr": 83.4,
+            "oos_pnl": 588.0,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 719,
+            "oos_wr": 79.4,
+            "oos_pnl": 351.8,
+            "oos_mdd": 6.8,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1120.7,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H1b: DynCap moderate L7/S5\u2194L5/S7",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 485,
+            "oos_wr": 87.2,
+            "oos_pnl": 224.9,
+            "oos_mdd": 3.3,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 807,
+            "oos_wr": 86.1,
+            "oos_pnl": 691.9,
+            "oos_mdd": 5.0,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 756,
+            "oos_wr": 81.0,
+            "oos_pnl": 384.2,
+            "oos_mdd": 6.6,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1301.0,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H1c: DynCap aggressive L7/S2\u2194L2/S7",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 430,
+            "oos_wr": 84.2,
+            "oos_pnl": 173.5,
+            "oos_mdd": 4.9,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 720,
+            "oos_wr": 81.7,
+            "oos_pnl": 440.6,
+            "oos_mdd": 6.2,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 671,
+            "oos_wr": 77.5,
+            "oos_pnl": 268.3,
+            "oos_mdd": 8.9,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 882.4,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H2a: NetExp cap=5",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 458,
+            "oos_wr": 86.9,
+            "oos_pnl": 177.7,
+            "oos_mdd": 3.9,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 788,
+            "oos_wr": 86.2,
+            "oos_pnl": 488.5,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 738,
+            "oos_wr": 80.2,
+            "oos_pnl": 268.0,
+            "oos_mdd": 6.9,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 934.2,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H2b: NetExp cap=3",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 380,
+            "oos_wr": 82.4,
+            "oos_pnl": 79.1,
+            "oos_mdd": 4.2,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 701,
+            "oos_wr": 82.5,
+            "oos_pnl": 232.7,
+            "oos_mdd": 5.8,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 646,
+            "oos_wr": 76.8,
+            "oos_pnl": 134.6,
+            "oos_mdd": 7.2,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 446.4,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H3a: Cooldown 3bars (15min)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 491,
+            "oos_wr": 88.2,
+            "oos_pnl": 244.0,
+            "oos_mdd": 3.0,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 801,
+            "oos_wr": 87.0,
+            "oos_pnl": 605.3,
+            "oos_mdd": 4.7,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 773,
+            "oos_wr": 81.2,
+            "oos_pnl": 339.1,
+            "oos_mdd": 5.4,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1188.4,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H3b: Cooldown 6bars (30min)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 479,
+            "oos_wr": 87.9,
+            "oos_pnl": 234.7,
+            "oos_mdd": 2.8,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 793,
+            "oos_wr": 86.8,
+            "oos_pnl": 571.2,
+            "oos_mdd": 4.8,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 766,
+            "oos_wr": 80.4,
+            "oos_pnl": 305.4,
+            "oos_mdd": 6.2,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1111.3,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H3c: Cooldown 12bars (60min)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 454,
+            "oos_wr": 87.0,
+            "oos_pnl": 198.3,
+            "oos_mdd": 3.5,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 748,
+            "oos_wr": 85.6,
+            "oos_pnl": 423.3,
+            "oos_mdd": 4.7,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 729,
+            "oos_wr": 78.5,
+            "oos_pnl": 215.8,
+            "oos_mdd": 6.4,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 837.4,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H4a: RollingWR sizing (LONG only)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 500,
+            "oos_wr": 89.0,
+            "oos_pnl": 461.3,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 818,
+            "oos_wr": 87.8,
+            "oos_pnl": 2397.3,
+            "oos_mdd": 8.1,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 777,
+            "oos_wr": 81.7,
+            "oos_pnl": 512.9,
+            "oos_mdd": 17.2,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 3371.5,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H4b: RollingWR sizing (both dirs)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 500,
+            "oos_wr": 89.0,
+            "oos_pnl": 461.3,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 818,
+            "oos_wr": 87.8,
+            "oos_pnl": 2190.5,
+            "oos_mdd": 7.9,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 777,
+            "oos_wr": 81.7,
+            "oos_pnl": 512.9,
+            "oos_mdd": 17.2,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 3164.7,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H5: Adaptive regime (WR-based mult)",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 500,
+            "oos_wr": 89.0,
+            "oos_pnl": 461.3,
+            "oos_mdd": 5.3,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 818,
+            "oos_wr": 87.8,
+            "oos_pnl": 2242.8,
+            "oos_mdd": 7.9,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 777,
+            "oos_wr": 81.7,
+            "oos_pnl": 616.3,
+            "oos_mdd": 14.2,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 3320.4,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H6a: LossBrake 2in24h\u2192block6h",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 498,
+            "oos_wr": 91.2,
+            "oos_pnl": 309.6,
+            "oos_mdd": 3.5,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 813,
+            "oos_wr": 89.2,
+            "oos_pnl": 851.3,
+            "oos_mdd": 4.4,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 770,
+            "oos_wr": 85.3,
+            "oos_pnl": 647.3,
+            "oos_mdd": 4.7,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1808.2,
+        "verdict": "PASS"
+      },
+      {
+        "scenario": "H6b: LossBrake 2in24h\u2192block12h",
+        "folds": [
+          {
+            "fold": 1,
+            "oos_bars": "21408-42816",
+            "oos_days": 74.0,
+            "oos_trades": 501,
+            "oos_wr": 91.2,
+            "oos_pnl": 313.8,
+            "oos_mdd": 3.5,
+            "pass": "True"
+          },
+          {
+            "fold": 2,
+            "oos_bars": "42816-64224",
+            "oos_days": 74.0,
+            "oos_trades": 799,
+            "oos_wr": 89.2,
+            "oos_pnl": 826.7,
+            "oos_mdd": 4.4,
+            "pass": "True"
+          },
+          {
+            "fold": 3,
+            "oos_bars": "64224-85632",
+            "oos_days": 74.0,
+            "oos_trades": 759,
+            "oos_wr": 87.2,
+            "oos_pnl": 741.9,
+            "oos_mdd": 4.4,
+            "pass": "True"
+          }
+        ],
+        "passes": 3,
+        "total_oos_pnl": 1882.4,
+        "verdict": "PASS"
+      }
+    ],
+    "combinations": [
+      {
+        "scenario": "COMBO1: Cool6b + AdaptiveRegime",
+        "trades": 2620,
+        "wr": 85.5,
+        "pnl": 356912.4,
+        "mdd": 10.4,
+        "pnl_mdd": 34231.72,
+        "burst_count": 49,
+        "burst_pnl": -205.6,
+        "wf_verdict": "3/3 PASS",
+        "total_oos_pnl": 2346.8
+      },
+      {
+        "scenario": "COMBO2: Cool6b + LossBrake2/24\u21926h",
+        "trades": 2603,
+        "wr": 87.9,
+        "pnl": 117224.2,
+        "mdd": 4.4,
+        "pnl_mdd": 26343.92,
+        "burst_count": 37,
+        "burst_pnl": -111.0,
+        "wf_verdict": "3/3 PASS",
+        "total_oos_pnl": 1570.0
+      },
+      {
+        "scenario": "COMBO3: DynCapMod + Cool6b",
+        "trades": 2526,
+        "wr": 84.0,
+        "pnl": 34493.0,
+        "mdd": 5.5,
+        "pnl_mdd": 6225.83,
+        "burst_count": 70,
+        "burst_pnl": -253.9,
+        "wf_verdict": "3/3 PASS",
+        "total_oos_pnl": 1011.0
+      },
+      {
+        "scenario": "COMBO4: RollingWR + LossBrake",
+        "trades": 2688,
+        "wr": 88.7,
+        "pnl": 1765757.7,
+        "mdd": 4.6,
+        "pnl_mdd": 385688.94,
+        "burst_count": 34,
+        "burst_pnl": -104.3,
+        "wf_verdict": "3/3 PASS",
+        "total_oos_pnl": 4055.9
+      },
+      {
+        "scenario": "COMBO5: NetExp3 + Cool6b + Adapt",
+        "trades": 2128,
+        "wr": 80.7,
+        "pnl": 13961.0,
+        "mdd": 10.7,
+        "pnl_mdd": 1301.16,
+        "burst_count": 81,
+        "burst_pnl": -321.2,
+        "wf_verdict": "3/3 PASS",
+        "total_oos_pnl": 821.4
+      },
+      {
+        "scenario": "COMBO6: Cool12b + LossBrake + Adapt",
+        "trades": 2424,
+        "wr": 88.0,
+        "pnl": 368927.9,
+        "mdd": 4.5,
+        "pnl_mdd": 82373.45,
+        "burst_count": 31,
+        "burst_pnl": -106.5,
+        "wf_verdict": "3/3 PASS",
+        "total_oos_pnl": 2393.0
+      }
+    ],
+    "recommendation": {
+      "improved_candidates": [
+        {
+          "name": "H6b: LossBrake 2in24h\u2192block12h",
+          "mdd": 4.4,
+          "burst_count": 28,
+          "burst_pnl": -83.8,
+          "total_oos": 1882.4,
+          "mdd_improved": "True",
+          "burst_improved": true
+        },
+        {
+          "name": "COMBO6: Cool12b + LossBrake + Adapt",
+          "mdd": 4.5,
+          "burst_count": 31,
+          "burst_pnl": -106.5,
+          "total_oos": 2393.0,
+          "mdd_improved": "True",
+          "burst_improved": true
+        },
+        {
+          "name": "COMBO4: RollingWR + LossBrake",
+          "mdd": 4.6,
+          "burst_count": 34,
+          "burst_pnl": -104.3,
+          "total_oos": 4055.9,
+          "mdd_improved": "True",
+          "burst_improved": true
+        },
+        {
+          "name": "H6a: LossBrake 2in24h\u2192block6h",
+          "mdd": 4.7,
+          "burst_count": 34,
+          "burst_pnl": -108.0,
+          "total_oos": 1808.2,
+          "mdd_improved": "True",
+          "burst_improved": true
+        },
+        {
+          "name": "COMBO2: Cool6b + LossBrake2/24\u21926h",
+          "mdd": 4.4,
+          "burst_count": 37,
+          "burst_pnl": -111.0,
+          "total_oos": 1570.0,
+          "mdd_improved": "True",
+          "burst_improved": true
+        }
+      ],
+      "best": {
+        "name": "H6b: LossBrake 2in24h\u2192block12h",
+        "mdd": 4.4,
+        "burst_count": 28,
+        "burst_pnl": -83.8,
+        "total_oos": 1882.4,
+        "mdd_improved": "True",
+        "burst_improved": true
+      }
+    }
+  },
+  "meta": {
+    "bars": 85634,
+    "days": 297.3,
+    "patterns": 130,
+    "total_signals": 6923,
+    "elapsed_seconds": 10.9
+  }
+}

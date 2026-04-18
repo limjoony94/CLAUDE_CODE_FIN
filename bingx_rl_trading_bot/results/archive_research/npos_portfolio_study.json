@@ -1,0 +1,132 @@
+{
+  "study": "npos_portfolio_study",
+  "timestamp": "2026-03-01T20:39:26",
+  "data_bars": 74114,
+  "patterns": 126,
+  "phase1_is": {
+    "1pos": {
+      "pnl": 1450.6,
+      "trades": 329,
+      "wr": 95.4,
+      "mdd": 24.9,
+      "pf": 11.3
+    },
+    "npos": {
+      "trades": 843,
+      "wr": 72.8,
+      "pnl": 107.66,
+      "mdd": 6.52,
+      "pnl_mdd": 16.52,
+      "pnl_per_trade": 0.128,
+      "max_corr_loss": 4.57,
+      "max_sim_positions": 9,
+      "corr_events": 26,
+      "blocked": {
+        "momentum": 214,
+        "agg_risk": 5704,
+        "dir_cap": 4,
+        "dup_pat": 581,
+        "max_pos": 5332
+      }
+    }
+  },
+  "phase2_wf": {
+    "wf_1pos_summary": {
+      "positive_folds": 3,
+      "total_oos_pnl": 803.2,
+      "avg_oos_wr": 85.0
+    },
+    "wf_npos_summary": {
+      "positive_folds": 3,
+      "total_oos_pnl": 44.4,
+      "avg_oos_wr": 68.1
+    }
+  },
+  "phase3_sensitivity": {
+    "baseline_npos": {
+      "trades": 738,
+      "wr": 76.3,
+      "pnl": 180.71,
+      "mdd": 7.94,
+      "pnl_mdd": 22.8,
+      "pnl_per_trade": 0.245,
+      "max_corr_loss": 5.18,
+      "max_sim_positions": 9,
+      "corr_events": 15
+    },
+    "+regime_0.3": {
+      "trades": 738,
+      "wr": 76.3,
+      "pnl": 111.02,
+      "mdd": 6.1,
+      "pnl_mdd": 18.2,
+      "pnl_per_trade": 0.15,
+      "max_corr_loss": 4.47,
+      "max_sim_positions": 9,
+      "corr_events": 14
+    },
+    "+agg_risk_3_7": {
+      "trades": 818,
+      "wr": 71.4,
+      "pnl": 97.98,
+      "mdd": 6.91,
+      "pnl_mdd": 14.2,
+      "pnl_per_trade": 0.12,
+      "max_corr_loss": 4.57,
+      "max_sim_positions": 9,
+      "corr_events": 32
+    },
+    "+momentum": {
+      "trades": 737,
+      "wr": 75.8,
+      "pnl": 177.39,
+      "mdd": 6.82,
+      "pnl_mdd": 26.0,
+      "pnl_per_trade": 0.241,
+      "max_corr_loss": 4.94,
+      "max_sim_positions": 9,
+      "corr_events": 16
+    },
+    "+regime+agg": {
+      "trades": 828,
+      "wr": 72.3,
+      "pnl": 104.45,
+      "mdd": 6.48,
+      "pnl_mdd": 16.1,
+      "pnl_per_trade": 0.126,
+      "max_corr_loss": 4.57,
+      "max_sim_positions": 9,
+      "corr_events": 26
+    },
+    "+regime+momentum": {
+      "trades": 737,
+      "wr": 75.8,
+      "pnl": 108.16,
+      "mdd": 6.42,
+      "pnl_mdd": 16.8,
+      "pnl_per_trade": 0.147,
+      "max_corr_loss": 3.84,
+      "max_sim_positions": 9,
+      "corr_events": 17
+    },
+    "full (production)": {
+      "trades": 843,
+      "wr": 72.8,
+      "pnl": 107.66,
+      "mdd": 6.52,
+      "pnl_mdd": 16.5,
+      "pnl_per_trade": 0.128,
+      "max_corr_loss": 4.57,
+      "max_sim_positions": 9,
+      "corr_events": 26
+    }
+  },
+  "verdict": {
+    "npos_wf_pass": true,
+    "gap_improved": true,
+    "gap_1pos_pp": 32.3,
+    "gap_npos_pp": 15.4,
+    "decision": "GO"
+  },
+  "elapsed_sec": 434.7
+}

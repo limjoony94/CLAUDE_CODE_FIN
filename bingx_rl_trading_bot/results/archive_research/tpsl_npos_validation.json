@@ -1,0 +1,196 @@
+{
+  "study": "tpsl_npos_validation",
+  "timestamp": "2026-03-12T03:09:22",
+  "phase1_baseline": {
+    "pnl": 356.96,
+    "wr": 72.6,
+    "mdd": 4.04,
+    "pnl_mdd": 88.36,
+    "trades": 1177,
+    "oos_pnl": 242.09999999999997,
+    "wf_pass": true,
+    "wf_folds": [
+      {
+        "fold": 1,
+        "pnl": 70.1,
+        "wr": 76.6,
+        "trades": 205
+      },
+      {
+        "fold": 2,
+        "pnl": 128.95,
+        "wr": 69.9,
+        "trades": 458
+      },
+      {
+        "fold": 3,
+        "pnl": 43.05,
+        "wr": 66.7,
+        "trades": 201
+      }
+    ]
+  },
+  "phase2_reoptimized": {
+    "pnl": 430.16,
+    "wr": 82.5,
+    "mdd": 4.32,
+    "pnl_mdd": 99.57,
+    "trades": 1205,
+    "oos_pnl": 281.77,
+    "wf_pass": true,
+    "wf_folds": [
+      {
+        "fold": 1,
+        "pnl": 81.41,
+        "wr": 85.7,
+        "trades": 223
+      },
+      {
+        "fold": 2,
+        "pnl": 148.81,
+        "wr": 76.5,
+        "trades": 472
+      },
+      {
+        "fold": 3,
+        "pnl": 51.55,
+        "wr": 76.6,
+        "trades": 175
+      }
+    ],
+    "changes": {
+      "tp_up": 21,
+      "tp_down": 54,
+      "sl_up": 79,
+      "sl_down": 11,
+      "unchanged": 16
+    },
+    "delta_pnl": 73.20000000000005
+  },
+  "phase3_shift_sweep": {
+    "best": {
+      "tp_mult": 0.6,
+      "sl_mult": 1.0,
+      "pnl": 421.27,
+      "wr": 81.9,
+      "mdd": 4.05,
+      "pnl_mdd": 104.02,
+      "trades": 1877
+    },
+    "current": {
+      "tp_mult": 1.0,
+      "sl_mult": 1.0,
+      "pnl": 356.96,
+      "wr": 72.6,
+      "mdd": 4.04,
+      "pnl_mdd": 88.36,
+      "trades": 1177
+    },
+    "current_rank": 9,
+    "total_combos": 64,
+    "top5": [
+      {
+        "tp_mult": 0.6,
+        "sl_mult": 1.0,
+        "pnl": 421.27,
+        "wr": 81.9,
+        "mdd": 4.05,
+        "pnl_mdd": 104.02,
+        "trades": 1877
+      },
+      {
+        "tp_mult": 1.0,
+        "sl_mult": 1.5,
+        "pnl": 388.02,
+        "wr": 86.2,
+        "mdd": 3.81,
+        "pnl_mdd": 101.84,
+        "trades": 957
+      },
+      {
+        "tp_mult": 0.6,
+        "sl_mult": 1.5,
+        "pnl": 459.15,
+        "wr": 90.9,
+        "mdd": 4.67,
+        "pnl_mdd": 98.32,
+        "trades": 1667
+      },
+      {
+        "tp_mult": 0.6,
+        "sl_mult": 1.2,
+        "pnl": 443.42,
+        "wr": 86.2,
+        "mdd": 4.6,
+        "pnl_mdd": 96.4,
+        "trades": 1760
+      },
+      {
+        "tp_mult": 0.6,
+        "sl_mult": 1.3,
+        "pnl": 463.33,
+        "wr": 88.9,
+        "mdd": 5.12,
+        "pnl_mdd": 90.49,
+        "trades": 1728
+      }
+    ]
+  },
+  "phase3_best_wf": {
+    "oos_pnl": 275.87,
+    "wf_pass": true,
+    "wf_folds": [
+      {
+        "fold": 1,
+        "pnl": 91.77,
+        "wr": 87.9,
+        "trades": 340
+      },
+      {
+        "fold": 2,
+        "pnl": 131.56,
+        "wr": 76.8,
+        "trades": 711
+      },
+      {
+        "fold": 3,
+        "pnl": 52.54,
+        "wr": 75.8,
+        "trades": 298
+      }
+    ]
+  },
+  "phase4_grid": {
+    "n_patterns": 214,
+    "pnl": 395.33,
+    "wr": 71.9,
+    "mdd": 6.9,
+    "pnl_mdd": 57.29,
+    "trades": 1255,
+    "oos_pnl": 282.84000000000003,
+    "wf_pass": true,
+    "wf_folds": [
+      {
+        "fold": 1,
+        "pnl": 67.87,
+        "wr": 72.2,
+        "trades": 216
+      },
+      {
+        "fold": 2,
+        "pnl": 157.81,
+        "wr": 69.1,
+        "trades": 495
+      },
+      {
+        "fold": 3,
+        "pnl": 57.16,
+        "wr": 69.6,
+        "trades": 194
+      }
+    ]
+  },
+  "verdict": "INVESTIGATE \u2014 Fixed Grid may improve portfolio performance",
+  "best_method": "Fixed Grid",
+  "elapsed_seconds": 458.8832061290741
+}

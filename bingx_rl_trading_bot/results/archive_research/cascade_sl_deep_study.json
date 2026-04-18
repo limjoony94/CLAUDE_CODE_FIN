@@ -1,0 +1,605 @@
+{
+  "study": "cascade_sl_deep_improvement_v2",
+  "timestamp": "2026-03-14T07:11:32",
+  "data_bars": 87315,
+  "patterns": 111,
+  "signals": 12010,
+  "signals_in_nw": 10158,
+  "neutral_window": [
+    0,
+    74642
+  ],
+  "tp_scale_factor": 0.72,
+  "baseline_cascade_pct": 85,
+  "phase1_baseline": {
+    "cascade_on": {
+      "pnl": 406.92,
+      "wr": 76.8,
+      "mdd": 3.81,
+      "trades": 1846,
+      "pnl_mdd": 106.8,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 90.74,
+          "wr": 80.8,
+          "trades": 365,
+          "mdd": 7.31
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 99.63,
+          "wr": 71.8,
+          "trades": 507,
+          "mdd": 4.59
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 109.27,
+          "wr": 73.3,
+          "trades": 588,
+          "mdd": 5.22
+        }
+      ],
+      "oos_pnl": 299.64,
+      "wf_pass": true
+    },
+    "cascade_off": {
+      "pnl": 367.85,
+      "wr": 88.0,
+      "mdd": 7.46,
+      "trades": 1589,
+      "pnl_mdd": 49.31,
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 75.66,
+          "wr": 88.9,
+          "trades": 315,
+          "mdd": 7.43
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 95.79,
+          "wr": 85.8,
+          "trades": 436,
+          "mdd": 6.51
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 94.37,
+          "wr": 84.4,
+          "trades": 506,
+          "mdd": 8.55
+        }
+      ],
+      "oos_pnl": 265.82,
+      "wf_pass": true
+    },
+    "cascade_events": 101,
+    "positions_affected": 328,
+    "avg_affected": 3.2,
+    "multi_sl_bars": 15,
+    "dir_distribution": {
+      "SHORT": 46,
+      "LONG": 55
+    }
+  },
+  "phase2_sweep": {
+    "configs": [
+      {
+        "keep_ratio": 0.05,
+        "tighten_pct": 95,
+        "is_pnl": 446.35,
+        "is_wr": 77.0,
+        "is_mdd": 3.74,
+        "is_trades": 1842,
+        "is_pnl_mdd": 119.34
+      },
+      {
+        "keep_ratio": 0.1,
+        "tighten_pct": 90,
+        "is_pnl": 424.72,
+        "is_wr": 76.7,
+        "is_mdd": 3.78,
+        "is_trades": 1844,
+        "is_pnl_mdd": 112.36
+      },
+      {
+        "keep_ratio": 0.15,
+        "tighten_pct": 85,
+        "is_pnl": 406.92,
+        "is_wr": 76.8,
+        "is_mdd": 3.81,
+        "is_trades": 1846,
+        "is_pnl_mdd": 106.8
+      },
+      {
+        "keep_ratio": 0.2,
+        "tighten_pct": 80,
+        "is_pnl": 390.72,
+        "is_wr": 76.6,
+        "is_mdd": 3.84,
+        "is_trades": 1853,
+        "is_pnl_mdd": 101.75
+      },
+      {
+        "keep_ratio": 0.25,
+        "tighten_pct": 75,
+        "is_pnl": 372.86,
+        "is_wr": 76.5,
+        "is_mdd": 4.05,
+        "is_trades": 1852,
+        "is_pnl_mdd": 92.06
+      },
+      {
+        "keep_ratio": 0.3,
+        "tighten_pct": 70,
+        "is_pnl": 362.93,
+        "is_wr": 76.8,
+        "is_mdd": 4.4,
+        "is_trades": 1850,
+        "is_pnl_mdd": 82.48
+      },
+      {
+        "keep_ratio": 0.4,
+        "tighten_pct": 60,
+        "is_pnl": 335.75,
+        "is_wr": 76.7,
+        "is_mdd": 4.78,
+        "is_trades": 1847,
+        "is_pnl_mdd": 70.24
+      },
+      {
+        "keep_ratio": 0.5,
+        "tighten_pct": 50,
+        "is_pnl": 316.82,
+        "is_wr": 77.3,
+        "is_mdd": 5.31,
+        "is_trades": 1831,
+        "is_pnl_mdd": 59.66
+      },
+      {
+        "keep_ratio": 0.6,
+        "tighten_pct": 40,
+        "is_pnl": 287.11,
+        "is_wr": 77.3,
+        "is_mdd": 5.33,
+        "is_trades": 1839,
+        "is_pnl_mdd": 53.87
+      },
+      {
+        "keep_ratio": 0.8,
+        "tighten_pct": 20,
+        "is_pnl": 280.39,
+        "is_wr": 80.8,
+        "is_mdd": 7.11,
+        "is_trades": 1747,
+        "is_pnl_mdd": 39.44
+      },
+      {
+        "keep_ratio": 1.0,
+        "tighten_pct": 0,
+        "is_pnl": 367.85,
+        "is_wr": 88.0,
+        "is_mdd": 7.46,
+        "is_trades": 1589,
+        "is_pnl_mdd": 49.31
+      }
+    ],
+    "top3": [
+      {
+        "keep": 0.05,
+        "pnl_mdd": 119.34
+      },
+      {
+        "keep": 0.1,
+        "pnl_mdd": 112.36
+      },
+      {
+        "keep": 0.15,
+        "pnl_mdd": 106.8
+      }
+    ],
+    "wf_validation": {
+      "0.05": {
+        "oos_pnl": 333.1,
+        "wf_pass": true,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 18660,
+            "oos_end": 37321,
+            "pnl": 96.45,
+            "wr": 81.0,
+            "trades": 363,
+            "mdd": 7.25
+          },
+          {
+            "fold": 2,
+            "oos_start": 37321,
+            "oos_end": 55981,
+            "pnl": 112.4,
+            "wr": 71.8,
+            "trades": 507,
+            "mdd": 4.33
+          },
+          {
+            "fold": 3,
+            "oos_start": 55981,
+            "oos_end": 74642,
+            "pnl": 124.25,
+            "wr": 73.9,
+            "trades": 586,
+            "mdd": 5.18
+          }
+        ]
+      },
+      "0.1": {
+        "oos_pnl": 315.3,
+        "wf_pass": true,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 18660,
+            "oos_end": 37321,
+            "pnl": 93.61,
+            "wr": 81.0,
+            "trades": 363,
+            "mdd": 7.28
+          },
+          {
+            "fold": 2,
+            "oos_start": 37321,
+            "oos_end": 55981,
+            "pnl": 105.94,
+            "wr": 71.8,
+            "trades": 507,
+            "mdd": 4.41
+          },
+          {
+            "fold": 3,
+            "oos_start": 55981,
+            "oos_end": 74642,
+            "pnl": 115.72,
+            "wr": 73.3,
+            "trades": 588,
+            "mdd": 5.2
+          }
+        ]
+      },
+      "0.15": {
+        "oos_pnl": 299.6,
+        "wf_pass": true,
+        "folds": [
+          {
+            "fold": 1,
+            "oos_start": 18660,
+            "oos_end": 37321,
+            "pnl": 90.74,
+            "wr": 80.8,
+            "trades": 365,
+            "mdd": 7.31
+          },
+          {
+            "fold": 2,
+            "oos_start": 37321,
+            "oos_end": 55981,
+            "pnl": 99.63,
+            "wr": 71.8,
+            "trades": 507,
+            "mdd": 4.59
+          },
+          {
+            "fold": 3,
+            "oos_start": 55981,
+            "oos_end": 74642,
+            "pnl": 109.27,
+            "wr": 73.3,
+            "trades": 588,
+            "mdd": 5.22
+          }
+        ]
+      }
+    }
+  },
+  "phase3_alternatives": {
+    "fixed_0.15": {
+      "desc": "Current: fixed keep=0.15 (compounds)",
+      "pnl": 408.07,
+      "wr": 77.1,
+      "mdd": 3.81,
+      "trades": 1837,
+      "pnl_mdd": 107.1
+    },
+    "proportional": {
+      "desc": "Proportional: keep scales with loss severity",
+      "pnl": 381.54,
+      "wr": 77.2,
+      "mdd": 4.35,
+      "trades": 1826,
+      "pnl_mdd": 87.71
+    },
+    "graduated": {
+      "desc": "Graduated: 1st=0.50, 2nd=0.25, 3rd+=0.10",
+      "pnl": 328.52,
+      "wr": 77.9,
+      "mdd": 5.02,
+      "trades": 1808,
+      "pnl_mdd": 65.44
+    },
+    "poscount_2": {
+      "desc": "Pos-count: only >=2 same-dir, intensity scales",
+      "pnl": 348.51,
+      "wr": 78.0,
+      "mdd": 4.02,
+      "trades": 1817,
+      "pnl_mdd": 86.69
+    },
+    "poscount_3": {
+      "desc": "Pos-count: only >=3 same-dir, intensity scales",
+      "pnl": 339.6,
+      "wr": 80.5,
+      "mdd": 4.46,
+      "trades": 1758,
+      "pnl_mdd": 76.14
+    },
+    "no_cascade": {
+      "desc": "No cascade (OFF)",
+      "pnl": 369.0,
+      "wr": 88.4,
+      "mdd": 7.46,
+      "trades": 1580,
+      "pnl_mdd": 49.46
+    },
+    "timedecay_36": {
+      "desc": "Time-decay: keep=0.15, recovery=36bars (3h)",
+      "pnl": 400.91,
+      "wr": 77.5,
+      "mdd": 3.82,
+      "trades": 1828,
+      "pnl_mdd": 104.95
+    },
+    "timedecay_72": {
+      "desc": "Time-decay: keep=0.15, recovery=72bars (6h)",
+      "pnl": 404.22,
+      "wr": 77.4,
+      "mdd": 3.81,
+      "trades": 1828,
+      "pnl_mdd": 106.09
+    },
+    "timedecay_144": {
+      "desc": "Time-decay: keep=0.15, recovery=144bars (12h)",
+      "pnl": 409.58,
+      "wr": 77.5,
+      "mdd": 3.81,
+      "trades": 1826,
+      "pnl_mdd": 107.5
+    }
+  },
+  "phase4_wf_validation": {
+    "timedecay_144": {
+      "oos_pnl": 305.8,
+      "wf_pass": true,
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 91.49,
+          "wr": 82.2,
+          "trades": 354,
+          "mdd": 7.32
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 101.84,
+          "wr": 73.4,
+          "trades": 493,
+          "mdd": 4.63
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 112.45,
+          "wr": 75.0,
+          "trades": 577,
+          "mdd": 5.22
+        }
+      ]
+    },
+    "fixed_0.15": {
+      "oos_pnl": 302.7,
+      "wf_pass": true,
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 91.71,
+          "wr": 82.0,
+          "trades": 356,
+          "mdd": 7.31
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 100.62,
+          "wr": 72.7,
+          "trades": 498,
+          "mdd": 4.59
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 110.41,
+          "wr": 74.3,
+          "trades": 579,
+          "mdd": 5.22
+        }
+      ]
+    },
+    "timedecay_72": {
+      "oos_pnl": 300.7,
+      "wf_pass": true,
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 91.14,
+          "wr": 82.2,
+          "trades": 354,
+          "mdd": 7.32
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 97.87,
+          "wr": 72.9,
+          "trades": 495,
+          "mdd": 4.67
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 111.67,
+          "wr": 75.0,
+          "trades": 577,
+          "mdd": 5.22
+        }
+      ]
+    },
+    "timedecay_36": {
+      "oos_pnl": 297.4,
+      "wf_pass": true,
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 90.59,
+          "wr": 82.2,
+          "trades": 354,
+          "mdd": 7.33
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 96.41,
+          "wr": 72.9,
+          "trades": 495,
+          "mdd": 4.75
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 110.45,
+          "wr": 75.0,
+          "trades": 577,
+          "mdd": 5.23
+        }
+      ]
+    },
+    "proportional": {
+      "oos_pnl": 279.4,
+      "wf_pass": true,
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 18660,
+          "oos_end": 37321,
+          "pnl": 84.11,
+          "wr": 81.6,
+          "trades": 358,
+          "mdd": 7.43
+        },
+        {
+          "fold": 2,
+          "oos_start": 37321,
+          "oos_end": 55981,
+          "pnl": 91.52,
+          "wr": 71.5,
+          "trades": 513,
+          "mdd": 4.69
+        },
+        {
+          "fold": 3,
+          "oos_start": 55981,
+          "oos_end": 74642,
+          "pnl": 103.82,
+          "wr": 74.8,
+          "trades": 575,
+          "mdd": 5.23
+        }
+      ]
+    }
+  },
+  "phase5_mc": {
+    "seeds": [
+      {
+        "seed": 42,
+        "random_on_pnl": 345.3,
+        "random_off_pnl": 265.0,
+        "delta_pnl": 80.4,
+        "wf_pass": true,
+        "oos_pnl": 265.5
+      },
+      {
+        "seed": 123,
+        "random_on_pnl": 352.4,
+        "random_off_pnl": 269.1,
+        "delta_pnl": 83.3,
+        "wf_pass": true,
+        "oos_pnl": 282.7
+      },
+      {
+        "seed": 7,
+        "random_on_pnl": 374.3,
+        "random_off_pnl": 280.7,
+        "delta_pnl": 93.5,
+        "wf_pass": true,
+        "oos_pnl": 287.3
+      }
+    ],
+    "random_helps": 3,
+    "random_wf_pass": 3,
+    "real_delta_pnl": 39.1,
+    "cascade_nature": "MECHANICAL_IMPROVEMENT"
+  },
+  "recommendation": {
+    "action": "CHANGE to fixed_keep_0.05",
+    "reason": "IS PnL/MDD 119.3x > current 106.8x (+12%), WF PASS, OOS +333.1%",
+    "current_keep": 0.15,
+    "current_pnl_mdd": 106.8,
+    "candidates_wf_pass": 8,
+    "best_candidate": {
+      "name": "fixed_keep_0.05",
+      "is_pnl_mdd": 119.34,
+      "oos_pnl": 333.1,
+      "wf_pass": true
+    }
+  },
+  "elapsed_seconds": 62.2
+}

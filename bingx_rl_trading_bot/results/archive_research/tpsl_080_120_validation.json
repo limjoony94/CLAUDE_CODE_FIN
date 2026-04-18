@@ -1,0 +1,457 @@
+{
+  "walkforward_new": {
+    "folds": [
+      {
+        "fold": 1,
+        "test_range": "bar 0-25920",
+        "patterns_discovered": 16,
+        "train": {
+          "pnl": 500.16,
+          "trades": 326,
+          "wr": 71.5,
+          "mdd": 24.29
+        },
+        "test": {
+          "pnl": -47.26,
+          "trades": 134,
+          "wr": 54.5,
+          "mdd": 61.11
+        },
+        "wr_drop": 17.0
+      },
+      {
+        "fold": 2,
+        "test_range": "bar 25920-51840",
+        "patterns_discovered": 16,
+        "train": {
+          "pnl": 609.69,
+          "trades": 243,
+          "wr": 75.7,
+          "mdd": 17.77
+        },
+        "test": {
+          "pnl": 30.42,
+          "trades": 118,
+          "wr": 66.1,
+          "mdd": 18.99
+        },
+        "wr_drop": 9.6
+      },
+      {
+        "fold": 3,
+        "test_range": "bar 51840-77760",
+        "patterns_discovered": 37,
+        "train": {
+          "pnl": 332.85,
+          "trades": 402,
+          "wr": 68.4,
+          "mdd": 23.75
+        },
+        "test": {
+          "pnl": -60.95,
+          "trades": 259,
+          "wr": 56.4,
+          "mdd": 64.6
+        },
+        "wr_drop": 12.0
+      }
+    ],
+    "avg_test_wr": 59.0,
+    "avg_test_pnl": -25.9,
+    "avg_wr_drop": 12.9,
+    "oos_positive_folds": "1/3"
+  },
+  "walkforward_old": {
+    "folds": [
+      {
+        "fold": 1,
+        "test_range": "bar 0-25920",
+        "patterns_discovered": 63,
+        "train": {
+          "pnl": 19808.47,
+          "trades": 163,
+          "wr": 82.2,
+          "mdd": 27.49
+        },
+        "test": {
+          "pnl": 81.01,
+          "trades": 59,
+          "wr": 67.8,
+          "mdd": 39.21
+        },
+        "wr_drop": 14.4
+      },
+      {
+        "fold": 2,
+        "test_range": "bar 25920-51840",
+        "patterns_discovered": 51,
+        "train": {
+          "pnl": 3371.84,
+          "trades": 165,
+          "wr": 75.2,
+          "mdd": 25.35
+        },
+        "test": {
+          "pnl": 276.43,
+          "trades": 66,
+          "wr": 74.2,
+          "mdd": 24.89
+        },
+        "wr_drop": 1.0
+      },
+      {
+        "fold": 3,
+        "test_range": "bar 51840-77760",
+        "patterns_discovered": 63,
+        "train": {
+          "pnl": 11728.09,
+          "trades": 144,
+          "wr": 82.6,
+          "mdd": 31.73
+        },
+        "test": {
+          "pnl": 17.34,
+          "trades": 88,
+          "wr": 62.5,
+          "mdd": 43.35
+        },
+        "wr_drop": 20.1
+      }
+    ],
+    "avg_test_wr": 68.2,
+    "avg_test_pnl": 124.9,
+    "avg_wr_drop": 11.8,
+    "oos_positive_folds": "3/3"
+  },
+  "slippage_new": {
+    "levels": [
+      {
+        "slippage_pct": 0.0,
+        "extra_fee_pct": 0.0,
+        "patterns": 24,
+        "trades": 335,
+        "wr": 80.6,
+        "pnl_compound": 3900.64,
+        "mdd": 14.0,
+        "pf": 2.58,
+        "pnl_degradation_pct": 0.0
+      },
+      {
+        "slippage_pct": 0.01,
+        "extra_fee_pct": 0.02,
+        "patterns": 24,
+        "trades": 335,
+        "wr": 80.6,
+        "pnl_compound": 3644.03,
+        "mdd": 14.07,
+        "pf": 2.55,
+        "pnl_degradation_pct": -6.6
+      },
+      {
+        "slippage_pct": 0.02,
+        "extra_fee_pct": 0.04,
+        "patterns": 25,
+        "trades": 339,
+        "wr": 80.8,
+        "pnl_compound": 3731.48,
+        "mdd": 14.14,
+        "pf": 2.55,
+        "pnl_degradation_pct": -4.3
+      },
+      {
+        "slippage_pct": 0.03,
+        "extra_fee_pct": 0.06,
+        "patterns": 22,
+        "trades": 278,
+        "wr": 82.7,
+        "pnl_compound": 2493.36,
+        "mdd": 17.44,
+        "pf": 2.85,
+        "pnl_degradation_pct": -36.1
+      },
+      {
+        "slippage_pct": 0.05,
+        "extra_fee_pct": 0.1,
+        "patterns": 22,
+        "trades": 278,
+        "wr": 82.7,
+        "pnl_compound": 2223.32,
+        "mdd": 17.61,
+        "pf": 2.77,
+        "pnl_degradation_pct": -43.0
+      },
+      {
+        "slippage_pct": 0.07,
+        "extra_fee_pct": 0.14,
+        "patterns": 21,
+        "trades": 222,
+        "wr": 87.4,
+        "pnl_compound": 2010.26,
+        "mdd": 16.01,
+        "pf": 3.9,
+        "pnl_degradation_pct": -48.5
+      },
+      {
+        "slippage_pct": 0.1,
+        "extra_fee_pct": 0.2,
+        "patterns": 21,
+        "trades": 222,
+        "wr": 87.4,
+        "pnl_compound": 1750.33,
+        "mdd": 16.32,
+        "pf": 3.73,
+        "pnl_degradation_pct": -55.1
+      }
+    ],
+    "breakeven_slippage": null,
+    "pnl_at_007": 2010.26
+  },
+  "slippage_old": {
+    "levels": [
+      {
+        "slippage_pct": 0.0,
+        "extra_fee_pct": 0.0,
+        "patterns": 70,
+        "trades": 240,
+        "wr": 81.2,
+        "pnl_compound": 169589.71,
+        "mdd": 24.89,
+        "pf": 2.95,
+        "pnl_degradation_pct": 0.0
+      },
+      {
+        "slippage_pct": 0.01,
+        "extra_fee_pct": 0.02,
+        "patterns": 64,
+        "trades": 230,
+        "wr": 77.8,
+        "pnl_compound": 34856.77,
+        "mdd": 24.94,
+        "pf": 2.38,
+        "pnl_degradation_pct": -79.4
+      },
+      {
+        "slippage_pct": 0.02,
+        "extra_fee_pct": 0.04,
+        "patterns": 62,
+        "trades": 230,
+        "wr": 77.8,
+        "pnl_compound": 33320.44,
+        "mdd": 30.21,
+        "pf": 2.37,
+        "pnl_degradation_pct": -80.4
+      },
+      {
+        "slippage_pct": 0.03,
+        "extra_fee_pct": 0.06,
+        "patterns": 60,
+        "trades": 230,
+        "wr": 77.0,
+        "pnl_compound": 23303.75,
+        "mdd": 25.04,
+        "pf": 2.24,
+        "pnl_degradation_pct": -86.3
+      },
+      {
+        "slippage_pct": 0.05,
+        "extra_fee_pct": 0.1,
+        "patterns": 49,
+        "trades": 225,
+        "wr": 75.1,
+        "pnl_compound": 9870.28,
+        "mdd": 36.5,
+        "pf": 2.0,
+        "pnl_degradation_pct": -94.2
+      },
+      {
+        "slippage_pct": 0.07,
+        "extra_fee_pct": 0.14,
+        "patterns": 48,
+        "trades": 223,
+        "wr": 73.5,
+        "pnl_compound": 4984.41,
+        "mdd": 40.52,
+        "pf": 1.82,
+        "pnl_degradation_pct": -97.1
+      },
+      {
+        "slippage_pct": 0.1,
+        "extra_fee_pct": 0.2,
+        "patterns": 44,
+        "trades": 207,
+        "wr": 73.4,
+        "pnl_compound": 3172.6,
+        "mdd": 33.69,
+        "pf": 1.78,
+        "pnl_degradation_pct": -98.1
+      }
+    ],
+    "breakeven_slippage": null,
+    "pnl_at_007": 4984.41
+  },
+  "mc_drawdown_new": {
+    "n_sims": 10000,
+    "n_trades": 335,
+    "mdd_mean": 14.3,
+    "mdd_median": 14.0,
+    "mdd_p90": 19.0,
+    "mdd_p95": 20.8,
+    "mdd_p99": 25.4,
+    "mdd_max": 36.3,
+    "pnl_mean": 4279.3,
+    "pnl_median": 3900.6,
+    "pnl_p5": 1837.0,
+    "pnl_p10": 2222.1,
+    "loss_probability": 0.0
+  },
+  "mc_drawdown_old": {
+    "n_sims": 10000,
+    "n_trades": 231,
+    "mdd_mean": 35.5,
+    "mdd_median": 34.1,
+    "mdd_p90": 46.1,
+    "mdd_p95": 50.3,
+    "mdd_p99": 58.6,
+    "mdd_max": 77.0,
+    "pnl_mean": 33897.2,
+    "pnl_median": 20741.5,
+    "pnl_p5": 3665.0,
+    "pnl_p10": 5904.0,
+    "loss_probability": 0.0
+  },
+  "quarterly_new": {
+    "quarters": [
+      {
+        "quarter": "Q1",
+        "bars": "0-19440",
+        "trades": 76,
+        "wr": 81.6,
+        "edge": 21.6,
+        "pnl": 141.58,
+        "mdd": 14.0
+      },
+      {
+        "quarter": "Q2",
+        "bars": "19440-38880",
+        "trades": 80,
+        "wr": 85.0,
+        "edge": 25.0,
+        "pnl": 198.58,
+        "mdd": 8.64
+      },
+      {
+        "quarter": "Q3",
+        "bars": "38880-58320",
+        "trades": 96,
+        "wr": 77.1,
+        "edge": 17.1,
+        "pnl": 134.73,
+        "mdd": 14.0
+      },
+      {
+        "quarter": "Q4",
+        "bars": "58320-77760",
+        "trades": 84,
+        "wr": 79.8,
+        "edge": 19.8,
+        "pnl": 141.72,
+        "mdd": 12.02
+      }
+    ],
+    "edge_mean": 20.9,
+    "edge_std": 2.9,
+    "edge_min": 17.1,
+    "wr_mean": 80.9,
+    "wr_std": 2.9,
+    "positive_quarters": "4/4"
+  },
+  "quarterly_old": {
+    "quarters": [
+      {
+        "quarter": "Q1",
+        "bars": "0-19440",
+        "trades": 51,
+        "wr": 74.5,
+        "edge": 15.7,
+        "pnl": 184.49,
+        "mdd": 24.89
+      },
+      {
+        "quarter": "Q2",
+        "bars": "19440-38880",
+        "trades": 43,
+        "wr": 83.7,
+        "edge": 24.9,
+        "pnl": 347.13,
+        "mdd": 20.23
+      },
+      {
+        "quarter": "Q3",
+        "bars": "38880-58320",
+        "trades": 78,
+        "wr": 76.9,
+        "edge": 18.1,
+        "pnl": 563.16,
+        "mdd": 24.89
+      },
+      {
+        "quarter": "Q4",
+        "bars": "58320-77760",
+        "trades": 68,
+        "wr": 75.0,
+        "edge": 16.2,
+        "pnl": 324.56,
+        "mdd": 28.24
+      }
+    ],
+    "edge_mean": 18.7,
+    "edge_std": 3.7,
+    "edge_min": 15.7,
+    "wr_mean": 77.5,
+    "wr_std": 3.7,
+    "positive_quarters": "4/4"
+  },
+  "comparison": {
+    "NEW_080_120": {
+      "tp": 0.8,
+      "sl": 1.2,
+      "patterns": 24,
+      "long": 18,
+      "short": 6,
+      "trades": 335,
+      "wr": 80.6,
+      "pnl_compound": 3900.64,
+      "mdd": 14.0,
+      "pnl_mdd": 278.6,
+      "pf": 2.58,
+      "avg_win": 2.3,
+      "avg_loss": 3.7,
+      "expected_per_trade": 1.136,
+      "pnl_with_slippage": 2010.26,
+      "slippage_impact_pct": -48.5
+    },
+    "OLD_210_300": {
+      "tp": 2.1,
+      "sl": 3.0,
+      "patterns": 62,
+      "long": 22,
+      "short": 40,
+      "trades": 234,
+      "wr": 79.1,
+      "pnl_compound": 63384.23,
+      "mdd": 24.89,
+      "pnl_mdd": 2546.6,
+      "pf": 2.57,
+      "avg_win": 6.2,
+      "avg_loss": 9.1,
+      "expected_per_trade": 3.002,
+      "pnl_with_slippage": 6583.46,
+      "slippage_impact_pct": -89.6
+    }
+  },
+  "meta": {
+    "data_file": "btc_5m_270days_reclassified.csv",
+    "data_bars": 77760,
+    "elapsed_seconds": 146.2
+  }
+}

@@ -1,0 +1,206 @@
+{
+  "study": "sim_production_parity",
+  "date": "2026-03-24T19:52:10.915002",
+  "results": {
+    "Z_scanner_npos": {
+      "label": "Z_scanner_npos",
+      "pnl": 483.51,
+      "mdd": 3.15,
+      "pm": 153.5,
+      "wr": 70.4,
+      "trades": 2212,
+      "rr": 1.994,
+      "tp": 1556,
+      "sl": 647,
+      "to": 0,
+      "avg_tp": 3.54,
+      "avg_sl": 1.78,
+      "avg_to": 0,
+      "tpsl_wr": 70.6,
+      "reasons": {
+        "TP": 1556,
+        "SL": 647,
+        "OOS_END": 9
+      }
+    },
+    "A_scanner_current": {
+      "label": "A_scanner_current",
+      "pnl": 483.51,
+      "mdd": 3.15,
+      "pm": 153.5,
+      "wr": 70.4,
+      "trades": 2212,
+      "rr": 1.994,
+      "tp": 1556,
+      "sl": 647,
+      "to": 0,
+      "avg_tp": 3.54,
+      "avg_sl": 1.78,
+      "avg_to": 0,
+      "tpsl_wr": 70.6,
+      "reasons": {
+        "TP": 1556,
+        "SL": 647,
+        "OOS_END": 9
+      }
+    },
+    "B_+decay": {
+      "label": "B_+decay",
+      "pnl": 521.71,
+      "mdd": 3.31,
+      "pm": 157.6,
+      "wr": 75.6,
+      "trades": 2861,
+      "rr": 1.58,
+      "tp": 2161,
+      "sl": 691,
+      "to": 0,
+      "avg_tp": 2.73,
+      "avg_sl": 1.73,
+      "avg_to": 0,
+      "tpsl_wr": 75.8,
+      "reasons": {
+        "TP": 2161,
+        "SL": 691,
+        "OOS_END": 9
+      }
+    },
+    "C_+vol_adapt": {
+      "label": "C_+vol_adapt",
+      "pnl": 516.45,
+      "mdd": 2.84,
+      "pm": 181.8,
+      "wr": 70.9,
+      "trades": 2310,
+      "rr": 1.854,
+      "tp": 1636,
+      "sl": 665,
+      "to": 0,
+      "avg_tp": 3.65,
+      "avg_sl": 1.97,
+      "avg_to": 0,
+      "tpsl_wr": 71.1,
+      "reasons": {
+        "TP": 1636,
+        "SL": 665,
+        "OOS_END": 9
+      }
+    },
+    "D_+timeout_pnl": {
+      "label": "D_+timeout_pnl",
+      "pnl": 303.81,
+      "mdd": 5.05,
+      "pm": 60.2,
+      "wr": 56.3,
+      "trades": 3379,
+      "rr": 1.994,
+      "tp": 1556,
+      "sl": 647,
+      "to": 1167,
+      "avg_tp": 3.54,
+      "avg_sl": 1.78,
+      "avg_to": -1.39,
+      "tpsl_wr": 70.6,
+      "reasons": {
+        "TP": 1556,
+        "TIMEOUT": 1167,
+        "SL": 647,
+        "OOS_END": 9
+      }
+    },
+    "E_decay+vol": {
+      "label": "E_decay+vol",
+      "pnl": 549.22,
+      "mdd": 3.5,
+      "pm": 156.9,
+      "wr": 75.4,
+      "trades": 3055,
+      "rr": 1.545,
+      "tp": 2303,
+      "sl": 743,
+      "to": 0,
+      "avg_tp": 2.72,
+      "avg_sl": 1.76,
+      "avg_to": 0,
+      "tpsl_wr": 75.6,
+      "reasons": {
+        "TP": 2303,
+        "SL": 743,
+        "OOS_END": 9
+      }
+    },
+    "F_decay+timeout_pnl": {
+      "label": "F_decay+timeout_pnl",
+      "pnl": 313.9,
+      "mdd": 4.73,
+      "pm": 66.4,
+      "wr": 61.4,
+      "trades": 3720,
+      "rr": 1.58,
+      "tp": 2161,
+      "sl": 691,
+      "to": 859,
+      "avg_tp": 2.73,
+      "avg_sl": 1.73,
+      "avg_to": -2.18,
+      "tpsl_wr": 75.8,
+      "reasons": {
+        "TP": 2161,
+        "TIMEOUT": 859,
+        "SL": 691,
+        "OOS_END": 9
+      }
+    },
+    "G_vol+timeout_pnl": {
+      "label": "G_vol+timeout_pnl",
+      "pnl": 337.27,
+      "mdd": 3.4,
+      "pm": 99.2,
+      "wr": 57.0,
+      "trades": 3455,
+      "rr": 1.854,
+      "tp": 1636,
+      "sl": 665,
+      "to": 1145,
+      "avg_tp": 3.65,
+      "avg_sl": 1.97,
+      "avg_to": -1.41,
+      "tpsl_wr": 71.1,
+      "reasons": {
+        "TP": 1636,
+        "TIMEOUT": 1145,
+        "SL": 665,
+        "OOS_END": 9
+      }
+    },
+    "H_FULL_PRODUCTION": {
+      "label": "H_FULL_PRODUCTION",
+      "pnl": 354.5,
+      "mdd": 3.5,
+      "pm": 101.3,
+      "wr": 62.2,
+      "trades": 3847,
+      "rr": 1.545,
+      "tp": 2303,
+      "sl": 743,
+      "to": 792,
+      "avg_tp": 2.72,
+      "avg_sl": 1.76,
+      "avg_to": -2.21,
+      "tpsl_wr": 75.6,
+      "reasons": {
+        "TP": 2303,
+        "TIMEOUT": 792,
+        "SL": 743,
+        "OOS_END": 9
+      }
+    }
+  },
+  "live_stats": {
+    "avg_tp": 4.1,
+    "avg_sl": 7.14,
+    "rr": 0.574,
+    "tpsl_wr": 65.1
+  },
+  "elapsed_s": 33.8
+}

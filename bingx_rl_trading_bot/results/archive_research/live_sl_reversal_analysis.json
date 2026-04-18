@@ -1,0 +1,3728 @@
+{
+  "metadata": {
+    "generated_at": "2026-03-14T22:54:51.922054",
+    "total_trades": 237,
+    "sl_trades_analyzed": 68,
+    "sl_trades_unmatched": 0,
+    "data_range": "2025-05-05 15:00:00 to 2026-03-14 13:50:00",
+    "horizons": {
+      "10bars_50m": "10 bars (50 minutes)",
+      "30bars_2h30m": "30 bars (150 minutes)",
+      "60bars_5h": "60 bars (300 minutes)",
+      "144bars_12h": "144 bars (720 minutes)",
+      "288bars_24h": "288 bars (1440 minutes)"
+    }
+  },
+  "overall_sl_stats": {
+    "count": 68,
+    "10bars_50m": {
+      "n_valid": 68,
+      "entry_recovery_rate": 26.5,
+      "tp_hit_rate": 7.4,
+      "avg_max_recovery_pct": 0.372,
+      "avg_end_recovery_pct": 0.01,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 18,
+      "n_tp_hit": 5
+    },
+    "30bars_2h30m": {
+      "n_valid": 68,
+      "entry_recovery_rate": 26.5,
+      "tp_hit_rate": 7.4,
+      "avg_max_recovery_pct": 0.555,
+      "avg_end_recovery_pct": -0.092,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 18,
+      "n_tp_hit": 5
+    },
+    "60bars_5h": {
+      "n_valid": 68,
+      "entry_recovery_rate": 32.4,
+      "tp_hit_rate": 11.8,
+      "avg_max_recovery_pct": 0.789,
+      "avg_end_recovery_pct": -0.268,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 22,
+      "n_tp_hit": 8
+    },
+    "144bars_12h": {
+      "n_valid": 68,
+      "entry_recovery_rate": 38.2,
+      "tp_hit_rate": 17.6,
+      "avg_max_recovery_pct": 1.356,
+      "avg_end_recovery_pct": -0.082,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 26,
+      "n_tp_hit": 12
+    },
+    "288bars_24h": {
+      "n_valid": 68,
+      "entry_recovery_rate": 45.6,
+      "tp_hit_rate": 27.9,
+      "avg_max_recovery_pct": 2.384,
+      "avg_end_recovery_pct": 0.535,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 31,
+      "n_tp_hit": 19
+    },
+    "regret": {
+      "mean_pct": 2.491,
+      "median_pct": 0.0,
+      "total_pct": 169.391,
+      "n_with_regret": 19,
+      "n_correct_sl": 49
+    }
+  },
+  "by_exit_reason": {
+    "SL": {
+      "count": 63,
+      "10bars_50m": {
+        "n_valid": 63,
+        "entry_recovery_rate": 22.2,
+        "tp_hit_rate": 6.3,
+        "avg_max_recovery_pct": 0.382,
+        "avg_end_recovery_pct": 0.016,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 14,
+        "n_tp_hit": 4
+      },
+      "30bars_2h30m": {
+        "n_valid": 63,
+        "entry_recovery_rate": 22.2,
+        "tp_hit_rate": 6.3,
+        "avg_max_recovery_pct": 0.578,
+        "avg_end_recovery_pct": -0.038,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 14,
+        "n_tp_hit": 4
+      },
+      "60bars_5h": {
+        "n_valid": 63,
+        "entry_recovery_rate": 28.6,
+        "tp_hit_rate": 11.1,
+        "avg_max_recovery_pct": 0.83,
+        "avg_end_recovery_pct": -0.28,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 18,
+        "n_tp_hit": 7
+      },
+      "144bars_12h": {
+        "n_valid": 63,
+        "entry_recovery_rate": 33.3,
+        "tp_hit_rate": 14.3,
+        "avg_max_recovery_pct": 1.355,
+        "avg_end_recovery_pct": -0.16,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 21,
+        "n_tp_hit": 9
+      },
+      "288bars_24h": {
+        "n_valid": 63,
+        "entry_recovery_rate": 41.3,
+        "tp_hit_rate": 22.2,
+        "avg_max_recovery_pct": 2.314,
+        "avg_end_recovery_pct": 0.428,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 26,
+        "n_tp_hit": 14
+      },
+      "regret": {
+        "mean_pct": 2.137,
+        "median_pct": 0.0,
+        "total_pct": 134.61,
+        "n_with_regret": 14,
+        "n_correct_sl": 49
+      }
+    },
+    "CASCADE_SL": {
+      "count": 5,
+      "10bars_50m": {
+        "n_valid": 5,
+        "entry_recovery_rate": 80.0,
+        "tp_hit_rate": 20.0,
+        "avg_max_recovery_pct": 0.241,
+        "avg_end_recovery_pct": -0.063,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 4,
+        "n_tp_hit": 1
+      },
+      "30bars_2h30m": {
+        "n_valid": 5,
+        "entry_recovery_rate": 80.0,
+        "tp_hit_rate": 20.0,
+        "avg_max_recovery_pct": 0.263,
+        "avg_end_recovery_pct": -0.776,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 4,
+        "n_tp_hit": 1
+      },
+      "60bars_5h": {
+        "n_valid": 5,
+        "entry_recovery_rate": 80.0,
+        "tp_hit_rate": 20.0,
+        "avg_max_recovery_pct": 0.267,
+        "avg_end_recovery_pct": -0.127,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 4,
+        "n_tp_hit": 1
+      },
+      "144bars_12h": {
+        "n_valid": 5,
+        "entry_recovery_rate": 100.0,
+        "tp_hit_rate": 60.0,
+        "avg_max_recovery_pct": 1.366,
+        "avg_end_recovery_pct": 0.907,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 5,
+        "n_tp_hit": 3
+      },
+      "288bars_24h": {
+        "n_valid": 5,
+        "entry_recovery_rate": 100.0,
+        "tp_hit_rate": 100.0,
+        "avg_max_recovery_pct": 3.269,
+        "avg_end_recovery_pct": 1.884,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 5,
+        "n_tp_hit": 5
+      },
+      "regret": {
+        "mean_pct": 6.956,
+        "median_pct": 4.503,
+        "total_pct": 34.781,
+        "n_with_regret": 5,
+        "n_correct_sl": 0
+      }
+    }
+  },
+  "by_direction": {
+    "LONG": {
+      "count": 15,
+      "10bars_50m": {
+        "n_valid": 15,
+        "entry_recovery_rate": 26.7,
+        "tp_hit_rate": 0.0,
+        "avg_max_recovery_pct": 0.444,
+        "avg_end_recovery_pct": 0.139,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 4,
+        "n_tp_hit": 0
+      },
+      "30bars_2h30m": {
+        "n_valid": 15,
+        "entry_recovery_rate": 26.7,
+        "tp_hit_rate": 0.0,
+        "avg_max_recovery_pct": 0.552,
+        "avg_end_recovery_pct": -0.158,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 4,
+        "n_tp_hit": 0
+      },
+      "60bars_5h": {
+        "n_valid": 15,
+        "entry_recovery_rate": 46.7,
+        "tp_hit_rate": 6.7,
+        "avg_max_recovery_pct": 1.127,
+        "avg_end_recovery_pct": 0.636,
+        "median_bars_to_entry": 2,
+        "n_entry_recovered": 7,
+        "n_tp_hit": 1
+      },
+      "144bars_12h": {
+        "n_valid": 15,
+        "entry_recovery_rate": 60.0,
+        "tp_hit_rate": 33.3,
+        "avg_max_recovery_pct": 2.13,
+        "avg_end_recovery_pct": 1.146,
+        "median_bars_to_entry": 36,
+        "n_entry_recovered": 9,
+        "n_tp_hit": 5
+      },
+      "288bars_24h": {
+        "n_valid": 15,
+        "entry_recovery_rate": 80.0,
+        "tp_hit_rate": 73.3,
+        "avg_max_recovery_pct": 4.446,
+        "avg_end_recovery_pct": 2.975,
+        "median_bars_to_entry": 43,
+        "n_entry_recovered": 12,
+        "n_tp_hit": 11
+      },
+      "regret": {
+        "mean_pct": 6.655,
+        "median_pct": 6.708,
+        "total_pct": 99.829,
+        "n_with_regret": 11,
+        "n_correct_sl": 4
+      }
+    },
+    "SHORT": {
+      "count": 53,
+      "10bars_50m": {
+        "n_valid": 53,
+        "entry_recovery_rate": 26.4,
+        "tp_hit_rate": 9.4,
+        "avg_max_recovery_pct": 0.352,
+        "avg_end_recovery_pct": -0.026,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 14,
+        "n_tp_hit": 5
+      },
+      "30bars_2h30m": {
+        "n_valid": 53,
+        "entry_recovery_rate": 26.4,
+        "tp_hit_rate": 9.4,
+        "avg_max_recovery_pct": 0.556,
+        "avg_end_recovery_pct": -0.073,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 14,
+        "n_tp_hit": 5
+      },
+      "60bars_5h": {
+        "n_valid": 53,
+        "entry_recovery_rate": 28.3,
+        "tp_hit_rate": 13.2,
+        "avg_max_recovery_pct": 0.693,
+        "avg_end_recovery_pct": -0.524,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 15,
+        "n_tp_hit": 7
+      },
+      "144bars_12h": {
+        "n_valid": 53,
+        "entry_recovery_rate": 32.1,
+        "tp_hit_rate": 13.2,
+        "avg_max_recovery_pct": 1.137,
+        "avg_end_recovery_pct": -0.429,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 17,
+        "n_tp_hit": 7
+      },
+      "288bars_24h": {
+        "n_valid": 53,
+        "entry_recovery_rate": 35.8,
+        "tp_hit_rate": 15.1,
+        "avg_max_recovery_pct": 1.801,
+        "avg_end_recovery_pct": -0.156,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 19,
+        "n_tp_hit": 8
+      },
+      "regret": {
+        "mean_pct": 1.312,
+        "median_pct": 0.0,
+        "total_pct": 69.562,
+        "n_with_regret": 8,
+        "n_correct_sl": 45
+      }
+    }
+  },
+  "by_session": {
+    "Asia": {
+      "count": 19,
+      "10bars_50m": {
+        "n_valid": 19,
+        "entry_recovery_rate": 31.6,
+        "tp_hit_rate": 5.3,
+        "avg_max_recovery_pct": 0.373,
+        "avg_end_recovery_pct": 0.042,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 6,
+        "n_tp_hit": 1
+      },
+      "30bars_2h30m": {
+        "n_valid": 19,
+        "entry_recovery_rate": 31.6,
+        "tp_hit_rate": 5.3,
+        "avg_max_recovery_pct": 0.698,
+        "avg_end_recovery_pct": 0.343,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 6,
+        "n_tp_hit": 1
+      },
+      "60bars_5h": {
+        "n_valid": 19,
+        "entry_recovery_rate": 31.6,
+        "tp_hit_rate": 5.3,
+        "avg_max_recovery_pct": 0.928,
+        "avg_end_recovery_pct": 0.443,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 6,
+        "n_tp_hit": 1
+      },
+      "144bars_12h": {
+        "n_valid": 19,
+        "entry_recovery_rate": 47.4,
+        "tp_hit_rate": 5.3,
+        "avg_max_recovery_pct": 1.604,
+        "avg_end_recovery_pct": 0.246,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 9,
+        "n_tp_hit": 1
+      },
+      "288bars_24h": {
+        "n_valid": 19,
+        "entry_recovery_rate": 47.4,
+        "tp_hit_rate": 5.3,
+        "avg_max_recovery_pct": 2.295,
+        "avg_end_recovery_pct": -0.505,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 9,
+        "n_tp_hit": 1
+      },
+      "regret": {
+        "mean_pct": 0.415,
+        "median_pct": 0.0,
+        "total_pct": 7.884,
+        "n_with_regret": 1,
+        "n_correct_sl": 18
+      }
+    },
+    "Europe": {
+      "count": 13,
+      "10bars_50m": {
+        "n_valid": 13,
+        "entry_recovery_rate": 15.4,
+        "tp_hit_rate": 7.7,
+        "avg_max_recovery_pct": 0.23,
+        "avg_end_recovery_pct": -0.157,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 2,
+        "n_tp_hit": 1
+      },
+      "30bars_2h30m": {
+        "n_valid": 13,
+        "entry_recovery_rate": 15.4,
+        "tp_hit_rate": 7.7,
+        "avg_max_recovery_pct": 0.28,
+        "avg_end_recovery_pct": -0.617,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 2,
+        "n_tp_hit": 1
+      },
+      "60bars_5h": {
+        "n_valid": 13,
+        "entry_recovery_rate": 15.4,
+        "tp_hit_rate": 7.7,
+        "avg_max_recovery_pct": 0.337,
+        "avg_end_recovery_pct": -1.535,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 2,
+        "n_tp_hit": 1
+      },
+      "144bars_12h": {
+        "n_valid": 13,
+        "entry_recovery_rate": 23.1,
+        "tp_hit_rate": 7.7,
+        "avg_max_recovery_pct": 1.093,
+        "avg_end_recovery_pct": -0.76,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 3,
+        "n_tp_hit": 1
+      },
+      "288bars_24h": {
+        "n_valid": 13,
+        "entry_recovery_rate": 30.8,
+        "tp_hit_rate": 30.8,
+        "avg_max_recovery_pct": 1.95,
+        "avg_end_recovery_pct": 0.353,
+        "median_bars_to_entry": 72,
+        "n_entry_recovered": 4,
+        "n_tp_hit": 4
+      },
+      "regret": {
+        "mean_pct": 2.567,
+        "median_pct": 0.0,
+        "total_pct": 33.367,
+        "n_with_regret": 4,
+        "n_correct_sl": 9
+      }
+    },
+    "US": {
+      "count": 12,
+      "10bars_50m": {
+        "n_valid": 12,
+        "entry_recovery_rate": 25.0,
+        "tp_hit_rate": 0.0,
+        "avg_max_recovery_pct": 0.543,
+        "avg_end_recovery_pct": 0.274,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 3,
+        "n_tp_hit": 0
+      },
+      "30bars_2h30m": {
+        "n_valid": 12,
+        "entry_recovery_rate": 25.0,
+        "tp_hit_rate": 0.0,
+        "avg_max_recovery_pct": 0.674,
+        "avg_end_recovery_pct": -0.14,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 3,
+        "n_tp_hit": 0
+      },
+      "60bars_5h": {
+        "n_valid": 12,
+        "entry_recovery_rate": 50.0,
+        "tp_hit_rate": 8.3,
+        "avg_max_recovery_pct": 1.302,
+        "avg_end_recovery_pct": 0.858,
+        "median_bars_to_entry": 19,
+        "n_entry_recovered": 6,
+        "n_tp_hit": 1
+      },
+      "144bars_12h": {
+        "n_valid": 12,
+        "entry_recovery_rate": 50.0,
+        "tp_hit_rate": 41.7,
+        "avg_max_recovery_pct": 2.359,
+        "avg_end_recovery_pct": 1.275,
+        "median_bars_to_entry": 19,
+        "n_entry_recovered": 6,
+        "n_tp_hit": 5
+      },
+      "288bars_24h": {
+        "n_valid": 12,
+        "entry_recovery_rate": 66.7,
+        "tp_hit_rate": 66.7,
+        "avg_max_recovery_pct": 5.22,
+        "avg_end_recovery_pct": 3.878,
+        "median_bars_to_entry": 39,
+        "n_entry_recovered": 8,
+        "n_tp_hit": 8
+      },
+      "regret": {
+        "mean_pct": 5.86,
+        "median_pct": 5.494,
+        "total_pct": 70.317,
+        "n_with_regret": 8,
+        "n_correct_sl": 4
+      }
+    },
+    "LatePM": {
+      "count": 24,
+      "10bars_50m": {
+        "n_valid": 24,
+        "entry_recovery_rate": 29.2,
+        "tp_hit_rate": 12.5,
+        "avg_max_recovery_pct": 0.363,
+        "avg_end_recovery_pct": -0.056,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 7,
+        "n_tp_hit": 3
+      },
+      "30bars_2h30m": {
+        "n_valid": 24,
+        "entry_recovery_rate": 29.2,
+        "tp_hit_rate": 12.5,
+        "avg_max_recovery_pct": 0.533,
+        "avg_end_recovery_pct": -0.128,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 7,
+        "n_tp_hit": 3
+      },
+      "60bars_5h": {
+        "n_valid": 24,
+        "entry_recovery_rate": 33.3,
+        "tp_hit_rate": 20.8,
+        "avg_max_recovery_pct": 0.666,
+        "avg_end_recovery_pct": -0.708,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 8,
+        "n_tp_hit": 5
+      },
+      "144bars_12h": {
+        "n_valid": 24,
+        "entry_recovery_rate": 33.3,
+        "tp_hit_rate": 20.8,
+        "avg_max_recovery_pct": 0.801,
+        "avg_end_recovery_pct": -0.653,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 8,
+        "n_tp_hit": 5
+      },
+      "288bars_24h": {
+        "n_valid": 24,
+        "entry_recovery_rate": 41.7,
+        "tp_hit_rate": 25.0,
+        "avg_max_recovery_pct": 1.272,
+        "avg_end_recovery_pct": -0.215,
+        "median_bars_to_entry": 1,
+        "n_entry_recovered": 10,
+        "n_tp_hit": 6
+      },
+      "regret": {
+        "mean_pct": 2.409,
+        "median_pct": 0.0,
+        "total_pct": 57.824,
+        "n_with_regret": 6,
+        "n_correct_sl": 18
+      }
+    }
+  },
+  "consecutive_sl_clusters": [
+    {
+      "cluster_size": 3,
+      "direction": "SHORT",
+      "timestamp": "2026-02-25T10:12:40.001913",
+      "total_loss_pct": -32.93,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 5,
+      "direction": "SHORT",
+      "timestamp": "2026-02-25T23:32:24.448512",
+      "total_loss_pct": -40.4,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 2,
+      "direction": "SHORT",
+      "timestamp": "2026-02-26T01:20:53.500665",
+      "total_loss_pct": -23.92,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 2,
+      "direction": "LONG",
+      "timestamp": "2026-02-28T15:18:10.472832",
+      "total_loss_pct": -11.62,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": true
+    },
+    {
+      "cluster_size": 4,
+      "direction": "SHORT",
+      "timestamp": "2026-03-01T04:34:25.935730",
+      "total_loss_pct": -53.41,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 4,
+      "direction": "SHORT",
+      "timestamp": "2026-03-03T00:12:59.159848",
+      "total_loss_pct": -53.5,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 2,
+      "direction": "LONG",
+      "timestamp": "2026-03-03T18:28:10.254010",
+      "total_loss_pct": -7.77,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": true
+    },
+    {
+      "cluster_size": 3,
+      "direction": "SHORT",
+      "timestamp": "2026-03-04T16:46:59.591548",
+      "total_loss_pct": -11.9,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 2,
+      "direction": "LONG",
+      "timestamp": "2026-03-06T23:00:41.234559",
+      "total_loss_pct": -19.88,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 5,
+      "direction": "SHORT",
+      "timestamp": "2026-03-09T22:27:13.459883",
+      "total_loss_pct": -52.56,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 2,
+      "direction": "SHORT",
+      "timestamp": "2026-03-11T22:38:46.438690",
+      "total_loss_pct": -13.93,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 6,
+      "direction": "SHORT",
+      "timestamp": "2026-03-12T02:24:44.164636",
+      "total_loss_pct": -31.73,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 2,
+      "direction": "LONG",
+      "timestamp": "2026-03-12T12:14:19.745440",
+      "total_loss_pct": -10.4,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": true
+    },
+    {
+      "cluster_size": 2,
+      "direction": "LONG",
+      "timestamp": "2026-03-12T16:44:20.502869",
+      "total_loss_pct": -4.34,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": true
+    },
+    {
+      "cluster_size": 6,
+      "direction": "SHORT",
+      "timestamp": "2026-03-13T09:15:28.516965",
+      "total_loss_pct": -47.8,
+      "last_trade_recovered": false,
+      "last_trade_tp_hit": false
+    },
+    {
+      "cluster_size": 7,
+      "direction": "SHORT",
+      "timestamp": "2026-03-13T22:50:45.021963",
+      "total_loss_pct": -55.0,
+      "last_trade_recovered": true,
+      "last_trade_tp_hit": true
+    }
+  ],
+  "timeout_comparison": {
+    "count": 20,
+    "10bars_50m": {
+      "n_valid": 20,
+      "entry_recovery_rate": 50.0,
+      "tp_hit_rate": 5.0,
+      "avg_max_recovery_pct": 0.366,
+      "avg_end_recovery_pct": 0.01,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 10,
+      "n_tp_hit": 1
+    },
+    "30bars_2h30m": {
+      "n_valid": 20,
+      "entry_recovery_rate": 50.0,
+      "tp_hit_rate": 20.0,
+      "avg_max_recovery_pct": 0.666,
+      "avg_end_recovery_pct": 0.182,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 10,
+      "n_tp_hit": 4
+    },
+    "60bars_5h": {
+      "n_valid": 20,
+      "entry_recovery_rate": 55.0,
+      "tp_hit_rate": 30.0,
+      "avg_max_recovery_pct": 1.035,
+      "avg_end_recovery_pct": 0.25,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 11,
+      "n_tp_hit": 6
+    },
+    "144bars_12h": {
+      "n_valid": 20,
+      "entry_recovery_rate": 65.0,
+      "tp_hit_rate": 40.0,
+      "avg_max_recovery_pct": 1.591,
+      "avg_end_recovery_pct": 0.536,
+      "median_bars_to_entry": 1,
+      "n_entry_recovered": 13,
+      "n_tp_hit": 8
+    },
+    "288bars_24h": {
+      "n_valid": 20,
+      "entry_recovery_rate": 80.0,
+      "tp_hit_rate": 45.0,
+      "avg_max_recovery_pct": 2.346,
+      "avg_end_recovery_pct": 0.67,
+      "median_bars_to_entry": 2,
+      "n_entry_recovered": 16,
+      "n_tp_hit": 9
+    },
+    "regret": {
+      "mean_pct": 2.254,
+      "median_pct": 0.0,
+      "total_pct": 45.078,
+      "n_with_regret": 9,
+      "n_correct_sl": 11
+    }
+  },
+  "tp_continuation": {
+    "count": 113,
+    "continued_favorable": 113
+  },
+  "recent_3day_details": [
+    {
+      "timestamp": "2026-03-12T02:24:44.164636",
+      "pattern": "D-ST-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 70155.5,
+      "exit": 71142.5,
+      "sl_distance_pct": 1.37,
+      "tp_distance_pct": 1.87,
+      "pnl_slot": -4.5206,
+      "hold_min": 1279,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.4969,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-12T02:24:51.813028",
+      "pattern": "DN-ST-H",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69557.6,
+      "exit": 71142.5,
+      "sl_distance_pct": 2.59,
+      "tp_distance_pct": 2.12,
+      "pnl_slot": -7.1356,
+      "hold_min": 1124,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.4969,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-12T02:24:58.753183",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69747.9,
+      "exit": 71142.5,
+      "sl_distance_pct": 2.28,
+      "tp_distance_pct": 1.24,
+      "pnl_slot": -6.2985,
+      "hold_min": 654,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.4969,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-12T02:25:05.305363",
+      "pattern": "U-BU-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69616.9,
+      "exit": 71142.5,
+      "sl_distance_pct": 2.51,
+      "tp_distance_pct": 1.56,
+      "pnl_slot": -6.8743,
+      "hold_min": 519,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.566,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-12T02:25:10.934507",
+      "pattern": "ST-ST-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 70657.6,
+      "exit": 71142.5,
+      "sl_distance_pct": 1.1,
+      "tp_distance_pct": 1.94,
+      "pnl_slot": -2.3588,
+      "hold_min": 150,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.566,
+      "regret_pct": 7.8841
+    },
+    {
+      "timestamp": "2026-03-12T02:25:15.824266",
+      "pattern": "ST-MU-D",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 70149.8,
+      "exit": 71142.5,
+      "sl_distance_pct": 1.86,
+      "tp_distance_pct": 1.74,
+      "pnl_slot": -4.5453,
+      "hold_min": 85,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.566,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-12T12:14:19.745440",
+      "pattern": "DN-ST-MU",
+      "direction": "LONG",
+      "exit_reason": "CASCADE_SL",
+      "entry": 70219.3,
+      "exit": 69319.1,
+      "sl_distance_pct": 4.31,
+      "tp_distance_pct": 1.97,
+      "pnl_slot": -4.146,
+      "hold_min": 679,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 3.1437,
+      "regret_pct": 9.7696
+    },
+    {
+      "timestamp": "2026-03-12T12:14:31.024046",
+      "pattern": "MU-ST-U",
+      "direction": "LONG",
+      "exit_reason": "CASCADE_SL",
+      "entry": 70719.6,
+      "exit": 69316.5,
+      "sl_distance_pct": 2.27,
+      "tp_distance_pct": 2.07,
+      "pnl_slot": -6.2521,
+      "hold_min": 629,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 3.1437,
+      "regret_pct": 12.1681
+    },
+    {
+      "timestamp": "2026-03-12T16:44:20.502869",
+      "pattern": "N/A",
+      "direction": "LONG",
+      "exit_reason": "CASCADE_SL",
+      "entry": 70105.6,
+      "exit": 69670.6,
+      "sl_distance_pct": 3.46,
+      "tp_distance_pct": 0.87,
+      "pnl_slot": -2.1615,
+      "hold_min": 25,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 5.021,
+      "regret_pct": 4.4864
+    },
+    {
+      "timestamp": "2026-03-12T16:44:32.120628",
+      "pattern": "N/A",
+      "direction": "LONG",
+      "exit_reason": "CASCADE_SL",
+      "entry": 70105.6,
+      "exit": 69666.8,
+      "sl_distance_pct": 3.46,
+      "tp_distance_pct": 0.87,
+      "pnl_slot": -2.1777,
+      "hold_min": 25,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 5.021,
+      "regret_pct": 4.5026
+    },
+    {
+      "timestamp": "2026-03-13T09:15:28.516965",
+      "pattern": "BD-U-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69651.3,
+      "exit": 71238.8,
+      "sl_distance_pct": 2.27,
+      "tp_distance_pct": 0.57,
+      "pnl_slot": -7.1376,
+      "hold_min": 885,
+      "entry_recovered_24h": false,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 2.0756,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T09:15:36.382845",
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 70200.0,
+      "exit": 71238.8,
+      "sl_distance_pct": 1.84,
+      "tp_distance_pct": 1.19,
+      "pnl_slot": -4.7393,
+      "hold_min": 520,
+      "entry_recovered_24h": false,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 2.0756,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T09:17:29.136452",
+      "pattern": "BU-U-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69453.3,
+      "exit": 71653.0,
+      "sl_distance_pct": 3.15,
+      "tp_distance_pct": 1.16,
+      "pnl_slot": -9.8015,
+      "hold_min": 1018,
+      "entry_recovered_24h": false,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 2.0756,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T09:17:35.401737",
+      "pattern": "ST-H-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69641.6,
+      "exit": 71653.0,
+      "sl_distance_pct": 3.02,
+      "tp_distance_pct": 0.63,
+      "pnl_slot": -8.9646,
+      "hold_min": 972,
+      "entry_recovered_24h": false,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 2.0756,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T09:17:40.917226",
+      "pattern": "H-ST-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69838.5,
+      "exit": 71653.0,
+      "sl_distance_pct": 2.64,
+      "tp_distance_pct": 0.84,
+      "pnl_slot": -8.0944,
+      "hold_min": 922,
+      "entry_recovered_24h": false,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 2.0756,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T09:17:45.775017",
+      "pattern": "ST-BD-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 69618.9,
+      "exit": 71653.0,
+      "sl_distance_pct": 2.89,
+      "tp_distance_pct": 0.8,
+      "pnl_slot": -9.0653,
+      "hold_min": 892,
+      "entry_recovered_24h": false,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 2.0756,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T22:50:45.021963",
+      "pattern": "H-ST-U",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 71344.2,
+      "exit": 73431.5,
+      "sl_distance_pct": 2.89,
+      "tp_distance_pct": 1.17,
+      "pnl_slot": -9.077,
+      "hold_min": 550,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.7069,
+      "regret_pct": 12.2751
+    },
+    {
+      "timestamp": "2026-03-13T22:50:54.365579",
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 71516.8,
+      "exit": 73431.5,
+      "sl_distance_pct": 2.92,
+      "tp_distance_pct": 1.18,
+      "pnl_slot": -8.3318,
+      "hold_min": 490,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.7069,
+      "regret_pct": 11.5664
+    },
+    {
+      "timestamp": "2026-03-13T22:51:02.503047",
+      "pattern": "BU-BU-DN",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 71293.8,
+      "exit": 73431.5,
+      "sl_distance_pct": 3.15,
+      "tp_distance_pct": 1.46,
+      "pnl_slot": -9.2953,
+      "hold_min": 386,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.7069,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T22:51:09.742241",
+      "pattern": "D-BU-DN",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 72093.1,
+      "exit": 73431.5,
+      "sl_distance_pct": 2.0,
+      "tp_distance_pct": 1.03,
+      "pnl_slot": -5.8695,
+      "hold_min": 221,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.7069,
+      "regret_pct": 8.6672
+    },
+    {
+      "timestamp": "2026-03-13T22:51:16.365106",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 72445.3,
+      "exit": 73431.5,
+      "sl_distance_pct": 1.5,
+      "tp_distance_pct": 1.57,
+      "pnl_slot": -4.3839,
+      "hold_min": 186,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.7069,
+      "regret_pct": 8.7915
+    },
+    {
+      "timestamp": "2026-03-13T23:00:41.372461",
+      "pattern": "BU-BU-DN",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 71504.5,
+      "exit": 73539.3,
+      "sl_distance_pct": 2.83,
+      "tp_distance_pct": 1.74,
+      "pnl_slot": -8.8371,
+      "hold_min": 810,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": false,
+      "max_recovery_pct": 0.6613,
+      "regret_pct": 0
+    },
+    {
+      "timestamp": "2026-03-13T23:00:46.774029",
+      "pattern": "U-MD-ST",
+      "direction": "SHORT",
+      "exit_reason": "SL",
+      "entry": 71419.5,
+      "exit": 73539.3,
+      "sl_distance_pct": 3.22,
+      "tp_distance_pct": 1.3,
+      "pnl_slot": -9.2043,
+      "hold_min": 690,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.6613,
+      "regret_pct": 12.7906
+    },
+    {
+      "timestamp": "2026-03-14T10:38:13.449074",
+      "pattern": "BD-ST-DN",
+      "direction": "SHORT",
+      "exit_reason": "CASCADE_SL",
+      "entry": 71366.0,
+      "exit": 71427.4,
+      "sl_distance_pct": 4.31,
+      "tp_distance_pct": 1.2,
+      "pnl_slot": -0.5581,
+      "hold_min": 478,
+      "entry_recovered_24h": true,
+      "tp_would_hit_24h": true,
+      "max_recovery_pct": 0.0158,
+      "regret_pct": 3.8544
+    }
+  ],
+  "all_trade_details": [
+    {
+      "timestamp": "2026-02-24T10:16:23.278430",
+      "pattern": "H-ST-DN",
+      "direction": "LONG",
+      "entry_price": 64796.2,
+      "exit_price": 63975.2,
+      "tp_price": 65611.2,
+      "sl_price": 64007.1,
+      "exit_reason": "SL",
+      "hold_minutes": 151,
+      "pnl_slot_pct": -4.1011,
+      "regret_pct": 7.5745,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1621
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1621
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.9016
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.3331
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 4.8599
+      }
+    },
+    {
+      "timestamp": "2026-02-24T23:48:09.877348",
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "entry_price": 62889.5,
+      "exit_price": 63493.0,
+      "tp_price": 62300.7,
+      "sl_price": 63453.2,
+      "exit_reason": "SL",
+      "hold_minutes": 78,
+      "pnl_slot_pct": -3.1789,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.274
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.274
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.274
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.274
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.274
+      }
+    },
+    {
+      "timestamp": "2026-02-25T04:06:54.847340",
+      "pattern": "BU-BU-U",
+      "direction": "SHORT",
+      "entry_price": 63618.4,
+      "exit_price": 64692.8,
+      "tp_price": 62524.2,
+      "sl_price": 64687.2,
+      "exit_reason": "SL",
+      "hold_minutes": 251,
+      "pnl_slot_pct": -5.3665,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.0487
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8796
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8796
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8796
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8796
+      }
+    },
+    {
+      "timestamp": "2026-02-25T10:12:40.001913",
+      "pattern": "DN-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 63986.1,
+      "exit_price": 65479.9,
+      "tp_price": 63193.1,
+      "sl_price": 65495.4,
+      "exit_reason": "SL",
+      "hold_minutes": 52,
+      "pnl_slot_pct": -7.3037,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3963
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      }
+    },
+    {
+      "timestamp": "2026-02-25T10:12:57.896771",
+      "pattern": "DN-MU-H",
+      "direction": "SHORT",
+      "entry_price": 63259.1,
+      "exit_price": 65712.0,
+      "tp_price": 61128.5,
+      "sl_price": 65666.9,
+      "exit_reason": "SL",
+      "hold_minutes": 1002,
+      "pnl_slot_pct": -11.9326,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3963
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      }
+    },
+    {
+      "timestamp": "2026-02-25T10:13:01.268377",
+      "pattern": "ST-BD-BU",
+      "direction": "SHORT",
+      "entry_price": 62903.5,
+      "exit_price": 65712.0,
+      "tp_price": 60505.8,
+      "sl_price": 65616.7,
+      "exit_reason": "SL",
+      "hold_minutes": 692,
+      "pnl_slot_pct": -13.6943,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3963
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.576
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:32:24.448512",
+      "pattern": "MD-MU-U",
+      "direction": "SHORT",
+      "entry_price": 64223.8,
+      "exit_price": 66704.8,
+      "tp_price": 62788.9,
+      "sl_price": 66699.6,
+      "exit_reason": "SL",
+      "hold_minutes": 1207,
+      "pnl_slot_pct": -11.8892,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.3943
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:32:27.262080",
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 64900.0,
+      "exit_price": 66704.8,
+      "tp_price": 64004.5,
+      "sl_price": 66646.6,
+      "exit_reason": "SL",
+      "hold_minutes": 522,
+      "pnl_slot_pct": -8.6427,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.3943
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:32:29.767952",
+      "pattern": "D-BU-DN",
+      "direction": "SHORT",
+      "entry_price": 65470.0,
+      "exit_price": 66704.8,
+      "tp_price": 64732.7,
+      "sl_price": 66718.2,
+      "exit_reason": "SL",
+      "hold_minutes": 332,
+      "pnl_slot_pct": -5.9582,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.3943
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:32:32.278742",
+      "pattern": "MD-ST-ST",
+      "direction": "SHORT",
+      "entry_price": 65343.7,
+      "exit_price": 66704.8,
+      "tp_price": 64570.0,
+      "sl_price": 66718.5,
+      "exit_reason": "SL",
+      "hold_minutes": 237,
+      "pnl_slot_pct": -6.549,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7772
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.3943
+      }
+    },
+    {
+      "timestamp": "2026-02-25T23:58:24.428085",
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "entry_price": 65373.2,
+      "exit_price": 66911.0,
+      "tp_price": 64481.5,
+      "sl_price": 66909.5,
+      "exit_reason": "SL",
+      "hold_minutes": 258,
+      "pnl_slot_pct": -7.357,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3855
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3855
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3855
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3855
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.1899
+      }
+    },
+    {
+      "timestamp": "2026-02-26T01:20:53.500665",
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "entry_price": 65266.9,
+      "exit_price": 67840.2,
+      "tp_price": 63694.0,
+      "sl_price": 67858.0,
+      "exit_reason": "SL",
+      "hold_minutes": 730,
+      "pnl_slot_pct": -12.1282,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.0504
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.0504
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.0504
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.0766
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.9645
+      }
+    },
+    {
+      "timestamp": "2026-02-26T01:25:25.303262",
+      "pattern": "DN-ST-H",
+      "direction": "SHORT",
+      "entry_price": 65491.3,
+      "exit_price": 68000.0,
+      "tp_price": 64050.5,
+      "sl_price": 67993.1,
+      "exit_reason": "SL",
+      "hold_minutes": 425,
+      "pnl_slot_pct": -11.7918,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8432
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8432
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8432
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8695
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.7614
+      }
+    },
+    {
+      "timestamp": "2026-02-26T02:12:39.339300",
+      "pattern": "IH-U-U",
+      "direction": "SHORT",
+      "entry_price": 66207.6,
+      "exit_price": 68597.2,
+      "tp_price": 64400.1,
+      "sl_price": 68591.1,
+      "exit_reason": "SL",
+      "hold_minutes": 897,
+      "pnl_slot_pct": -11.1278,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": -0.0041
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": -0.0041
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": -0.0041
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3032
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0184
+      }
+    },
+    {
+      "timestamp": "2026-02-27T20:36:15.809158",
+      "pattern": "DN-BD-MU",
+      "direction": "LONG",
+      "entry_price": 67593.6,
+      "exit_price": 66232.6,
+      "tp_price": 68200.2,
+      "sl_price": 66244.4,
+      "exit_reason": "SL",
+      "hold_minutes": 241,
+      "pnl_slot_pct": -6.3405,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.2502
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4406
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6688
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6712
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.2121
+      }
+    },
+    {
+      "timestamp": "2026-02-28T15:18:10.472832",
+      "pattern": "D-BD-U",
+      "direction": "LONG",
+      "entry_price": 65800.9,
+      "exit_price": 64837.7,
+      "tp_price": 66260.2,
+      "sl_price": 64854.7,
+      "exit_reason": "SL",
+      "hold_minutes": 343,
+      "pnl_slot_pct": -4.6914,
+      "regret_pct": 6.4854,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.9619
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.2498
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 3.6096
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.9209
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.9209
+      }
+    },
+    {
+      "timestamp": "2026-02-28T15:18:29.132576",
+      "pattern": "H-U-U",
+      "direction": "LONG",
+      "entry_price": 65990.0,
+      "exit_price": 64531.1,
+      "tp_price": 66977.2,
+      "sl_price": 64565.9,
+      "exit_reason": "SL",
+      "hold_minutes": 203,
+      "pnl_slot_pct": -6.9324,
+      "regret_pct": 11.1204,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.9619
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.2498
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.6096
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.9209
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.9209
+      }
+    },
+    {
+      "timestamp": "2026-02-28T15:57:55.036470",
+      "pattern": "DN-U-DN",
+      "direction": "LONG",
+      "entry_price": 66015.1,
+      "exit_price": 63150.0,
+      "tp_price": 67262.8,
+      "sl_price": 63167.6,
+      "exit_reason": "SL",
+      "hold_minutes": 1142,
+      "pnl_slot_pct": -13.3202,
+      "regret_pct": 18.6903,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.5767
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.1367
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.5742
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.2168
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.2168
+      }
+    },
+    {
+      "timestamp": "2026-03-01T04:34:25.935730",
+      "pattern": "DN-DF-DN",
+      "direction": "SHORT",
+      "entry_price": 63558.8,
+      "exit_price": 66333.2,
+      "tp_price": 62092.5,
+      "sl_price": 66300.3,
+      "exit_reason": "SL",
+      "hold_minutes": 684,
+      "pnl_slot_pct": -13.3953,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1587
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7668
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.4222
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.752
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3776
+      }
+    },
+    {
+      "timestamp": "2026-03-01T04:35:23.438550",
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "entry_price": 63619.9,
+      "exit_price": 66388.1,
+      "tp_price": 62358.5,
+      "sl_price": 66364.0,
+      "exit_reason": "SL",
+      "hold_minutes": 580,
+      "pnl_slot_pct": -13.3535,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1224
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7397
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.4883
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.7162
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3424
+      }
+    },
+    {
+      "timestamp": "2026-03-01T04:39:43.477767",
+      "pattern": "U-DN-DF",
+      "direction": "SHORT",
+      "entry_price": 63791.9,
+      "exit_price": 66524.1,
+      "tp_price": 62571.1,
+      "sl_price": 66543.5,
+      "exit_reason": "SL",
+      "hold_minutes": 694,
+      "pnl_slot_pct": -13.149,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1224
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7397
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.4883
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.7162
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3424
+      }
+    },
+    {
+      "timestamp": "2026-03-01T04:39:46.319451",
+      "pattern": "DN-ST-ST",
+      "direction": "SHORT",
+      "entry_price": 63718.5,
+      "exit_price": 66524.1,
+      "tp_price": 62246.5,
+      "sl_price": 66466.9,
+      "exit_reason": "SL",
+      "hold_minutes": 589,
+      "pnl_slot_pct": -13.5094,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1224
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7397
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.4883
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.7162
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3424
+      }
+    },
+    {
+      "timestamp": "2026-03-03T00:12:59.159848",
+      "pattern": "ST-U-ST",
+      "direction": "SHORT",
+      "entry_price": 65251.8,
+      "exit_price": 68099.5,
+      "tp_price": 63798.2,
+      "sl_price": 68066.3,
+      "exit_reason": "SL",
+      "hold_minutes": 1092,
+      "pnl_slot_pct": -13.3925,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.2345
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.8417
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.1134
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.5896
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.8745
+      }
+    },
+    {
+      "timestamp": "2026-03-03T00:15:39.075389",
+      "pattern": "MU-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 65677.3,
+      "exit_price": 68542.1,
+      "tp_price": 64312.5,
+      "sl_price": 68510.2,
+      "exit_reason": "SL",
+      "hold_minutes": 970,
+      "pnl_slot_pct": -13.3858,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.0911
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6992
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.9713
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.451
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.7364
+      }
+    },
+    {
+      "timestamp": "2026-03-03T00:39:48.055052",
+      "pattern": "BU-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 66500.0,
+      "exit_price": 69383.5,
+      "tp_price": 64976.1,
+      "sl_price": 69368.4,
+      "exit_reason": "SL",
+      "hold_minutes": 2284,
+      "pnl_slot_pct": -13.3083,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3219
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.248
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.5186
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.9846
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 4.2684
+      }
+    },
+    {
+      "timestamp": "2026-03-03T01:09:09.940036",
+      "pattern": "D-BU-DN",
+      "direction": "SHORT",
+      "entry_price": 66695.1,
+      "exit_price": 69611.5,
+      "tp_price": 65022.2,
+      "sl_price": 69571.9,
+      "exit_reason": "SL",
+      "hold_minutes": 2619,
+      "pnl_slot_pct": -13.4182,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4934
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.2337
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.79
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.9695
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 4.2533
+      }
+    },
+    {
+      "timestamp": "2026-03-03T17:44:15.076706",
+      "pattern": "BD-DN-U",
+      "direction": "LONG",
+      "entry_price": 69261.5,
+      "exit_price": 67311.0,
+      "tp_price": 70206.2,
+      "sl_price": 67315.0,
+      "exit_reason": "SL",
+      "hold_minutes": 619,
+      "pnl_slot_pct": -2.9161,
+      "regret_pct": 6.708,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.019
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.1277
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.1277
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.1277
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 8.2087
+      }
+    },
+    {
+      "timestamp": "2026-03-03T18:28:10.254010",
+      "pattern": "BD-BD-BU",
+      "direction": "LONG",
+      "entry_price": 68838.9,
+      "exit_price": 66614.9,
+      "tp_price": 70098.3,
+      "sl_price": 66629.9,
+      "exit_reason": "SL",
+      "hold_minutes": 788,
+      "pnl_slot_pct": -3.3307,
+      "regret_pct": 8.5192,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6529
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6529
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6529
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6529
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 7.7007
+      }
+    },
+    {
+      "timestamp": "2026-03-03T18:31:25.029860",
+      "pattern": "DN-U-DN",
+      "direction": "LONG",
+      "entry_price": 69473.7,
+      "exit_price": 66462.4,
+      "tp_price": 70786.8,
+      "sl_price": 66477.1,
+      "exit_reason": "SL",
+      "hold_minutes": 1021,
+      "pnl_slot_pct": -4.4344,
+      "regret_pct": 9.8046,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3454
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3454
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3454
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3454
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 7.3716
+      }
+    },
+    {
+      "timestamp": "2026-03-04T16:46:59.591548",
+      "pattern": "ST-DN-MU",
+      "direction": "SHORT",
+      "entry_price": 66691.5,
+      "exit_price": 68977.8,
+      "tp_price": 65516.3,
+      "sl_price": 68967.9,
+      "exit_reason": "SL",
+      "hold_minutes": 1261,
+      "pnl_slot_pct": -3.5282,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3962
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4395
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4839
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.234
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3275
+      }
+    },
+    {
+      "timestamp": "2026-03-04T16:47:16.287723",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "entry_price": 68342.2,
+      "exit_price": 69292.2,
+      "tp_price": 67091.3,
+      "sl_price": 69277.1,
+      "exit_reason": "SL",
+      "hold_minutes": 672,
+      "pnl_slot_pct": -4.4702,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3962
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4395
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4839
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.234
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3275
+      }
+    },
+    {
+      "timestamp": "2026-03-04T16:57:13.585627",
+      "pattern": "BD-ST-DN",
+      "direction": "SHORT",
+      "entry_price": 66920.9,
+      "exit_price": 69464.7,
+      "tp_price": 65519.7,
+      "sl_price": 69459.6,
+      "exit_reason": "SL",
+      "hold_minutes": 1377,
+      "pnl_slot_pct": -3.9012,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4671
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.5103
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.5547
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3043
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.3963
+      }
+    },
+    {
+      "timestamp": "2026-03-04T22:07:04.791857",
+      "pattern": "BU-U-ST",
+      "direction": "SHORT",
+      "entry_price": 70923.7,
+      "exit_price": 71511.4,
+      "tp_price": 70076.0,
+      "sl_price": 71717.6,
+      "exit_reason": "SL",
+      "hold_minutes": 21,
+      "pnl_slot_pct": -2.7859,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.1155
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.5403
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.5403
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.3148
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 3.8246
+      }
+    },
+    {
+      "timestamp": "2026-03-04T23:07:18.628012",
+      "pattern": "U-GS-DN",
+      "direction": "SHORT",
+      "entry_price": 71350.0,
+      "exit_price": 71538.2,
+      "tp_price": 70650.4,
+      "sl_price": 71687.5,
+      "exit_reason": "SL",
+      "hold_minutes": 17,
+      "pnl_slot_pct": -1.0913,
+      "regret_pct": 3.7329,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4935
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4935
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4935
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.2762
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 2.802
+      }
+    },
+    {
+      "timestamp": "2026-03-06T23:00:41.234559",
+      "pattern": "ST-GS-U",
+      "direction": "LONG",
+      "entry_price": 71056.8,
+      "exit_price": 69124.8,
+      "tp_price": 71930.3,
+      "sl_price": 69140.6,
+      "exit_reason": "SL",
+      "hold_minutes": 1090,
+      "pnl_slot_pct": -8.4569,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.0637
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1031
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3402
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3402
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3402
+      }
+    },
+    {
+      "timestamp": "2026-03-06T23:09:56.810134",
+      "pattern": "U-U-H",
+      "direction": "LONG",
+      "entry_price": 71325.9,
+      "exit_price": 68681.7,
+      "tp_price": 72537.8,
+      "sl_price": 68684.4,
+      "exit_reason": "SL",
+      "hold_minutes": 1129,
+      "pnl_slot_pct": -11.4216,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.0709
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1103
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3474
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3474
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3474
+      }
+    },
+    {
+      "timestamp": "2026-03-09T22:27:13.459883",
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 65828.4,
+      "exit_price": 68689.5,
+      "tp_price": 64420.1,
+      "sl_price": 68667.8,
+      "exit_reason": "SL",
+      "hold_minutes": 897,
+      "pnl_slot_pct": -13.3389,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4123
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      }
+    },
+    {
+      "timestamp": "2026-03-09T22:27:20.271812",
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "entry_price": 66059.5,
+      "exit_price": 68689.5,
+      "tp_price": 64775.7,
+      "sl_price": 68914.6,
+      "exit_reason": "SL",
+      "hold_minutes": 877,
+      "pnl_slot_pct": -12.2438,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4123
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      }
+    },
+    {
+      "timestamp": "2026-03-09T22:27:26.064186",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "entry_price": 66188.4,
+      "exit_price": 68689.5,
+      "tp_price": 64899.6,
+      "sl_price": 68881.4,
+      "exit_reason": "SL",
+      "hold_minutes": 867,
+      "pnl_slot_pct": -11.6363,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4123
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      }
+    },
+    {
+      "timestamp": "2026-03-09T22:27:31.164984",
+      "pattern": "DN-ST-BU",
+      "direction": "SHORT",
+      "entry_price": 67250.0,
+      "exit_price": 68689.5,
+      "tp_price": 65665.6,
+      "sl_price": 68869.8,
+      "exit_reason": "SL",
+      "hold_minutes": 482,
+      "pnl_slot_pct": -6.7216,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4123
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6578
+      }
+    },
+    {
+      "timestamp": "2026-03-09T22:35:13.232293",
+      "pattern": "ST-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 67116.3,
+      "exit_price": 68977.7,
+      "tp_price": 65565.1,
+      "sl_price": 68894.3,
+      "exit_reason": "SL",
+      "hold_minutes": 1230,
+      "pnl_slot_pct": -8.6202,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1665
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3864
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3864
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3864
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3864
+      }
+    },
+    {
+      "timestamp": "2026-03-11T06:45:57.408316",
+      "pattern": "DN-DF-ST",
+      "direction": "LONG",
+      "entry_price": 71232.6,
+      "exit_price": 69518.7,
+      "tp_price": 72315.3,
+      "sl_price": 69526.6,
+      "exit_reason": "SL",
+      "hold_minutes": 305,
+      "pnl_slot_pct": -7.5182,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4022
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4022
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4022
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.2643
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.2643
+      }
+    },
+    {
+      "timestamp": "2026-03-11T22:38:46.438690",
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "entry_price": 69158.0,
+      "exit_price": 70935.1,
+      "tp_price": 68271.5,
+      "sl_price": 70928.5,
+      "exit_reason": "SL",
+      "hold_minutes": 83,
+      "pnl_slot_pct": -8.0089,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.2257
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6942
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.6287
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.6475
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.6475
+      }
+    },
+    {
+      "timestamp": "2026-03-11T22:38:54.235784",
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "entry_price": 69629.9,
+      "exit_price": 70935.1,
+      "tp_price": 68409.8,
+      "sl_price": 71121.3,
+      "exit_reason": "SL",
+      "hold_minutes": 68,
+      "pnl_slot_pct": -5.9234,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.2257
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6942
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.6287
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.6475
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.6475
+      }
+    },
+    {
+      "timestamp": "2026-03-12T02:24:44.164636",
+      "pattern": "D-ST-U",
+      "direction": "SHORT",
+      "entry_price": 70155.5,
+      "exit_price": 71142.5,
+      "tp_price": 68840.8,
+      "sl_price": 71119.0,
+      "exit_reason": "SL",
+      "hold_minutes": 1279,
+      "pnl_slot_pct": -4.5206,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4779
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4779
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      }
+    },
+    {
+      "timestamp": "2026-03-12T02:24:51.813028",
+      "pattern": "DN-ST-H",
+      "direction": "SHORT",
+      "entry_price": 69557.6,
+      "exit_price": 71142.5,
+      "tp_price": 68085.6,
+      "sl_price": 71357.4,
+      "exit_reason": "SL",
+      "hold_minutes": 1124,
+      "pnl_slot_pct": -7.1356,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4779
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4779
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      }
+    },
+    {
+      "timestamp": "2026-03-12T02:24:58.753183",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "entry_price": 69747.9,
+      "exit_price": 71142.5,
+      "tp_price": 68880.9,
+      "sl_price": 71337.2,
+      "exit_reason": "SL",
+      "hold_minutes": 654,
+      "pnl_slot_pct": -6.2985,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4779
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4779
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4969
+      }
+    },
+    {
+      "timestamp": "2026-03-12T02:25:05.305363",
+      "pattern": "U-BU-U",
+      "direction": "SHORT",
+      "entry_price": 69616.9,
+      "exit_price": 71142.5,
+      "tp_price": 68532.1,
+      "sl_price": 71367.5,
+      "exit_reason": "SL",
+      "hold_minutes": 519,
+      "pnl_slot_pct": -6.8743,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.547
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.547
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.566
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.566
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.566
+      }
+    },
+    {
+      "timestamp": "2026-03-12T02:25:10.934507",
+      "pattern": "ST-ST-ST",
+      "direction": "SHORT",
+      "entry_price": 70657.6,
+      "exit_price": 71142.5,
+      "tp_price": 69285.6,
+      "sl_price": 71435.6,
+      "exit_reason": "SL",
+      "hold_minutes": 150,
+      "pnl_slot_pct": -2.3588,
+      "regret_pct": 7.8841,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.547
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.547
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.566
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.566
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.566
+      }
+    },
+    {
+      "timestamp": "2026-03-12T02:25:15.824266",
+      "pattern": "ST-MU-D",
+      "direction": "SHORT",
+      "entry_price": 70149.8,
+      "exit_price": 71142.5,
+      "tp_price": 68925.7,
+      "sl_price": 71456.7,
+      "exit_reason": "SL",
+      "hold_minutes": 85,
+      "pnl_slot_pct": -4.5453,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.547
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.547
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.566
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.566
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.566
+      }
+    },
+    {
+      "timestamp": "2026-03-12T12:14:19.745440",
+      "pattern": "DN-ST-MU",
+      "direction": "LONG",
+      "entry_price": 70219.3,
+      "exit_price": 69319.1,
+      "tp_price": 71605.8,
+      "sl_price": 67190.5,
+      "exit_reason": "CASCADE_SL",
+      "hold_minutes": 679,
+      "pnl_slot_pct": -4.146,
+      "regret_pct": 9.7696,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3486
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.405
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.405
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.064
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 3.1437
+      }
+    },
+    {
+      "timestamp": "2026-03-12T12:14:31.024046",
+      "pattern": "MU-ST-U",
+      "direction": "LONG",
+      "entry_price": 70719.6,
+      "exit_price": 69316.5,
+      "tp_price": 72184.9,
+      "sl_price": 69111.1,
+      "exit_reason": "CASCADE_SL",
+      "hold_minutes": 629,
+      "pnl_slot_pct": -6.2521,
+      "regret_pct": 12.1681,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3486
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.405
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.405
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.064
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 3.1437
+      }
+    },
+    {
+      "timestamp": "2026-03-12T16:44:20.502869",
+      "pattern": "N/A",
+      "direction": "LONG",
+      "entry_price": 70105.6,
+      "exit_price": 69670.6,
+      "tp_price": 70719.0,
+      "sl_price": 67679.9,
+      "exit_reason": "CASCADE_SL",
+      "hold_minutes": 25,
+      "pnl_slot_pct": -2.1615,
+      "regret_pct": 4.4864,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.245
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.245
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.2554
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 2.3428
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.021
+      }
+    },
+    {
+      "timestamp": "2026-03-12T16:44:32.120628",
+      "pattern": "N/A",
+      "direction": "LONG",
+      "entry_price": 70105.6,
+      "exit_price": 69666.8,
+      "tp_price": 70719.0,
+      "sl_price": 67679.9,
+      "exit_reason": "CASCADE_SL",
+      "hold_minutes": 25,
+      "pnl_slot_pct": -2.1777,
+      "regret_pct": 4.5026,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.245
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.245
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.2554
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 2.3428
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 5.021
+      }
+    },
+    {
+      "timestamp": "2026-03-13T09:15:28.516965",
+      "pattern": "BD-U-ST",
+      "direction": "SHORT",
+      "entry_price": 69651.3,
+      "exit_price": 71238.8,
+      "tp_price": 69251.9,
+      "sl_price": 71230.4,
+      "exit_reason": "SL",
+      "hold_minutes": 885,
+      "pnl_slot_pct": -7.1376,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3339
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0756
+      }
+    },
+    {
+      "timestamp": "2026-03-13T09:15:36.382845",
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "entry_price": 70200.0,
+      "exit_price": 71238.8,
+      "tp_price": 69364.5,
+      "sl_price": 71493.8,
+      "exit_reason": "SL",
+      "hold_minutes": 520,
+      "pnl_slot_pct": -4.7393,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3339
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0756
+      }
+    },
+    {
+      "timestamp": "2026-03-13T09:17:29.136452",
+      "pattern": "BU-U-U",
+      "direction": "SHORT",
+      "entry_price": 69453.3,
+      "exit_price": 71653.0,
+      "tp_price": 68651.1,
+      "sl_price": 71639.1,
+      "exit_reason": "SL",
+      "hold_minutes": 1018,
+      "pnl_slot_pct": -9.8015,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3339
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0756
+      }
+    },
+    {
+      "timestamp": "2026-03-13T09:17:35.401737",
+      "pattern": "ST-H-U",
+      "direction": "SHORT",
+      "entry_price": 69641.6,
+      "exit_price": 71653.0,
+      "tp_price": 69200.9,
+      "sl_price": 71744.8,
+      "exit_reason": "SL",
+      "hold_minutes": 972,
+      "pnl_slot_pct": -8.9646,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3339
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0756
+      }
+    },
+    {
+      "timestamp": "2026-03-13T09:17:40.917226",
+      "pattern": "H-ST-U",
+      "direction": "SHORT",
+      "entry_price": 69838.5,
+      "exit_price": 71653.0,
+      "tp_price": 69254.8,
+      "sl_price": 71685.5,
+      "exit_reason": "SL",
+      "hold_minutes": 922,
+      "pnl_slot_pct": -8.0944,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3339
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0756
+      }
+    },
+    {
+      "timestamp": "2026-03-13T09:17:45.775017",
+      "pattern": "ST-BD-U",
+      "direction": "SHORT",
+      "entry_price": 69618.9,
+      "exit_price": 71653.0,
+      "tp_price": 69059.6,
+      "sl_price": 71629.9,
+      "exit_reason": "SL",
+      "hold_minutes": 892,
+      "pnl_slot_pct": -9.0653,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.1538
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 1.3339
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": false,
+        "tp_would_hit": false,
+        "max_recovery_pct": 2.0756
+      }
+    },
+    {
+      "timestamp": "2026-03-13T22:50:45.021963",
+      "pattern": "H-ST-U",
+      "direction": "SHORT",
+      "entry_price": 71344.2,
+      "exit_price": 73431.5,
+      "tp_price": 70512.3,
+      "sl_price": 73403.2,
+      "exit_reason": "SL",
+      "hold_minutes": 550,
+      "pnl_slot_pct": -9.077,
+      "regret_pct": 12.2751,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.159
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3501
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.4729
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      }
+    },
+    {
+      "timestamp": "2026-03-13T22:50:54.365579",
+      "pattern": "U-BU-ST",
+      "direction": "SHORT",
+      "entry_price": 71516.8,
+      "exit_price": 73431.5,
+      "tp_price": 70674.2,
+      "sl_price": 73605.6,
+      "exit_reason": "SL",
+      "hold_minutes": 490,
+      "pnl_slot_pct": -8.3318,
+      "regret_pct": 11.5664,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.159
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.3501
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.4729
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      }
+    },
+    {
+      "timestamp": "2026-03-13T22:51:02.503047",
+      "pattern": "BU-BU-DN",
+      "direction": "SHORT",
+      "entry_price": 71293.8,
+      "exit_price": 73431.5,
+      "tp_price": 70252.9,
+      "sl_price": 73537.5,
+      "exit_reason": "SL",
+      "hold_minutes": 386,
+      "pnl_slot_pct": -9.2953,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.159
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3501
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4729
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7069
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.7069
+      }
+    },
+    {
+      "timestamp": "2026-03-13T22:51:09.742241",
+      "pattern": "D-BU-DN",
+      "direction": "SHORT",
+      "entry_price": 72093.1,
+      "exit_price": 73431.5,
+      "tp_price": 71348.7,
+      "sl_price": 73534.7,
+      "exit_reason": "SL",
+      "hold_minutes": 221,
+      "pnl_slot_pct": -5.8695,
+      "regret_pct": 8.6672,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.159
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.3501
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.4729
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      }
+    },
+    {
+      "timestamp": "2026-03-13T22:51:16.365106",
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "entry_price": 72445.3,
+      "exit_price": 73431.5,
+      "tp_price": 71308.5,
+      "sl_price": 73530.3,
+      "exit_reason": "SL",
+      "hold_minutes": 186,
+      "pnl_slot_pct": -4.3839,
+      "regret_pct": 8.7915,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.159
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.3501
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.4729
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.7069
+      }
+    },
+    {
+      "timestamp": "2026-03-13T23:00:41.372461",
+      "pattern": "BU-BU-DN",
+      "direction": "SHORT",
+      "entry_price": 71504.5,
+      "exit_price": 73539.3,
+      "tp_price": 70257.6,
+      "sl_price": 73525.8,
+      "exit_reason": "SL",
+      "hold_minutes": 810,
+      "pnl_slot_pct": -8.8371,
+      "regret_pct": 0,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.07
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3044
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.4272
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6613
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.6613
+      }
+    },
+    {
+      "timestamp": "2026-03-13T23:00:46.774029",
+      "pattern": "U-MD-ST",
+      "direction": "SHORT",
+      "entry_price": 71419.5,
+      "exit_price": 73539.3,
+      "tp_price": 70494.3,
+      "sl_price": 73722.7,
+      "exit_reason": "SL",
+      "hold_minutes": 690,
+      "pnl_slot_pct": -9.2043,
+      "regret_pct": 12.7906,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.07
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": false,
+        "max_recovery_pct": 0.3044
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.4272
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.6613
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.6613
+      }
+    },
+    {
+      "timestamp": "2026-03-14T10:38:13.449074",
+      "pattern": "BD-ST-DN",
+      "direction": "SHORT",
+      "entry_price": 71366.0,
+      "exit_price": 71427.4,
+      "tp_price": 70510.5,
+      "sl_price": 74444.3,
+      "exit_reason": "CASCADE_SL",
+      "hold_minutes": 478,
+      "pnl_slot_pct": -0.5581,
+      "regret_pct": 3.8544,
+      "recovery_10bars_50m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.0158
+      },
+      "recovery_30bars_2h30m": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.0158
+      },
+      "recovery_60bars_5h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.0158
+      },
+      "recovery_144bars_12h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.0158
+      },
+      "recovery_288bars_24h": {
+        "entry_recovered": true,
+        "tp_would_hit": true,
+        "max_recovery_pct": 0.0158
+      }
+    }
+  ]
+}

@@ -1,0 +1,573 @@
+{
+  "metadata": {
+    "script": "mae_early_exit_study.py",
+    "date": "2026-03-09T15:08:18.853002",
+    "n_patterns": 131,
+    "n_signals": 13546,
+    "neutral_window": [
+      0,
+      74642
+    ],
+    "runtime_sec": 528.9
+  },
+  "baseline": {
+    "label": "baseline",
+    "trades": 1182,
+    "wr": 70.8,
+    "pnl": 235.3,
+    "mdd": 1.37,
+    "pnl_mdd": 171.8,
+    "mae_exits": 0,
+    "exit_counts": {
+      "TP": 834,
+      "SL": 339,
+      "OOS_END": 9
+    },
+    "mae_check_bar": null,
+    "mae_threshold": null
+  },
+  "phase1": {
+    "3h": {
+      "check_bar": 36,
+      "total_alive": 1017,
+      "in_profit": 498,
+      "in_loss": 519,
+      "pct_in_loss": 51.0,
+      "losers_recovered_pct": 59.3,
+      "winners_reversed_pct": 12.7,
+      "avg_loser_unr": -1.48,
+      "avg_winner_unr": 1.47
+    },
+    "6h": {
+      "check_bar": 72,
+      "total_alive": 865,
+      "in_profit": 439,
+      "in_loss": 426,
+      "pct_in_loss": 49.2,
+      "losers_recovered_pct": 57.0,
+      "winners_reversed_pct": 10.9,
+      "avg_loser_unr": -1.81,
+      "avg_winner_unr": 1.62
+    },
+    "9h": {
+      "check_bar": 108,
+      "total_alive": 732,
+      "in_profit": 382,
+      "in_loss": 350,
+      "pct_in_loss": 47.8,
+      "losers_recovered_pct": 52.9,
+      "winners_reversed_pct": 8.9,
+      "avg_loser_unr": -2.32,
+      "avg_winner_unr": 1.96
+    },
+    "12h": {
+      "check_bar": 144,
+      "total_alive": 576,
+      "in_profit": 304,
+      "in_loss": 272,
+      "pct_in_loss": 47.2,
+      "losers_recovered_pct": 49.3,
+      "winners_reversed_pct": 5.9,
+      "avg_loser_unr": -2.78,
+      "avg_winner_unr": 2.55
+    },
+    "15h": {
+      "check_bar": 180,
+      "total_alive": 438,
+      "in_profit": 237,
+      "in_loss": 201,
+      "pct_in_loss": 45.9,
+      "losers_recovered_pct": 50.7,
+      "winners_reversed_pct": 7.2,
+      "avg_loser_unr": -2.65,
+      "avg_winner_unr": 2.68
+    },
+    "18h": {
+      "check_bar": 216,
+      "total_alive": 288,
+      "in_profit": 176,
+      "in_loss": 112,
+      "pct_in_loss": 38.9,
+      "losers_recovered_pct": 37.5,
+      "winners_reversed_pct": 3.4,
+      "avg_loser_unr": -3.8,
+      "avg_winner_unr": 2.76
+    },
+    "21h": {
+      "check_bar": 252,
+      "total_alive": 121,
+      "in_profit": 89,
+      "in_loss": 32,
+      "pct_in_loss": 26.4,
+      "losers_recovered_pct": 25.0,
+      "winners_reversed_pct": 2.2,
+      "avg_loser_unr": -4.65,
+      "avg_winner_unr": 3.27
+    }
+  },
+  "phase2": {
+    "cb36_th-1.5": {
+      "label": "cb36_th-1.5",
+      "trades": 4821,
+      "wr": 24.0,
+      "pnl": -126.6,
+      "mdd": 126.28,
+      "pnl_mdd": -1.0,
+      "mae_exits": 3611,
+      "exit_counts": {
+        "MAE_EXIT": 3611,
+        "TP": 1155,
+        "SL": 46,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 36,
+      "mae_threshold": -1.5
+    },
+    "cb36_th-2.0": {
+      "label": "cb36_th-2.0",
+      "trades": 4057,
+      "wr": 27.0,
+      "pnl": -129.1,
+      "mdd": 128.39,
+      "pnl_mdd": -1.0,
+      "mae_exits": 2917,
+      "exit_counts": {
+        "MAE_EXIT": 2917,
+        "TP": 1092,
+        "SL": 39,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 36,
+      "mae_threshold": -2.0
+    },
+    "cb36_th-2.5": {
+      "label": "cb36_th-2.5",
+      "trades": 3465,
+      "wr": 30.0,
+      "pnl": -121.4,
+      "mdd": 120.44,
+      "pnl_mdd": -1.0,
+      "mae_exits": 2370,
+      "exit_counts": {
+        "MAE_EXIT": 2370,
+        "TP": 1038,
+        "SL": 48,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 36,
+      "mae_threshold": -2.5
+    },
+    "cb36_th-3.0": {
+      "label": "cb36_th-3.0",
+      "trades": 2945,
+      "wr": 34.1,
+      "pnl": -98.6,
+      "mdd": 98.69,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1895,
+      "exit_counts": {
+        "MAE_EXIT": 1895,
+        "TP": 1000,
+        "SL": 41,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 36,
+      "mae_threshold": -3.0
+    },
+    "cb36_th-4.0": {
+      "label": "cb36_th-4.0",
+      "trades": 2304,
+      "wr": 41.2,
+      "pnl": -67.4,
+      "mdd": 69.14,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1283,
+      "exit_counts": {
+        "MAE_EXIT": 1283,
+        "TP": 946,
+        "SL": 66,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 36,
+      "mae_threshold": -4.0
+    },
+    "cb36_th-5.0": {
+      "label": "cb36_th-5.0",
+      "trades": 1952,
+      "wr": 45.6,
+      "pnl": -58.6,
+      "mdd": 61.76,
+      "pnl_mdd": -0.9,
+      "mae_exits": 963,
+      "exit_counts": {
+        "MAE_EXIT": 963,
+        "TP": 887,
+        "SL": 93,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 36,
+      "mae_threshold": -5.0
+    },
+    "cb72_th-1.5": {
+      "label": "cb72_th-1.5",
+      "trades": 4061,
+      "wr": 27.1,
+      "pnl": -121.0,
+      "mdd": 120.18,
+      "pnl_mdd": -1.0,
+      "mae_exits": 2819,
+      "exit_counts": {
+        "MAE_EXIT": 2819,
+        "TP": 1099,
+        "SL": 134,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 72,
+      "mae_threshold": -1.5
+    },
+    "cb72_th-2.0": {
+      "label": "cb72_th-2.0",
+      "trades": 3515,
+      "wr": 30.5,
+      "pnl": -111.8,
+      "mdd": 111.45,
+      "pnl_mdd": -1.0,
+      "mae_exits": 2302,
+      "exit_counts": {
+        "MAE_EXIT": 2302,
+        "TP": 1069,
+        "SL": 135,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 72,
+      "mae_threshold": -2.0
+    },
+    "cb72_th-2.5": {
+      "label": "cb72_th-2.5",
+      "trades": 3098,
+      "wr": 33.4,
+      "pnl": -99.6,
+      "mdd": 99.61,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1936,
+      "exit_counts": {
+        "MAE_EXIT": 1936,
+        "TP": 1033,
+        "SL": 120,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 72,
+      "mae_threshold": -2.5
+    },
+    "cb72_th-3.0": {
+      "label": "cb72_th-3.0",
+      "trades": 2688,
+      "wr": 37.0,
+      "pnl": -75.9,
+      "mdd": 77.41,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1571,
+      "exit_counts": {
+        "MAE_EXIT": 1571,
+        "TP": 992,
+        "SL": 116,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 72,
+      "mae_threshold": -3.0
+    },
+    "cb72_th-4.0": {
+      "label": "cb72_th-4.0",
+      "trades": 2210,
+      "wr": 42.4,
+      "pnl": -67.2,
+      "mdd": 69.4,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1143,
+      "exit_counts": {
+        "MAE_EXIT": 1143,
+        "TP": 933,
+        "SL": 125,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 72,
+      "mae_threshold": -4.0
+    },
+    "cb72_th-5.0": {
+      "label": "cb72_th-5.0",
+      "trades": 1897,
+      "wr": 47.8,
+      "pnl": -34.4,
+      "mdd": 41.48,
+      "pnl_mdd": -0.8,
+      "mae_exits": 847,
+      "exit_counts": {
+        "MAE_EXIT": 847,
+        "TP": 904,
+        "SL": 137,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 72,
+      "mae_threshold": -5.0
+    },
+    "cb108_th-1.5": {
+      "label": "cb108_th-1.5",
+      "trades": 3511,
+      "wr": 30.9,
+      "pnl": -89.3,
+      "mdd": 89.68,
+      "pnl_mdd": -1.0,
+      "mae_exits": 2246,
+      "exit_counts": {
+        "MAE_EXIT": 2246,
+        "TP": 1082,
+        "SL": 174,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 108,
+      "mae_threshold": -1.5
+    },
+    "cb108_th-2.0": {
+      "label": "cb108_th-2.0",
+      "trades": 3121,
+      "wr": 32.7,
+      "pnl": -118.5,
+      "mdd": 118.05,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1914,
+      "exit_counts": {
+        "MAE_EXIT": 1914,
+        "TP": 1017,
+        "SL": 181,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 108,
+      "mae_threshold": -2.0
+    },
+    "cb108_th-2.5": {
+      "label": "cb108_th-2.5",
+      "trades": 2825,
+      "wr": 35.6,
+      "pnl": -96.0,
+      "mdd": 96.15,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1641,
+      "exit_counts": {
+        "MAE_EXIT": 1641,
+        "TP": 1002,
+        "SL": 173,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 108,
+      "mae_threshold": -2.5
+    },
+    "cb108_th-3.0": {
+      "label": "cb108_th-3.0",
+      "trades": 2520,
+      "wr": 38.1,
+      "pnl": -90.8,
+      "mdd": 91.16,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1402,
+      "exit_counts": {
+        "MAE_EXIT": 1402,
+        "TP": 957,
+        "SL": 152,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 108,
+      "mae_threshold": -3.0
+    },
+    "cb108_th-4.0": {
+      "label": "cb108_th-4.0",
+      "trades": 2092,
+      "wr": 43.6,
+      "pnl": -62.4,
+      "mdd": 65.5,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1037,
+      "exit_counts": {
+        "MAE_EXIT": 1037,
+        "TP": 909,
+        "SL": 137,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 108,
+      "mae_threshold": -4.0
+    },
+    "cb108_th-5.0": {
+      "label": "cb108_th-5.0",
+      "trades": 1836,
+      "wr": 48.8,
+      "pnl": -28.8,
+      "mdd": 36.75,
+      "pnl_mdd": -0.8,
+      "mae_exits": 773,
+      "exit_counts": {
+        "TP": 893,
+        "SL": 161,
+        "MAE_EXIT": 773,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 108,
+      "mae_threshold": -5.0
+    },
+    "cb144_th-1.5": {
+      "label": "cb144_th-1.5",
+      "trades": 3095,
+      "wr": 33.4,
+      "pnl": -74.9,
+      "mdd": 75.09,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1808,
+      "exit_counts": {
+        "MAE_EXIT": 1808,
+        "SL": 249,
+        "TP": 1029,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 144,
+      "mae_threshold": -1.5
+    },
+    "cb144_th-2.0": {
+      "label": "cb144_th-2.0",
+      "trades": 2862,
+      "wr": 35.5,
+      "pnl": -73.9,
+      "mdd": 73.87,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1606,
+      "exit_counts": {
+        "MAE_EXIT": 1606,
+        "TP": 1014,
+        "SL": 233,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 144,
+      "mae_threshold": -2.0
+    },
+    "cb144_th-2.5": {
+      "label": "cb144_th-2.5",
+      "trades": 2593,
+      "wr": 37.8,
+      "pnl": -84.2,
+      "mdd": 84.53,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1376,
+      "exit_counts": {
+        "MAE_EXIT": 1376,
+        "SL": 235,
+        "TP": 973,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 144,
+      "mae_threshold": -2.5
+    },
+    "cb144_th-3.0": {
+      "label": "cb144_th-3.0",
+      "trades": 2360,
+      "wr": 40.2,
+      "pnl": -68.6,
+      "mdd": 69.98,
+      "pnl_mdd": -1.0,
+      "mae_exits": 1160,
+      "exit_counts": {
+        "MAE_EXIT": 1160,
+        "SL": 246,
+        "TP": 945,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 144,
+      "mae_threshold": -3.0
+    },
+    "cb144_th-4.0": {
+      "label": "cb144_th-4.0",
+      "trades": 2002,
+      "wr": 44.4,
+      "pnl": -54.8,
+      "mdd": 57.74,
+      "pnl_mdd": -0.9,
+      "mae_exits": 885,
+      "exit_counts": {
+        "MAE_EXIT": 885,
+        "TP": 886,
+        "SL": 222,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 144,
+      "mae_threshold": -4.0
+    },
+    "cb144_th-5.0": {
+      "label": "cb144_th-5.0",
+      "trades": 1822,
+      "wr": 50.3,
+      "pnl": -17.3,
+      "mdd": 29.66,
+      "pnl_mdd": -0.6,
+      "mae_exits": 696,
+      "exit_counts": {
+        "TP": 914,
+        "SL": 203,
+        "MAE_EXIT": 696,
+        "OOS_END": 9
+      },
+      "mae_check_bar": 144,
+      "mae_threshold": -5.0
+    }
+  },
+  "phase3": {
+    "baseline": {
+      "label": "baseline",
+      "folds": [
+        {
+          "fold": 1,
+          "is_patterns": 162,
+          "oos_trades": 356,
+          "oos_wr": 62.4,
+          "oos_pnl": 49.0,
+          "oos_mdd": 7.94,
+          "mae_exits": 0,
+          "status": "PASS"
+        },
+        {
+          "fold": 2,
+          "is_patterns": 158,
+          "oos_trades": 468,
+          "oos_wr": 60.0,
+          "oos_pnl": 70.6,
+          "oos_mdd": 2.74,
+          "mae_exits": 0,
+          "status": "PASS"
+        },
+        {
+          "fold": 3,
+          "is_patterns": 180,
+          "oos_trades": 1,
+          "oos_wr": 0.0,
+          "oos_pnl": -0.0,
+          "oos_mdd": 0.02,
+          "mae_exits": 0,
+          "status": "FAIL"
+        }
+      ],
+      "pass_count": 2,
+      "total_folds": 3,
+      "verdict": "FAIL"
+    }
+  },
+  "phase4": {
+    "baseline": {
+      "n_seeds": 10,
+      "pass_count": 0,
+      "pass_pct": 0.0,
+      "verdict": "DISCRIMINATING"
+    }
+  },
+  "verdict": {
+    "decision": "STOP",
+    "reason": "No variant beats baseline",
+    "best_variant": null,
+    "baseline_pm": 171.8,
+    "best_pm": 171.8
+  }
+}

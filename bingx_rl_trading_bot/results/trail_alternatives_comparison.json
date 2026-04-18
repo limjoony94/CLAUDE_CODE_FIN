@@ -1,0 +1,390 @@
+{
+  "meta": {
+    "n_bars": 31946,
+    "n_days": 332.8,
+    "fee_pct": 0.1,
+    "leverage": 1,
+    "max_positions": 1,
+    "size_pct": 100.0,
+    "zero_eps_pct": 0.05,
+    "period_start": "2025-05-05 15:00:00",
+    "period_end": "2026-04-03 09:15:00"
+  },
+  "variants": {
+    "A": {
+      "desc": "Baseline (K=2.5, act=0.05%)",
+      "params": {
+        "trail_K": 2.5,
+        "trail_activation_pct": 0.05
+      },
+      "stats": {
+        "trades": 1165,
+        "wr": 36.05,
+        "rr": 3.18,
+        "pnl_additive_1x": 175.45,
+        "pnl_compound": 446.27,
+        "mdd": 6.41,
+        "trades_per_day": 3.5,
+        "daily_pnl": 0.5272,
+        "max_winner": 11.289,
+        "max_loser": -3.009,
+        "avg_bars_held": 17.4,
+        "exits": {
+          "SL": 186,
+          "TRAIL_TP": 979
+        },
+        "trail_bins": {
+          "sl": 186,
+          "zero_trail": 59,
+          "pos_trail": 391,
+          "neg_trail": 529,
+          "emergency": 0,
+          "timeout": 0
+        },
+        "pnl_mdd": 27.38
+      },
+      "wf_folds_oos": [
+        11.19,
+        30.81,
+        48.2,
+        46.7,
+        26.42
+      ],
+      "wf_passes_of_5": 5
+    },
+    "B": {
+      "desc": "Activation 0.5% (K=2.5)",
+      "params": {
+        "trail_K": 2.5,
+        "trail_activation_pct": 0.5
+      },
+      "stats": {
+        "trades": 877,
+        "wr": 46.18,
+        "rr": 1.32,
+        "pnl_additive_1x": 45.65,
+        "pnl_compound": 47.65,
+        "mdd": 25.26,
+        "trades_per_day": 2.64,
+        "daily_pnl": 0.1372,
+        "max_winner": 11.289,
+        "max_loser": -3.009,
+        "avg_bars_held": 26.7,
+        "exits": {
+          "SL": 314,
+          "TRAIL_TP": 561,
+          "TIMEOUT": 2
+        },
+        "trail_bins": {
+          "sl": 314,
+          "zero_trail": 48,
+          "pos_trail": 381,
+          "neg_trail": 132,
+          "emergency": 0,
+          "timeout": 2
+        },
+        "pnl_mdd": 1.81
+      },
+      "wf_folds_oos": [
+        -6.7,
+        25.19,
+        21.0,
+        25.8,
+        -22.18
+      ],
+      "wf_passes_of_5": 3
+    },
+    "C": {
+      "desc": "Dynamic activation 1\u00d7ATR",
+      "params": {
+        "trail_K": 2.5,
+        "trail_activation_pct": null
+      },
+      "stats": {
+        "trades": 1030,
+        "wr": 39.51,
+        "rr": 1.73,
+        "pnl_additive_1x": 44.12,
+        "pnl_compound": 45.54,
+        "mdd": 25.11,
+        "trades_per_day": 3.1,
+        "daily_pnl": 0.1326,
+        "max_winner": 11.289,
+        "max_loser": -3.009,
+        "avg_bars_held": 21.4,
+        "exits": {
+          "SL": 291,
+          "TRAIL_TP": 738,
+          "TIMEOUT": 1
+        },
+        "trail_bins": {
+          "sl": 291,
+          "zero_trail": 53,
+          "pos_trail": 381,
+          "neg_trail": 304,
+          "emergency": 0,
+          "timeout": 1
+        },
+        "pnl_mdd": 1.76
+      },
+      "wf_folds_oos": [
+        -2.77,
+        26.52,
+        23.8,
+        20.38,
+        -23.72
+      ],
+      "wf_passes_of_5": 3
+    },
+    "D": {
+      "desc": "Chandelier K=3.0 ($ stop from best)",
+      "params": {
+        "trail_K": 3.0,
+        "trail_activation_pct": 0.0
+      },
+      "stats": {
+        "trades": 893,
+        "wr": 41.99,
+        "rr": 1.05,
+        "pnl_additive_1x": -94.72,
+        "pnl_compound": -63.18,
+        "mdd": 63.88,
+        "trades_per_day": 2.68,
+        "daily_pnl": -0.2847,
+        "max_winner": 9.033,
+        "max_loser": -3.009,
+        "avg_bars_held": 27.6,
+        "exits": {
+          "SL": 379,
+          "TRAIL_TP": 514
+        },
+        "trail_bins": {
+          "sl": 379,
+          "zero_trail": 62,
+          "pos_trail": 352,
+          "neg_trail": 100,
+          "emergency": 0,
+          "timeout": 0
+        },
+        "pnl_mdd": -1.48
+      },
+      "wf_folds_oos": [
+        -18.42,
+        9.11,
+        -10.95,
+        -15.05,
+        -36.51
+      ],
+      "wf_passes_of_5": 1
+    },
+    "E": {
+      "desc": "Step-up tiers (1/2/3 ATR)",
+      "params": {
+        "trail_K": 2.5,
+        "trail_activation_pct": null
+      },
+      "stats": {
+        "trades": 967,
+        "wr": 36.09,
+        "rr": 1.93,
+        "pnl_additive_1x": 29.76,
+        "pnl_compound": 26.71,
+        "mdd": 23.89,
+        "trades_per_day": 2.91,
+        "daily_pnl": 0.0894,
+        "max_winner": 10.425,
+        "max_loser": -3.009,
+        "avg_bars_held": 24.7,
+        "exits": {
+          "SL": 279,
+          "TRAIL_TP": 687,
+          "TIMEOUT": 1
+        },
+        "trail_bins": {
+          "sl": 279,
+          "zero_trail": 46,
+          "pos_trail": 329,
+          "neg_trail": 312,
+          "emergency": 0,
+          "timeout": 1
+        },
+        "pnl_mdd": 1.25
+      },
+      "wf_folds_oos": [
+        -2.27,
+        20.2,
+        15.52,
+        13.1,
+        -23.48
+      ],
+      "wf_passes_of_5": 3
+    },
+    "F": {
+      "desc": "Break-even @ 1ATR + trail @ 2ATR",
+      "params": {
+        "trail_K": 2.5,
+        "trail_activation_pct": null
+      },
+      "stats": {
+        "trades": 1181,
+        "wr": 23.29,
+        "rr": 2.47,
+        "pnl_additive_1x": -95.76,
+        "pnl_compound": -63.6,
+        "mdd": 63.77,
+        "trades_per_day": 3.55,
+        "daily_pnl": -0.2878,
+        "max_winner": 9.658,
+        "max_loser": -3.009,
+        "avg_bars_held": 16.0,
+        "exits": {
+          "SL": 897,
+          "TRAIL_TP": 283,
+          "TIMEOUT": 1
+        },
+        "trail_bins": {
+          "sl": 897,
+          "zero_trail": 11,
+          "pos_trail": 267,
+          "neg_trail": 5,
+          "emergency": 0,
+          "timeout": 1
+        },
+        "pnl_mdd": -1.5
+      },
+      "wf_folds_oos": [
+        -14.31,
+        8.94,
+        -6.75,
+        -21.62,
+        -48.0
+      ],
+      "wf_passes_of_5": 1
+    },
+    "G": {
+      "desc": "Tighter trail (K=1.5)",
+      "params": {
+        "trail_K": 1.5,
+        "trail_activation_pct": 0.05
+      },
+      "stats": {
+        "trades": 1519,
+        "wr": 36.14,
+        "rr": 2.81,
+        "pnl_additive_1x": 123.39,
+        "pnl_compound": 232.5,
+        "mdd": 7.71,
+        "trades_per_day": 4.56,
+        "daily_pnl": 0.3708,
+        "max_winner": 6.205,
+        "max_loser": -3.009,
+        "avg_bars_held": 7.5,
+        "exits": {
+          "SL": 152,
+          "TRAIL_TP": 1367
+        },
+        "trail_bins": {
+          "sl": 152,
+          "zero_trail": 127,
+          "pos_trail": 482,
+          "neg_trail": 758,
+          "emergency": 0,
+          "timeout": 0
+        },
+        "pnl_mdd": 16.0
+      },
+      "wf_folds_oos": [
+        -0.18,
+        19.14,
+        34.14,
+        26.56,
+        30.39
+      ],
+      "wf_passes_of_5": 4
+    },
+    "H": {
+      "desc": "Looser trail (K=3.5)",
+      "params": {
+        "trail_K": 3.5,
+        "trail_activation_pct": 0.05
+      },
+      "stats": {
+        "trades": 893,
+        "wr": 34.15,
+        "rr": 2.84,
+        "pnl_additive_1x": 112.91,
+        "pnl_compound": 189.66,
+        "mdd": 11.69,
+        "trades_per_day": 2.68,
+        "daily_pnl": 0.3393,
+        "max_winner": 14.599,
+        "max_loser": -3.009,
+        "avg_bars_held": 28.9,
+        "exits": {
+          "SL": 222,
+          "TRAIL_TP": 671
+        },
+        "trail_bins": {
+          "sl": 222,
+          "zero_trail": 36,
+          "pos_trail": 287,
+          "neg_trail": 348,
+          "emergency": 0,
+          "timeout": 0
+        },
+        "pnl_mdd": 9.66
+      },
+      "wf_folds_oos": [
+        2.61,
+        27.28,
+        21.34,
+        29.22,
+        13.45
+      ],
+      "wf_passes_of_5": 5
+    },
+    "I": {
+      "desc": "Partial scale-out 50% @ 1.5ATR + trail",
+      "params": {
+        "trail_K": 2.5,
+        "trail_activation_pct": 0.05
+      },
+      "stats": {
+        "trades": 935,
+        "wr": 64.81,
+        "rr": 0.47,
+        "pnl_additive_1x": -45.47,
+        "pnl_compound": -38.94,
+        "mdd": 40.07,
+        "trades_per_day": 2.81,
+        "daily_pnl": -0.1366,
+        "max_winner": 5.837,
+        "max_loser": -3.009,
+        "avg_bars_held": 24.4,
+        "exits": {
+          "SL": 316,
+          "TRAIL_TP": 617,
+          "TIMEOUT": 2
+        },
+        "trail_bins": {
+          "sl": 316,
+          "zero_trail": 64,
+          "pos_trail": 552,
+          "neg_trail": 1,
+          "emergency": 0,
+          "timeout": 2
+        },
+        "pnl_mdd": -1.13
+      },
+      "wf_folds_oos": [
+        -11.94,
+        10.2,
+        -3.72,
+        -2.41,
+        -32.48
+      ],
+      "wf_passes_of_5": 1,
+      "note": "FIXED 2026-04-17: prior run double-counted some SL exits as full-notional after TP1 had fired"
+    }
+  }
+}

@@ -1,0 +1,1854 @@
+{
+  "date_run": "2026-04-18T21:06:49.146045",
+  "script": "c1_regime_classifier.py",
+  "data_file": "btc_5m_270days_reclassified.csv",
+  "period_days": 332,
+  "cfg": {
+    "channel_period": 15,
+    "body_min_ratio": 0.4,
+    "atr_period": 14,
+    "trail_K": 2.5,
+    "max_sl_atr": 3.3,
+    "emergency_sl_pct": 3.0,
+    "max_hold_bars": 192,
+    "sl_min_pct": 0.15,
+    "sl_max_pct": 3.0,
+    "min_bars_between": 2,
+    "trail_activation_pct": 0.05,
+    "fractal_lookback": 10
+  },
+  "fee_rt_pct": 0.1,
+  "n_signals": 1027,
+  "n_subset": 176,
+  "forward_all_pnl_sanity": 170.49,
+  "fractal_causality": {
+    "swl_diffs": 0,
+    "swh_diffs": 0
+  },
+  "classifiers": {
+    "M1-f1(vol_ratio)": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 30.99,
+          "PnL": 11.08,
+          "MDD": 4.26,
+          "subset_n": 13,
+          "subset_acc": 38.46,
+          "baseline_PnL": 12.39,
+          "delta_PnL": -1.31,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 38.6,
+          "PnL": 31.24,
+          "MDD": 1.81,
+          "subset_n": 12,
+          "subset_acc": 58.33,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -1.41,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 39.18,
+          "PnL": 38.48,
+          "MDD": 5.38,
+          "subset_n": 44,
+          "subset_acc": 56.82,
+          "baseline_PnL": 39.87,
+          "delta_PnL": -1.39,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 32.16,
+          "PnL": 21.28,
+          "MDD": 5.03,
+          "subset_n": 34,
+          "subset_acc": 47.06,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -24.27,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 36.26,
+          "PnL": 24.59,
+          "MDD": 4.1,
+          "subset_n": 53,
+          "subset_acc": 73.58,
+          "baseline_PnL": 23.46,
+          "delta_PnL": 1.13,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 35.44,
+        "PnL": 126.67,
+        "MDD": 5.38,
+        "subset_n": 156,
+        "subset_acc": 58.97,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -27.24,
+        "folds_improved": 1,
+        "folds_degraded_5pp": 1
+      },
+      "wf_diag": {
+        "fold5_delta": 1.13,
+        "folds1to4_delta_sum": -28.38
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 35.37,
+            "PnL": 38.27,
+            "MDD": 4.26,
+            "subset_n": 39,
+            "subset_acc": 53.85,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 1.11
+          },
+          "val": {
+            "trades": 206,
+            "WR": 41.75,
+            "PnL": 54.22,
+            "MDD": 3.0,
+            "subset_n": 35,
+            "subset_acc": 54.29,
+            "baseline_PnL": 54.91,
+            "delta_PnL": -0.69
+          },
+          "test": {
+            "trades": 411,
+            "WR": 32.85,
+            "PnL": 58.35,
+            "MDD": 6.22,
+            "subset_n": 102,
+            "subset_acc": 50.98,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -20.07
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.45,
+            "PnL": 63.17,
+            "MDD": 4.27,
+            "subset_n": 45,
+            "subset_acc": 68.89,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 1.46
+          },
+          "val": {
+            "trades": 205,
+            "WR": 40.98,
+            "PnL": 48.11,
+            "MDD": 5.38,
+            "subset_n": 51,
+            "subset_acc": 56.86,
+            "baseline_PnL": 47.49,
+            "delta_PnL": 0.62
+          },
+          "test": {
+            "trades": 309,
+            "WR": 33.66,
+            "PnL": 58.25,
+            "MDD": 6.38,
+            "subset_n": 80,
+            "subset_acc": 68.75,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -3.03
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 37.5,
+            "PnL": 95.95,
+            "MDD": 4.26,
+            "subset_n": 74,
+            "subset_acc": 50.0,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 3.88
+          },
+          "val": {
+            "trades": 205,
+            "WR": 34.15,
+            "PnL": 21.8,
+            "MDD": 4.49,
+            "subset_n": 39,
+            "subset_acc": 53.85,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -2.42
+          },
+          "test": {
+            "trades": 206,
+            "WR": 30.58,
+            "PnL": 33.26,
+            "MDD": 7.04,
+            "subset_n": 63,
+            "subset_acc": 38.1,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -20.94
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 37.74,
+            "PnL": 115.7,
+            "MDD": 4.26,
+            "subset_n": 96,
+            "subset_acc": 47.92,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 6.5
+          },
+          "val": {
+            "trades": 154,
+            "WR": 29.87,
+            "PnL": 14.28,
+            "MDD": 5.03,
+            "subset_n": 33,
+            "subset_acc": 48.48,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -30.32
+          },
+          "test": {
+            "trades": 155,
+            "WR": 30.32,
+            "PnL": 21.03,
+            "MDD": 4.32,
+            "subset_n": 47,
+            "subset_acc": 42.55,
+            "baseline_PnL": 16.68,
+            "delta_PnL": 4.35
+          }
+        }
+      },
+      "three_way_pass": 1,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M1-f2(htf_align)": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 31.58,
+          "PnL": 13.71,
+          "MDD": 4.26,
+          "subset_n": 13,
+          "subset_acc": 53.85,
+          "baseline_PnL": 12.39,
+          "delta_PnL": 1.32,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 39.18,
+          "PnL": 31.43,
+          "MDD": 1.81,
+          "subset_n": 12,
+          "subset_acc": 66.67,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -1.22,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 39.77,
+          "PnL": 44.38,
+          "MDD": 3.0,
+          "subset_n": 44,
+          "subset_acc": 56.82,
+          "baseline_PnL": 39.87,
+          "delta_PnL": 4.51,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 34.5,
+          "PnL": 45.09,
+          "MDD": 3.74,
+          "subset_n": 34,
+          "subset_acc": 70.59,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -0.46,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 36.26,
+          "PnL": 30.59,
+          "MDD": 4.45,
+          "subset_n": 53,
+          "subset_acc": 64.15,
+          "baseline_PnL": 23.46,
+          "delta_PnL": 7.13,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 36.26,
+        "PnL": 165.2,
+        "MDD": 4.45,
+        "subset_n": 156,
+        "subset_acc": 62.82,
+        "baseline_PnL": 153.91,
+        "delta_PnL": 11.29,
+        "folds_improved": 3,
+        "folds_degraded_5pp": 0
+      },
+      "wf_diag": {
+        "fold5_delta": 7.13,
+        "folds1to4_delta_sum": 4.15
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.1,
+            "PnL": 38.49,
+            "MDD": 4.38,
+            "subset_n": 39,
+            "subset_acc": 56.41,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 1.33
+          },
+          "val": {
+            "trades": 206,
+            "WR": 40.29,
+            "PnL": 52.6,
+            "MDD": 3.0,
+            "subset_n": 35,
+            "subset_acc": 57.14,
+            "baseline_PnL": 54.91,
+            "delta_PnL": -2.31
+          },
+          "test": {
+            "trades": 411,
+            "WR": 33.82,
+            "PnL": 85.34,
+            "MDD": 4.78,
+            "subset_n": 102,
+            "subset_acc": 50.98,
+            "baseline_PnL": 78.42,
+            "delta_PnL": 6.92
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.45,
+            "PnL": 62.18,
+            "MDD": 4.38,
+            "subset_n": 45,
+            "subset_acc": 57.78,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 0.47
+          },
+          "val": {
+            "trades": 205,
+            "WR": 41.46,
+            "PnL": 54.98,
+            "MDD": 3.0,
+            "subset_n": 51,
+            "subset_acc": 54.9,
+            "baseline_PnL": 47.49,
+            "delta_PnL": 7.49
+          },
+          "test": {
+            "trades": 309,
+            "WR": 31.72,
+            "PnL": 59.28,
+            "MDD": 4.78,
+            "subset_n": 80,
+            "subset_acc": 50.0,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -2.0
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 37.99,
+            "PnL": 98.0,
+            "MDD": 4.27,
+            "subset_n": 74,
+            "subset_acc": 62.16,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 5.93
+          },
+          "val": {
+            "trades": 205,
+            "WR": 34.63,
+            "PnL": 26.95,
+            "MDD": 2.73,
+            "subset_n": 39,
+            "subset_acc": 69.23,
+            "baseline_PnL": 24.22,
+            "delta_PnL": 2.73
+          },
+          "test": {
+            "trades": 206,
+            "WR": 35.44,
+            "PnL": 60.49,
+            "MDD": 4.45,
+            "subset_n": 63,
+            "subset_acc": 63.49,
+            "baseline_PnL": 54.2,
+            "delta_PnL": 6.29
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.02,
+            "PnL": 118.65,
+            "MDD": 5.38,
+            "subset_n": 96,
+            "subset_acc": 60.42,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 9.45
+          },
+          "val": {
+            "trades": 154,
+            "WR": 33.77,
+            "PnL": 46.74,
+            "MDD": 3.74,
+            "subset_n": 33,
+            "subset_acc": 75.76,
+            "baseline_PnL": 44.6,
+            "delta_PnL": 2.14
+          },
+          "test": {
+            "trades": 155,
+            "WR": 34.19,
+            "PnL": 20.05,
+            "MDD": 4.45,
+            "subset_n": 47,
+            "subset_acc": 63.83,
+            "baseline_PnL": 16.68,
+            "delta_PnL": 3.37
+          }
+        }
+      },
+      "three_way_pass": 3,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M1-f3(quality)": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 32.16,
+          "PnL": 12.54,
+          "MDD": 4.47,
+          "subset_n": 13,
+          "subset_acc": 53.85,
+          "baseline_PnL": 12.39,
+          "delta_PnL": 0.15,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 37.43,
+          "PnL": 29.59,
+          "MDD": 3.48,
+          "subset_n": 12,
+          "subset_acc": 33.33,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -3.06,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 39.77,
+          "PnL": 37.33,
+          "MDD": 7.91,
+          "subset_n": 44,
+          "subset_acc": 47.73,
+          "baseline_PnL": 39.87,
+          "delta_PnL": -2.54,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 33.92,
+          "PnL": 41.79,
+          "MDD": 4.69,
+          "subset_n": 34,
+          "subset_acc": 64.71,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -3.76,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 35.09,
+          "PnL": 24.63,
+          "MDD": 6.57,
+          "subset_n": 53,
+          "subset_acc": 66.04,
+          "baseline_PnL": 23.46,
+          "delta_PnL": 1.17,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 35.67,
+        "PnL": 145.88,
+        "MDD": 7.91,
+        "subset_n": 156,
+        "subset_acc": 57.05,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -8.03,
+        "folds_improved": 2,
+        "folds_degraded_5pp": 0
+      },
+      "wf_diag": {
+        "fold5_delta": 1.17,
+        "folds1to4_delta_sum": -9.21
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.59,
+            "PnL": 40.51,
+            "MDD": 4.47,
+            "subset_n": 39,
+            "subset_acc": 66.67,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 3.35
+          },
+          "val": {
+            "trades": 206,
+            "WR": 41.26,
+            "PnL": 58.31,
+            "MDD": 3.48,
+            "subset_n": 35,
+            "subset_acc": 51.43,
+            "baseline_PnL": 54.91,
+            "delta_PnL": 3.4
+          },
+          "test": {
+            "trades": 411,
+            "WR": 33.09,
+            "PnL": 58.97,
+            "MDD": 7.11,
+            "subset_n": 102,
+            "subset_acc": 46.08,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -19.45
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.65,
+            "PnL": 63.55,
+            "MDD": 4.48,
+            "subset_n": 45,
+            "subset_acc": 62.22,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 1.84
+          },
+          "val": {
+            "trades": 205,
+            "WR": 41.46,
+            "PnL": 46.97,
+            "MDD": 7.91,
+            "subset_n": 51,
+            "subset_acc": 49.02,
+            "baseline_PnL": 47.49,
+            "delta_PnL": -0.52
+          },
+          "test": {
+            "trades": 309,
+            "WR": 32.36,
+            "PnL": 52.31,
+            "MDD": 6.47,
+            "subset_n": 80,
+            "subset_acc": 62.5,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -8.97
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 38.64,
+            "PnL": 101.04,
+            "MDD": 4.48,
+            "subset_n": 74,
+            "subset_acc": 64.86,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 8.97
+          },
+          "val": {
+            "trades": 205,
+            "WR": 31.71,
+            "PnL": 9.45,
+            "MDD": 5.16,
+            "subset_n": 39,
+            "subset_acc": 41.03,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -14.77
+          },
+          "test": {
+            "trades": 206,
+            "WR": 34.47,
+            "PnL": 53.46,
+            "MDD": 6.47,
+            "subset_n": 63,
+            "subset_acc": 65.08,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -0.74
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.02,
+            "PnL": 111.89,
+            "MDD": 6.05,
+            "subset_n": 96,
+            "subset_acc": 55.21,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 2.69
+          },
+          "val": {
+            "trades": 154,
+            "WR": 31.82,
+            "PnL": 32.44,
+            "MDD": 7.11,
+            "subset_n": 33,
+            "subset_acc": 51.52,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -12.16
+          },
+          "test": {
+            "trades": 155,
+            "WR": 30.32,
+            "PnL": 10.41,
+            "MDD": 5.01,
+            "subset_n": 47,
+            "subset_acc": 40.43,
+            "baseline_PnL": 16.68,
+            "delta_PnL": -6.27
+          }
+        }
+      },
+      "three_way_pass": 0,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M1-f4(consol)": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 32.16,
+          "PnL": 13.86,
+          "MDD": 4.47,
+          "subset_n": 13,
+          "subset_acc": 69.23,
+          "baseline_PnL": 12.39,
+          "delta_PnL": 1.47,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 38.01,
+          "PnL": 30.47,
+          "MDD": 3.08,
+          "subset_n": 12,
+          "subset_acc": 50.0,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -2.18,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 40.35,
+          "PnL": 39.64,
+          "MDD": 5.38,
+          "subset_n": 44,
+          "subset_acc": 59.09,
+          "baseline_PnL": 39.87,
+          "delta_PnL": -0.23,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 33.33,
+          "PnL": 39.42,
+          "MDD": 6.82,
+          "subset_n": 34,
+          "subset_acc": 55.88,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -6.13,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 34.5,
+          "PnL": 23.09,
+          "MDD": 3.15,
+          "subset_n": 53,
+          "subset_acc": 54.72,
+          "baseline_PnL": 23.46,
+          "delta_PnL": -0.37,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 35.67,
+        "PnL": 146.47,
+        "MDD": 6.82,
+        "subset_n": 156,
+        "subset_acc": 57.05,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -7.44,
+        "folds_improved": 1,
+        "folds_degraded_5pp": 1
+      },
+      "wf_diag": {
+        "fold5_delta": -0.37,
+        "folds1to4_delta_sum": -7.07
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.59,
+            "PnL": 39.01,
+            "MDD": 4.59,
+            "subset_n": 39,
+            "subset_acc": 61.54,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 1.85
+          },
+          "val": {
+            "trades": 206,
+            "WR": 40.78,
+            "PnL": 60.43,
+            "MDD": 3.36,
+            "subset_n": 35,
+            "subset_acc": 54.29,
+            "baseline_PnL": 54.91,
+            "delta_PnL": 5.52
+          },
+          "test": {
+            "trades": 411,
+            "WR": 34.55,
+            "PnL": 75.9,
+            "MDD": 6.82,
+            "subset_n": 102,
+            "subset_acc": 51.96,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -2.52
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.65,
+            "PnL": 62.13,
+            "MDD": 4.59,
+            "subset_n": 45,
+            "subset_acc": 68.89,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 0.42
+          },
+          "val": {
+            "trades": 205,
+            "WR": 41.95,
+            "PnL": 49.27,
+            "MDD": 5.38,
+            "subset_n": 51,
+            "subset_acc": 58.82,
+            "baseline_PnL": 47.49,
+            "delta_PnL": 1.78
+          },
+          "test": {
+            "trades": 309,
+            "WR": 33.98,
+            "PnL": 60.21,
+            "MDD": 5.38,
+            "subset_n": 80,
+            "subset_acc": 71.25,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -1.07
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 38.15,
+            "PnL": 100.38,
+            "MDD": 4.59,
+            "subset_n": 74,
+            "subset_acc": 59.46,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 8.31
+          },
+          "val": {
+            "trades": 205,
+            "WR": 34.63,
+            "PnL": 20.08,
+            "MDD": 5.7,
+            "subset_n": 39,
+            "subset_acc": 48.72,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -4.14
+          },
+          "test": {
+            "trades": 206,
+            "WR": 33.98,
+            "PnL": 52.62,
+            "MDD": 3.15,
+            "subset_n": 63,
+            "subset_acc": 55.56,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -1.58
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.72,
+            "PnL": 122.47,
+            "MDD": 4.59,
+            "subset_n": 96,
+            "subset_acc": 59.38,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 13.27
+          },
+          "val": {
+            "trades": 154,
+            "WR": 31.17,
+            "PnL": 35.71,
+            "MDD": 6.82,
+            "subset_n": 33,
+            "subset_acc": 48.48,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -8.89
+          },
+          "test": {
+            "trades": 155,
+            "WR": 32.26,
+            "PnL": 14.91,
+            "MDD": 3.15,
+            "subset_n": 47,
+            "subset_acc": 53.19,
+            "baseline_PnL": 16.68,
+            "delta_PnL": -1.77
+          }
+        }
+      },
+      "three_way_pass": 0,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M2-f1ANDf2": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 30.99,
+          "PnL": 11.08,
+          "MDD": 4.26,
+          "subset_n": 13,
+          "subset_acc": 38.46,
+          "baseline_PnL": 12.39,
+          "delta_PnL": -1.31,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 38.6,
+          "PnL": 30.5,
+          "MDD": 1.81,
+          "subset_n": 12,
+          "subset_acc": 58.33,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -2.15,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 39.77,
+          "PnL": 42.56,
+          "MDD": 4.02,
+          "subset_n": 44,
+          "subset_acc": 43.18,
+          "baseline_PnL": 39.87,
+          "delta_PnL": 2.69,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 32.75,
+          "PnL": 24.49,
+          "MDD": 4.28,
+          "subset_n": 34,
+          "subset_acc": 50.0,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -21.06,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 36.84,
+          "PnL": 32.07,
+          "MDD": 3.49,
+          "subset_n": 53,
+          "subset_acc": 62.26,
+          "baseline_PnL": 23.46,
+          "delta_PnL": 8.61,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 35.79,
+        "PnL": 140.7,
+        "MDD": 4.28,
+        "subset_n": 156,
+        "subset_acc": 51.92,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -13.21,
+        "folds_improved": 2,
+        "folds_degraded_5pp": 1
+      },
+      "wf_diag": {
+        "fold5_delta": 8.61,
+        "folds1to4_delta_sum": -21.83
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.34,
+            "PnL": 39.69,
+            "MDD": 4.26,
+            "subset_n": 39,
+            "subset_acc": 58.97,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 2.53
+          },
+          "val": {
+            "trades": 206,
+            "WR": 41.75,
+            "PnL": 58.87,
+            "MDD": 3.0,
+            "subset_n": 35,
+            "subset_acc": 65.71,
+            "baseline_PnL": 54.91,
+            "delta_PnL": 3.96
+          },
+          "test": {
+            "trades": 411,
+            "WR": 31.63,
+            "PnL": 59.57,
+            "MDD": 4.95,
+            "subset_n": 102,
+            "subset_acc": 37.25,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -18.85
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.26,
+            "PnL": 63.09,
+            "MDD": 4.26,
+            "subset_n": 45,
+            "subset_acc": 51.11,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 1.38
+          },
+          "val": {
+            "trades": 205,
+            "WR": 41.46,
+            "PnL": 52.4,
+            "MDD": 4.02,
+            "subset_n": 51,
+            "subset_acc": 41.18,
+            "baseline_PnL": 47.49,
+            "delta_PnL": 4.91
+          },
+          "test": {
+            "trades": 309,
+            "WR": 29.13,
+            "PnL": 31.93,
+            "MDD": 5.83,
+            "subset_n": 80,
+            "subset_acc": 35.0,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -29.35
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 37.82,
+            "PnL": 98.17,
+            "MDD": 4.26,
+            "subset_n": 74,
+            "subset_acc": 51.35,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 6.1
+          },
+          "val": {
+            "trades": 205,
+            "WR": 32.68,
+            "PnL": 19.74,
+            "MDD": 4.72,
+            "subset_n": 39,
+            "subset_acc": 46.15,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -4.48
+          },
+          "test": {
+            "trades": 206,
+            "WR": 30.1,
+            "PnL": 31.89,
+            "MDD": 4.42,
+            "subset_n": 63,
+            "subset_acc": 28.57,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -22.31
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.3,
+            "PnL": 120.51,
+            "MDD": 4.26,
+            "subset_n": 96,
+            "subset_acc": 57.29,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 11.31
+          },
+          "val": {
+            "trades": 154,
+            "WR": 29.87,
+            "PnL": 21.44,
+            "MDD": 4.95,
+            "subset_n": 33,
+            "subset_acc": 42.42,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -23.16
+          },
+          "test": {
+            "trades": 155,
+            "WR": 29.03,
+            "PnL": 17.82,
+            "MDD": 4.03,
+            "subset_n": 47,
+            "subset_acc": 34.04,
+            "baseline_PnL": 16.68,
+            "delta_PnL": 1.14
+          }
+        }
+      },
+      "three_way_pass": 1,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M2-f1ANDf3": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 31.58,
+          "PnL": 12.07,
+          "MDD": 4.47,
+          "subset_n": 13,
+          "subset_acc": 38.46,
+          "baseline_PnL": 12.39,
+          "delta_PnL": -0.32,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 37.43,
+          "PnL": 29.59,
+          "MDD": 3.48,
+          "subset_n": 12,
+          "subset_acc": 33.33,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -3.06,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 39.77,
+          "PnL": 38.2,
+          "MDD": 3.3,
+          "subset_n": 44,
+          "subset_acc": 45.45,
+          "baseline_PnL": 39.87,
+          "delta_PnL": -1.67,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 33.33,
+          "PnL": 20.66,
+          "MDD": 7.11,
+          "subset_n": 34,
+          "subset_acc": 38.24,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -24.89,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 32.75,
+          "PnL": 25.39,
+          "MDD": 5.27,
+          "subset_n": 53,
+          "subset_acc": 33.96,
+          "baseline_PnL": 23.46,
+          "delta_PnL": 1.93,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 34.97,
+        "PnL": 125.91,
+        "MDD": 7.11,
+        "subset_n": 156,
+        "subset_acc": 38.46,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -28.0,
+        "folds_improved": 1,
+        "folds_degraded_5pp": 1
+      },
+      "wf_diag": {
+        "fold5_delta": 1.93,
+        "folds1to4_delta_sum": -29.94
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.34,
+            "PnL": 41.22,
+            "MDD": 4.26,
+            "subset_n": 39,
+            "subset_acc": 61.54,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 4.06
+          },
+          "val": {
+            "trades": 206,
+            "WR": 41.75,
+            "PnL": 55.9,
+            "MDD": 3.0,
+            "subset_n": 35,
+            "subset_acc": 54.29,
+            "baseline_PnL": 54.91,
+            "delta_PnL": 0.99
+          },
+          "test": {
+            "trades": 411,
+            "WR": 32.36,
+            "PnL": 56.46,
+            "MDD": 6.22,
+            "subset_n": 102,
+            "subset_acc": 48.04,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -21.96
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.65,
+            "PnL": 65.66,
+            "MDD": 4.26,
+            "subset_n": 45,
+            "subset_acc": 62.22,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 3.95
+          },
+          "val": {
+            "trades": 205,
+            "WR": 40.98,
+            "PnL": 46.76,
+            "MDD": 3.3,
+            "subset_n": 51,
+            "subset_acc": 41.18,
+            "baseline_PnL": 47.49,
+            "delta_PnL": -0.73
+          },
+          "test": {
+            "trades": 309,
+            "WR": 30.42,
+            "PnL": 36.76,
+            "MDD": 6.3,
+            "subset_n": 80,
+            "subset_acc": 46.25,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -24.52
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 37.99,
+            "PnL": 98.82,
+            "MDD": 4.26,
+            "subset_n": 74,
+            "subset_acc": 54.05,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 6.75
+          },
+          "val": {
+            "trades": 205,
+            "WR": 32.68,
+            "PnL": 16.7,
+            "MDD": 4.64,
+            "subset_n": 39,
+            "subset_acc": 43.59,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -7.52
+          },
+          "test": {
+            "trades": 206,
+            "WR": 31.07,
+            "PnL": 33.67,
+            "MDD": 7.04,
+            "subset_n": 63,
+            "subset_acc": 39.68,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -20.53
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.58,
+            "PnL": 119.64,
+            "MDD": 4.47,
+            "subset_n": 96,
+            "subset_acc": 54.17,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 10.44
+          },
+          "val": {
+            "trades": 154,
+            "WR": 29.87,
+            "PnL": 12.77,
+            "MDD": 6.91,
+            "subset_n": 33,
+            "subset_acc": 39.39,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -31.83
+          },
+          "test": {
+            "trades": 155,
+            "WR": 30.32,
+            "PnL": 13.65,
+            "MDD": 4.43,
+            "subset_n": 47,
+            "subset_acc": 40.43,
+            "baseline_PnL": 16.68,
+            "delta_PnL": -3.03
+          }
+        }
+      },
+      "three_way_pass": 0,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M2-f3ANDf4": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 32.16,
+          "PnL": 12.54,
+          "MDD": 4.47,
+          "subset_n": 13,
+          "subset_acc": 53.85,
+          "baseline_PnL": 12.39,
+          "delta_PnL": 0.15,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 37.43,
+          "PnL": 29.59,
+          "MDD": 3.48,
+          "subset_n": 12,
+          "subset_acc": 33.33,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -3.06,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 38.6,
+          "PnL": 37.15,
+          "MDD": 4.36,
+          "subset_n": 44,
+          "subset_acc": 40.91,
+          "baseline_PnL": 39.87,
+          "delta_PnL": -2.72,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 32.75,
+          "PnL": 38.51,
+          "MDD": 7.54,
+          "subset_n": 34,
+          "subset_acc": 47.06,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -7.04,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 35.09,
+          "PnL": 22.41,
+          "MDD": 4.09,
+          "subset_n": 53,
+          "subset_acc": 54.72,
+          "baseline_PnL": 23.46,
+          "delta_PnL": -1.05,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 35.2,
+        "PnL": 140.2,
+        "MDD": 7.54,
+        "subset_n": 156,
+        "subset_acc": 47.44,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -13.71,
+        "folds_improved": 1,
+        "folds_degraded_5pp": 1
+      },
+      "wf_diag": {
+        "fold5_delta": -1.05,
+        "folds1to4_delta_sum": -12.67
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.1,
+            "PnL": 38.48,
+            "MDD": 4.26,
+            "subset_n": 39,
+            "subset_acc": 56.41,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 1.32
+          },
+          "val": {
+            "trades": 206,
+            "WR": 40.29,
+            "PnL": 52.56,
+            "MDD": 3.0,
+            "subset_n": 35,
+            "subset_acc": 42.86,
+            "baseline_PnL": 54.91,
+            "delta_PnL": -2.35
+          },
+          "test": {
+            "trades": 411,
+            "WR": 31.63,
+            "PnL": 45.96,
+            "MDD": 6.33,
+            "subset_n": 102,
+            "subset_acc": 40.2,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -32.46
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 36.65,
+            "PnL": 62.31,
+            "MDD": 4.48,
+            "subset_n": 45,
+            "subset_acc": 55.56,
+            "baseline_PnL": 61.71,
+            "delta_PnL": 0.6
+          },
+          "val": {
+            "trades": 205,
+            "WR": 40.98,
+            "PnL": 47.84,
+            "MDD": 4.36,
+            "subset_n": 51,
+            "subset_acc": 41.18,
+            "baseline_PnL": 47.49,
+            "delta_PnL": 0.35
+          },
+          "test": {
+            "trades": 309,
+            "WR": 30.1,
+            "PnL": 29.77,
+            "MDD": 6.62,
+            "subset_n": 80,
+            "subset_acc": 45.0,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -31.51
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 37.82,
+            "PnL": 99.24,
+            "MDD": 4.59,
+            "subset_n": 74,
+            "subset_acc": 50.0,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 7.17
+          },
+          "val": {
+            "trades": 205,
+            "WR": 33.66,
+            "PnL": 15.83,
+            "MDD": 5.59,
+            "subset_n": 39,
+            "subset_acc": 38.46,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -8.39
+          },
+          "test": {
+            "trades": 206,
+            "WR": 33.01,
+            "PnL": 50.64,
+            "MDD": 5.01,
+            "subset_n": 63,
+            "subset_acc": 41.27,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -3.56
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.44,
+            "PnL": 119.9,
+            "MDD": 4.89,
+            "subset_n": 96,
+            "subset_acc": 53.12,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 10.7
+          },
+          "val": {
+            "trades": 154,
+            "WR": 29.87,
+            "PnL": 24.07,
+            "MDD": 6.82,
+            "subset_n": 33,
+            "subset_acc": 36.36,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -20.53
+          },
+          "test": {
+            "trades": 155,
+            "WR": 30.97,
+            "PnL": 11.32,
+            "MDD": 4.86,
+            "subset_n": 47,
+            "subset_acc": 44.68,
+            "baseline_PnL": 16.68,
+            "delta_PnL": -5.36
+          }
+        }
+      },
+      "three_way_pass": 0,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    },
+    "M3-LogReg(f1-f4)": {
+      "wf_folds": [
+        {
+          "trades": 171,
+          "WR": 32.16,
+          "PnL": 12.47,
+          "MDD": 4.48,
+          "subset_n": 13,
+          "subset_acc": 53.85,
+          "baseline_PnL": 12.39,
+          "delta_PnL": 0.08,
+          "fold": 1,
+          "oos_range": [
+            171,
+            342
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 36.84,
+          "PnL": 29.36,
+          "MDD": 3.08,
+          "subset_n": 12,
+          "subset_acc": 33.33,
+          "baseline_PnL": 32.65,
+          "delta_PnL": -3.29,
+          "fold": 2,
+          "oos_range": [
+            342,
+            513
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 40.35,
+          "PnL": 38.75,
+          "MDD": 6.41,
+          "subset_n": 44,
+          "subset_acc": 54.55,
+          "baseline_PnL": 39.87,
+          "delta_PnL": -1.12,
+          "fold": 3,
+          "oos_range": [
+            513,
+            684
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 34.5,
+          "PnL": 41.77,
+          "MDD": 6.31,
+          "subset_n": 34,
+          "subset_acc": 67.65,
+          "baseline_PnL": 45.55,
+          "delta_PnL": -3.78,
+          "fold": 4,
+          "oos_range": [
+            684,
+            855
+          ]
+        },
+        {
+          "trades": 171,
+          "WR": 33.33,
+          "PnL": 20.38,
+          "MDD": 4.38,
+          "subset_n": 53,
+          "subset_acc": 47.17,
+          "baseline_PnL": 23.46,
+          "delta_PnL": -3.08,
+          "fold": 5,
+          "oos_range": [
+            855,
+            1026
+          ]
+        }
+      ],
+      "wf_totals": {
+        "trades": 855,
+        "WR": 35.44,
+        "PnL": 142.73,
+        "MDD": 6.41,
+        "subset_n": 156,
+        "subset_acc": 53.21,
+        "baseline_PnL": 153.91,
+        "delta_PnL": -11.18,
+        "folds_improved": 1,
+        "folds_degraded_5pp": 0
+      },
+      "wf_diag": {
+        "fold5_delta": -3.08,
+        "folds1to4_delta_sum": -8.11
+      },
+      "three_way": {
+        "40/20/40": {
+          "train": {
+            "trades": 410,
+            "WR": 36.1,
+            "PnL": 37.46,
+            "MDD": 4.47,
+            "subset_n": 39,
+            "subset_acc": 61.54,
+            "baseline_PnL": 37.16,
+            "delta_PnL": 0.3
+          },
+          "val": {
+            "trades": 206,
+            "WR": 41.26,
+            "PnL": 57.62,
+            "MDD": 3.08,
+            "subset_n": 35,
+            "subset_acc": 57.14,
+            "baseline_PnL": 54.91,
+            "delta_PnL": 2.71
+          },
+          "test": {
+            "trades": 411,
+            "WR": 33.33,
+            "PnL": 61.73,
+            "MDD": 7.94,
+            "subset_n": 102,
+            "subset_acc": 50.98,
+            "baseline_PnL": 78.42,
+            "delta_PnL": -16.69
+          }
+        },
+        "50/20/30": {
+          "train": {
+            "trades": 513,
+            "WR": 35.87,
+            "PnL": 60.02,
+            "MDD": 4.48,
+            "subset_n": 45,
+            "subset_acc": 53.33,
+            "baseline_PnL": 61.71,
+            "delta_PnL": -1.69
+          },
+          "val": {
+            "trades": 205,
+            "WR": 41.95,
+            "PnL": 48.39,
+            "MDD": 6.41,
+            "subset_n": 51,
+            "subset_acc": 54.9,
+            "baseline_PnL": 47.49,
+            "delta_PnL": 0.9
+          },
+          "test": {
+            "trades": 309,
+            "WR": 31.72,
+            "PnL": 47.85,
+            "MDD": 7.94,
+            "subset_n": 80,
+            "subset_acc": 53.75,
+            "baseline_PnL": 61.28,
+            "delta_PnL": -13.43
+          }
+        },
+        "60/20/20": {
+          "train": {
+            "trades": 616,
+            "WR": 37.99,
+            "PnL": 98.86,
+            "MDD": 4.47,
+            "subset_n": 74,
+            "subset_acc": 64.86,
+            "baseline_PnL": 92.07,
+            "delta_PnL": 6.79
+          },
+          "val": {
+            "trades": 205,
+            "WR": 33.66,
+            "PnL": 12.89,
+            "MDD": 5.83,
+            "subset_n": 39,
+            "subset_acc": 46.15,
+            "baseline_PnL": 24.22,
+            "delta_PnL": -11.33
+          },
+          "test": {
+            "trades": 206,
+            "WR": 33.5,
+            "PnL": 50.31,
+            "MDD": 4.6,
+            "subset_n": 63,
+            "subset_acc": 58.73,
+            "baseline_PnL": 54.2,
+            "delta_PnL": -3.89
+          }
+        },
+        "70/15/15": {
+          "train": {
+            "trades": 718,
+            "WR": 38.44,
+            "PnL": 119.27,
+            "MDD": 5.38,
+            "subset_n": 96,
+            "subset_acc": 59.38,
+            "baseline_PnL": 109.2,
+            "delta_PnL": 10.07
+          },
+          "val": {
+            "trades": 154,
+            "WR": 32.47,
+            "PnL": 39.45,
+            "MDD": 7.45,
+            "subset_n": 33,
+            "subset_acc": 66.67,
+            "baseline_PnL": 44.6,
+            "delta_PnL": -5.15
+          },
+          "test": {
+            "trades": 155,
+            "WR": 31.61,
+            "PnL": 14.87,
+            "MDD": 4.27,
+            "subset_n": 47,
+            "subset_acc": 51.06,
+            "baseline_PnL": 16.68,
+            "delta_PnL": -1.81
+          }
+        }
+      },
+      "three_way_pass": 0,
+      "three_way_has_inferior": true,
+      "verdict": "FAIL (\u22651 three-way split inferior to forward or negative)"
+    }
+  }
+}

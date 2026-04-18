@@ -1,0 +1,106 @@
+{
+  "date": "2026-04-16 13:23",
+  "script": "scripts/analysis/intrabar_trail_impact.py",
+  "data": "data/btc_5m_270days_reclassified.csv",
+  "data_bars_5m": 95838,
+  "data_bars_15m": 31946,
+  "parameters": {
+    "channel_period": 15,
+    "trail_K": 2.5,
+    "max_sl_atr": 3.3,
+    "atr_period": 14,
+    "fee_pct": 0.1
+  },
+  "test1_bar_close": {
+    "pnl": 169.5,
+    "trades": 1028,
+    "wr": 36.6,
+    "mdd": 5.4,
+    "reasons": {
+      "SL": 149,
+      "TRAIL_TP": 879
+    }
+  },
+  "test2_intrabar": {
+    "pnl": 2.6,
+    "trades": 1237,
+    "wr": 27.2,
+    "mdd": 15.8,
+    "delta_pnl_pp": -166.9,
+    "delta_trades": 209,
+    "reasons": {
+      "SL": 143,
+      "TRAIL_TP": 1094
+    }
+  },
+  "test3_5m_resolution": {
+    "pnl": 165.7,
+    "trades": 1074,
+    "wr": 34.7,
+    "mdd": 5.6,
+    "delta_pnl_pp": -3.9,
+    "delta_trades": 46,
+    "reasons": {
+      "SL": 120,
+      "TRAIL_TP": 954
+    }
+  },
+  "test4_multiplier_sweep": [
+    {
+      "multiplier": 1.0,
+      "trail_K_effective": 2.5,
+      "pnl": 2.6249945948204085,
+      "trades": 1237,
+      "wr": 27.243330638641876,
+      "mdd": 15.805843909899298,
+      "delta_vs_baseline": -166.9229022174314
+    },
+    {
+      "multiplier": 1.3,
+      "trail_K_effective": 3.25,
+      "pnl": 9.887017653030894,
+      "trades": 969,
+      "wr": 29.927760577915375,
+      "mdd": 18.545704918129186,
+      "delta_vs_baseline": -159.66087915922094
+    },
+    {
+      "multiplier": 1.5,
+      "trail_K_effective": 3.75,
+      "pnl": 25.33924526253123,
+      "trades": 815,
+      "wr": 30.67484662576687,
+      "mdd": 19.859158929290462,
+      "delta_vs_baseline": -144.2086515497206
+    },
+    {
+      "multiplier": 1.7,
+      "trail_K_effective": 4.25,
+      "pnl": 1.2674292511953613,
+      "trades": 707,
+      "wr": 30.26874115983027,
+      "mdd": 20.905339437129648,
+      "delta_vs_baseline": -168.28046756105647
+    },
+    {
+      "multiplier": 2.0,
+      "trail_K_effective": 5.0,
+      "pnl": -11.638762283148681,
+      "trades": 595,
+      "wr": 28.57142857142857,
+      "mdd": 26.320855512795262,
+      "delta_vs_baseline": -181.1866590954005
+    }
+  ],
+  "test4_best_multiplier": 1.5,
+  "test5_premature_exits": {
+    "shared_entry_bars": 948,
+    "different_exit_outcomes": 541,
+    "premature_exits": 541,
+    "delayed_exits": 0,
+    "only_in_baseline": 80,
+    "only_in_intrabar": 289,
+    "avg_pnl_diff_premature": -0.3034,
+    "total_pnl_impact_premature": -164.1
+  }
+}

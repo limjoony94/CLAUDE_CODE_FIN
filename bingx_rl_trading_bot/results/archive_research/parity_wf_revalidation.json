@@ -1,0 +1,136 @@
+{
+  "OLD_cascade_ON": {
+    "folds": [
+      47.7,
+      53.2,
+      148.2,
+      72.4,
+      174.0
+    ],
+    "total": 495.5,
+    "avg_wr": 54.4,
+    "avg_rr": 2.034
+  },
+  "OLD_cascade_OFF": {
+    "folds": [
+      -9.9,
+      -24.3,
+      16.6,
+      -22.3,
+      -15.8
+    ],
+    "total": -55.8,
+    "avg_wr": 59.1,
+    "avg_rr": 0.639
+  },
+  "NEW_cascade_ON": {
+    "folds": [
+      55.6,
+      69.9,
+      148.3,
+      83.2,
+      164.1
+    ],
+    "total": 521.1,
+    "avg_wr": 60.1,
+    "avg_rr": 1.744
+  },
+  "NEW_cascade_OFF": {
+    "folds": [
+      -12.7,
+      -24.5,
+      -9.9,
+      -9.1,
+      -34.6
+    ],
+    "total": -90.8,
+    "avg_wr": 64.3,
+    "avg_rr": 0.498
+  },
+  "OLD_cascade_ON_30d": {
+    "trades": 555,
+    "wr": 56.4,
+    "pnl": 88.2,
+    "mdd": 1.3,
+    "pnl_mdd": 67.9,
+    "rr": 2.704,
+    "wr_margin": 29.4,
+    "exit_reasons": {
+      "SL": 208,
+      "TP": 298,
+      "TIMEOUT": 47,
+      "OOS_END": 2
+    }
+  },
+  "OLD_cascade_OFF_30d": {
+    "trades": 456,
+    "wr": 62.9,
+    "pnl": -22.8,
+    "mdd": 26.25,
+    "pnl_mdd": -0.9,
+    "rr": 0.491,
+    "wr_margin": -4.1,
+    "exit_reasons": {
+      "SL": 83,
+      "TP": 269,
+      "TIMEOUT": 100,
+      "OOS_END": 4
+    }
+  },
+  "NEW_cascade_ON_30d": {
+    "trades": 604,
+    "wr": 59.6,
+    "pnl": 81.6,
+    "mdd": 1.72,
+    "pnl_mdd": 47.4,
+    "rr": 2.184,
+    "wr_margin": 28.2,
+    "exit_reasons": {
+      "SL": 214,
+      "TP": 353,
+      "TIMEOUT": 35,
+      "OOS_END": 2
+    }
+  },
+  "NEW_cascade_OFF_30d": {
+    "trades": 499,
+    "wr": 66.9,
+    "pnl": -30.3,
+    "mdd": 33.16,
+    "pnl_mdd": -0.9,
+    "rr": 0.386,
+    "wr_margin": -5.2,
+    "exit_reasons": {
+      "SL": 84,
+      "TP": 328,
+      "TIMEOUT": 82,
+      "OOS_END": 5
+    }
+  },
+  "NEW_cascade_ON_23d_oos": {
+    "trades": 437,
+    "wr": 59.3,
+    "pnl": 54.6,
+    "rr": 2.045,
+    "wr_margin": 26.5,
+    "exit_reasons": {
+      "TP": 252,
+      "SL": 150,
+      "TIMEOUT": 33,
+      "OOS_END": 2
+    }
+  },
+  "NEW_cascade_OFF_23d_oos": {
+    "trades": 359,
+    "wr": 66.6,
+    "pnl": -20.2,
+    "rr": 0.394,
+    "wr_margin": -5.1,
+    "exit_reasons": {
+      "TP": 233,
+      "TIMEOUT": 69,
+      "SL": 52,
+      "OOS_END": 5
+    }
+  }
+}

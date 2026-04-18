@@ -1,0 +1,4461 @@
+{
+  "study": "tp_rr_fix_study",
+  "date": "2026-04-02T07:09:37.433933",
+  "data_bars": 93864,
+  "n_patterns": 111,
+  "n_folds": 5,
+  "params": {
+    "n_slots": 9,
+    "direction_cap": 6,
+    "agg_risk": "10.0/15.0",
+    "atr_clamp": "[1.0,1.5]",
+    "timeout_bars": 576,
+    "cascade_tighten_pct": 98.0,
+    "preemptive_cascade_pct": 1.0,
+    "preemptive_tighten_pct": 98.0,
+    "fee": 0.30000000000000004,
+    "leverage": 3,
+    "realistic_cascade": true
+  },
+  "results": {
+    "BASELINE": {
+      "config": {
+        "desc": "MFE median TP x1.0, decay 0.9975 (current)",
+        "tp_mult": 1.0,
+        "tp_decay_rate": 0.9975,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 7071,
+        "wr": 43.2,
+        "pnl": 201.82,
+        "mdd": 9.1,
+        "pnl_mdd": 22.17,
+        "avg_win": 3.084,
+        "avg_loss": 1.895,
+        "rr": 1.627,
+        "edge_per_trade": 0.029,
+        "n_wins": 3056,
+        "n_losses": 4015,
+        "reason_breakdown": {
+          "TP": {
+            "count": 3051,
+            "avg_pnl": 3.089,
+            "total_pnl": 9424.03
+          },
+          "CASCADE_SL": {
+            "count": 3528,
+            "avg_pnl": -2.059,
+            "total_pnl": -7264.77
+          },
+          "SL": {
+            "count": 471,
+            "avg_pnl": -0.702,
+            "total_pnl": -330.75
+          },
+          "TIMEOUT": {
+            "count": 19,
+            "avg_pnl": -0.651,
+            "total_pnl": -12.37
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 8.92,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 1177,
+            "wr": 41.8,
+            "pnl": 18.71,
+            "mdd": 5.96,
+            "pnl_mdd": 3.14,
+            "avg_win": 2.996,
+            "avg_loss": 1.906,
+            "rr": 1.572,
+            "edge_per_trade": 0.016,
+            "n_wins": 492,
+            "n_losses": 685,
+            "reason_breakdown": {
+              "TP": {
+                "count": 491,
+                "avg_pnl": 3.002,
+                "total_pnl": 1474.03
+              },
+              "CASCADE_SL": {
+                "count": 619,
+                "avg_pnl": -2.046,
+                "total_pnl": -1266.29
+              },
+              "SL": {
+                "count": 55,
+                "avg_pnl": -0.6,
+                "total_pnl": -33.0
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "avg_pnl": -0.308,
+                "total_pnl": -0.92
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.608,
+                "total_pnl": -5.47
+              }
+            }
+          },
+          "oos": {
+            "trades": 944,
+            "wr": 42.7,
+            "pnl": 12.5,
+            "mdd": 4.85,
+            "pnl_mdd": 2.58,
+            "avg_win": 2.808,
+            "avg_loss": 1.884,
+            "rr": 1.491,
+            "edge_per_trade": 0.013,
+            "n_wins": 403,
+            "n_losses": 541,
+            "reason_breakdown": {
+              "TP": {
+                "count": 398,
+                "avg_pnl": 2.827,
+                "total_pnl": 1125.13
+              },
+              "CASCADE_SL": {
+                "count": 488,
+                "avg_pnl": -2.025,
+                "total_pnl": -988.21
+              },
+              "SL": {
+                "count": 49,
+                "avg_pnl": -0.6,
+                "total_pnl": -29.4
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 2105,
+            "wr": 42.6,
+            "pnl": 34.46,
+            "mdd": 5.96,
+            "pnl_mdd": 5.79,
+            "avg_win": 2.91,
+            "avg_loss": 1.9,
+            "rr": 1.531,
+            "edge_per_trade": 0.016,
+            "n_wins": 896,
+            "n_losses": 1209,
+            "reason_breakdown": {
+              "TP": {
+                "count": 890,
+                "avg_pnl": 2.922,
+                "total_pnl": 2600.82
+              },
+              "CASCADE_SL": {
+                "count": 1099,
+                "avg_pnl": -2.031,
+                "total_pnl": -2232.31
+              },
+              "SL": {
+                "count": 104,
+                "avg_pnl": -0.6,
+                "total_pnl": -62.4
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "avg_pnl": -0.308,
+                "total_pnl": -0.92
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          },
+          "oos": {
+            "trades": 995,
+            "wr": 42.0,
+            "pnl": 12.5,
+            "mdd": 11.36,
+            "pnl_mdd": 1.1,
+            "avg_win": 2.871,
+            "avg_loss": 1.885,
+            "rr": 1.523,
+            "edge_per_trade": 0.013,
+            "n_wins": 418,
+            "n_losses": 577,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 515,
+                "avg_pnl": -1.988,
+                "total_pnl": -1023.92
+              },
+              "TP": {
+                "count": 416,
+                "avg_pnl": 2.883,
+                "total_pnl": 1199.45
+              },
+              "SL": {
+                "count": 54,
+                "avg_pnl": -1.051,
+                "total_pnl": -56.74
+              },
+              "TIMEOUT": {
+                "count": 8,
+                "avg_pnl": -0.805,
+                "total_pnl": -6.44
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 3091,
+            "wr": 42.3,
+            "pnl": 46.47,
+            "mdd": 9.1,
+            "pnl_mdd": 5.1,
+            "avg_win": 2.904,
+            "avg_loss": 1.899,
+            "rr": 1.53,
+            "edge_per_trade": 0.015,
+            "n_wins": 1309,
+            "n_losses": 1782,
+            "reason_breakdown": {
+              "TP": {
+                "count": 1306,
+                "avg_pnl": 2.91,
+                "total_pnl": 3800.92
+              },
+              "CASCADE_SL": {
+                "count": 1614,
+                "avg_pnl": -2.018,
+                "total_pnl": -3256.32
+              },
+              "SL": {
+                "count": 158,
+                "avg_pnl": -0.754,
+                "total_pnl": -119.14
+              },
+              "TIMEOUT": {
+                "count": 11,
+                "avg_pnl": -0.67,
+                "total_pnl": -7.37
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          },
+          "oos": {
+            "trades": 1354,
+            "wr": 43.9,
+            "pnl": 51.98,
+            "mdd": 6.59,
+            "pnl_mdd": 7.88,
+            "avg_win": 3.286,
+            "avg_loss": 1.953,
+            "rr": 1.683,
+            "edge_per_trade": 0.038,
+            "n_wins": 594,
+            "n_losses": 760,
+            "reason_breakdown": {
+              "TP": {
+                "count": 592,
+                "avg_pnl": 3.286,
+                "total_pnl": 1945.42
+              },
+              "CASCADE_SL": {
+                "count": 648,
+                "avg_pnl": -2.169,
+                "total_pnl": -1405.76
+              },
+              "SL": {
+                "count": 111,
+                "avg_pnl": -0.701,
+                "total_pnl": -77.77
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 3.235,
+                "total_pnl": 6.47
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 4443,
+            "wr": 42.8,
+            "pnl": 98.79,
+            "mdd": 9.1,
+            "pnl_mdd": 10.85,
+            "avg_win": 3.025,
+            "avg_loss": 1.916,
+            "rr": 1.579,
+            "edge_per_trade": 0.022,
+            "n_wins": 1903,
+            "n_losses": 2540,
+            "reason_breakdown": {
+              "TP": {
+                "count": 1899,
+                "avg_pnl": 3.028,
+                "total_pnl": 5749.46
+              },
+              "CASCADE_SL": {
+                "count": 2262,
+                "avg_pnl": -2.061,
+                "total_pnl": -4662.59
+              },
+              "SL": {
+                "count": 268,
+                "avg_pnl": -0.732,
+                "total_pnl": -196.31
+              },
+              "TIMEOUT": {
+                "count": 12,
+                "avg_pnl": -0.661,
+                "total_pnl": -7.93
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 3.235,
+                "total_pnl": 6.47
+              }
+            }
+          },
+          "oos": {
+            "trades": 1036,
+            "wr": 44.0,
+            "pnl": 36.68,
+            "mdd": 3.42,
+            "pnl_mdd": 10.73,
+            "avg_win": 3.001,
+            "avg_loss": 1.79,
+            "rr": 1.676,
+            "edge_per_trade": 0.035,
+            "n_wins": 456,
+            "n_losses": 580,
+            "reason_breakdown": {
+              "TP": {
+                "count": 451,
+                "avg_pnl": 3.032,
+                "total_pnl": 1367.61
+              },
+              "CASCADE_SL": {
+                "count": 496,
+                "avg_pnl": -1.984,
+                "total_pnl": -984.18
+              },
+              "SL": {
+                "count": 74,
+                "avg_pnl": -0.6,
+                "total_pnl": -44.4
+              },
+              "TIMEOUT": {
+                "count": 7,
+                "avg_pnl": -0.635,
+                "total_pnl": -4.44
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 5484,
+            "wr": 43.0,
+            "pnl": 134.61,
+            "mdd": 9.1,
+            "pnl_mdd": 14.78,
+            "avg_win": 3.021,
+            "avg_loss": 1.89,
+            "rr": 1.599,
+            "edge_per_trade": 0.025,
+            "n_wins": 2357,
+            "n_losses": 3127,
+            "reason_breakdown": {
+              "TP": {
+                "count": 2350,
+                "avg_pnl": 3.03,
+                "total_pnl": 7120.09
+              },
+              "CASCADE_SL": {
+                "count": 2763,
+                "avg_pnl": -2.045,
+                "total_pnl": -5649.89
+              },
+              "SL": {
+                "count": 344,
+                "avg_pnl": -0.703,
+                "total_pnl": -241.91
+              },
+              "TIMEOUT": {
+                "count": 19,
+                "avg_pnl": -0.651,
+                "total_pnl": -12.37
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          },
+          "oos": {
+            "trades": 1589,
+            "wr": 44.1,
+            "pnl": 67.03,
+            "mdd": 5.3,
+            "pnl_mdd": 12.66,
+            "avg_win": 3.286,
+            "avg_loss": 1.909,
+            "rr": 1.722,
+            "edge_per_trade": 0.042,
+            "n_wins": 700,
+            "n_losses": 889,
+            "reason_breakdown": {
+              "TP": {
+                "count": 699,
+                "avg_pnl": 3.29,
+                "total_pnl": 2299.48
+              },
+              "CASCADE_SL": {
+                "count": 761,
+                "avg_pnl": -2.113,
+                "total_pnl": -1607.65
+              },
+              "SL": {
+                "count": 127,
+                "avg_pnl": -0.7,
+                "total_pnl": -88.84
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 180.69,
+        "weighted_wr": 43.4,
+        "weighted_rr": 1.636,
+        "avg_win": 3.093,
+        "avg_loss": 1.89,
+        "total_trades": 5918,
+        "fold_pnls": [
+          12.5,
+          12.5,
+          51.98,
+          36.68,
+          67.03
+        ]
+      }
+    },
+    "TP_1.2x": {
+      "config": {
+        "desc": "MFE median TP x1.2 (20% wider)",
+        "tp_mult": 1.2,
+        "tp_decay_rate": 0.9975,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 6510,
+        "wr": 40.1,
+        "pnl": 217.7,
+        "mdd": 9.0,
+        "pnl_mdd": 24.18,
+        "avg_win": 3.593,
+        "avg_loss": 1.901,
+        "rr": 1.89,
+        "edge_per_trade": 0.033,
+        "n_wins": 2609,
+        "n_losses": 3901,
+        "reason_breakdown": {
+          "CASCADE_SL": {
+            "count": 3361,
+            "avg_pnl": -2.098,
+            "total_pnl": -7050.36
+          },
+          "TP": {
+            "count": 2604,
+            "avg_pnl": 3.6,
+            "total_pnl": 9373.67
+          },
+          "SL": {
+            "count": 521,
+            "avg_pnl": -0.668,
+            "total_pnl": -348.11
+          },
+          "TIMEOUT": {
+            "count": 22,
+            "avg_pnl": -0.735,
+            "total_pnl": -16.16
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 9.01,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 1042,
+            "wr": 39.7,
+            "pnl": 26.45,
+            "mdd": 5.7,
+            "pnl_mdd": 4.64,
+            "avg_win": 3.443,
+            "avg_loss": 1.891,
+            "rr": 1.821,
+            "edge_per_trade": 0.025,
+            "n_wins": 414,
+            "n_losses": 628,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 556,
+                "avg_pnl": -2.054,
+                "total_pnl": -1141.95
+              },
+              "TP": {
+                "count": 410,
+                "avg_pnl": 3.475,
+                "total_pnl": 1424.76
+              },
+              "SL": {
+                "count": 65,
+                "avg_pnl": -0.6,
+                "total_pnl": -39.0
+              },
+              "TIMEOUT": {
+                "count": 2,
+                "avg_pnl": -0.9,
+                "total_pnl": -1.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.442,
+                "total_pnl": -3.98
+              }
+            }
+          },
+          "oos": {
+            "trades": 873,
+            "wr": 40.1,
+            "pnl": 15.54,
+            "mdd": 4.37,
+            "pnl_mdd": 3.56,
+            "avg_win": 3.229,
+            "avg_loss": 1.894,
+            "rr": 1.705,
+            "edge_per_trade": 0.018,
+            "n_wins": 350,
+            "n_losses": 523,
+            "reason_breakdown": {
+              "TP": {
+                "count": 345,
+                "avg_pnl": 3.257,
+                "total_pnl": 1123.71
+              },
+              "CASCADE_SL": {
+                "count": 471,
+                "avg_pnl": -2.038,
+                "total_pnl": -959.96
+              },
+              "SL": {
+                "count": 48,
+                "avg_pnl": -0.6,
+                "total_pnl": -28.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1899,
+            "wr": 40.0,
+            "pnl": 42.09,
+            "mdd": 5.7,
+            "pnl_mdd": 7.38,
+            "avg_win": 3.346,
+            "avg_loss": 1.896,
+            "rr": 1.765,
+            "edge_per_trade": 0.022,
+            "n_wins": 759,
+            "n_losses": 1140,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1022,
+                "avg_pnl": -2.046,
+                "total_pnl": -2090.76
+              },
+              "TP": {
+                "count": 754,
+                "avg_pnl": 3.36,
+                "total_pnl": 2533.24
+              },
+              "SL": {
+                "count": 111,
+                "avg_pnl": -0.6,
+                "total_pnl": -66.6
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "avg_pnl": -0.667,
+                "total_pnl": -2.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          },
+          "oos": {
+            "trades": 914,
+            "wr": 39.5,
+            "pnl": 16.7,
+            "mdd": 8.85,
+            "pnl_mdd": 1.89,
+            "avg_win": 3.32,
+            "avg_loss": 1.896,
+            "rr": 1.751,
+            "edge_per_trade": 0.018,
+            "n_wins": 361,
+            "n_losses": 553,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 483,
+                "avg_pnl": -2.051,
+                "total_pnl": -990.57
+              },
+              "TP": {
+                "count": 359,
+                "avg_pnl": 3.338,
+                "total_pnl": 1198.17
+              },
+              "SL": {
+                "count": 59,
+                "avg_pnl": -0.798,
+                "total_pnl": -47.1
+              },
+              "TIMEOUT": {
+                "count": 11,
+                "avg_pnl": -0.944,
+                "total_pnl": -10.38
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2803,
+            "wr": 39.8,
+            "pnl": 58.37,
+            "mdd": 9.0,
+            "pnl_mdd": 6.48,
+            "avg_win": 3.347,
+            "avg_loss": 1.899,
+            "rr": 1.762,
+            "edge_per_trade": 0.021,
+            "n_wins": 1115,
+            "n_losses": 1688,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1504,
+                "avg_pnl": -2.048,
+                "total_pnl": -3079.86
+              },
+              "TP": {
+                "count": 1113,
+                "avg_pnl": 3.352,
+                "total_pnl": 3731.09
+              },
+              "SL": {
+                "count": 170,
+                "avg_pnl": -0.669,
+                "total_pnl": -113.7
+              },
+              "TIMEOUT": {
+                "count": 14,
+                "avg_pnl": -0.885,
+                "total_pnl": -12.39
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          },
+          "oos": {
+            "trades": 1274,
+            "wr": 41.4,
+            "pnl": 58.86,
+            "mdd": 7.38,
+            "pnl_mdd": 7.97,
+            "avg_win": 3.852,
+            "avg_loss": 2.008,
+            "rr": 1.918,
+            "edge_per_trade": 0.046,
+            "n_wins": 527,
+            "n_losses": 747,
+            "reason_breakdown": {
+              "SL": {
+                "count": 114,
+                "avg_pnl": -0.698,
+                "total_pnl": -79.57
+              },
+              "CASCADE_SL": {
+                "count": 628,
+                "avg_pnl": -2.245,
+                "total_pnl": -1409.95
+              },
+              "TP": {
+                "count": 523,
+                "avg_pnl": 3.861,
+                "total_pnl": 2019.3
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": 0.07,
+                "total_pnl": 0.56
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 4071,
+            "wr": 40.3,
+            "pnl": 117.92,
+            "mdd": 9.0,
+            "pnl_mdd": 13.1,
+            "avg_win": 3.507,
+            "avg_loss": 1.934,
+            "rr": 1.814,
+            "edge_per_trade": 0.029,
+            "n_wins": 1642,
+            "n_losses": 2429,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2129,
+                "avg_pnl": -2.105,
+                "total_pnl": -4482.38
+              },
+              "TP": {
+                "count": 1637,
+                "avg_pnl": 3.511,
+                "total_pnl": 5748.14
+              },
+              "SL": {
+                "count": 282,
+                "avg_pnl": -0.681,
+                "total_pnl": -192.07
+              },
+              "TIMEOUT": {
+                "count": 15,
+                "avg_pnl": -0.863,
+                "total_pnl": -12.95
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": 0.07,
+                "total_pnl": 0.56
+              }
+            }
+          },
+          "oos": {
+            "trades": 965,
+            "wr": 39.4,
+            "pnl": 29.0,
+            "mdd": 4.14,
+            "pnl_mdd": 7.01,
+            "avg_win": 3.475,
+            "avg_loss": 1.811,
+            "rr": 1.919,
+            "edge_per_trade": 0.03,
+            "n_wins": 380,
+            "n_losses": 585,
+            "reason_breakdown": {
+              "SL": {
+                "count": 82,
+                "avg_pnl": -0.6,
+                "total_pnl": -49.2
+              },
+              "TP": {
+                "count": 374,
+                "avg_pnl": 3.529,
+                "total_pnl": 1319.88
+              },
+              "CASCADE_SL": {
+                "count": 494,
+                "avg_pnl": -2.028,
+                "total_pnl": -1002.0
+              },
+              "TIMEOUT": {
+                "count": 7,
+                "avg_pnl": -0.46,
+                "total_pnl": -3.22
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 5034,
+            "wr": 40.1,
+            "pnl": 146.73,
+            "mdd": 9.0,
+            "pnl_mdd": 16.3,
+            "avg_win": 3.504,
+            "avg_loss": 1.91,
+            "rr": 1.834,
+            "edge_per_trade": 0.029,
+            "n_wins": 2020,
+            "n_losses": 3014,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2627,
+                "avg_pnl": -2.091,
+                "total_pnl": -5494.14
+              },
+              "TP": {
+                "count": 2013,
+                "avg_pnl": 3.515,
+                "total_pnl": 7076.61
+              },
+              "SL": {
+                "count": 364,
+                "avg_pnl": -0.663,
+                "total_pnl": -241.27
+              },
+              "TIMEOUT": {
+                "count": 22,
+                "avg_pnl": -0.735,
+                "total_pnl": -16.16
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          },
+          "oos": {
+            "trades": 1478,
+            "wr": 39.9,
+            "pnl": 70.67,
+            "mdd": 3.98,
+            "pnl_mdd": 17.75,
+            "avg_win": 3.885,
+            "avg_loss": 1.865,
+            "rr": 2.083,
+            "edge_per_trade": 0.048,
+            "n_wins": 590,
+            "n_losses": 888,
+            "reason_breakdown": {
+              "TP": {
+                "count": 589,
+                "avg_pnl": 3.891,
+                "total_pnl": 2291.64
+              },
+              "CASCADE_SL": {
+                "count": 730,
+                "avg_pnl": -2.122,
+                "total_pnl": -1548.99
+              },
+              "SL": {
+                "count": 157,
+                "avg_pnl": -0.681,
+                "total_pnl": -106.84
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 190.77,
+        "weighted_wr": 40.1,
+        "weighted_rr": 1.902,
+        "avg_win": 3.61,
+        "avg_loss": 1.898,
+        "total_trades": 5504,
+        "fold_pnls": [
+          15.54,
+          16.7,
+          58.86,
+          29.0,
+          70.67
+        ]
+      }
+    },
+    "TP_1.5x": {
+      "config": {
+        "desc": "MFE median TP x1.5 (50% wider)",
+        "tp_mult": 1.5,
+        "tp_decay_rate": 0.9975,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 5919,
+        "wr": 36.2,
+        "pnl": 216.68,
+        "mdd": 6.63,
+        "pnl_mdd": 32.66,
+        "avg_win": 4.263,
+        "avg_loss": 1.901,
+        "rr": 2.242,
+        "edge_per_trade": 0.037,
+        "n_wins": 2142,
+        "n_losses": 3777,
+        "reason_breakdown": {
+          "CASCADE_SL": {
+            "count": 3193,
+            "avg_pnl": -2.128,
+            "total_pnl": -6795.56
+          },
+          "SL": {
+            "count": 566,
+            "avg_pnl": -0.663,
+            "total_pnl": -375.11
+          },
+          "TP": {
+            "count": 2131,
+            "avg_pnl": 4.282,
+            "total_pnl": 9125.39
+          },
+          "TIMEOUT": {
+            "count": 27,
+            "avg_pnl": -0.18,
+            "total_pnl": -4.86
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 6.72,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 913,
+            "wr": 36.6,
+            "pnl": 31.16,
+            "mdd": 5.23,
+            "pnl_mdd": 5.95,
+            "avg_win": 4.089,
+            "avg_loss": 1.874,
+            "rr": 2.182,
+            "edge_per_trade": 0.034,
+            "n_wins": 334,
+            "n_losses": 579,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 503,
+                "avg_pnl": -2.068,
+                "total_pnl": -1040.19
+              },
+              "SL": {
+                "count": 68,
+                "avg_pnl": -0.6,
+                "total_pnl": -40.8
+              },
+              "TP": {
+                "count": 332,
+                "avg_pnl": 4.109,
+                "total_pnl": 1364.24
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.803,
+                "total_pnl": -0.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.225,
+                "total_pnl": -2.02
+              }
+            }
+          },
+          "oos": {
+            "trades": 800,
+            "wr": 37.9,
+            "pnl": 22.3,
+            "mdd": 4.16,
+            "pnl_mdd": 5.36,
+            "avg_win": 3.844,
+            "avg_loss": 1.94,
+            "rr": 1.982,
+            "edge_per_trade": 0.028,
+            "n_wins": 303,
+            "n_losses": 497,
+            "reason_breakdown": {
+              "TP": {
+                "count": 296,
+                "avg_pnl": 3.911,
+                "total_pnl": 1157.54
+              },
+              "CASCADE_SL": {
+                "count": 444,
+                "avg_pnl": -2.1,
+                "total_pnl": -932.39
+              },
+              "SL": {
+                "count": 48,
+                "avg_pnl": -0.6,
+                "total_pnl": -28.8
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "avg_pnl": -0.459,
+                "total_pnl": -1.38
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.632,
+                "total_pnl": 5.69
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1705,
+            "wr": 37.2,
+            "pnl": 52.33,
+            "mdd": 5.23,
+            "pnl_mdd": 10.0,
+            "avg_win": 3.953,
+            "avg_loss": 1.906,
+            "rr": 2.074,
+            "edge_per_trade": 0.031,
+            "n_wins": 635,
+            "n_losses": 1070,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 943,
+                "avg_pnl": -2.083,
+                "total_pnl": -1963.81
+              },
+              "SL": {
+                "count": 117,
+                "avg_pnl": -0.6,
+                "total_pnl": -70.2
+              },
+              "TP": {
+                "count": 625,
+                "avg_pnl": 4.002,
+                "total_pnl": 2501.26
+              },
+              "TIMEOUT": {
+                "count": 11,
+                "avg_pnl": -0.182,
+                "total_pnl": -2.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.632,
+                "total_pnl": 5.69
+              }
+            }
+          },
+          "oos": {
+            "trades": 828,
+            "wr": 36.4,
+            "pnl": 17.42,
+            "mdd": 6.2,
+            "pnl_mdd": 2.81,
+            "avg_win": 3.82,
+            "avg_loss": 1.884,
+            "rr": 2.027,
+            "edge_per_trade": 0.021,
+            "n_wins": 301,
+            "n_losses": 527,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 450,
+                "avg_pnl": -2.079,
+                "total_pnl": -935.35
+              },
+              "SL": {
+                "count": 71,
+                "avg_pnl": -0.765,
+                "total_pnl": -54.3
+              },
+              "TP": {
+                "count": 299,
+                "avg_pnl": 3.837,
+                "total_pnl": 1147.3
+              },
+              "TIMEOUT": {
+                "count": 5,
+                "avg_pnl": -0.593,
+                "total_pnl": -2.97
+              },
+              "OOS_END": {
+                "count": 3,
+                "avg_pnl": 0.701,
+                "total_pnl": 2.1
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2525,
+            "wr": 36.9,
+            "pnl": 69.44,
+            "mdd": 6.63,
+            "pnl_mdd": 10.47,
+            "avg_win": 3.927,
+            "avg_loss": 1.901,
+            "rr": 2.065,
+            "edge_per_trade": 0.027,
+            "n_wins": 931,
+            "n_losses": 1594,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1393,
+                "avg_pnl": -2.081,
+                "total_pnl": -2898.54
+              },
+              "SL": {
+                "count": 188,
+                "avg_pnl": -0.662,
+                "total_pnl": -124.5
+              },
+              "TP": {
+                "count": 925,
+                "avg_pnl": 3.947,
+                "total_pnl": 3650.83
+              },
+              "TIMEOUT": {
+                "count": 16,
+                "avg_pnl": -0.311,
+                "total_pnl": -4.97
+              },
+              "OOS_END": {
+                "count": 3,
+                "avg_pnl": 0.701,
+                "total_pnl": 2.1
+              }
+            }
+          },
+          "oos": {
+            "trades": 1159,
+            "wr": 35.3,
+            "pnl": 45.94,
+            "mdd": 8.61,
+            "pnl_mdd": 5.33,
+            "avg_win": 4.665,
+            "avg_loss": 1.993,
+            "rr": 2.341,
+            "edge_per_trade": 0.04,
+            "n_wins": 409,
+            "n_losses": 750,
+            "reason_breakdown": {
+              "SL": {
+                "count": 126,
+                "avg_pnl": -0.689,
+                "total_pnl": -86.77
+              },
+              "CASCADE_SL": {
+                "count": 619,
+                "avg_pnl": -2.257,
+                "total_pnl": -1397.16
+              },
+              "TP": {
+                "count": 406,
+                "avg_pnl": 4.675,
+                "total_pnl": 1898.09
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": -0.017,
+                "total_pnl": -0.12
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 3677,
+            "wr": 36.4,
+            "pnl": 116.46,
+            "mdd": 6.63,
+            "pnl_mdd": 17.55,
+            "avg_win": 4.152,
+            "avg_loss": 1.932,
+            "rr": 2.149,
+            "edge_per_trade": 0.032,
+            "n_wins": 1340,
+            "n_losses": 2337,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2009,
+                "avg_pnl": -2.135,
+                "total_pnl": -4288.4
+              },
+              "SL": {
+                "count": 311,
+                "avg_pnl": -0.674,
+                "total_pnl": -209.47
+              },
+              "TP": {
+                "count": 1333,
+                "avg_pnl": 4.165,
+                "total_pnl": 5551.62
+              },
+              "TIMEOUT": {
+                "count": 17,
+                "avg_pnl": -0.325,
+                "total_pnl": -5.53
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": -0.017,
+                "total_pnl": -0.12
+              }
+            }
+          },
+          "oos": {
+            "trades": 883,
+            "wr": 35.9,
+            "pnl": 28.37,
+            "mdd": 5.87,
+            "pnl_mdd": 4.83,
+            "avg_win": 4.054,
+            "avg_loss": 1.82,
+            "rr": 2.228,
+            "edge_per_trade": 0.032,
+            "n_wins": 317,
+            "n_losses": 566,
+            "reason_breakdown": {
+              "SL": {
+                "count": 92,
+                "avg_pnl": -0.6,
+                "total_pnl": -55.2
+              },
+              "CASCADE_SL": {
+                "count": 465,
+                "avg_pnl": -2.079,
+                "total_pnl": -966.92
+              },
+              "TP": {
+                "count": 307,
+                "avg_pnl": 4.167,
+                "total_pnl": 1279.38
+              },
+              "TIMEOUT": {
+                "count": 10,
+                "avg_pnl": 0.066,
+                "total_pnl": 0.66
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 4557,
+            "wr": 36.3,
+            "pnl": 143.68,
+            "mdd": 6.63,
+            "pnl_mdd": 21.66,
+            "avg_win": 4.135,
+            "avg_loss": 1.91,
+            "rr": 2.164,
+            "edge_per_trade": 0.032,
+            "n_wins": 1654,
+            "n_losses": 2903,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2478,
+                "avg_pnl": -2.125,
+                "total_pnl": -5265.07
+              },
+              "SL": {
+                "count": 403,
+                "avg_pnl": -0.657,
+                "total_pnl": -264.67
+              },
+              "TP": {
+                "count": 1640,
+                "avg_pnl": 4.165,
+                "total_pnl": 6830.36
+              },
+              "TIMEOUT": {
+                "count": 27,
+                "avg_pnl": -0.18,
+                "total_pnl": -4.86
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          },
+          "oos": {
+            "trades": 1366,
+            "wr": 36.0,
+            "pnl": 73.88,
+            "mdd": 3.97,
+            "pnl_mdd": 18.6,
+            "avg_win": 4.671,
+            "avg_loss": 1.869,
+            "rr": 2.5,
+            "edge_per_trade": 0.054,
+            "n_wins": 492,
+            "n_losses": 874,
+            "reason_breakdown": {
+              "TP": {
+                "count": 491,
+                "avg_pnl": 4.68,
+                "total_pnl": 2297.74
+              },
+              "CASCADE_SL": {
+                "count": 711,
+                "avg_pnl": -2.142,
+                "total_pnl": -1523.26
+              },
+              "SL": {
+                "count": 162,
+                "avg_pnl": -0.678,
+                "total_pnl": -109.84
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 187.91,
+        "weighted_wr": 36.2,
+        "weighted_rr": 2.252,
+        "avg_win": 4.284,
+        "avg_loss": 1.903,
+        "total_trades": 5036,
+        "fold_pnls": [
+          22.3,
+          17.42,
+          45.94,
+          28.37,
+          73.88
+        ]
+      }
+    },
+    "TP_2.0x": {
+      "config": {
+        "desc": "MFE median TP x2.0 (double)",
+        "tp_mult": 2.0,
+        "tp_decay_rate": 0.9975,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 5284,
+        "wr": 31.6,
+        "pnl": 214.89,
+        "mdd": 7.74,
+        "pnl_mdd": 27.77,
+        "avg_win": 5.281,
+        "avg_loss": 1.903,
+        "rr": 2.775,
+        "edge_per_trade": 0.041,
+        "n_wins": 1669,
+        "n_losses": 3615,
+        "reason_breakdown": {
+          "CASCADE_SL": {
+            "count": 2960,
+            "avg_pnl": -2.175,
+            "total_pnl": -6439.45
+          },
+          "SL": {
+            "count": 638,
+            "avg_pnl": -0.675,
+            "total_pnl": -430.95
+          },
+          "TP": {
+            "count": 1647,
+            "avg_pnl": 5.339,
+            "total_pnl": 8793.84
+          },
+          "TIMEOUT": {
+            "count": 37,
+            "avg_pnl": 0.151,
+            "total_pnl": 5.6
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 2.482,
+            "total_pnl": 4.96
+          }
+        }
+      },
+      "full_is_mdd_mtm": 6.94,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 846,
+            "wr": 30.1,
+            "pnl": 21.14,
+            "mdd": 6.71,
+            "pnl_mdd": 3.15,
+            "avg_win": 5.077,
+            "avg_loss": 1.869,
+            "rr": 2.717,
+            "edge_per_trade": 0.025,
+            "n_wins": 255,
+            "n_losses": 591,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 500,
+                "avg_pnl": -2.097,
+                "total_pnl": -1048.43
+              },
+              "SL": {
+                "count": 85,
+                "avg_pnl": -0.6,
+                "total_pnl": -51.0
+              },
+              "TP": {
+                "count": 250,
+                "avg_pnl": 5.164,
+                "total_pnl": 1291.07
+              },
+              "TIMEOUT": {
+                "count": 2,
+                "avg_pnl": -0.311,
+                "total_pnl": -0.62
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.082,
+                "total_pnl": -0.74
+              }
+            }
+          },
+          "oos": {
+            "trades": 716,
+            "wr": 32.5,
+            "pnl": 11.67,
+            "mdd": 8.93,
+            "pnl_mdd": 1.31,
+            "avg_win": 4.559,
+            "avg_loss": 1.982,
+            "rr": 2.3,
+            "edge_per_trade": 0.016,
+            "n_wins": 233,
+            "n_losses": 483,
+            "reason_breakdown": {
+              "TP": {
+                "count": 222,
+                "avg_pnl": 4.737,
+                "total_pnl": 1051.53
+              },
+              "CASCADE_SL": {
+                "count": 412,
+                "avg_pnl": -2.213,
+                "total_pnl": -911.67
+              },
+              "SL": {
+                "count": 69,
+                "avg_pnl": -0.6,
+                "total_pnl": -41.4
+              },
+              "TIMEOUT": {
+                "count": 4,
+                "avg_pnl": 0.462,
+                "total_pnl": 1.85
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.524,
+                "total_pnl": 4.72
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1561,
+            "wr": 30.9,
+            "pnl": 29.76,
+            "mdd": 7.74,
+            "pnl_mdd": 3.85,
+            "avg_win": 4.838,
+            "avg_loss": 1.919,
+            "rr": 2.521,
+            "edge_per_trade": 0.019,
+            "n_wins": 483,
+            "n_losses": 1078,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 920,
+                "avg_pnl": -2.142,
+                "total_pnl": -1970.93
+              },
+              "SL": {
+                "count": 155,
+                "avg_pnl": -0.6,
+                "total_pnl": -93.0
+              },
+              "TP": {
+                "count": 468,
+                "avg_pnl": 4.964,
+                "total_pnl": 2323.06
+              },
+              "TIMEOUT": {
+                "count": 9,
+                "avg_pnl": 0.445,
+                "total_pnl": 4.0
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.524,
+                "total_pnl": 4.72
+              }
+            }
+          },
+          "oos": {
+            "trades": 730,
+            "wr": 32.3,
+            "pnl": 16.6,
+            "mdd": 6.66,
+            "pnl_mdd": 2.49,
+            "avg_win": 4.637,
+            "avg_loss": 1.913,
+            "rr": 2.424,
+            "edge_per_trade": 0.023,
+            "n_wins": 236,
+            "n_losses": 494,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 417,
+                "avg_pnl": -2.125,
+                "total_pnl": -886.17
+              },
+              "SL": {
+                "count": 64,
+                "avg_pnl": -0.783,
+                "total_pnl": -50.1
+              },
+              "TP": {
+                "count": 229,
+                "avg_pnl": 4.74,
+                "total_pnl": 1085.42
+              },
+              "TIMEOUT": {
+                "count": 13,
+                "avg_pnl": -0.078,
+                "total_pnl": -1.01
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": 0.179,
+                "total_pnl": 1.26
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2284,
+            "wr": 31.5,
+            "pnl": 51.45,
+            "mdd": 7.74,
+            "pnl_mdd": 6.65,
+            "avg_win": 4.809,
+            "avg_loss": 1.918,
+            "rr": 2.508,
+            "edge_per_trade": 0.023,
+            "n_wins": 720,
+            "n_losses": 1564,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1333,
+                "avg_pnl": -2.136,
+                "total_pnl": -2847.92
+              },
+              "SL": {
+                "count": 216,
+                "avg_pnl": -0.654,
+                "total_pnl": -141.3
+              },
+              "TP": {
+                "count": 706,
+                "avg_pnl": 4.884,
+                "total_pnl": 3448.05
+              },
+              "TIMEOUT": {
+                "count": 22,
+                "avg_pnl": 0.136,
+                "total_pnl": 2.99
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": 0.179,
+                "total_pnl": 1.26
+              }
+            }
+          },
+          "oos": {
+            "trades": 1040,
+            "wr": 31.3,
+            "pnl": 51.16,
+            "mdd": 9.65,
+            "pnl_mdd": 5.3,
+            "avg_win": 5.777,
+            "avg_loss": 1.993,
+            "rr": 2.899,
+            "edge_per_trade": 0.049,
+            "n_wins": 326,
+            "n_losses": 714,
+            "reason_breakdown": {
+              "SL": {
+                "count": 144,
+                "avg_pnl": -0.678,
+                "total_pnl": -97.57
+              },
+              "CASCADE_SL": {
+                "count": 566,
+                "avg_pnl": -2.326,
+                "total_pnl": -1316.75
+              },
+              "TP": {
+                "count": 322,
+                "avg_pnl": 5.821,
+                "total_pnl": 1874.23
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": 0.151,
+                "total_pnl": 1.06
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 3319,
+            "wr": 31.5,
+            "pnl": 104.42,
+            "mdd": 7.74,
+            "pnl_mdd": 13.5,
+            "avg_win": 5.116,
+            "avg_loss": 1.944,
+            "rr": 2.632,
+            "edge_per_trade": 0.031,
+            "n_wins": 1047,
+            "n_losses": 2272,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1901,
+                "avg_pnl": -2.192,
+                "total_pnl": -4166.29
+              },
+              "SL": {
+                "count": 356,
+                "avg_pnl": -0.664,
+                "total_pnl": -236.47
+              },
+              "TP": {
+                "count": 1032,
+                "avg_pnl": 5.173,
+                "total_pnl": 5339.02
+              },
+              "TIMEOUT": {
+                "count": 23,
+                "avg_pnl": 0.106,
+                "total_pnl": 2.43
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": 0.151,
+                "total_pnl": 1.06
+              }
+            }
+          },
+          "oos": {
+            "trades": 786,
+            "wr": 31.9,
+            "pnl": 32.89,
+            "mdd": 7.62,
+            "pnl_mdd": 4.32,
+            "avg_win": 4.951,
+            "avg_loss": 1.769,
+            "rr": 2.798,
+            "edge_per_trade": 0.042,
+            "n_wins": 251,
+            "n_losses": 535,
+            "reason_breakdown": {
+              "SL": {
+                "count": 104,
+                "avg_pnl": -0.6,
+                "total_pnl": -62.4
+              },
+              "CASCADE_SL": {
+                "count": 422,
+                "avg_pnl": -2.077,
+                "total_pnl": -876.39
+              },
+              "TP": {
+                "count": 237,
+                "avg_pnl": 5.208,
+                "total_pnl": 1234.28
+              },
+              "TIMEOUT": {
+                "count": 14,
+                "avg_pnl": 0.227,
+                "total_pnl": 3.17
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 4098,
+            "wr": 31.6,
+            "pnl": 138.51,
+            "mdd": 7.74,
+            "pnl_mdd": 17.9,
+            "avg_win": 5.093,
+            "avg_loss": 1.908,
+            "rr": 2.669,
+            "edge_per_trade": 0.034,
+            "n_wins": 1295,
+            "n_losses": 2803,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2322,
+                "avg_pnl": -2.168,
+                "total_pnl": -5035.07
+              },
+              "SL": {
+                "count": 460,
+                "avg_pnl": -0.65,
+                "total_pnl": -298.87
+              },
+              "TP": {
+                "count": 1270,
+                "avg_pnl": 5.179,
+                "total_pnl": 6577.57
+              },
+              "TIMEOUT": {
+                "count": 37,
+                "avg_pnl": 0.151,
+                "total_pnl": 5.6
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          },
+          "oos": {
+            "trades": 1190,
+            "wr": 31.8,
+            "pnl": 77.34,
+            "mdd": 4.23,
+            "pnl_mdd": 18.29,
+            "avg_win": 5.886,
+            "avg_loss": 1.883,
+            "rr": 3.126,
+            "edge_per_trade": 0.065,
+            "n_wins": 378,
+            "n_losses": 812,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 634,
+                "avg_pnl": -2.204,
+                "total_pnl": -1397.16
+              },
+              "TP": {
+                "count": 377,
+                "avg_pnl": 5.888,
+                "total_pnl": 2219.77
+              },
+              "SL": {
+                "count": 177,
+                "avg_pnl": -0.743,
+                "total_pnl": -131.48
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 2.482,
+                "total_pnl": 4.96
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 189.66,
+        "weighted_wr": 31.9,
+        "weighted_rr": 2.761,
+        "avg_win": 5.272,
+        "avg_loss": 1.909,
+        "total_trades": 4462,
+        "fold_pnls": [
+          11.67,
+          16.6,
+          51.16,
+          32.89,
+          77.34
+        ]
+      }
+    },
+    "NO_DECAY": {
+      "config": {
+        "desc": "MFE median TP x1.0, NO decay",
+        "tp_mult": 1.0,
+        "tp_decay_rate": 0.0,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 6239,
+        "wr": 38.7,
+        "pnl": 209.55,
+        "mdd": 7.67,
+        "pnl_mdd": 27.33,
+        "avg_win": 3.831,
+        "avg_loss": 1.924,
+        "rr": 1.99,
+        "edge_per_trade": 0.034,
+        "n_wins": 2414,
+        "n_losses": 3825,
+        "reason_breakdown": {
+          "TP": {
+            "count": 2363,
+            "avg_pnl": 3.881,
+            "total_pnl": 9169.91
+          },
+          "CASCADE_SL": {
+            "count": 3271,
+            "avg_pnl": -2.137,
+            "total_pnl": -6991.21
+          },
+          "SL": {
+            "count": 533,
+            "avg_pnl": -0.667,
+            "total_pnl": -355.31
+          },
+          "TIMEOUT": {
+            "count": 70,
+            "avg_pnl": 0.89,
+            "total_pnl": 62.32
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 6.97,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 996,
+            "wr": 36.3,
+            "pnl": 18.72,
+            "mdd": 7.67,
+            "pnl_mdd": 2.44,
+            "avg_win": 3.819,
+            "avg_loss": 1.915,
+            "rr": 1.994,
+            "edge_per_trade": 0.019,
+            "n_wins": 362,
+            "n_losses": 634,
+            "reason_breakdown": {
+              "TP": {
+                "count": 354,
+                "avg_pnl": 3.867,
+                "total_pnl": 1368.95
+              },
+              "CASCADE_SL": {
+                "count": 555,
+                "avg_pnl": -2.101,
+                "total_pnl": -1165.87
+              },
+              "SL": {
+                "count": 73,
+                "avg_pnl": -0.6,
+                "total_pnl": -43.8
+              },
+              "TIMEOUT": {
+                "count": 5,
+                "avg_pnl": 2.323,
+                "total_pnl": 11.62
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.269,
+                "total_pnl": -2.42
+              }
+            }
+          },
+          "oos": {
+            "trades": 806,
+            "wr": 36.7,
+            "pnl": 16.9,
+            "mdd": 5.58,
+            "pnl_mdd": 3.03,
+            "avg_win": 3.838,
+            "avg_loss": 1.929,
+            "rr": 1.989,
+            "edge_per_trade": 0.021,
+            "n_wins": 296,
+            "n_losses": 510,
+            "reason_breakdown": {
+              "TP": {
+                "count": 283,
+                "avg_pnl": 3.943,
+                "total_pnl": 1115.94
+              },
+              "CASCADE_SL": {
+                "count": 458,
+                "avg_pnl": -2.081,
+                "total_pnl": -953.12
+              },
+              "SL": {
+                "count": 45,
+                "avg_pnl": -0.6,
+                "total_pnl": -27.0
+              },
+              "TIMEOUT": {
+                "count": 11,
+                "avg_pnl": 1.027,
+                "total_pnl": 11.3
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1794,
+            "wr": 36.4,
+            "pnl": 35.34,
+            "mdd": 7.67,
+            "pnl_mdd": 4.61,
+            "avg_win": 3.842,
+            "avg_loss": 1.92,
+            "rr": 2.001,
+            "edge_per_trade": 0.02,
+            "n_wins": 653,
+            "n_losses": 1141,
+            "reason_breakdown": {
+              "TP": {
+                "count": 635,
+                "avg_pnl": 3.9,
+                "total_pnl": 2476.22
+              },
+              "CASCADE_SL": {
+                "count": 1014,
+                "avg_pnl": -2.086,
+                "total_pnl": -2115.16
+              },
+              "SL": {
+                "count": 118,
+                "avg_pnl": -0.6,
+                "total_pnl": -70.8
+              },
+              "TIMEOUT": {
+                "count": 18,
+                "avg_pnl": 1.272,
+                "total_pnl": 22.89
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          },
+          "oos": {
+            "trades": 831,
+            "wr": 38.0,
+            "pnl": 21.01,
+            "mdd": 5.44,
+            "pnl_mdd": 3.86,
+            "avg_win": 3.715,
+            "avg_loss": 1.912,
+            "rr": 1.943,
+            "edge_per_trade": 0.025,
+            "n_wins": 316,
+            "n_losses": 515,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 437,
+                "avg_pnl": -2.117,
+                "total_pnl": -925.21
+              },
+              "TP": {
+                "count": 299,
+                "avg_pnl": 3.84,
+                "total_pnl": 1148.3
+              },
+              "SL": {
+                "count": 70,
+                "avg_pnl": -0.767,
+                "total_pnl": -53.7
+              },
+              "TIMEOUT": {
+                "count": 23,
+                "avg_pnl": 0.849,
+                "total_pnl": 19.54
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2615,
+            "wr": 36.9,
+            "pnl": 55.99,
+            "mdd": 7.67,
+            "pnl_mdd": 7.3,
+            "avg_win": 3.814,
+            "avg_loss": 1.922,
+            "rr": 1.985,
+            "edge_per_trade": 0.021,
+            "n_wins": 964,
+            "n_losses": 1651,
+            "reason_breakdown": {
+              "TP": {
+                "count": 934,
+                "avg_pnl": 3.881,
+                "total_pnl": 3624.71
+              },
+              "CASCADE_SL": {
+                "count": 1450,
+                "avg_pnl": -2.096,
+                "total_pnl": -3038.89
+              },
+              "SL": {
+                "count": 188,
+                "avg_pnl": -0.662,
+                "total_pnl": -124.5
+              },
+              "TIMEOUT": {
+                "count": 41,
+                "avg_pnl": 1.035,
+                "total_pnl": 42.43
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          },
+          "oos": {
+            "trades": 1256,
+            "wr": 40.8,
+            "pnl": 56.84,
+            "mdd": 7.4,
+            "pnl_mdd": 7.68,
+            "avg_win": 3.899,
+            "avg_loss": 2.004,
+            "rr": 1.946,
+            "edge_per_trade": 0.045,
+            "n_wins": 513,
+            "n_losses": 743,
+            "reason_breakdown": {
+              "TP": {
+                "count": 507,
+                "avg_pnl": 3.923,
+                "total_pnl": 1989.13
+              },
+              "CASCADE_SL": {
+                "count": 632,
+                "avg_pnl": -2.233,
+                "total_pnl": -1410.97
+              },
+              "SL": {
+                "count": 109,
+                "avg_pnl": -0.702,
+                "total_pnl": -76.57
+              },
+              "TIMEOUT": {
+                "count": 6,
+                "avg_pnl": 0.581,
+                "total_pnl": 3.49
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 3.235,
+                "total_pnl": 6.47
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 3869,
+            "wr": 38.1,
+            "pnl": 112.53,
+            "mdd": 7.67,
+            "pnl_mdd": 14.68,
+            "avg_win": 3.846,
+            "avg_loss": 1.949,
+            "rr": 1.973,
+            "edge_per_trade": 0.029,
+            "n_wins": 1476,
+            "n_losses": 2393,
+            "reason_breakdown": {
+              "TP": {
+                "count": 1441,
+                "avg_pnl": 3.896,
+                "total_pnl": 5613.85
+              },
+              "CASCADE_SL": {
+                "count": 2082,
+                "avg_pnl": -2.139,
+                "total_pnl": -4452.36
+              },
+              "SL": {
+                "count": 297,
+                "avg_pnl": -0.677,
+                "total_pnl": -201.07
+              },
+              "TIMEOUT": {
+                "count": 47,
+                "avg_pnl": 0.977,
+                "total_pnl": 45.91
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 3.235,
+                "total_pnl": 6.47
+              }
+            }
+          },
+          "oos": {
+            "trades": 898,
+            "wr": 38.5,
+            "pnl": 32.48,
+            "mdd": 4.54,
+            "pnl_mdd": 7.16,
+            "avg_win": 3.789,
+            "avg_loss": 1.846,
+            "rr": 2.053,
+            "edge_per_trade": 0.036,
+            "n_wins": 346,
+            "n_losses": 552,
+            "reason_breakdown": {
+              "TP": {
+                "count": 327,
+                "avg_pnl": 3.946,
+                "total_pnl": 1290.38
+              },
+              "CASCADE_SL": {
+                "count": 451,
+                "avg_pnl": -2.119,
+                "total_pnl": -955.83
+              },
+              "SL": {
+                "count": 90,
+                "avg_pnl": -0.6,
+                "total_pnl": -54.0
+              },
+              "TIMEOUT": {
+                "count": 22,
+                "avg_pnl": 0.738,
+                "total_pnl": 16.23
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 4765,
+            "wr": 38.2,
+            "pnl": 144.6,
+            "mdd": 7.67,
+            "pnl_mdd": 18.86,
+            "avg_win": 3.837,
+            "avg_loss": 1.929,
+            "rr": 1.989,
+            "edge_per_trade": 0.03,
+            "n_wins": 1820,
+            "n_losses": 2945,
+            "reason_breakdown": {
+              "TP": {
+                "count": 1768,
+                "avg_pnl": 3.907,
+                "total_pnl": 6906.96
+              },
+              "CASCADE_SL": {
+                "count": 2533,
+                "avg_pnl": -2.135,
+                "total_pnl": -5408.19
+              },
+              "SL": {
+                "count": 387,
+                "avg_pnl": -0.659,
+                "total_pnl": -255.07
+              },
+              "TIMEOUT": {
+                "count": 69,
+                "avg_pnl": 0.901,
+                "total_pnl": 62.14
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          },
+          "oos": {
+            "trades": 1476,
+            "wr": 40.3,
+            "pnl": 64.6,
+            "mdd": 4.07,
+            "pnl_mdd": 15.87,
+            "avg_win": 3.794,
+            "avg_loss": 1.903,
+            "rr": 1.994,
+            "edge_per_trade": 0.044,
+            "n_wins": 595,
+            "n_losses": 881,
+            "reason_breakdown": {
+              "TP": {
+                "count": 593,
+                "avg_pnl": 3.806,
+                "total_pnl": 2256.99
+              },
+              "CASCADE_SL": {
+                "count": 734,
+                "avg_pnl": -2.147,
+                "total_pnl": -1575.79
+              },
+              "SL": {
+                "count": 146,
+                "avg_pnl": -0.687,
+                "total_pnl": -100.24
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": 0.18,
+                "total_pnl": 0.18
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 191.83,
+        "weighted_wr": 39.2,
+        "weighted_rr": 1.984,
+        "avg_win": 3.813,
+        "avg_loss": 1.922,
+        "total_trades": 5267,
+        "fold_pnls": [
+          16.9,
+          21.01,
+          56.84,
+          32.48,
+          64.6
+        ]
+      }
+    },
+    "SLOW_DECAY": {
+      "config": {
+        "desc": "MFE median TP x1.0, decay 0.999 (HL=57.7h)",
+        "tp_mult": 1.0,
+        "tp_decay_rate": 0.999,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 6595,
+        "wr": 40.7,
+        "pnl": 213.59,
+        "mdd": 7.59,
+        "pnl_mdd": 28.14,
+        "avg_win": 3.499,
+        "avg_loss": 1.907,
+        "rr": 1.835,
+        "edge_per_trade": 0.032,
+        "n_wins": 2682,
+        "n_losses": 3913,
+        "reason_breakdown": {
+          "TP": {
+            "count": 2667,
+            "avg_pnl": 3.515,
+            "total_pnl": 9374.12
+          },
+          "CASCADE_SL": {
+            "count": 3395,
+            "avg_pnl": -2.095,
+            "total_pnl": -7112.37
+          },
+          "SL": {
+            "count": 495,
+            "avg_pnl": -0.672,
+            "total_pnl": -332.51
+          },
+          "TIMEOUT": {
+            "count": 36,
+            "avg_pnl": -0.2,
+            "total_pnl": -7.22
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 7.68,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 1066,
+            "wr": 39.4,
+            "pnl": 23.95,
+            "mdd": 5.36,
+            "pnl_mdd": 4.46,
+            "avg_win": 3.431,
+            "avg_loss": 1.897,
+            "rr": 1.809,
+            "edge_per_trade": 0.022,
+            "n_wins": 420,
+            "n_losses": 646,
+            "reason_breakdown": {
+              "TP": {
+                "count": 416,
+                "avg_pnl": 3.462,
+                "total_pnl": 1440.3
+              },
+              "CASCADE_SL": {
+                "count": 580,
+                "avg_pnl": -2.044,
+                "total_pnl": -1185.53
+              },
+              "SL": {
+                "count": 59,
+                "avg_pnl": -0.6,
+                "total_pnl": -35.4
+              },
+              "TIMEOUT": {
+                "count": 2,
+                "avg_pnl": -0.9,
+                "total_pnl": -1.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.224,
+                "total_pnl": -2.01
+              }
+            }
+          },
+          "oos": {
+            "trades": 856,
+            "wr": 39.5,
+            "pnl": 15.68,
+            "mdd": 4.88,
+            "pnl_mdd": 3.22,
+            "avg_win": 3.353,
+            "avg_loss": 1.915,
+            "rr": 1.75,
+            "edge_per_trade": 0.018,
+            "n_wins": 338,
+            "n_losses": 518,
+            "reason_breakdown": {
+              "TP": {
+                "count": 331,
+                "avg_pnl": 3.402,
+                "total_pnl": 1125.93
+              },
+              "CASCADE_SL": {
+                "count": 463,
+                "avg_pnl": -2.072,
+                "total_pnl": -959.11
+              },
+              "SL": {
+                "count": 47,
+                "avg_pnl": -0.6,
+                "total_pnl": -28.2
+              },
+              "TIMEOUT": {
+                "count": 6,
+                "avg_pnl": -0.411,
+                "total_pnl": -2.47
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1917,
+            "wr": 39.4,
+            "pnl": 40.15,
+            "mdd": 5.36,
+            "pnl_mdd": 7.48,
+            "avg_win": 3.408,
+            "avg_loss": 1.908,
+            "rr": 1.786,
+            "edge_per_trade": 0.021,
+            "n_wins": 756,
+            "n_losses": 1161,
+            "reason_breakdown": {
+              "TP": {
+                "count": 748,
+                "avg_pnl": 3.434,
+                "total_pnl": 2569.0
+              },
+              "CASCADE_SL": {
+                "count": 1044,
+                "avg_pnl": -2.054,
+                "total_pnl": -2144.73
+              },
+              "SL": {
+                "count": 106,
+                "avg_pnl": -0.6,
+                "total_pnl": -63.6
+              },
+              "TIMEOUT": {
+                "count": 10,
+                "avg_pnl": -0.43,
+                "total_pnl": -4.3
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          },
+          "oos": {
+            "trades": 900,
+            "wr": 37.8,
+            "pnl": 10.95,
+            "mdd": 6.52,
+            "pnl_mdd": 1.68,
+            "avg_win": 3.349,
+            "avg_loss": 1.857,
+            "rr": 1.803,
+            "edge_per_trade": 0.012,
+            "n_wins": 340,
+            "n_losses": 560,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 478,
+                "avg_pnl": -2.043,
+                "total_pnl": -976.37
+              },
+              "TP": {
+                "count": 335,
+                "avg_pnl": 3.381,
+                "total_pnl": 1132.75
+              },
+              "SL": {
+                "count": 72,
+                "avg_pnl": -0.762,
+                "total_pnl": -54.9
+              },
+              "TIMEOUT": {
+                "count": 13,
+                "avg_pnl": -0.236,
+                "total_pnl": -3.07
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2807,
+            "wr": 38.9,
+            "pnl": 50.71,
+            "mdd": 7.59,
+            "pnl_mdd": 6.68,
+            "avg_win": 3.399,
+            "avg_loss": 1.895,
+            "rr": 1.794,
+            "edge_per_trade": 0.018,
+            "n_wins": 1091,
+            "n_losses": 1716,
+            "reason_breakdown": {
+              "TP": {
+                "count": 1083,
+                "avg_pnl": 3.418,
+                "total_pnl": 3701.74
+              },
+              "CASCADE_SL": {
+                "count": 1521,
+                "avg_pnl": -2.051,
+                "total_pnl": -3119.62
+              },
+              "SL": {
+                "count": 178,
+                "avg_pnl": -0.666,
+                "total_pnl": -118.5
+              },
+              "TIMEOUT": {
+                "count": 23,
+                "avg_pnl": -0.321,
+                "total_pnl": -7.37
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.078,
+                "total_pnl": 0.16
+              }
+            }
+          },
+          "oos": {
+            "trades": 1300,
+            "wr": 43.2,
+            "pnl": 62.65,
+            "mdd": 6.84,
+            "pnl_mdd": 9.16,
+            "avg_win": 3.624,
+            "avg_loss": 1.988,
+            "rr": 1.823,
+            "edge_per_trade": 0.048,
+            "n_wins": 561,
+            "n_losses": 739,
+            "reason_breakdown": {
+              "TP": {
+                "count": 558,
+                "avg_pnl": 3.631,
+                "total_pnl": 2026.07
+              },
+              "CASCADE_SL": {
+                "count": 632,
+                "avg_pnl": -2.205,
+                "total_pnl": -1393.62
+              },
+              "SL": {
+                "count": 106,
+                "avg_pnl": -0.705,
+                "total_pnl": -74.77
+              },
+              "TIMEOUT": {
+                "count": 2,
+                "avg_pnl": -0.127,
+                "total_pnl": -0.25
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 3.235,
+                "total_pnl": 6.47
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 4106,
+            "wr": 40.2,
+            "pnl": 113.63,
+            "mdd": 7.59,
+            "pnl_mdd": 14.97,
+            "avg_win": 3.478,
+            "avg_loss": 1.925,
+            "rr": 1.807,
+            "edge_per_trade": 0.028,
+            "n_wins": 1652,
+            "n_losses": 2454,
+            "reason_breakdown": {
+              "TP": {
+                "count": 1642,
+                "avg_pnl": 3.491,
+                "total_pnl": 5732.86
+              },
+              "CASCADE_SL": {
+                "count": 2153,
+                "avg_pnl": -2.097,
+                "total_pnl": -4515.74
+              },
+              "SL": {
+                "count": 284,
+                "avg_pnl": -0.681,
+                "total_pnl": -193.27
+              },
+              "TIMEOUT": {
+                "count": 25,
+                "avg_pnl": -0.305,
+                "total_pnl": -7.63
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 3.235,
+                "total_pnl": 6.47
+              }
+            }
+          },
+          "oos": {
+            "trades": 967,
+            "wr": 40.7,
+            "pnl": 34.33,
+            "mdd": 4.01,
+            "pnl_mdd": 8.56,
+            "avg_win": 3.451,
+            "avg_loss": 1.834,
+            "rr": 1.882,
+            "edge_per_trade": 0.035,
+            "n_wins": 394,
+            "n_losses": 573,
+            "reason_breakdown": {
+              "TP": {
+                "count": 385,
+                "avg_pnl": 3.52,
+                "total_pnl": 1355.07
+              },
+              "CASCADE_SL": {
+                "count": 485,
+                "avg_pnl": -2.052,
+                "total_pnl": -995.33
+              },
+              "SL": {
+                "count": 78,
+                "avg_pnl": -0.6,
+                "total_pnl": -46.8
+              },
+              "TIMEOUT": {
+                "count": 11,
+                "avg_pnl": 0.037,
+                "total_pnl": 0.41
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 5071,
+            "wr": 40.3,
+            "pnl": 147.38,
+            "mdd": 7.59,
+            "pnl_mdd": 19.42,
+            "avg_win": 3.474,
+            "avg_loss": 1.907,
+            "rr": 1.821,
+            "edge_per_trade": 0.029,
+            "n_wins": 2044,
+            "n_losses": 3027,
+            "reason_breakdown": {
+              "TP": {
+                "count": 2027,
+                "avg_pnl": 3.497,
+                "total_pnl": 7089.17
+              },
+              "CASCADE_SL": {
+                "count": 2638,
+                "avg_pnl": -2.089,
+                "total_pnl": -5511.07
+              },
+              "SL": {
+                "count": 362,
+                "avg_pnl": -0.663,
+                "total_pnl": -240.07
+              },
+              "TIMEOUT": {
+                "count": 36,
+                "avg_pnl": -0.2,
+                "total_pnl": -7.22
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": -0.554,
+                "total_pnl": -4.43
+              }
+            }
+          },
+          "oos": {
+            "trades": 1526,
+            "wr": 41.9,
+            "pnl": 65.94,
+            "mdd": 4.96,
+            "pnl_mdd": 13.29,
+            "avg_win": 3.568,
+            "avg_loss": 1.902,
+            "rr": 1.876,
+            "edge_per_trade": 0.043,
+            "n_wins": 639,
+            "n_losses": 887,
+            "reason_breakdown": {
+              "TP": {
+                "count": 638,
+                "avg_pnl": 3.573,
+                "total_pnl": 2279.69
+              },
+              "CASCADE_SL": {
+                "count": 753,
+                "avg_pnl": -2.117,
+                "total_pnl": -1594.08
+              },
+              "SL": {
+                "count": 133,
+                "avg_pnl": -0.695,
+                "total_pnl": -92.44
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 189.55,
+        "weighted_wr": 40.9,
+        "weighted_rr": 1.837,
+        "avg_win": 3.497,
+        "avg_loss": 1.904,
+        "total_trades": 5549,
+        "fold_pnls": [
+          15.68,
+          10.95,
+          62.65,
+          34.33,
+          65.94
+        ]
+      }
+    },
+    "TP_1.2x_SLOW": {
+      "config": {
+        "desc": "MFE median TP x1.2, decay 0.999",
+        "tp_mult": 1.2,
+        "tp_decay_rate": 0.999,
+        "fixed_tp": null
+      },
+      "full_is": {
+        "trades": 6020,
+        "wr": 36.9,
+        "pnl": 212.01,
+        "mdd": 7.19,
+        "pnl_mdd": 29.5,
+        "avg_win": 4.133,
+        "avg_loss": 1.919,
+        "rr": 2.154,
+        "edge_per_trade": 0.035,
+        "n_wins": 2224,
+        "n_losses": 3796,
+        "reason_breakdown": {
+          "CASCADE_SL": {
+            "count": 3222,
+            "avg_pnl": -2.142,
+            "total_pnl": -6902.34
+          },
+          "TP": {
+            "count": 2192,
+            "avg_pnl": 4.178,
+            "total_pnl": 9157.91
+          },
+          "SL": {
+            "count": 551,
+            "avg_pnl": -0.664,
+            "total_pnl": -366.11
+          },
+          "TIMEOUT": {
+            "count": 53,
+            "avg_pnl": 0.346,
+            "total_pnl": 18.35
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 7.16,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 945,
+            "wr": 35.8,
+            "pnl": 25.1,
+            "mdd": 6.17,
+            "pnl_mdd": 4.07,
+            "avg_win": 4.089,
+            "avg_loss": 1.905,
+            "rr": 2.147,
+            "edge_per_trade": 0.027,
+            "n_wins": 338,
+            "n_losses": 607,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 523,
+                "avg_pnl": -2.118,
+                "total_pnl": -1107.76
+              },
+              "TP": {
+                "count": 336,
+                "avg_pnl": 4.109,
+                "total_pnl": 1380.74
+              },
+              "SL": {
+                "count": 76,
+                "avg_pnl": -0.6,
+                "total_pnl": -45.6
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.803,
+                "total_pnl": -0.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.074,
+                "total_pnl": -0.67
+              }
+            }
+          },
+          "oos": {
+            "trades": 764,
+            "wr": 38.2,
+            "pnl": 23.79,
+            "mdd": 3.9,
+            "pnl_mdd": 6.09,
+            "avg_win": 3.904,
+            "avg_loss": 1.962,
+            "rr": 1.99,
+            "edge_per_trade": 0.031,
+            "n_wins": 292,
+            "n_losses": 472,
+            "reason_breakdown": {
+              "TP": {
+                "count": 282,
+                "avg_pnl": 3.997,
+                "total_pnl": 1127.21
+              },
+              "CASCADE_SL": {
+                "count": 423,
+                "avg_pnl": -2.12,
+                "total_pnl": -896.9
+              },
+              "SL": {
+                "count": 42,
+                "avg_pnl": -0.6,
+                "total_pnl": -25.2
+              },
+              "TIMEOUT": {
+                "count": 8,
+                "avg_pnl": 0.505,
+                "total_pnl": 4.04
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1712,
+            "wr": 36.7,
+            "pnl": 47.34,
+            "mdd": 6.17,
+            "pnl_mdd": 7.67,
+            "avg_win": 4.0,
+            "avg_loss": 1.93,
+            "rr": 2.073,
+            "edge_per_trade": 0.028,
+            "n_wins": 629,
+            "n_losses": 1083,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 952,
+                "avg_pnl": -2.114,
+                "total_pnl": -2012.3
+              },
+              "TP": {
+                "count": 616,
+                "avg_pnl": 4.061,
+                "total_pnl": 2501.36
+              },
+              "SL": {
+                "count": 119,
+                "avg_pnl": -0.6,
+                "total_pnl": -71.4
+              },
+              "TIMEOUT": {
+                "count": 16,
+                "avg_pnl": 0.214,
+                "total_pnl": 3.42
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.549,
+                "total_pnl": 4.94
+              }
+            }
+          },
+          "oos": {
+            "trades": 822,
+            "wr": 35.8,
+            "pnl": 15.5,
+            "mdd": 7.97,
+            "pnl_mdd": 1.94,
+            "avg_win": 3.865,
+            "avg_loss": 1.888,
+            "rr": 2.047,
+            "edge_per_trade": 0.019,
+            "n_wins": 294,
+            "n_losses": 528,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 449,
+                "avg_pnl": -2.084,
+                "total_pnl": -935.78
+              },
+              "SL": {
+                "count": 69,
+                "avg_pnl": -0.77,
+                "total_pnl": -53.1
+              },
+              "TP": {
+                "count": 280,
+                "avg_pnl": 3.983,
+                "total_pnl": 1115.17
+              },
+              "TIMEOUT": {
+                "count": 21,
+                "avg_pnl": 0.522,
+                "total_pnl": 10.96
+              },
+              "OOS_END": {
+                "count": 3,
+                "avg_pnl": 0.761,
+                "total_pnl": 2.28
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2525,
+            "wr": 36.4,
+            "pnl": 62.89,
+            "mdd": 7.19,
+            "pnl_mdd": 8.75,
+            "avg_win": 3.972,
+            "avg_loss": 1.92,
+            "rr": 2.068,
+            "edge_per_trade": 0.025,
+            "n_wins": 919,
+            "n_losses": 1606,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1400,
+                "avg_pnl": -2.105,
+                "total_pnl": -2946.6
+              },
+              "TP": {
+                "count": 897,
+                "avg_pnl": 4.036,
+                "total_pnl": 3620.45
+              },
+              "SL": {
+                "count": 188,
+                "avg_pnl": -0.662,
+                "total_pnl": -124.5
+              },
+              "TIMEOUT": {
+                "count": 37,
+                "avg_pnl": 0.389,
+                "total_pnl": 14.38
+              },
+              "OOS_END": {
+                "count": 3,
+                "avg_pnl": 0.761,
+                "total_pnl": 2.28
+              }
+            }
+          },
+          "oos": {
+            "trades": 1202,
+            "wr": 37.4,
+            "pnl": 50.48,
+            "mdd": 8.61,
+            "pnl_mdd": 5.86,
+            "avg_win": 4.352,
+            "avg_loss": 2.0,
+            "rr": 2.176,
+            "edge_per_trade": 0.042,
+            "n_wins": 450,
+            "n_losses": 752,
+            "reason_breakdown": {
+              "SL": {
+                "count": 115,
+                "avg_pnl": -0.697,
+                "total_pnl": -80.17
+              },
+              "CASCADE_SL": {
+                "count": 632,
+                "avg_pnl": -2.236,
+                "total_pnl": -1413.34
+              },
+              "TP": {
+                "count": 447,
+                "avg_pnl": 4.359,
+                "total_pnl": 1948.52
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": -0.017,
+                "total_pnl": -0.12
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 3719,
+            "wr": 36.8,
+            "pnl": 114.27,
+            "mdd": 7.19,
+            "pnl_mdd": 15.9,
+            "avg_win": 4.099,
+            "avg_loss": 1.948,
+            "rr": 2.105,
+            "edge_per_trade": 0.031,
+            "n_wins": 1368,
+            "n_losses": 2351,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2029,
+                "avg_pnl": -2.146,
+                "total_pnl": -4353.4
+              },
+              "TP": {
+                "count": 1345,
+                "avg_pnl": 4.142,
+                "total_pnl": 5570.98
+              },
+              "SL": {
+                "count": 300,
+                "avg_pnl": -0.676,
+                "total_pnl": -202.87
+              },
+              "TIMEOUT": {
+                "count": 38,
+                "avg_pnl": 0.364,
+                "total_pnl": 13.82
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": -0.017,
+                "total_pnl": -0.12
+              }
+            }
+          },
+          "oos": {
+            "trades": 884,
+            "wr": 35.4,
+            "pnl": 21.11,
+            "mdd": 4.68,
+            "pnl_mdd": 4.51,
+            "avg_win": 3.967,
+            "avg_loss": 1.842,
+            "rr": 2.154,
+            "edge_per_trade": 0.024,
+            "n_wins": 313,
+            "n_losses": 571,
+            "reason_breakdown": {
+              "SL": {
+                "count": 89,
+                "avg_pnl": -0.6,
+                "total_pnl": -53.4
+              },
+              "CASCADE_SL": {
+                "count": 473,
+                "avg_pnl": -2.094,
+                "total_pnl": -990.69
+              },
+              "TP": {
+                "count": 299,
+                "avg_pnl": 4.122,
+                "total_pnl": 1232.33
+              },
+              "TIMEOUT": {
+                "count": 14,
+                "avg_pnl": 0.31,
+                "total_pnl": 4.34
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 4600,
+            "wr": 36.5,
+            "pnl": 134.47,
+            "mdd": 7.19,
+            "pnl_mdd": 18.71,
+            "avg_win": 4.077,
+            "avg_loss": 1.927,
+            "rr": 2.116,
+            "edge_per_trade": 0.029,
+            "n_wins": 1678,
+            "n_losses": 2922,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2506,
+                "avg_pnl": -2.136,
+                "total_pnl": -5353.84
+              },
+              "TP": {
+                "count": 1644,
+                "avg_pnl": 4.139,
+                "total_pnl": 6804.76
+              },
+              "SL": {
+                "count": 389,
+                "avg_pnl": -0.659,
+                "total_pnl": -256.27
+              },
+              "TIMEOUT": {
+                "count": 52,
+                "avg_pnl": 0.349,
+                "total_pnl": 18.17
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          },
+          "oos": {
+            "trades": 1423,
+            "wr": 38.6,
+            "pnl": 77.78,
+            "mdd": 3.9,
+            "pnl_mdd": 19.95,
+            "avg_win": 4.282,
+            "avg_loss": 1.889,
+            "rr": 2.267,
+            "edge_per_trade": 0.055,
+            "n_wins": 549,
+            "n_losses": 874,
+            "reason_breakdown": {
+              "TP": {
+                "count": 547,
+                "avg_pnl": 4.296,
+                "total_pnl": 2350.12
+              },
+              "CASCADE_SL": {
+                "count": 712,
+                "avg_pnl": -2.165,
+                "total_pnl": -1541.27
+              },
+              "SL": {
+                "count": 161,
+                "avg_pnl": -0.679,
+                "total_pnl": -109.24
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": 0.18,
+                "total_pnl": 0.18
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 188.66,
+        "weighted_wr": 37.3,
+        "weighted_rr": 2.151,
+        "avg_win": 4.124,
+        "avg_loss": 1.917,
+        "total_trades": 5095,
+        "fold_pnls": [
+          23.79,
+          15.5,
+          50.48,
+          21.11,
+          77.78
+        ]
+      }
+    },
+    "FIXED_TP_2PCT": {
+      "config": {
+        "desc": "Fixed TP 2.0% for all patterns",
+        "tp_mult": 1.0,
+        "tp_decay_rate": 0.9975,
+        "fixed_tp": 2.0
+      },
+      "full_is": {
+        "trades": 5665,
+        "wr": 35.2,
+        "pnl": 230.04,
+        "mdd": 5.36,
+        "pnl_mdd": 42.92,
+        "avg_win": 4.546,
+        "avg_loss": 1.904,
+        "rr": 2.388,
+        "edge_per_trade": 0.041,
+        "n_wins": 1993,
+        "n_losses": 3672,
+        "reason_breakdown": {
+          "CASCADE_SL": {
+            "count": 3075,
+            "avg_pnl": -2.141,
+            "total_pnl": -6583.67
+          },
+          "SL": {
+            "count": 573,
+            "avg_pnl": -0.684,
+            "total_pnl": -391.95
+          },
+          "TP": {
+            "count": 1978,
+            "avg_pnl": 4.576,
+            "total_pnl": 9050.69
+          },
+          "TIMEOUT": {
+            "count": 37,
+            "avg_pnl": -0.134,
+            "total_pnl": -4.95
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 0.123,
+            "total_pnl": 0.25
+          }
+        }
+      },
+      "full_is_mdd_mtm": 5.72,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 900,
+            "wr": 34.7,
+            "pnl": 28.87,
+            "mdd": 5.06,
+            "pnl_mdd": 5.7,
+            "avg_win": 4.434,
+            "avg_loss": 1.911,
+            "rr": 2.32,
+            "edge_per_trade": 0.032,
+            "n_wins": 312,
+            "n_losses": 588,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 511,
+                "avg_pnl": -2.112,
+                "total_pnl": -1079.32
+              },
+              "SL": {
+                "count": 69,
+                "avg_pnl": -0.6,
+                "total_pnl": -41.4
+              },
+              "TP": {
+                "count": 310,
+                "avg_pnl": 4.458,
+                "total_pnl": 1382.02
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.803,
+                "total_pnl": -0.8
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.074,
+                "total_pnl": -0.67
+              }
+            }
+          },
+          "oos": {
+            "trades": 754,
+            "wr": 36.9,
+            "pnl": 18.49,
+            "mdd": 4.92,
+            "pnl_mdd": 3.76,
+            "avg_win": 3.959,
+            "avg_loss": 1.963,
+            "rr": 2.017,
+            "edge_per_trade": 0.025,
+            "n_wins": 278,
+            "n_losses": 476,
+            "reason_breakdown": {
+              "TP": {
+                "count": 271,
+                "avg_pnl": 4.057,
+                "total_pnl": 1099.49
+              },
+              "CASCADE_SL": {
+                "count": 424,
+                "avg_pnl": -2.119,
+                "total_pnl": -898.63
+              },
+              "SL": {
+                "count": 47,
+                "avg_pnl": -0.6,
+                "total_pnl": -28.2
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "avg_pnl": -0.376,
+                "total_pnl": -1.13
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.568,
+                "total_pnl": -5.11
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1656,
+            "wr": 35.6,
+            "pnl": 46.42,
+            "mdd": 5.06,
+            "pnl_mdd": 9.17,
+            "avg_win": 4.209,
+            "avg_loss": 1.938,
+            "rr": 2.172,
+            "edge_per_trade": 0.028,
+            "n_wins": 590,
+            "n_losses": 1066,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 941,
+                "avg_pnl": -2.111,
+                "total_pnl": -1986.54
+              },
+              "SL": {
+                "count": 115,
+                "avg_pnl": -0.6,
+                "total_pnl": -69.0
+              },
+              "TP": {
+                "count": 581,
+                "avg_pnl": 4.271,
+                "total_pnl": 2481.4
+              },
+              "TIMEOUT": {
+                "count": 10,
+                "avg_pnl": -0.293,
+                "total_pnl": -2.93
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.568,
+                "total_pnl": -5.11
+              }
+            }
+          },
+          "oos": {
+            "trades": 770,
+            "wr": 36.5,
+            "pnl": 22.93,
+            "mdd": 3.46,
+            "pnl_mdd": 6.62,
+            "avg_win": 4.048,
+            "avg_loss": 1.904,
+            "rr": 2.126,
+            "edge_per_trade": 0.03,
+            "n_wins": 281,
+            "n_losses": 489,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 420,
+                "avg_pnl": -2.092,
+                "total_pnl": -878.5
+              },
+              "SL": {
+                "count": 57,
+                "avg_pnl": -0.805,
+                "total_pnl": -45.9
+              },
+              "TP": {
+                "count": 275,
+                "avg_pnl": 4.107,
+                "total_pnl": 1129.51
+              },
+              "TIMEOUT": {
+                "count": 14,
+                "avg_pnl": -0.245,
+                "total_pnl": -3.43
+              },
+              "OOS_END": {
+                "count": 4,
+                "avg_pnl": 1.18,
+                "total_pnl": 4.72
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2418,
+            "wr": 35.9,
+            "pnl": 71.23,
+            "mdd": 5.06,
+            "pnl_mdd": 14.07,
+            "avg_win": 4.178,
+            "avg_loss": 1.93,
+            "rr": 2.165,
+            "edge_per_trade": 0.029,
+            "n_wins": 869,
+            "n_losses": 1549,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1360,
+                "avg_pnl": -2.107,
+                "total_pnl": -2864.93
+              },
+              "SL": {
+                "count": 170,
+                "avg_pnl": -0.669,
+                "total_pnl": -113.7
+              },
+              "TP": {
+                "count": 860,
+                "avg_pnl": 4.211,
+                "total_pnl": 3621.31
+              },
+              "TIMEOUT": {
+                "count": 24,
+                "avg_pnl": -0.265,
+                "total_pnl": -6.36
+              },
+              "OOS_END": {
+                "count": 4,
+                "avg_pnl": 1.18,
+                "total_pnl": 4.72
+              }
+            }
+          },
+          "oos": {
+            "trades": 1096,
+            "wr": 34.6,
+            "pnl": 49.13,
+            "mdd": 9.19,
+            "pnl_mdd": 5.35,
+            "avg_win": 4.917,
+            "avg_loss": 1.982,
+            "rr": 2.48,
+            "edge_per_trade": 0.045,
+            "n_wins": 379,
+            "n_losses": 717,
+            "reason_breakdown": {
+              "SL": {
+                "count": 126,
+                "avg_pnl": -0.689,
+                "total_pnl": -86.77
+              },
+              "CASCADE_SL": {
+                "count": 586,
+                "avg_pnl": -2.259,
+                "total_pnl": -1323.94
+              },
+              "TP": {
+                "count": 374,
+                "avg_pnl": 4.952,
+                "total_pnl": 1851.97
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.161,
+                "total_pnl": 1.45
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 3506,
+            "wr": 35.6,
+            "pnl": 121.2,
+            "mdd": 5.36,
+            "pnl_mdd": 22.61,
+            "avg_win": 4.405,
+            "avg_loss": 1.949,
+            "rr": 2.26,
+            "edge_per_trade": 0.035,
+            "n_wins": 1247,
+            "n_losses": 2259,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1943,
+                "avg_pnl": -2.153,
+                "total_pnl": -4182.33
+              },
+              "SL": {
+                "count": 293,
+                "avg_pnl": -0.678,
+                "total_pnl": -198.67
+              },
+              "TP": {
+                "count": 1236,
+                "avg_pnl": 4.431,
+                "total_pnl": 5477.26
+              },
+              "TIMEOUT": {
+                "count": 25,
+                "avg_pnl": -0.277,
+                "total_pnl": -6.92
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.161,
+                "total_pnl": 1.45
+              }
+            }
+          },
+          "oos": {
+            "trades": 844,
+            "wr": 35.2,
+            "pnl": 34.84,
+            "mdd": 6.02,
+            "pnl_mdd": 5.79,
+            "avg_win": 4.322,
+            "avg_loss": 1.774,
+            "rr": 2.437,
+            "edge_per_trade": 0.041,
+            "n_wins": 297,
+            "n_losses": 547,
+            "reason_breakdown": {
+              "SL": {
+                "count": 101,
+                "avg_pnl": -0.6,
+                "total_pnl": -60.6
+              },
+              "CASCADE_SL": {
+                "count": 437,
+                "avg_pnl": -2.063,
+                "total_pnl": -901.72
+              },
+              "TP": {
+                "count": 285,
+                "avg_pnl": 4.479,
+                "total_pnl": 1276.55
+              },
+              "TIMEOUT": {
+                "count": 12,
+                "avg_pnl": 0.164,
+                "total_pnl": 1.97
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 4347,
+            "wr": 35.4,
+            "pnl": 155.71,
+            "mdd": 5.36,
+            "pnl_mdd": 29.05,
+            "avg_win": 4.395,
+            "avg_loss": 1.914,
+            "rr": 2.296,
+            "edge_per_trade": 0.036,
+            "n_wins": 1541,
+            "n_losses": 2806,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2384,
+                "avg_pnl": -2.137,
+                "total_pnl": -5093.8
+              },
+              "SL": {
+                "count": 394,
+                "avg_pnl": -0.658,
+                "total_pnl": -259.27
+              },
+              "TP": {
+                "count": 1523,
+                "avg_pnl": 4.44,
+                "total_pnl": 6762.04
+              },
+              "TIMEOUT": {
+                "count": 37,
+                "avg_pnl": -0.134,
+                "total_pnl": -4.95
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.291,
+                "total_pnl": -2.62
+              }
+            }
+          },
+          "oos": {
+            "trades": 1322,
+            "wr": 34.5,
+            "pnl": 75.12,
+            "mdd": 4.04,
+            "pnl_mdd": 18.61,
+            "avg_win": 5.024,
+            "avg_loss": 1.865,
+            "rr": 2.694,
+            "edge_per_trade": 0.057,
+            "n_wins": 456,
+            "n_losses": 866,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 687,
+                "avg_pnl": -2.158,
+                "total_pnl": -1482.65
+              },
+              "TP": {
+                "count": 455,
+                "avg_pnl": 5.034,
+                "total_pnl": 2290.54
+              },
+              "SL": {
+                "count": 178,
+                "avg_pnl": -0.742,
+                "total_pnl": -132.08
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 0.123,
+                "total_pnl": 0.25
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 200.51,
+        "weighted_wr": 35.3,
+        "weighted_rr": 2.393,
+        "avg_win": 4.539,
+        "avg_loss": 1.897,
+        "total_trades": 4786,
+        "fold_pnls": [
+          18.49,
+          22.93,
+          49.13,
+          34.84,
+          75.12
+        ]
+      }
+    },
+    "FIXED_TP_3PCT": {
+      "config": {
+        "desc": "Fixed TP 3.0% for all patterns",
+        "tp_mult": 1.0,
+        "tp_decay_rate": 0.9975,
+        "fixed_tp": 3.0
+      },
+      "full_is": {
+        "trades": 4793,
+        "wr": 30.0,
+        "pnl": 247.01,
+        "mdd": 7.06,
+        "pnl_mdd": 34.97,
+        "avg_win": 5.991,
+        "avg_loss": 1.9,
+        "rr": 3.152,
+        "edge_per_trade": 0.052,
+        "n_wins": 1436,
+        "n_losses": 3357,
+        "reason_breakdown": {
+          "CASCADE_SL": {
+            "count": 2689,
+            "avg_pnl": -2.205,
+            "total_pnl": -5929.58
+          },
+          "SL": {
+            "count": 647,
+            "avg_pnl": -0.674,
+            "total_pnl": -436.35
+          },
+          "TP": {
+            "count": 1412,
+            "avg_pnl": 6.075,
+            "total_pnl": 8578.14
+          },
+          "TIMEOUT": {
+            "count": 43,
+            "avg_pnl": 0.137,
+            "total_pnl": 5.87
+          },
+          "OOS_END": {
+            "count": 2,
+            "avg_pnl": 2.482,
+            "total_pnl": 4.96
+          }
+        }
+      },
+      "full_is_mdd_mtm": 6.69,
+      "folds": [
+        {
+          "fold": 1,
+          "is_bars": "0-15644",
+          "oos_bars": "15644-31288",
+          "is": {
+            "trades": 736,
+            "wr": 29.3,
+            "pnl": 21.47,
+            "mdd": 7.06,
+            "pnl_mdd": 3.04,
+            "avg_win": 5.452,
+            "avg_loss": 1.893,
+            "rr": 2.88,
+            "edge_per_trade": 0.029,
+            "n_wins": 216,
+            "n_losses": 520,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 437,
+                "avg_pnl": -2.134,
+                "total_pnl": -932.72
+              },
+              "SL": {
+                "count": 76,
+                "avg_pnl": -0.6,
+                "total_pnl": -45.6
+              },
+              "TP": {
+                "count": 209,
+                "avg_pnl": 5.601,
+                "total_pnl": 1170.58
+              },
+              "TIMEOUT": {
+                "count": 5,
+                "avg_pnl": 0.595,
+                "total_pnl": 2.97
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": -0.222,
+                "total_pnl": -2.0
+              }
+            }
+          },
+          "oos": {
+            "trades": 633,
+            "wr": 32.1,
+            "pnl": 18.92,
+            "mdd": 5.62,
+            "pnl_mdd": 3.37,
+            "avg_win": 4.982,
+            "avg_loss": 1.956,
+            "rr": 2.547,
+            "edge_per_trade": 0.03,
+            "n_wins": 203,
+            "n_losses": 430,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 371,
+                "avg_pnl": -2.165,
+                "total_pnl": -803.24
+              },
+              "TP": {
+                "count": 193,
+                "avg_pnl": 5.219,
+                "total_pnl": 1007.26
+              },
+              "SL": {
+                "count": 57,
+                "avg_pnl": -0.6,
+                "total_pnl": -34.2
+              },
+              "TIMEOUT": {
+                "count": 3,
+                "avg_pnl": 0.075,
+                "total_pnl": 0.22
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.025,
+                "total_pnl": 0.22
+              }
+            }
+          }
+        },
+        {
+          "fold": 2,
+          "is_bars": "0-31288",
+          "oos_bars": "31288-46932",
+          "is": {
+            "trades": 1368,
+            "wr": 30.7,
+            "pnl": 40.97,
+            "mdd": 7.06,
+            "pnl_mdd": 5.8,
+            "avg_win": 5.24,
+            "avg_loss": 1.933,
+            "rr": 2.711,
+            "edge_per_trade": 0.03,
+            "n_wins": 420,
+            "n_losses": 948,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 813,
+                "avg_pnl": -2.151,
+                "total_pnl": -1749.15
+              },
+              "SL": {
+                "count": 131,
+                "avg_pnl": -0.6,
+                "total_pnl": -78.6
+              },
+              "TP": {
+                "count": 405,
+                "avg_pnl": 5.41,
+                "total_pnl": 2191.0
+              },
+              "TIMEOUT": {
+                "count": 10,
+                "avg_pnl": 0.528,
+                "total_pnl": 5.28
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.025,
+                "total_pnl": 0.22
+              }
+            }
+          },
+          "oos": {
+            "trades": 652,
+            "wr": 29.6,
+            "pnl": 17.27,
+            "mdd": 8.99,
+            "pnl_mdd": 1.92,
+            "avg_win": 5.248,
+            "avg_loss": 1.868,
+            "rr": 2.809,
+            "edge_per_trade": 0.026,
+            "n_wins": 193,
+            "n_losses": 459,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 368,
+                "avg_pnl": -2.143,
+                "total_pnl": -788.46
+              },
+              "SL": {
+                "count": 74,
+                "avg_pnl": -0.758,
+                "total_pnl": -56.1
+              },
+              "TP": {
+                "count": 185,
+                "avg_pnl": 5.417,
+                "total_pnl": 1002.13
+              },
+              "TIMEOUT": {
+                "count": 18,
+                "avg_pnl": -0.188,
+                "total_pnl": -3.39
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": 0.179,
+                "total_pnl": 1.26
+              }
+            }
+          }
+        },
+        {
+          "fold": 3,
+          "is_bars": "0-46932",
+          "oos_bars": "46932-62576",
+          "is": {
+            "trades": 2011,
+            "wr": 30.3,
+            "pnl": 60.53,
+            "mdd": 7.06,
+            "pnl_mdd": 8.57,
+            "avg_win": 5.293,
+            "avg_loss": 1.916,
+            "rr": 2.763,
+            "edge_per_trade": 0.03,
+            "n_wins": 610,
+            "n_losses": 1401,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1179,
+                "avg_pnl": -2.152,
+                "total_pnl": -2536.63
+              },
+              "SL": {
+                "count": 202,
+                "avg_pnl": -0.658,
+                "total_pnl": -132.9
+              },
+              "TP": {
+                "count": 595,
+                "avg_pnl": 5.397,
+                "total_pnl": 3211.12
+              },
+              "TIMEOUT": {
+                "count": 28,
+                "avg_pnl": 0.068,
+                "total_pnl": 1.89
+              },
+              "OOS_END": {
+                "count": 7,
+                "avg_pnl": 0.179,
+                "total_pnl": 1.26
+              }
+            }
+          },
+          "oos": {
+            "trades": 971,
+            "wr": 28.7,
+            "pnl": 52.25,
+            "mdd": 9.48,
+            "pnl_mdd": 5.51,
+            "avg_win": 6.583,
+            "avg_loss": 1.975,
+            "rr": 3.334,
+            "edge_per_trade": 0.054,
+            "n_wins": 279,
+            "n_losses": 692,
+            "reason_breakdown": {
+              "SL": {
+                "count": 157,
+                "avg_pnl": -0.671,
+                "total_pnl": -105.37
+              },
+              "CASCADE_SL": {
+                "count": 532,
+                "avg_pnl": -2.357,
+                "total_pnl": -1253.91
+              },
+              "TP": {
+                "count": 273,
+                "avg_pnl": 6.685,
+                "total_pnl": 1825.05
+              },
+              "TIMEOUT": {
+                "count": 1,
+                "avg_pnl": -0.56,
+                "total_pnl": -0.56
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": 0.629,
+                "total_pnl": 5.03
+              }
+            }
+          }
+        },
+        {
+          "fold": 4,
+          "is_bars": "0-62576",
+          "oos_bars": "62576-78220",
+          "is": {
+            "trades": 2978,
+            "wr": 29.9,
+            "pnl": 116.41,
+            "mdd": 7.06,
+            "pnl_mdd": 16.48,
+            "avg_win": 5.717,
+            "avg_loss": 1.939,
+            "rr": 2.949,
+            "edge_per_trade": 0.039,
+            "n_wins": 891,
+            "n_losses": 2087,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 1711,
+                "avg_pnl": -2.216,
+                "total_pnl": -3791.93
+              },
+              "SL": {
+                "count": 357,
+                "avg_pnl": -0.664,
+                "total_pnl": -237.07
+              },
+              "TP": {
+                "count": 873,
+                "avg_pnl": 5.808,
+                "total_pnl": 5070.33
+              },
+              "TIMEOUT": {
+                "count": 29,
+                "avg_pnl": 0.046,
+                "total_pnl": 1.33
+              },
+              "OOS_END": {
+                "count": 8,
+                "avg_pnl": 0.629,
+                "total_pnl": 5.03
+              }
+            }
+          },
+          "oos": {
+            "trades": 727,
+            "wr": 32.0,
+            "pnl": 44.3,
+            "mdd": 5.94,
+            "pnl_mdd": 7.45,
+            "avg_win": 5.585,
+            "avg_loss": 1.827,
+            "rr": 3.057,
+            "edge_per_trade": 0.061,
+            "n_wins": 233,
+            "n_losses": 494,
+            "reason_breakdown": {
+              "SL": {
+                "count": 99,
+                "avg_pnl": -0.6,
+                "total_pnl": -59.4
+              },
+              "CASCADE_SL": {
+                "count": 388,
+                "avg_pnl": -2.155,
+                "total_pnl": -836.1
+              },
+              "TP": {
+                "count": 217,
+                "avg_pnl": 5.931,
+                "total_pnl": 1287.13
+              },
+              "TIMEOUT": {
+                "count": 14,
+                "avg_pnl": 0.324,
+                "total_pnl": 4.54
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.277,
+                "total_pnl": 2.5
+              }
+            }
+          }
+        },
+        {
+          "fold": 5,
+          "is_bars": "0-78220",
+          "oos_bars": "78220-93864",
+          "is": {
+            "trades": 3699,
+            "wr": 30.4,
+            "pnl": 164.12,
+            "mdd": 7.06,
+            "pnl_mdd": 23.23,
+            "avg_win": 5.708,
+            "avg_loss": 1.915,
+            "rr": 2.981,
+            "edge_per_trade": 0.044,
+            "n_wins": 1123,
+            "n_losses": 2576,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 2097,
+                "avg_pnl": -2.203,
+                "total_pnl": -4619.74
+              },
+              "SL": {
+                "count": 455,
+                "avg_pnl": -0.65,
+                "total_pnl": -295.87
+              },
+              "TP": {
+                "count": 1095,
+                "avg_pnl": 5.83,
+                "total_pnl": 6384.3
+              },
+              "TIMEOUT": {
+                "count": 43,
+                "avg_pnl": 0.137,
+                "total_pnl": 5.87
+              },
+              "OOS_END": {
+                "count": 9,
+                "avg_pnl": 0.277,
+                "total_pnl": 2.5
+              }
+            }
+          },
+          "oos": {
+            "trades": 1099,
+            "wr": 28.9,
+            "pnl": 84.69,
+            "mdd": 3.49,
+            "pnl_mdd": 24.28,
+            "avg_win": 6.926,
+            "avg_loss": 1.844,
+            "rr": 3.756,
+            "edge_per_trade": 0.077,
+            "n_wins": 318,
+            "n_losses": 781,
+            "reason_breakdown": {
+              "CASCADE_SL": {
+                "count": 590,
+                "avg_pnl": -2.204,
+                "total_pnl": -1300.57
+              },
+              "TP": {
+                "count": 317,
+                "avg_pnl": 6.931,
+                "total_pnl": 2197.13
+              },
+              "SL": {
+                "count": 190,
+                "avg_pnl": -0.733,
+                "total_pnl": -139.28
+              },
+              "OOS_END": {
+                "count": 2,
+                "avg_pnl": 2.482,
+                "total_pnl": 4.96
+              }
+            }
+          }
+        }
+      ],
+      "oos_summary": {
+        "total_pnl": 217.43,
+        "weighted_wr": 30.0,
+        "weighted_rr": 3.172,
+        "avg_win": 6.007,
+        "avg_loss": 1.894,
+        "total_trades": 4082,
+        "fold_pnls": [
+          18.92,
+          17.27,
+          52.25,
+          44.3,
+          84.69
+        ]
+      }
+    }
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "config": "FIXED_TP_3PCT",
+      "oos_pnl": 217.43,
+      "oos_rr": 3.172,
+      "oos_wr": 30.0
+    },
+    {
+      "rank": 2,
+      "config": "FIXED_TP_2PCT",
+      "oos_pnl": 200.51,
+      "oos_rr": 2.393,
+      "oos_wr": 35.3
+    },
+    {
+      "rank": 3,
+      "config": "NO_DECAY",
+      "oos_pnl": 191.83,
+      "oos_rr": 1.984,
+      "oos_wr": 39.2
+    },
+    {
+      "rank": 4,
+      "config": "TP_1.2x",
+      "oos_pnl": 190.77,
+      "oos_rr": 1.902,
+      "oos_wr": 40.1
+    },
+    {
+      "rank": 5,
+      "config": "TP_2.0x",
+      "oos_pnl": 189.66,
+      "oos_rr": 2.761,
+      "oos_wr": 31.9
+    },
+    {
+      "rank": 6,
+      "config": "SLOW_DECAY",
+      "oos_pnl": 189.55,
+      "oos_rr": 1.837,
+      "oos_wr": 40.9
+    },
+    {
+      "rank": 7,
+      "config": "TP_1.2x_SLOW",
+      "oos_pnl": 188.66,
+      "oos_rr": 2.151,
+      "oos_wr": 37.3
+    },
+    {
+      "rank": 8,
+      "config": "TP_1.5x",
+      "oos_pnl": 187.91,
+      "oos_rr": 2.252,
+      "oos_wr": 36.2
+    },
+    {
+      "rank": 9,
+      "config": "BASELINE",
+      "oos_pnl": 180.69,
+      "oos_rr": 1.636,
+      "oos_wr": 43.4
+    }
+  ]
+}

@@ -1,0 +1,2131 @@
+{
+  "timestamp": "2026-02-09T15:51:38.223309",
+  "research": "v1.26.4 Deep TP/SL Validation",
+  "phase1_cv": {
+    "BD-BD-U": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        null,
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        null
+      ],
+      "consensus_tpsl": [
+        2.0,
+        3.0
+      ],
+      "consensus_count": 3,
+      "n_match_proposed": 3,
+      "n_valid": 3,
+      "oos_pnls": [
+        13.5,
+        0,
+        17.2,
+        3.9,
+        0
+      ],
+      "oos_positive": 3,
+      "oos_total": 34.6,
+      "stable": true
+    },
+    "BD-D-D": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "selections": [
+        [
+          1.5,
+          3.0
+        ],
+        [
+          1.5,
+          3.0
+        ],
+        [
+          1.5,
+          3.0
+        ],
+        [
+          1.5,
+          2.5
+        ],
+        [
+          1.5,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        1.5,
+        3.0
+      ],
+      "consensus_count": 4,
+      "n_match_proposed": 4,
+      "n_valid": 5,
+      "oos_pnls": [
+        8.8,
+        4.4,
+        13.2,
+        5.6,
+        17.6
+      ],
+      "oos_positive": 5,
+      "oos_total": 49.6,
+      "stable": true
+    },
+    "BD-ST-U": {
+      "proposed": [
+        2.0,
+        2.0
+      ],
+      "selections": [
+        [
+          1.5,
+          2.0
+        ],
+        [
+          2.5,
+          2.0
+        ],
+        [
+          2.0,
+          2.0
+        ],
+        [
+          1.5,
+          0.5
+        ],
+        null
+      ],
+      "consensus_tpsl": [
+        1.5,
+        2.0
+      ],
+      "consensus_count": 1,
+      "n_match_proposed": 1,
+      "n_valid": 4,
+      "oos_pnls": [
+        29.4,
+        -15.7,
+        -44.5,
+        -1.2,
+        0
+      ],
+      "oos_positive": 1,
+      "oos_total": -32.0,
+      "stable": false
+    },
+    "BU-BU-BD": {
+      "proposed": [
+        3.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          0.7,
+          3.0
+        ],
+        [
+          3.0,
+          3.0
+        ],
+        [
+          2.0,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        3.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 1,
+      "n_valid": 5,
+      "oos_pnls": [
+        5.4,
+        20.4,
+        16.9,
+        -1.0,
+        28.6
+      ],
+      "oos_positive": 4,
+      "oos_total": 70.3,
+      "stable": false
+    },
+    "BU-ST-GS": {
+      "proposed": [
+        1.0,
+        2.5
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          1.0,
+          2.0
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          1.0,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        1.0,
+        2.5
+      ],
+      "consensus_count": 3,
+      "n_match_proposed": 3,
+      "n_valid": 5,
+      "oos_pnls": [
+        -18.2,
+        8.7,
+        -3.2,
+        8.7,
+        8.7
+      ],
+      "oos_positive": 3,
+      "oos_total": 4.7,
+      "stable": true
+    },
+    "D-BD-ST": {
+      "proposed": [
+        2.5,
+        3.0
+      ],
+      "selections": [
+        null,
+        [
+          2.5,
+          3.0
+        ],
+        null,
+        null,
+        [
+          2.5,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        2.5,
+        3.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 2,
+      "oos_pnls": [
+        0,
+        5.7,
+        0,
+        0,
+        5.7
+      ],
+      "oos_positive": 2,
+      "oos_total": 11.4,
+      "stable": false
+    },
+    "D-MU-U": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "selections": [
+        [
+          1.5,
+          2.0
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        null,
+        [
+          1.5,
+          3.0
+        ],
+        [
+          1.0,
+          2.0
+        ]
+      ],
+      "consensus_tpsl": [
+        1.5,
+        2.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 4,
+      "oos_pnls": [
+        15.9,
+        5.4,
+        0,
+        -5.3,
+        20.0
+      ],
+      "oos_positive": 3,
+      "oos_total": 36.0,
+      "stable": false
+    },
+    "DN-BD-BD": {
+      "proposed": [
+        2.0,
+        1.5
+      ],
+      "selections": [
+        [
+          2.0,
+          1.5
+        ],
+        [
+          2.0,
+          1.5
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        null
+      ],
+      "consensus_tpsl": [
+        2.0,
+        1.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 4,
+      "oos_pnls": [
+        29.4,
+        15.0,
+        -3.5,
+        -41.1,
+        0
+      ],
+      "oos_positive": 2,
+      "oos_total": -0.2,
+      "stable": false
+    },
+    "DN-D-BD": {
+      "proposed": [
+        2.5,
+        1.0
+      ],
+      "selections": [
+        null,
+        [
+          2.5,
+          3.0
+        ],
+        null,
+        null,
+        null
+      ],
+      "consensus_tpsl": [
+        2.5,
+        3.0
+      ],
+      "consensus_count": 1,
+      "n_match_proposed": 0,
+      "n_valid": 1,
+      "oos_pnls": [
+        0,
+        -5.1,
+        0,
+        0,
+        0
+      ],
+      "oos_positive": 0,
+      "oos_total": -5.1,
+      "stable": false
+    },
+    "DN-DF-MU": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "selections": [
+        [
+          0.7,
+          1.5
+        ],
+        [
+          1.5,
+          3.0
+        ],
+        [
+          0.7,
+          1.5
+        ],
+        [
+          1.5,
+          1.5
+        ],
+        [
+          0.7,
+          1.0
+        ]
+      ],
+      "consensus_tpsl": [
+        0.7,
+        1.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 1,
+      "n_valid": 5,
+      "oos_pnls": [
+        6.0,
+        -0.3,
+        6.0,
+        4.2,
+        4.9
+      ],
+      "oos_positive": 4,
+      "oos_total": 20.8,
+      "stable": false
+    },
+    "DN-DF-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          1.0,
+          2.0
+        ],
+        [
+          0.5,
+          2.5
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          0.5,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        0.5,
+        2.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 1,
+      "n_valid": 5,
+      "oos_pnls": [
+        8.4,
+        9.8,
+        2.5,
+        -9.6,
+        11.2
+      ],
+      "oos_positive": 4,
+      "oos_total": 22.3,
+      "stable": false
+    },
+    "DN-DN-H": {
+      "proposed": [
+        1.0,
+        2.5
+      ],
+      "selections": [
+        [
+          2.5,
+          1.0
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          0.7,
+          2.5
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          0.7,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        1.0,
+        2.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        -6.4,
+        25.4,
+        34.4,
+        -6.8,
+        3.6
+      ],
+      "oos_positive": 3,
+      "oos_total": 50.2,
+      "stable": false
+    },
+    "DN-MD-DN": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "selections": [
+        null,
+        null,
+        [
+          1.5,
+          3.0
+        ],
+        [
+          1.5,
+          2.5
+        ],
+        [
+          1.5,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        1.5,
+        3.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 3,
+      "oos_pnls": [
+        0,
+        0,
+        32.5,
+        12.4,
+        -3.3
+      ],
+      "oos_positive": 2,
+      "oos_total": 41.6,
+      "stable": false
+    },
+    "GS-ST-ST": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "selections": [
+        [
+          0.3,
+          2.0
+        ],
+        [
+          1.0,
+          1.5
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          0.3,
+          2.0
+        ]
+      ],
+      "consensus_tpsl": [
+        0.3,
+        2.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 1,
+      "n_valid": 5,
+      "oos_pnls": [
+        2.4,
+        1.2,
+        2.7,
+        2.7,
+        5.6
+      ],
+      "oos_positive": 5,
+      "oos_total": 14.6,
+      "stable": false
+    },
+    "H-BU-BU": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.5,
+          3.0
+        ],
+        [
+          2.5,
+          3.0
+        ],
+        [
+          2.5,
+          3.0
+        ],
+        [
+          2.5,
+          3.0
+        ],
+        [
+          2.0,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        2.5,
+        3.0
+      ],
+      "consensus_count": 4,
+      "n_match_proposed": 0,
+      "n_valid": 5,
+      "oos_pnls": [
+        14.8,
+        7.4,
+        7.4,
+        7.4,
+        16.0
+      ],
+      "oos_positive": 5,
+      "oos_total": 53.0,
+      "stable": true
+    },
+    "H-MU-MD": {
+      "proposed": [
+        1.0,
+        2.0
+      ],
+      "selections": [
+        [
+          0.7,
+          1.0
+        ],
+        [
+          1.0,
+          2.0
+        ],
+        [
+          0.7,
+          1.5
+        ],
+        [
+          1.5,
+          3.0
+        ],
+        [
+          1.5,
+          2.0
+        ]
+      ],
+      "consensus_tpsl": [
+        0.7,
+        1.0
+      ],
+      "consensus_count": 1,
+      "n_match_proposed": 1,
+      "n_valid": 5,
+      "oos_pnls": [
+        12.0,
+        5.8,
+        5.4,
+        -5.0,
+        1.0
+      ],
+      "oos_positive": 4,
+      "oos_total": 19.2,
+      "stable": false
+    },
+    "IH-MD-MD": {
+      "proposed": [
+        1.0,
+        2.0
+      ],
+      "selections": [
+        [
+          1.0,
+          2.0
+        ],
+        [
+          1.0,
+          2.0
+        ],
+        [
+          1.0,
+          2.0
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        [
+          2.0,
+          1.5
+        ]
+      ],
+      "consensus_tpsl": [
+        1.0,
+        2.0
+      ],
+      "consensus_count": 3,
+      "n_match_proposed": 3,
+      "n_valid": 5,
+      "oos_pnls": [
+        8.7,
+        11.6,
+        11.6,
+        4.4,
+        -12.5
+      ],
+      "oos_positive": 4,
+      "oos_total": 23.8,
+      "stable": true
+    },
+    "IH-ST-MU": {
+      "proposed": [
+        0.5,
+        2.5
+      ],
+      "selections": [
+        [
+          0.5,
+          2.5
+        ],
+        [
+          0.5,
+          2.5
+        ],
+        [
+          0.5,
+          2.5
+        ],
+        [
+          0.5,
+          2.5
+        ],
+        [
+          1.0,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        0.5,
+        2.5
+      ],
+      "consensus_count": 4,
+      "n_match_proposed": 4,
+      "n_valid": 5,
+      "oos_pnls": [
+        7.0,
+        7.0,
+        7.0,
+        5.6,
+        -9.5
+      ],
+      "oos_positive": 4,
+      "oos_total": 17.1,
+      "stable": true
+    },
+    "IH-ST-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        3.0
+      ],
+      "consensus_count": 4,
+      "n_match_proposed": 4,
+      "n_valid": 5,
+      "oos_pnls": [
+        11.3,
+        23.2,
+        8.6,
+        26.3,
+        17.7
+      ],
+      "oos_positive": 5,
+      "oos_total": 87.1,
+      "stable": true
+    },
+    "MD-BU-MD": {
+      "proposed": [
+        2.0,
+        2.5
+      ],
+      "selections": [
+        [
+          2.0,
+          2.5
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        [
+          2.0,
+          2.0
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        2.5
+      ],
+      "consensus_count": 3,
+      "n_match_proposed": 3,
+      "n_valid": 5,
+      "oos_pnls": [
+        11.8,
+        5.9,
+        8.7,
+        17.7,
+        5.3
+      ],
+      "oos_positive": 5,
+      "oos_total": 49.4,
+      "stable": true
+    },
+    "MD-H-MD": {
+      "proposed": [
+        1.0,
+        0.7
+      ],
+      "selections": [
+        null,
+        [
+          1.0,
+          0.7
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        null,
+        [
+          1.0,
+          0.3
+        ]
+      ],
+      "consensus_tpsl": [
+        1.0,
+        0.7
+      ],
+      "consensus_count": 1,
+      "n_match_proposed": 1,
+      "n_valid": 3,
+      "oos_pnls": [
+        0,
+        -3.7,
+        -3.3,
+        0,
+        -0.2
+      ],
+      "oos_positive": 0,
+      "oos_total": -7.2,
+      "stable": false
+    },
+    "MD-MD-ST": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "selections": [
+        [
+          1.5,
+          2.0
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        [
+          0.7,
+          1.0
+        ],
+        [
+          1.5,
+          3.0
+        ],
+        [
+          2.5,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        1.5,
+        2.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        7.1,
+        11.5,
+        6.9,
+        8.2,
+        -12.5
+      ],
+      "oos_positive": 4,
+      "oos_total": 21.2,
+      "stable": false
+    },
+    "MU-BD-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.5,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        3.0
+      ],
+      "consensus_count": 4,
+      "n_match_proposed": 4,
+      "n_valid": 5,
+      "oos_pnls": [
+        23.6,
+        8.6,
+        7.4,
+        17.7,
+        17.2
+      ],
+      "oos_positive": 5,
+      "oos_total": 74.5,
+      "stable": true
+    },
+    "MU-DF-U": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "selections": [
+        [
+          1.5,
+          2.0
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        [
+          1.5,
+          1.5
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        [
+          1.5,
+          1.0
+        ]
+      ],
+      "consensus_tpsl": [
+        1.5,
+        2.0
+      ],
+      "consensus_count": 3,
+      "n_match_proposed": 3,
+      "n_valid": 5,
+      "oos_pnls": [
+        17.6,
+        -3.4,
+        4.2,
+        17.6,
+        10.1
+      ],
+      "oos_positive": 4,
+      "oos_total": 46.1,
+      "stable": true
+    },
+    "MU-IH-DN": {
+      "proposed": [
+        2.0,
+        2.0
+      ],
+      "selections": [
+        [
+          2.0,
+          2.5
+        ],
+        [
+          2.0,
+          2.0
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        [
+          2.0,
+          2.0
+        ],
+        [
+          2.0,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        2.5
+      ],
+      "consensus_count": 3,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        27.8,
+        17.5,
+        -9.3,
+        41.3,
+        32.0
+      ],
+      "oos_positive": 4,
+      "oos_total": 109.3,
+      "stable": true
+    },
+    "ST-DN-BU": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          3.0,
+          2.5
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          3.0,
+          2.5
+        ],
+        null,
+        null
+      ],
+      "consensus_tpsl": [
+        3.0,
+        2.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 1,
+      "n_valid": 3,
+      "oos_pnls": [
+        -2.4,
+        -24.6,
+        3.9,
+        0,
+        0
+      ],
+      "oos_positive": 1,
+      "oos_total": -23.1,
+      "stable": false
+    },
+    "ST-MU-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          2.0,
+          2.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          1.5,
+          2.0
+        ],
+        [
+          1.5,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        3.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        20.4,
+        -1.2,
+        -1.0,
+        29.1,
+        21.2
+      ],
+      "oos_positive": 3,
+      "oos_total": 68.5,
+      "stable": false
+    },
+    "U-MD-GS": {
+      "proposed": [
+        0.5,
+        2.5
+      ],
+      "selections": [
+        null,
+        [
+          0.5,
+          0.3
+        ],
+        [
+          1.0,
+          2.5
+        ],
+        null,
+        [
+          1.0,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        1.0,
+        2.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 0,
+      "n_valid": 3,
+      "oos_pnls": [
+        0,
+        0.8,
+        -1.8,
+        0,
+        9.8
+      ],
+      "oos_positive": 2,
+      "oos_total": 8.8,
+      "stable": false
+    },
+    "U-MU-H": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "selections": [
+        [
+          1.5,
+          3.0
+        ],
+        [
+          2.0,
+          1.5
+        ],
+        [
+          1.5,
+          1.5
+        ],
+        [
+          1.5,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        1.5,
+        3.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        34.9,
+        -6.6,
+        -0.8,
+        12.3,
+        38.1
+      ],
+      "oos_positive": 3,
+      "oos_total": 77.9,
+      "stable": false
+    },
+    "U-MU-IH": {
+      "proposed": [
+        3.0,
+        2.5
+      ],
+      "selections": [
+        [
+          3.0,
+          2.5
+        ],
+        [
+          3.0,
+          0.3
+        ],
+        [
+          3.0,
+          2.5
+        ],
+        [
+          2.5,
+          2.5
+        ],
+        [
+          1.5,
+          2.5
+        ]
+      ],
+      "consensus_tpsl": [
+        3.0,
+        2.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        19.1,
+        33.6,
+        -15.2,
+        21.8,
+        27.6
+      ],
+      "oos_positive": 4,
+      "oos_total": 86.9,
+      "stable": false
+    },
+    "U-ST-DF": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.5,
+          3.0
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          2.0,
+          2.5
+        ],
+        null
+      ],
+      "consensus_tpsl": [
+        2.0,
+        2.5
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 0,
+      "n_valid": 4,
+      "oos_pnls": [
+        -18.2,
+        -7.6,
+        2.5,
+        16.0,
+        0
+      ],
+      "oos_positive": 2,
+      "oos_total": -7.3,
+      "stable": false
+    },
+    "U-ST-DN": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "selections": [
+        [
+          2.0,
+          3.0
+        ],
+        [
+          3.0,
+          3.0
+        ],
+        [
+          2.0,
+          3.0
+        ],
+        [
+          1.0,
+          3.0
+        ],
+        [
+          3.0,
+          3.0
+        ]
+      ],
+      "consensus_tpsl": [
+        2.0,
+        3.0
+      ],
+      "consensus_count": 2,
+      "n_match_proposed": 2,
+      "n_valid": 5,
+      "oos_pnls": [
+        -29.6,
+        50.8,
+        111.3,
+        98.4,
+        60.1
+      ],
+      "oos_positive": 4,
+      "oos_total": 291.0,
+      "stable": false
+    }
+  },
+  "phase2_neighbors": {
+    "BD-BD-U": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "BD-D-D": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "BD-ST-U": {
+      "proposed": [
+        2.0,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "BU-BU-BD": {
+      "proposed": [
+        3.0,
+        3.0
+      ],
+      "n_profitable": 4,
+      "n_total": 4,
+      "plateau": true
+    },
+    "BU-ST-GS": {
+      "proposed": [
+        1.0,
+        2.5
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "D-BD-ST": {
+      "proposed": [
+        2.5,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "D-MU-U": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "DN-BD-BD": {
+      "proposed": [
+        2.0,
+        1.5
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "DN-D-BD": {
+      "proposed": [
+        2.5,
+        1.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "DN-DF-MU": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "DN-DF-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "DN-DN-H": {
+      "proposed": [
+        1.0,
+        2.5
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "DN-MD-DN": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "GS-ST-ST": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "H-BU-BU": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "H-MU-MD": {
+      "proposed": [
+        1.0,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "IH-MD-MD": {
+      "proposed": [
+        1.0,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "IH-ST-MU": {
+      "proposed": [
+        0.5,
+        2.5
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "IH-ST-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "MD-BU-MD": {
+      "proposed": [
+        2.0,
+        2.5
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "MD-H-MD": {
+      "proposed": [
+        1.0,
+        0.7
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "MD-MD-ST": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "MU-BD-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "MU-DF-U": {
+      "proposed": [
+        1.5,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "MU-IH-DN": {
+      "proposed": [
+        2.0,
+        2.0
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "ST-DN-BU": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "ST-MU-ST": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "U-MD-GS": {
+      "proposed": [
+        0.5,
+        2.5
+      ],
+      "n_profitable": 9,
+      "n_total": 9,
+      "plateau": true
+    },
+    "U-MU-H": {
+      "proposed": [
+        1.5,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "U-MU-IH": {
+      "proposed": [
+        3.0,
+        2.5
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "U-ST-DF": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    },
+    "U-ST-DN": {
+      "proposed": [
+        2.0,
+        3.0
+      ],
+      "n_profitable": 6,
+      "n_total": 6,
+      "plateau": true
+    }
+  },
+  "phase3_edge": {
+    "BD-BD-U": {
+      "pat_wr": 76.4,
+      "base_wr": 65.3,
+      "excess": 11.1,
+      "has_edge": true
+    },
+    "BD-D-D": {
+      "pat_wr": 100.0,
+      "base_wr": 68.1,
+      "excess": 31.9,
+      "has_edge": true
+    },
+    "BD-ST-U": {
+      "pat_wr": 63.2,
+      "base_wr": 53.4,
+      "excess": 9.8,
+      "has_edge": true
+    },
+    "BU-BU-BD": {
+      "pat_wr": 71.4,
+      "base_wr": 50.0,
+      "excess": 21.4,
+      "has_edge": true
+    },
+    "BU-ST-GS": {
+      "pat_wr": 100.0,
+      "base_wr": 69.8,
+      "excess": 30.2,
+      "has_edge": true
+    },
+    "D-BD-ST": {
+      "pat_wr": 83.3,
+      "base_wr": 55.9,
+      "excess": 27.4,
+      "has_edge": true
+    },
+    "D-MU-U": {
+      "pat_wr": 80.0,
+      "base_wr": 62.4,
+      "excess": 17.6,
+      "has_edge": true
+    },
+    "DN-BD-BD": {
+      "pat_wr": 59.2,
+      "base_wr": 46.7,
+      "excess": 12.5,
+      "has_edge": true
+    },
+    "DN-D-BD": {
+      "pat_wr": 48.8,
+      "base_wr": 24.4,
+      "excess": 24.5,
+      "has_edge": true
+    },
+    "DN-DF-MU": {
+      "pat_wr": 92.9,
+      "base_wr": 73.1,
+      "excess": 19.8,
+      "has_edge": true
+    },
+    "DN-DF-ST": {
+      "pat_wr": 83.3,
+      "base_wr": 65.3,
+      "excess": 18.0,
+      "has_edge": true
+    },
+    "DN-DN-H": {
+      "pat_wr": 83.5,
+      "base_wr": 75.6,
+      "excess": 7.9,
+      "has_edge": true
+    },
+    "DN-MD-DN": {
+      "pat_wr": 77.2,
+      "base_wr": 73.1,
+      "excess": 4.2,
+      "has_edge": false
+    },
+    "GS-ST-ST": {
+      "pat_wr": 83.3,
+      "base_wr": 62.4,
+      "excess": 21.0,
+      "has_edge": true
+    },
+    "H-BU-BU": {
+      "pat_wr": 100.0,
+      "base_wr": 65.3,
+      "excess": 34.7,
+      "has_edge": true
+    },
+    "H-MU-MD": {
+      "pat_wr": 91.3,
+      "base_wr": 71.7,
+      "excess": 19.7,
+      "has_edge": true
+    },
+    "IH-MD-MD": {
+      "pat_wr": 94.7,
+      "base_wr": 71.7,
+      "excess": 23.1,
+      "has_edge": true
+    },
+    "IH-ST-MU": {
+      "pat_wr": 100.0,
+      "base_wr": 84.5,
+      "excess": 15.5,
+      "has_edge": true
+    },
+    "IH-ST-ST": {
+      "pat_wr": 84.6,
+      "base_wr": 61.6,
+      "excess": 23.1,
+      "has_edge": true
+    },
+    "MD-BU-MD": {
+      "pat_wr": 87.5,
+      "base_wr": 59.5,
+      "excess": 28.0,
+      "has_edge": true
+    },
+    "MD-H-MD": {
+      "pat_wr": 70.8,
+      "base_wr": 44.8,
+      "excess": 26.0,
+      "has_edge": true
+    },
+    "MD-MD-ST": {
+      "pat_wr": 80.0,
+      "base_wr": 62.4,
+      "excess": 17.6,
+      "has_edge": true
+    },
+    "MU-BD-ST": {
+      "pat_wr": 87.5,
+      "base_wr": 65.3,
+      "excess": 22.2,
+      "has_edge": true
+    },
+    "MU-DF-U": {
+      "pat_wr": 88.9,
+      "base_wr": 62.4,
+      "excess": 26.5,
+      "has_edge": true
+    },
+    "MU-IH-DN": {
+      "pat_wr": 81.2,
+      "base_wr": 53.4,
+      "excess": 27.8,
+      "has_edge": true
+    },
+    "ST-DN-BU": {
+      "pat_wr": 76.3,
+      "base_wr": 61.6,
+      "excess": 14.7,
+      "has_edge": true
+    },
+    "ST-MU-ST": {
+      "pat_wr": 79.1,
+      "base_wr": 61.6,
+      "excess": 17.5,
+      "has_edge": true
+    },
+    "U-MD-GS": {
+      "pat_wr": 95.5,
+      "base_wr": 84.5,
+      "excess": 11.0,
+      "has_edge": true
+    },
+    "U-MU-H": {
+      "pat_wr": 87.5,
+      "base_wr": 73.1,
+      "excess": 14.4,
+      "has_edge": true
+    },
+    "U-MU-IH": {
+      "pat_wr": 76.0,
+      "base_wr": 44.1,
+      "excess": 31.9,
+      "has_edge": true
+    },
+    "U-ST-DF": {
+      "pat_wr": 85.0,
+      "base_wr": 65.3,
+      "excess": 19.7,
+      "has_edge": true
+    },
+    "U-ST-DN": {
+      "pat_wr": 70.9,
+      "base_wr": 61.6,
+      "excess": 9.3,
+      "has_edge": true
+    }
+  },
+  "phase4_oos": {
+    "test_current": {
+      "pnl": 341.3,
+      "trades": 106,
+      "wr": 71.7,
+      "mdd": 12.5,
+      "pf": 3.6,
+      "exp": 3.22,
+      "pnl_mdd": 27.3
+    },
+    "test_train_opt": {
+      "pnl": 321.4,
+      "trades": 122,
+      "wr": 76.23,
+      "mdd": 12.2,
+      "pf": 3.24,
+      "exp": 2.63,
+      "pnl_mdd": 26.34
+    },
+    "test_full_opt": {
+      "pnl": 333.4,
+      "trades": 101,
+      "wr": 77.23,
+      "mdd": 15.3,
+      "pf": 3.57,
+      "exp": 3.3,
+      "pnl_mdd": 21.79
+    }
+  },
+  "phase5_final": {
+    "accepted": [
+      "BD-BD-U",
+      "BD-D-D",
+      "BD-ST-U",
+      "BU-BU-BD",
+      "BU-ST-GS",
+      "D-BD-ST",
+      "D-MU-U",
+      "DN-BD-BD",
+      "DN-D-BD",
+      "DN-DF-MU",
+      "DN-DF-ST",
+      "DN-DN-H",
+      "GS-ST-ST",
+      "H-BU-BU",
+      "H-MU-MD",
+      "IH-MD-MD",
+      "IH-ST-MU",
+      "IH-ST-ST",
+      "MD-BU-MD",
+      "MD-H-MD",
+      "MD-MD-ST",
+      "MU-BD-ST",
+      "MU-DF-U",
+      "MU-IH-DN",
+      "ST-DN-BU",
+      "ST-MU-ST",
+      "U-MD-GS",
+      "U-MU-H",
+      "U-MU-IH",
+      "U-ST-DF",
+      "U-ST-DN"
+    ],
+    "rejected": [
+      "DN-MD-DN"
+    ],
+    "portfolio": {
+      "pnl": 882.7,
+      "trades": 314,
+      "wr": 77.07,
+      "mdd": 24.4,
+      "pf": 3.23,
+      "exp": 2.81,
+      "pnl_mdd": 36.18
+    },
+    "changes": [
+      {
+        "pattern": "BD-BD-U",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "BD-D-D",
+        "direction": "SHORT",
+        "tp": 1.5,
+        "sl": 3.0
+      },
+      {
+        "pattern": "BD-ST-U",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 2.0
+      },
+      {
+        "pattern": "BU-BU-BD",
+        "direction": "LONG",
+        "tp": 3.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "BU-ST-GS",
+        "direction": "SHORT",
+        "tp": 1.0,
+        "sl": 2.5
+      },
+      {
+        "pattern": "D-BD-ST",
+        "direction": "SHORT",
+        "tp": 2.5,
+        "sl": 3.0
+      },
+      {
+        "pattern": "D-MU-U",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 2.0
+      },
+      {
+        "pattern": "DN-BD-BD",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 1.5
+      },
+      {
+        "pattern": "DN-D-BD",
+        "direction": "SHORT",
+        "tp": 2.5,
+        "sl": 1.0
+      },
+      {
+        "pattern": "DN-DF-MU",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 3.0
+      },
+      {
+        "pattern": "DN-DF-ST",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "DN-DN-H",
+        "direction": "LONG",
+        "tp": 1.0,
+        "sl": 2.5
+      },
+      {
+        "pattern": "GS-ST-ST",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 2.0
+      },
+      {
+        "pattern": "H-BU-BU",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "H-MU-MD",
+        "direction": "LONG",
+        "tp": 1.0,
+        "sl": 2.0
+      },
+      {
+        "pattern": "IH-MD-MD",
+        "direction": "LONG",
+        "tp": 1.0,
+        "sl": 2.0
+      },
+      {
+        "pattern": "IH-ST-MU",
+        "direction": "LONG",
+        "tp": 0.5,
+        "sl": 2.5
+      },
+      {
+        "pattern": "IH-ST-ST",
+        "direction": "SHORT",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "MD-BU-MD",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 2.5
+      },
+      {
+        "pattern": "MD-H-MD",
+        "direction": "LONG",
+        "tp": 1.0,
+        "sl": 0.7
+      },
+      {
+        "pattern": "MD-MD-ST",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 2.0
+      },
+      {
+        "pattern": "MU-BD-ST",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "MU-DF-U",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 2.0
+      },
+      {
+        "pattern": "MU-IH-DN",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 2.0
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "direction": "SHORT",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "ST-MU-ST",
+        "direction": "SHORT",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "U-MD-GS",
+        "direction": "LONG",
+        "tp": 0.5,
+        "sl": 2.5
+      },
+      {
+        "pattern": "U-MU-H",
+        "direction": "LONG",
+        "tp": 1.5,
+        "sl": 3.0
+      },
+      {
+        "pattern": "U-MU-IH",
+        "direction": "LONG",
+        "tp": 3.0,
+        "sl": 2.5
+      },
+      {
+        "pattern": "U-ST-DF",
+        "direction": "LONG",
+        "tp": 2.0,
+        "sl": 3.0
+      },
+      {
+        "pattern": "U-ST-DN",
+        "direction": "SHORT",
+        "tp": 2.0,
+        "sl": 3.0
+      }
+    ]
+  }
+}

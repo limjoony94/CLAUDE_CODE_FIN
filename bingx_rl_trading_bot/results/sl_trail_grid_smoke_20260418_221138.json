@@ -1,0 +1,687 @@
+{
+  "timestamp": "2026-04-18T22:11:38.180855",
+  "label": "smoke",
+  "elapsed_sec": 1.6,
+  "grid": {
+    "max_sl_atr": [
+      3.3,
+      4.0
+    ],
+    "trail_K": [
+      2.5,
+      2.8
+    ],
+    "max_hold_bars": [
+      192,
+      288
+    ]
+  },
+  "baseline": {
+    "full_pnl": 170.49,
+    "full_mdd": 5.38,
+    "test_pnl": 54.2,
+    "ratio": 31.69
+  },
+  "regression_check": {
+    "baseline_combo_full_pnl": 170.49,
+    "drift": 0.0
+  },
+  "train_top10": [
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.5,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 609,
+        "WR": 37.4,
+        "PnL": 97.56,
+        "MDD": 4.11,
+        "ratio": 23.73722627737226
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.5,
+        "max_hold_bars": 288
+      },
+      "train": {
+        "trades": 609,
+        "WR": 37.4,
+        "PnL": 97.56,
+        "MDD": 4.11,
+        "ratio": 23.73722627737226
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 3.3,
+        "trail_K": 2.5,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 615,
+        "WR": 37.6,
+        "PnL": 95.07,
+        "MDD": 4.27,
+        "ratio": 22.26463700234192
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 3.3,
+        "trail_K": 2.5,
+        "max_hold_bars": 288
+      },
+      "train": {
+        "trades": 615,
+        "WR": 37.6,
+        "PnL": 95.07,
+        "MDD": 4.27,
+        "ratio": 22.26463700234192
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.8,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 565,
+        "WR": 36.5,
+        "PnL": 84.76,
+        "MDD": 5.88,
+        "ratio": 14.41496598639456
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.8,
+        "max_hold_bars": 288
+      },
+      "train": {
+        "trades": 565,
+        "WR": 36.5,
+        "PnL": 84.76,
+        "MDD": 5.88,
+        "ratio": 14.41496598639456
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 3.3,
+        "trail_K": 2.8,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 570,
+        "WR": 36.7,
+        "PnL": 76.47,
+        "MDD": 5.45,
+        "ratio": 14.031192660550458
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 3.3,
+        "trail_K": 2.8,
+        "max_hold_bars": 288
+      },
+      "train": {
+        "trades": 570,
+        "WR": 36.7,
+        "PnL": 76.47,
+        "MDD": 5.45,
+        "ratio": 14.031192660550458
+      }
+    }
+  ],
+  "val_top3": [
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.5,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 609,
+        "WR": 37.4,
+        "PnL": 97.56,
+        "MDD": 4.11,
+        "ratio": 23.73722627737226
+      },
+      "val": {
+        "trades": 200,
+        "WR": 36.0,
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "ratio": 10.722972972972972
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.5,
+        "max_hold_bars": 288
+      },
+      "train": {
+        "trades": 609,
+        "WR": 37.4,
+        "PnL": 97.56,
+        "MDD": 4.11,
+        "ratio": 23.73722627737226
+      },
+      "val": {
+        "trades": 200,
+        "WR": 36.0,
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "ratio": 10.722972972972972
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 3.3,
+        "trail_K": 2.5,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 615,
+        "WR": 37.6,
+        "PnL": 95.07,
+        "MDD": 4.27,
+        "ratio": 22.26463700234192
+      },
+      "val": {
+        "trades": 204,
+        "WR": 35.3,
+        "PnL": 21.21,
+        "MDD": 5.38,
+        "ratio": 3.942379182156134
+      }
+    }
+  ],
+  "top3_full_validation": [
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.5,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 609,
+        "WR": 37.4,
+        "PnL": 97.56,
+        "MDD": 4.11,
+        "ratio": 23.73722627737226
+      },
+      "val": {
+        "trades": 200,
+        "WR": 36.0,
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "ratio": 10.722972972972972
+      },
+      "test": {
+        "trades": 203,
+        "WR": 36.5,
+        "PnL": 64.47,
+        "MDD": 5.2,
+        "ratio": 12.398076923076923
+      },
+      "full": {
+        "trades": 1012,
+        "WR": 37.0,
+        "PnL": 193.78,
+        "MDD": 5.2,
+        "ratio": 37.26538461538461
+      },
+      "wf_oos": [
+        {
+          "trades": 172,
+          "WR": 31.4,
+          "PnL": 17.48,
+          "MDD": 4.11,
+          "fold": 1,
+          "period": "2025-06-30~2025-08-24"
+        },
+        {
+          "trades": 171,
+          "WR": 38.6,
+          "PnL": 27.86,
+          "MDD": 3.0,
+          "fold": 2,
+          "period": "2025-08-24~2025-10-19"
+        },
+        {
+          "trades": 154,
+          "WR": 42.2,
+          "PnL": 48.96,
+          "MDD": 2.96,
+          "fold": 3,
+          "period": "2025-10-19~2025-12-13"
+        },
+        {
+          "trades": 168,
+          "WR": 36.3,
+          "PnL": 49.89,
+          "MDD": 4.2,
+          "fold": 4,
+          "period": "2025-12-13~2026-02-07"
+        },
+        {
+          "trades": 172,
+          "WR": 36.0,
+          "PnL": 30.85,
+          "MDD": 5.2,
+          "fold": 5,
+          "period": "2026-02-07~2026-04-03"
+        }
+      ],
+      "three_way": {
+        "train": {
+          "trades": 609,
+          "WR": 37.4,
+          "PnL": 97.56,
+          "MDD": 4.11
+        },
+        "val": {
+          "trades": 200,
+          "WR": 36.0,
+          "PnL": 31.74,
+          "MDD": 2.96
+        },
+        "test": {
+          "trades": 203,
+          "WR": 36.5,
+          "PnL": 64.47,
+          "MDD": 5.2
+        }
+      },
+      "mc_p": 0.001,
+      "bootstrap": {
+        "obs_pnl": 193.776,
+        "pnl_mean": 193.795,
+        "pnl_ci_lo": 126.759,
+        "pnl_ci_hi": 275.833,
+        "method": "stationary_bootstrap(mean_block=20)",
+        "mdd_ci_lo": 4.042,
+        "mdd_ci_hi": 8.752,
+        "obs_mdd": 5.201
+      },
+      "neighborhood": {
+        "positive": 3,
+        "total": 3,
+        "threshold": 3,
+        "passed": true,
+        "neighbors": [
+          {
+            "combo": {
+              "max_sl_atr": 3.3,
+              "trail_K": 2.5,
+              "max_hold_bars": 192
+            },
+            "PnL": 170.49,
+            "MDD": 5.38,
+            "trades": 1027,
+            "positive": true
+          },
+          {
+            "combo": {
+              "max_sl_atr": 4.0,
+              "trail_K": 2.8,
+              "max_hold_bars": 192
+            },
+            "PnL": 155.78,
+            "MDD": 6.34,
+            "trades": 937,
+            "positive": true
+          },
+          {
+            "combo": {
+              "max_sl_atr": 4.0,
+              "trail_K": 2.5,
+              "max_hold_bars": 288
+            },
+            "PnL": 193.78,
+            "MDD": 5.2,
+            "trades": 1012,
+            "positive": true
+          }
+        ]
+      },
+      "verdict_flags": {
+        "ratio_ok": true,
+        "wf_pass": true,
+        "tw_pass": true,
+        "test_ok": true,
+        "mc_pass": true,
+        "ci_pass": true,
+        "nbr_pass": true
+      }
+    },
+    {
+      "combo": {
+        "max_sl_atr": 4.0,
+        "trail_K": 2.5,
+        "max_hold_bars": 288
+      },
+      "train": {
+        "trades": 609,
+        "WR": 37.4,
+        "PnL": 97.56,
+        "MDD": 4.11,
+        "ratio": 23.73722627737226
+      },
+      "val": {
+        "trades": 200,
+        "WR": 36.0,
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "ratio": 10.722972972972972
+      },
+      "test": {
+        "trades": 203,
+        "WR": 36.5,
+        "PnL": 64.47,
+        "MDD": 5.2,
+        "ratio": 12.398076923076923
+      },
+      "full": {
+        "trades": 1012,
+        "WR": 37.0,
+        "PnL": 193.78,
+        "MDD": 5.2,
+        "ratio": 37.26538461538461
+      },
+      "wf_oos": [
+        {
+          "trades": 172,
+          "WR": 31.4,
+          "PnL": 17.48,
+          "MDD": 4.11,
+          "fold": 1,
+          "period": "2025-06-30~2025-08-24"
+        },
+        {
+          "trades": 171,
+          "WR": 38.6,
+          "PnL": 27.86,
+          "MDD": 3.0,
+          "fold": 2,
+          "period": "2025-08-24~2025-10-19"
+        },
+        {
+          "trades": 154,
+          "WR": 42.2,
+          "PnL": 48.96,
+          "MDD": 2.96,
+          "fold": 3,
+          "period": "2025-10-19~2025-12-13"
+        },
+        {
+          "trades": 168,
+          "WR": 36.3,
+          "PnL": 49.89,
+          "MDD": 4.2,
+          "fold": 4,
+          "period": "2025-12-13~2026-02-07"
+        },
+        {
+          "trades": 172,
+          "WR": 36.0,
+          "PnL": 30.85,
+          "MDD": 5.2,
+          "fold": 5,
+          "period": "2026-02-07~2026-04-03"
+        }
+      ],
+      "three_way": {
+        "train": {
+          "trades": 609,
+          "WR": 37.4,
+          "PnL": 97.56,
+          "MDD": 4.11
+        },
+        "val": {
+          "trades": 200,
+          "WR": 36.0,
+          "PnL": 31.74,
+          "MDD": 2.96
+        },
+        "test": {
+          "trades": 203,
+          "WR": 36.5,
+          "PnL": 64.47,
+          "MDD": 5.2
+        }
+      },
+      "mc_p": 0.001,
+      "bootstrap": {
+        "obs_pnl": 193.776,
+        "pnl_mean": 193.795,
+        "pnl_ci_lo": 126.759,
+        "pnl_ci_hi": 275.833,
+        "method": "stationary_bootstrap(mean_block=20)",
+        "mdd_ci_lo": 4.042,
+        "mdd_ci_hi": 8.752,
+        "obs_mdd": 5.201
+      },
+      "neighborhood": {
+        "positive": 3,
+        "total": 3,
+        "threshold": 3,
+        "passed": true,
+        "neighbors": [
+          {
+            "combo": {
+              "max_sl_atr": 3.3,
+              "trail_K": 2.5,
+              "max_hold_bars": 288
+            },
+            "PnL": 170.49,
+            "MDD": 5.38,
+            "trades": 1027,
+            "positive": true
+          },
+          {
+            "combo": {
+              "max_sl_atr": 4.0,
+              "trail_K": 2.8,
+              "max_hold_bars": 288
+            },
+            "PnL": 155.78,
+            "MDD": 6.34,
+            "trades": 937,
+            "positive": true
+          },
+          {
+            "combo": {
+              "max_sl_atr": 4.0,
+              "trail_K": 2.5,
+              "max_hold_bars": 192
+            },
+            "PnL": 193.78,
+            "MDD": 5.2,
+            "trades": 1012,
+            "positive": true
+          }
+        ]
+      },
+      "verdict_flags": null
+    },
+    {
+      "combo": {
+        "max_sl_atr": 3.3,
+        "trail_K": 2.5,
+        "max_hold_bars": 192
+      },
+      "train": {
+        "trades": 615,
+        "WR": 37.6,
+        "PnL": 95.07,
+        "MDD": 4.27,
+        "ratio": 22.26463700234192
+      },
+      "val": {
+        "trades": 204,
+        "WR": 35.3,
+        "PnL": 21.21,
+        "MDD": 5.38,
+        "ratio": 3.942379182156134
+      },
+      "test": {
+        "trades": 208,
+        "WR": 35.1,
+        "PnL": 54.2,
+        "MDD": 4.1,
+        "ratio": 13.219512195121952
+      },
+      "full": {
+        "trades": 1027,
+        "WR": 36.6,
+        "PnL": 170.49,
+        "MDD": 5.38,
+        "ratio": 31.68959107806692
+      },
+      "wf_oos": [
+        {
+          "trades": 175,
+          "WR": 31.4,
+          "PnL": 16.5,
+          "MDD": 4.27,
+          "fold": 1,
+          "period": "2025-06-30~2025-08-24"
+        },
+        {
+          "trades": 172,
+          "WR": 38.4,
+          "PnL": 28.44,
+          "MDD": 2.84,
+          "fold": 2,
+          "period": "2025-08-24~2025-10-19"
+        },
+        {
+          "trades": 158,
+          "WR": 41.8,
+          "PnL": 40.78,
+          "MDD": 5.38,
+          "fold": 3,
+          "period": "2025-10-19~2025-12-13"
+        },
+        {
+          "trades": 170,
+          "WR": 35.9,
+          "PnL": 47.22,
+          "MDD": 4.36,
+          "fold": 4,
+          "period": "2025-12-13~2026-02-07"
+        },
+        {
+          "trades": 176,
+          "WR": 34.7,
+          "PnL": 20.56,
+          "MDD": 4.1,
+          "fold": 5,
+          "period": "2026-02-07~2026-04-03"
+        }
+      ],
+      "three_way": {
+        "train": {
+          "trades": 615,
+          "WR": 37.6,
+          "PnL": 95.07,
+          "MDD": 4.27
+        },
+        "val": {
+          "trades": 204,
+          "WR": 35.3,
+          "PnL": 21.21,
+          "MDD": 5.38
+        },
+        "test": {
+          "trades": 208,
+          "WR": 35.1,
+          "PnL": 54.2,
+          "MDD": 4.1
+        }
+      },
+      "mc_p": 0.001,
+      "bootstrap": {
+        "obs_pnl": 170.488,
+        "pnl_mean": 170.863,
+        "pnl_ci_lo": 111.682,
+        "pnl_ci_hi": 241.493,
+        "method": "stationary_bootstrap(mean_block=20)",
+        "mdd_ci_lo": 4.253,
+        "mdd_ci_hi": 8.986,
+        "obs_mdd": 5.383
+      },
+      "neighborhood": {
+        "positive": 3,
+        "total": 3,
+        "threshold": 3,
+        "passed": true,
+        "neighbors": [
+          {
+            "combo": {
+              "max_sl_atr": 4.0,
+              "trail_K": 2.5,
+              "max_hold_bars": 192
+            },
+            "PnL": 193.78,
+            "MDD": 5.2,
+            "trades": 1012,
+            "positive": true
+          },
+          {
+            "combo": {
+              "max_sl_atr": 3.3,
+              "trail_K": 2.8,
+              "max_hold_bars": 192
+            },
+            "PnL": 128.76,
+            "MDD": 7.79,
+            "trades": 950,
+            "positive": true
+          },
+          {
+            "combo": {
+              "max_sl_atr": 3.3,
+              "trail_K": 2.5,
+              "max_hold_bars": 288
+            },
+            "PnL": 170.49,
+            "MDD": 5.38,
+            "trades": 1027,
+            "positive": true
+          }
+        ]
+      },
+      "verdict_flags": null
+    }
+  ],
+  "verdict": {
+    "outcome": "GO",
+    "combo": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "flags": {
+      "ratio_ok": true,
+      "wf_pass": true,
+      "tw_pass": true,
+      "test_ok": true,
+      "mc_pass": true,
+      "ci_pass": true,
+      "nbr_pass": true
+    },
+    "ratio": 37.265,
+    "baseline_ratio": 31.69
+  }
+}

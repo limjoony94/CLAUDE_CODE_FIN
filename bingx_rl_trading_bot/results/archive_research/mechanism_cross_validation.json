@@ -1,0 +1,596 @@
+{
+  "metadata": {
+    "script": "mechanism_cross_validation_study.py",
+    "date": "2026-03-11T18:45:15.656470",
+    "stack": "v1.55.0",
+    "n_patterns": 131,
+    "n_signals": 13546,
+    "neutral_window": [
+      0,
+      74642
+    ],
+    "mechanisms": {
+      "M1_Cascade": {
+        "cascade_tighten_pct": {
+          "on": 85,
+          "off": 0
+        }
+      },
+      "M2_AggRisk": {
+        "agg_risk_counter": {
+          "on": 8.0,
+          "off": 999.0
+        },
+        "agg_risk_with": {
+          "on": 15.0,
+          "off": 999.0
+        }
+      },
+      "M3_DirCap": {
+        "direction_cap": {
+          "on": 7,
+          "off": 9
+        }
+      },
+      "M4_Momentum": {
+        "momentum_lookback": {
+          "on": 3,
+          "off": 0
+        }
+      },
+      "M5_Timeout": {
+        "timeout_bars": {
+          "on": 288,
+          "off": 99999
+        }
+      },
+      "M6_Regime": {
+        "regime_mult": {
+          "on": 0.3,
+          "off": null
+        }
+      }
+    },
+    "runtime_sec": 85.9
+  },
+  "phase1_ablation": {
+    "results": {
+      "BASELINE": {
+        "trades": 1182,
+        "wr": 70.8,
+        "pnl": 235.31,
+        "mdd": 1.83,
+        "pnl_mdd": 128.8,
+        "pnl_per_trade": 0.199,
+        "mdd_mtm": 4.87,
+        "exit_reasons": {
+          "TP": 834,
+          "SL": 339,
+          "OOS_END": 9
+        }
+      },
+      "-M1_Cascade": {
+        "trades": 945,
+        "wr": 85.9,
+        "pnl": 216.62,
+        "mdd": 3.31,
+        "pnl_mdd": 65.51,
+        "pnl_per_trade": 0.229,
+        "mdd_mtm": 4.28,
+        "exit_reasons": {
+          "TP": 809,
+          "SL": 127,
+          "OOS_END": 9
+        }
+      },
+      "-M2_AggRisk": {
+        "trades": 1165,
+        "wr": 71.8,
+        "pnl": 241.92,
+        "mdd": 1.73,
+        "pnl_mdd": 139.44,
+        "pnl_per_trade": 0.208,
+        "mdd_mtm": 5.11,
+        "exit_reasons": {
+          "TP": 834,
+          "SL": 322,
+          "OOS_END": 9
+        }
+      },
+      "-M3_DirCap": {
+        "trades": 1182,
+        "wr": 72.8,
+        "pnl": 241.05,
+        "mdd": 1.78,
+        "pnl_mdd": 135.25,
+        "pnl_per_trade": 0.204,
+        "mdd_mtm": 4.92,
+        "exit_reasons": {
+          "TP": 857,
+          "SL": 316,
+          "OOS_END": 9
+        }
+      },
+      "-M4_Momentum": {
+        "trades": 1178,
+        "wr": 70.8,
+        "pnl": 236.65,
+        "mdd": 1.83,
+        "pnl_mdd": 129.56,
+        "pnl_per_trade": 0.201,
+        "mdd_mtm": 4.87,
+        "exit_reasons": {
+          "TP": 831,
+          "SL": 338,
+          "OOS_END": 9
+        }
+      },
+      "-M5_Timeout": {
+        "trades": 996,
+        "wr": 57.9,
+        "pnl": 154.65,
+        "mdd": 4.02,
+        "pnl_mdd": 38.5,
+        "pnl_per_trade": 0.155,
+        "mdd_mtm": 6.92,
+        "exit_reasons": {
+          "TP": 574,
+          "SL": 413,
+          "OOS_END": 9
+        }
+      },
+      "-M6_Regime": {
+        "trades": 1177,
+        "wr": 72.6,
+        "pnl": 356.96,
+        "mdd": 2.14,
+        "pnl_mdd": 166.41,
+        "pnl_per_trade": 0.303,
+        "mdd_mtm": 4.04,
+        "exit_reasons": {
+          "TP": 851,
+          "SL": 317,
+          "OOS_END": 9
+        }
+      },
+      "ALL_OFF": {
+        "trades": 686,
+        "wr": 69.2,
+        "pnl": 52.03,
+        "mdd": 26.63,
+        "pnl_mdd": 1.95,
+        "pnl_per_trade": 0.076,
+        "mdd_mtm": 27.61,
+        "exit_reasons": {
+          "TP": 472,
+          "SL": 205,
+          "OOS_END": 9
+        }
+      }
+    },
+    "impacts": {
+      "M1_Cascade": {
+        "delta_pnl": -18.69,
+        "delta_pm": 2.29
+      },
+      "M2_AggRisk": {
+        "delta_pnl": 6.61,
+        "delta_pm": -0.98
+      },
+      "M3_DirCap": {
+        "delta_pnl": 5.74,
+        "delta_pm": 0.68
+      },
+      "M4_Momentum": {
+        "delta_pnl": 1.34,
+        "delta_pm": 0.28
+      },
+      "M5_Timeout": {
+        "delta_pnl": -80.66,
+        "delta_pm": -25.97
+      },
+      "M6_Regime": {
+        "delta_pnl": 121.65,
+        "delta_pm": 40.04
+      }
+    },
+    "synergy": -219.27
+  },
+  "phase2_interaction": {
+    "-M1_Cascade -M2_AggRisk": {
+      "pnl": 220.7,
+      "mdd_mtm": 4.14,
+      "pm": 53.31,
+      "pair_delta": -14.61,
+      "e1": -18.69,
+      "e2": 6.61,
+      "interaction": -2.53
+    },
+    "-M1_Cascade -M3_DirCap": {
+      "pnl": 224.62,
+      "mdd_mtm": 5.0,
+      "pm": 44.92,
+      "pair_delta": -10.69,
+      "e1": -18.69,
+      "e2": 5.74,
+      "interaction": 2.26
+    },
+    "-M1_Cascade -M5_Timeout": {
+      "pnl": 22.89,
+      "mdd_mtm": 11.57,
+      "pm": 1.98,
+      "pair_delta": -212.42,
+      "e1": -18.69,
+      "e2": -80.66,
+      "interaction": -113.07
+    },
+    "-M1_Cascade -M6_Regime": {
+      "pnl": 338.64,
+      "mdd_mtm": 5.46,
+      "pm": 62.02,
+      "pair_delta": 103.33,
+      "e1": -18.69,
+      "e2": 121.65,
+      "interaction": 0.37
+    },
+    "-M2_AggRisk -M3_DirCap": {
+      "pnl": 256.93,
+      "mdd_mtm": 5.2,
+      "pm": 49.41,
+      "pair_delta": 21.62,
+      "e1": 6.61,
+      "e2": 5.74,
+      "interaction": 9.27
+    },
+    "-M2_AggRisk -M5_Timeout": {
+      "pnl": 171.19,
+      "mdd_mtm": 7.67,
+      "pm": 22.32,
+      "pair_delta": -64.12,
+      "e1": 6.61,
+      "e2": -80.66,
+      "interaction": 9.93
+    },
+    "-M2_AggRisk -M6_Regime": {
+      "pnl": 364.67,
+      "mdd_mtm": 4.34,
+      "pm": 84.03,
+      "pair_delta": 129.36,
+      "e1": 6.61,
+      "e2": 121.65,
+      "interaction": 1.1
+    },
+    "-M3_DirCap -M5_Timeout": {
+      "pnl": 175.07,
+      "mdd_mtm": 7.96,
+      "pm": 21.99,
+      "pair_delta": -60.24,
+      "e1": 5.74,
+      "e2": -80.66,
+      "interaction": 14.68
+    },
+    "-M3_DirCap -M6_Regime": {
+      "pnl": 368.14,
+      "mdd_mtm": 4.09,
+      "pm": 90.01,
+      "pair_delta": 132.83,
+      "e1": 5.74,
+      "e2": 121.65,
+      "interaction": 5.44
+    },
+    "-M5_Timeout -M6_Regime": {
+      "pnl": 219.33,
+      "mdd_mtm": 7.84,
+      "pm": 27.98,
+      "pair_delta": -15.98,
+      "e1": -80.66,
+      "e2": 121.65,
+      "interaction": -56.97
+    }
+  },
+  "phase3_buildup": [
+    {
+      "config": "BARE",
+      "trades": 686,
+      "wr": 69.2,
+      "pnl": 52.03,
+      "mdd": 26.63,
+      "pnl_mdd": 1.95,
+      "pnl_per_trade": 0.076,
+      "mdd_mtm": 27.61,
+      "exit_reasons": {
+        "TP": 472,
+        "SL": 205,
+        "OOS_END": 9
+      }
+    },
+    {
+      "config": "+M5_Timeout",
+      "added": "M5_Timeout",
+      "marginal_delta": 325.04,
+      "trades": 947,
+      "wr": 87.8,
+      "pnl": 377.07,
+      "mdd": 6.83,
+      "pnl_mdd": 55.21,
+      "pnl_per_trade": 0.398,
+      "mdd_mtm": 8.01,
+      "exit_reasons": {
+        "TP": 828,
+        "SL": 110,
+        "OOS_END": 9
+      }
+    },
+    {
+      "config": "+M1_Cascade",
+      "added": "M1_Cascade",
+      "marginal_delta": 22.92,
+      "trades": 1176,
+      "wr": 74.0,
+      "pnl": 399.99,
+      "mdd": 2.43,
+      "pnl_mdd": 164.46,
+      "pnl_per_trade": 0.34,
+      "mdd_mtm": 5.08,
+      "exit_reasons": {
+        "TP": 867,
+        "SL": 300,
+        "OOS_END": 9
+      }
+    },
+    {
+      "config": "+M4_Momentum",
+      "added": "M4_Momentum",
+      "marginal_delta": -1.31,
+      "trades": 1176,
+      "wr": 73.8,
+      "pnl": 398.68,
+      "mdd": 2.43,
+      "pnl_mdd": 163.92,
+      "pnl_per_trade": 0.339,
+      "mdd_mtm": 5.08,
+      "exit_reasons": {
+        "TP": 865,
+        "SL": 302,
+        "OOS_END": 9
+      }
+    },
+    {
+      "config": "+M3_DirCap",
+      "added": "M3_DirCap",
+      "marginal_delta": -34.01,
+      "trades": 1165,
+      "wr": 71.8,
+      "pnl": 364.67,
+      "mdd": 2.43,
+      "pnl_mdd": 149.94,
+      "pnl_per_trade": 0.313,
+      "mdd_mtm": 4.34,
+      "exit_reasons": {
+        "TP": 834,
+        "SL": 322,
+        "OOS_END": 9
+      }
+    },
+    {
+      "config": "+M2_AggRisk",
+      "added": "M2_AggRisk",
+      "marginal_delta": -7.71,
+      "trades": 1177,
+      "wr": 72.6,
+      "pnl": 356.96,
+      "mdd": 2.14,
+      "pnl_mdd": 166.41,
+      "pnl_per_trade": 0.303,
+      "mdd_mtm": 4.04,
+      "exit_reasons": {
+        "TP": 851,
+        "SL": 317,
+        "OOS_END": 9
+      }
+    },
+    {
+      "config": "+M6_Regime",
+      "added": "M6_Regime",
+      "marginal_delta": -121.65,
+      "trades": 1182,
+      "wr": 70.8,
+      "pnl": 235.31,
+      "mdd": 1.83,
+      "pnl_mdd": 128.8,
+      "pnl_per_trade": 0.199,
+      "mdd_mtm": 4.87,
+      "exit_reasons": {
+        "TP": 834,
+        "SL": 339,
+        "OOS_END": 9
+      }
+    }
+  ],
+  "phase4_discrimination": {
+    "results": [
+      {
+        "seed": 42,
+        "base_pnl": 100.39,
+        "bare_pnl": -50.59,
+        "base_wins": "True",
+        "base_wf": 3,
+        "bare_wf": 1
+      },
+      {
+        "seed": 123,
+        "base_pnl": 76.17,
+        "bare_pnl": -21.39,
+        "base_wins": "True",
+        "base_wf": 3,
+        "bare_wf": 1
+      },
+      {
+        "seed": 7777,
+        "base_pnl": 90.11,
+        "bare_pnl": -56.2,
+        "base_wins": "True",
+        "base_wf": 3,
+        "bare_wf": 0
+      },
+      {
+        "seed": 2024,
+        "base_pnl": 95.26,
+        "bare_pnl": -78.1,
+        "base_wins": "True",
+        "base_wf": 3,
+        "bare_wf": 0
+      },
+      {
+        "seed": 9999,
+        "base_pnl": 131.5,
+        "bare_pnl": -16.13,
+        "base_wins": "True",
+        "base_wf": 3,
+        "bare_wf": 1
+      }
+    ],
+    "base_wins": 5,
+    "wf_base_pass": 5,
+    "wf_bare_pass": 0
+  },
+  "phase5_wf": {
+    "BASELINE": {
+      "folds": [
+        44.7,
+        74.95,
+        56.52
+      ],
+      "avg": 58.72,
+      "min": 44.7,
+      "n_pass": 3,
+      "is_pnl": 235.31
+    },
+    "ALL_OFF": {
+      "folds": [
+        -15.37,
+        26.29,
+        49.78
+      ],
+      "avg": 20.23,
+      "min": -15.37,
+      "n_pass": 2,
+      "is_pnl": 52.03
+    },
+    "-M5_Timeout": {
+      "folds": [
+        24.38,
+        55.62,
+        27.93
+      ],
+      "avg": 35.98,
+      "min": 24.38,
+      "n_pass": 3,
+      "is_pnl": 154.65
+    },
+    "-M1_Cascade": {
+      "folds": [
+        38.03,
+        72.83,
+        42.25
+      ],
+      "avg": 51.04,
+      "min": 38.03,
+      "n_pass": 3,
+      "is_pnl": 216.62
+    },
+    "-M4_Momentum": {
+      "folds": [
+        46.51,
+        71.13,
+        59.1
+      ],
+      "avg": 58.91,
+      "min": 46.51,
+      "n_pass": 3,
+      "is_pnl": 236.65
+    },
+    "-M3_DirCap": {
+      "folds": [
+        47.49,
+        74.77,
+        57.88
+      ],
+      "avg": 60.05,
+      "min": 47.49,
+      "n_pass": 3,
+      "is_pnl": 241.05
+    },
+    "-M2_AggRisk": {
+      "folds": [
+        40.44,
+        79.11,
+        58.93
+      ],
+      "avg": 59.49,
+      "min": 40.44,
+      "n_pass": 3,
+      "is_pnl": 241.92
+    },
+    "-M6_Regime": {
+      "folds": [
+        72.74,
+        103.87,
+        84.43
+      ],
+      "avg": 87.01,
+      "min": 72.74,
+      "n_pass": 3,
+      "is_pnl": 356.96
+    },
+    "-M1_Cascade -M5_Timeout": {
+      "folds": [
+        -1.55,
+        10.17,
+        5.26
+      ],
+      "avg": 4.63,
+      "min": -1.55,
+      "n_pass": 2,
+      "is_pnl": 22.89
+    },
+    "TOP3_only": {
+      "folds": [
+        77.39,
+        111.09,
+        117.95
+      ],
+      "avg": 102.14,
+      "min": 77.39,
+      "n_pass": 3,
+      "is_pnl": 398.68
+    }
+  },
+  "phase6_entry": {
+    "real_full": 235.31,
+    "real_bare": 52.03,
+    "rand_full_avg": 98.69,
+    "rand_bare_avg": -44.48,
+    "stack_effect": 183.28,
+    "pattern_effect": 136.62,
+    "interaction": -40.11
+  },
+  "synthesis": {
+    "essential": [
+      "M1_Cascade",
+      "M5_Timeout"
+    ],
+    "beneficial": [],
+    "marginal": [
+      "M4_Momentum"
+    ],
+    "harmful": [
+      "M2_AggRisk",
+      "M3_DirCap",
+      "M6_Regime"
+    ],
+    "system_type": "balanced",
+    "stack_effect_pct": 183.28,
+    "pattern_effect_pct": 136.62
+  }
+}

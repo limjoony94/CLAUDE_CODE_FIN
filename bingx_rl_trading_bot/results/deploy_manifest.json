@@ -1,0 +1,46 @@
+{
+  "version": "v1.71.0",
+  "deployed_at": "2026-04-03T17:40:00",
+  "description": "Cascade OFF + N7 DC7 + TP LIMIT + Auto Pipeline",
+  "config_snapshot": {
+    "max_positions": 7,
+    "direction_cap": 7,
+    "leverage": 3,
+    "timeout_bars": 576,
+    "cascade_sl_tightening_enabled": false,
+    "preemptive_cascade_enabled": false,
+    "tp_mode": "mfe_median",
+    "momentum_threshold": 1.5,
+    "agg_risk_counter": 10,
+    "agg_risk_with": 15
+  },
+  "patterns": {
+    "count": 110,
+    "long": 50,
+    "short": 60,
+    "data_days": 332,
+    "scan_date": "2026-04-03"
+  },
+  "history": [
+    {
+      "version": "v1.69.1",
+      "date": "2026-03-31",
+      "changes": "Cascade entry-based fix, trail OFF, vol_adapt OFF"
+    },
+    {
+      "version": "v1.70.0",
+      "date": "2026-04-02",
+      "changes": "Cascade OFF, N5 DC4 — cluster elimination"
+    },
+    {
+      "version": "v1.70.3",
+      "date": "2026-04-03",
+      "changes": "DC4→5, TP LIMIT maker fee"
+    },
+    {
+      "version": "v1.71.0",
+      "date": "2026-04-03",
+      "changes": "N5→7, DC5→7, 332d rescan, automation pipeline"
+    }
+  ]
+}

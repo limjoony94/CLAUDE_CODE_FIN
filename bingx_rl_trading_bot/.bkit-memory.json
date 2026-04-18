@@ -1,4 +1,13 @@
 {
+  "sl_trail_tuning": {
+    "phase": "check",
+    "matchRate": 94,
+    "outcome": "STOP",
+    "iterationCount": 0,
+    "startedAt": "2026-04-18T00:00:00Z",
+    "checkedAt": "2026-04-18T22:15:00Z",
+    "notes": "C1 Breakout v2.6 max_sl_atr/trail_K/max_hold_bars 3D grid tuning. 120 combos, STOP (6/7 GO conditions pass, ratio_ok fails). Best candidate (4.5, 2.2, 144) full PnL+183.2% vs baseline+170.5% but MDD 6.56>5.38 → PnL/MDD 27.92 < 34.86 threshold."
+  },
   "atr-scanner-alignment": {
     "phase": "archived",
     "matchRate": null,

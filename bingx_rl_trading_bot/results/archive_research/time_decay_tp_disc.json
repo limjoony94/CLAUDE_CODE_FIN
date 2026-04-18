@@ -1,0 +1,22 @@
+{
+  "study": "time_decay_tp_discrimination",
+  "variant": "linear_144",
+  "tp_scale_factor": 0.72,
+  "test1_pattern_subsets": {
+    "decay_wins": 30,
+    "total_sims": 30,
+    "win_rate_pct": 100.0,
+    "avg_gap_pct": 26.5,
+    "median_gap_pct": 27.6,
+    "verdict": "DISCRIMINATING"
+  },
+  "test2_shuffled_directions": {
+    "decay_wins": 15,
+    "total_sims": 15,
+    "win_rate_pct": 100.0,
+    "avg_gap_pct": 26.0,
+    "median_gap_pct": 25.4,
+    "verdict": "MECHANICAL_IMPROVEMENT"
+  },
+  "overall": "GO \u2014 genuine structural improvement"
+}

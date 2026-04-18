@@ -1,0 +1,431 @@
+{
+  "metadata": {
+    "script": "tpsl_edge_structure.py",
+    "date": "2026-04-02T20:20:56.579558",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "data_bars": 93864,
+    "leverage": 3,
+    "fee_pct": 0.001,
+    "fee_total": 0.003,
+    "timeout_bars": 576,
+    "n_seeds": 10
+  },
+  "exp1_random_entry_fixed_tpsl": {
+    "TP1.0_SL2.0": {
+      "tp": 1.0,
+      "sl": 2.0,
+      "ratio": 0.5,
+      "theoretical_wr": 66.67,
+      "observed_wr_mean": 66.96,
+      "wr_delta": 0.29,
+      "theoretical_ev_before_fee": -0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.2737,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 29008,
+      "wr_std": 0.22,
+      "pnl_std": 0.0
+    },
+    "TP1.5_SL3.0": {
+      "tp": 1.5,
+      "sl": 3.0,
+      "ratio": 0.5,
+      "theoretical_wr": 66.67,
+      "observed_wr_mean": 68.56,
+      "wr_delta": 1.89,
+      "theoretical_ev_before_fee": 0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.0448,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 24217,
+      "wr_std": 0.17,
+      "pnl_std": 0.0
+    },
+    "TP2.0_SL4.0": {
+      "tp": 2.0,
+      "sl": 4.0,
+      "ratio": 0.5,
+      "theoretical_wr": 66.67,
+      "observed_wr_mean": 72.3,
+      "wr_delta": 5.63,
+      "theoretical_ev_before_fee": -0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": 0.7128,
+      "compound_pnl_pct": 3.6463907692900777e+36,
+      "avg_trades": 19053,
+      "wr_std": 0.24,
+      "pnl_std": 6.901505009310808e+36
+    },
+    "TP0.5_SL1.0": {
+      "tp": 0.5,
+      "sl": 1.0,
+      "ratio": 0.5,
+      "theoretical_wr": 66.67,
+      "observed_wr_mean": 66.64,
+      "wr_delta": -0.02,
+      "theoretical_ev_before_fee": -0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.301,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 31176,
+      "wr_std": 0.22,
+      "pnl_std": 0.0
+    },
+    "SYM_1.5": {
+      "tp": 1.5,
+      "sl": 1.5,
+      "ratio": 1.0,
+      "theoretical_wr": 50.0,
+      "observed_wr_mean": 49.96,
+      "wr_delta": -0.04,
+      "theoretical_ev_before_fee": 0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.3033,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 28570,
+      "wr_std": 0.16,
+      "pnl_std": 0.0
+    },
+    "SYM_2.0": {
+      "tp": 2.0,
+      "sl": 2.0,
+      "ratio": 1.0,
+      "theoretical_wr": 50.0,
+      "observed_wr_mean": 50.19,
+      "wr_delta": 0.19,
+      "theoretical_ev_before_fee": 0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.2767,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 25047,
+      "wr_std": 0.21,
+      "pnl_std": 0.0
+    },
+    "TP2.0_SL1.0": {
+      "tp": 2.0,
+      "sl": 1.0,
+      "ratio": 2.0,
+      "theoretical_wr": 33.33,
+      "observed_wr_mean": 33.15,
+      "wr_delta": -0.18,
+      "theoretical_ev_before_fee": -0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.3163,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 29039,
+      "wr_std": 0.22,
+      "pnl_std": 0.0
+    },
+    "TP3.0_SL1.5": {
+      "tp": 3.0,
+      "sl": 1.5,
+      "ratio": 2.0,
+      "theoretical_wr": 33.33,
+      "observed_wr_mean": 31.62,
+      "wr_delta": -1.71,
+      "theoretical_ev_before_fee": 0.0,
+      "theoretical_ev_after_fee": -0.3,
+      "observed_ev_pct": -0.5315,
+      "compound_pnl_pct": -100.0,
+      "avg_trades": 24249,
+      "wr_std": 0.17,
+      "pnl_std": 0.0
+    }
+  },
+  "exp2_pattern_vs_random": {
+    "pattern_stats": {
+      "n": 9572,
+      "wr": 79.91,
+      "ev_pct": 0.6601,
+      "avg_pnl_pct": 0.6601,
+      "compound_pnl_pct": 3.5555064976594566e+22
+    },
+    "random_avg": {
+      "wr": 76.21,
+      "ev_pct": 0.1576,
+      "compound_pnl_pct": -14.15
+    },
+    "genuine_edge": {
+      "wr_pp": 3.7,
+      "ev_pct": 0.5025
+    },
+    "uniform_comparison": {
+      "TP1.0_SL2.5": {
+        "pattern_wr": 75.34,
+        "pattern_ev": 0.1111,
+        "random_wr": 72.47,
+        "random_ev": -0.1904,
+        "genuine_edge_wr": 2.87,
+        "genuine_edge_ev": 0.3015
+      },
+      "TP1.3_SL3.0": {
+        "pattern_wr": 75.44,
+        "pattern_ev": 0.4322,
+        "random_wr": 71.84,
+        "random_ev": -0.0323,
+        "genuine_edge_wr": 3.6,
+        "genuine_edge_ev": 0.4645
+      }
+    }
+  },
+  "exp3_theoretical_comparison": {
+    "TP1.0_SL2.0": {
+      "delta_pp": 0.29,
+      "significant": "False",
+      "verdict": "RANDOM WALK"
+    },
+    "TP1.5_SL3.0": {
+      "delta_pp": 1.89,
+      "significant": "True",
+      "verdict": "SLIGHT EDGE"
+    },
+    "TP2.0_SL4.0": {
+      "delta_pp": 5.63,
+      "significant": "True",
+      "verdict": "SLIGHT EDGE"
+    },
+    "TP0.5_SL1.0": {
+      "delta_pp": -0.02,
+      "significant": "False",
+      "verdict": "RANDOM WALK"
+    },
+    "SYM_1.5": {
+      "delta_pp": -0.04,
+      "significant": "False",
+      "verdict": "RANDOM WALK"
+    },
+    "SYM_2.0": {
+      "delta_pp": 0.19,
+      "significant": "False",
+      "verdict": "RANDOM WALK"
+    },
+    "TP2.0_SL1.0": {
+      "delta_pp": -0.18,
+      "significant": "False",
+      "verdict": "RANDOM WALK"
+    },
+    "TP3.0_SL1.5": {
+      "delta_pp": -1.71,
+      "significant": "True",
+      "verdict": "SLIGHT DRAG"
+    }
+  },
+  "exp4_time_of_day": {
+    "hourly": {
+      "0": {
+        "pattern_wr": 79.4,
+        "pattern_n": 418,
+        "random_wr": 71.6,
+        "random_n": 1034,
+        "gap_pp": 7.9
+      },
+      "1": {
+        "pattern_wr": 79.4,
+        "pattern_n": 403,
+        "random_wr": 68.5,
+        "random_n": 1038,
+        "gap_pp": 10.9
+      },
+      "2": {
+        "pattern_wr": 81.9,
+        "pattern_n": 403,
+        "random_wr": 72.7,
+        "random_n": 1089,
+        "gap_pp": 9.2
+      },
+      "3": {
+        "pattern_wr": 81.6,
+        "pattern_n": 347,
+        "random_wr": 71.8,
+        "random_n": 1077,
+        "gap_pp": 9.8
+      },
+      "4": {
+        "pattern_wr": 81.5,
+        "pattern_n": 390,
+        "random_wr": 72.0,
+        "random_n": 1069,
+        "gap_pp": 9.5
+      },
+      "5": {
+        "pattern_wr": 79.7,
+        "pattern_n": 394,
+        "random_wr": 73.4,
+        "random_n": 1091,
+        "gap_pp": 6.3
+      },
+      "6": {
+        "pattern_wr": 83.3,
+        "pattern_n": 408,
+        "random_wr": 70.6,
+        "random_n": 1071,
+        "gap_pp": 12.7
+      },
+      "7": {
+        "pattern_wr": 81.0,
+        "pattern_n": 426,
+        "random_wr": 71.0,
+        "random_n": 1070,
+        "gap_pp": 10.0
+      },
+      "8": {
+        "pattern_wr": 81.4,
+        "pattern_n": 408,
+        "random_wr": 70.4,
+        "random_n": 1072,
+        "gap_pp": 10.9
+      },
+      "9": {
+        "pattern_wr": 78.5,
+        "pattern_n": 432,
+        "random_wr": 71.6,
+        "random_n": 1066,
+        "gap_pp": 6.9
+      },
+      "10": {
+        "pattern_wr": 78.9,
+        "pattern_n": 365,
+        "random_wr": 70.4,
+        "random_n": 1037,
+        "gap_pp": 8.5
+      },
+      "11": {
+        "pattern_wr": 81.2,
+        "pattern_n": 399,
+        "random_wr": 71.1,
+        "random_n": 1088,
+        "gap_pp": 10.1
+      },
+      "12": {
+        "pattern_wr": 77.8,
+        "pattern_n": 424,
+        "random_wr": 70.7,
+        "random_n": 1065,
+        "gap_pp": 7.1
+      },
+      "13": {
+        "pattern_wr": 78.8,
+        "pattern_n": 406,
+        "random_wr": 73.3,
+        "random_n": 1040,
+        "gap_pp": 5.5
+      },
+      "14": {
+        "pattern_wr": 78.5,
+        "pattern_n": 423,
+        "random_wr": 72.1,
+        "random_n": 1038,
+        "gap_pp": 6.4
+      },
+      "15": {
+        "pattern_wr": 80.5,
+        "pattern_n": 411,
+        "random_wr": 69.4,
+        "random_n": 1049,
+        "gap_pp": 11.1
+      },
+      "16": {
+        "pattern_wr": 79.6,
+        "pattern_n": 388,
+        "random_wr": 69.1,
+        "random_n": 1042,
+        "gap_pp": 10.5
+      },
+      "17": {
+        "pattern_wr": 79.4,
+        "pattern_n": 408,
+        "random_wr": 71.6,
+        "random_n": 1056,
+        "gap_pp": 7.8
+      },
+      "18": {
+        "pattern_wr": 83.5,
+        "pattern_n": 388,
+        "random_wr": 72.8,
+        "random_n": 1046,
+        "gap_pp": 10.7
+      },
+      "19": {
+        "pattern_wr": 77.6,
+        "pattern_n": 397,
+        "random_wr": 72.2,
+        "random_n": 1043,
+        "gap_pp": 5.4
+      },
+      "20": {
+        "pattern_wr": 77.3,
+        "pattern_n": 384,
+        "random_wr": 70.7,
+        "random_n": 1037,
+        "gap_pp": 6.7
+      },
+      "21": {
+        "pattern_wr": 80.3,
+        "pattern_n": 407,
+        "random_wr": 69.7,
+        "random_n": 1025,
+        "gap_pp": 10.7
+      },
+      "22": {
+        "pattern_wr": 79.7,
+        "pattern_n": 364,
+        "random_wr": 70.7,
+        "random_n": 1055,
+        "gap_pp": 9.0
+      },
+      "23": {
+        "pattern_wr": 77.0,
+        "pattern_n": 379,
+        "random_wr": 70.8,
+        "random_n": 1057,
+        "gap_pp": 6.3
+      }
+    },
+    "sessions": {
+      "Asia (00-08 UTC)": {
+        "pattern_wr": 81.0,
+        "pattern_n": 3189,
+        "random_wr": 71.5,
+        "random_n": 8539,
+        "gap_pp": 9.5
+      },
+      "Europe (08-16 UTC)": {
+        "pattern_wr": 79.4,
+        "pattern_n": 3268,
+        "random_wr": 71.1,
+        "random_n": 8455,
+        "gap_pp": 8.3
+      },
+      "US (16-24 UTC)": {
+        "pattern_wr": 79.3,
+        "pattern_n": 3115,
+        "random_wr": 70.9,
+        "random_n": 8361,
+        "gap_pp": 8.4
+      }
+    }
+  },
+  "exp5_direction_drift": {
+    "TP1.0_SL2.0": {
+      "long_wr": 67.29,
+      "short_wr": 66.51,
+      "long_ev": -0.2435,
+      "short_ev": -0.3145,
+      "long_pnl": -100.0,
+      "short_pnl": -100.0,
+      "theoretical_wr": 66.67,
+      "drift_detected": false
+    },
+    "TP1.5_SL3.0": {
+      "long_wr": 66.31,
+      "short_wr": 70.75,
+      "long_ev": -0.3475,
+      "short_ev": 0.2513,
+      "long_pnl": -100.0,
+      "short_pnl": 48809556.57,
+      "theoretical_wr": 66.67,
+      "drift_detected": true
+    }
+  },
+  "conclusion": "POSSIBLE_EDGE"
+}

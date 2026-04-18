@@ -1,0 +1,103 @@
+{
+  "description": "112-pattern WF OOS verification (expanding window, 720d Binance)",
+  "parameters": {
+    "data": "btc_5m_720days_binance.csv",
+    "n_folds": 3,
+    "mode": "per_pattern",
+    "edge_threshold": 21.8,
+    "mc_threshold": 0.01,
+    "min_trades": 25,
+    "max_baseline_wr": 70.0,
+    "post_filter": "SL>=1.0% + WR>=60.0%"
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "is_days": 180,
+      "oos_days": 180,
+      "is_patterns_raw": 24,
+      "is_patterns_filtered": 23,
+      "is_long": 9,
+      "is_short": 14,
+      "is_stats": {
+        "pnl": 763.8,
+        "trades": 236,
+        "wr": 86.0,
+        "mdd": 23.4,
+        "pf": 3.77
+      },
+      "oos_stats": {
+        "pnl": 62.4,
+        "trades": 200,
+        "wr": 64.0,
+        "mdd": 83.7,
+        "pf": 1.11
+      },
+      "oos_mc_p": 0.26,
+      "oos_positive": true
+    },
+    {
+      "fold": 2,
+      "is_days": 360,
+      "oos_days": 180,
+      "is_patterns_raw": 41,
+      "is_patterns_filtered": 40,
+      "is_long": 22,
+      "is_short": 18,
+      "is_stats": {
+        "pnl": 1564.8,
+        "trades": 435,
+        "wr": 88.5,
+        "mdd": 23.1,
+        "pf": 4.47
+      },
+      "oos_stats": {
+        "pnl": 331.2,
+        "trades": 166,
+        "wr": 77.7,
+        "mdd": 34.2,
+        "pf": 2.08
+      },
+      "oos_mc_p": 0.0002,
+      "oos_positive": true
+    },
+    {
+      "fold": 3,
+      "is_days": 540,
+      "oos_days": 180,
+      "is_patterns_raw": 59,
+      "is_patterns_filtered": 58,
+      "is_long": 34,
+      "is_short": 24,
+      "is_stats": {
+        "pnl": 2236.2,
+        "trades": 568,
+        "wr": 88.4,
+        "mdd": 29.1,
+        "pf": 4.42
+      },
+      "oos_stats": {
+        "pnl": 463.5,
+        "trades": 172,
+        "wr": 81.4,
+        "mdd": 39.0,
+        "pf": 2.52
+      },
+      "oos_mc_p": 0.0,
+      "oos_positive": true
+    }
+  ],
+  "summary": {
+    "positive_folds": 3,
+    "total_oos_pnl": 857.1,
+    "total_oos_trades": 538,
+    "avg_oos_wr": 74.4,
+    "avg_oos_mdd": 52.3,
+    "stable_pattern_count": 1,
+    "stable_patterns": [
+      "ST-BD-D_LONG"
+    ],
+    "verdict": "PASS"
+  },
+  "elapsed_seconds": 1016.8
+}

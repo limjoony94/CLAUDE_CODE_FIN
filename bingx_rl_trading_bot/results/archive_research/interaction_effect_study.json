@@ -1,0 +1,369 @@
+{
+  "timestamp": "2026-03-05T03:50:36.727020",
+  "version": "v1.52.0",
+  "baselines": {
+    "v152": {
+      "label": "v1.52.0 (ALL NEW)",
+      "pnl": 3720.5,
+      "mdd": 5.05,
+      "pnl_mdd": 736.7,
+      "wr": 74.3,
+      "trades": 1232
+    },
+    "v144": {
+      "label": "v1.44.0 (ALL OLD)",
+      "pnl": 598.2,
+      "mdd": 7.1,
+      "pnl_mdd": 84.3,
+      "wr": 65.8,
+      "trades": 981
+    }
+  },
+  "total_delta_pnl": 3122.3,
+  "sum_individual": 4881.9,
+  "interaction_effect": -1759.6,
+  "phase1_individual": [
+    {
+      "param": "cascade_pct",
+      "old": 75,
+      "new": 85,
+      "label": "revert_cascade_pct",
+      "pnl": 2887.2,
+      "mdd": 5.05,
+      "pnl_mdd": 571.7,
+      "wr": 74.2,
+      "trades": 1233,
+      "delta_pnl": 833.3,
+      "delta_mdd": 0.0
+    },
+    {
+      "param": "mom_lookback",
+      "old": 6,
+      "new": 3,
+      "label": "revert_mom_lookback",
+      "pnl": 3649.9,
+      "mdd": 6.96,
+      "pnl_mdd": 524.4,
+      "wr": 74.7,
+      "trades": 1222,
+      "delta_pnl": 70.6,
+      "delta_mdd": -1.91
+    },
+    {
+      "param": "mom_cooldown",
+      "old": 6,
+      "new": 12,
+      "label": "revert_mom_cooldown",
+      "pnl": 3630.7,
+      "mdd": 5.05,
+      "pnl_mdd": 718.9,
+      "wr": 73.4,
+      "trades": 1254,
+      "delta_pnl": 89.8,
+      "delta_mdd": 0.0
+    },
+    {
+      "param": "atr_lo",
+      "old": 0.6,
+      "new": 0.5,
+      "label": "revert_atr_lo",
+      "pnl": 3756.8,
+      "mdd": 5.05,
+      "pnl_mdd": 743.9,
+      "wr": 74.3,
+      "trades": 1217,
+      "delta_pnl": -36.3,
+      "delta_mdd": 0.0
+    },
+    {
+      "param": "timeout",
+      "old": 864,
+      "new": 288,
+      "label": "revert_timeout",
+      "pnl": 1491.1,
+      "mdd": 6.55,
+      "pnl_mdd": 227.6,
+      "wr": 65.9,
+      "trades": 1141,
+      "delta_pnl": 2229.4,
+      "delta_mdd": -1.5
+    },
+    {
+      "param": "agg_counter",
+      "old": 5.0,
+      "new": 8.0,
+      "label": "revert_agg_counter",
+      "pnl": 3291.4,
+      "mdd": 5.05,
+      "pnl_mdd": 651.8,
+      "wr": 75.1,
+      "trades": 1211,
+      "delta_pnl": 429.1,
+      "delta_mdd": 0.0
+    },
+    {
+      "param": "atr_hi",
+      "old": 1.7,
+      "new": 1.5,
+      "label": "revert_atr_hi",
+      "pnl": 2671.7,
+      "mdd": 4.71,
+      "pnl_mdd": 567.2,
+      "wr": 71.2,
+      "trades": 1202,
+      "delta_pnl": 1048.8,
+      "delta_mdd": 0.34
+    },
+    {
+      "param": "mom_threshold",
+      "old": 1.0,
+      "new": 1.5,
+      "label": "revert_mom_threshold",
+      "pnl": 3503.3,
+      "mdd": 6.96,
+      "pnl_mdd": 503.4,
+      "wr": 74.5,
+      "trades": 1224,
+      "delta_pnl": 217.2,
+      "delta_mdd": -1.91
+    }
+  ],
+  "phase2_sequential": [
+    {
+      "step": 0,
+      "param": "baseline",
+      "label": "v1.44.0 (ALL OLD)",
+      "pnl": 598.2,
+      "mdd": 7.1,
+      "pnl_mdd": 84.3,
+      "wr": 65.8,
+      "trades": 981
+    },
+    {
+      "step": 1,
+      "param": "cascade_pct",
+      "label": "step1_cascade_pct",
+      "pnl": 894.9,
+      "mdd": 5.78,
+      "pnl_mdd": 154.8,
+      "wr": 66.4,
+      "trades": 978,
+      "marginal_pnl": 296.7
+    },
+    {
+      "step": 2,
+      "param": "mom_lookback",
+      "label": "step2_mom_lookback",
+      "pnl": 719.7,
+      "mdd": 6.59,
+      "pnl_mdd": 109.2,
+      "wr": 64.2,
+      "trades": 1007,
+      "marginal_pnl": -175.2
+    },
+    {
+      "step": 3,
+      "param": "mom_cooldown",
+      "label": "step3_mom_cooldown",
+      "pnl": 1027.1,
+      "mdd": 5.78,
+      "pnl_mdd": 177.7,
+      "wr": 66.0,
+      "trades": 1008,
+      "marginal_pnl": 307.4
+    },
+    {
+      "step": 4,
+      "param": "atr_lo",
+      "label": "step4_atr_lo",
+      "pnl": 1099.0,
+      "mdd": 5.78,
+      "pnl_mdd": 190.1,
+      "wr": 66.5,
+      "trades": 1007,
+      "marginal_pnl": 71.9
+    },
+    {
+      "step": 5,
+      "param": "timeout",
+      "label": "step5_timeout",
+      "pnl": 2287.8,
+      "mdd": 5.78,
+      "pnl_mdd": 395.8,
+      "wr": 74.2,
+      "trades": 1138,
+      "marginal_pnl": 1188.8
+    },
+    {
+      "step": 6,
+      "param": "agg_counter",
+      "label": "step6_agg_counter",
+      "pnl": 2833.7,
+      "mdd": 5.78,
+      "pnl_mdd": 490.3,
+      "wr": 73.4,
+      "trades": 1163,
+      "marginal_pnl": 545.9
+    },
+    {
+      "step": 7,
+      "param": "atr_hi",
+      "label": "step7_atr_hi",
+      "pnl": 3503.3,
+      "mdd": 6.96,
+      "pnl_mdd": 503.4,
+      "wr": 74.5,
+      "trades": 1224,
+      "marginal_pnl": 669.6
+    },
+    {
+      "step": 8,
+      "param": "mom_threshold",
+      "label": "step8_mom_threshold",
+      "pnl": 3720.5,
+      "mdd": 5.05,
+      "pnl_mdd": 736.7,
+      "wr": 74.3,
+      "trades": 1232,
+      "marginal_pnl": 217.2
+    }
+  ],
+  "phase3_ablation": [
+    {
+      "param": "cascade_pct",
+      "old": 75,
+      "new": 85,
+      "label": "no_cascade_pct",
+      "pnl": 2887.2,
+      "mdd": 5.05,
+      "pnl_mdd": 571.7,
+      "wr": 74.2,
+      "trades": 1233,
+      "delta_vs_v152": 833.3,
+      "verdict": "KEEP NEW"
+    },
+    {
+      "param": "mom_lookback",
+      "old": 6,
+      "new": 3,
+      "label": "no_mom_lookback",
+      "pnl": 3649.9,
+      "mdd": 6.96,
+      "pnl_mdd": 524.4,
+      "wr": 74.7,
+      "trades": 1222,
+      "delta_vs_v152": 70.6,
+      "verdict": "KEEP NEW"
+    },
+    {
+      "param": "mom_cooldown",
+      "old": 6,
+      "new": 12,
+      "label": "no_mom_cooldown",
+      "pnl": 3630.7,
+      "mdd": 5.05,
+      "pnl_mdd": 718.9,
+      "wr": 73.4,
+      "trades": 1254,
+      "delta_vs_v152": 89.8,
+      "verdict": "KEEP NEW"
+    },
+    {
+      "param": "atr_lo",
+      "old": 0.6,
+      "new": 0.5,
+      "label": "no_atr_lo",
+      "pnl": 3756.8,
+      "mdd": 5.05,
+      "pnl_mdd": 743.9,
+      "wr": 74.3,
+      "trades": 1217,
+      "delta_vs_v152": -36.3,
+      "verdict": "REVERT"
+    },
+    {
+      "param": "timeout",
+      "old": 864,
+      "new": 288,
+      "label": "no_timeout",
+      "pnl": 1491.1,
+      "mdd": 6.55,
+      "pnl_mdd": 227.6,
+      "wr": 65.9,
+      "trades": 1141,
+      "delta_vs_v152": 2229.4,
+      "verdict": "KEEP NEW"
+    },
+    {
+      "param": "agg_counter",
+      "old": 5.0,
+      "new": 8.0,
+      "label": "no_agg_counter",
+      "pnl": 3291.4,
+      "mdd": 5.05,
+      "pnl_mdd": 651.8,
+      "wr": 75.1,
+      "trades": 1211,
+      "delta_vs_v152": 429.1,
+      "verdict": "KEEP NEW"
+    },
+    {
+      "param": "atr_hi",
+      "old": 1.7,
+      "new": 1.5,
+      "label": "no_atr_hi",
+      "pnl": 2671.7,
+      "mdd": 4.71,
+      "pnl_mdd": 567.2,
+      "wr": 71.2,
+      "trades": 1202,
+      "delta_vs_v152": 1048.8,
+      "verdict": "KEEP NEW"
+    },
+    {
+      "param": "mom_threshold",
+      "old": 1.0,
+      "new": 1.5,
+      "label": "no_mom_threshold",
+      "pnl": 3503.3,
+      "mdd": 6.96,
+      "pnl_mdd": 503.4,
+      "wr": 74.5,
+      "trades": 1224,
+      "delta_vs_v152": 217.2,
+      "verdict": "KEEP NEW"
+    }
+  ],
+  "phase4_wf": {
+    "v1.52.0 (current)": {
+      "folds": [
+        110.0,
+        171.9,
+        150.2
+      ],
+      "avg": 144.0,
+      "min": 110.0,
+      "n_pass": 3
+    },
+    "v1.44.0 (all old)": {
+      "folds": [
+        28.3,
+        111.6,
+        47.7
+      ],
+      "avg": 62.5,
+      "min": 28.3,
+      "n_pass": 3
+    },
+    "revert_atr_lo": {
+      "folds": [
+        120.0,
+        178.4,
+        142.3
+      ],
+      "avg": 146.9,
+      "min": 120.0,
+      "n_pass": 3
+    }
+  }
+}

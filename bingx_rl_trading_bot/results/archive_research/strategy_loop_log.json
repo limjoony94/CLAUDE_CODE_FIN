@@ -1,0 +1,1491 @@
+[
+  {
+    "iteration": 1,
+    "hypothesis": "Timeout 288 \u2192 192 bars: timeout \uc190\uc2e4 \ucd95\uc18c\ub85c \uc804\uccb4 PnL \uac1c\uc120",
+    "parameter": "timeout_bars",
+    "change": "288 \u2192 192",
+    "result": {
+      "verdict": "STOP",
+      "reason": "IS quick check failed",
+      "baseline_is": {
+        "pnl": 81.59,
+        "wr": 59.6
+      },
+      "treatment_is": {
+        "pnl": 73.3,
+        "wr": 59.6
+      }
+    }
+  },
+  {
+    "iteration": 2,
+    "hypothesis": "Timeout 288 \u2192 240 bars: \ubcf4\uc218\uc801 timeout \ucd95\uc18c",
+    "parameter": "timeout_bars",
+    "change": "288 \u2192 240",
+    "result": {
+      "verdict": "STOP",
+      "reason": "IS quick check failed",
+      "baseline_is": {
+        "pnl": 81.59,
+        "wr": 59.6
+      },
+      "treatment_is": {
+        "pnl": 75.55,
+        "wr": 58.6
+      }
+    }
+  },
+  {
+    "iteration": 3,
+    "hypothesis": "Pre-emptive cascade 3% \u2192 2%: \ub354 \uc774\ub978 SL \ucd95\uc18c\ub85c \ud074\ub7ec\uc2a4\ud130 \ubc29\uc5b4",
+    "parameter": "preemptive_cascade_pct",
+    "change": "3.0 \u2192 2.0",
+    "result": {
+      "verdict": "GO",
+      "baseline_oos": 521.1,
+      "treatment_oos": 617.7,
+      "delta": 96.6,
+      "discrimination": "NON-DISC",
+      "shuffle_pass": 10,
+      "cascade_dependency": {
+        "on_gap": 96.6,
+        "off_gap": 0.0,
+        "dependency_ratio": 0.0,
+        "verdict": "CASCADE-DEPENDENT"
+      },
+      "pure_oos": {
+        "pnl": 67.0,
+        "wr": 55.9,
+        "rr": 2.886
+      },
+      "treatment_folds": [
+        74.6,
+        87.4,
+        163.1,
+        104.2,
+        188.3
+      ],
+      "baseline_folds": [
+        55.6,
+        69.9,
+        148.3,
+        83.2,
+        164.1
+      ]
+    }
+  },
+  {
+    "iteration": 4,
+    "hypothesis": "Direction Cap 6 \u2192 5: cascade-independent \ud074\ub7ec\uc2a4\ud130 \ubc29\uc5b4",
+    "parameter": "direction_cap",
+    "change": "6 \u2192 5",
+    "result": {
+      "verdict": "STOP",
+      "reason": "IS quick check failed",
+      "baseline_is": {
+        "pnl": 81.59,
+        "wr": 59.6
+      },
+      "treatment_is": {
+        "pnl": 73.77,
+        "wr": 60.2
+      }
+    }
+  },
+  {
+    "iteration": 5,
+    "hypothesis": "Momentum Guard 1.5% \u2192 2.0%: \uc9c4\uc785 \uae30\ud68c \uc99d\uac00\ub85c \ubc00\ub3c4 \uc0c1\uc2b9",
+    "parameter": "momentum_threshold",
+    "change": "1.5 \u2192 2.0",
+    "result": {
+      "verdict": "STOP",
+      "reason": "IS quick check failed",
+      "baseline_is": {
+        "pnl": 81.59,
+        "wr": 59.6
+      },
+      "treatment_is": {
+        "pnl": 80.81,
+        "wr": 59.5
+      }
+    }
+  },
+  {
+    "iteration": 6,
+    "hypothesis": "preemptive_cascade_pct 2.0 \u2192 1.0",
+    "parameter": "preemptive_cascade_pct",
+    "change": "2.0 \u2192 1.0",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "score": 0
+    },
+    "timestamp": "2026-03-28T14:57:54.158566"
+  },
+  {
+    "iteration": 7,
+    "hypothesis": "preemptive_cascade_pct 3.0 \u2192 1.5",
+    "parameter": "preemptive_cascade_pct",
+    "change": "3.0 \u2192 1.5",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "score": 0
+    },
+    "timestamp": "2026-03-28T14:58:38.967017"
+  },
+  {
+    "iteration": 8,
+    "hypothesis": "preemptive_cascade_pct 3.0 \u2192 2.5",
+    "parameter": "preemptive_cascade_pct",
+    "change": "3.0 \u2192 2.5",
+    "result": {
+      "a1_direction_shuffle": {
+        "real_gap": 49.4,
+        "shuffled_gap_mean": 45.5,
+        "shuffled_gap_std": 10.9,
+        "gap_ratio": 0.92,
+        "passed": "False",
+        "verdict": "MECHANICAL"
+      },
+      "a2_time_bootstrap": {
+        "positive_ratio": 1.0,
+        "gaps": [
+          9.8,
+          15.3,
+          15.5,
+          10.3,
+          11.4,
+          17.5,
+          11.6,
+          22.0,
+          13.3,
+          9.7
+        ],
+        "mean_gap": 13.6,
+        "passed": true
+      },
+      "a3_noise_injection": {
+        "noise_levels": {
+          "noise_5%": {
+            "gap": 58.9,
+            "positive": "True"
+          },
+          "noise_10%": {
+            "gap": 59.1,
+            "positive": "True"
+          },
+          "noise_15%": {
+            "gap": 54.2,
+            "positive": "True"
+          }
+        },
+        "passed": true
+      },
+      "a4_regime_stress": {
+        "worst_gap": -1.6,
+        "worst_bar": 29376,
+        "passed": "True"
+      },
+      "a5_cascade_removal": {
+        "real_gap": 49.4,
+        "off_gap": 0.0,
+        "independence_ratio": 0.0,
+        "passed": "False",
+        "verdict": "DEPENDENT"
+      },
+      "a6_neighbor_test": {
+        "param": "preemptive_cascade_pct",
+        "neighbors": {
+          "low": 78.4,
+          "center": 49.4,
+          "high": 29.1
+        },
+        "range": 49.3,
+        "passed": "False"
+      },
+      "a7_overfit_score": {
+        "is_improvement": 65.5,
+        "oos_improvement": 49.4,
+        "overfit_ratio": 0.245,
+        "overfit_score": 0.245,
+        "passed": "True",
+        "risk_level": "LOW"
+      },
+      "final_score": 4,
+      "max_score": 7,
+      "verdict": "CONDITIONAL GO"
+    },
+    "timestamp": "2026-03-28T15:02:34.474021"
+  },
+  {
+    "iteration": 9,
+    "hypothesis": "preemptive_cascade_pct 2.5 \u2192 2.0",
+    "parameter": "preemptive_cascade_pct",
+    "change": "2.5 \u2192 2.0",
+    "result": {
+      "verdict": "STRONG GO",
+      "normalized_score": 8.24,
+      "raw_score": 11.54,
+      "max_score": 14.0,
+      "tier1": {
+        "G1_WF_POSITIVE": {
+          "gate": "G1_WF_POSITIVE",
+          "pnls": [
+            74.6,
+            87.4,
+            163.1,
+            104.2,
+            188.3
+          ],
+          "all_positive": true,
+          "passed": true,
+          "reason": ""
+        },
+        "G2_WR_MARGIN": {
+          "gate": "G2_WR_MARGIN",
+          "avg_margin": 27.6,
+          "worst_margin": 22.8,
+          "threshold": 5.0,
+          "passed": "True",
+          "reason": ""
+        },
+        "G3_OVERFIT": {
+          "gate": "G3_OVERFIT",
+          "is_improvement": 50.8,
+          "oos_improvement": 47.1,
+          "overfit_score": 0.073,
+          "risk": "LOW",
+          "passed": "True",
+          "reason": ""
+        }
+      },
+      "tier2": {
+        "A1_TIME_BOOTSTRAP": {
+          "attack": "A1_TIME_BOOTSTRAP",
+          "weight": 2.0,
+          "positive_ratio": 1.0,
+          "mean_gap": 9.9,
+          "std_gap": 2.6,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A2_NOISE_ROBUSTNESS": {
+          "attack": "A2_NOISE_ROBUSTNESS",
+          "weight": 1.5,
+          "noise_levels": {
+            "5%": {
+              "gap": 42.0,
+              "positive": "True"
+            },
+            "10%": {
+              "gap": 48.3,
+              "positive": "True"
+            },
+            "20%": {
+              "gap": 46.8,
+              "positive": "True"
+            }
+          },
+          "survive_ratio": 1.0,
+          "raw_score": 1.0,
+          "weighted_score": 1.5
+        },
+        "A3_REGIME_WORST": {
+          "attack": "A3_REGIME_WORST",
+          "weight": 2.0,
+          "worst_gap": -2.6,
+          "mean_gap": 1.5,
+          "negative_pct": 21.9,
+          "n_windows": 32,
+          "raw_score": 0.817,
+          "weighted_score": 1.635
+        },
+        "A4_FOLD_DECAY": {
+          "attack": "A4_FOLD_DECAY",
+          "weight": 2.5,
+          "gaps_by_fold": [
+            11.3,
+            4.7,
+            2.7,
+            13.1,
+            15.3
+          ],
+          "early_avg": 8.0,
+          "late_avg": 14.2,
+          "decay_ratio": 1.775,
+          "trend": "IMPROVING",
+          "raw_score": 1.0,
+          "weighted_score": 2.5
+        },
+        "A5_TAIL_RISK": {
+          "attack": "A5_TAIL_RISK",
+          "weight": 2.0,
+          "worst_periods": [
+            {
+              "start": 78336,
+              "end": 79776,
+              "btc_return": -12.5,
+              "baseline_pnl": 22.2,
+              "treatment_pnl": 28.4,
+              "gap": 6.2
+            },
+            {
+              "start": 44496,
+              "end": 45936,
+              "btc_return": -11.5,
+              "baseline_pnl": 14.1,
+              "treatment_pnl": 12.3,
+              "gap": -1.9
+            },
+            {
+              "start": 56016,
+              "end": 57456,
+              "btc_return": -10.9,
+              "baseline_pnl": 22.6,
+              "treatment_pnl": 28.0,
+              "gap": 5.4
+            }
+          ],
+          "positive_in_worst": 2,
+          "avg_gap_in_worst": 3.2,
+          "raw_score": 0.7,
+          "weighted_score": 1.4
+        },
+        "A6_PARAM_NEIGHBORHOOD": {
+          "attack": "A6_PARAM_NEIGHBORHOOD",
+          "weight": 1.5,
+          "param": "preemptive_cascade_pct",
+          "step": 0.5,
+          "neighbors": {
+            "low": 1.5,
+            "center": 2.0,
+            "high": 2.5
+          },
+          "gaps": {
+            "low": 61.5,
+            "center": 47.1,
+            "high": 0.0
+          },
+          "range": 61.5,
+          "all_positive": false,
+          "raw_score": 0.4,
+          "weighted_score": 0.6
+        },
+        "A7_TRADE_COUNT": {
+          "attack": "A7_TRADE_COUNT",
+          "weight": 1.0,
+          "baseline_trades": 4730,
+          "treatment_trades": 5099,
+          "change_pct": 7.8,
+          "raw_score": 1.0,
+          "weighted_score": 1.0
+        },
+        "A8_MULTIPLE_TESTING": {
+          "attack": "A8_MULTIPLE_TESTING",
+          "weight": 1.5,
+          "iteration": 9,
+          "total_params_tested": 9,
+          "false_positive_prob": 0.37,
+          "required_confidence": 0.994,
+          "raw_score": 0.6,
+          "weighted_score": 0.9
+        }
+      },
+      "baseline_oos": 570.5,
+      "treatment_oos": 617.7,
+      "delta": 47.1,
+      "treatment_folds": [
+        74.6,
+        87.4,
+        163.1,
+        104.2,
+        188.3
+      ]
+    },
+    "timestamp": "2026-03-28T15:20:48.706715",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 10,
+    "hypothesis": "preemptive_cascade_pct 2.5 \u2192 3.0",
+    "parameter": "preemptive_cascade_pct",
+    "change": "2.5 \u2192 3.0",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:29:33.880121",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 11,
+    "hypothesis": "preemptive_cascade_pct 2.5 \u2192 4.0",
+    "parameter": "preemptive_cascade_pct",
+    "change": "2.5 \u2192 4.0",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:29:34.272316",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 12,
+    "hypothesis": "cascade_tighten_pct 95 \u2192 90",
+    "parameter": "cascade_tighten_pct",
+    "change": "95 \u2192 90",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:29:34.833077",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 13,
+    "hypothesis": "agg_risk_counter 10.0 \u2192 5",
+    "parameter": "agg_risk_counter",
+    "change": "10.0 \u2192 5",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:51:07.542724",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 14,
+    "hypothesis": "agg_risk_with 15.0 \u2192 10",
+    "parameter": "agg_risk_with",
+    "change": "15.0 \u2192 10",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:51:08.241345",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 15,
+    "hypothesis": "momentum_cooldown 12 \u2192 6",
+    "parameter": "momentum_cooldown",
+    "change": "12 \u2192 6",
+    "result": {
+      "verdict": "CONDITIONAL GO",
+      "normalized_score": 6.73,
+      "raw_score": 9.42,
+      "max_score": 14.0,
+      "tier1": {
+        "G1_WF_POSITIVE": {
+          "gate": "G1_WF_POSITIVE",
+          "pnls": [
+            74.7,
+            87.1,
+            164.2,
+            104.9,
+            189.7
+          ],
+          "all_positive": true,
+          "passed": true,
+          "reason": ""
+        },
+        "G2_WR_MARGIN": {
+          "gate": "G2_WR_MARGIN",
+          "avg_margin": 27.7,
+          "worst_margin": 23.0,
+          "threshold": 5.0,
+          "passed": "True",
+          "reason": ""
+        },
+        "G3_OVERFIT": {
+          "gate": "G3_OVERFIT",
+          "is_improvement": 3.0,
+          "oos_improvement": 2.9,
+          "overfit_score": 0.01,
+          "risk": "LOW",
+          "passed": "True",
+          "reason": ""
+        }
+      },
+      "tier2": {
+        "A1_TIME_BOOTSTRAP": {
+          "attack": "A1_TIME_BOOTSTRAP",
+          "weight": 2.0,
+          "positive_ratio": 1.0,
+          "mean_gap": 0.9,
+          "std_gap": 0.2,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A2_NOISE_ROBUSTNESS": {
+          "attack": "A2_NOISE_ROBUSTNESS",
+          "weight": 1.5,
+          "noise_levels": {
+            "5%": {
+              "gap": 2.7,
+              "positive": "True"
+            },
+            "10%": {
+              "gap": 2.6,
+              "positive": "True"
+            },
+            "20%": {
+              "gap": -0.3,
+              "positive": "False"
+            }
+          },
+          "survive_ratio": 0.67,
+          "raw_score": 0.667,
+          "weighted_score": 1.0
+        },
+        "A3_REGIME_WORST": {
+          "attack": "A3_REGIME_WORST",
+          "weight": 2.0,
+          "worst_gap": -0.4,
+          "mean_gap": 0.1,
+          "negative_pct": 15.6,
+          "n_windows": 32,
+          "raw_score": 0.924,
+          "weighted_score": 1.848
+        },
+        "A4_FOLD_DECAY": {
+          "attack": "A4_FOLD_DECAY",
+          "weight": 2.5,
+          "gaps_by_fold": [
+            0.2,
+            -0.3,
+            1.1,
+            0.6,
+            1.3
+          ],
+          "early_avg": -0.1,
+          "late_avg": 1.0,
+          "decay_ratio": 0,
+          "trend": "DECAYING",
+          "raw_score": 0,
+          "weighted_score": 0.0
+        },
+        "A5_TAIL_RISK": {
+          "attack": "A5_TAIL_RISK",
+          "weight": 2.0,
+          "worst_periods": [
+            {
+              "start": 78336,
+              "end": 79776,
+              "btc_return": -12.5,
+              "baseline_pnl": 28.4,
+              "treatment_pnl": 28.8,
+              "gap": 0.4
+            },
+            {
+              "start": 44496,
+              "end": 45936,
+              "btc_return": -11.5,
+              "baseline_pnl": 12.3,
+              "treatment_pnl": 12.6,
+              "gap": 0.4
+            },
+            {
+              "start": 56016,
+              "end": 57456,
+              "btc_return": -10.9,
+              "baseline_pnl": 28.0,
+              "treatment_pnl": 28.5,
+              "gap": 0.4
+            }
+          ],
+          "positive_in_worst": 3,
+          "avg_gap_in_worst": 0.4,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A6_PARAM_NEIGHBORHOOD": {
+          "attack": "A6_PARAM_NEIGHBORHOOD",
+          "weight": 1.5,
+          "param": "momentum_cooldown",
+          "step": 3,
+          "neighbors": {
+            "low": 3,
+            "center": 6,
+            "high": 9
+          },
+          "gaps": {
+            "low": 4.8,
+            "center": 2.9,
+            "high": 0.8
+          },
+          "range": 4.0,
+          "all_positive": true,
+          "raw_score": 0.7,
+          "weighted_score": 1.05
+        },
+        "A7_TRADE_COUNT": {
+          "attack": "A7_TRADE_COUNT",
+          "weight": 1.0,
+          "baseline_trades": 5099,
+          "treatment_trades": 5121,
+          "change_pct": 0.4,
+          "raw_score": 1.0,
+          "weighted_score": 1.0
+        },
+        "A8_MULTIPLE_TESTING": {
+          "attack": "A8_MULTIPLE_TESTING",
+          "weight": 1.5,
+          "iteration": 15,
+          "total_params_tested": 9,
+          "false_positive_prob": 0.537,
+          "required_confidence": 0.997,
+          "raw_score": 0.35,
+          "weighted_score": 0.525
+        }
+      },
+      "baseline_oos": 617.7,
+      "treatment_oos": 620.6,
+      "delta": 2.9,
+      "treatment_folds": [
+        74.7,
+        87.1,
+        164.2,
+        104.9,
+        189.7
+      ]
+    },
+    "timestamp": "2026-03-28T15:52:35.522591",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 16,
+    "hypothesis": "tp_decay_rate 0.9975 \u2192 0.995",
+    "parameter": "tp_decay_rate",
+    "change": "0.9975 \u2192 0.995",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:52:36.236424",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 17,
+    "hypothesis": "timeout_bars 288 \u2192 336",
+    "parameter": "timeout_bars",
+    "change": "288 \u2192 336",
+    "result": {
+      "verdict": "CONDITIONAL GO",
+      "normalized_score": 5.48,
+      "raw_score": 7.67,
+      "max_score": 14.0,
+      "tier1": {
+        "G1_WF_POSITIVE": {
+          "gate": "G1_WF_POSITIVE",
+          "pnls": [
+            79.6,
+            97.7,
+            166.0,
+            103.6,
+            191.8
+          ],
+          "all_positive": true,
+          "passed": true,
+          "reason": ""
+        },
+        "G2_WR_MARGIN": {
+          "gate": "G2_WR_MARGIN",
+          "avg_margin": 29.7,
+          "worst_margin": 25.9,
+          "threshold": 5.0,
+          "passed": "True",
+          "reason": ""
+        },
+        "G3_OVERFIT": {
+          "gate": "G3_OVERFIT",
+          "is_improvement": 24.3,
+          "oos_improvement": 21.0,
+          "overfit_score": 0.135,
+          "risk": "LOW",
+          "passed": "True",
+          "reason": ""
+        }
+      },
+      "tier2": {
+        "A1_TIME_BOOTSTRAP": {
+          "attack": "A1_TIME_BOOTSTRAP",
+          "weight": 2.0,
+          "positive_ratio": 0.9,
+          "mean_gap": 6.7,
+          "std_gap": 3.8,
+          "raw_score": 0.8,
+          "weighted_score": 1.6
+        },
+        "A2_NOISE_ROBUSTNESS": {
+          "attack": "A2_NOISE_ROBUSTNESS",
+          "weight": 1.5,
+          "noise_levels": {
+            "5%": {
+              "gap": 25.0,
+              "positive": "True"
+            },
+            "10%": {
+              "gap": 16.5,
+              "positive": "True"
+            },
+            "20%": {
+              "gap": 15.0,
+              "positive": "True"
+            }
+          },
+          "survive_ratio": 1.0,
+          "raw_score": 1.0,
+          "weighted_score": 1.5
+        },
+        "A3_REGIME_WORST": {
+          "attack": "A3_REGIME_WORST",
+          "weight": 2.0,
+          "worst_gap": -2.3,
+          "mean_gap": 0.6,
+          "negative_pct": 28.1,
+          "n_windows": 32,
+          "raw_score": 0.804,
+          "weighted_score": 1.608
+        },
+        "A4_FOLD_DECAY": {
+          "attack": "A4_FOLD_DECAY",
+          "weight": 2.5,
+          "gaps_by_fold": [
+            5.0,
+            10.3,
+            2.9,
+            -0.7,
+            3.5
+          ],
+          "early_avg": 7.7,
+          "late_avg": 1.4,
+          "decay_ratio": 0.185,
+          "trend": "DECAYING",
+          "raw_score": 0.185,
+          "weighted_score": 0.462
+        },
+        "A5_TAIL_RISK": {
+          "attack": "A5_TAIL_RISK",
+          "weight": 2.0,
+          "worst_periods": [
+            {
+              "start": 78336,
+              "end": 79776,
+              "btc_return": -12.5,
+              "baseline_pnl": 28.4,
+              "treatment_pnl": 28.4,
+              "gap": 0.0
+            },
+            {
+              "start": 44496,
+              "end": 45936,
+              "btc_return": -11.5,
+              "baseline_pnl": 12.3,
+              "treatment_pnl": 12.3,
+              "gap": 0.0
+            },
+            {
+              "start": 56016,
+              "end": 57456,
+              "btc_return": -10.9,
+              "baseline_pnl": 28.0,
+              "treatment_pnl": 28.0,
+              "gap": 0.0
+            }
+          ],
+          "positive_in_worst": 0,
+          "avg_gap_in_worst": 0.0,
+          "raw_score": 0.0,
+          "weighted_score": 0.0
+        },
+        "A6_PARAM_NEIGHBORHOOD": {
+          "attack": "A6_PARAM_NEIGHBORHOOD",
+          "weight": 1.5,
+          "param": "timeout_bars",
+          "step": 24,
+          "neighbors": {
+            "low": 312,
+            "center": 336,
+            "high": 360
+          },
+          "gaps": {
+            "low": 14.0,
+            "center": 21.0,
+            "high": 24.9
+          },
+          "range": 10.9,
+          "all_positive": true,
+          "raw_score": 0.7,
+          "weighted_score": 1.05
+        },
+        "A7_TRADE_COUNT": {
+          "attack": "A7_TRADE_COUNT",
+          "weight": 1.0,
+          "baseline_trades": 5099,
+          "treatment_trades": 5008,
+          "change_pct": 1.8,
+          "raw_score": 1.0,
+          "weighted_score": 1.0
+        },
+        "A8_MULTIPLE_TESTING": {
+          "attack": "A8_MULTIPLE_TESTING",
+          "weight": 1.5,
+          "iteration": 17,
+          "total_params_tested": 9,
+          "false_positive_prob": 0.582,
+          "required_confidence": 0.997,
+          "raw_score": 0.3,
+          "weighted_score": 0.45
+        }
+      },
+      "baseline_oos": 617.7,
+      "treatment_oos": 638.7,
+      "delta": 21.0,
+      "treatment_folds": [
+        79.6,
+        97.7,
+        166.0,
+        103.6,
+        191.8
+      ]
+    },
+    "timestamp": "2026-03-28T15:54:03.422748",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 18,
+    "hypothesis": "cascade_tighten_pct 95 \u2192 93",
+    "parameter": "cascade_tighten_pct",
+    "change": "95 \u2192 93",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:54:04.131432",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 19,
+    "hypothesis": "cascade_tighten_pct 95 \u2192 97",
+    "parameter": "cascade_tighten_pct",
+    "change": "95 \u2192 97",
+    "result": {
+      "verdict": "STRONG GO",
+      "normalized_score": 7.61,
+      "raw_score": 10.65,
+      "max_score": 14.0,
+      "tier1": {
+        "G1_WF_POSITIVE": {
+          "gate": "G1_WF_POSITIVE",
+          "pnls": [
+            74.6,
+            87.6,
+            163.3,
+            104.4,
+            188.8
+          ],
+          "all_positive": true,
+          "passed": true,
+          "reason": ""
+        },
+        "G2_WR_MARGIN": {
+          "gate": "G2_WR_MARGIN",
+          "avg_margin": 27.7,
+          "worst_margin": 22.8,
+          "threshold": 5.0,
+          "passed": "True",
+          "reason": ""
+        },
+        "G3_OVERFIT": {
+          "gate": "G3_OVERFIT",
+          "is_improvement": 1.2,
+          "oos_improvement": 1.0,
+          "overfit_score": 0.168,
+          "risk": "LOW",
+          "passed": "True",
+          "reason": ""
+        }
+      },
+      "tier2": {
+        "A1_TIME_BOOTSTRAP": {
+          "attack": "A1_TIME_BOOTSTRAP",
+          "weight": 2.0,
+          "positive_ratio": 1.0,
+          "mean_gap": 0.3,
+          "std_gap": 0.1,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A2_NOISE_ROBUSTNESS": {
+          "attack": "A2_NOISE_ROBUSTNESS",
+          "weight": 1.5,
+          "noise_levels": {
+            "5%": {
+              "gap": 1.2,
+              "positive": "True"
+            },
+            "10%": {
+              "gap": 1.2,
+              "positive": "True"
+            },
+            "20%": {
+              "gap": 1.4,
+              "positive": "True"
+            }
+          },
+          "survive_ratio": 1.0,
+          "raw_score": 1.0,
+          "weighted_score": 1.5
+        },
+        "A3_REGIME_WORST": {
+          "attack": "A3_REGIME_WORST",
+          "weight": 2.0,
+          "worst_gap": 0.0,
+          "mean_gap": 0.0,
+          "negative_pct": 0.0,
+          "n_windows": 32,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A4_FOLD_DECAY": {
+          "attack": "A4_FOLD_DECAY",
+          "weight": 2.5,
+          "gaps_by_fold": [
+            0.1,
+            0.2,
+            0.1,
+            0.1,
+            0.4
+          ],
+          "early_avg": 0.2,
+          "late_avg": 0.3,
+          "decay_ratio": 1.967,
+          "trend": "IMPROVING",
+          "raw_score": 1.0,
+          "weighted_score": 2.5
+        },
+        "A5_TAIL_RISK": {
+          "attack": "A5_TAIL_RISK",
+          "weight": 2.0,
+          "worst_periods": [
+            {
+              "start": 78336,
+              "end": 79776,
+              "btc_return": -12.5,
+              "baseline_pnl": 28.4,
+              "treatment_pnl": 28.4,
+              "gap": 0.0
+            },
+            {
+              "start": 44496,
+              "end": 45936,
+              "btc_return": -11.5,
+              "baseline_pnl": 12.3,
+              "treatment_pnl": 12.4,
+              "gap": 0.1
+            },
+            {
+              "start": 56016,
+              "end": 57456,
+              "btc_return": -10.9,
+              "baseline_pnl": 28.0,
+              "treatment_pnl": 28.0,
+              "gap": 0.0
+            }
+          ],
+          "positive_in_worst": 1,
+          "avg_gap_in_worst": 0.0,
+          "raw_score": 0.3,
+          "weighted_score": 0.6
+        },
+        "A6_PARAM_NEIGHBORHOOD": {
+          "attack": "A6_PARAM_NEIGHBORHOOD",
+          "weight": 1.5,
+          "param": "cascade_tighten_pct",
+          "step": 2,
+          "neighbors": {
+            "low": 95,
+            "center": 97,
+            "high": 99
+          },
+          "gaps": {
+            "low": 0.0,
+            "center": 1.0,
+            "high": 1.1
+          },
+          "range": 1.1,
+          "all_positive": false,
+          "raw_score": 0.4,
+          "weighted_score": 0.6
+        },
+        "A7_TRADE_COUNT": {
+          "attack": "A7_TRADE_COUNT",
+          "weight": 1.0,
+          "baseline_trades": 5099,
+          "treatment_trades": 5099,
+          "change_pct": 0.0,
+          "raw_score": 1.0,
+          "weighted_score": 1.0
+        },
+        "A8_MULTIPLE_TESTING": {
+          "attack": "A8_MULTIPLE_TESTING",
+          "weight": 1.5,
+          "iteration": 19,
+          "total_params_tested": 9,
+          "false_positive_prob": 0.623,
+          "required_confidence": 0.997,
+          "raw_score": 0.3,
+          "weighted_score": 0.45
+        }
+      },
+      "baseline_oos": 617.7,
+      "treatment_oos": 618.7,
+      "delta": 1.0,
+      "treatment_folds": [
+        74.6,
+        87.6,
+        163.3,
+        104.4,
+        188.8
+      ]
+    },
+    "timestamp": "2026-03-28T15:55:30.923339",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 20,
+    "hypothesis": "cascade_tighten_pct 95 \u2192 98",
+    "parameter": "cascade_tighten_pct",
+    "change": "95 \u2192 98",
+    "result": {
+      "verdict": "STRONG GO",
+      "normalized_score": 8.25,
+      "raw_score": 11.55,
+      "max_score": 14.0,
+      "tier1": {
+        "G1_WF_POSITIVE": {
+          "gate": "G1_WF_POSITIVE",
+          "pnls": [
+            74.6,
+            87.7,
+            163.3,
+            104.4,
+            188.8
+          ],
+          "all_positive": true,
+          "passed": true,
+          "reason": ""
+        },
+        "G2_WR_MARGIN": {
+          "gate": "G2_WR_MARGIN",
+          "avg_margin": 27.7,
+          "worst_margin": 22.8,
+          "threshold": 5.0,
+          "passed": "True",
+          "reason": ""
+        },
+        "G3_OVERFIT": {
+          "gate": "G3_OVERFIT",
+          "is_improvement": 1.3,
+          "oos_improvement": 1.1,
+          "overfit_score": 0.179,
+          "risk": "LOW",
+          "passed": "True",
+          "reason": ""
+        }
+      },
+      "tier2": {
+        "A1_TIME_BOOTSTRAP": {
+          "attack": "A1_TIME_BOOTSTRAP",
+          "weight": 2.0,
+          "positive_ratio": 1.0,
+          "mean_gap": 0.3,
+          "std_gap": 0.1,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A2_NOISE_ROBUSTNESS": {
+          "attack": "A2_NOISE_ROBUSTNESS",
+          "weight": 1.5,
+          "noise_levels": {
+            "5%": {
+              "gap": 1.3,
+              "positive": "True"
+            },
+            "10%": {
+              "gap": 1.2,
+              "positive": "True"
+            },
+            "20%": {
+              "gap": 1.5,
+              "positive": "True"
+            }
+          },
+          "survive_ratio": 1.0,
+          "raw_score": 1.0,
+          "weighted_score": 1.5
+        },
+        "A3_REGIME_WORST": {
+          "attack": "A3_REGIME_WORST",
+          "weight": 2.0,
+          "worst_gap": 0.0,
+          "mean_gap": 0.0,
+          "negative_pct": 0.0,
+          "n_windows": 32,
+          "raw_score": 1.0,
+          "weighted_score": 2.0
+        },
+        "A4_FOLD_DECAY": {
+          "attack": "A4_FOLD_DECAY",
+          "weight": 2.5,
+          "gaps_by_fold": [
+            0.1,
+            0.3,
+            0.2,
+            0.1,
+            0.5
+          ],
+          "early_avg": 0.2,
+          "late_avg": 0.3,
+          "decay_ratio": 1.937,
+          "trend": "IMPROVING",
+          "raw_score": 1.0,
+          "weighted_score": 2.5
+        },
+        "A5_TAIL_RISK": {
+          "attack": "A5_TAIL_RISK",
+          "weight": 2.0,
+          "worst_periods": [
+            {
+              "start": 78336,
+              "end": 79776,
+              "btc_return": -12.5,
+              "baseline_pnl": 28.4,
+              "treatment_pnl": 28.4,
+              "gap": 0.0
+            },
+            {
+              "start": 44496,
+              "end": 45936,
+              "btc_return": -11.5,
+              "baseline_pnl": 12.3,
+              "treatment_pnl": 12.4,
+              "gap": 0.1
+            },
+            {
+              "start": 56016,
+              "end": 57456,
+              "btc_return": -10.9,
+              "baseline_pnl": 28.0,
+              "treatment_pnl": 28.0,
+              "gap": 0.0
+            }
+          ],
+          "positive_in_worst": 1,
+          "avg_gap_in_worst": 0.0,
+          "raw_score": 0.3,
+          "weighted_score": 0.6
+        },
+        "A6_PARAM_NEIGHBORHOOD": {
+          "attack": "A6_PARAM_NEIGHBORHOOD",
+          "weight": 1.5,
+          "param": "cascade_tighten_pct",
+          "step": 2,
+          "neighbors": {
+            "low": 96,
+            "center": 98,
+            "high": 100
+          },
+          "gaps": {
+            "low": 0.6,
+            "center": 1.1,
+            "high": 1.1
+          },
+          "range": 0.5,
+          "all_positive": true,
+          "raw_score": 1.0,
+          "weighted_score": 1.5
+        },
+        "A7_TRADE_COUNT": {
+          "attack": "A7_TRADE_COUNT",
+          "weight": 1.0,
+          "baseline_trades": 5099,
+          "treatment_trades": 5099,
+          "change_pct": 0.0,
+          "raw_score": 1.0,
+          "weighted_score": 1.0
+        },
+        "A8_MULTIPLE_TESTING": {
+          "attack": "A8_MULTIPLE_TESTING",
+          "weight": 1.5,
+          "iteration": 20,
+          "total_params_tested": 9,
+          "false_positive_prob": 0.642,
+          "required_confidence": 0.998,
+          "raw_score": 0.3,
+          "weighted_score": 0.45
+        }
+      },
+      "baseline_oos": 617.7,
+      "treatment_oos": 618.8,
+      "delta": 1.1,
+      "treatment_folds": [
+        74.6,
+        87.7,
+        163.3,
+        104.4,
+        188.8
+      ]
+    },
+    "timestamp": "2026-03-28T15:56:58.118275",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 21,
+    "hypothesis": "cascade_tighten_pct 98 \u2192 95",
+    "parameter": "cascade_tighten_pct",
+    "change": "98 \u2192 95",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:58:03.155508",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 22,
+    "hypothesis": "cascade_tighten_pct 98 \u2192 99",
+    "parameter": "cascade_tighten_pct",
+    "change": "98 \u2192 99",
+    "result": {
+      "verdict": "REJECT",
+      "reason": "IS failed",
+      "normalized_score": 0
+    },
+    "timestamp": "2026-03-28T15:58:03.869389",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 23,
+    "hypothesis": "direction_cap 6 \u2192 7",
+    "parameter": "direction_cap",
+    "change": "6 \u2192 7",
+    "result": {
+      "verdict": "REJECT",
+      "normalized_score": 4.53,
+      "raw_score": 6.34,
+      "max_score": 14.0,
+      "tier1": {
+        "G1_WF_POSITIVE": {
+          "gate": "G1_WF_POSITIVE",
+          "pnls": [
+            73.2,
+            88.6,
+            164.8,
+            108.3,
+            188.6
+          ],
+          "all_positive": true,
+          "passed": true,
+          "reason": ""
+        },
+        "G2_WR_MARGIN": {
+          "gate": "G2_WR_MARGIN",
+          "avg_margin": 27.2,
+          "worst_margin": 21.8,
+          "threshold": 5.0,
+          "passed": "True",
+          "reason": ""
+        },
+        "G3_OVERFIT": {
+          "gate": "G3_OVERFIT",
+          "is_improvement": 7.2,
+          "oos_improvement": 4.8,
+          "overfit_score": 0.331,
+          "risk": "MODERATE",
+          "passed": "True",
+          "reason": ""
+        }
+      },
+      "tier2": {
+        "A1_TIME_BOOTSTRAP": {
+          "attack": "A1_TIME_BOOTSTRAP",
+          "weight": 2.0,
+          "positive_ratio": 0.8,
+          "mean_gap": 3.0,
+          "std_gap": 2.8,
+          "raw_score": 0.6,
+          "weighted_score": 1.2
+        },
+        "A2_NOISE_ROBUSTNESS": {
+          "attack": "A2_NOISE_ROBUSTNESS",
+          "weight": 1.5,
+          "noise_levels": {
+            "5%": {
+              "gap": -0.0,
+              "positive": "False"
+            },
+            "10%": {
+              "gap": 6.5,
+              "positive": "True"
+            },
+            "20%": {
+              "gap": 7.8,
+              "positive": "True"
+            }
+          },
+          "survive_ratio": 0.67,
+          "raw_score": 0.667,
+          "weighted_score": 1.0
+        },
+        "A3_REGIME_WORST": {
+          "attack": "A3_REGIME_WORST",
+          "weight": 2.0,
+          "worst_gap": -2.6,
+          "mean_gap": 0.2,
+          "negative_pct": 40.6,
+          "n_windows": 32,
+          "raw_score": 0.742,
+          "weighted_score": 1.485
+        },
+        "A4_FOLD_DECAY": {
+          "attack": "A4_FOLD_DECAY",
+          "weight": 2.5,
+          "gaps_by_fold": [
+            -1.5,
+            1.0,
+            1.6,
+            3.9,
+            -0.2
+          ],
+          "early_avg": -0.2,
+          "late_avg": 1.9,
+          "decay_ratio": 0,
+          "trend": "DECAYING",
+          "raw_score": 0,
+          "weighted_score": 0.0
+        },
+        "A5_TAIL_RISK": {
+          "attack": "A5_TAIL_RISK",
+          "weight": 2.0,
+          "worst_periods": [
+            {
+              "start": 78336,
+              "end": 79776,
+              "btc_return": -12.5,
+              "baseline_pnl": 28.4,
+              "treatment_pnl": 27.5,
+              "gap": -0.9
+            },
+            {
+              "start": 44496,
+              "end": 45936,
+              "btc_return": -11.5,
+              "baseline_pnl": 12.4,
+              "treatment_pnl": 13.2,
+              "gap": 0.8
+            },
+            {
+              "start": 56016,
+              "end": 57456,
+              "btc_return": -10.9,
+              "baseline_pnl": 28.0,
+              "treatment_pnl": 27.6,
+              "gap": -0.4
+            }
+          ],
+          "positive_in_worst": 1,
+          "avg_gap_in_worst": -0.2,
+          "raw_score": 0.3,
+          "weighted_score": 0.6
+        },
+        "A6_PARAM_NEIGHBORHOOD": {
+          "attack": "A6_PARAM_NEIGHBORHOOD",
+          "weight": 1.5,
+          "param": "direction_cap",
+          "step": 1,
+          "neighbors": {
+            "low": 6,
+            "center": 7,
+            "high": 8
+          },
+          "gaps": {
+            "low": 0.0,
+            "center": 4.8,
+            "high": 10.9
+          },
+          "range": 10.9,
+          "all_positive": false,
+          "raw_score": 0.4,
+          "weighted_score": 0.6
+        },
+        "A7_TRADE_COUNT": {
+          "attack": "A7_TRADE_COUNT",
+          "weight": 1.0,
+          "baseline_trades": 5099,
+          "treatment_trades": 5245,
+          "change_pct": 2.9,
+          "raw_score": 1.0,
+          "weighted_score": 1.0
+        },
+        "A8_MULTIPLE_TESTING": {
+          "attack": "A8_MULTIPLE_TESTING",
+          "weight": 1.5,
+          "iteration": 23,
+          "total_params_tested": 9,
+          "false_positive_prob": 0.693,
+          "required_confidence": 0.998,
+          "raw_score": 0.3,
+          "weighted_score": 0.45
+        }
+      },
+      "baseline_oos": 618.8,
+      "treatment_oos": 623.6,
+      "delta": 4.8,
+      "treatment_folds": [
+        73.2,
+        88.6,
+        164.8,
+        108.3,
+        188.6
+      ]
+    },
+    "timestamp": "2026-03-28T15:59:31.472480",
+    "evaluator_version": "v2"
+  },
+  {
+    "iteration": 24,
+    "hypothesis": "ATR-dynamic trail activation (scale with vol)",
+    "parameter": "trail_activation",
+    "change": "fixed 1.0% \u2192 ATR-scaled",
+    "result": {
+      "verdict": "STOP",
+      "reason": "ATR-dynamic OOS -4.3% vs fixed +5.2%. WF 4/5 PASS but OOS inferior.",
+      "normalized_score": 0
+    },
+    "evaluator_version": "ralph_loop_v1"
+  },
+  {
+    "iteration": 25,
+    "hypothesis": "MCC + Trail combination effect",
+    "parameter": "mcc_trail_interaction",
+    "change": "MCC+Trail vs Trail only",
+    "result": {
+      "verdict": "GO",
+      "action": "DISABLE MCC, KEEP Trail only",
+      "reason": "MCC+Trail interaction = -23.1% (CANCEL). Trail only: WF 5/5 PASS, OOS +5.2%.",
+      "normalized_score": 8.0
+    },
+    "evaluator_version": "ralph_loop_v2"
+  }
+]

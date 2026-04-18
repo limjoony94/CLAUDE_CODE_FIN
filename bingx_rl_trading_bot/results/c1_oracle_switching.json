@@ -1,0 +1,105 @@
+{
+  "date_run": "2026-04-18T20:58:21.346806",
+  "script": "c1_oracle_switching.py",
+  "data_file": "btc_5m_270days_reclassified.csv",
+  "period_days": 332,
+  "bars_15m": 31946,
+  "cfg": {
+    "channel_period": 15,
+    "body_min_ratio": 0.4,
+    "atr_period": 14,
+    "trail_K": 2.5,
+    "max_sl_atr": 3.3,
+    "emergency_sl_pct": 3.0,
+    "max_hold_bars": 192,
+    "sl_min_pct": 0.15,
+    "sl_max_pct": 3.0,
+    "min_bars_between": 2,
+    "trail_activation_pct": 0.05,
+    "fractal_lookback": 10
+  },
+  "fee_rt_pct": 0.1,
+  "signals_total": 1027,
+  "reverse_valid": 176,
+  "reverse_invalid_sl_oob": 851,
+  "sanity_baseline_expected": {
+    "PnL": 170.5,
+    "trades": 1027
+  },
+  "sanity_forward_observed": {
+    "PnL": 170.49,
+    "trades": 1027,
+    "PnL_diff": 0.01,
+    "trades_diff": 0,
+    "pass": true
+  },
+  "aggregates": {
+    "forward_all": {
+      "trades": 1027,
+      "WR": 36.61,
+      "PnL": 170.49,
+      "MDD": 5.38
+    },
+    "forward_subset": {
+      "trades": 176,
+      "WR": 35.23,
+      "PnL": 34.72,
+      "MDD": 5.36
+    },
+    "reverse_subset": {
+      "trades": 176,
+      "WR": 25.57,
+      "PnL": 2.8,
+      "MDD": 9.76
+    },
+    "oracle_all": {
+      "trades": 1027,
+      "WR": 40.9,
+      "PnL": 253.87,
+      "MDD": 4.26
+    },
+    "oracle_subset": {
+      "trades": 176,
+      "WR": 60.23,
+      "PnL": 118.1,
+      "MDD": 0.97
+    },
+    "antioracle_all": {
+      "trades": 1027,
+      "WR": 30.67,
+      "PnL": 55.18,
+      "MDD": 11.66
+    },
+    "antioracle_subset": {
+      "trades": 176,
+      "WR": 0.57,
+      "PnL": -80.58,
+      "MDD": 80.58
+    }
+  },
+  "classification_stats_subset": {
+    "forward_wins": 119,
+    "reverse_wins": 55,
+    "ties": 2,
+    "forward_win_pct": 67.61,
+    "reverse_win_pct": 31.25
+  },
+  "accuracy_curve_pct_pnl": {
+    "50": 154.53,
+    "55": 164.46,
+    "60": 174.39,
+    "65": 184.33,
+    "70": 194.26,
+    "75": 204.2,
+    "80": 214.13,
+    "85": 224.07,
+    "90": 234.0,
+    "95": 243.94,
+    "100": 253.87
+  },
+  "accuracy_thresholds": {
+    "match_forward": 58.04,
+    "beat_plus_10pct_relative": 66.62,
+    "beat_plus_50pp_absolute": 83.2
+  }
+}

@@ -1,0 +1,982 @@
+{
+  "study": "exit_mechanism_study",
+  "version": "v1.53.0",
+  "generated_at": "2026-03-06T03:46:44.652591",
+  "data_bars": 87315,
+  "patterns": "59L+72S",
+  "signals": 15988,
+  "elapsed_sec": 37131.5,
+  "verdict": "KEEP_BASELINE",
+  "baseline": {
+    "is": {
+      "trades": 3405,
+      "wins": 1718,
+      "wr": 50.5,
+      "pnl": 337.03,
+      "mdd": 13.79,
+      "pnl_mdd": 24.4
+    },
+    "wf_pass": false,
+    "wf_folds": [
+      {
+        "trades": 928,
+        "wins": 504,
+        "wr": 54.3,
+        "pnl": 120.38,
+        "mdd": 8.04,
+        "pnl_mdd": 15.0,
+        "fold": 1,
+        "oos_bars": 21828
+      },
+      {
+        "trades": 933,
+        "wins": 464,
+        "wr": 49.7,
+        "pnl": 59.32,
+        "mdd": 11.14,
+        "pnl_mdd": 5.3,
+        "fold": 2,
+        "oos_bars": 21828
+      },
+      {
+        "trades": 0,
+        "wr": 0,
+        "pnl": 0,
+        "mdd": 0,
+        "pnl_mdd": 0,
+        "fold": 3,
+        "oos_bars": 3
+      }
+    ],
+    "wf_min_pnl": 0,
+    "wf_avg_pnl": 59.9,
+    "exit_reasons": {
+      "TIMEOUT": 1732,
+      "TP": 1091,
+      "SL": 582
+    },
+    "config": {
+      "exit_fn": "baseline",
+      "cascade_pct": 85,
+      "kwargs": {}
+    }
+  },
+  "results": {
+    "H0_baseline": {
+      "is": {
+        "trades": 3405,
+        "wins": 1718,
+        "wr": 50.5,
+        "pnl": 337.03,
+        "mdd": 13.79,
+        "pnl_mdd": 24.4
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 928,
+          "wins": 504,
+          "wr": 54.3,
+          "pnl": 120.38,
+          "mdd": 8.04,
+          "pnl_mdd": 15.0,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 933,
+          "wins": 464,
+          "wr": 49.7,
+          "pnl": 59.32,
+          "mdd": 11.14,
+          "pnl_mdd": 5.3,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 59.9,
+      "exit_reasons": {
+        "TIMEOUT": 1732,
+        "TP": 1091,
+        "SL": 582
+      },
+      "config": {
+        "exit_fn": "baseline",
+        "cascade_pct": 85,
+        "kwargs": {}
+      }
+    },
+    "F1a_BE_0.5pct": {
+      "is": {
+        "trades": 7918,
+        "wins": 1018,
+        "wr": 12.9,
+        "pnl": -61.65,
+        "mdd": 96.27,
+        "pnl_mdd": -0.6
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 2441,
+          "wins": 263,
+          "wr": 10.8,
+          "pnl": -32.91,
+          "mdd": 69.1,
+          "pnl_mdd": -0.5,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 2259,
+          "wins": 294,
+          "wr": 13.0,
+          "pnl": -30.2,
+          "mdd": 62.95,
+          "pnl_mdd": -0.5,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": -32.91,
+      "wf_avg_pnl": -21.04,
+      "exit_reasons": {
+        "SL": 6639,
+        "TP": 862,
+        "TIMEOUT": 417
+      },
+      "config": {
+        "exit_fn": "breakeven",
+        "cascade_pct": 85,
+        "kwargs": {
+          "profit_trigger_pct": 0.005
+        }
+      }
+    },
+    "F1b_BE_1.0pct": {
+      "is": {
+        "trades": 5027,
+        "wins": 1451,
+        "wr": 28.9,
+        "pnl": -12.4,
+        "mdd": 23.45,
+        "pnl_mdd": -0.5
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 1519,
+          "wins": 404,
+          "wr": 26.6,
+          "pnl": 14.6,
+          "mdd": 15.06,
+          "pnl_mdd": 1.0,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 1560,
+          "wins": 395,
+          "wr": 25.3,
+          "pnl": -16.35,
+          "mdd": 24.21,
+          "pnl_mdd": -0.7,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": -16.35,
+      "wf_avg_pnl": -0.58,
+      "exit_reasons": {
+        "SL": 2941,
+        "TP": 1056,
+        "TIMEOUT": 1030
+      },
+      "config": {
+        "exit_fn": "breakeven",
+        "cascade_pct": 85,
+        "kwargs": {
+          "profit_trigger_pct": 0.01
+        }
+      }
+    },
+    "F1c_BE_0.3pct": {
+      "is": {
+        "trades": 11169,
+        "wins": 625,
+        "wr": 5.6,
+        "pnl": -82.25,
+        "mdd": 99.83,
+        "pnl_mdd": -0.8
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 3279,
+          "wins": 171,
+          "wr": 5.2,
+          "pnl": -44.19,
+          "mdd": 84.64,
+          "pnl_mdd": -0.5,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 3053,
+          "wins": 153,
+          "wr": 5.0,
+          "pnl": -44.98,
+          "mdd": 85.55,
+          "pnl_mdd": -0.5,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": -44.98,
+      "wf_avg_pnl": -29.72,
+      "exit_reasons": {
+        "SL": 10469,
+        "TP": 587,
+        "TIMEOUT": 113
+      },
+      "config": {
+        "exit_fn": "breakeven",
+        "cascade_pct": 85,
+        "kwargs": {
+          "profit_trigger_pct": 0.003
+        }
+      }
+    },
+    "F2a_Trail_0.8_0.5": {
+      "is": {
+        "trades": 7519,
+        "wins": 2927,
+        "wr": 38.9,
+        "pnl": 275.4,
+        "mdd": 15.97,
+        "pnl_mdd": 17.2
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 2250,
+          "wins": 853,
+          "wr": 37.9,
+          "pnl": 72.15,
+          "mdd": 10.89,
+          "pnl_mdd": 6.6,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 2210,
+          "wins": 912,
+          "wr": 41.3,
+          "pnl": 67.27,
+          "mdd": 5.23,
+          "pnl_mdd": 12.9,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 46.47,
+      "exit_reasons": {
+        "SL": 6193,
+        "TP": 892,
+        "TIMEOUT": 434
+      },
+      "config": {
+        "exit_fn": "trailing",
+        "cascade_pct": 85,
+        "kwargs": {
+          "trail_pct": 0.008,
+          "activation_pct": 0.005
+        }
+      }
+    },
+    "F2b_Trail_1.2_0.8": {
+      "is": {
+        "trades": 5417,
+        "wins": 2284,
+        "wr": 42.2,
+        "pnl": 617.38,
+        "mdd": 12.91,
+        "pnl_mdd": 47.8
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 1601,
+          "wins": 726,
+          "wr": 45.3,
+          "pnl": 164.57,
+          "mdd": 7.76,
+          "pnl_mdd": 21.2,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 1670,
+          "wins": 694,
+          "wr": 41.6,
+          "pnl": 101.34,
+          "mdd": 5.47,
+          "pnl_mdd": 18.5,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 88.64,
+      "exit_reasons": {
+        "SL": 3416,
+        "TP": 1116,
+        "TIMEOUT": 885
+      },
+      "config": {
+        "exit_fn": "trailing",
+        "cascade_pct": 85,
+        "kwargs": {
+          "trail_pct": 0.012,
+          "activation_pct": 0.008
+        }
+      }
+    },
+    "F2c_Trail_0.5_0.3": {
+      "is": {
+        "trades": 10802,
+        "wins": 4082,
+        "wr": 37.8,
+        "pnl": 44.02,
+        "mdd": 19.3,
+        "pnl_mdd": 2.3
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 3170,
+          "wins": 1153,
+          "wr": 36.4,
+          "pnl": 6.9,
+          "mdd": 12.46,
+          "pnl_mdd": 0.6,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 2891,
+          "wins": 1172,
+          "wr": 40.5,
+          "pnl": 15.53,
+          "mdd": 13.24,
+          "pnl_mdd": 1.2,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 7.48,
+      "exit_reasons": {
+        "SL": 10164,
+        "TP": 530,
+        "TIMEOUT": 108
+      },
+      "config": {
+        "exit_fn": "trailing",
+        "cascade_pct": 85,
+        "kwargs": {
+          "trail_pct": 0.005,
+          "activation_pct": 0.003
+        }
+      }
+    },
+    "F3a_TPExp_1.5x": {
+      "is": {
+        "trades": 3238,
+        "wins": 1491,
+        "wr": 46.0,
+        "pnl": 442.18,
+        "mdd": 20.46,
+        "pnl_mdd": 21.6
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 860,
+          "wins": 426,
+          "wr": 49.5,
+          "pnl": 163.58,
+          "mdd": 6.45,
+          "pnl_mdd": 25.3,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 897,
+          "wins": 372,
+          "wr": 41.5,
+          "pnl": 45.53,
+          "mdd": 21.57,
+          "pnl_mdd": 2.1,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 69.7,
+      "exit_reasons": {
+        "TIMEOUT": 1869,
+        "TP": 543,
+        "SL": 826
+      },
+      "config": {
+        "exit_fn": "tp_expansion",
+        "cascade_pct": 85,
+        "kwargs": {
+          "expansion_mult": 1.5,
+          "momentum_bars": 6
+        }
+      }
+    },
+    "F3b_TPExp_2.0x": {
+      "is": {
+        "trades": 3137,
+        "wins": 1372,
+        "wr": 43.7,
+        "pnl": 396.92,
+        "mdd": 17.9,
+        "pnl_mdd": 22.2
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 832,
+          "wins": 366,
+          "wr": 44.0,
+          "pnl": 125.53,
+          "mdd": 7.29,
+          "pnl_mdd": 17.2,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 855,
+          "wins": 348,
+          "wr": 40.7,
+          "pnl": 60.79,
+          "mdd": 20.12,
+          "pnl_mdd": 3.0,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 62.11,
+      "exit_reasons": {
+        "TIMEOUT": 1960,
+        "TP": 336,
+        "SL": 841
+      },
+      "config": {
+        "exit_fn": "tp_expansion",
+        "cascade_pct": 85,
+        "kwargs": {
+          "expansion_mult": 2.0,
+          "momentum_bars": 6
+        }
+      }
+    },
+    "F3c_TPExp_1.3x_12": {
+      "is": {
+        "trades": 3300,
+        "wins": 1556,
+        "wr": 47.2,
+        "pnl": 440.15,
+        "mdd": 19.42,
+        "pnl_mdd": 22.7
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 893,
+          "wins": 424,
+          "wr": 47.5,
+          "pnl": 132.49,
+          "mdd": 5.09,
+          "pnl_mdd": 26.1,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 919,
+          "wins": 406,
+          "wr": 44.2,
+          "pnl": 60.64,
+          "mdd": 17.0,
+          "pnl_mdd": 3.6,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 64.38,
+      "exit_reasons": {
+        "TIMEOUT": 1850,
+        "TP": 681,
+        "SL": 769
+      },
+      "config": {
+        "exit_fn": "tp_expansion",
+        "cascade_pct": 85,
+        "kwargs": {
+          "expansion_mult": 1.3,
+          "momentum_bars": 12
+        }
+      }
+    },
+    "F4a_Decay_144_50": {
+      "is": {
+        "trades": 3489,
+        "wins": 1814,
+        "wr": 52.0,
+        "pnl": 258.02,
+        "mdd": 17.87,
+        "pnl_mdd": 14.4
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 954,
+          "wins": 537,
+          "wr": 56.3,
+          "pnl": 107.66,
+          "mdd": 11.3,
+          "pnl_mdd": 9.5,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 952,
+          "wins": 485,
+          "wr": 50.9,
+          "pnl": 44.39,
+          "mdd": 11.46,
+          "pnl_mdd": 3.9,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 50.68,
+      "exit_reasons": {
+        "TP": 1448,
+        "TIMEOUT": 1477,
+        "SL": 564
+      },
+      "config": {
+        "exit_fn": "time_decay",
+        "cascade_pct": 85,
+        "kwargs": {
+          "decay_start_bar": 144,
+          "decay_end_pct": 0.5
+        }
+      }
+    },
+    "F4b_Decay_72_60": {
+      "is": {
+        "trades": 3501,
+        "wins": 1821,
+        "wr": 52.0,
+        "pnl": 198.7,
+        "mdd": 19.08,
+        "pnl_mdd": 10.4
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 955,
+          "wins": 531,
+          "wr": 55.6,
+          "pnl": 89.44,
+          "mdd": 11.4,
+          "pnl_mdd": 7.8,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 964,
+          "wins": 489,
+          "wr": 50.7,
+          "pnl": 44.16,
+          "mdd": 13.37,
+          "pnl_mdd": 3.3,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 44.53,
+      "exit_reasons": {
+        "TP": 1405,
+        "TIMEOUT": 1532,
+        "SL": 564
+      },
+      "config": {
+        "exit_fn": "time_decay",
+        "cascade_pct": 85,
+        "kwargs": {
+          "decay_start_bar": 72,
+          "decay_end_pct": 0.6
+        }
+      }
+    },
+    "F4c_Decay_192_40": {
+      "is": {
+        "trades": 3471,
+        "wins": 1765,
+        "wr": 50.8,
+        "pnl": 207.53,
+        "mdd": 21.14,
+        "pnl_mdd": 9.8
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 937,
+          "wins": 516,
+          "wr": 55.1,
+          "pnl": 100.28,
+          "mdd": 10.23,
+          "pnl_mdd": 9.8,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 951,
+          "wins": 484,
+          "wr": 50.9,
+          "pnl": 44.4,
+          "mdd": 11.76,
+          "pnl_mdd": 3.8,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 48.23,
+      "exit_reasons": {
+        "TP": 1473,
+        "TIMEOUT": 1429,
+        "SL": 569
+      },
+      "config": {
+        "exit_fn": "time_decay",
+        "cascade_pct": 85,
+        "kwargs": {
+          "decay_start_bar": 192,
+          "decay_end_pct": 0.4
+        }
+      }
+    },
+    "F5a_Cascade_90": {
+      "is": {
+        "trades": 3407,
+        "wins": 1717,
+        "wr": 50.4,
+        "pnl": 459.84,
+        "mdd": 10.63,
+        "pnl_mdd": 43.3
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 928,
+          "wins": 504,
+          "wr": 54.3,
+          "pnl": 137.55,
+          "mdd": 7.81,
+          "pnl_mdd": 17.6,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 935,
+          "wins": 466,
+          "wr": 49.8,
+          "pnl": 77.17,
+          "mdd": 10.02,
+          "pnl_mdd": 7.7,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 71.57,
+      "exit_reasons": {
+        "TIMEOUT": 1732,
+        "TP": 1091,
+        "SL": 584
+      },
+      "config": {
+        "exit_fn": "baseline",
+        "cascade_pct": 90,
+        "kwargs": {}
+      }
+    },
+    "F5b_Cascade_70": {
+      "is": {
+        "trades": 3407,
+        "wins": 1721,
+        "wr": 50.5,
+        "pnl": 130.47,
+        "mdd": 25.46,
+        "pnl_mdd": 5.1
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 937,
+          "wins": 507,
+          "wr": 54.1,
+          "pnl": 79.94,
+          "mdd": 8.62,
+          "pnl_mdd": 9.3,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 929,
+          "wins": 463,
+          "wr": 49.8,
+          "pnl": 27.71,
+          "mdd": 14.32,
+          "pnl_mdd": 1.9,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": 0,
+      "wf_avg_pnl": 35.88,
+      "exit_reasons": {
+        "TIMEOUT": 1744,
+        "TP": 1087,
+        "SL": 576
+      },
+      "config": {
+        "exit_fn": "baseline",
+        "cascade_pct": 70,
+        "kwargs": {}
+      }
+    },
+    "F5c_Cascade_OFF": {
+      "is": {
+        "trades": 3276,
+        "wins": 1723,
+        "wr": 52.6,
+        "pnl": -9.93,
+        "mdd": 49.07,
+        "pnl_mdd": -0.2
+      },
+      "wf_pass": false,
+      "wf_folds": [
+        {
+          "trades": 890,
+          "wins": 505,
+          "wr": 56.7,
+          "pnl": 13.66,
+          "mdd": 11.6,
+          "pnl_mdd": 1.2,
+          "fold": 1,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 884,
+          "wins": 458,
+          "wr": 51.8,
+          "pnl": -20.94,
+          "mdd": 36.77,
+          "pnl_mdd": -0.6,
+          "fold": 2,
+          "oos_bars": 21828
+        },
+        {
+          "trades": 0,
+          "wr": 0,
+          "pnl": 0,
+          "mdd": 0,
+          "pnl_mdd": 0,
+          "fold": 3,
+          "oos_bars": 3
+        }
+      ],
+      "wf_min_pnl": -20.94,
+      "wf_avg_pnl": -2.43,
+      "exit_reasons": {
+        "TIMEOUT": 1921,
+        "TP": 1095,
+        "SL": 260
+      },
+      "config": {
+        "exit_fn": "baseline",
+        "cascade_pct": 0,
+        "kwargs": {}
+      }
+    }
+  },
+  "winners": [],
+  "ranking": [
+    "F2b_Trail_1.2_0.8",
+    "F5a_Cascade_90",
+    "H0_baseline",
+    "F3c_TPExp_1.3x_12",
+    "F3b_TPExp_2.0x",
+    "F3a_TPExp_1.5x",
+    "F2a_Trail_0.8_0.5",
+    "F4a_Decay_144_50",
+    "F4b_Decay_72_60",
+    "F4c_Decay_192_40",
+    "F5b_Cascade_70",
+    "F2c_Trail_0.5_0.3",
+    "F5c_Cascade_OFF",
+    "F1b_BE_1.0pct",
+    "F1a_BE_0.5pct",
+    "F1c_BE_0.3pct"
+  ]
+}

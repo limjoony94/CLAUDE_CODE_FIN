@@ -1,0 +1,958 @@
+{
+  "study": "live_gap_portfolio_study",
+  "date": "2026-02-27T08:01:24.135262",
+  "elapsed_s": 69.5,
+  "data_bars": 77760,
+  "data_days": 270.0,
+  "patterns": {
+    "long": 16,
+    "short": 35
+  },
+  "baseline": {
+    "config": {
+      "cap": 8,
+      "portfolio_sl": null,
+      "regime_mult": 0.3
+    },
+    "metrics": {
+      "trades": 828,
+      "wr": 76.8,
+      "pnl": 133.1,
+      "mdd": 5.86,
+      "pnl_mdd": 22.71,
+      "long_trades": 269,
+      "short_trades": 559,
+      "long_pnl": 32.79,
+      "short_pnl": 100.31,
+      "pnl_per_trade": 0.161
+    },
+    "stats": {
+      "max_corr_loss": 1.85,
+      "max_sim_positions": 9,
+      "max_sim_long": 6,
+      "max_sim_short": 8,
+      "portfolio_sl_events": 0
+    }
+  },
+  "h1": {
+    "hypothesis": "H1_direction_cap",
+    "verdict": "GO",
+    "best": "cap7",
+    "results": {
+      "cap3": {
+        "total_pnl": 45.24,
+        "max_mdd": 6.16,
+        "pnl_mdd": 7.34,
+        "pass_3_3": true,
+        "total_trades": 421,
+        "max_corr_loss": 2.32,
+        "fold_pnls": [
+          11.35,
+          21.26,
+          12.63
+        ]
+      },
+      "cap4": {
+        "total_pnl": 64.47,
+        "max_mdd": 6.48,
+        "pnl_mdd": 9.95,
+        "pass_3_3": true,
+        "total_trades": 573,
+        "max_corr_loss": 2.29,
+        "fold_pnls": [
+          18.06,
+          29.24,
+          17.17
+        ]
+      },
+      "cap5": {
+        "total_pnl": 77.43,
+        "max_mdd": 6.1,
+        "pnl_mdd": 12.69,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.63,
+        "fold_pnls": [
+          21.61,
+          37.02,
+          18.8
+        ]
+      },
+      "cap6": {
+        "total_pnl": 85.55,
+        "max_mdd": 6.14,
+        "pnl_mdd": 13.93,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.24,
+        "fold_pnls": [
+          18.3,
+          46.03,
+          21.22
+        ]
+      },
+      "cap7": {
+        "total_pnl": 94.97,
+        "max_mdd": 6.58,
+        "pnl_mdd": 14.43,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.13,
+        "fold_pnls": [
+          26.86,
+          46.65,
+          21.46
+        ]
+      },
+      "cap8": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.55,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      },
+      "cap9_nocap": {
+        "total_pnl": 104.4,
+        "max_mdd": 8.41,
+        "pnl_mdd": 12.41,
+        "pass_3_3": true,
+        "total_trades": 659,
+        "max_corr_loss": 3.13,
+        "fold_pnls": [
+          27.11,
+          49.88,
+          27.41
+        ]
+      }
+    }
+  },
+  "h2": {
+    "hypothesis": "H2_portfolio_sl",
+    "verdict": "STOP",
+    "best": "psl_10pct",
+    "results": {
+      "psl_5pct": {
+        "total_pnl": 60.01,
+        "max_mdd": 10.55,
+        "pnl_mdd": 5.69,
+        "pass_3_3": false,
+        "total_trades": 549,
+        "portfolio_sl_events": 5,
+        "fold_pnls": [
+          25.64,
+          34.47,
+          -0.1
+        ]
+      },
+      "psl_10pct": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      },
+      "psl_15pct": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      },
+      "psl_20pct": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      },
+      "psl_25pct": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      },
+      "psl_disabled": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      }
+    }
+  },
+  "h3": {
+    "hypothesis": "H3_regime_sizing",
+    "verdict": "GO",
+    "best": "mult_1.0",
+    "results": {
+      "mult_0.0": {
+        "total_pnl": 72.34,
+        "max_mdd": 6.96,
+        "pnl_mdd": 10.39,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.32,
+        "fold_pnls": [
+          19.34,
+          39.65,
+          13.35
+        ]
+      },
+      "mult_0.1": {
+        "total_pnl": 81.36,
+        "max_mdd": 6.71,
+        "pnl_mdd": 12.13,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.4,
+        "fold_pnls": [
+          21.44,
+          43.43,
+          16.49
+        ]
+      },
+      "mult_0.2": {
+        "total_pnl": 90.39,
+        "max_mdd": 6.94,
+        "pnl_mdd": 13.02,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.48,
+        "fold_pnls": [
+          23.54,
+          47.22,
+          19.63
+        ]
+      },
+      "mult_0.3": {
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.55,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      },
+      "mult_0.5": {
+        "total_pnl": 117.42,
+        "max_mdd": 8.14,
+        "pnl_mdd": 14.43,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.69,
+        "fold_pnls": [
+          29.83,
+          58.56,
+          29.03
+        ]
+      },
+      "mult_1.0": {
+        "total_pnl": 162.53,
+        "max_mdd": 10.35,
+        "pnl_mdd": 15.7,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 5.1,
+        "fold_pnls": [
+          40.33,
+          77.48,
+          44.72
+        ]
+      }
+    }
+  },
+  "h4": {
+    "hypothesis": "H4_combined",
+    "verdict": "GO",
+    "best": "best_combo",
+    "results": {
+      "best_combo": {
+        "cap": 7,
+        "psl": null,
+        "regime_mult": 1.0,
+        "total_pnl": 150.79,
+        "max_mdd": 9.74,
+        "pnl_mdd": 15.48,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 5.01,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          40.0,
+          68.89,
+          41.9
+        ]
+      },
+      "cap5_psl10_m0.0": {
+        "cap": 5,
+        "psl": 10.0,
+        "regime_mult": 0.0,
+        "total_pnl": 58.09,
+        "max_mdd": 6.27,
+        "pnl_mdd": 9.26,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.28,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          17.15,
+          29.75,
+          11.19
+        ]
+      },
+      "cap5_psl10_m0.1": {
+        "cap": 5,
+        "psl": 10.0,
+        "regime_mult": 0.1,
+        "total_pnl": 64.54,
+        "max_mdd": 6.16,
+        "pnl_mdd": 10.48,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.26,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          18.64,
+          32.17,
+          13.73
+        ]
+      },
+      "cap5_psl10_m0.2": {
+        "cap": 5,
+        "psl": 10.0,
+        "regime_mult": 0.2,
+        "total_pnl": 70.99,
+        "max_mdd": 6.06,
+        "pnl_mdd": 11.71,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.32,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          20.13,
+          34.6,
+          16.26
+        ]
+      },
+      "cap5_psl10_m0.3": {
+        "cap": 5,
+        "psl": 10.0,
+        "regime_mult": 0.3,
+        "total_pnl": 77.43,
+        "max_mdd": 6.1,
+        "pnl_mdd": 12.69,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.63,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          21.61,
+          37.02,
+          18.8
+        ]
+      },
+      "cap5_psl15_m0.0": {
+        "cap": 5,
+        "psl": 15.0,
+        "regime_mult": 0.0,
+        "total_pnl": 58.09,
+        "max_mdd": 6.27,
+        "pnl_mdd": 9.26,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.28,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          17.15,
+          29.75,
+          11.19
+        ]
+      },
+      "cap5_psl15_m0.1": {
+        "cap": 5,
+        "psl": 15.0,
+        "regime_mult": 0.1,
+        "total_pnl": 64.54,
+        "max_mdd": 6.16,
+        "pnl_mdd": 10.48,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.26,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          18.64,
+          32.17,
+          13.73
+        ]
+      },
+      "cap5_psl15_m0.2": {
+        "cap": 5,
+        "psl": 15.0,
+        "regime_mult": 0.2,
+        "total_pnl": 70.99,
+        "max_mdd": 6.06,
+        "pnl_mdd": 11.71,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.32,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          20.13,
+          34.6,
+          16.26
+        ]
+      },
+      "cap5_psl15_m0.3": {
+        "cap": 5,
+        "psl": 15.0,
+        "regime_mult": 0.3,
+        "total_pnl": 77.43,
+        "max_mdd": 6.1,
+        "pnl_mdd": 12.69,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.63,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          21.61,
+          37.02,
+          18.8
+        ]
+      },
+      "cap5_psloff_m0.0": {
+        "cap": 5,
+        "psl": null,
+        "regime_mult": 0.0,
+        "total_pnl": 58.09,
+        "max_mdd": 6.27,
+        "pnl_mdd": 9.26,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.28,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          17.15,
+          29.75,
+          11.19
+        ]
+      },
+      "cap5_psloff_m0.1": {
+        "cap": 5,
+        "psl": null,
+        "regime_mult": 0.1,
+        "total_pnl": 64.54,
+        "max_mdd": 6.16,
+        "pnl_mdd": 10.48,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.26,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          18.64,
+          32.17,
+          13.73
+        ]
+      },
+      "cap5_psloff_m0.2": {
+        "cap": 5,
+        "psl": null,
+        "regime_mult": 0.2,
+        "total_pnl": 70.99,
+        "max_mdd": 6.06,
+        "pnl_mdd": 11.71,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.32,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          20.13,
+          34.6,
+          16.26
+        ]
+      },
+      "cap5_psloff_m0.3": {
+        "cap": 5,
+        "psl": null,
+        "regime_mult": 0.3,
+        "total_pnl": 77.43,
+        "max_mdd": 6.1,
+        "pnl_mdd": 12.69,
+        "pass_3_3": true,
+        "total_trades": 646,
+        "max_corr_loss": 2.63,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          21.61,
+          37.02,
+          18.8
+        ]
+      },
+      "cap6_psl10_m0.0": {
+        "cap": 6,
+        "psl": 10.0,
+        "regime_mult": 0.0,
+        "total_pnl": 63.44,
+        "max_mdd": 7.08,
+        "pnl_mdd": 8.96,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.36,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          13.44,
+          36.26,
+          13.74
+        ]
+      },
+      "cap6_psl10_m0.1": {
+        "cap": 6,
+        "psl": 10.0,
+        "regime_mult": 0.1,
+        "total_pnl": 70.81,
+        "max_mdd": 6.75,
+        "pnl_mdd": 10.49,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.32,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          15.06,
+          39.52,
+          16.23
+        ]
+      },
+      "cap6_psl10_m0.2": {
+        "cap": 6,
+        "psl": 10.0,
+        "regime_mult": 0.2,
+        "total_pnl": 78.18,
+        "max_mdd": 6.44,
+        "pnl_mdd": 12.14,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.28,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          16.68,
+          42.77,
+          18.73
+        ]
+      },
+      "cap6_psl10_m0.3": {
+        "cap": 6,
+        "psl": 10.0,
+        "regime_mult": 0.3,
+        "total_pnl": 85.55,
+        "max_mdd": 6.14,
+        "pnl_mdd": 13.93,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.24,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          18.3,
+          46.03,
+          21.22
+        ]
+      },
+      "cap6_psl15_m0.0": {
+        "cap": 6,
+        "psl": 15.0,
+        "regime_mult": 0.0,
+        "total_pnl": 63.44,
+        "max_mdd": 7.08,
+        "pnl_mdd": 8.96,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.36,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          13.44,
+          36.26,
+          13.74
+        ]
+      },
+      "cap6_psl15_m0.1": {
+        "cap": 6,
+        "psl": 15.0,
+        "regime_mult": 0.1,
+        "total_pnl": 70.81,
+        "max_mdd": 6.75,
+        "pnl_mdd": 10.49,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.32,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          15.06,
+          39.52,
+          16.23
+        ]
+      },
+      "cap6_psl15_m0.2": {
+        "cap": 6,
+        "psl": 15.0,
+        "regime_mult": 0.2,
+        "total_pnl": 78.18,
+        "max_mdd": 6.44,
+        "pnl_mdd": 12.14,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.28,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          16.68,
+          42.77,
+          18.73
+        ]
+      },
+      "cap6_psl15_m0.3": {
+        "cap": 6,
+        "psl": 15.0,
+        "regime_mult": 0.3,
+        "total_pnl": 85.55,
+        "max_mdd": 6.14,
+        "pnl_mdd": 13.93,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.24,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          18.3,
+          46.03,
+          21.22
+        ]
+      },
+      "cap6_psloff_m0.0": {
+        "cap": 6,
+        "psl": null,
+        "regime_mult": 0.0,
+        "total_pnl": 63.44,
+        "max_mdd": 7.08,
+        "pnl_mdd": 8.96,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.36,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          13.44,
+          36.26,
+          13.74
+        ]
+      },
+      "cap6_psloff_m0.1": {
+        "cap": 6,
+        "psl": null,
+        "regime_mult": 0.1,
+        "total_pnl": 70.81,
+        "max_mdd": 6.75,
+        "pnl_mdd": 10.49,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.32,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          15.06,
+          39.52,
+          16.23
+        ]
+      },
+      "cap6_psloff_m0.2": {
+        "cap": 6,
+        "psl": null,
+        "regime_mult": 0.2,
+        "total_pnl": 78.18,
+        "max_mdd": 6.44,
+        "pnl_mdd": 12.14,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.28,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          16.68,
+          42.77,
+          18.73
+        ]
+      },
+      "cap6_psloff_m0.3": {
+        "cap": 6,
+        "psl": null,
+        "regime_mult": 0.3,
+        "total_pnl": 85.55,
+        "max_mdd": 6.14,
+        "pnl_mdd": 13.93,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.24,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          18.3,
+          46.03,
+          21.22
+        ]
+      },
+      "cap7_psl10_m0.0": {
+        "cap": 7,
+        "psl": 10.0,
+        "regime_mult": 0.0,
+        "total_pnl": 71.04,
+        "max_mdd": 7.08,
+        "pnl_mdd": 10.03,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.65,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          21.22,
+          37.12,
+          12.7
+        ]
+      },
+      "cap7_psl10_m0.1": {
+        "cap": 7,
+        "psl": 10.0,
+        "regime_mult": 0.1,
+        "total_pnl": 79.02,
+        "max_mdd": 6.85,
+        "pnl_mdd": 11.54,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.81,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          23.1,
+          40.3,
+          15.62
+        ]
+      },
+      "cap7_psl10_m0.2": {
+        "cap": 7,
+        "psl": 10.0,
+        "regime_mult": 0.2,
+        "total_pnl": 86.99,
+        "max_mdd": 6.68,
+        "pnl_mdd": 13.02,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.97,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          24.98,
+          43.47,
+          18.54
+        ]
+      },
+      "cap7_psl10_m0.3": {
+        "cap": 7,
+        "psl": 10.0,
+        "regime_mult": 0.3,
+        "total_pnl": 94.97,
+        "max_mdd": 6.58,
+        "pnl_mdd": 14.43,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.13,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          26.86,
+          46.65,
+          21.46
+        ]
+      },
+      "cap7_psl15_m0.0": {
+        "cap": 7,
+        "psl": 15.0,
+        "regime_mult": 0.0,
+        "total_pnl": 71.04,
+        "max_mdd": 7.08,
+        "pnl_mdd": 10.03,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.65,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          21.22,
+          37.12,
+          12.7
+        ]
+      },
+      "cap7_psl15_m0.1": {
+        "cap": 7,
+        "psl": 15.0,
+        "regime_mult": 0.1,
+        "total_pnl": 79.02,
+        "max_mdd": 6.85,
+        "pnl_mdd": 11.54,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.81,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          23.1,
+          40.3,
+          15.62
+        ]
+      },
+      "cap7_psl15_m0.2": {
+        "cap": 7,
+        "psl": 15.0,
+        "regime_mult": 0.2,
+        "total_pnl": 86.99,
+        "max_mdd": 6.68,
+        "pnl_mdd": 13.02,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.97,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          24.98,
+          43.47,
+          18.54
+        ]
+      },
+      "cap7_psl15_m0.3": {
+        "cap": 7,
+        "psl": 15.0,
+        "regime_mult": 0.3,
+        "total_pnl": 94.97,
+        "max_mdd": 6.58,
+        "pnl_mdd": 14.43,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.13,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          26.86,
+          46.65,
+          21.46
+        ]
+      },
+      "cap7_psloff_m0.0": {
+        "cap": 7,
+        "psl": null,
+        "regime_mult": 0.0,
+        "total_pnl": 71.04,
+        "max_mdd": 7.08,
+        "pnl_mdd": 10.03,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.65,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          21.22,
+          37.12,
+          12.7
+        ]
+      },
+      "cap7_psloff_m0.1": {
+        "cap": 7,
+        "psl": null,
+        "regime_mult": 0.1,
+        "total_pnl": 79.02,
+        "max_mdd": 6.85,
+        "pnl_mdd": 11.54,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.81,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          23.1,
+          40.3,
+          15.62
+        ]
+      },
+      "cap7_psloff_m0.2": {
+        "cap": 7,
+        "psl": null,
+        "regime_mult": 0.2,
+        "total_pnl": 86.99,
+        "max_mdd": 6.68,
+        "pnl_mdd": 13.02,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 2.97,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          24.98,
+          43.47,
+          18.54
+        ]
+      },
+      "cap7_psloff_m0.3": {
+        "cap": 7,
+        "psl": null,
+        "regime_mult": 0.3,
+        "total_pnl": 94.97,
+        "max_mdd": 6.58,
+        "pnl_mdd": 14.43,
+        "pass_3_3": true,
+        "total_trades": 648,
+        "max_corr_loss": 3.13,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          26.86,
+          46.65,
+          21.46
+        ]
+      },
+      "current_baseline": {
+        "cap": 8,
+        "psl": null,
+        "regime_mult": 0.3,
+        "total_pnl": 99.4,
+        "max_mdd": 7.34,
+        "pnl_mdd": 13.54,
+        "pass_3_3": true,
+        "total_trades": 658,
+        "max_corr_loss": 3.55,
+        "portfolio_sl_events": 0,
+        "fold_pnls": [
+          25.64,
+          51.0,
+          22.76
+        ]
+      }
+    }
+  }
+}

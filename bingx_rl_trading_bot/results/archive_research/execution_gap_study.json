@@ -1,0 +1,180 @@
+{
+  "study": "execution_gap",
+  "total_trades": 57,
+  "tp_slippage": {
+    "count": 22,
+    "mean_bps": 1.17,
+    "median_bps": -1.38
+  },
+  "sl_slippage": {
+    "count": 22,
+    "mean_bps": -2.92,
+    "median_bps": -2.16
+  },
+  "rr_comparison": {
+    "live_avg_win": 1.872,
+    "bt_avg_win": 1.945,
+    "live_avg_loss": 2.832,
+    "bt_avg_loss": 2.99,
+    "live_rr": 0.661,
+    "bt_rr": 0.6506,
+    "live_breakeven_wr": 60.2,
+    "bt_breakeven_wr": 60.6
+  },
+  "exit_reasons": {
+    "MARKET": {
+      "count": 7,
+      "wr": 28.6,
+      "avg_slot_pnl": -3.642,
+      "avg_port_pnl": -0.4047
+    },
+    "SL": {
+      "count": 22,
+      "wr": 0.0,
+      "avg_slot_pnl": -9.351,
+      "avg_port_pnl": -1.0389
+    },
+    "TP": {
+      "count": 22,
+      "wr": 100.0,
+      "avg_slot_pnl": 5.514,
+      "avg_port_pnl": 0.6127
+    }
+  },
+  "hold_times": {
+    "win_mean_min": 395.0,
+    "loss_mean_min": 508.9
+  },
+  "pattern_performance": [
+    {
+      "pattern": "DN-U-DN",
+      "direction": "LONG",
+      "trades": 4,
+      "wins": 3,
+      "live_wr": 75.0,
+      "expected_tp": 1.86,
+      "expected_sl": 4.31,
+      "avg_pnl": 0.506
+    },
+    {
+      "pattern": "DN-BD-ST",
+      "direction": "SHORT",
+      "trades": 3,
+      "wins": 1,
+      "live_wr": 33.3,
+      "expected_tp": 1.66,
+      "expected_sl": 3.86,
+      "avg_pnl": -3.285
+    },
+    {
+      "pattern": "ST-ST-U",
+      "direction": "SHORT",
+      "trades": 3,
+      "wins": 0,
+      "live_wr": 0.0,
+      "expected_tp": 1.78,
+      "expected_sl": 3.93,
+      "avg_pnl": -7.7
+    },
+    {
+      "pattern": "BD-DN-BU",
+      "direction": "SHORT",
+      "trades": 2,
+      "wins": 1,
+      "live_wr": 50.0,
+      "expected_tp": 1.57,
+      "expected_sl": 3.21,
+      "avg_pnl": -3.06
+    },
+    {
+      "pattern": "DN-DN-ST",
+      "direction": "LONG",
+      "trades": 2,
+      "wins": 1,
+      "live_wr": 50.0,
+      "expected_tp": 2.07,
+      "expected_sl": 4.34,
+      "avg_pnl": -0.771
+    },
+    {
+      "pattern": "U-MU-DN",
+      "direction": "LONG",
+      "trades": 2,
+      "wins": 1,
+      "live_wr": 50.0,
+      "expected_tp": 2.34,
+      "expected_sl": 4.84,
+      "avg_pnl": -1.192
+    },
+    {
+      "pattern": "U-U-ST",
+      "direction": "SHORT",
+      "trades": 2,
+      "wins": 2,
+      "live_wr": 100.0,
+      "expected_tp": 1.69,
+      "expected_sl": 3.8,
+      "avg_pnl": 4.364
+    }
+  ],
+  "correlated_bursts": {
+    "count": 6,
+    "total_trades": 19,
+    "excess_losses": 13,
+    "pnl_impact": -20.405
+  },
+  "gap_decomposition": {
+    "expected_wr": 88.8,
+    "live_wr": 43.9,
+    "pattern_wr": 47.1,
+    "total_gap_pp": 44.9,
+    "recovery_drag_pp": 8.8,
+    "burst_drag_pp": 22.8,
+    "remaining_unexplained_pp": 13.4
+  },
+  "daily": [
+    {
+      "date": "2026-02-24",
+      "trades": 6,
+      "wins": 4,
+      "wr": 66.7,
+      "pnl": 2.481
+    },
+    {
+      "date": "2026-02-25",
+      "trades": 11,
+      "wins": 1,
+      "wr": 9.1,
+      "pnl": -8.627
+    },
+    {
+      "date": "2026-02-26",
+      "trades": 4,
+      "wins": 0,
+      "wr": 0.0,
+      "pnl": -5.088
+    },
+    {
+      "date": "2026-02-27",
+      "trades": 12,
+      "wins": 6,
+      "wr": 50.0,
+      "pnl": -1.787
+    },
+    {
+      "date": "2026-02-28",
+      "trades": 14,
+      "wins": 8,
+      "wr": 57.1,
+      "pnl": 0.011
+    },
+    {
+      "date": "2026-03-01",
+      "trades": 10,
+      "wins": 6,
+      "wr": 60.0,
+      "pnl": -2.134
+    }
+  ],
+  "elapsed_seconds": 0.0
+}

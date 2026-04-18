@@ -1,0 +1,962 @@
+{
+  "phase1_ablation": {
+    "ALL_ON (baseline)": {
+      "trades": 825,
+      "wr": 76.5,
+      "pnl": 105.84,
+      "mdd": 5.8,
+      "pnl_mdd": 18.24,
+      "avg_leverage": 2.49,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -4.02,
+      "blocked": {
+        "G1_direction_cap": 57,
+        "G2_momentum_guard": 201,
+        "G3_loss_burst_brake": 569,
+        "G4_correlation_aware": 241,
+        "G5_aggregate_risk_cap": 2836
+      }
+    },
+    "NO_G1_direction_cap": {
+      "trades": 830,
+      "wr": 76.4,
+      "pnl": 96.38,
+      "mdd": 5.8,
+      "pnl_mdd": 16.61,
+      "avg_leverage": 2.52,
+      "max_consec_loss": 7,
+      "worst_daily_pnl": -3.82,
+      "blocked": {
+        "G1_direction_cap": 0,
+        "G2_momentum_guard": 205,
+        "G3_loss_burst_brake": 517,
+        "G4_correlation_aware": 287,
+        "G5_aggregate_risk_cap": 2625
+      }
+    },
+    "NO_G2_momentum_guard": {
+      "trades": 819,
+      "wr": 74.5,
+      "pnl": 93.85,
+      "mdd": 5.8,
+      "pnl_mdd": 16.17,
+      "avg_leverage": 2.48,
+      "max_consec_loss": 7,
+      "worst_daily_pnl": -4.65,
+      "blocked": {
+        "G1_direction_cap": 63,
+        "G2_momentum_guard": 0,
+        "G3_loss_burst_brake": 671,
+        "G4_correlation_aware": 246,
+        "G5_aggregate_risk_cap": 2674
+      }
+    },
+    "NO_G3_loss_burst_brake": {
+      "trades": 787,
+      "wr": 76.7,
+      "pnl": 104.18,
+      "mdd": 4.36,
+      "pnl_mdd": 23.9,
+      "avg_leverage": 2.54,
+      "max_consec_loss": 6,
+      "worst_daily_pnl": -4.67,
+      "blocked": {
+        "G1_direction_cap": 16,
+        "G2_momentum_guard": 174,
+        "G3_loss_burst_brake": 0,
+        "G4_correlation_aware": 155,
+        "G5_aggregate_risk_cap": 2613
+      }
+    },
+    "NO_G4_correlation_aware": {
+      "trades": 825,
+      "wr": 77.1,
+      "pnl": 100.01,
+      "mdd": 5.8,
+      "pnl_mdd": 17.24,
+      "avg_leverage": 2.53,
+      "max_consec_loss": 7,
+      "worst_daily_pnl": -3.92,
+      "blocked": {
+        "G1_direction_cap": 79,
+        "G2_momentum_guard": 195,
+        "G3_loss_burst_brake": 557,
+        "G4_correlation_aware": 0,
+        "G5_aggregate_risk_cap": 2887
+      }
+    },
+    "NO_G5_aggregate_risk_cap": {
+      "trades": 761,
+      "wr": 78.1,
+      "pnl": 121.75,
+      "mdd": 9.13,
+      "pnl_mdd": 13.34,
+      "avg_leverage": 2.57,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -7.76,
+      "blocked": {
+        "G1_direction_cap": 119,
+        "G2_momentum_guard": 156,
+        "G3_loss_burst_brake": 372,
+        "G4_correlation_aware": 205,
+        "G5_aggregate_risk_cap": 0
+      }
+    },
+    "NO_M1_mdd_sizing": {
+      "trades": 825,
+      "wr": 76.5,
+      "pnl": 105.86,
+      "mdd": 5.8,
+      "pnl_mdd": 18.24,
+      "avg_leverage": 2.49,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -4.02,
+      "blocked": {
+        "G1_direction_cap": 57,
+        "G2_momentum_guard": 201,
+        "G3_loss_burst_brake": 569,
+        "G4_correlation_aware": 241,
+        "G5_aggregate_risk_cap": 2836
+      }
+    },
+    "NO_M2_regime_sizing": {
+      "trades": 812,
+      "wr": 75.6,
+      "pnl": 100.16,
+      "mdd": 6.0,
+      "pnl_mdd": 16.7,
+      "avg_leverage": 2.5,
+      "max_consec_loss": 7,
+      "worst_daily_pnl": -5.37,
+      "blocked": {
+        "G1_direction_cap": 94,
+        "G2_momentum_guard": 205,
+        "G3_loss_burst_brake": 703,
+        "G4_correlation_aware": 289,
+        "G5_aggregate_risk_cap": 3501
+      }
+    },
+    "NO_M3_equity_curve_sizing": {
+      "trades": 840,
+      "wr": 75.0,
+      "pnl": 117.2,
+      "mdd": 5.8,
+      "pnl_mdd": 20.2,
+      "avg_leverage": 2.55,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -6.2,
+      "blocked": {
+        "G1_direction_cap": 57,
+        "G2_momentum_guard": 216,
+        "G3_loss_burst_brake": 640,
+        "G4_correlation_aware": 281,
+        "G5_aggregate_risk_cap": 3115
+      }
+    },
+    "NO_M4_adaptive_leverage": {
+      "trades": 809,
+      "wr": 75.5,
+      "pnl": 112.63,
+      "mdd": 5.96,
+      "pnl_mdd": 18.91,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 10,
+      "worst_daily_pnl": -4.6,
+      "blocked": {
+        "G1_direction_cap": 32,
+        "G2_momentum_guard": 204,
+        "G3_loss_burst_brake": 618,
+        "G4_correlation_aware": 279,
+        "G5_aggregate_risk_cap": 3723
+      }
+    },
+    "NO_M5_vol_mult_atr": {
+      "trades": 1165,
+      "wr": 71.2,
+      "pnl": 37.48,
+      "mdd": 10.55,
+      "pnl_mdd": 3.55,
+      "avg_leverage": 2.18,
+      "max_consec_loss": 11,
+      "worst_daily_pnl": -6.39,
+      "blocked": {
+        "G1_direction_cap": 113,
+        "G2_momentum_guard": 198,
+        "G3_loss_burst_brake": 982,
+        "G4_correlation_aware": 413,
+        "G5_aggregate_risk_cap": 381
+      }
+    }
+  },
+  "phase1_impact": {
+    "NO_G1_direction_cap": {
+      "d_pnl": -9.46,
+      "d_mdd": 0.0,
+      "d_pnl_mdd": -1.63,
+      "d_trades": 5,
+      "verdict": "MIXED"
+    },
+    "NO_G2_momentum_guard": {
+      "d_pnl": -11.99,
+      "d_mdd": 0.0,
+      "d_pnl_mdd": -2.07,
+      "d_trades": -6,
+      "verdict": "MIXED"
+    },
+    "NO_G3_loss_burst_brake": {
+      "d_pnl": -1.66,
+      "d_mdd": -1.44,
+      "d_pnl_mdd": 5.66,
+      "d_trades": -38,
+      "verdict": "MIXED"
+    },
+    "NO_G4_correlation_aware": {
+      "d_pnl": -5.83,
+      "d_mdd": 0.0,
+      "d_pnl_mdd": -1.0,
+      "d_trades": 0,
+      "verdict": "MIXED"
+    },
+    "NO_G5_aggregate_risk_cap": {
+      "d_pnl": 15.91,
+      "d_mdd": 3.33,
+      "d_pnl_mdd": -4.9,
+      "d_trades": -64,
+      "verdict": "VALUABLE"
+    },
+    "NO_M1_mdd_sizing": {
+      "d_pnl": 0.02,
+      "d_mdd": 0.0,
+      "d_pnl_mdd": 0.0,
+      "d_trades": 0,
+      "verdict": "MARGINAL"
+    },
+    "NO_M2_regime_sizing": {
+      "d_pnl": -5.68,
+      "d_mdd": 0.2,
+      "d_pnl_mdd": -1.54,
+      "d_trades": -13,
+      "verdict": "MIXED"
+    },
+    "NO_M3_equity_curve_sizing": {
+      "d_pnl": 11.36,
+      "d_mdd": 0.0,
+      "d_pnl_mdd": 1.96,
+      "d_trades": 15,
+      "verdict": "HARMFUL"
+    },
+    "NO_M4_adaptive_leverage": {
+      "d_pnl": 6.79,
+      "d_mdd": 0.16,
+      "d_pnl_mdd": 0.67,
+      "d_trades": -16,
+      "verdict": "MIXED"
+    },
+    "NO_M5_vol_mult_atr": {
+      "d_pnl": -68.36,
+      "d_mdd": 4.75,
+      "d_pnl_mdd": -14.69,
+      "d_trades": 340,
+      "verdict": "VALUABLE"
+    }
+  },
+  "phase2_additive": {
+    "BARE (no guards)": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 78.06,
+      "mdd": 11.25,
+      "pnl_mdd": 6.94,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -9.35
+    },
+    "ONLY_G1_direction_cap": {
+      "trades": 1384,
+      "wr": 71.1,
+      "pnl": 76.25,
+      "mdd": 14.15,
+      "pnl_mdd": 5.39,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -9.35
+    },
+    "ONLY_G2_momentum_guard": {
+      "trades": 1356,
+      "wr": 71.4,
+      "pnl": 81.84,
+      "mdd": 10.86,
+      "pnl_mdd": 7.54,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 6,
+      "worst_daily_pnl": -7.17
+    },
+    "ONLY_G3_loss_burst_brake": {
+      "trades": 1327,
+      "wr": 72.2,
+      "pnl": 116.19,
+      "mdd": 13.29,
+      "pnl_mdd": 8.74,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 13,
+      "worst_daily_pnl": -10.76
+    },
+    "ONLY_G4_correlation_aware": {
+      "trades": 1341,
+      "wr": 71.9,
+      "pnl": 93.12,
+      "mdd": 9.47,
+      "pnl_mdd": 9.83,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -7.24
+    },
+    "ONLY_G5_aggregate_risk_cap": {
+      "trades": 1257,
+      "wr": 69.2,
+      "pnl": 38.27,
+      "mdd": 17.87,
+      "pnl_mdd": 2.14,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -5.13
+    },
+    "ONLY_M1_mdd_sizing": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 67.78,
+      "mdd": 10.6,
+      "pnl_mdd": 6.39,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -8.46
+    },
+    "ONLY_M2_regime_sizing": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 57.56,
+      "mdd": 14.06,
+      "pnl_mdd": 4.09,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -6.13
+    },
+    "ONLY_M3_equity_curve_sizing": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 59.58,
+      "mdd": 18.83,
+      "pnl_mdd": 3.16,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -8.72
+    },
+    "ONLY_M4_adaptive_leverage": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 88.21,
+      "mdd": 7.26,
+      "pnl_mdd": 12.15,
+      "avg_leverage": 2.1,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -5.12
+    },
+    "ONLY_M5_vol_mult_atr": {
+      "trades": 717,
+      "wr": 77.4,
+      "pnl": 196.59,
+      "mdd": 10.22,
+      "pnl_mdd": 19.24,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 6,
+      "worst_daily_pnl": -6.88
+    }
+  },
+  "phase2_contribution": {
+    "ONLY_G1_direction_cap": {
+      "d_pnl": -1.81,
+      "d_mdd": 2.9,
+      "d_pnl_mdd": -1.55,
+      "d_trades": -5
+    },
+    "ONLY_G2_momentum_guard": {
+      "d_pnl": 3.78,
+      "d_mdd": -0.39,
+      "d_pnl_mdd": 0.6,
+      "d_trades": -33
+    },
+    "ONLY_G3_loss_burst_brake": {
+      "d_pnl": 38.13,
+      "d_mdd": 2.04,
+      "d_pnl_mdd": 1.8,
+      "d_trades": -62
+    },
+    "ONLY_G4_correlation_aware": {
+      "d_pnl": 15.06,
+      "d_mdd": -1.78,
+      "d_pnl_mdd": 2.89,
+      "d_trades": -48
+    },
+    "ONLY_G5_aggregate_risk_cap": {
+      "d_pnl": -39.79,
+      "d_mdd": 6.62,
+      "d_pnl_mdd": -4.8,
+      "d_trades": -132
+    },
+    "ONLY_M1_mdd_sizing": {
+      "d_pnl": -10.28,
+      "d_mdd": -0.65,
+      "d_pnl_mdd": -0.55,
+      "d_trades": 0
+    },
+    "ONLY_M2_regime_sizing": {
+      "d_pnl": -20.5,
+      "d_mdd": 2.81,
+      "d_pnl_mdd": -2.85,
+      "d_trades": 0
+    },
+    "ONLY_M3_equity_curve_sizing": {
+      "d_pnl": -18.48,
+      "d_mdd": 7.58,
+      "d_pnl_mdd": -3.78,
+      "d_trades": 0
+    },
+    "ONLY_M4_adaptive_leverage": {
+      "d_pnl": 10.15,
+      "d_mdd": -3.99,
+      "d_pnl_mdd": 5.21,
+      "d_trades": 0
+    },
+    "ONLY_M5_vol_mult_atr": {
+      "d_pnl": 118.53,
+      "d_mdd": -1.03,
+      "d_pnl_mdd": 12.3,
+      "d_trades": -672
+    }
+  },
+  "phase3_overlap": {
+    "P1_Regime\u00d7AggRisk_A_only": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 57.56,
+      "mdd": 14.06,
+      "pnl_mdd": 4.09,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -6.13
+    },
+    "P1_Regime\u00d7AggRisk_B_only": {
+      "trades": 1257,
+      "wr": 69.2,
+      "pnl": 38.27,
+      "mdd": 17.87,
+      "pnl_mdd": 2.14,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -5.13
+    },
+    "P1_Regime\u00d7AggRisk_A+B": {
+      "trades": 1331,
+      "wr": 70.4,
+      "pnl": 34.57,
+      "mdd": 13.28,
+      "pnl_mdd": 2.6,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 6,
+      "worst_daily_pnl": -5.73
+    },
+    "P2_Regime\u00d7CorrAware_A_only": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 57.56,
+      "mdd": 14.06,
+      "pnl_mdd": 4.09,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -6.13
+    },
+    "P2_Regime\u00d7CorrAware_B_only": {
+      "trades": 1341,
+      "wr": 71.9,
+      "pnl": 93.12,
+      "mdd": 9.47,
+      "pnl_mdd": 9.83,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -7.24
+    },
+    "P2_Regime\u00d7CorrAware_A+B": {
+      "trades": 1341,
+      "wr": 71.9,
+      "pnl": 62.22,
+      "mdd": 15.13,
+      "pnl_mdd": 4.11,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -6.05
+    },
+    "P3_LossBurst\u00d7EqCurve_A_only": {
+      "trades": 1327,
+      "wr": 72.2,
+      "pnl": 116.19,
+      "mdd": 13.29,
+      "pnl_mdd": 8.74,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 13,
+      "worst_daily_pnl": -10.76
+    },
+    "P3_LossBurst\u00d7EqCurve_B_only": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 59.58,
+      "mdd": 18.83,
+      "pnl_mdd": 3.16,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -8.72
+    },
+    "P3_LossBurst\u00d7EqCurve_A+B": {
+      "trades": 1327,
+      "wr": 72.2,
+      "pnl": 92.06,
+      "mdd": 16.9,
+      "pnl_mdd": 5.45,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 13,
+      "worst_daily_pnl": -11.26
+    },
+    "P4_MDD\u00d7AdaptLev_A_only": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 67.78,
+      "mdd": 10.6,
+      "pnl_mdd": 6.39,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -8.46
+    },
+    "P4_MDD\u00d7AdaptLev_B_only": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 88.21,
+      "mdd": 7.26,
+      "pnl_mdd": 12.15,
+      "avg_leverage": 2.1,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -5.12
+    },
+    "P4_MDD\u00d7AdaptLev_A+B": {
+      "trades": 1389,
+      "wr": 71.1,
+      "pnl": 86.81,
+      "mdd": 6.85,
+      "pnl_mdd": 12.67,
+      "avg_leverage": 2.1,
+      "max_consec_loss": 9,
+      "worst_daily_pnl": -5.12
+    },
+    "P5_DirCap\u00d7AggRisk_A_only": {
+      "trades": 1384,
+      "wr": 71.1,
+      "pnl": 76.25,
+      "mdd": 14.15,
+      "pnl_mdd": 5.39,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -9.35
+    },
+    "P5_DirCap\u00d7AggRisk_B_only": {
+      "trades": 1257,
+      "wr": 69.2,
+      "pnl": 38.27,
+      "mdd": 17.87,
+      "pnl_mdd": 2.14,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -5.13
+    },
+    "P5_DirCap\u00d7AggRisk_A+B": {
+      "trades": 1257,
+      "wr": 69.2,
+      "pnl": 38.27,
+      "mdd": 17.87,
+      "pnl_mdd": 2.14,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 5,
+      "worst_daily_pnl": -5.13
+    },
+    "P6_Momentum\u00d7LossBurst_A_only": {
+      "trades": 1356,
+      "wr": 71.4,
+      "pnl": 81.84,
+      "mdd": 10.86,
+      "pnl_mdd": 7.54,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 6,
+      "worst_daily_pnl": -7.17
+    },
+    "P6_Momentum\u00d7LossBurst_B_only": {
+      "trades": 1327,
+      "wr": 72.2,
+      "pnl": 116.19,
+      "mdd": 13.29,
+      "pnl_mdd": 8.74,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 13,
+      "worst_daily_pnl": -10.76
+    },
+    "P6_Momentum\u00d7LossBurst_A+B": {
+      "trades": 1284,
+      "wr": 71.5,
+      "pnl": 90.47,
+      "mdd": 12.15,
+      "pnl_mdd": 7.45,
+      "avg_leverage": 3.0,
+      "max_consec_loss": 14,
+      "worst_daily_pnl": -9.38
+    }
+  },
+  "phase3_redundancy": {
+    "P1_Regime\u00d7AggRisk": {
+      "A_field": "regime_sizing",
+      "B_field": "aggregate_risk_cap",
+      "A_pnl_mdd_delta": -2.85,
+      "B_pnl_mdd_delta": -4.8,
+      "AB_pnl_mdd_delta": -4.34,
+      "expected_independent": -7.65,
+      "actual_combined": -4.34,
+      "pnl_mdd_redundancy": 0.433,
+      "mdd_redundancy": 0.785
+    },
+    "P2_Regime\u00d7CorrAware": {
+      "A_field": "regime_sizing",
+      "B_field": "correlation_aware",
+      "A_pnl_mdd_delta": -2.85,
+      "B_pnl_mdd_delta": 2.89,
+      "AB_pnl_mdd_delta": -2.83,
+      "expected_independent": 0.04,
+      "actual_combined": -2.83,
+      "pnl_mdd_redundancy": 71.75,
+      "mdd_redundancy": -2.767
+    },
+    "P3_LossBurst\u00d7EqCurve": {
+      "A_field": "loss_burst_brake",
+      "B_field": "equity_curve_sizing",
+      "A_pnl_mdd_delta": 1.8,
+      "B_pnl_mdd_delta": -3.78,
+      "AB_pnl_mdd_delta": -1.49,
+      "expected_independent": -1.98,
+      "actual_combined": -1.49,
+      "pnl_mdd_redundancy": 0.247,
+      "mdd_redundancy": 0.413
+    },
+    "P4_MDD\u00d7AdaptLev": {
+      "A_field": "mdd_sizing",
+      "B_field": "adaptive_leverage",
+      "A_pnl_mdd_delta": -0.55,
+      "B_pnl_mdd_delta": 5.21,
+      "AB_pnl_mdd_delta": 5.73,
+      "expected_independent": 4.66,
+      "actual_combined": 5.73,
+      "pnl_mdd_redundancy": -0.23,
+      "mdd_redundancy": 0.052
+    },
+    "P5_DirCap\u00d7AggRisk": {
+      "A_field": "direction_cap",
+      "B_field": "aggregate_risk_cap",
+      "A_pnl_mdd_delta": -1.55,
+      "B_pnl_mdd_delta": -4.8,
+      "AB_pnl_mdd_delta": -4.8,
+      "expected_independent": -6.35,
+      "actual_combined": -4.8,
+      "pnl_mdd_redundancy": 0.244,
+      "mdd_redundancy": 0.305
+    },
+    "P6_Momentum\u00d7LossBurst": {
+      "A_field": "momentum_guard",
+      "B_field": "loss_burst_brake",
+      "A_pnl_mdd_delta": 0.6,
+      "B_pnl_mdd_delta": 1.8,
+      "AB_pnl_mdd_delta": 0.51,
+      "expected_independent": 2.4,
+      "actual_combined": 0.51,
+      "pnl_mdd_redundancy": 0.788,
+      "mdd_redundancy": 0.455
+    }
+  },
+  "phase4_wf": {
+    "ALL_ON (baseline)": {
+      "folds": [
+        {
+          "trades": 159,
+          "wr": 71.1,
+          "pnl": 14.97,
+          "mdd": 5.13,
+          "pnl_mdd": 2.92,
+          "avg_leverage": 2.6,
+          "max_consec_loss": 4,
+          "worst_daily_pnl": -2.98,
+          "fold": 1
+        },
+        {
+          "trades": 222,
+          "wr": 70.7,
+          "pnl": 28.22,
+          "mdd": 6.31,
+          "pnl_mdd": 4.47,
+          "avg_leverage": 2.34,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -3.79,
+          "fold": 2
+        },
+        {
+          "trades": 271,
+          "wr": 73.4,
+          "pnl": 37.69,
+          "mdd": 5.7,
+          "pnl_mdd": 6.61,
+          "avg_leverage": 2.45,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -6.2,
+          "fold": 3
+        }
+      ],
+      "pass": true
+    },
+    "BARE (no guards)": {
+      "folds": [
+        {
+          "trades": 258,
+          "wr": 69.4,
+          "pnl": 9.91,
+          "mdd": 15.6,
+          "pnl_mdd": 0.63,
+          "avg_leverage": 3.0,
+          "max_consec_loss": 8,
+          "worst_daily_pnl": -6.87,
+          "fold": 1
+        },
+        {
+          "trades": 409,
+          "wr": 72.1,
+          "pnl": 28.58,
+          "mdd": 15.48,
+          "pnl_mdd": 1.85,
+          "avg_leverage": 3.0,
+          "max_consec_loss": 4,
+          "worst_daily_pnl": -5.4,
+          "fold": 2
+        },
+        {
+          "trades": 446,
+          "wr": 67.0,
+          "pnl": -6.49,
+          "mdd": 19.87,
+          "pnl_mdd": -0.33,
+          "avg_leverage": 3.0,
+          "max_consec_loss": 6,
+          "worst_daily_pnl": -9.35,
+          "fold": 3
+        }
+      ],
+      "pass": false
+    },
+    "NO_M3_equity_curve_sizing": {
+      "folds": [
+        {
+          "trades": 157,
+          "wr": 73.2,
+          "pnl": 15.92,
+          "mdd": 4.52,
+          "pnl_mdd": 3.52,
+          "avg_leverage": 2.48,
+          "max_consec_loss": 5,
+          "worst_daily_pnl": -3.82,
+          "fold": 1
+        },
+        {
+          "trades": 235,
+          "wr": 74.0,
+          "pnl": 38.4,
+          "mdd": 6.29,
+          "pnl_mdd": 6.11,
+          "avg_leverage": 2.63,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -3.79,
+          "fold": 2
+        },
+        {
+          "trades": 279,
+          "wr": 71.3,
+          "pnl": 34.14,
+          "mdd": 5.7,
+          "pnl_mdd": 5.99,
+          "avg_leverage": 2.46,
+          "max_consec_loss": 9,
+          "worst_daily_pnl": -6.2,
+          "fold": 3
+        }
+      ],
+      "pass": true
+    },
+    "NO_M1_mdd_sizing": {
+      "folds": [
+        {
+          "trades": 159,
+          "wr": 71.1,
+          "pnl": 14.99,
+          "mdd": 5.13,
+          "pnl_mdd": 2.92,
+          "avg_leverage": 2.6,
+          "max_consec_loss": 4,
+          "worst_daily_pnl": -2.98,
+          "fold": 1
+        },
+        {
+          "trades": 227,
+          "wr": 76.2,
+          "pnl": 32.53,
+          "mdd": 6.5,
+          "pnl_mdd": 5.0,
+          "avg_leverage": 2.58,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -3.81,
+          "fold": 2
+        },
+        {
+          "trades": 271,
+          "wr": 73.4,
+          "pnl": 37.78,
+          "mdd": 5.7,
+          "pnl_mdd": 6.63,
+          "avg_leverage": 2.45,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -6.2,
+          "fold": 3
+        }
+      ],
+      "pass": true
+    },
+    "REMOVE_weaker_in_P1_Regime\u00d7AggRisk": {
+      "folds": [
+        {
+          "trades": 169,
+          "wr": 75.7,
+          "pnl": 28.66,
+          "mdd": 4.12,
+          "pnl_mdd": 6.95,
+          "avg_leverage": 2.51,
+          "max_consec_loss": 4,
+          "worst_daily_pnl": -1.88,
+          "fold": 1
+        },
+        {
+          "trades": 233,
+          "wr": 70.4,
+          "pnl": 18.18,
+          "mdd": 7.42,
+          "pnl_mdd": 2.45,
+          "avg_leverage": 2.22,
+          "max_consec_loss": 8,
+          "worst_daily_pnl": -5.37,
+          "fold": 2
+        },
+        {
+          "trades": 277,
+          "wr": 74.0,
+          "pnl": 40.59,
+          "mdd": 5.75,
+          "pnl_mdd": 7.06,
+          "avg_leverage": 2.56,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -6.2,
+          "fold": 3
+        }
+      ],
+      "pass": true
+    },
+    "REMOVE_weaker_in_P2_Regime\u00d7CorrAware": {
+      "folds": [
+        {
+          "trades": 169,
+          "wr": 75.7,
+          "pnl": 28.66,
+          "mdd": 4.12,
+          "pnl_mdd": 6.95,
+          "avg_leverage": 2.51,
+          "max_consec_loss": 4,
+          "worst_daily_pnl": -1.88,
+          "fold": 1
+        },
+        {
+          "trades": 233,
+          "wr": 70.4,
+          "pnl": 18.18,
+          "mdd": 7.42,
+          "pnl_mdd": 2.45,
+          "avg_leverage": 2.22,
+          "max_consec_loss": 8,
+          "worst_daily_pnl": -5.37,
+          "fold": 2
+        },
+        {
+          "trades": 277,
+          "wr": 74.0,
+          "pnl": 40.59,
+          "mdd": 5.75,
+          "pnl_mdd": 7.06,
+          "avg_leverage": 2.56,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -6.2,
+          "fold": 3
+        }
+      ],
+      "pass": true
+    },
+    "REMOVE_weaker_in_P6_Momentum\u00d7LossBurst": {
+      "folds": [
+        {
+          "trades": 154,
+          "wr": 70.1,
+          "pnl": 16.0,
+          "mdd": 3.62,
+          "pnl_mdd": 4.42,
+          "avg_leverage": 2.48,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -2.47,
+          "fold": 1
+        },
+        {
+          "trades": 232,
+          "wr": 73.3,
+          "pnl": 27.19,
+          "mdd": 6.29,
+          "pnl_mdd": 4.32,
+          "avg_leverage": 2.35,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -3.79,
+          "fold": 2
+        },
+        {
+          "trades": 258,
+          "wr": 70.2,
+          "pnl": 22.01,
+          "mdd": 5.69,
+          "pnl_mdd": 3.87,
+          "avg_leverage": 2.4,
+          "max_consec_loss": 7,
+          "worst_daily_pnl": -6.2,
+          "fold": 3
+        }
+      ],
+      "pass": true
+    }
+  },
+  "metadata": {
+    "date": "2026-03-03T02:06:20.630577",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "patterns": 130,
+    "neutral_bars": 74722,
+    "runtime_sec": 41.586086
+  }
+}

@@ -1,0 +1,437 @@
+{
+  "timestamp": "2026-03-05T02:20:54.449804",
+  "version": "v1.48.0",
+  "phase1_counter": {
+    "2.0": {
+      "pnl": 1888.21,
+      "mdd": 6.73,
+      "pm": 280.5661218424963,
+      "wr": 72.72,
+      "trades": 1184,
+      "blocks": 2840
+    },
+    "3.0": {
+      "pnl": 1937.54,
+      "mdd": 5.05,
+      "pm": 383.6712871287129,
+      "wr": 71.42,
+      "trades": 1214,
+      "blocks": 2545
+    },
+    "4.0": {
+      "pnl": 2251.28,
+      "mdd": 5.05,
+      "pm": 445.7980198019803,
+      "wr": 72.32,
+      "trades": 1221,
+      "blocks": 2217
+    },
+    "5.0": {
+      "pnl": 2062.49,
+      "mdd": 3.63,
+      "pm": 568.1790633608815,
+      "wr": 70.96,
+      "trades": 1195,
+      "blocks": 1693
+    },
+    "6.0": {
+      "pnl": 2351.11,
+      "mdd": 3.84,
+      "pm": 612.2682291666667,
+      "wr": 71.12,
+      "trades": 1212,
+      "blocks": 1384
+    },
+    "7.0": {
+      "pnl": 2346.23,
+      "mdd": 4.31,
+      "pm": 544.3689095127611,
+      "wr": 71.12,
+      "trades": 1212,
+      "blocks": 1022
+    },
+    "8.0": {
+      "pnl": 2764.05,
+      "mdd": 3.78,
+      "pm": 731.2301587301588,
+      "wr": 73.04,
+      "trades": 1202,
+      "blocks": 734
+    },
+    "10.0": {
+      "pnl": 3221.84,
+      "mdd": 3.79,
+      "pm": 850.0897097625331,
+      "wr": 72.27,
+      "trades": 1226,
+      "blocks": 268
+    }
+  },
+  "phase2_with": {
+    "8.0": {
+      "pnl": 1989.47,
+      "mdd": 5.54,
+      "pm": 359.1101083032491,
+      "wr": 71.36,
+      "trades": 1236,
+      "blocks": 4087
+    },
+    "10.0": {
+      "pnl": 1849.33,
+      "mdd": 4.11,
+      "pm": 449.95863746958634,
+      "wr": 69.91,
+      "trades": 1223,
+      "blocks": 2409
+    },
+    "12.0": {
+      "pnl": 1970.23,
+      "mdd": 3.63,
+      "pm": 542.7630853994491,
+      "wr": 69.71,
+      "trades": 1228,
+      "blocks": 1894
+    },
+    "15.0": {
+      "pnl": 2062.49,
+      "mdd": 3.63,
+      "pm": 568.1790633608815,
+      "wr": 70.96,
+      "trades": 1195,
+      "blocks": 1693
+    },
+    "18.0": {
+      "pnl": 2094.68,
+      "mdd": 3.63,
+      "pm": 577.0468319559228,
+      "wr": 71.01,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "20.0": {
+      "pnl": 2094.68,
+      "mdd": 3.63,
+      "pm": 577.0468319559228,
+      "wr": 71.01,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "25.0": {
+      "pnl": 2094.68,
+      "mdd": 3.63,
+      "pm": 577.0468319559228,
+      "wr": 71.01,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "50.0": {
+      "pnl": 2094.68,
+      "mdd": 3.63,
+      "pm": 577.0468319559228,
+      "wr": 71.01,
+      "trades": 1197,
+      "blocks": 1684
+    }
+  },
+  "grid_results": {
+    "OFF": {
+      "counter": 5.0,
+      "with_cap": 15.0,
+      "enabled": false,
+      "pnl": 3335.7,
+      "mdd": 2.68,
+      "pnl_mdd": 1244.7,
+      "wr": 72.2,
+      "trades": 1236,
+      "blocks": 0
+    },
+    "CURRENT": {
+      "counter": 5.0,
+      "with_cap": 15.0,
+      "enabled": true,
+      "pnl": 2062.5,
+      "mdd": 3.63,
+      "pnl_mdd": 568.2,
+      "wr": 71.0,
+      "trades": 1195,
+      "blocks": 1693
+    },
+    "c5_w18": {
+      "counter": 5.0,
+      "with_cap": 18.0,
+      "enabled": true,
+      "pnl": 2094.7,
+      "mdd": 3.63,
+      "pnl_mdd": 577.0,
+      "wr": 71.0,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "c5_w20": {
+      "counter": 5.0,
+      "with_cap": 20.0,
+      "enabled": true,
+      "pnl": 2094.7,
+      "mdd": 3.63,
+      "pnl_mdd": 577.0,
+      "wr": 71.0,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "c5_w25": {
+      "counter": 5.0,
+      "with_cap": 25.0,
+      "enabled": true,
+      "pnl": 2094.7,
+      "mdd": 3.63,
+      "pnl_mdd": 577.0,
+      "wr": 71.0,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "c5_w50": {
+      "counter": 5.0,
+      "with_cap": 50.0,
+      "enabled": true,
+      "pnl": 2094.7,
+      "mdd": 3.63,
+      "pnl_mdd": 577.0,
+      "wr": 71.0,
+      "trades": 1197,
+      "blocks": 1684
+    },
+    "c6_w18": {
+      "counter": 6.0,
+      "with_cap": 18.0,
+      "enabled": true,
+      "pnl": 2330.3,
+      "mdd": 3.84,
+      "pnl_mdd": 606.8,
+      "wr": 71.1,
+      "trades": 1210,
+      "blocks": 1375
+    },
+    "c6_w20": {
+      "counter": 6.0,
+      "with_cap": 20.0,
+      "enabled": true,
+      "pnl": 2330.3,
+      "mdd": 3.84,
+      "pnl_mdd": 606.8,
+      "wr": 71.1,
+      "trades": 1210,
+      "blocks": 1375
+    },
+    "c6_w25": {
+      "counter": 6.0,
+      "with_cap": 25.0,
+      "enabled": true,
+      "pnl": 2330.3,
+      "mdd": 3.84,
+      "pnl_mdd": 606.8,
+      "wr": 71.1,
+      "trades": 1210,
+      "blocks": 1375
+    },
+    "c6_w50": {
+      "counter": 6.0,
+      "with_cap": 50.0,
+      "enabled": true,
+      "pnl": 2330.3,
+      "mdd": 3.84,
+      "pnl_mdd": 606.8,
+      "wr": 71.1,
+      "trades": 1210,
+      "blocks": 1375
+    },
+    "c8_w18": {
+      "counter": 8.0,
+      "with_cap": 18.0,
+      "enabled": true,
+      "pnl": 2813.9,
+      "mdd": 3.78,
+      "pnl_mdd": 744.4,
+      "wr": 73.1,
+      "trades": 1204,
+      "blocks": 735
+    },
+    "c8_w20": {
+      "counter": 8.0,
+      "with_cap": 20.0,
+      "enabled": true,
+      "pnl": 2813.9,
+      "mdd": 3.78,
+      "pnl_mdd": 744.4,
+      "wr": 73.1,
+      "trades": 1204,
+      "blocks": 735
+    },
+    "c8_w25": {
+      "counter": 8.0,
+      "with_cap": 25.0,
+      "enabled": true,
+      "pnl": 2813.9,
+      "mdd": 3.78,
+      "pnl_mdd": 744.4,
+      "wr": 73.1,
+      "trades": 1204,
+      "blocks": 735
+    },
+    "c8_w50": {
+      "counter": 8.0,
+      "with_cap": 50.0,
+      "enabled": true,
+      "pnl": 2813.9,
+      "mdd": 3.78,
+      "pnl_mdd": 744.4,
+      "wr": 73.1,
+      "trades": 1204,
+      "blocks": 735
+    },
+    "c10_w18": {
+      "counter": 10.0,
+      "with_cap": 18.0,
+      "enabled": true,
+      "pnl": 3221.8,
+      "mdd": 3.79,
+      "pnl_mdd": 850.1,
+      "wr": 72.3,
+      "trades": 1226,
+      "blocks": 268
+    },
+    "c10_w20": {
+      "counter": 10.0,
+      "with_cap": 20.0,
+      "enabled": true,
+      "pnl": 3221.8,
+      "mdd": 3.79,
+      "pnl_mdd": 850.1,
+      "wr": 72.3,
+      "trades": 1226,
+      "blocks": 268
+    },
+    "c10_w25": {
+      "counter": 10.0,
+      "with_cap": 25.0,
+      "enabled": true,
+      "pnl": 3221.8,
+      "mdd": 3.79,
+      "pnl_mdd": 850.1,
+      "wr": 72.3,
+      "trades": 1226,
+      "blocks": 268
+    },
+    "c10_w50": {
+      "counter": 10.0,
+      "with_cap": 50.0,
+      "enabled": true,
+      "pnl": 3221.8,
+      "mdd": 3.79,
+      "pnl_mdd": 850.1,
+      "wr": 72.3,
+      "trades": 1226,
+      "blocks": 268
+    }
+  },
+  "wf_results": {
+    "OFF": {
+      "counter": 5.0,
+      "with_cap": 15.0,
+      "enabled": false,
+      "folds": [
+        85.0,
+        161.0,
+        165.4
+      ],
+      "avg": 137.1,
+      "min": 85.0,
+      "n_pass": 3,
+      "is_pnl_mdd": 1244.7
+    },
+    "c10_w18": {
+      "counter": 10.0,
+      "with_cap": 18.0,
+      "enabled": true,
+      "folds": [
+        87.6,
+        160.8,
+        168.8
+      ],
+      "avg": 139.1,
+      "min": 87.6,
+      "n_pass": 3,
+      "is_pnl_mdd": 850.1
+    },
+    "c10_w20": {
+      "counter": 10.0,
+      "with_cap": 20.0,
+      "enabled": true,
+      "folds": [
+        87.6,
+        160.8,
+        168.8
+      ],
+      "avg": 139.1,
+      "min": 87.6,
+      "n_pass": 3,
+      "is_pnl_mdd": 850.1
+    },
+    "c10_w25": {
+      "counter": 10.0,
+      "with_cap": 25.0,
+      "enabled": true,
+      "folds": [
+        87.6,
+        160.8,
+        168.8
+      ],
+      "avg": 139.1,
+      "min": 87.6,
+      "n_pass": 3,
+      "is_pnl_mdd": 850.1
+    },
+    "c10_w50": {
+      "counter": 10.0,
+      "with_cap": 50.0,
+      "enabled": true,
+      "folds": [
+        87.6,
+        160.8,
+        168.8
+      ],
+      "avg": 139.1,
+      "min": 87.6,
+      "n_pass": 3,
+      "is_pnl_mdd": 850.1
+    },
+    "c8_w18": {
+      "counter": 8.0,
+      "with_cap": 18.0,
+      "enabled": true,
+      "folds": [
+        91.7,
+        138.8,
+        157.3
+      ],
+      "avg": 129.3,
+      "min": 91.7,
+      "n_pass": 3,
+      "is_pnl_mdd": 744.4
+    },
+    "CURRENT": {
+      "counter": 5.0,
+      "with_cap": 15.0,
+      "enabled": true,
+      "folds": [
+        82.0,
+        138.0,
+        129.4
+      ],
+      "avg": 116.5,
+      "min": 82.0,
+      "n_pass": 3,
+      "is_pnl_mdd": 568.2
+    }
+  },
+  "recommended": "c8_w18"
+}

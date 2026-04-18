@@ -1,0 +1,91 @@
+{
+  "date_run": "2026-04-18T15:28:54.419141",
+  "baseline_ci": {
+    "obs_mdd": 5.383,
+    "mean": 6.089,
+    "median": 5.766,
+    "stdev": 1.22,
+    "ci_low": 4.253,
+    "ci_high": 8.986,
+    "p99": 10.696,
+    "p01": 4.069,
+    "method": "stationary_bootstrap(mean_block=20)"
+  },
+  "results": [
+    {
+      "name": "BASELINE",
+      "n_trades": 1027,
+      "boot": {
+        "obs_mdd": 5.383,
+        "mean": 6.089,
+        "median": 5.766,
+        "stdev": 1.22,
+        "ci_low": 4.253,
+        "ci_high": 8.986,
+        "p99": 10.696,
+        "p01": 4.069,
+        "method": "stationary_bootstrap(mean_block=20)"
+      }
+    },
+    {
+      "name": "REFINED pure (CD=0)",
+      "n_trades": 1612,
+      "boot": {
+        "obs_mdd": 8.211,
+        "mean": 8.224,
+        "median": 8.211,
+        "stdev": 1.779,
+        "ci_low": 5.509,
+        "ci_high": 12.432,
+        "p99": 13.79,
+        "p01": 5.323,
+        "method": "stationary_bootstrap(mean_block=20)"
+      }
+    },
+    {
+      "name": "A: CD=2",
+      "n_trades": 1394,
+      "boot": {
+        "obs_mdd": 10.416,
+        "mean": 9.76,
+        "median": 9.254,
+        "stdev": 2.376,
+        "ci_low": 6.337,
+        "ci_high": 16.075,
+        "p99": 17.262,
+        "p01": 6.053,
+        "method": "stationary_bootstrap(mean_block=20)"
+      }
+    },
+    {
+      "name": "C: Channel soft",
+      "n_trades": 1345,
+      "boot": {
+        "obs_mdd": 6.911,
+        "mean": 7.388,
+        "median": 7.088,
+        "stdev": 1.534,
+        "ci_low": 5.145,
+        "ci_high": 11.009,
+        "p99": 11.983,
+        "p01": 4.806,
+        "method": "stationary_bootstrap(mean_block=20)"
+      }
+    },
+    {
+      "name": "D: Body 50%",
+      "n_trades": 1589,
+      "boot": {
+        "obs_mdd": 6.897,
+        "mean": 8.738,
+        "median": 8.329,
+        "stdev": 1.955,
+        "ci_low": 5.964,
+        "ci_high": 13.314,
+        "p99": 14.219,
+        "p01": 5.591,
+        "method": "stationary_bootstrap(mean_block=20)"
+      }
+    }
+  ]
+}

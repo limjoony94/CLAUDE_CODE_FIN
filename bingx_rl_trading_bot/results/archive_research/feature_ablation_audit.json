@@ -1,0 +1,110 @@
+{
+  "additive": {
+    "F1_cascade_98": {
+      "is_delta": 483.6,
+      "wf_delta": 398.0,
+      "oos_delta": 47.5,
+      "overfit": 0.902,
+      "verdict": "NOISE"
+    },
+    "F2_preemptive_2": {
+      "is_delta": 770.1,
+      "wf_delta": 640.5,
+      "oos_delta": 68.5,
+      "overfit": 0.911,
+      "verdict": "NOISE"
+    },
+    "F3_tp_decay": {
+      "is_delta": -37.5,
+      "wf_delta": -47.2,
+      "oos_delta": -3.5,
+      "overfit": 0,
+      "verdict": "HARMFUL"
+    },
+    "F4_timeout_288": {
+      "is_delta": -56.6,
+      "wf_delta": -77.8,
+      "oos_delta": -24.5,
+      "overfit": 0,
+      "verdict": "HARMFUL"
+    },
+    "F5_momentum": {
+      "is_delta": 18.8,
+      "wf_delta": 21.2,
+      "oos_delta": -0.6,
+      "overfit": 1.032,
+      "verdict": "OVERFIT"
+    },
+    "F6_dircap_6": {
+      "is_delta": -59.1,
+      "wf_delta": -64.5,
+      "oos_delta": -5.1,
+      "overfit": 0,
+      "verdict": "HARMFUL"
+    },
+    "F7_aggrisk": {
+      "is_delta": -47.1,
+      "wf_delta": -41.6,
+      "oos_delta": -3.7,
+      "overfit": 0,
+      "verdict": "HARMFUL"
+    }
+  },
+  "subtractive": {
+    "F1_cascade": {
+      "is_delta": -855.8,
+      "wf_delta": -751.4,
+      "oos_delta": -92.1,
+      "essential": "ESSENTIAL",
+      "risk": "LOW"
+    },
+    "F2_preemptive": {
+      "is_delta": -514.7,
+      "wf_delta": -443.8,
+      "oos_delta": -42.7,
+      "essential": "ESSENTIAL",
+      "risk": "LOW"
+    },
+    "F3_tp_decay": {
+      "is_delta": -14.7,
+      "wf_delta": -13.3,
+      "oos_delta": -4.1,
+      "essential": "USEFUL",
+      "risk": "LOW"
+    },
+    "F4_timeout": {
+      "is_delta": 64.1,
+      "wf_delta": 53.0,
+      "oos_delta": 3.7,
+      "essential": "REMOVABLE",
+      "risk": "MEDIUM"
+    },
+    "F5_momentum": {
+      "is_delta": 7.2,
+      "wf_delta": 7.1,
+      "oos_delta": 0.7,
+      "essential": "NEUTRAL",
+      "risk": "MEDIUM"
+    },
+    "F6_dircap": {
+      "is_delta": 21.3,
+      "wf_delta": 14.0,
+      "oos_delta": 2.6,
+      "essential": "REMOVABLE",
+      "risk": "MEDIUM"
+    },
+    "F7_aggrisk": {
+      "is_delta": 0.0,
+      "wf_delta": 0.0,
+      "oos_delta": 0.0,
+      "essential": "NEUTRAL",
+      "risk": "MEDIUM"
+    }
+  },
+  "minimal_better": "True",
+  "overfit_features": [],
+  "removable_features": [
+    "F4_timeout",
+    "F6_dircap"
+  ]
+}

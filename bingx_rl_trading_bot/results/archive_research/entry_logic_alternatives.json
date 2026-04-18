@@ -1,0 +1,530 @@
+{
+  "study": "entry_logic_alternatives",
+  "date": "2026-03-15T01:39:22.667830",
+  "method": "Alternative entry logic with identical risk management stack",
+  "risk_management": {
+    "n_slots": 9,
+    "direction_cap": 7,
+    "cascade_pct": 85,
+    "agg_risk": [
+      8.0,
+      15.0
+    ],
+    "timeout": 288,
+    "tp_scale": 0.72,
+    "decay": 0.9975
+  },
+  "quality_filter": {
+    "edge": 18.0,
+    "min_trades": 25,
+    "min_sl": 1.0
+  },
+  "data_bars": 87315,
+  "neutral_window": [
+    0,
+    74642
+  ],
+  "results": {
+    "REFERENCE": {
+      "label": "REFERENCE v1.63.1",
+      "n_patterns": 111,
+      "n_signals": 10158,
+      "is": {
+        "trades": 2470,
+        "wr": 83.1,
+        "pnl": 458.28,
+        "mdd_mtm": 4.5,
+        "pnl_mdd_mtm": 101.8,
+        "timeouts": 1024,
+        "avg_hold": 168.0,
+        "tp": 2051,
+        "sl": 410
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 111.22,
+            "oos_trades": 541,
+            "oos_wr": 86.9
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 119.5,
+            "oos_trades": 669,
+            "oos_wr": 79.8
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 108.82,
+            "oos_trades": 717,
+            "oos_wr": 78.1
+          }
+        ],
+        "total_oos_pnl": 339.5,
+        "n_pass": 3,
+        "verdict": "PASS"
+      }
+    },
+    "1-candle": {
+      "label": "1-candle",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 28.8
+    },
+    "2-candle": {
+      "label": "2-candle",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 29.0
+    },
+    "3-candle": {
+      "label": "3-candle",
+      "n_patterns": 17,
+      "n_signals": 779,
+      "is": {
+        "trades": 624,
+        "wr": 86.5,
+        "pnl": 57.78,
+        "mdd_mtm": 2.34,
+        "pnl_mdd_mtm": 24.7,
+        "timeouts": 96,
+        "avg_hold": 109.6,
+        "tp": 540,
+        "sl": 82
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 13.6,
+            "oos_trades": 150,
+            "oos_wr": 88.7
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 12.43,
+            "oos_trades": 165,
+            "oos_wr": 81.2
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 19.18,
+            "oos_trades": 158,
+            "oos_wr": 91.8
+          }
+        ],
+        "total_oos_pnl": 45.2,
+        "n_pass": 3,
+        "verdict": "PASS"
+      },
+      "elapsed_s": 26.8,
+      "top_patterns": {
+        "H-ST-ST_SHORT": {
+          "pattern": "H-ST-ST",
+          "direction": "SHORT",
+          "tp": 1.1421,
+          "sl": 1.6318,
+          "trades": 25,
+          "wr": 84.0,
+          "edge": 25.2
+        },
+        "D-DN-MU_LONG": {
+          "pattern": "D-DN-MU",
+          "direction": "LONG",
+          "tp": 1.4596,
+          "sl": 2.2843,
+          "trades": 28,
+          "wr": 85.7,
+          "edge": 24.7
+        },
+        "ST-MU-D_SHORT": {
+          "pattern": "ST-MU-D",
+          "direction": "SHORT",
+          "tp": 1.1466,
+          "sl": 1.8659,
+          "trades": 27,
+          "wr": 85.2,
+          "edge": 23.2
+        },
+        "U-GS-DN_SHORT": {
+          "pattern": "U-GS-DN",
+          "direction": "SHORT",
+          "tp": 1.0631,
+          "sl": 1.9505,
+          "trades": 41,
+          "wr": 87.8,
+          "edge": 23.1
+        },
+        "DN-DF-ST_LONG": {
+          "pattern": "DN-DF-ST",
+          "direction": "LONG",
+          "tp": 1.0041,
+          "sl": 1.6102,
+          "trades": 25,
+          "wr": 84.0,
+          "edge": 22.4
+        },
+        "U-MD-IH_LONG": {
+          "pattern": "U-MD-IH",
+          "direction": "LONG",
+          "tp": 1.1325,
+          "sl": 1.4555,
+          "trades": 41,
+          "wr": 78.0,
+          "edge": 21.8
+        },
+        "U-MD-H_LONG": {
+          "pattern": "U-MD-H",
+          "direction": "LONG",
+          "tp": 0.9583,
+          "sl": 1.6533,
+          "trades": 46,
+          "wr": 84.8,
+          "edge": 21.5
+        },
+        "IH-ST-ST_SHORT": {
+          "pattern": "IH-ST-ST",
+          "direction": "SHORT",
+          "tp": 1.4649,
+          "sl": 1.5815,
+          "trades": 26,
+          "wr": 73.1,
+          "edge": 21.2
+        },
+        "U-D-BU_SHORT": {
+          "pattern": "U-D-BU",
+          "direction": "SHORT",
+          "tp": 0.7204,
+          "sl": 1.9127,
+          "trades": 30,
+          "wr": 93.3,
+          "edge": 20.7
+        },
+        "H-MU-U_LONG": {
+          "pattern": "H-MU-U",
+          "direction": "LONG",
+          "tp": 1.0034,
+          "sl": 1.8206,
+          "trades": 39,
+          "wr": 84.6,
+          "edge": 20.1
+        }
+      }
+    },
+    "4-candle": {
+      "label": "4-candle",
+      "n_patterns": 19,
+      "n_signals": 879,
+      "is": {
+        "trades": 716,
+        "wr": 87.2,
+        "pnl": 80.02,
+        "mdd_mtm": 2.45,
+        "pnl_mdd_mtm": 32.7,
+        "timeouts": 107,
+        "avg_hold": 111.9,
+        "tp": 622,
+        "sl": 90
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 20.53,
+            "oos_trades": 182,
+            "oos_wr": 88.5
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 24.03,
+            "oos_trades": 158,
+            "oos_wr": 89.2
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 17.99,
+            "oos_trades": 195,
+            "oos_wr": 83.6
+          }
+        ],
+        "total_oos_pnl": 62.6,
+        "n_pass": 3,
+        "verdict": "PASS"
+      },
+      "elapsed_s": 12.1,
+      "top_patterns": {
+        "ST-MU-U-DN_LONG": {
+          "pattern": "ST-MU-U-DN",
+          "direction": "LONG",
+          "tp": 1.1545,
+          "sl": 1.0,
+          "trades": 26,
+          "wr": 80.8,
+          "edge": 34.4
+        },
+        "ST-ST-DN-U_SHORT": {
+          "pattern": "ST-ST-DN-U",
+          "direction": "SHORT",
+          "tp": 1.2075,
+          "sl": 1.6275,
+          "trades": 44,
+          "wr": 81.8,
+          "edge": 24.4
+        },
+        "ST-U-U-ST_SHORT": {
+          "pattern": "ST-U-U-ST",
+          "direction": "SHORT",
+          "tp": 1.2899,
+          "sl": 2.3144,
+          "trades": 38,
+          "wr": 86.8,
+          "edge": 22.6
+        },
+        "U-BU-U-U_LONG": {
+          "pattern": "U-BU-U-U",
+          "direction": "LONG",
+          "tp": 1.4011,
+          "sl": 1.7337,
+          "trades": 27,
+          "wr": 77.8,
+          "edge": 22.5
+        },
+        "DN-U-MU-MD_LONG": {
+          "pattern": "DN-U-MU-MD",
+          "direction": "LONG",
+          "tp": 1.4724,
+          "sl": 1.2941,
+          "trades": 25,
+          "wr": 68.0,
+          "edge": 21.2
+        },
+        "BU-U-U-U_LONG": {
+          "pattern": "BU-U-U-U",
+          "direction": "LONG",
+          "tp": 1.1562,
+          "sl": 1.866,
+          "trades": 29,
+          "wr": 82.8,
+          "edge": 21.0
+        },
+        "U-DN-U-MD_LONG": {
+          "pattern": "U-DN-U-MD",
+          "direction": "LONG",
+          "tp": 1.3794,
+          "sl": 2.1748,
+          "trades": 32,
+          "wr": 81.2,
+          "edge": 20.1
+        },
+        "U-DN-U-BU_SHORT": {
+          "pattern": "U-DN-U-BU",
+          "direction": "SHORT",
+          "tp": 0.8844,
+          "sl": 1.7857,
+          "trades": 44,
+          "wr": 86.4,
+          "edge": 19.5
+        },
+        "DN-ST-MU-DN_SHORT": {
+          "pattern": "DN-ST-MU-DN",
+          "direction": "SHORT",
+          "tp": 0.9772,
+          "sl": 1.919,
+          "trades": 28,
+          "wr": 85.7,
+          "edge": 19.5
+        },
+        "DN-ST-MD-U_SHORT": {
+          "pattern": "DN-ST-MD-U",
+          "direction": "SHORT",
+          "tp": 0.7711,
+          "sl": 1.5099,
+          "trades": 28,
+          "wr": 85.7,
+          "edge": 19.5
+        }
+      }
+    },
+    "RSI_p14_30/70": {
+      "label": "RSI_p14_30/70",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 0.3
+    },
+    "RSI_p14_25/75": {
+      "label": "RSI_p14_25/75",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 0.1
+    },
+    "RSI_p7_30/70": {
+      "label": "RSI_p7_30/70",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 1.2
+    },
+    "BB_p20_s2.0": {
+      "label": "BB_p20_s2.0",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 1.6
+    },
+    "BB_p20_s1.5": {
+      "label": "BB_p20_s1.5",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 4.1
+    },
+    "MACD_12_26_9": {
+      "label": "MACD_12_26_9",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 1.2
+    },
+    "Breakout_20": {
+      "label": "Breakout_20",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 1.6
+    },
+    "Breakout_50": {
+      "label": "Breakout_50",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 0.9
+    },
+    "MeanRev_p50_t2.0": {
+      "label": "MeanRev_p50_t2.0",
+      "n_patterns": 1,
+      "n_signals": 153,
+      "is": {
+        "trades": 11,
+        "wr": 90.9,
+        "pnl": 2.43,
+        "mdd_mtm": 1.41,
+        "pnl_mdd_mtm": 1.7,
+        "timeouts": 1,
+        "avg_hold": 118.6,
+        "tp": 10,
+        "sl": 1
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 0.52,
+            "oos_trades": 2,
+            "oos_wr": 100.0
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 0.8,
+            "oos_trades": 2,
+            "oos_wr": 100.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 0.29,
+            "oos_trades": 5,
+            "oos_wr": 80.0
+          }
+        ],
+        "total_oos_pnl": 1.6,
+        "n_pass": 3,
+        "verdict": "PASS"
+      },
+      "elapsed_s": 0.5,
+      "top_patterns": {
+        "MR_HIGH_SHORT": {
+          "pattern": "MR_HIGH",
+          "direction": "SHORT",
+          "tp": 1.3564,
+          "sl": 2.3659,
+          "trades": 78,
+          "wr": 85.9,
+          "edge": 22.3
+        }
+      }
+    },
+    "MeanRev_p20_t1.5": {
+      "label": "MeanRev_p20_t1.5",
+      "n_patterns": 1,
+      "n_signals": 102,
+      "is": {
+        "trades": 10,
+        "wr": 90.0,
+        "pnl": 2.36,
+        "mdd_mtm": 1.98,
+        "pnl_mdd_mtm": 1.2,
+        "timeouts": 5,
+        "avg_hold": 140.5,
+        "tp": 9,
+        "sl": 1
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "oos_pnl": 0.28,
+            "oos_trades": 1,
+            "oos_wr": 100.0
+          },
+          {
+            "fold": 2,
+            "oos_pnl": 0.36,
+            "oos_trades": 1,
+            "oos_wr": 100.0
+          },
+          {
+            "fold": 3,
+            "oos_pnl": 0.59,
+            "oos_trades": 5,
+            "oos_wr": 80.0
+          }
+        ],
+        "total_oos_pnl": 1.2,
+        "n_pass": 3,
+        "verdict": "PASS"
+      },
+      "elapsed_s": 0.5,
+      "top_patterns": {
+        "MR_HIGH_SHORT": {
+          "pattern": "MR_HIGH",
+          "direction": "SHORT",
+          "tp": 1.3309,
+          "sl": 2.2441,
+          "trades": 51,
+          "wr": 90.2,
+          "edge": 27.4
+        }
+      }
+    },
+    "VolSpike_2.0x": {
+      "label": "VolSpike_2.0x",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 1.3
+    },
+    "VolSpike_3.0x": {
+      "label": "VolSpike_3.0x",
+      "n_patterns": 0,
+      "is": null,
+      "wf": null,
+      "elapsed_s": 0.5
+    }
+  },
+  "reference_oos": 339.5,
+  "elapsed_s": 133.8
+}

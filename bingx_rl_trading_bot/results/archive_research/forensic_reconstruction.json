@@ -1,0 +1,101 @@
+{
+  "f1_PROD_cascade_ON": {
+    "pnl": 18.8,
+    "wr": 57.2,
+    "rr": 2.007,
+    "mdd": 2.75,
+    "trades": 159,
+    "exit_reasons": {
+      "TP": 88,
+      "SL": 58,
+      "TIMEOUT": 11,
+      "OOS_END": 2
+    }
+  },
+  "f1_PROD_cascade_OFF": {
+    "pnl": -9.7,
+    "wr": 62.2,
+    "rr": 0.444,
+    "mdd": 13.9,
+    "trades": 135,
+    "exit_reasons": {
+      "TP": 81,
+      "TIMEOUT": 28,
+      "SL": 21,
+      "OOS_END": 5
+    }
+  },
+  "f1_HARNESS_cascade_ON": {
+    "pnl": 24.8,
+    "wr": 57.2,
+    "rr": 2.906,
+    "mdd": 1.05,
+    "trades": 187,
+    "exit_reasons": {
+      "TP": 106,
+      "SL": 78,
+      "TIMEOUT": 1,
+      "OOS_END": 2
+    }
+  },
+  "f1_HARNESS_cascade_OFF": {
+    "pnl": -9.7,
+    "wr": 62.2,
+    "rr": 0.444,
+    "mdd": 13.9,
+    "trades": 135,
+    "exit_reasons": {
+      "TP": 81,
+      "TIMEOUT": 28,
+      "SL": 21,
+      "OOS_END": 5
+    }
+  },
+  "f2_production_be": 34.0,
+  "f2_harness_be": 28.0,
+  "f3_live_trades": 176,
+  "f3_bt_trades": 187,
+  "f3_live_avg_sl": -5.56,
+  "f3_bt_avg_sl": -0.96,
+  "f3_passed": true,
+  "f4_old_gap": 41.8,
+  "f4_new_gap": 29.8,
+  "f4_closer": "NEW",
+  "f4_remaining_gap": 29.8,
+  "f4_passed": "True",
+  "f5_scenarios": {
+    "pessimistic": {
+      "cascade_eff": 0.3,
+      "parity_disc": 0.5,
+      "raw_pnl_30d": 8.8,
+      "est_pnl_30d": 4.4,
+      "est_annual": 53.0
+    },
+    "conservative": {
+      "cascade_eff": 0.5,
+      "parity_disc": 0.65,
+      "raw_pnl_30d": 34.8,
+      "est_pnl_30d": 22.6,
+      "est_annual": 271.0
+    },
+    "neutral": {
+      "cascade_eff": 0.7,
+      "parity_disc": 0.73,
+      "raw_pnl_30d": 60.8,
+      "est_pnl_30d": 44.4,
+      "est_annual": 533.0
+    },
+    "optimistic": {
+      "cascade_eff": 0.9,
+      "parity_disc": 0.85,
+      "raw_pnl_30d": 86.9,
+      "est_pnl_30d": 73.8,
+      "est_annual": 886.0
+    }
+  },
+  "f5_passed": "True",
+  "final": {
+    "passed": 5,
+    "total": 5
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "oa1": {
+    "n_tests": 23,
+    "original_p": 0.048,
+    "bonferroni_p": 1.0,
+    "fwer": 0.693,
+    "survives_bonferroni": false
+  },
+  "oa2": {
+    "consistent": true,
+    "fold_results": {
+      "3": {
+        "gap": 127.7,
+        "all_pos": true,
+        "prod": 490.2,
+        "best": 617.9
+      },
+      "4": {
+        "gap": 136.1,
+        "all_pos": true,
+        "prod": 517.9,
+        "best": 654.0
+      },
+      "5": {
+        "gap": 139.5,
+        "all_pos": true,
+        "prod": 521.1,
+        "best": 660.6
+      },
+      "6": {
+        "gap": 143.2,
+        "all_pos": true,
+        "prod": 527.8,
+        "best": 671.0
+      },
+      "7": {
+        "gap": 144.2,
+        "all_pos": true,
+        "prod": 535.4,
+        "best": 679.7
+      }
+    }
+  },
+  "oa3": {
+    "holdout_gap": 49.4,
+    "wf_gap": 139.5,
+    "ratio": 0.35,
+    "generalized": "True"
+  },
+  "oa4": {
+    "median": 98.9,
+    "ci_lo": 83.4,
+    "ci_hi": 120.9,
+    "pct_positive": 100.0,
+    "significant": "True"
+  },
+  "oa5": {
+    "decision": "APPLY_NOW",
+    "reason": "No downside vs PROD; upside when cascade works"
+  },
+  "verdict": "OPTIMIZATION IS GENUINE \u2014 apply with confidence",
+  "dominated_strategy": true
+}

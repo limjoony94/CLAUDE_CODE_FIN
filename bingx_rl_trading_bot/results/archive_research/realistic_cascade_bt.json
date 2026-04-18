@@ -1,0 +1,5577 @@
+{
+  "study": "realistic_cascade_bt",
+  "date": "2026-03-31T21:07:28.406064",
+  "description": "Realistic cascade exit pricing: cascade SL already-triggered exits at bar OPEN (market fill) instead of sl_price. Preemptive threshold and direction cap sweep.",
+  "data_bars": 93864,
+  "n_patterns": 111,
+  "n_signals": 12941,
+  "params": {
+    "n_slots": 9,
+    "leverage": 3,
+    "fee": 0.1,
+    "atr_clamp": "[1.0,1.5]",
+    "timeout": 576,
+    "tp_decay": 0.9975,
+    "cascade_tighten_pct": 98,
+    "preemptive_tighten_pct": 98,
+    "tp_mode": "mfe_median",
+    "regime_mult": 1.0,
+    "agg_risk": "10.0/15.0",
+    "momentum": "1.5%/3b/12b"
+  },
+  "part1_preemptive_sweep": {
+    "NO_CASCADE": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 521,
+              "wr": 74.3,
+              "pnl": -0.62,
+              "mdd": 14.94,
+              "pnl_mdd": -0.04,
+              "avg_trade": -0.001,
+              "rr": 0.344,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 15.69,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            },
+            "oos": {
+              "trades": 460,
+              "wr": 70.0,
+              "pnl": -8.26,
+              "mdd": 16.41,
+              "pnl_mdd": -0.5,
+              "avg_trade": -0.018,
+              "rr": 0.392,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 17.48,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 974,
+              "wr": 72.8,
+              "pnl": -7.64,
+              "mdd": 23.19,
+              "pnl_mdd": -0.33,
+              "avg_trade": -0.008,
+              "rr": 0.36,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 26.67,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            },
+            "oos": {
+              "trades": 499,
+              "wr": 70.3,
+              "pnl": -14.46,
+              "mdd": 22.63,
+              "pnl_mdd": -0.64,
+              "avg_trade": -0.029,
+              "rr": 0.368,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 23.36,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 1462,
+              "wr": 72.1,
+              "pnl": -23.62,
+              "mdd": 38.59,
+              "pnl_mdd": -0.61,
+              "avg_trade": -0.016,
+              "rr": 0.359,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 39.25,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            },
+            "oos": {
+              "trades": 655,
+              "wr": 76.3,
+              "pnl": 4.37,
+              "mdd": 15.48,
+              "pnl_mdd": 0.28,
+              "avg_trade": 0.007,
+              "rr": 0.318,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 17.99,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 2113,
+              "wr": 73.6,
+              "pnl": -19.75,
+              "mdd": 42.2,
+              "pnl_mdd": -0.47,
+              "avg_trade": -0.009,
+              "rr": 0.343,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 44.53,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            },
+            "oos": {
+              "trades": 529,
+              "wr": 71.3,
+              "pnl": -8.85,
+              "mdd": 19.51,
+              "pnl_mdd": -0.45,
+              "avg_trade": -0.017,
+              "rr": 0.374,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 19.48,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 2632,
+              "wr": 73.4,
+              "pnl": -24.95,
+              "mdd": 42.2,
+              "pnl_mdd": -0.59,
+              "avg_trade": -0.009,
+              "rr": 0.348,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 44.53,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            },
+            "oos": {
+              "trades": 810,
+              "wr": 75.3,
+              "pnl": -30.44,
+              "mdd": 35.81,
+              "pnl_mdd": -0.85,
+              "avg_trade": -0.038,
+              "rr": 0.285,
+              "cascade_sl_market": 0,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 37.09,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 0,
+              "meta_cascade_market_fills": 0,
+              "meta_cascade_avg_gap_pct": 0.0
+            }
+          }
+        ],
+        "oos_total_pnl": -57.64,
+        "oos_avg_wr": 72.6,
+        "oos_min_pnl": -30.44,
+        "oos_pnls": [
+          -8.26,
+          -14.46,
+          4.37,
+          -8.85,
+          -30.44
+        ]
+      },
+      "is_full": {
+        "trades": 3432,
+        "wr": 74.0,
+        "pnl": -53.8,
+        "mdd": 60.96,
+        "pnl_mdd": -0.88,
+        "avg_trade": -0.016,
+        "rr": 0.329,
+        "cascade_sl_market": 0,
+        "cascade_sl_normal": 0,
+        "meta_mdd_mtm": 62.14,
+        "meta_cascade_events": 0,
+        "meta_cascade_positions_closed": 0,
+        "meta_cascade_market_fills": 0,
+        "meta_cascade_avg_gap_pct": 0.0
+      },
+      "config": {
+        "preemptive_loss_pct": null,
+        "direction_cap": 6,
+        "cascade": false
+      }
+    },
+    "PRE_0.3": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1682,
+              "wr": 25.4,
+              "pnl": 22.15,
+              "mdd": 5.09,
+              "pnl_mdd": 4.35,
+              "avg_trade": 0.013,
+              "rr": 3.439,
+              "cascade_sl_market": 695,
+              "cascade_sl_normal": 553,
+              "meta_mdd_mtm": 4.39,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 695,
+              "meta_cascade_market_fills": 695,
+              "meta_cascade_avg_gap_pct": 0.1898
+            },
+            "oos": {
+              "trades": 1541,
+              "wr": 21.7,
+              "pnl": -12.88,
+              "mdd": 16.02,
+              "pnl_mdd": -0.8,
+              "avg_trade": -0.008,
+              "rr": 3.228,
+              "cascade_sl_market": 730,
+              "cascade_sl_normal": 472,
+              "meta_mdd_mtm": 16.44,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 730,
+              "meta_cascade_market_fills": 730,
+              "meta_cascade_avg_gap_pct": 0.181
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 3212,
+              "wr": 23.7,
+              "pnl": 9.11,
+              "mdd": 15.72,
+              "pnl_mdd": 0.58,
+              "avg_trade": 0.003,
+              "rr": 3.338,
+              "cascade_sl_market": 1427,
+              "cascade_sl_normal": 1020,
+              "meta_mdd_mtm": 15.59,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1427,
+              "meta_cascade_market_fills": 1427,
+              "meta_cascade_avg_gap_pct": 0.1849
+            },
+            "oos": {
+              "trades": 1492,
+              "wr": 24.4,
+              "pnl": 5.26,
+              "mdd": 5.73,
+              "pnl_mdd": 0.92,
+              "avg_trade": 0.004,
+              "rr": 3.237,
+              "cascade_sl_market": 646,
+              "cascade_sl_normal": 480,
+              "meta_mdd_mtm": 5.54,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 646,
+              "meta_cascade_market_fills": 646,
+              "meta_cascade_avg_gap_pct": 0.1914
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 4696,
+              "wr": 23.8,
+              "pnl": 13.27,
+              "mdd": 18.76,
+              "pnl_mdd": 0.71,
+              "avg_trade": 0.003,
+              "rr": 3.312,
+              "cascade_sl_market": 2071,
+              "cascade_sl_normal": 1504,
+              "meta_mdd_mtm": 18.62,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 2071,
+              "meta_cascade_market_fills": 2071,
+              "meta_cascade_avg_gap_pct": 0.1871
+            },
+            "oos": {
+              "trades": 1817,
+              "wr": 24.7,
+              "pnl": 10.12,
+              "mdd": 8.31,
+              "pnl_mdd": 1.22,
+              "avg_trade": 0.006,
+              "rr": 3.252,
+              "cascade_sl_market": 774,
+              "cascade_sl_normal": 593,
+              "meta_mdd_mtm": 8.73,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 774,
+              "meta_cascade_market_fills": 774,
+              "meta_cascade_avg_gap_pct": 0.2479
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 6513,
+              "wr": 24.1,
+              "pnl": 23.79,
+              "mdd": 18.76,
+              "pnl_mdd": 1.27,
+              "avg_trade": 0.004,
+              "rr": 3.299,
+              "cascade_sl_market": 2845,
+              "cascade_sl_normal": 2098,
+              "meta_mdd_mtm": 18.62,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2845,
+              "meta_cascade_market_fills": 2845,
+              "meta_cascade_avg_gap_pct": 0.2035
+            },
+            "oos": {
+              "trades": 1540,
+              "wr": 24.0,
+              "pnl": 10.9,
+              "mdd": 4.39,
+              "pnl_mdd": 2.49,
+              "avg_trade": 0.007,
+              "rr": 3.451,
+              "cascade_sl_market": 625,
+              "cascade_sl_normal": 541,
+              "meta_mdd_mtm": 4.2,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 625,
+              "meta_cascade_market_fills": 625,
+              "meta_cascade_avg_gap_pct": 0.1931
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 8053,
+              "wr": 24.0,
+              "pnl": 34.57,
+              "mdd": 18.76,
+              "pnl_mdd": 1.84,
+              "avg_trade": 0.004,
+              "rr": 3.329,
+              "cascade_sl_market": 3470,
+              "cascade_sl_normal": 2640,
+              "meta_mdd_mtm": 18.62,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 3470,
+              "meta_cascade_market_fills": 3470,
+              "meta_cascade_avg_gap_pct": 0.2015
+            },
+            "oos": {
+              "trades": 1966,
+              "wr": 27.7,
+              "pnl": 38.59,
+              "mdd": 5.71,
+              "pnl_mdd": 6.75,
+              "avg_trade": 0.02,
+              "rr": 3.222,
+              "cascade_sl_market": 751,
+              "cascade_sl_normal": 667,
+              "meta_mdd_mtm": 5.85,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 751,
+              "meta_cascade_market_fills": 751,
+              "meta_cascade_avg_gap_pct": 0.2677
+            }
+          }
+        ],
+        "oos_total_pnl": 51.99,
+        "oos_avg_wr": 24.5,
+        "oos_min_pnl": -12.88,
+        "oos_pnls": [
+          -12.88,
+          5.26,
+          10.12,
+          10.9,
+          38.59
+        ]
+      },
+      "is_full": {
+        "trades": 10017,
+        "wr": 24.7,
+        "pnl": 73.54,
+        "mdd": 18.76,
+        "pnl_mdd": 3.92,
+        "avg_trade": 0.007,
+        "rr": 3.316,
+        "cascade_sl_market": 4221,
+        "cascade_sl_normal": 3309,
+        "meta_mdd_mtm": 18.62,
+        "meta_cascade_events": 7,
+        "meta_cascade_positions_closed": 4221,
+        "meta_cascade_market_fills": 4221,
+        "meta_cascade_avg_gap_pct": 0.2134
+      },
+      "config": {
+        "preemptive_loss_pct": 0.3,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "PRE_0.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1471,
+              "wr": 31.3,
+              "pnl": 27.34,
+              "mdd": 4.52,
+              "pnl_mdd": 6.05,
+              "avg_trade": 0.019,
+              "rr": 2.644,
+              "cascade_sl_market": 716,
+              "cascade_sl_normal": 290,
+              "meta_mdd_mtm": 4.77,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 716,
+              "meta_cascade_market_fills": 716,
+              "meta_cascade_avg_gap_pct": 0.2725
+            },
+            "oos": {
+              "trades": 1303,
+              "wr": 27.6,
+              "pnl": -8.42,
+              "mdd": 11.43,
+              "pnl_mdd": -0.74,
+              "avg_trade": -0.006,
+              "rr": 2.452,
+              "cascade_sl_market": 714,
+              "cascade_sl_normal": 226,
+              "meta_mdd_mtm": 12.71,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 714,
+              "meta_cascade_market_fills": 714,
+              "meta_cascade_avg_gap_pct": 0.2574
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2773,
+              "wr": 29.4,
+              "pnl": 17.75,
+              "mdd": 12.95,
+              "pnl_mdd": 1.37,
+              "avg_trade": 0.006,
+              "rr": 2.564,
+              "cascade_sl_market": 1439,
+              "cascade_sl_normal": 514,
+              "meta_mdd_mtm": 13.33,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1439,
+              "meta_cascade_market_fills": 1439,
+              "meta_cascade_avg_gap_pct": 0.2638
+            },
+            "oos": {
+              "trades": 1304,
+              "wr": 30.4,
+              "pnl": 14.36,
+              "mdd": 7.32,
+              "pnl_mdd": 1.96,
+              "avg_trade": 0.011,
+              "rr": 2.569,
+              "cascade_sl_market": 663,
+              "cascade_sl_normal": 243,
+              "meta_mdd_mtm": 7.47,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 663,
+              "meta_cascade_market_fills": 663,
+              "meta_cascade_avg_gap_pct": 0.2604
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 4068,
+              "wr": 29.6,
+              "pnl": 31.23,
+              "mdd": 16.8,
+              "pnl_mdd": 1.86,
+              "avg_trade": 0.008,
+              "rr": 2.57,
+              "cascade_sl_market": 2101,
+              "cascade_sl_normal": 759,
+              "meta_mdd_mtm": 16.74,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 2101,
+              "meta_cascade_market_fills": 2101,
+              "meta_cascade_avg_gap_pct": 0.2627
+            },
+            "oos": {
+              "trades": 1615,
+              "wr": 33.0,
+              "pnl": 45.29,
+              "mdd": 9.39,
+              "pnl_mdd": 4.83,
+              "avg_trade": 0.028,
+              "rr": 2.633,
+              "cascade_sl_market": 736,
+              "cascade_sl_normal": 342,
+              "meta_mdd_mtm": 9.2,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 736,
+              "meta_cascade_market_fills": 736,
+              "meta_cascade_avg_gap_pct": 0.3211
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 5683,
+              "wr": 30.6,
+              "pnl": 76.76,
+              "mdd": 16.8,
+              "pnl_mdd": 4.57,
+              "avg_trade": 0.014,
+              "rr": 2.597,
+              "cascade_sl_market": 2838,
+              "cascade_sl_normal": 1101,
+              "meta_mdd_mtm": 16.74,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2838,
+              "meta_cascade_market_fills": 2838,
+              "meta_cascade_avg_gap_pct": 0.2778
+            },
+            "oos": {
+              "trades": 1365,
+              "wr": 29.6,
+              "pnl": 16.41,
+              "mdd": 5.65,
+              "pnl_mdd": 2.9,
+              "avg_trade": 0.012,
+              "rr": 2.698,
+              "cascade_sl_market": 665,
+              "cascade_sl_normal": 292,
+              "meta_mdd_mtm": 5.73,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 665,
+              "meta_cascade_market_fills": 665,
+              "meta_cascade_avg_gap_pct": 0.2639
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 7048,
+              "wr": 30.4,
+              "pnl": 94.4,
+              "mdd": 16.8,
+              "pnl_mdd": 5.62,
+              "avg_trade": 0.013,
+              "rr": 2.617,
+              "cascade_sl_market": 3504,
+              "cascade_sl_normal": 1393,
+              "meta_mdd_mtm": 16.74,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 3504,
+              "meta_cascade_market_fills": 3504,
+              "meta_cascade_avg_gap_pct": 0.2751
+            },
+            "oos": {
+              "trades": 1845,
+              "wr": 33.6,
+              "pnl": 56.54,
+              "mdd": 3.62,
+              "pnl_mdd": 15.6,
+              "avg_trade": 0.031,
+              "rr": 2.627,
+              "cascade_sl_market": 816,
+              "cascade_sl_normal": 405,
+              "meta_mdd_mtm": 3.64,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 816,
+              "meta_cascade_market_fills": 816,
+              "meta_cascade_avg_gap_pct": 0.3196
+            }
+          }
+        ],
+        "oos_total_pnl": 124.18,
+        "oos_avg_wr": 30.8,
+        "oos_min_pnl": -8.42,
+        "oos_pnls": [
+          -8.42,
+          14.36,
+          45.29,
+          16.41,
+          56.54
+        ]
+      },
+      "is_full": {
+        "trades": 8891,
+        "wr": 31.1,
+        "pnl": 150.46,
+        "mdd": 16.8,
+        "pnl_mdd": 8.95,
+        "avg_trade": 0.017,
+        "rr": 2.624,
+        "cascade_sl_market": 4323,
+        "cascade_sl_normal": 1798,
+        "meta_mdd_mtm": 16.74,
+        "meta_cascade_events": 6,
+        "meta_cascade_positions_closed": 4323,
+        "meta_cascade_market_fills": 4323,
+        "meta_cascade_avg_gap_pct": 0.2837
+      },
+      "config": {
+        "preemptive_loss_pct": 0.5,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "PRE_1.0": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1179,
+              "wr": 41.9,
+              "pnl": 19.29,
+              "mdd": 5.93,
+              "pnl_mdd": 3.25,
+              "avg_trade": 0.016,
+              "rr": 1.571,
+              "cascade_sl_market": 620,
+              "cascade_sl_normal": 54,
+              "meta_mdd_mtm": 5.8,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 620,
+              "meta_cascade_market_fills": 620,
+              "meta_cascade_avg_gap_pct": 0.4812
+            },
+            "oos": {
+              "trades": 944,
+              "wr": 42.7,
+              "pnl": 12.5,
+              "mdd": 4.85,
+              "pnl_mdd": 2.58,
+              "avg_trade": 0.013,
+              "rr": 1.491,
+              "cascade_sl_market": 488,
+              "cascade_sl_normal": 49,
+              "meta_mdd_mtm": 4.38,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 488,
+              "meta_cascade_market_fills": 488,
+              "meta_cascade_avg_gap_pct": 0.475
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2107,
+              "wr": 42.6,
+              "pnl": 35.05,
+              "mdd": 5.93,
+              "pnl_mdd": 5.91,
+              "avg_trade": 0.017,
+              "rr": 1.531,
+              "cascade_sl_market": 1100,
+              "cascade_sl_normal": 103,
+              "meta_mdd_mtm": 5.8,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1100,
+              "meta_cascade_market_fills": 1100,
+              "meta_cascade_avg_gap_pct": 0.4767
+            },
+            "oos": {
+              "trades": 995,
+              "wr": 42.0,
+              "pnl": 12.5,
+              "mdd": 11.36,
+              "pnl_mdd": 1.1,
+              "avg_trade": 0.013,
+              "rr": 1.523,
+              "cascade_sl_market": 515,
+              "cascade_sl_normal": 52,
+              "meta_mdd_mtm": 10.69,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 515,
+              "meta_cascade_market_fills": 515,
+              "meta_cascade_avg_gap_pct": 0.4627
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 3093,
+              "wr": 42.4,
+              "pnl": 47.06,
+              "mdd": 9.07,
+              "pnl_mdd": 5.19,
+              "avg_trade": 0.015,
+              "rr": 1.529,
+              "cascade_sl_market": 1615,
+              "cascade_sl_normal": 155,
+              "meta_mdd_mtm": 8.88,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1615,
+              "meta_cascade_market_fills": 1615,
+              "meta_cascade_avg_gap_pct": 0.4723
+            },
+            "oos": {
+              "trades": 1354,
+              "wr": 43.9,
+              "pnl": 51.98,
+              "mdd": 6.59,
+              "pnl_mdd": 7.88,
+              "avg_trade": 0.038,
+              "rr": 1.683,
+              "cascade_sl_market": 648,
+              "cascade_sl_normal": 110,
+              "meta_mdd_mtm": 7.19,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 648,
+              "meta_cascade_market_fills": 648,
+              "meta_cascade_avg_gap_pct": 0.5231
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 4445,
+              "wr": 42.9,
+              "pnl": 99.38,
+              "mdd": 9.07,
+              "pnl_mdd": 10.96,
+              "avg_trade": 0.022,
+              "rr": 1.578,
+              "cascade_sl_market": 2263,
+              "cascade_sl_normal": 264,
+              "meta_mdd_mtm": 8.88,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2263,
+              "meta_cascade_market_fills": 2263,
+              "meta_cascade_avg_gap_pct": 0.4869
+            },
+            "oos": {
+              "trades": 1036,
+              "wr": 44.0,
+              "pnl": 36.68,
+              "mdd": 3.42,
+              "pnl_mdd": 10.73,
+              "avg_trade": 0.035,
+              "rr": 1.676,
+              "cascade_sl_market": 496,
+              "cascade_sl_normal": 74,
+              "meta_mdd_mtm": 3.37,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 496,
+              "meta_cascade_market_fills": 496,
+              "meta_cascade_avg_gap_pct": 0.4614
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 5486,
+              "wr": 43.0,
+              "pnl": 135.2,
+              "mdd": 9.07,
+              "pnl_mdd": 14.91,
+              "avg_trade": 0.025,
+              "rr": 1.598,
+              "cascade_sl_market": 2764,
+              "cascade_sl_normal": 340,
+              "meta_mdd_mtm": 8.88,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2764,
+              "meta_cascade_market_fills": 2764,
+              "meta_cascade_avg_gap_pct": 0.4815
+            },
+            "oos": {
+              "trades": 1589,
+              "wr": 44.1,
+              "pnl": 67.03,
+              "mdd": 5.3,
+              "pnl_mdd": 12.66,
+              "avg_trade": 0.042,
+              "rr": 1.722,
+              "cascade_sl_market": 761,
+              "cascade_sl_normal": 126,
+              "meta_mdd_mtm": 5.48,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 761,
+              "meta_cascade_market_fills": 761,
+              "meta_cascade_avg_gap_pct": 0.5042
+            }
+          }
+        ],
+        "oos_total_pnl": 180.69,
+        "oos_avg_wr": 43.3,
+        "oos_min_pnl": 12.5,
+        "oos_pnls": [
+          12.5,
+          12.5,
+          51.98,
+          36.68,
+          67.03
+        ]
+      },
+      "is_full": {
+        "trades": 7073,
+        "wr": 43.2,
+        "pnl": 202.41,
+        "mdd": 9.07,
+        "pnl_mdd": 22.33,
+        "avg_trade": 0.029,
+        "rr": 1.627,
+        "cascade_sl_market": 3529,
+        "cascade_sl_normal": 466,
+        "meta_mdd_mtm": 8.88,
+        "meta_cascade_events": 4,
+        "meta_cascade_positions_closed": 3529,
+        "meta_cascade_market_fills": 3529,
+        "meta_cascade_avg_gap_pct": 0.4863
+      },
+      "config": {
+        "preemptive_loss_pct": 1.0,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "PRE_1.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 939,
+              "wr": 52.2,
+              "pnl": 34.78,
+              "mdd": 4.58,
+              "pnl_mdd": 7.6,
+              "avg_trade": 0.037,
+              "rr": 1.173,
+              "cascade_sl_market": 408,
+              "cascade_sl_normal": 29,
+              "meta_mdd_mtm": 4.84,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 408,
+              "meta_cascade_market_fills": 408,
+              "meta_cascade_avg_gap_pct": 0.6902
+            },
+            "oos": {
+              "trades": 816,
+              "wr": 48.9,
+              "pnl": 6.09,
+              "mdd": 8.68,
+              "pnl_mdd": 0.7,
+              "avg_trade": 0.007,
+              "rr": 1.099,
+              "cascade_sl_market": 390,
+              "cascade_sl_normal": 21,
+              "meta_mdd_mtm": 8.54,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 390,
+              "meta_cascade_market_fills": 390,
+              "meta_cascade_avg_gap_pct": 0.6866
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1759,
+              "wr": 50.6,
+              "pnl": 38.68,
+              "mdd": 6.72,
+              "pnl_mdd": 5.76,
+              "avg_trade": 0.022,
+              "rr": 1.131,
+              "cascade_sl_market": 809,
+              "cascade_sl_normal": 50,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 809,
+              "meta_cascade_market_fills": 809,
+              "meta_cascade_avg_gap_pct": 0.6893
+            },
+            "oos": {
+              "trades": 823,
+              "wr": 53.2,
+              "pnl": 24.01,
+              "mdd": 4.28,
+              "pnl_mdd": 5.6,
+              "avg_trade": 0.029,
+              "rr": 1.067,
+              "cascade_sl_market": 343,
+              "cascade_sl_normal": 13,
+              "meta_mdd_mtm": 4.47,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 343,
+              "meta_cascade_market_fills": 343,
+              "meta_cascade_avg_gap_pct": 0.7145
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2573,
+              "wr": 51.4,
+              "pnl": 62.52,
+              "mdd": 6.72,
+              "pnl_mdd": 9.3,
+              "avg_trade": 0.024,
+              "rr": 1.111,
+              "cascade_sl_market": 1152,
+              "cascade_sl_normal": 63,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1152,
+              "meta_cascade_market_fills": 1152,
+              "meta_cascade_avg_gap_pct": 0.6955
+            },
+            "oos": {
+              "trades": 1177,
+              "wr": 52.8,
+              "pnl": 54.94,
+              "mdd": 7.77,
+              "pnl_mdd": 7.07,
+              "avg_trade": 0.047,
+              "rr": 1.189,
+              "cascade_sl_market": 517,
+              "cascade_sl_normal": 33,
+              "meta_mdd_mtm": 8.28,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 517,
+              "meta_cascade_market_fills": 517,
+              "meta_cascade_avg_gap_pct": 0.7529
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 3741,
+              "wr": 51.9,
+              "pnl": 119.14,
+              "mdd": 6.72,
+              "pnl_mdd": 17.73,
+              "avg_trade": 0.032,
+              "rr": 1.138,
+              "cascade_sl_market": 1665,
+              "cascade_sl_normal": 96,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1665,
+              "meta_cascade_market_fills": 1665,
+              "meta_cascade_avg_gap_pct": 0.7118
+            },
+            "oos": {
+              "trades": 913,
+              "wr": 50.5,
+              "pnl": 29.68,
+              "mdd": 6.29,
+              "pnl_mdd": 4.72,
+              "avg_trade": 0.033,
+              "rr": 1.219,
+              "cascade_sl_market": 420,
+              "cascade_sl_normal": 22,
+              "meta_mdd_mtm": 5.98,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 420,
+              "meta_cascade_market_fills": 420,
+              "meta_cascade_avg_gap_pct": 0.6557
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 4650,
+              "wr": 51.7,
+              "pnl": 150.44,
+              "mdd": 6.72,
+              "pnl_mdd": 22.39,
+              "avg_trade": 0.032,
+              "rr": 1.153,
+              "cascade_sl_market": 2085,
+              "cascade_sl_normal": 118,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2085,
+              "meta_cascade_market_fills": 2085,
+              "meta_cascade_avg_gap_pct": 0.7007
+            },
+            "oos": {
+              "trades": 1410,
+              "wr": 51.1,
+              "pnl": 54.89,
+              "mdd": 7.25,
+              "pnl_mdd": 7.57,
+              "avg_trade": 0.039,
+              "rr": 1.213,
+              "cascade_sl_market": 629,
+              "cascade_sl_normal": 52,
+              "meta_mdd_mtm": 6.9,
+              "meta_cascade_events": 8,
+              "meta_cascade_positions_closed": 629,
+              "meta_cascade_market_fills": 629,
+              "meta_cascade_avg_gap_pct": 0.7329
+            }
+          }
+        ],
+        "oos_total_pnl": 169.61,
+        "oos_avg_wr": 51.3,
+        "oos_min_pnl": 6.09,
+        "oos_pnls": [
+          6.09,
+          24.01,
+          54.94,
+          29.68,
+          54.89
+        ]
+      },
+      "is_full": {
+        "trades": 6058,
+        "wr": 51.6,
+        "pnl": 204.67,
+        "mdd": 6.72,
+        "pnl_mdd": 30.46,
+        "avg_trade": 0.034,
+        "rr": 1.166,
+        "cascade_sl_market": 2718,
+        "cascade_sl_normal": 170,
+        "meta_mdd_mtm": 6.61,
+        "meta_cascade_events": 10,
+        "meta_cascade_positions_closed": 2718,
+        "meta_cascade_market_fills": 2718,
+        "meta_cascade_avg_gap_pct": 0.7084
+      },
+      "config": {
+        "preemptive_loss_pct": 1.5,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "PRE_2.0": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 863,
+              "wr": 57.6,
+              "pnl": 29.18,
+              "mdd": 5.0,
+              "pnl_mdd": 5.84,
+              "avg_trade": 0.034,
+              "rr": 0.904,
+              "cascade_sl_market": 329,
+              "cascade_sl_normal": 18,
+              "meta_mdd_mtm": 4.81,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 329,
+              "meta_cascade_market_fills": 329,
+              "meta_cascade_avg_gap_pct": 0.9256
+            },
+            "oos": {
+              "trades": 711,
+              "wr": 56.0,
+              "pnl": 9.38,
+              "mdd": 5.84,
+              "pnl_mdd": 1.61,
+              "avg_trade": 0.013,
+              "rr": 0.853,
+              "cascade_sl_market": 287,
+              "cascade_sl_normal": 11,
+              "meta_mdd_mtm": 5.94,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 287,
+              "meta_cascade_market_fills": 287,
+              "meta_cascade_avg_gap_pct": 0.904
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1566,
+              "wr": 57.0,
+              "pnl": 37.99,
+              "mdd": 5.0,
+              "pnl_mdd": 7.6,
+              "avg_trade": 0.024,
+              "rr": 0.874,
+              "cascade_sl_market": 616,
+              "cascade_sl_normal": 29,
+              "meta_mdd_mtm": 4.81,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 616,
+              "meta_cascade_market_fills": 616,
+              "meta_cascade_avg_gap_pct": 0.9151
+            },
+            "oos": {
+              "trades": 768,
+              "wr": 57.6,
+              "pnl": 17.31,
+              "mdd": 7.85,
+              "pnl_mdd": 2.2,
+              "avg_trade": 0.023,
+              "rr": 0.847,
+              "cascade_sl_market": 293,
+              "cascade_sl_normal": 6,
+              "meta_mdd_mtm": 7.79,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 293,
+              "meta_cascade_market_fills": 293,
+              "meta_cascade_avg_gap_pct": 0.9253
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2322,
+              "wr": 57.1,
+              "pnl": 55.32,
+              "mdd": 5.74,
+              "pnl_mdd": 9.64,
+              "avg_trade": 0.024,
+              "rr": 0.869,
+              "cascade_sl_market": 908,
+              "cascade_sl_normal": 39,
+              "meta_mdd_mtm": 5.7,
+              "meta_cascade_events": 6,
+              "meta_cascade_positions_closed": 908,
+              "meta_cascade_market_fills": 908,
+              "meta_cascade_avg_gap_pct": 0.915
+            },
+            "oos": {
+              "trades": 1087,
+              "wr": 57.4,
+              "pnl": 39.42,
+              "mdd": 5.13,
+              "pnl_mdd": 7.68,
+              "avg_trade": 0.036,
+              "rr": 0.904,
+              "cascade_sl_market": 429,
+              "cascade_sl_normal": 24,
+              "meta_mdd_mtm": 4.57,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 429,
+              "meta_cascade_market_fills": 429,
+              "meta_cascade_avg_gap_pct": 1.0022
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 3408,
+              "wr": 57.2,
+              "pnl": 95.03,
+              "mdd": 5.74,
+              "pnl_mdd": 16.55,
+              "avg_trade": 0.028,
+              "rr": 0.881,
+              "cascade_sl_market": 1337,
+              "cascade_sl_normal": 63,
+              "meta_mdd_mtm": 5.7,
+              "meta_cascade_events": 10,
+              "meta_cascade_positions_closed": 1337,
+              "meta_cascade_market_fills": 1337,
+              "meta_cascade_avg_gap_pct": 0.9433
+            },
+            "oos": {
+              "trades": 856,
+              "wr": 53.6,
+              "pnl": 7.02,
+              "mdd": 15.54,
+              "pnl_mdd": 0.45,
+              "avg_trade": 0.008,
+              "rr": 0.908,
+              "cascade_sl_market": 356,
+              "cascade_sl_normal": 13,
+              "meta_mdd_mtm": 15.85,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 356,
+              "meta_cascade_market_fills": 356,
+              "meta_cascade_avg_gap_pct": 0.9428
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 4260,
+              "wr": 56.6,
+              "pnl": 104.24,
+              "mdd": 8.52,
+              "pnl_mdd": 12.23,
+              "avg_trade": 0.024,
+              "rr": 0.886,
+              "cascade_sl_market": 1693,
+              "cascade_sl_normal": 76,
+              "meta_mdd_mtm": 8.69,
+              "meta_cascade_events": 11,
+              "meta_cascade_positions_closed": 1693,
+              "meta_cascade_market_fills": 1693,
+              "meta_cascade_avg_gap_pct": 0.9424
+            },
+            "oos": {
+              "trades": 1293,
+              "wr": 54.2,
+              "pnl": 35.45,
+              "mdd": 12.82,
+              "pnl_mdd": 2.76,
+              "avg_trade": 0.027,
+              "rr": 0.984,
+              "cascade_sl_market": 545,
+              "cascade_sl_normal": 38,
+              "meta_mdd_mtm": 13.1,
+              "meta_cascade_events": 8,
+              "meta_cascade_positions_closed": 545,
+              "meta_cascade_market_fills": 545,
+              "meta_cascade_avg_gap_pct": 0.9291
+            }
+          }
+        ],
+        "oos_total_pnl": 108.58,
+        "oos_avg_wr": 55.8,
+        "oos_min_pnl": 7.02,
+        "oos_pnls": [
+          9.38,
+          17.31,
+          39.42,
+          7.02,
+          35.45
+        ]
+      },
+      "is_full": {
+        "trades": 5548,
+        "wr": 56.0,
+        "pnl": 139.98,
+        "mdd": 8.52,
+        "pnl_mdd": 16.42,
+        "avg_trade": 0.025,
+        "rr": 0.908,
+        "cascade_sl_market": 2240,
+        "cascade_sl_normal": 114,
+        "meta_mdd_mtm": 8.69,
+        "meta_cascade_events": 19,
+        "meta_cascade_positions_closed": 2240,
+        "meta_cascade_market_fills": 2240,
+        "meta_cascade_avg_gap_pct": 0.9385
+      },
+      "config": {
+        "preemptive_loss_pct": 2.0,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    }
+  },
+  "part2_dircap_x_preemptive": {
+    "DC3_PRE0.3": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1092,
+              "wr": 29.1,
+              "pnl": 16.86,
+              "mdd": 3.98,
+              "pnl_mdd": 4.23,
+              "avg_trade": 0.015,
+              "rr": 2.867,
+              "cascade_sl_market": 539,
+              "cascade_sl_normal": 232,
+              "meta_mdd_mtm": 3.89,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 539,
+              "meta_cascade_market_fills": 539,
+              "meta_cascade_avg_gap_pct": 0.2408
+            },
+            "oos": {
+              "trades": 938,
+              "wr": 27.1,
+              "pnl": -0.58,
+              "mdd": 5.73,
+              "pnl_mdd": -0.1,
+              "avg_trade": -0.001,
+              "rr": 2.674,
+              "cascade_sl_market": 514,
+              "cascade_sl_normal": 167,
+              "meta_mdd_mtm": 6.22,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 514,
+              "meta_cascade_market_fills": 514,
+              "meta_cascade_avg_gap_pct": 0.2245
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2025,
+              "wr": 28.1,
+              "pnl": 15.86,
+              "mdd": 7.42,
+              "pnl_mdd": 2.14,
+              "avg_trade": 0.008,
+              "rr": 2.786,
+              "cascade_sl_market": 1053,
+              "cascade_sl_normal": 400,
+              "meta_mdd_mtm": 7.5,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1053,
+              "meta_cascade_market_fills": 1053,
+              "meta_cascade_avg_gap_pct": 0.2325
+            },
+            "oos": {
+              "trades": 950,
+              "wr": 30.1,
+              "pnl": 13.33,
+              "mdd": 2.81,
+              "pnl_mdd": 4.74,
+              "avg_trade": 0.014,
+              "rr": 2.694,
+              "cascade_sl_market": 480,
+              "cascade_sl_normal": 178,
+              "meta_mdd_mtm": 2.92,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 480,
+              "meta_cascade_market_fills": 480,
+              "meta_cascade_avg_gap_pct": 0.2258
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2968,
+              "wr": 28.7,
+              "pnl": 28.59,
+              "mdd": 7.42,
+              "pnl_mdd": 3.85,
+              "avg_trade": 0.01,
+              "rr": 2.755,
+              "cascade_sl_market": 1533,
+              "cascade_sl_normal": 577,
+              "meta_mdd_mtm": 7.5,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1533,
+              "meta_cascade_market_fills": 1533,
+              "meta_cascade_avg_gap_pct": 0.2304
+            },
+            "oos": {
+              "trades": 1305,
+              "wr": 30.0,
+              "pnl": 19.4,
+              "mdd": 5.04,
+              "pnl_mdd": 3.85,
+              "avg_trade": 0.015,
+              "rr": 2.69,
+              "cascade_sl_market": 621,
+              "cascade_sl_normal": 288,
+              "meta_mdd_mtm": 4.73,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 621,
+              "meta_cascade_market_fills": 621,
+              "meta_cascade_avg_gap_pct": 0.2967
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 4272,
+              "wr": 29.1,
+              "pnl": 48.45,
+              "mdd": 7.42,
+              "pnl_mdd": 6.53,
+              "avg_trade": 0.011,
+              "rr": 2.739,
+              "cascade_sl_market": 2154,
+              "cascade_sl_normal": 865,
+              "meta_mdd_mtm": 7.5,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 2154,
+              "meta_cascade_market_fills": 2154,
+              "meta_cascade_avg_gap_pct": 0.2494
+            },
+            "oos": {
+              "trades": 997,
+              "wr": 29.4,
+              "pnl": 17.9,
+              "mdd": 2.42,
+              "pnl_mdd": 7.39,
+              "avg_trade": 0.018,
+              "rr": 2.916,
+              "cascade_sl_market": 470,
+              "cascade_sl_normal": 231,
+              "meta_mdd_mtm": 2.39,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 470,
+              "meta_cascade_market_fills": 470,
+              "meta_cascade_avg_gap_pct": 0.236
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 5270,
+              "wr": 29.1,
+              "pnl": 66.16,
+              "mdd": 7.42,
+              "pnl_mdd": 8.92,
+              "avg_trade": 0.013,
+              "rr": 2.773,
+              "cascade_sl_market": 2627,
+              "cascade_sl_normal": 1097,
+              "meta_mdd_mtm": 7.5,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 2627,
+              "meta_cascade_market_fills": 2627,
+              "meta_cascade_avg_gap_pct": 0.2467
+            },
+            "oos": {
+              "trades": 1476,
+              "wr": 32.0,
+              "pnl": 44.68,
+              "mdd": 3.84,
+              "pnl_mdd": 11.64,
+              "avg_trade": 0.03,
+              "rr": 2.83,
+              "cascade_sl_market": 634,
+              "cascade_sl_normal": 366,
+              "meta_mdd_mtm": 3.7,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 634,
+              "meta_cascade_market_fills": 634,
+              "meta_cascade_avg_gap_pct": 0.3026
+            }
+          }
+        ],
+        "oos_total_pnl": 94.73,
+        "oos_avg_wr": 29.7,
+        "oos_min_pnl": -0.58,
+        "oos_pnls": [
+          -0.58,
+          13.33,
+          19.4,
+          17.9,
+          44.68
+        ]
+      },
+      "is_full": {
+        "trades": 6743,
+        "wr": 29.8,
+        "pnl": 110.49,
+        "mdd": 7.42,
+        "pnl_mdd": 14.89,
+        "avg_trade": 0.016,
+        "rr": 2.791,
+        "cascade_sl_market": 3263,
+        "cascade_sl_normal": 1463,
+        "meta_mdd_mtm": 7.5,
+        "meta_cascade_events": 6,
+        "meta_cascade_positions_closed": 3263,
+        "meta_cascade_market_fills": 3263,
+        "meta_cascade_avg_gap_pct": 0.2576
+      },
+      "config": {
+        "preemptive_loss_pct": 0.3,
+        "direction_cap": 3,
+        "cascade": true
+      }
+    },
+    "DC3_PRE0.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 896,
+              "wr": 37.8,
+              "pnl": 18.42,
+              "mdd": 3.59,
+              "pnl_mdd": 5.14,
+              "avg_trade": 0.021,
+              "rr": 1.955,
+              "cascade_sl_market": 496,
+              "cascade_sl_normal": 58,
+              "meta_mdd_mtm": 3.17,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 496,
+              "meta_cascade_market_fills": 496,
+              "meta_cascade_avg_gap_pct": 0.3616
+            },
+            "oos": {
+              "trades": 732,
+              "wr": 36.5,
+              "pnl": 5.87,
+              "mdd": 3.33,
+              "pnl_mdd": 1.76,
+              "avg_trade": 0.008,
+              "rr": 1.87,
+              "cascade_sl_market": 419,
+              "cascade_sl_normal": 43,
+              "meta_mdd_mtm": 2.91,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 419,
+              "meta_cascade_market_fills": 419,
+              "meta_cascade_avg_gap_pct": 0.3478
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1625,
+              "wr": 37.1,
+              "pnl": 23.74,
+              "mdd": 3.59,
+              "pnl_mdd": 6.62,
+              "avg_trade": 0.015,
+              "rr": 1.923,
+              "cascade_sl_market": 915,
+              "cascade_sl_normal": 101,
+              "meta_mdd_mtm": 3.17,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 915,
+              "meta_cascade_market_fills": 915,
+              "meta_cascade_avg_gap_pct": 0.3552
+            },
+            "oos": {
+              "trades": 771,
+              "wr": 38.5,
+              "pnl": 12.6,
+              "mdd": 2.63,
+              "pnl_mdd": 4.78,
+              "avg_trade": 0.016,
+              "rr": 1.833,
+              "cascade_sl_market": 426,
+              "cascade_sl_normal": 41,
+              "meta_mdd_mtm": 2.42,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 426,
+              "meta_cascade_market_fills": 426,
+              "meta_cascade_avg_gap_pct": 0.3641
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2390,
+              "wr": 37.6,
+              "pnl": 36.37,
+              "mdd": 3.59,
+              "pnl_mdd": 10.14,
+              "avg_trade": 0.015,
+              "rr": 1.893,
+              "cascade_sl_market": 1341,
+              "cascade_sl_normal": 141,
+              "meta_mdd_mtm": 3.17,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 1341,
+              "meta_cascade_market_fills": 1341,
+              "meta_cascade_avg_gap_pct": 0.3575
+            },
+            "oos": {
+              "trades": 1093,
+              "wr": 38.1,
+              "pnl": 34.92,
+              "mdd": 5.16,
+              "pnl_mdd": 6.76,
+              "avg_trade": 0.032,
+              "rr": 2.103,
+              "cascade_sl_market": 547,
+              "cascade_sl_normal": 129,
+              "meta_mdd_mtm": 4.78,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 547,
+              "meta_cascade_market_fills": 547,
+              "meta_cascade_avg_gap_pct": 0.4
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 3480,
+              "wr": 37.8,
+              "pnl": 71.98,
+              "mdd": 3.8,
+              "pnl_mdd": 18.94,
+              "avg_trade": 0.021,
+              "rr": 1.961,
+              "cascade_sl_market": 1890,
+              "cascade_sl_normal": 268,
+              "meta_mdd_mtm": 3.52,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1890,
+              "meta_cascade_market_fills": 1890,
+              "meta_cascade_avg_gap_pct": 0.3692
+            },
+            "oos": {
+              "trades": 849,
+              "wr": 37.7,
+              "pnl": 17.14,
+              "mdd": 3.32,
+              "pnl_mdd": 5.16,
+              "avg_trade": 0.02,
+              "rr": 1.966,
+              "cascade_sl_market": 448,
+              "cascade_sl_normal": 77,
+              "meta_mdd_mtm": 3.34,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 448,
+              "meta_cascade_market_fills": 448,
+              "meta_cascade_avg_gap_pct": 0.3714
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 4329,
+              "wr": 37.7,
+              "pnl": 88.8,
+              "mdd": 3.8,
+              "pnl_mdd": 23.36,
+              "avg_trade": 0.021,
+              "rr": 1.963,
+              "cascade_sl_market": 2339,
+              "cascade_sl_normal": 345,
+              "meta_mdd_mtm": 3.52,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2339,
+              "meta_cascade_market_fills": 2339,
+              "meta_cascade_avg_gap_pct": 0.3695
+            },
+            "oos": {
+              "trades": 1311,
+              "wr": 38.1,
+              "pnl": 45.46,
+              "mdd": 2.63,
+              "pnl_mdd": 17.26,
+              "avg_trade": 0.035,
+              "rr": 2.152,
+              "cascade_sl_market": 634,
+              "cascade_sl_normal": 173,
+              "meta_mdd_mtm": 2.6,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 634,
+              "meta_cascade_market_fills": 634,
+              "meta_cascade_avg_gap_pct": 0.3884
+            }
+          }
+        ],
+        "oos_total_pnl": 115.99,
+        "oos_avg_wr": 37.8,
+        "oos_min_pnl": 5.87,
+        "oos_pnls": [
+          5.87,
+          12.6,
+          34.92,
+          17.14,
+          45.46
+        ]
+      },
+      "is_full": {
+        "trades": 5637,
+        "wr": 37.8,
+        "pnl": 135.29,
+        "mdd": 3.8,
+        "pnl_mdd": 35.6,
+        "avg_trade": 0.024,
+        "rr": 2.006,
+        "cascade_sl_market": 2972,
+        "cascade_sl_normal": 518,
+        "meta_mdd_mtm": 3.52,
+        "meta_cascade_events": 6,
+        "meta_cascade_positions_closed": 2972,
+        "meta_cascade_market_fills": 2972,
+        "meta_cascade_avg_gap_pct": 0.3737
+      },
+      "config": {
+        "preemptive_loss_pct": 0.5,
+        "direction_cap": 3,
+        "cascade": true
+      }
+    },
+    "DC3_PRE1.0": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 640,
+              "wr": 53.3,
+              "pnl": 17.01,
+              "mdd": 3.53,
+              "pnl_mdd": 4.82,
+              "avg_trade": 0.027,
+              "rr": 1.036,
+              "cascade_sl_market": 289,
+              "cascade_sl_normal": 4,
+              "meta_mdd_mtm": 3.27,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 289,
+              "meta_cascade_market_fills": 289,
+              "meta_cascade_avg_gap_pct": 0.7651
+            },
+            "oos": {
+              "trades": 505,
+              "wr": 52.5,
+              "pnl": 4.53,
+              "mdd": 3.59,
+              "pnl_mdd": 1.26,
+              "avg_trade": 0.009,
+              "rr": 0.96,
+              "cascade_sl_market": 233,
+              "cascade_sl_normal": 1,
+              "meta_mdd_mtm": 3.26,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 233,
+              "meta_cascade_market_fills": 233,
+              "meta_cascade_avg_gap_pct": 0.7608
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1141,
+              "wr": 52.9,
+              "pnl": 21.02,
+              "mdd": 3.53,
+              "pnl_mdd": 5.96,
+              "avg_trade": 0.018,
+              "rr": 0.999,
+              "cascade_sl_market": 522,
+              "cascade_sl_normal": 5,
+              "meta_mdd_mtm": 3.27,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 522,
+              "meta_cascade_market_fills": 522,
+              "meta_cascade_avg_gap_pct": 0.7628
+            },
+            "oos": {
+              "trades": 525,
+              "wr": 55.0,
+              "pnl": 16.38,
+              "mdd": 2.6,
+              "pnl_mdd": 6.3,
+              "avg_trade": 0.031,
+              "rr": 0.998,
+              "cascade_sl_market": 212,
+              "cascade_sl_normal": 3,
+              "meta_mdd_mtm": 3.47,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 212,
+              "meta_cascade_market_fills": 212,
+              "meta_cascade_avg_gap_pct": 0.7666
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 1658,
+              "wr": 53.7,
+              "pnl": 38.38,
+              "mdd": 3.53,
+              "pnl_mdd": 10.88,
+              "avg_trade": 0.023,
+              "rr": 0.997,
+              "cascade_sl_market": 732,
+              "cascade_sl_normal": 7,
+              "meta_mdd_mtm": 3.27,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 732,
+              "meta_cascade_market_fills": 732,
+              "meta_cascade_avg_gap_pct": 0.7628
+            },
+            "oos": {
+              "trades": 818,
+              "wr": 53.3,
+              "pnl": 32.66,
+              "mdd": 3.9,
+              "pnl_mdd": 8.37,
+              "avg_trade": 0.04,
+              "rr": 1.105,
+              "cascade_sl_market": 368,
+              "cascade_sl_normal": 9,
+              "meta_mdd_mtm": 4.06,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 368,
+              "meta_cascade_market_fills": 368,
+              "meta_cascade_avg_gap_pct": 0.7984
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 2472,
+              "wr": 53.6,
+              "pnl": 71.17,
+              "mdd": 3.53,
+              "pnl_mdd": 20.18,
+              "avg_trade": 0.029,
+              "rr": 1.032,
+              "cascade_sl_market": 1099,
+              "cascade_sl_normal": 17,
+              "meta_mdd_mtm": 3.27,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 1099,
+              "meta_cascade_market_fills": 1099,
+              "meta_cascade_avg_gap_pct": 0.7746
+            },
+            "oos": {
+              "trades": 612,
+              "wr": 52.8,
+              "pnl": 19.62,
+              "mdd": 4.31,
+              "pnl_mdd": 4.56,
+              "avg_trade": 0.032,
+              "rr": 1.098,
+              "cascade_sl_market": 269,
+              "cascade_sl_normal": 7,
+              "meta_mdd_mtm": 3.86,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 269,
+              "meta_cascade_market_fills": 269,
+              "meta_cascade_avg_gap_pct": 0.7377
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 3080,
+              "wr": 53.5,
+              "pnl": 91.46,
+              "mdd": 3.53,
+              "pnl_mdd": 25.93,
+              "avg_trade": 0.03,
+              "rr": 1.045,
+              "cascade_sl_market": 1368,
+              "cascade_sl_normal": 24,
+              "meta_mdd_mtm": 3.27,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 1368,
+              "meta_cascade_market_fills": 1368,
+              "meta_cascade_avg_gap_pct": 0.7672
+            },
+            "oos": {
+              "trades": 1008,
+              "wr": 52.3,
+              "pnl": 49.24,
+              "mdd": 2.33,
+              "pnl_mdd": 21.17,
+              "avg_trade": 0.049,
+              "rr": 1.227,
+              "cascade_sl_market": 449,
+              "cascade_sl_normal": 29,
+              "meta_mdd_mtm": 2.33,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 449,
+              "meta_cascade_market_fills": 449,
+              "meta_cascade_avg_gap_pct": 0.7223
+            }
+          }
+        ],
+        "oos_total_pnl": 122.43,
+        "oos_avg_wr": 53.2,
+        "oos_min_pnl": 4.53,
+        "oos_pnls": [
+          4.53,
+          16.38,
+          32.66,
+          19.62,
+          49.24
+        ]
+      },
+      "is_full": {
+        "trades": 4086,
+        "wr": 53.2,
+        "pnl": 140.41,
+        "mdd": 3.53,
+        "pnl_mdd": 39.81,
+        "avg_trade": 0.034,
+        "rr": 1.087,
+        "cascade_sl_market": 1820,
+        "cascade_sl_normal": 53,
+        "meta_mdd_mtm": 3.27,
+        "meta_cascade_events": 5,
+        "meta_cascade_positions_closed": 1820,
+        "meta_cascade_market_fills": 1820,
+        "meta_cascade_avg_gap_pct": 0.7561
+      },
+      "config": {
+        "preemptive_loss_pct": 1.0,
+        "direction_cap": 3,
+        "cascade": true
+      }
+    },
+    "DC3_PRE1.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 487,
+              "wr": 62.0,
+              "pnl": 9.08,
+              "mdd": 6.24,
+              "pnl_mdd": 1.46,
+              "avg_trade": 0.019,
+              "rr": 0.68,
+              "cascade_sl_market": 165,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 6.45,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 165,
+              "meta_cascade_market_fills": 165,
+              "meta_cascade_avg_gap_pct": 1.2262
+            },
+            "oos": {
+              "trades": 408,
+              "wr": 62.5,
+              "pnl": 3.82,
+              "mdd": 4.23,
+              "pnl_mdd": 0.9,
+              "avg_trade": 0.009,
+              "rr": 0.633,
+              "cascade_sl_market": 134,
+              "cascade_sl_normal": 1,
+              "meta_mdd_mtm": 4.29,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 134,
+              "meta_cascade_market_fills": 134,
+              "meta_cascade_avg_gap_pct": 1.2438
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 890,
+              "wr": 62.2,
+              "pnl": 12.15,
+              "mdd": 6.24,
+              "pnl_mdd": 1.95,
+              "avg_trade": 0.014,
+              "rr": 0.655,
+              "cascade_sl_market": 299,
+              "cascade_sl_normal": 1,
+              "meta_mdd_mtm": 6.45,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 299,
+              "meta_cascade_market_fills": 299,
+              "meta_cascade_avg_gap_pct": 1.2341
+            },
+            "oos": {
+              "trades": 469,
+              "wr": 62.0,
+              "pnl": 6.4,
+              "mdd": 4.63,
+              "pnl_mdd": 1.38,
+              "avg_trade": 0.014,
+              "rr": 0.659,
+              "cascade_sl_market": 155,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 4.91,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 155,
+              "meta_cascade_market_fills": 155,
+              "meta_cascade_avg_gap_pct": 1.2494
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 1352,
+              "wr": 62.2,
+              "pnl": 19.24,
+              "mdd": 6.24,
+              "pnl_mdd": 3.09,
+              "avg_trade": 0.014,
+              "rr": 0.658,
+              "cascade_sl_market": 453,
+              "cascade_sl_normal": 2,
+              "meta_mdd_mtm": 6.45,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 453,
+              "meta_cascade_market_fills": 453,
+              "meta_cascade_avg_gap_pct": 1.2333
+            },
+            "oos": {
+              "trades": 673,
+              "wr": 60.6,
+              "pnl": 18.35,
+              "mdd": 3.89,
+              "pnl_mdd": 4.72,
+              "avg_trade": 0.027,
+              "rr": 0.744,
+              "cascade_sl_market": 254,
+              "cascade_sl_normal": 4,
+              "meta_mdd_mtm": 3.64,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 254,
+              "meta_cascade_market_fills": 254,
+              "meta_cascade_avg_gap_pct": 1.2564
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 2024,
+              "wr": 61.8,
+              "pnl": 39.19,
+              "mdd": 6.24,
+              "pnl_mdd": 6.28,
+              "avg_trade": 0.019,
+              "rr": 0.687,
+              "cascade_sl_market": 708,
+              "cascade_sl_normal": 6,
+              "meta_mdd_mtm": 6.45,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 708,
+              "meta_cascade_market_fills": 708,
+              "meta_cascade_avg_gap_pct": 1.2399
+            },
+            "oos": {
+              "trades": 524,
+              "wr": 60.3,
+              "pnl": 11.02,
+              "mdd": 4.55,
+              "pnl_mdd": 2.42,
+              "avg_trade": 0.021,
+              "rr": 0.738,
+              "cascade_sl_market": 192,
+              "cascade_sl_normal": 0,
+              "meta_mdd_mtm": 4.05,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 192,
+              "meta_cascade_market_fills": 192,
+              "meta_cascade_avg_gap_pct": 1.1746
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 2545,
+              "wr": 61.5,
+              "pnl": 51.35,
+              "mdd": 6.24,
+              "pnl_mdd": 8.23,
+              "avg_trade": 0.02,
+              "rr": 0.697,
+              "cascade_sl_market": 900,
+              "cascade_sl_normal": 6,
+              "meta_mdd_mtm": 6.45,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 900,
+              "meta_cascade_market_fills": 900,
+              "meta_cascade_avg_gap_pct": 1.2255
+            },
+            "oos": {
+              "trades": 847,
+              "wr": 58.3,
+              "pnl": 15.01,
+              "mdd": 7.3,
+              "pnl_mdd": 2.06,
+              "avg_trade": 0.018,
+              "rr": 0.781,
+              "cascade_sl_market": 339,
+              "cascade_sl_normal": 6,
+              "meta_mdd_mtm": 7.3,
+              "meta_cascade_events": 7,
+              "meta_cascade_positions_closed": 339,
+              "meta_cascade_market_fills": 339,
+              "meta_cascade_avg_gap_pct": 1.1795
+            }
+          }
+        ],
+        "oos_total_pnl": 54.6,
+        "oos_avg_wr": 60.7,
+        "oos_min_pnl": 3.82,
+        "oos_pnls": [
+          3.82,
+          6.4,
+          18.35,
+          11.02,
+          15.01
+        ]
+      },
+      "is_full": {
+        "trades": 3387,
+        "wr": 60.8,
+        "pnl": 66.87,
+        "mdd": 6.24,
+        "pnl_mdd": 10.72,
+        "avg_trade": 0.02,
+        "rr": 0.716,
+        "cascade_sl_market": 1239,
+        "cascade_sl_normal": 12,
+        "meta_mdd_mtm": 6.45,
+        "meta_cascade_events": 11,
+        "meta_cascade_positions_closed": 1239,
+        "meta_cascade_market_fills": 1239,
+        "meta_cascade_avg_gap_pct": 1.2132
+      },
+      "config": {
+        "preemptive_loss_pct": 1.5,
+        "direction_cap": 3,
+        "cascade": true
+      }
+    },
+    "DC4_PRE0.3": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1418,
+              "wr": 26.9,
+              "pnl": 23.08,
+              "mdd": 4.07,
+              "pnl_mdd": 5.67,
+              "avg_trade": 0.016,
+              "rr": 3.29,
+              "cascade_sl_market": 624,
+              "cascade_sl_normal": 409,
+              "meta_mdd_mtm": 4.08,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 624,
+              "meta_cascade_market_fills": 624,
+              "meta_cascade_avg_gap_pct": 0.2
+            },
+            "oos": {
+              "trades": 1274,
+              "wr": 23.0,
+              "pnl": -11.57,
+              "mdd": 13.39,
+              "pnl_mdd": -0.86,
+              "avg_trade": -0.009,
+              "rr": 2.993,
+              "cascade_sl_market": 667,
+              "cascade_sl_normal": 310,
+              "meta_mdd_mtm": 13.42,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 667,
+              "meta_cascade_market_fills": 667,
+              "meta_cascade_avg_gap_pct": 0.196
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2690,
+              "wr": 24.9,
+              "pnl": 10.67,
+              "mdd": 14.43,
+              "pnl_mdd": 0.74,
+              "avg_trade": 0.004,
+              "rr": 3.155,
+              "cascade_sl_market": 1294,
+              "cascade_sl_normal": 721,
+              "meta_mdd_mtm": 14.27,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1294,
+              "meta_cascade_market_fills": 1294,
+              "meta_cascade_avg_gap_pct": 0.1974
+            },
+            "oos": {
+              "trades": 1242,
+              "wr": 26.1,
+              "pnl": 6.51,
+              "mdd": 4.11,
+              "pnl_mdd": 1.58,
+              "avg_trade": 0.005,
+              "rr": 3.013,
+              "cascade_sl_market": 610,
+              "cascade_sl_normal": 303,
+              "meta_mdd_mtm": 4.72,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 610,
+              "meta_cascade_market_fills": 610,
+              "meta_cascade_avg_gap_pct": 0.192
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 3923,
+              "wr": 25.2,
+              "pnl": 16.35,
+              "mdd": 15.79,
+              "pnl_mdd": 1.04,
+              "avg_trade": 0.004,
+              "rr": 3.113,
+              "cascade_sl_market": 1902,
+              "cascade_sl_normal": 1026,
+              "meta_mdd_mtm": 15.46,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1902,
+              "meta_cascade_market_fills": 1902,
+              "meta_cascade_avg_gap_pct": 0.1958
+            },
+            "oos": {
+              "trades": 1571,
+              "wr": 26.6,
+              "pnl": 14.46,
+              "mdd": 6.83,
+              "pnl_mdd": 2.12,
+              "avg_trade": 0.009,
+              "rr": 3.039,
+              "cascade_sl_market": 706,
+              "cascade_sl_normal": 445,
+              "meta_mdd_mtm": 6.52,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 706,
+              "meta_cascade_market_fills": 706,
+              "meta_cascade_avg_gap_pct": 0.2654
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 5493,
+              "wr": 25.6,
+              "pnl": 31.14,
+              "mdd": 15.79,
+              "pnl_mdd": 1.97,
+              "avg_trade": 0.006,
+              "rr": 3.096,
+              "cascade_sl_market": 2608,
+              "cascade_sl_normal": 1471,
+              "meta_mdd_mtm": 15.46,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 2608,
+              "meta_cascade_market_fills": 2608,
+              "meta_cascade_avg_gap_pct": 0.2147
+            },
+            "oos": {
+              "trades": 1303,
+              "wr": 26.2,
+              "pnl": 15.98,
+              "mdd": 2.9,
+              "pnl_mdd": 5.5,
+              "avg_trade": 0.012,
+              "rr": 3.255,
+              "cascade_sl_market": 589,
+              "cascade_sl_normal": 370,
+              "meta_mdd_mtm": 3.03,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 589,
+              "meta_cascade_market_fills": 589,
+              "meta_cascade_avg_gap_pct": 0.2024
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 6797,
+              "wr": 25.7,
+              "pnl": 46.8,
+              "mdd": 15.79,
+              "pnl_mdd": 2.96,
+              "avg_trade": 0.007,
+              "rr": 3.126,
+              "cascade_sl_market": 3199,
+              "cascade_sl_normal": 1841,
+              "meta_mdd_mtm": 15.46,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 3199,
+              "meta_cascade_market_fills": 3199,
+              "meta_cascade_avg_gap_pct": 0.2123
+            },
+            "oos": {
+              "trades": 1745,
+              "wr": 29.1,
+              "pnl": 39.83,
+              "mdd": 4.68,
+              "pnl_mdd": 8.5,
+              "avg_trade": 0.023,
+              "rr": 3.077,
+              "cascade_sl_market": 700,
+              "cascade_sl_normal": 533,
+              "meta_mdd_mtm": 4.53,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 700,
+              "meta_cascade_market_fills": 700,
+              "meta_cascade_avg_gap_pct": 0.2769
+            }
+          }
+        ],
+        "oos_total_pnl": 65.21,
+        "oos_avg_wr": 26.2,
+        "oos_min_pnl": -11.57,
+        "oos_pnls": [
+          -11.57,
+          6.51,
+          14.46,
+          15.98,
+          39.83
+        ]
+      },
+      "is_full": {
+        "trades": 8539,
+        "wr": 26.4,
+        "pnl": 86.5,
+        "mdd": 15.79,
+        "pnl_mdd": 5.48,
+        "avg_trade": 0.01,
+        "rr": 3.124,
+        "cascade_sl_market": 3901,
+        "cascade_sl_normal": 2374,
+        "meta_mdd_mtm": 15.46,
+        "meta_cascade_events": 7,
+        "meta_cascade_positions_closed": 3901,
+        "meta_cascade_market_fills": 3901,
+        "meta_cascade_avg_gap_pct": 0.2239
+      },
+      "config": {
+        "preemptive_loss_pct": 0.3,
+        "direction_cap": 4,
+        "cascade": true
+      }
+    },
+    "DC4_PRE0.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1212,
+              "wr": 32.8,
+              "pnl": 15.55,
+              "mdd": 4.82,
+              "pnl_mdd": 3.22,
+              "avg_trade": 0.013,
+              "rr": 2.317,
+              "cascade_sl_market": 658,
+              "cascade_sl_normal": 153,
+              "meta_mdd_mtm": 4.16,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 658,
+              "meta_cascade_market_fills": 658,
+              "meta_cascade_avg_gap_pct": 0.3033
+            },
+            "oos": {
+              "trades": 1030,
+              "wr": 31.5,
+              "pnl": 1.0,
+              "mdd": 7.6,
+              "pnl_mdd": 0.13,
+              "avg_trade": 0.001,
+              "rr": 2.2,
+              "cascade_sl_market": 578,
+              "cascade_sl_normal": 125,
+              "meta_mdd_mtm": 7.61,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 578,
+              "meta_cascade_market_fills": 578,
+              "meta_cascade_avg_gap_pct": 0.2897
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2236,
+              "wr": 32.1,
+              "pnl": 15.98,
+              "mdd": 6.88,
+              "pnl_mdd": 2.32,
+              "avg_trade": 0.007,
+              "rr": 2.27,
+              "cascade_sl_market": 1240,
+              "cascade_sl_normal": 276,
+              "meta_mdd_mtm": 6.66,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1240,
+              "meta_cascade_market_fills": 1240,
+              "meta_cascade_avg_gap_pct": 0.2956
+            },
+            "oos": {
+              "trades": 1056,
+              "wr": 33.9,
+              "pnl": 15.42,
+              "mdd": 5.25,
+              "pnl_mdd": 2.94,
+              "avg_trade": 0.015,
+              "rr": 2.243,
+              "cascade_sl_market": 560,
+              "cascade_sl_normal": 130,
+              "meta_mdd_mtm": 5.24,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 560,
+              "meta_cascade_market_fills": 560,
+              "meta_cascade_avg_gap_pct": 0.2923
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 3285,
+              "wr": 32.6,
+              "pnl": 31.15,
+              "mdd": 6.88,
+              "pnl_mdd": 4.52,
+              "avg_trade": 0.009,
+              "rr": 2.262,
+              "cascade_sl_market": 1800,
+              "cascade_sl_normal": 405,
+              "meta_mdd_mtm": 6.66,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 1800,
+              "meta_cascade_market_fills": 1800,
+              "meta_cascade_avg_gap_pct": 0.2946
+            },
+            "oos": {
+              "trades": 1367,
+              "wr": 35.8,
+              "pnl": 43.04,
+              "mdd": 6.93,
+              "pnl_mdd": 6.21,
+              "avg_trade": 0.031,
+              "rr": 2.35,
+              "cascade_sl_market": 657,
+              "cascade_sl_normal": 216,
+              "meta_mdd_mtm": 6.75,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 657,
+              "meta_cascade_market_fills": 657,
+              "meta_cascade_avg_gap_pct": 0.3528
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 4650,
+              "wr": 33.6,
+              "pnl": 73.81,
+              "mdd": 6.88,
+              "pnl_mdd": 10.72,
+              "avg_trade": 0.016,
+              "rr": 2.292,
+              "cascade_sl_market": 2459,
+              "cascade_sl_normal": 620,
+              "meta_mdd_mtm": 6.66,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2459,
+              "meta_cascade_market_fills": 2459,
+              "meta_cascade_avg_gap_pct": 0.311
+            },
+            "oos": {
+              "trades": 1109,
+              "wr": 33.6,
+              "pnl": 19.21,
+              "mdd": 4.32,
+              "pnl_mdd": 4.45,
+              "avg_trade": 0.017,
+              "rr": 2.325,
+              "cascade_sl_market": 562,
+              "cascade_sl_normal": 171,
+              "meta_mdd_mtm": 4.3,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 562,
+              "meta_cascade_market_fills": 562,
+              "meta_cascade_avg_gap_pct": 0.3133
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 5759,
+              "wr": 33.6,
+              "pnl": 94.19,
+              "mdd": 6.88,
+              "pnl_mdd": 13.68,
+              "avg_trade": 0.016,
+              "rr": 2.299,
+              "cascade_sl_market": 3022,
+              "cascade_sl_normal": 791,
+              "meta_mdd_mtm": 6.66,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 3022,
+              "meta_cascade_market_fills": 3022,
+              "meta_cascade_avg_gap_pct": 0.3114
+            },
+            "oos": {
+              "trades": 1592,
+              "wr": 35.9,
+              "pnl": 57.84,
+              "mdd": 2.68,
+              "pnl_mdd": 21.61,
+              "avg_trade": 0.036,
+              "rr": 2.454,
+              "cascade_sl_market": 720,
+              "cascade_sl_normal": 296,
+              "meta_mdd_mtm": 2.71,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 720,
+              "meta_cascade_market_fills": 720,
+              "meta_cascade_avg_gap_pct": 0.3443
+            }
+          }
+        ],
+        "oos_total_pnl": 136.51,
+        "oos_avg_wr": 34.1,
+        "oos_min_pnl": 1.0,
+        "oos_pnls": [
+          1.0,
+          15.42,
+          43.04,
+          19.21,
+          57.84
+        ]
+      },
+      "is_full": {
+        "trades": 7348,
+        "wr": 34.1,
+        "pnl": 151.73,
+        "mdd": 6.88,
+        "pnl_mdd": 22.04,
+        "avg_trade": 0.021,
+        "rr": 2.336,
+        "cascade_sl_market": 3744,
+        "cascade_sl_normal": 1087,
+        "meta_mdd_mtm": 6.66,
+        "meta_cascade_events": 6,
+        "meta_cascade_positions_closed": 3744,
+        "meta_cascade_market_fills": 3744,
+        "meta_cascade_avg_gap_pct": 0.3179
+      },
+      "config": {
+        "preemptive_loss_pct": 0.5,
+        "direction_cap": 4,
+        "cascade": true
+      }
+    },
+    "DC4_PRE1.0": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 907,
+              "wr": 48.0,
+              "pnl": 24.44,
+              "mdd": 3.43,
+              "pnl_mdd": 7.13,
+              "avg_trade": 0.027,
+              "rr": 1.311,
+              "cascade_sl_market": 454,
+              "cascade_sl_normal": 11,
+              "meta_mdd_mtm": 3.18,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 454,
+              "meta_cascade_market_fills": 454,
+              "meta_cascade_avg_gap_pct": 0.5657
+            },
+            "oos": {
+              "trades": 733,
+              "wr": 46.5,
+              "pnl": 6.84,
+              "mdd": 3.27,
+              "pnl_mdd": 2.09,
+              "avg_trade": 0.009,
+              "rr": 1.229,
+              "cascade_sl_market": 379,
+              "cascade_sl_normal": 10,
+              "meta_mdd_mtm": 3.16,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 379,
+              "meta_cascade_market_fills": 379,
+              "meta_cascade_avg_gap_pct": 0.5756
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1636,
+              "wr": 47.2,
+              "pnl": 29.67,
+              "mdd": 3.62,
+              "pnl_mdd": 8.2,
+              "avg_trade": 0.018,
+              "rr": 1.269,
+              "cascade_sl_market": 836,
+              "cascade_sl_normal": 21,
+              "meta_mdd_mtm": 3.34,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 836,
+              "meta_cascade_market_fills": 836,
+              "meta_cascade_avg_gap_pct": 0.5721
+            },
+            "oos": {
+              "trades": 775,
+              "wr": 47.9,
+              "pnl": 17.44,
+              "mdd": 3.53,
+              "pnl_mdd": 4.94,
+              "avg_trade": 0.023,
+              "rr": 1.28,
+              "cascade_sl_market": 374,
+              "cascade_sl_normal": 14,
+              "meta_mdd_mtm": 3.79,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 374,
+              "meta_cascade_market_fills": 374,
+              "meta_cascade_avg_gap_pct": 0.5552
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2404,
+              "wr": 47.5,
+              "pnl": 47.12,
+              "mdd": 3.62,
+              "pnl_mdd": 13.02,
+              "avg_trade": 0.02,
+              "rr": 1.272,
+              "cascade_sl_market": 1210,
+              "cascade_sl_normal": 34,
+              "meta_mdd_mtm": 3.34,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1210,
+              "meta_cascade_market_fills": 1210,
+              "meta_cascade_avg_gap_pct": 0.5667
+            },
+            "oos": {
+              "trades": 1094,
+              "wr": 48.5,
+              "pnl": 47.52,
+              "mdd": 4.9,
+              "pnl_mdd": 9.71,
+              "avg_trade": 0.043,
+              "rr": 1.407,
+              "cascade_sl_market": 509,
+              "cascade_sl_normal": 48,
+              "meta_mdd_mtm": 4.82,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 509,
+              "meta_cascade_market_fills": 509,
+              "meta_cascade_avg_gap_pct": 0.6229
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 3498,
+              "wr": 47.8,
+              "pnl": 94.53,
+              "mdd": 3.73,
+              "pnl_mdd": 25.34,
+              "avg_trade": 0.027,
+              "rr": 1.316,
+              "cascade_sl_market": 1722,
+              "cascade_sl_normal": 83,
+              "meta_mdd_mtm": 3.68,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 1722,
+              "meta_cascade_market_fills": 1722,
+              "meta_cascade_avg_gap_pct": 0.5836
+            },
+            "oos": {
+              "trades": 836,
+              "wr": 47.6,
+              "pnl": 28.26,
+              "mdd": 2.53,
+              "pnl_mdd": 11.17,
+              "avg_trade": 0.034,
+              "rr": 1.401,
+              "cascade_sl_market": 400,
+              "cascade_sl_normal": 25,
+              "meta_mdd_mtm": 2.51,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 400,
+              "meta_cascade_market_fills": 400,
+              "meta_cascade_avg_gap_pct": 0.5548
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 4337,
+              "wr": 47.7,
+              "pnl": 122.07,
+              "mdd": 3.73,
+              "pnl_mdd": 32.73,
+              "avg_trade": 0.028,
+              "rr": 1.333,
+              "cascade_sl_market": 2129,
+              "cascade_sl_normal": 109,
+              "meta_mdd_mtm": 3.68,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2129,
+              "meta_cascade_market_fills": 2129,
+              "meta_cascade_avg_gap_pct": 0.578
+            },
+            "oos": {
+              "trades": 1322,
+              "wr": 46.6,
+              "pnl": 51.54,
+              "mdd": 4.14,
+              "pnl_mdd": 12.46,
+              "avg_trade": 0.039,
+              "rr": 1.488,
+              "cascade_sl_market": 648,
+              "cascade_sl_normal": 56,
+              "meta_mdd_mtm": 4.21,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 648,
+              "meta_cascade_market_fills": 648,
+              "meta_cascade_avg_gap_pct": 0.5752
+            }
+          }
+        ],
+        "oos_total_pnl": 151.6,
+        "oos_avg_wr": 47.4,
+        "oos_min_pnl": 6.84,
+        "oos_pnls": [
+          6.84,
+          17.44,
+          47.52,
+          28.26,
+          51.54
+        ]
+      },
+      "is_full": {
+        "trades": 5657,
+        "wr": 47.4,
+        "pnl": 173.75,
+        "mdd": 3.73,
+        "pnl_mdd": 46.58,
+        "avg_trade": 0.031,
+        "rr": 1.368,
+        "cascade_sl_market": 2781,
+        "cascade_sl_normal": 165,
+        "meta_mdd_mtm": 3.68,
+        "meta_cascade_events": 4,
+        "meta_cascade_positions_closed": 2781,
+        "meta_cascade_market_fills": 2781,
+        "meta_cascade_avg_gap_pct": 0.5771
+      },
+      "config": {
+        "preemptive_loss_pct": 1.0,
+        "direction_cap": 4,
+        "cascade": true
+      }
+    },
+    "DC4_PRE1.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 709,
+              "wr": 56.6,
+              "pnl": 17.11,
+              "mdd": 5.72,
+              "pnl_mdd": 2.99,
+              "avg_trade": 0.024,
+              "rr": 0.888,
+              "cascade_sl_market": 294,
+              "cascade_sl_normal": 2,
+              "meta_mdd_mtm": 5.36,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 294,
+              "meta_cascade_market_fills": 294,
+              "meta_cascade_avg_gap_pct": 0.8916
+            },
+            "oos": {
+              "trades": 613,
+              "wr": 56.4,
+              "pnl": 7.11,
+              "mdd": 3.56,
+              "pnl_mdd": 2.0,
+              "avg_trade": 0.012,
+              "rr": 0.828,
+              "cascade_sl_market": 254,
+              "cascade_sl_normal": 2,
+              "meta_mdd_mtm": 3.96,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 254,
+              "meta_cascade_market_fills": 254,
+              "meta_cascade_avg_gap_pct": 0.909
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1312,
+              "wr": 56.6,
+              "pnl": 23.86,
+              "mdd": 5.72,
+              "pnl_mdd": 4.17,
+              "avg_trade": 0.018,
+              "rr": 0.855,
+              "cascade_sl_market": 544,
+              "cascade_sl_normal": 4,
+              "meta_mdd_mtm": 5.36,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 544,
+              "meta_cascade_market_fills": 544,
+              "meta_cascade_avg_gap_pct": 0.8994
+            },
+            "oos": {
+              "trades": 629,
+              "wr": 57.9,
+              "pnl": 13.42,
+              "mdd": 5.28,
+              "pnl_mdd": 2.54,
+              "avg_trade": 0.021,
+              "rr": 0.83,
+              "cascade_sl_market": 240,
+              "cascade_sl_normal": 2,
+              "meta_mdd_mtm": 5.95,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 240,
+              "meta_cascade_market_fills": 240,
+              "meta_cascade_avg_gap_pct": 0.9232
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 1931,
+              "wr": 57.2,
+              "pnl": 39.92,
+              "mdd": 5.72,
+              "pnl_mdd": 6.98,
+              "avg_trade": 0.021,
+              "rr": 0.85,
+              "cascade_sl_market": 779,
+              "cascade_sl_normal": 8,
+              "meta_mdd_mtm": 5.36,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 779,
+              "meta_cascade_market_fills": 779,
+              "meta_cascade_avg_gap_pct": 0.9037
+            },
+            "oos": {
+              "trades": 971,
+              "wr": 55.2,
+              "pnl": 37.04,
+              "mdd": 4.51,
+              "pnl_mdd": 8.21,
+              "avg_trade": 0.038,
+              "rr": 1.004,
+              "cascade_sl_market": 408,
+              "cascade_sl_normal": 21,
+              "meta_mdd_mtm": 4.13,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 408,
+              "meta_cascade_market_fills": 408,
+              "meta_cascade_avg_gap_pct": 0.9212
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 2901,
+              "wr": 56.5,
+              "pnl": 77.14,
+              "mdd": 5.72,
+              "pnl_mdd": 13.48,
+              "avg_trade": 0.027,
+              "rr": 0.9,
+              "cascade_sl_market": 1187,
+              "cascade_sl_normal": 29,
+              "meta_mdd_mtm": 5.36,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 1187,
+              "meta_cascade_market_fills": 1187,
+              "meta_cascade_avg_gap_pct": 0.9098
+            },
+            "oos": {
+              "trades": 737,
+              "wr": 55.5,
+              "pnl": 18.88,
+              "mdd": 5.38,
+              "pnl_mdd": 3.51,
+              "avg_trade": 0.026,
+              "rr": 0.938,
+              "cascade_sl_market": 306,
+              "cascade_sl_normal": 3,
+              "meta_mdd_mtm": 5.06,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 306,
+              "meta_cascade_market_fills": 306,
+              "meta_cascade_avg_gap_pct": 0.8628
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 3633,
+              "wr": 56.4,
+              "pnl": 96.68,
+              "mdd": 5.72,
+              "pnl_mdd": 16.9,
+              "avg_trade": 0.027,
+              "rr": 0.906,
+              "cascade_sl_market": 1493,
+              "cascade_sl_normal": 32,
+              "meta_mdd_mtm": 5.36,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 1493,
+              "meta_cascade_market_fills": 1493,
+              "meta_cascade_avg_gap_pct": 0.9006
+            },
+            "oos": {
+              "trades": 1139,
+              "wr": 53.4,
+              "pnl": 23.97,
+              "mdd": 8.43,
+              "pnl_mdd": 2.84,
+              "avg_trade": 0.021,
+              "rr": 0.982,
+              "cascade_sl_market": 504,
+              "cascade_sl_normal": 18,
+              "meta_mdd_mtm": 8.27,
+              "meta_cascade_events": 8,
+              "meta_cascade_positions_closed": 504,
+              "meta_cascade_market_fills": 504,
+              "meta_cascade_avg_gap_pct": 0.9025
+            }
+          }
+        ],
+        "oos_total_pnl": 100.42,
+        "oos_avg_wr": 55.7,
+        "oos_min_pnl": 7.11,
+        "oos_pnls": [
+          7.11,
+          13.42,
+          37.04,
+          18.88,
+          23.97
+        ]
+      },
+      "is_full": {
+        "trades": 4770,
+        "wr": 55.7,
+        "pnl": 120.12,
+        "mdd": 5.72,
+        "pnl_mdd": 21.0,
+        "avg_trade": 0.025,
+        "rr": 0.923,
+        "cascade_sl_market": 2001,
+        "cascade_sl_normal": 50,
+        "meta_mdd_mtm": 5.36,
+        "meta_cascade_events": 11,
+        "meta_cascade_positions_closed": 2001,
+        "meta_cascade_market_fills": 2001,
+        "meta_cascade_avg_gap_pct": 0.9011
+      },
+      "config": {
+        "preemptive_loss_pct": 1.5,
+        "direction_cap": 4,
+        "cascade": true
+      }
+    },
+    "DC5_PRE0.3": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1595,
+              "wr": 26.1,
+              "pnl": 23.53,
+              "mdd": 4.56,
+              "pnl_mdd": 5.16,
+              "avg_trade": 0.015,
+              "rr": 3.382,
+              "cascade_sl_market": 675,
+              "cascade_sl_normal": 499,
+              "meta_mdd_mtm": 4.0,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 675,
+              "meta_cascade_market_fills": 675,
+              "meta_cascade_avg_gap_pct": 0.1925
+            },
+            "oos": {
+              "trades": 1454,
+              "wr": 22.5,
+              "pnl": -10.09,
+              "mdd": 12.28,
+              "pnl_mdd": -0.82,
+              "avg_trade": -0.007,
+              "rr": 3.154,
+              "cascade_sl_market": 704,
+              "cascade_sl_normal": 419,
+              "meta_mdd_mtm": 12.08,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 704,
+              "meta_cascade_market_fills": 704,
+              "meta_cascade_avg_gap_pct": 0.1857
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 3042,
+              "wr": 24.3,
+              "pnl": 12.97,
+              "mdd": 13.12,
+              "pnl_mdd": 0.99,
+              "avg_trade": 0.004,
+              "rr": 3.279,
+              "cascade_sl_market": 1383,
+              "cascade_sl_normal": 915,
+              "meta_mdd_mtm": 12.96,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1383,
+              "meta_cascade_market_fills": 1383,
+              "meta_cascade_avg_gap_pct": 0.1878
+            },
+            "oos": {
+              "trades": 1401,
+              "wr": 25.3,
+              "pnl": 9.1,
+              "mdd": 4.22,
+              "pnl_mdd": 2.16,
+              "avg_trade": 0.006,
+              "rr": 3.2,
+              "cascade_sl_market": 632,
+              "cascade_sl_normal": 413,
+              "meta_mdd_mtm": 4.06,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 632,
+              "meta_cascade_market_fills": 632,
+              "meta_cascade_avg_gap_pct": 0.1896
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 4434,
+              "wr": 24.5,
+              "pnl": 21.05,
+              "mdd": 15.39,
+              "pnl_mdd": 1.37,
+              "avg_trade": 0.005,
+              "rr": 3.26,
+              "cascade_sl_market": 2014,
+              "cascade_sl_normal": 1330,
+              "meta_mdd_mtm": 15.12,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 2014,
+              "meta_cascade_market_fills": 2014,
+              "meta_cascade_avg_gap_pct": 0.1885
+            },
+            "oos": {
+              "trades": 1742,
+              "wr": 25.4,
+              "pnl": 13.6,
+              "mdd": 7.63,
+              "pnl_mdd": 1.78,
+              "avg_trade": 0.008,
+              "rr": 3.194,
+              "cascade_sl_market": 748,
+              "cascade_sl_normal": 549,
+              "meta_mdd_mtm": 7.32,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 748,
+              "meta_cascade_market_fills": 748,
+              "meta_cascade_avg_gap_pct": 0.2532
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 6175,
+              "wr": 24.8,
+              "pnl": 35.1,
+              "mdd": 15.39,
+              "pnl_mdd": 2.28,
+              "avg_trade": 0.006,
+              "rr": 3.245,
+              "cascade_sl_market": 2762,
+              "cascade_sl_normal": 1879,
+              "meta_mdd_mtm": 15.12,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2762,
+              "meta_cascade_market_fills": 2762,
+              "meta_cascade_avg_gap_pct": 0.2059
+            },
+            "oos": {
+              "trades": 1445,
+              "wr": 25.3,
+              "pnl": 15.56,
+              "mdd": 3.98,
+              "pnl_mdd": 3.91,
+              "avg_trade": 0.011,
+              "rr": 3.356,
+              "cascade_sl_market": 612,
+              "cascade_sl_normal": 463,
+              "meta_mdd_mtm": 4.02,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 612,
+              "meta_cascade_market_fills": 612,
+              "meta_cascade_avg_gap_pct": 0.1934
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 7620,
+              "wr": 24.9,
+              "pnl": 50.54,
+              "mdd": 15.39,
+              "pnl_mdd": 3.28,
+              "avg_trade": 0.007,
+              "rr": 3.267,
+              "cascade_sl_market": 3374,
+              "cascade_sl_normal": 2343,
+              "meta_mdd_mtm": 15.12,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 3374,
+              "meta_cascade_market_fills": 3374,
+              "meta_cascade_avg_gap_pct": 0.2035
+            },
+            "oos": {
+              "trades": 1902,
+              "wr": 28.1,
+              "pnl": 38.95,
+              "mdd": 4.88,
+              "pnl_mdd": 7.98,
+              "avg_trade": 0.02,
+              "rr": 3.178,
+              "cascade_sl_market": 741,
+              "cascade_sl_normal": 623,
+              "meta_mdd_mtm": 4.72,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 741,
+              "meta_cascade_market_fills": 741,
+              "meta_cascade_avg_gap_pct": 0.2699
+            }
+          }
+        ],
+        "oos_total_pnl": 67.12,
+        "oos_avg_wr": 25.3,
+        "oos_min_pnl": -10.09,
+        "oos_pnls": [
+          -10.09,
+          9.1,
+          13.6,
+          15.56,
+          38.95
+        ]
+      },
+      "is_full": {
+        "trades": 9520,
+        "wr": 25.5,
+        "pnl": 89.87,
+        "mdd": 15.39,
+        "pnl_mdd": 5.84,
+        "avg_trade": 0.009,
+        "rr": 3.257,
+        "cascade_sl_market": 4115,
+        "cascade_sl_normal": 2968,
+        "meta_mdd_mtm": 15.12,
+        "meta_cascade_events": 7,
+        "meta_cascade_positions_closed": 4115,
+        "meta_cascade_market_fills": 4115,
+        "meta_cascade_avg_gap_pct": 0.2155
+      },
+      "config": {
+        "preemptive_loss_pct": 0.3,
+        "direction_cap": 5,
+        "cascade": true
+      }
+    },
+    "DC5_PRE0.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1395,
+              "wr": 31.5,
+              "pnl": 22.91,
+              "mdd": 4.44,
+              "pnl_mdd": 5.16,
+              "avg_trade": 0.016,
+              "rr": 2.564,
+              "cascade_sl_market": 718,
+              "cascade_sl_normal": 235,
+              "meta_mdd_mtm": 4.58,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 718,
+              "meta_cascade_market_fills": 718,
+              "meta_cascade_avg_gap_pct": 0.2737
+            },
+            "oos": {
+              "trades": 1232,
+              "wr": 28.4,
+              "pnl": -5.36,
+              "mdd": 9.23,
+              "pnl_mdd": -0.58,
+              "avg_trade": -0.004,
+              "rr": 2.405,
+              "cascade_sl_market": 689,
+              "cascade_sl_normal": 189,
+              "meta_mdd_mtm": 9.16,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 689,
+              "meta_cascade_market_fills": 689,
+              "meta_cascade_avg_gap_pct": 0.2562
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2622,
+              "wr": 29.9,
+              "pnl": 16.58,
+              "mdd": 11.75,
+              "pnl_mdd": 1.41,
+              "avg_trade": 0.006,
+              "rr": 2.502,
+              "cascade_sl_market": 1410,
+              "cascade_sl_normal": 424,
+              "meta_mdd_mtm": 11.43,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1410,
+              "meta_cascade_market_fills": 1410,
+              "meta_cascade_avg_gap_pct": 0.2644
+            },
+            "oos": {
+              "trades": 1235,
+              "wr": 31.3,
+              "pnl": 11.37,
+              "mdd": 5.39,
+              "pnl_mdd": 2.11,
+              "avg_trade": 0.009,
+              "rr": 2.405,
+              "cascade_sl_market": 648,
+              "cascade_sl_normal": 193,
+              "meta_mdd_mtm": 5.13,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 648,
+              "meta_cascade_market_fills": 648,
+              "meta_cascade_avg_gap_pct": 0.2667
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 3847,
+              "wr": 30.3,
+              "pnl": 27.53,
+              "mdd": 11.99,
+              "pnl_mdd": 2.3,
+              "avg_trade": 0.007,
+              "rr": 2.474,
+              "cascade_sl_market": 2056,
+              "cascade_sl_normal": 618,
+              "meta_mdd_mtm": 12.05,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2056,
+              "meta_cascade_market_fills": 2056,
+              "meta_cascade_avg_gap_pct": 0.2653
+            },
+            "oos": {
+              "trades": 1552,
+              "wr": 34.2,
+              "pnl": 47.28,
+              "mdd": 9.18,
+              "pnl_mdd": 5.15,
+              "avg_trade": 0.03,
+              "rr": 2.536,
+              "cascade_sl_market": 721,
+              "cascade_sl_normal": 296,
+              "meta_mdd_mtm": 9.0,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 721,
+              "meta_cascade_market_fills": 721,
+              "meta_cascade_avg_gap_pct": 0.3267
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 5398,
+              "wr": 31.4,
+              "pnl": 75.14,
+              "mdd": 11.99,
+              "pnl_mdd": 6.27,
+              "avg_trade": 0.014,
+              "rr": 2.501,
+              "cascade_sl_market": 2777,
+              "cascade_sl_normal": 914,
+              "meta_mdd_mtm": 12.05,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2777,
+              "meta_cascade_market_fills": 2777,
+              "meta_cascade_avg_gap_pct": 0.2813
+            },
+            "oos": {
+              "trades": 1287,
+              "wr": 31.6,
+              "pnl": 19.99,
+              "mdd": 6.39,
+              "pnl_mdd": 3.13,
+              "avg_trade": 0.016,
+              "rr": 2.526,
+              "cascade_sl_market": 644,
+              "cascade_sl_normal": 233,
+              "meta_mdd_mtm": 6.26,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 644,
+              "meta_cascade_market_fills": 644,
+              "meta_cascade_avg_gap_pct": 0.2797
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 6685,
+              "wr": 31.5,
+              "pnl": 96.29,
+              "mdd": 11.99,
+              "pnl_mdd": 8.03,
+              "avg_trade": 0.014,
+              "rr": 2.507,
+              "cascade_sl_market": 3422,
+              "cascade_sl_normal": 1147,
+              "meta_mdd_mtm": 12.05,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 3422,
+              "meta_cascade_market_fills": 3422,
+              "meta_cascade_avg_gap_pct": 0.281
+            },
+            "oos": {
+              "trades": 1771,
+              "wr": 34.3,
+              "pnl": 57.15,
+              "mdd": 3.38,
+              "pnl_mdd": 16.93,
+              "avg_trade": 0.032,
+              "rr": 2.567,
+              "cascade_sl_market": 789,
+              "cascade_sl_normal": 370,
+              "meta_mdd_mtm": 3.23,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 789,
+              "meta_cascade_market_fills": 789,
+              "meta_cascade_avg_gap_pct": 0.3286
+            }
+          }
+        ],
+        "oos_total_pnl": 130.43,
+        "oos_avg_wr": 32.0,
+        "oos_min_pnl": -5.36,
+        "oos_pnls": [
+          -5.36,
+          11.37,
+          47.28,
+          19.99,
+          57.15
+        ]
+      },
+      "is_full": {
+        "trades": 8454,
+        "wr": 32.1,
+        "pnl": 152.96,
+        "mdd": 11.99,
+        "pnl_mdd": 12.76,
+        "avg_trade": 0.018,
+        "rr": 2.524,
+        "cascade_sl_market": 4214,
+        "cascade_sl_normal": 1517,
+        "meta_mdd_mtm": 12.05,
+        "meta_cascade_events": 7,
+        "meta_cascade_positions_closed": 4214,
+        "meta_cascade_market_fills": 4214,
+        "meta_cascade_avg_gap_pct": 0.2901
+      },
+      "config": {
+        "preemptive_loss_pct": 0.5,
+        "direction_cap": 5,
+        "cascade": true
+      }
+    },
+    "DC5_PRE1.0": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1090,
+              "wr": 45.0,
+              "pnl": 29.24,
+              "mdd": 3.59,
+              "pnl_mdd": 8.15,
+              "avg_trade": 0.027,
+              "rr": 1.49,
+              "cascade_sl_market": 557,
+              "cascade_sl_normal": 32,
+              "meta_mdd_mtm": 3.6,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 557,
+              "meta_cascade_market_fills": 557,
+              "meta_cascade_avg_gap_pct": 0.4968
+            },
+            "oos": {
+              "trades": 885,
+              "wr": 43.7,
+              "pnl": 11.2,
+              "mdd": 5.23,
+              "pnl_mdd": 2.14,
+              "avg_trade": 0.013,
+              "rr": 1.419,
+              "cascade_sl_market": 469,
+              "cascade_sl_normal": 25,
+              "meta_mdd_mtm": 4.64,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 469,
+              "meta_cascade_market_fills": 469,
+              "meta_cascade_avg_gap_pct": 0.4874
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1966,
+              "wr": 44.5,
+              "pnl": 40.02,
+              "mdd": 4.15,
+              "pnl_mdd": 9.64,
+              "avg_trade": 0.02,
+              "rr": 1.454,
+              "cascade_sl_market": 1025,
+              "cascade_sl_normal": 57,
+              "meta_mdd_mtm": 3.69,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1025,
+              "meta_cascade_market_fills": 1025,
+              "meta_cascade_avg_gap_pct": 0.4932
+            },
+            "oos": {
+              "trades": 938,
+              "wr": 43.7,
+              "pnl": 13.4,
+              "mdd": 4.23,
+              "pnl_mdd": 3.17,
+              "avg_trade": 0.014,
+              "rr": 1.435,
+              "cascade_sl_market": 492,
+              "cascade_sl_normal": 28,
+              "meta_mdd_mtm": 4.09,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 492,
+              "meta_cascade_market_fills": 492,
+              "meta_cascade_avg_gap_pct": 0.4836
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2896,
+              "wr": 44.3,
+              "pnl": 53.36,
+              "mdd": 4.66,
+              "pnl_mdd": 11.44,
+              "avg_trade": 0.018,
+              "rr": 1.447,
+              "cascade_sl_market": 1517,
+              "cascade_sl_normal": 84,
+              "meta_mdd_mtm": 4.52,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1517,
+              "meta_cascade_market_fills": 1517,
+              "meta_cascade_avg_gap_pct": 0.4901
+            },
+            "oos": {
+              "trades": 1265,
+              "wr": 45.9,
+              "pnl": 55.15,
+              "mdd": 5.44,
+              "pnl_mdd": 10.14,
+              "avg_trade": 0.044,
+              "rr": 1.596,
+              "cascade_sl_market": 602,
+              "cascade_sl_normal": 80,
+              "meta_mdd_mtm": 5.44,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 602,
+              "meta_cascade_market_fills": 602,
+              "meta_cascade_avg_gap_pct": 0.5395
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 4161,
+              "wr": 44.8,
+              "pnl": 108.69,
+              "mdd": 4.66,
+              "pnl_mdd": 23.3,
+              "avg_trade": 0.026,
+              "rr": 1.495,
+              "cascade_sl_market": 2120,
+              "cascade_sl_normal": 164,
+              "meta_mdd_mtm": 4.52,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2120,
+              "meta_cascade_market_fills": 2120,
+              "meta_cascade_avg_gap_pct": 0.5042
+            },
+            "oos": {
+              "trades": 991,
+              "wr": 44.3,
+              "pnl": 31.31,
+              "mdd": 3.57,
+              "pnl_mdd": 8.77,
+              "avg_trade": 0.032,
+              "rr": 1.6,
+              "cascade_sl_market": 492,
+              "cascade_sl_normal": 50,
+              "meta_mdd_mtm": 3.5,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 492,
+              "meta_cascade_market_fills": 492,
+              "meta_cascade_avg_gap_pct": 0.4746
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 5155,
+              "wr": 44.6,
+              "pnl": 139.23,
+              "mdd": 4.66,
+              "pnl_mdd": 29.85,
+              "avg_trade": 0.027,
+              "rr": 1.515,
+              "cascade_sl_market": 2615,
+              "cascade_sl_normal": 215,
+              "meta_mdd_mtm": 4.52,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2615,
+              "meta_cascade_market_fills": 2615,
+              "meta_cascade_avg_gap_pct": 0.4986
+            },
+            "oos": {
+              "trades": 1507,
+              "wr": 44.5,
+              "pnl": 59.04,
+              "mdd": 3.73,
+              "pnl_mdd": 15.82,
+              "avg_trade": 0.039,
+              "rr": 1.642,
+              "cascade_sl_market": 730,
+              "cascade_sl_normal": 104,
+              "meta_mdd_mtm": 4.67,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 730,
+              "meta_cascade_market_fills": 730,
+              "meta_cascade_avg_gap_pct": 0.5282
+            }
+          }
+        ],
+        "oos_total_pnl": 170.1,
+        "oos_avg_wr": 44.4,
+        "oos_min_pnl": 11.2,
+        "oos_pnls": [
+          11.2,
+          13.4,
+          55.15,
+          31.31,
+          59.04
+        ]
+      },
+      "is_full": {
+        "trades": 6660,
+        "wr": 44.6,
+        "pnl": 198.45,
+        "mdd": 4.66,
+        "pnl_mdd": 42.55,
+        "avg_trade": 0.03,
+        "rr": 1.544,
+        "cascade_sl_market": 3349,
+        "cascade_sl_normal": 319,
+        "meta_mdd_mtm": 4.52,
+        "meta_cascade_events": 4,
+        "meta_cascade_positions_closed": 3349,
+        "meta_cascade_market_fills": 3349,
+        "meta_cascade_avg_gap_pct": 0.505
+      },
+      "config": {
+        "preemptive_loss_pct": 1.0,
+        "direction_cap": 5,
+        "cascade": true
+      }
+    },
+    "DC5_PRE1.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 877,
+              "wr": 52.5,
+              "pnl": 21.27,
+              "mdd": 6.21,
+              "pnl_mdd": 3.43,
+              "avg_trade": 0.024,
+              "rr": 1.06,
+              "cascade_sl_market": 393,
+              "cascade_sl_normal": 13,
+              "meta_mdd_mtm": 5.93,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 393,
+              "meta_cascade_market_fills": 393,
+              "meta_cascade_avg_gap_pct": 0.7426
+            },
+            "oos": {
+              "trades": 759,
+              "wr": 52.3,
+              "pnl": 9.14,
+              "mdd": 5.86,
+              "pnl_mdd": 1.56,
+              "avg_trade": 0.012,
+              "rr": 0.987,
+              "cascade_sl_market": 347,
+              "cascade_sl_normal": 11,
+              "meta_mdd_mtm": 5.76,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 347,
+              "meta_cascade_market_fills": 347,
+              "meta_cascade_avg_gap_pct": 0.7569
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1625,
+              "wr": 52.5,
+              "pnl": 30.04,
+              "mdd": 6.21,
+              "pnl_mdd": 4.84,
+              "avg_trade": 0.018,
+              "rr": 1.02,
+              "cascade_sl_market": 740,
+              "cascade_sl_normal": 24,
+              "meta_mdd_mtm": 5.93,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 740,
+              "meta_cascade_market_fills": 740,
+              "meta_cascade_avg_gap_pct": 0.7479
+            },
+            "oos": {
+              "trades": 774,
+              "wr": 52.7,
+              "pnl": 14.1,
+              "mdd": 5.46,
+              "pnl_mdd": 2.58,
+              "avg_trade": 0.018,
+              "rr": 1.011,
+              "cascade_sl_market": 329,
+              "cascade_sl_normal": 9,
+              "meta_mdd_mtm": 5.46,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 329,
+              "meta_cascade_market_fills": 329,
+              "meta_cascade_avg_gap_pct": 0.7491
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2391,
+              "wr": 52.6,
+              "pnl": 44.68,
+              "mdd": 6.21,
+              "pnl_mdd": 7.2,
+              "avg_trade": 0.019,
+              "rr": 1.017,
+              "cascade_sl_market": 1068,
+              "cascade_sl_normal": 33,
+              "meta_mdd_mtm": 5.93,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1068,
+              "meta_cascade_market_fills": 1068,
+              "meta_cascade_avg_gap_pct": 0.7475
+            },
+            "oos": {
+              "trades": 1116,
+              "wr": 53.7,
+              "pnl": 48.61,
+              "mdd": 7.06,
+              "pnl_mdd": 6.88,
+              "avg_trade": 0.044,
+              "rr": 1.116,
+              "cascade_sl_market": 483,
+              "cascade_sl_normal": 28,
+              "meta_mdd_mtm": 7.25,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 483,
+              "meta_cascade_market_fills": 483,
+              "meta_cascade_avg_gap_pct": 0.8095
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 3499,
+              "wr": 53.1,
+              "pnl": 94.48,
+              "mdd": 6.21,
+              "pnl_mdd": 15.23,
+              "avg_trade": 0.027,
+              "rr": 1.048,
+              "cascade_sl_market": 1546,
+              "cascade_sl_normal": 61,
+              "meta_mdd_mtm": 5.93,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1546,
+              "meta_cascade_market_fills": 1546,
+              "meta_cascade_avg_gap_pct": 0.768
+            },
+            "oos": {
+              "trades": 866,
+              "wr": 53.2,
+              "pnl": 27.94,
+              "mdd": 5.31,
+              "pnl_mdd": 5.26,
+              "avg_trade": 0.032,
+              "rr": 1.083,
+              "cascade_sl_market": 370,
+              "cascade_sl_normal": 15,
+              "meta_mdd_mtm": 4.42,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 370,
+              "meta_cascade_market_fills": 370,
+              "meta_cascade_avg_gap_pct": 0.7454
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 4360,
+              "wr": 53.2,
+              "pnl": 123.9,
+              "mdd": 6.21,
+              "pnl_mdd": 19.97,
+              "avg_trade": 0.028,
+              "rr": 1.054,
+              "cascade_sl_market": 1916,
+              "cascade_sl_normal": 76,
+              "meta_mdd_mtm": 5.93,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1916,
+              "meta_cascade_market_fills": 1916,
+              "meta_cascade_avg_gap_pct": 0.7634
+            },
+            "oos": {
+              "trades": 1339,
+              "wr": 51.8,
+              "pnl": 48.65,
+              "mdd": 6.72,
+              "pnl_mdd": 7.24,
+              "avg_trade": 0.036,
+              "rr": 1.154,
+              "cascade_sl_market": 598,
+              "cascade_sl_normal": 40,
+              "meta_mdd_mtm": 6.56,
+              "meta_cascade_events": 6,
+              "meta_cascade_positions_closed": 598,
+              "meta_cascade_market_fills": 598,
+              "meta_cascade_avg_gap_pct": 0.7676
+            }
+          }
+        ],
+        "oos_total_pnl": 148.44,
+        "oos_avg_wr": 52.7,
+        "oos_min_pnl": 9.14,
+        "oos_pnls": [
+          9.14,
+          14.1,
+          48.61,
+          27.94,
+          48.65
+        ]
+      },
+      "is_full": {
+        "trades": 5697,
+        "wr": 52.9,
+        "pnl": 171.89,
+        "mdd": 6.21,
+        "pnl_mdd": 27.7,
+        "avg_trade": 0.03,
+        "rr": 1.076,
+        "cascade_sl_market": 2518,
+        "cascade_sl_normal": 116,
+        "meta_mdd_mtm": 5.93,
+        "meta_cascade_events": 8,
+        "meta_cascade_positions_closed": 2518,
+        "meta_cascade_market_fills": 2518,
+        "meta_cascade_avg_gap_pct": 0.7646
+      },
+      "config": {
+        "preemptive_loss_pct": 1.5,
+        "direction_cap": 5,
+        "cascade": true
+      }
+    },
+    "DC6_PRE0.3": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1682,
+              "wr": 25.4,
+              "pnl": 22.15,
+              "mdd": 5.09,
+              "pnl_mdd": 4.35,
+              "avg_trade": 0.013,
+              "rr": 3.439,
+              "cascade_sl_market": 695,
+              "cascade_sl_normal": 553,
+              "meta_mdd_mtm": 4.39,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 695,
+              "meta_cascade_market_fills": 695,
+              "meta_cascade_avg_gap_pct": 0.1898
+            },
+            "oos": {
+              "trades": 1541,
+              "wr": 21.7,
+              "pnl": -12.88,
+              "mdd": 16.02,
+              "pnl_mdd": -0.8,
+              "avg_trade": -0.008,
+              "rr": 3.228,
+              "cascade_sl_market": 730,
+              "cascade_sl_normal": 472,
+              "meta_mdd_mtm": 16.44,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 730,
+              "meta_cascade_market_fills": 730,
+              "meta_cascade_avg_gap_pct": 0.181
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 3212,
+              "wr": 23.7,
+              "pnl": 9.11,
+              "mdd": 15.72,
+              "pnl_mdd": 0.58,
+              "avg_trade": 0.003,
+              "rr": 3.338,
+              "cascade_sl_market": 1427,
+              "cascade_sl_normal": 1020,
+              "meta_mdd_mtm": 15.59,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1427,
+              "meta_cascade_market_fills": 1427,
+              "meta_cascade_avg_gap_pct": 0.1849
+            },
+            "oos": {
+              "trades": 1492,
+              "wr": 24.4,
+              "pnl": 5.26,
+              "mdd": 5.73,
+              "pnl_mdd": 0.92,
+              "avg_trade": 0.004,
+              "rr": 3.237,
+              "cascade_sl_market": 646,
+              "cascade_sl_normal": 480,
+              "meta_mdd_mtm": 5.54,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 646,
+              "meta_cascade_market_fills": 646,
+              "meta_cascade_avg_gap_pct": 0.1914
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 4696,
+              "wr": 23.8,
+              "pnl": 13.27,
+              "mdd": 18.76,
+              "pnl_mdd": 0.71,
+              "avg_trade": 0.003,
+              "rr": 3.312,
+              "cascade_sl_market": 2071,
+              "cascade_sl_normal": 1504,
+              "meta_mdd_mtm": 18.62,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 2071,
+              "meta_cascade_market_fills": 2071,
+              "meta_cascade_avg_gap_pct": 0.1871
+            },
+            "oos": {
+              "trades": 1817,
+              "wr": 24.7,
+              "pnl": 10.12,
+              "mdd": 8.31,
+              "pnl_mdd": 1.22,
+              "avg_trade": 0.006,
+              "rr": 3.252,
+              "cascade_sl_market": 774,
+              "cascade_sl_normal": 593,
+              "meta_mdd_mtm": 8.73,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 774,
+              "meta_cascade_market_fills": 774,
+              "meta_cascade_avg_gap_pct": 0.2479
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 6513,
+              "wr": 24.1,
+              "pnl": 23.79,
+              "mdd": 18.76,
+              "pnl_mdd": 1.27,
+              "avg_trade": 0.004,
+              "rr": 3.299,
+              "cascade_sl_market": 2845,
+              "cascade_sl_normal": 2098,
+              "meta_mdd_mtm": 18.62,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2845,
+              "meta_cascade_market_fills": 2845,
+              "meta_cascade_avg_gap_pct": 0.2035
+            },
+            "oos": {
+              "trades": 1540,
+              "wr": 24.0,
+              "pnl": 10.9,
+              "mdd": 4.39,
+              "pnl_mdd": 2.49,
+              "avg_trade": 0.007,
+              "rr": 3.451,
+              "cascade_sl_market": 625,
+              "cascade_sl_normal": 541,
+              "meta_mdd_mtm": 4.2,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 625,
+              "meta_cascade_market_fills": 625,
+              "meta_cascade_avg_gap_pct": 0.1931
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 8053,
+              "wr": 24.0,
+              "pnl": 34.57,
+              "mdd": 18.76,
+              "pnl_mdd": 1.84,
+              "avg_trade": 0.004,
+              "rr": 3.329,
+              "cascade_sl_market": 3470,
+              "cascade_sl_normal": 2640,
+              "meta_mdd_mtm": 18.62,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 3470,
+              "meta_cascade_market_fills": 3470,
+              "meta_cascade_avg_gap_pct": 0.2015
+            },
+            "oos": {
+              "trades": 1966,
+              "wr": 27.7,
+              "pnl": 38.59,
+              "mdd": 5.71,
+              "pnl_mdd": 6.75,
+              "avg_trade": 0.02,
+              "rr": 3.222,
+              "cascade_sl_market": 751,
+              "cascade_sl_normal": 667,
+              "meta_mdd_mtm": 5.85,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 751,
+              "meta_cascade_market_fills": 751,
+              "meta_cascade_avg_gap_pct": 0.2677
+            }
+          }
+        ],
+        "oos_total_pnl": 51.99,
+        "oos_avg_wr": 24.5,
+        "oos_min_pnl": -12.88,
+        "oos_pnls": [
+          -12.88,
+          5.26,
+          10.12,
+          10.9,
+          38.59
+        ]
+      },
+      "is_full": {
+        "trades": 10017,
+        "wr": 24.7,
+        "pnl": 73.54,
+        "mdd": 18.76,
+        "pnl_mdd": 3.92,
+        "avg_trade": 0.007,
+        "rr": 3.316,
+        "cascade_sl_market": 4221,
+        "cascade_sl_normal": 3309,
+        "meta_mdd_mtm": 18.62,
+        "meta_cascade_events": 7,
+        "meta_cascade_positions_closed": 4221,
+        "meta_cascade_market_fills": 4221,
+        "meta_cascade_avg_gap_pct": 0.2134
+      },
+      "config": {
+        "preemptive_loss_pct": 0.3,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "DC6_PRE0.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1471,
+              "wr": 31.3,
+              "pnl": 27.34,
+              "mdd": 4.52,
+              "pnl_mdd": 6.05,
+              "avg_trade": 0.019,
+              "rr": 2.644,
+              "cascade_sl_market": 716,
+              "cascade_sl_normal": 290,
+              "meta_mdd_mtm": 4.77,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 716,
+              "meta_cascade_market_fills": 716,
+              "meta_cascade_avg_gap_pct": 0.2725
+            },
+            "oos": {
+              "trades": 1303,
+              "wr": 27.6,
+              "pnl": -8.42,
+              "mdd": 11.43,
+              "pnl_mdd": -0.74,
+              "avg_trade": -0.006,
+              "rr": 2.452,
+              "cascade_sl_market": 714,
+              "cascade_sl_normal": 226,
+              "meta_mdd_mtm": 12.71,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 714,
+              "meta_cascade_market_fills": 714,
+              "meta_cascade_avg_gap_pct": 0.2574
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2773,
+              "wr": 29.4,
+              "pnl": 17.75,
+              "mdd": 12.95,
+              "pnl_mdd": 1.37,
+              "avg_trade": 0.006,
+              "rr": 2.564,
+              "cascade_sl_market": 1439,
+              "cascade_sl_normal": 514,
+              "meta_mdd_mtm": 13.33,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1439,
+              "meta_cascade_market_fills": 1439,
+              "meta_cascade_avg_gap_pct": 0.2638
+            },
+            "oos": {
+              "trades": 1304,
+              "wr": 30.4,
+              "pnl": 14.36,
+              "mdd": 7.32,
+              "pnl_mdd": 1.96,
+              "avg_trade": 0.011,
+              "rr": 2.569,
+              "cascade_sl_market": 663,
+              "cascade_sl_normal": 243,
+              "meta_mdd_mtm": 7.47,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 663,
+              "meta_cascade_market_fills": 663,
+              "meta_cascade_avg_gap_pct": 0.2604
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 4068,
+              "wr": 29.6,
+              "pnl": 31.23,
+              "mdd": 16.8,
+              "pnl_mdd": 1.86,
+              "avg_trade": 0.008,
+              "rr": 2.57,
+              "cascade_sl_market": 2101,
+              "cascade_sl_normal": 759,
+              "meta_mdd_mtm": 16.74,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 2101,
+              "meta_cascade_market_fills": 2101,
+              "meta_cascade_avg_gap_pct": 0.2627
+            },
+            "oos": {
+              "trades": 1615,
+              "wr": 33.0,
+              "pnl": 45.29,
+              "mdd": 9.39,
+              "pnl_mdd": 4.83,
+              "avg_trade": 0.028,
+              "rr": 2.633,
+              "cascade_sl_market": 736,
+              "cascade_sl_normal": 342,
+              "meta_mdd_mtm": 9.2,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 736,
+              "meta_cascade_market_fills": 736,
+              "meta_cascade_avg_gap_pct": 0.3211
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 5683,
+              "wr": 30.6,
+              "pnl": 76.76,
+              "mdd": 16.8,
+              "pnl_mdd": 4.57,
+              "avg_trade": 0.014,
+              "rr": 2.597,
+              "cascade_sl_market": 2838,
+              "cascade_sl_normal": 1101,
+              "meta_mdd_mtm": 16.74,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2838,
+              "meta_cascade_market_fills": 2838,
+              "meta_cascade_avg_gap_pct": 0.2778
+            },
+            "oos": {
+              "trades": 1365,
+              "wr": 29.6,
+              "pnl": 16.41,
+              "mdd": 5.65,
+              "pnl_mdd": 2.9,
+              "avg_trade": 0.012,
+              "rr": 2.698,
+              "cascade_sl_market": 665,
+              "cascade_sl_normal": 292,
+              "meta_mdd_mtm": 5.73,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 665,
+              "meta_cascade_market_fills": 665,
+              "meta_cascade_avg_gap_pct": 0.2639
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 7048,
+              "wr": 30.4,
+              "pnl": 94.4,
+              "mdd": 16.8,
+              "pnl_mdd": 5.62,
+              "avg_trade": 0.013,
+              "rr": 2.617,
+              "cascade_sl_market": 3504,
+              "cascade_sl_normal": 1393,
+              "meta_mdd_mtm": 16.74,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 3504,
+              "meta_cascade_market_fills": 3504,
+              "meta_cascade_avg_gap_pct": 0.2751
+            },
+            "oos": {
+              "trades": 1845,
+              "wr": 33.6,
+              "pnl": 56.54,
+              "mdd": 3.62,
+              "pnl_mdd": 15.6,
+              "avg_trade": 0.031,
+              "rr": 2.627,
+              "cascade_sl_market": 816,
+              "cascade_sl_normal": 405,
+              "meta_mdd_mtm": 3.64,
+              "meta_cascade_events": 4,
+              "meta_cascade_positions_closed": 816,
+              "meta_cascade_market_fills": 816,
+              "meta_cascade_avg_gap_pct": 0.3196
+            }
+          }
+        ],
+        "oos_total_pnl": 124.18,
+        "oos_avg_wr": 30.8,
+        "oos_min_pnl": -8.42,
+        "oos_pnls": [
+          -8.42,
+          14.36,
+          45.29,
+          16.41,
+          56.54
+        ]
+      },
+      "is_full": {
+        "trades": 8891,
+        "wr": 31.1,
+        "pnl": 150.46,
+        "mdd": 16.8,
+        "pnl_mdd": 8.95,
+        "avg_trade": 0.017,
+        "rr": 2.624,
+        "cascade_sl_market": 4323,
+        "cascade_sl_normal": 1798,
+        "meta_mdd_mtm": 16.74,
+        "meta_cascade_events": 6,
+        "meta_cascade_positions_closed": 4323,
+        "meta_cascade_market_fills": 4323,
+        "meta_cascade_avg_gap_pct": 0.2837
+      },
+      "config": {
+        "preemptive_loss_pct": 0.5,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "DC6_PRE1.0": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 1179,
+              "wr": 41.9,
+              "pnl": 19.29,
+              "mdd": 5.93,
+              "pnl_mdd": 3.25,
+              "avg_trade": 0.016,
+              "rr": 1.571,
+              "cascade_sl_market": 620,
+              "cascade_sl_normal": 54,
+              "meta_mdd_mtm": 5.8,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 620,
+              "meta_cascade_market_fills": 620,
+              "meta_cascade_avg_gap_pct": 0.4812
+            },
+            "oos": {
+              "trades": 944,
+              "wr": 42.7,
+              "pnl": 12.5,
+              "mdd": 4.85,
+              "pnl_mdd": 2.58,
+              "avg_trade": 0.013,
+              "rr": 1.491,
+              "cascade_sl_market": 488,
+              "cascade_sl_normal": 49,
+              "meta_mdd_mtm": 4.38,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 488,
+              "meta_cascade_market_fills": 488,
+              "meta_cascade_avg_gap_pct": 0.475
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 2107,
+              "wr": 42.6,
+              "pnl": 35.05,
+              "mdd": 5.93,
+              "pnl_mdd": 5.91,
+              "avg_trade": 0.017,
+              "rr": 1.531,
+              "cascade_sl_market": 1100,
+              "cascade_sl_normal": 103,
+              "meta_mdd_mtm": 5.8,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 1100,
+              "meta_cascade_market_fills": 1100,
+              "meta_cascade_avg_gap_pct": 0.4767
+            },
+            "oos": {
+              "trades": 995,
+              "wr": 42.0,
+              "pnl": 12.5,
+              "mdd": 11.36,
+              "pnl_mdd": 1.1,
+              "avg_trade": 0.013,
+              "rr": 1.523,
+              "cascade_sl_market": 515,
+              "cascade_sl_normal": 52,
+              "meta_mdd_mtm": 10.69,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 515,
+              "meta_cascade_market_fills": 515,
+              "meta_cascade_avg_gap_pct": 0.4627
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 3093,
+              "wr": 42.4,
+              "pnl": 47.06,
+              "mdd": 9.07,
+              "pnl_mdd": 5.19,
+              "avg_trade": 0.015,
+              "rr": 1.529,
+              "cascade_sl_market": 1615,
+              "cascade_sl_normal": 155,
+              "meta_mdd_mtm": 8.88,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1615,
+              "meta_cascade_market_fills": 1615,
+              "meta_cascade_avg_gap_pct": 0.4723
+            },
+            "oos": {
+              "trades": 1354,
+              "wr": 43.9,
+              "pnl": 51.98,
+              "mdd": 6.59,
+              "pnl_mdd": 7.88,
+              "avg_trade": 0.038,
+              "rr": 1.683,
+              "cascade_sl_market": 648,
+              "cascade_sl_normal": 110,
+              "meta_mdd_mtm": 7.19,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 648,
+              "meta_cascade_market_fills": 648,
+              "meta_cascade_avg_gap_pct": 0.5231
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 4445,
+              "wr": 42.9,
+              "pnl": 99.38,
+              "mdd": 9.07,
+              "pnl_mdd": 10.96,
+              "avg_trade": 0.022,
+              "rr": 1.578,
+              "cascade_sl_market": 2263,
+              "cascade_sl_normal": 264,
+              "meta_mdd_mtm": 8.88,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2263,
+              "meta_cascade_market_fills": 2263,
+              "meta_cascade_avg_gap_pct": 0.4869
+            },
+            "oos": {
+              "trades": 1036,
+              "wr": 44.0,
+              "pnl": 36.68,
+              "mdd": 3.42,
+              "pnl_mdd": 10.73,
+              "avg_trade": 0.035,
+              "rr": 1.676,
+              "cascade_sl_market": 496,
+              "cascade_sl_normal": 74,
+              "meta_mdd_mtm": 3.37,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 496,
+              "meta_cascade_market_fills": 496,
+              "meta_cascade_avg_gap_pct": 0.4614
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 5486,
+              "wr": 43.0,
+              "pnl": 135.2,
+              "mdd": 9.07,
+              "pnl_mdd": 14.91,
+              "avg_trade": 0.025,
+              "rr": 1.598,
+              "cascade_sl_market": 2764,
+              "cascade_sl_normal": 340,
+              "meta_mdd_mtm": 8.88,
+              "meta_cascade_events": 3,
+              "meta_cascade_positions_closed": 2764,
+              "meta_cascade_market_fills": 2764,
+              "meta_cascade_avg_gap_pct": 0.4815
+            },
+            "oos": {
+              "trades": 1589,
+              "wr": 44.1,
+              "pnl": 67.03,
+              "mdd": 5.3,
+              "pnl_mdd": 12.66,
+              "avg_trade": 0.042,
+              "rr": 1.722,
+              "cascade_sl_market": 761,
+              "cascade_sl_normal": 126,
+              "meta_mdd_mtm": 5.48,
+              "meta_cascade_events": 1,
+              "meta_cascade_positions_closed": 761,
+              "meta_cascade_market_fills": 761,
+              "meta_cascade_avg_gap_pct": 0.5042
+            }
+          }
+        ],
+        "oos_total_pnl": 180.69,
+        "oos_avg_wr": 43.3,
+        "oos_min_pnl": 12.5,
+        "oos_pnls": [
+          12.5,
+          12.5,
+          51.98,
+          36.68,
+          67.03
+        ]
+      },
+      "is_full": {
+        "trades": 7073,
+        "wr": 43.2,
+        "pnl": 202.41,
+        "mdd": 9.07,
+        "pnl_mdd": 22.33,
+        "avg_trade": 0.029,
+        "rr": 1.627,
+        "cascade_sl_market": 3529,
+        "cascade_sl_normal": 466,
+        "meta_mdd_mtm": 8.88,
+        "meta_cascade_events": 4,
+        "meta_cascade_positions_closed": 3529,
+        "meta_cascade_market_fills": 3529,
+        "meta_cascade_avg_gap_pct": 0.4863
+      },
+      "config": {
+        "preemptive_loss_pct": 1.0,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    },
+    "DC6_PRE1.5": {
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "is_range": [
+              0,
+              15644
+            ],
+            "oos_range": [
+              15644,
+              31288
+            ],
+            "is": {
+              "trades": 939,
+              "wr": 52.2,
+              "pnl": 34.78,
+              "mdd": 4.58,
+              "pnl_mdd": 7.6,
+              "avg_trade": 0.037,
+              "rr": 1.173,
+              "cascade_sl_market": 408,
+              "cascade_sl_normal": 29,
+              "meta_mdd_mtm": 4.84,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 408,
+              "meta_cascade_market_fills": 408,
+              "meta_cascade_avg_gap_pct": 0.6902
+            },
+            "oos": {
+              "trades": 816,
+              "wr": 48.9,
+              "pnl": 6.09,
+              "mdd": 8.68,
+              "pnl_mdd": 0.7,
+              "avg_trade": 0.007,
+              "rr": 1.099,
+              "cascade_sl_market": 390,
+              "cascade_sl_normal": 21,
+              "meta_mdd_mtm": 8.54,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 390,
+              "meta_cascade_market_fills": 390,
+              "meta_cascade_avg_gap_pct": 0.6866
+            }
+          },
+          {
+            "fold": 2,
+            "is_range": [
+              0,
+              31288
+            ],
+            "oos_range": [
+              31288,
+              46932
+            ],
+            "is": {
+              "trades": 1759,
+              "wr": 50.6,
+              "pnl": 38.68,
+              "mdd": 6.72,
+              "pnl_mdd": 5.76,
+              "avg_trade": 0.022,
+              "rr": 1.131,
+              "cascade_sl_market": 809,
+              "cascade_sl_normal": 50,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 809,
+              "meta_cascade_market_fills": 809,
+              "meta_cascade_avg_gap_pct": 0.6893
+            },
+            "oos": {
+              "trades": 823,
+              "wr": 53.2,
+              "pnl": 24.01,
+              "mdd": 4.28,
+              "pnl_mdd": 5.6,
+              "avg_trade": 0.029,
+              "rr": 1.067,
+              "cascade_sl_market": 343,
+              "cascade_sl_normal": 13,
+              "meta_mdd_mtm": 4.47,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 343,
+              "meta_cascade_market_fills": 343,
+              "meta_cascade_avg_gap_pct": 0.7145
+            }
+          },
+          {
+            "fold": 3,
+            "is_range": [
+              0,
+              46932
+            ],
+            "oos_range": [
+              46932,
+              62576
+            ],
+            "is": {
+              "trades": 2573,
+              "wr": 51.4,
+              "pnl": 62.52,
+              "mdd": 6.72,
+              "pnl_mdd": 9.3,
+              "avg_trade": 0.024,
+              "rr": 1.111,
+              "cascade_sl_market": 1152,
+              "cascade_sl_normal": 63,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1152,
+              "meta_cascade_market_fills": 1152,
+              "meta_cascade_avg_gap_pct": 0.6955
+            },
+            "oos": {
+              "trades": 1177,
+              "wr": 52.8,
+              "pnl": 54.94,
+              "mdd": 7.77,
+              "pnl_mdd": 7.07,
+              "avg_trade": 0.047,
+              "rr": 1.189,
+              "cascade_sl_market": 517,
+              "cascade_sl_normal": 33,
+              "meta_mdd_mtm": 8.28,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 517,
+              "meta_cascade_market_fills": 517,
+              "meta_cascade_avg_gap_pct": 0.7529
+            }
+          },
+          {
+            "fold": 4,
+            "is_range": [
+              0,
+              62576
+            ],
+            "oos_range": [
+              62576,
+              78220
+            ],
+            "is": {
+              "trades": 3741,
+              "wr": 51.9,
+              "pnl": 119.14,
+              "mdd": 6.72,
+              "pnl_mdd": 17.73,
+              "avg_trade": 0.032,
+              "rr": 1.138,
+              "cascade_sl_market": 1665,
+              "cascade_sl_normal": 96,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 1665,
+              "meta_cascade_market_fills": 1665,
+              "meta_cascade_avg_gap_pct": 0.7118
+            },
+            "oos": {
+              "trades": 913,
+              "wr": 50.5,
+              "pnl": 29.68,
+              "mdd": 6.29,
+              "pnl_mdd": 4.72,
+              "avg_trade": 0.033,
+              "rr": 1.219,
+              "cascade_sl_market": 420,
+              "cascade_sl_normal": 22,
+              "meta_mdd_mtm": 5.98,
+              "meta_cascade_events": 0,
+              "meta_cascade_positions_closed": 420,
+              "meta_cascade_market_fills": 420,
+              "meta_cascade_avg_gap_pct": 0.6557
+            }
+          },
+          {
+            "fold": 5,
+            "is_range": [
+              0,
+              78220
+            ],
+            "oos_range": [
+              78220,
+              93864
+            ],
+            "is": {
+              "trades": 4650,
+              "wr": 51.7,
+              "pnl": 150.44,
+              "mdd": 6.72,
+              "pnl_mdd": 22.39,
+              "avg_trade": 0.032,
+              "rr": 1.153,
+              "cascade_sl_market": 2085,
+              "cascade_sl_normal": 118,
+              "meta_mdd_mtm": 6.61,
+              "meta_cascade_events": 2,
+              "meta_cascade_positions_closed": 2085,
+              "meta_cascade_market_fills": 2085,
+              "meta_cascade_avg_gap_pct": 0.7007
+            },
+            "oos": {
+              "trades": 1410,
+              "wr": 51.1,
+              "pnl": 54.89,
+              "mdd": 7.25,
+              "pnl_mdd": 7.57,
+              "avg_trade": 0.039,
+              "rr": 1.213,
+              "cascade_sl_market": 629,
+              "cascade_sl_normal": 52,
+              "meta_mdd_mtm": 6.9,
+              "meta_cascade_events": 8,
+              "meta_cascade_positions_closed": 629,
+              "meta_cascade_market_fills": 629,
+              "meta_cascade_avg_gap_pct": 0.7329
+            }
+          }
+        ],
+        "oos_total_pnl": 169.61,
+        "oos_avg_wr": 51.3,
+        "oos_min_pnl": 6.09,
+        "oos_pnls": [
+          6.09,
+          24.01,
+          54.94,
+          29.68,
+          54.89
+        ]
+      },
+      "is_full": {
+        "trades": 6058,
+        "wr": 51.6,
+        "pnl": 204.67,
+        "mdd": 6.72,
+        "pnl_mdd": 30.46,
+        "avg_trade": 0.034,
+        "rr": 1.166,
+        "cascade_sl_market": 2718,
+        "cascade_sl_normal": 170,
+        "meta_mdd_mtm": 6.61,
+        "meta_cascade_events": 10,
+        "meta_cascade_positions_closed": 2718,
+        "meta_cascade_market_fills": 2718,
+        "meta_cascade_avg_gap_pct": 0.7084
+      },
+      "config": {
+        "preemptive_loss_pct": 1.5,
+        "direction_cap": 6,
+        "cascade": true
+      }
+    }
+  },
+  "verdict": {
+    "best_config": "PRE_1.0",
+    "best_oos_pnl": 180.69,
+    "no_cascade_oos_pnl": -57.64,
+    "cascade_benefit_pp": 238.33
+  },
+  "elapsed_seconds": 363.3
+}

@@ -1,0 +1,157 @@
+{
+  "log_files": [
+    "pattern_5m_bot_20260320.log",
+    "pattern_5m_bot_20260323.log",
+    "pattern_5m_bot_20260324.log",
+    "pattern_5m_bot_20260325.log",
+    "pattern_5m_bot_20260327.log"
+  ],
+  "total_trades": 162,
+  "exit_reasons": {
+    "OPP_SIGNAL": 41,
+    "TP": 64,
+    "SL": 41,
+    "CASCADE_SL": 5,
+    "TIMEOUT": 8,
+    "CRASH_RECOVERY": 3
+  },
+  "sl_events": 41,
+  "cascade_triggers": 12,
+  "cascade_skips": 39,
+  "cascade_skip_rate_pct": 88.6,
+  "cascade_targets_total": 44,
+  "cascade_applied": 5,
+  "pre_cascades": 0,
+  "sl_with_cascade": 11,
+  "sl_without_cascade": 30,
+  "timing_deltas_sec": [
+    -1.214,
+    -1.205,
+    -1.216,
+    -1.094,
+    -1.526,
+    -0.605,
+    -1.492,
+    -1.508,
+    -1.211,
+    -0.91,
+    -0.42
+  ],
+  "avg_delta_sec": -1.1,
+  "multi_sl_clusters": 10,
+  "same_dir_clusters": 10,
+  "cluster_details": [
+    {
+      "size": 2,
+      "span_sec": 12.227,
+      "directions": [
+        "SHORT"
+      ],
+      "patterns": [
+        "BU-MU-DN",
+        "ST-DN-BU"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 11.498,
+      "directions": [
+        "LONG"
+      ],
+      "patterns": [
+        "DN-MD-BU",
+        "D-ST-ST"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 12.072,
+      "directions": [
+        "LONG"
+      ],
+      "patterns": [
+        "ST-BD-DN",
+        "DN-DN-DF"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 26.931,
+      "directions": [
+        "LONG"
+      ],
+      "patterns": [
+        "BU-BD-BD",
+        "BD-BD-U"
+      ]
+    },
+    {
+      "size": 3,
+      "span_sec": 56.301,
+      "directions": [
+        "SHORT"
+      ],
+      "patterns": [
+        "BU-BD-U",
+        "DN-D-DN",
+        "ST-U-ST"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 11.687,
+      "directions": [
+        "SHORT"
+      ],
+      "patterns": [
+        "ST-DN-BU",
+        "MD-ST-ST"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 11.501,
+      "directions": [
+        "SHORT"
+      ],
+      "patterns": [
+        "DN-D-DN",
+        "U-D-DN"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 10.911,
+      "directions": [
+        "SHORT"
+      ],
+      "patterns": [
+        "ST-BD-ST",
+        "ST-ST-U"
+      ]
+    },
+    {
+      "size": 2,
+      "span_sec": 11.813,
+      "directions": [
+        "LONG"
+      ],
+      "patterns": [
+        "ST-BD-DN",
+        "BD-DN-U"
+      ]
+    },
+    {
+      "size": 3,
+      "span_sec": 56.802,
+      "directions": [
+        "LONG"
+      ],
+      "patterns": [
+        "H-U-MD",
+        "H-ST-DN",
+        "ST-BD-DN"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "study": "opposite_signal_exit",
+  "date": "2026-03-17T02:34:15.257826",
+  "results": {
+    "BASELINE": {
+      "is": {
+        "label": "BASELINE",
+        "trades": 3489,
+        "wr": 67.5,
+        "pnl": 594.61,
+        "mdd": 2.1,
+        "pm": 283.1,
+        "tp": 2354,
+        "sl": 1126,
+        "opp": 0,
+        "rr": 2.437
+      },
+      "wf": {
+        "total_oos": 453.5,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 999,
+        "opp_profit_pct": 999
+      }
+    },
+    "OPP2_prof0.3": {
+      "is": {
+        "label": "OPP2_prof0.3",
+        "trades": 4250,
+        "wr": 71.9,
+        "pnl": 596.28,
+        "mdd": 2.32,
+        "pm": 257.0,
+        "tp": 1937,
+        "sl": 1184,
+        "opp": 1120,
+        "rr": 2.506
+      },
+      "wf": {
+        "total_oos": 465.2,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 2,
+        "opp_profit_pct": 0.3
+      }
+    },
+    "OPP3_prof0.3": {
+      "is": {
+        "label": "OPP3_prof0.3",
+        "trades": 3620,
+        "wr": 68.2,
+        "pnl": 599.82,
+        "mdd": 2.08,
+        "pm": 288.4,
+        "tp": 2281,
+        "sl": 1144,
+        "opp": 187,
+        "rr": 2.539
+      },
+      "wf": {
+        "total_oos": 455.0,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 3,
+        "opp_profit_pct": 0.3
+      }
+    },
+    "OPP2_prof0.1": {
+      "is": {
+        "label": "OPP2_prof0.1",
+        "trades": 4383,
+        "wr": 67.7,
+        "pnl": 593.23,
+        "mdd": 2.69,
+        "pm": 220.5,
+        "tp": 1931,
+        "sl": 1192,
+        "opp": 1252,
+        "rr": 2.575
+      },
+      "wf": {
+        "total_oos": 468.6,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 2,
+        "opp_profit_pct": 0.1
+      }
+    },
+    "OPP1_prof0.5": {
+      "is": {
+        "label": "OPP1_prof0.5",
+        "trades": 6157,
+        "wr": 79.9,
+        "pnl": 557.5,
+        "mdd": 2.84,
+        "pm": 196.3,
+        "tp": 931,
+        "sl": 1231,
+        "opp": 3988,
+        "rr": 2.835
+      },
+      "wf": {
+        "total_oos": 431.1,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 1,
+        "opp_profit_pct": 0.5
+      }
+    },
+    "OPP2_full_only": {
+      "is": {
+        "label": "OPP2_full_only",
+        "trades": 4032,
+        "wr": 70.7,
+        "pnl": 601.14,
+        "mdd": 2.18,
+        "pm": 275.8,
+        "tp": 2086,
+        "sl": 1175,
+        "opp": 763,
+        "rr": 2.545
+      },
+      "wf": {
+        "total_oos": 465.9,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 2,
+        "opp_profit_pct": 0.3,
+        "opp_only_when_full": true
+      }
+    },
+    "OPP2_any_pnl": {
+      "is": {
+        "label": "OPP2_any_pnl",
+        "trades": 4943,
+        "wr": 57.5,
+        "pnl": 409.15,
+        "mdd": 2.73,
+        "pm": 149.9,
+        "tp": 2096,
+        "sl": 901,
+        "opp": 1937,
+        "rr": 2.441
+      },
+      "wf": {
+        "total_oos": 321.6,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 2,
+        "opp_ignore_profit": true
+      }
+    },
+    "OPP1_prof0.3": {
+      "is": {
+        "label": "OPP1_prof0.3",
+        "trades": 6740,
+        "wr": 81.9,
+        "pnl": 514.87,
+        "mdd": 3.15,
+        "pm": 163.5,
+        "tp": 893,
+        "sl": 1213,
+        "opp": 4627,
+        "rr": 2.824
+      },
+      "wf": {
+        "total_oos": 401.9,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 1,
+        "opp_profit_pct": 0.3
+      }
+    },
+    "OPP4_prof0.3": {
+      "is": {
+        "label": "OPP4_prof0.3",
+        "trades": 3521,
+        "wr": 67.7,
+        "pnl": 591.31,
+        "mdd": 2.1,
+        "pm": 281.6,
+        "tp": 2344,
+        "sl": 1129,
+        "opp": 39,
+        "rr": 2.388
+      },
+      "wf": {
+        "total_oos": 448.8,
+        "verdict": "PASS"
+      },
+      "params": {
+        "opp_consecutive": 4,
+        "opp_profit_pct": 0.3
+      }
+    }
+  },
+  "baseline_oos": 453.5,
+  "elapsed_s": 91.8
+}

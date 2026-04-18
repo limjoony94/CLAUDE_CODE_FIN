@@ -1,0 +1,790 @@
+{
+  "study": "disabled_mech_reeval",
+  "timestamp": "2026-03-13T23:37:59",
+  "tp_scale": 0.72,
+  "patterns": 111,
+  "data_bars": 87315,
+  "neutral_window": [
+    0,
+    74642
+  ],
+  "phases": {
+    "P0_baseline": {
+      "is": {
+        "trades": 1846,
+        "wr": 76.8,
+        "pnl": 406.9,
+        "mdd": 3.81,
+        "pnl_mdd": 106.8,
+        "pnl_per_trade": 0.22,
+        "max_corr_loss": 3.68,
+        "max_sim_positions": 9,
+        "corr_events": 86,
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 390,
+          "dir_cap": 124,
+          "dup_pat": 381,
+          "max_pos": 6047
+        },
+        "mdd_mtm": 3.81
+      },
+      "wf_folds": [
+        {
+          "fold": 1,
+          "pnl": 82.42,
+          "wr": 78.6,
+          "trades": 332,
+          "mdd": 3.85
+        },
+        {
+          "fold": 2,
+          "pnl": 140.78,
+          "wr": 76.1,
+          "trades": 640,
+          "mdd": 5.02
+        },
+        {
+          "fold": 3,
+          "pnl": 53.59,
+          "wr": 69.3,
+          "trades": 339,
+          "mdd": 6.28
+        }
+      ],
+      "wf_pnl": 276.8,
+      "wf_pass": true
+    },
+    "P1_regime_sizing": {
+      "regime_0.3": {
+        "regime_mult": 0.3,
+        "is": {
+          "trades": 1837,
+          "wr": 77.5,
+          "pnl": 280.38,
+          "mdd": 2.87,
+          "pnl_mdd": 97.69,
+          "pnl_per_trade": 0.153,
+          "max_corr_loss": 2.94,
+          "max_sim_positions": 9,
+          "corr_events": 79,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 19,
+            "dir_cap": 278,
+            "dup_pat": 315,
+            "max_pos": 6314
+          },
+          "mdd_mtm": 2.87
+        },
+        "delta_pnl": -126.5,
+        "delta_mdd": -0.94
+      },
+      "regime_0.5": {
+        "regime_mult": 0.5,
+        "is": {
+          "trades": 1832,
+          "wr": 77.7,
+          "pnl": 321.35,
+          "mdd": 2.84,
+          "pnl_mdd": 113.15,
+          "pnl_per_trade": 0.175,
+          "max_corr_loss": 3.37,
+          "max_sim_positions": 9,
+          "corr_events": 80,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 41,
+            "dir_cap": 276,
+            "dup_pat": 318,
+            "max_pos": 6295
+          },
+          "mdd_mtm": 2.84
+        },
+        "delta_pnl": -85.5,
+        "delta_mdd": -0.97,
+        "wf_folds": [
+          {
+            "fold": 1,
+            "pnl": 64.05,
+            "wr": 83.0,
+            "trades": 312,
+            "mdd": 3.42
+          },
+          {
+            "fold": 2,
+            "pnl": 109.68,
+            "wr": 75.8,
+            "trades": 645,
+            "mdd": 4.53
+          },
+          {
+            "fold": 3,
+            "pnl": 41.28,
+            "wr": 72.0,
+            "trades": 339,
+            "mdd": 5.39
+          }
+        ],
+        "wf_pnl": 215.0,
+        "wf_pass": true,
+        "mc_p": 0.0,
+        "discriminating": true
+      },
+      "regime_0.7": {
+        "regime_mult": 0.7,
+        "is": {
+          "trades": 1832,
+          "wr": 77.6,
+          "pnl": 360.63,
+          "mdd": 3.3,
+          "pnl_mdd": 109.28,
+          "pnl_per_trade": 0.197,
+          "max_corr_loss": 4.57,
+          "max_sim_positions": 9,
+          "corr_events": 81,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 94,
+            "dir_cap": 246,
+            "dup_pat": 315,
+            "max_pos": 6279
+          },
+          "mdd_mtm": 3.3
+        },
+        "delta_pnl": -46.3,
+        "delta_mdd": -0.51
+      }
+    },
+    "P2_equity_curve": {
+      "ec_ema20_s50": {
+        "ema_trades": 20,
+        "size_mult": 0.5,
+        "is": {
+          "trades": 1841,
+          "wr": 76.6,
+          "pnl": 402.46,
+          "mdd": 3.94,
+          "pnl_mdd": 102.15,
+          "pnl_per_trade": 0.219,
+          "max_corr_loss": 3.68,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 385,
+            "dir_cap": 126,
+            "dup_pat": 381,
+            "max_pos": 6054,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.94
+        },
+        "delta_pnl": -4.4,
+        "delta_mdd": 0.13
+      },
+      "ec_ema30_s50": {
+        "ema_trades": 30,
+        "size_mult": 0.5,
+        "is": {
+          "trades": 1843,
+          "wr": 76.8,
+          "pnl": 404.09,
+          "mdd": 3.72,
+          "pnl_mdd": 108.63,
+          "pnl_per_trade": 0.219,
+          "max_corr_loss": 3.68,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 384,
+            "dir_cap": 130,
+            "dup_pat": 379,
+            "max_pos": 6051,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.72
+        },
+        "delta_pnl": -2.8,
+        "delta_mdd": -0.09,
+        "wf_folds": [
+          {
+            "fold": 1,
+            "pnl": 81.46,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.9
+          },
+          {
+            "fold": 2,
+            "pnl": 139.87,
+            "wr": 76.2,
+            "trades": 639,
+            "mdd": 5.05
+          },
+          {
+            "fold": 3,
+            "pnl": 50.97,
+            "wr": 69.6,
+            "trades": 339,
+            "mdd": 5.63
+          }
+        ],
+        "wf_pnl": 272.3,
+        "wf_pass": true,
+        "mc_p": 0.0,
+        "discriminating": true
+      },
+      "ec_ema20_s25": {
+        "ema_trades": 20,
+        "size_mult": 0.25,
+        "is": {
+          "trades": 1841,
+          "wr": 76.6,
+          "pnl": 401.52,
+          "mdd": 3.97,
+          "pnl_mdd": 101.14,
+          "pnl_per_trade": 0.218,
+          "max_corr_loss": 3.68,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 385,
+            "dir_cap": 126,
+            "dup_pat": 381,
+            "max_pos": 6054,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.97
+        },
+        "delta_pnl": -5.4,
+        "delta_mdd": 0.16
+      },
+      "ec_ema30_s25": {
+        "ema_trades": 30,
+        "size_mult": 0.25,
+        "is": {
+          "trades": 1843,
+          "wr": 76.8,
+          "pnl": 403.01,
+          "mdd": 3.74,
+          "pnl_mdd": 107.76,
+          "pnl_per_trade": 0.219,
+          "max_corr_loss": 3.68,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 384,
+            "dir_cap": 130,
+            "dup_pat": 379,
+            "max_pos": 6051,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.74
+        },
+        "delta_pnl": -3.9,
+        "delta_mdd": -0.07
+      }
+    },
+    "P3_loss_burst_brake": {
+      "lb_3c_144b": {
+        "threshold": 3,
+        "block_bars": 144,
+        "window_bars": 288,
+        "is": {
+          "trades": 1748,
+          "wr": 77.8,
+          "pnl": 393.78,
+          "mdd": 4.31,
+          "pnl_mdd": 91.36,
+          "pnl_per_trade": 0.225,
+          "max_corr_loss": 3.74,
+          "max_sim_positions": 9,
+          "corr_events": 77,
+          "blocked": {
+            "momentum": 40,
+            "agg_risk": 406,
+            "dir_cap": 318,
+            "dup_pat": 344,
+            "max_pos": 5339,
+            "loss_burst": 716,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 4.31
+        },
+        "delta_pnl": -13.1,
+        "delta_mdd": 0.5,
+        "blocked": 716,
+        "wf_folds": [
+          {
+            "fold": 1,
+            "pnl": 82.82,
+            "wr": 78.4,
+            "trades": 342,
+            "mdd": 4.0
+          },
+          {
+            "fold": 2,
+            "pnl": 140.2,
+            "wr": 77.1,
+            "trades": 612,
+            "mdd": 5.58
+          },
+          {
+            "fold": 3,
+            "pnl": 43.4,
+            "wr": 69.4,
+            "trades": 304,
+            "mdd": 7.83
+          }
+        ],
+        "wf_pnl": 266.4,
+        "wf_pass": true,
+        "mc_p": 0.0,
+        "discriminating": true
+      },
+      "lb_3c_288b": {
+        "threshold": 3,
+        "block_bars": 288,
+        "window_bars": 288,
+        "is": {
+          "trades": 1641,
+          "wr": 76.2,
+          "pnl": 353.72,
+          "mdd": 5.39,
+          "pnl_mdd": 65.63,
+          "pnl_per_trade": 0.216,
+          "max_corr_loss": 3.94,
+          "max_sim_positions": 9,
+          "corr_events": 82,
+          "blocked": {
+            "momentum": 38,
+            "agg_risk": 415,
+            "dir_cap": 605,
+            "dup_pat": 333,
+            "max_pos": 4525,
+            "loss_burst": 1415,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 5.39
+        },
+        "delta_pnl": -53.2,
+        "delta_mdd": 1.58,
+        "blocked": 1415
+      },
+      "lb_4c_144b": {
+        "threshold": 4,
+        "block_bars": 144,
+        "window_bars": 288,
+        "is": {
+          "trades": 1776,
+          "wr": 76.7,
+          "pnl": 383.99,
+          "mdd": 4.33,
+          "pnl_mdd": 88.68,
+          "pnl_per_trade": 0.216,
+          "max_corr_loss": 3.74,
+          "max_sim_positions": 9,
+          "corr_events": 85,
+          "blocked": {
+            "momentum": 38,
+            "agg_risk": 412,
+            "dir_cap": 319,
+            "dup_pat": 356,
+            "max_pos": 5343,
+            "loss_burst": 670,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 4.33
+        },
+        "delta_pnl": -22.9,
+        "delta_mdd": 0.52,
+        "blocked": 670
+      },
+      "lb_4c_288b": {
+        "threshold": 4,
+        "block_bars": 288,
+        "window_bars": 288,
+        "is": {
+          "trades": 1675,
+          "wr": 76.2,
+          "pnl": 364.02,
+          "mdd": 5.39,
+          "pnl_mdd": 67.54,
+          "pnl_per_trade": 0.217,
+          "max_corr_loss": 3.94,
+          "max_sim_positions": 9,
+          "corr_events": 82,
+          "blocked": {
+            "momentum": 38,
+            "agg_risk": 419,
+            "dir_cap": 556,
+            "dup_pat": 336,
+            "max_pos": 4630,
+            "loss_burst": 1309,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 5.39
+        },
+        "delta_pnl": -42.9,
+        "delta_mdd": 1.58,
+        "blocked": 1309
+      },
+      "lb_2c_72b": {
+        "threshold": 2,
+        "block_bars": 72,
+        "window_bars": 144,
+        "is": {
+          "trades": 1761,
+          "wr": 77.0,
+          "pnl": 385.2,
+          "mdd": 4.24,
+          "pnl_mdd": 90.85,
+          "pnl_per_trade": 0.219,
+          "max_corr_loss": 5.13,
+          "max_sim_positions": 9,
+          "corr_events": 80,
+          "blocked": {
+            "momentum": 35,
+            "agg_risk": 375,
+            "dir_cap": 198,
+            "dup_pat": 346,
+            "max_pos": 5764,
+            "loss_burst": 399,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 4.24
+        },
+        "delta_pnl": -21.7,
+        "delta_mdd": 0.43,
+        "blocked": 399
+      }
+    },
+    "P4_correlation_aware": {
+      "ca_70pct": {
+        "dir_pct_threshold": 0.7,
+        "is": {
+          "trades": 1779,
+          "wr": 77.5,
+          "pnl": 396.01,
+          "mdd": 3.88,
+          "pnl_mdd": 102.06,
+          "pnl_per_trade": 0.223,
+          "max_corr_loss": 4.78,
+          "max_sim_positions": 9,
+          "corr_events": 82,
+          "blocked": {
+            "momentum": 38,
+            "agg_risk": 85,
+            "dir_cap": 103,
+            "dup_pat": 363,
+            "max_pos": 5883,
+            "loss_burst": 0,
+            "corr_aware": 582,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.88
+        },
+        "delta_pnl": -10.9,
+        "delta_mdd": 0.07,
+        "blocked": 582
+      },
+      "ca_60pct": {
+        "dir_pct_threshold": 0.6,
+        "is": {
+          "trades": 1732,
+          "wr": 78.1,
+          "pnl": 388.64,
+          "mdd": 3.61,
+          "pnl_mdd": 107.66,
+          "pnl_per_trade": 0.224,
+          "max_corr_loss": 4.78,
+          "max_sim_positions": 9,
+          "corr_events": 82,
+          "blocked": {
+            "momentum": 38,
+            "agg_risk": 0,
+            "dir_cap": 90,
+            "dup_pat": 401,
+            "max_pos": 5596,
+            "loss_burst": 0,
+            "corr_aware": 983,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.61
+        },
+        "delta_pnl": -18.3,
+        "delta_mdd": -0.2,
+        "blocked": 983,
+        "wf_folds": [
+          {
+            "fold": 1,
+            "pnl": 80.49,
+            "wr": 80.6,
+            "trades": 320,
+            "mdd": 3.99
+          },
+          {
+            "fold": 2,
+            "pnl": 131.77,
+            "wr": 76.2,
+            "trades": 605,
+            "mdd": 4.42
+          },
+          {
+            "fold": 3,
+            "pnl": 47.85,
+            "wr": 71.9,
+            "trades": 302,
+            "mdd": 5.43
+          }
+        ],
+        "wf_pnl": 260.1,
+        "wf_pass": true,
+        "mc_p": 0.0,
+        "discriminating": true
+      },
+      "ca_80pct": {
+        "dir_pct_threshold": 0.8,
+        "is": {
+          "trades": 1790,
+          "wr": 77.9,
+          "pnl": 403.46,
+          "mdd": 3.85,
+          "pnl_mdd": 104.79,
+          "pnl_per_trade": 0.225,
+          "max_corr_loss": 4.78,
+          "max_sim_positions": 9,
+          "corr_events": 82,
+          "blocked": {
+            "momentum": 38,
+            "agg_risk": 235,
+            "dir_cap": 116,
+            "dup_pat": 376,
+            "max_pos": 5951,
+            "loss_burst": 0,
+            "corr_aware": 316,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.85
+        },
+        "delta_pnl": -3.4,
+        "delta_mdd": 0.04,
+        "blocked": 316
+      },
+      "ca_50pct": {
+        "dir_pct_threshold": 0.5,
+        "is": {
+          "trades": 1660,
+          "wr": 77.9,
+          "pnl": 366.1,
+          "mdd": 4.51,
+          "pnl_mdd": 81.18,
+          "pnl_per_trade": 0.221,
+          "max_corr_loss": 4.78,
+          "max_sim_positions": 9,
+          "corr_events": 81,
+          "blocked": {
+            "momentum": 40,
+            "agg_risk": 0,
+            "dir_cap": 87,
+            "dup_pat": 467,
+            "max_pos": 4803,
+            "loss_burst": 0,
+            "corr_aware": 1824,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 4.51
+        },
+        "delta_pnl": -40.8,
+        "delta_mdd": 0.7,
+        "blocked": 1824
+      }
+    },
+    "P5_adaptive_leverage": {
+      "al_w12_1_3": {
+        "window": 12,
+        "min_lev": 1.0,
+        "max_lev": 3.0,
+        "is": {
+          "trades": 1846,
+          "wr": 76.8,
+          "pnl": 276.71,
+          "mdd": 4.32,
+          "pnl_mdd": 64.05,
+          "pnl_per_trade": 0.15,
+          "max_corr_loss": 2.62,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 390,
+            "dir_cap": 124,
+            "dup_pat": 381,
+            "max_pos": 6047,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 4.32
+        },
+        "delta_pnl": -130.2,
+        "delta_mdd": 0.51
+      },
+      "al_w20_1_3": {
+        "window": 20,
+        "min_lev": 1.0,
+        "max_lev": 3.0,
+        "is": {
+          "trades": 1846,
+          "wr": 76.8,
+          "pnl": 279.95,
+          "mdd": 3.34,
+          "pnl_mdd": 83.82,
+          "pnl_per_trade": 0.152,
+          "max_corr_loss": 2.75,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 390,
+            "dir_cap": 124,
+            "dup_pat": 381,
+            "max_pos": 6047,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.34
+        },
+        "delta_pnl": -127.0,
+        "delta_mdd": -0.47
+      },
+      "al_w12_2_3": {
+        "window": 12,
+        "min_lev": 2.0,
+        "max_lev": 3.0,
+        "is": {
+          "trades": 1846,
+          "wr": 76.8,
+          "pnl": 341.8,
+          "mdd": 3.97,
+          "pnl_mdd": 86.1,
+          "pnl_per_trade": 0.185,
+          "max_corr_loss": 2.98,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 390,
+            "dir_cap": 124,
+            "dup_pat": 381,
+            "max_pos": 6047,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 3.97
+        },
+        "delta_pnl": -65.1,
+        "delta_mdd": 0.16,
+        "wf_folds": [
+          {
+            "fold": 1,
+            "pnl": 73.13,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.91
+          },
+          {
+            "fold": 2,
+            "pnl": 117.64,
+            "wr": 76.1,
+            "trades": 640,
+            "mdd": 4.71
+          },
+          {
+            "fold": 3,
+            "pnl": 41.82,
+            "wr": 69.3,
+            "trades": 339,
+            "mdd": 4.96
+          }
+        ],
+        "wf_pnl": 232.6,
+        "wf_pass": true,
+        "mc_p": 0.0,
+        "discriminating": true
+      },
+      "al_w8_1_3": {
+        "window": 8,
+        "min_lev": 1.0,
+        "max_lev": 3.0,
+        "is": {
+          "trades": 1846,
+          "wr": 76.8,
+          "pnl": 284.6,
+          "mdd": 4.28,
+          "pnl_mdd": 66.5,
+          "pnl_per_trade": 0.154,
+          "max_corr_loss": 2.45,
+          "max_sim_positions": 9,
+          "corr_events": 86,
+          "blocked": {
+            "momentum": 37,
+            "agg_risk": 390,
+            "dir_cap": 124,
+            "dup_pat": 381,
+            "max_pos": 6047,
+            "loss_burst": 0,
+            "corr_aware": 0,
+            "equity_curve": 0
+          },
+          "mdd_mtm": 4.28
+        },
+        "delta_pnl": -122.3,
+        "delta_mdd": 0.47
+      }
+    }
+  },
+  "baseline": {
+    "is": {
+      "trades": 1846,
+      "wr": 76.8,
+      "pnl": 406.9,
+      "mdd": 3.81,
+      "pnl_mdd": 106.8,
+      "pnl_per_trade": 0.22,
+      "max_corr_loss": 3.68,
+      "max_sim_positions": 9,
+      "corr_events": 86,
+      "blocked": {
+        "momentum": 37,
+        "agg_risk": 390,
+        "dir_cap": 124,
+        "dup_pat": 381,
+        "max_pos": 6047
+      },
+      "mdd_mtm": 3.81
+    },
+    "wf_pnl": 276.8,
+    "wf_pass": true
+  },
+  "elapsed_seconds": 60.2
+}

@@ -1,0 +1,416 @@
+{
+  "generated_at": "2026-03-31T02:06:51.165097",
+  "analyses": {
+    "A_sl_decomposition": {
+      "n_sl_trades": 146,
+      "n_tp_trades": 243,
+      "avg_sl_pnl": -6.633,
+      "avg_tp_pnl": 3.84,
+      "live_rr": 0.5789,
+      "avg_base_sl": 3.443,
+      "avg_implied_sl": 2.17,
+      "expansion_ratio": 0.63,
+      "worst_expansions": [
+        {
+          "pattern": "D-BU-DN",
+          "direction": "SHORT",
+          "base_sl": 2.56,
+          "implied_sl": 4.313,
+          "expansion": 1.685,
+          "pnl_slot": -13.4182,
+          "hold_min": 2619
+        },
+        {
+          "pattern": "DN-DF-ST",
+          "direction": "LONG",
+          "base_sl": 1.61,
+          "implied_sl": 2.395,
+          "expansion": 1.488,
+          "pnl_slot": -7.5182,
+          "hold_min": 305
+        },
+        {
+          "pattern": "MU-DN-BU",
+          "direction": "SHORT",
+          "base_sl": 2.93,
+          "implied_sl": 4.313,
+          "expansion": 1.472,
+          "pnl_slot": -13.3858,
+          "hold_min": 970
+        },
+        {
+          "pattern": "BD-DN-BU",
+          "direction": "SHORT",
+          "base_sl": 3.21,
+          "implied_sl": 4.313,
+          "expansion": 1.344,
+          "pnl_slot": -13.3389,
+          "hold_min": 897
+        },
+        {
+          "pattern": "MU-DN-BD",
+          "direction": "LONG",
+          "base_sl": 4.02,
+          "implied_sl": 5.361,
+          "expansion": 1.333,
+          "pnl_slot": -16.5492,
+          "hold_min": 1422
+        }
+      ]
+    },
+    "B_pattern_sl_dist": {
+      "mean_base_sl": 3.264,
+      "median_base_sl": 3.43,
+      "max_base_sl": 4.56,
+      "mean_with_leverage": 9.792,
+      "worst_voladapt_max": 27.36
+    },
+    "C_atr_distribution": {
+      "atr_mean": 1.1639,
+      "atr_median": 0.9968,
+      "atr_p90": 1.9291,
+      "atr_p95": 2.3168,
+      "pct_above_1": 49.7,
+      "pct_above_1_5": 21.9,
+      "effective_range": [
+        0.25,
+        3.0
+      ]
+    },
+    "D_va_clamp_sweep": {
+      "no_va": {
+        "va_clamp": [
+          0.0,
+          0.0
+        ],
+        "trades": 4536,
+        "wr": 65.1,
+        "pnl": -77.73,
+        "mdd_mtm": 83.05,
+        "rr": 0.492,
+        "avg_sl_loss": -9.994,
+        "med_sl_loss": -10.506
+      },
+      "va_0.5_1.0": {
+        "va_clamp": [
+          0.5,
+          1.0
+        ],
+        "trades": 5332,
+        "wr": 60.3,
+        "pnl": -139.67,
+        "mdd_mtm": 134.98,
+        "rr": 0.576,
+        "avg_sl_loss": -5.871,
+        "med_sl_loss": -6.332
+      },
+      "va_0.5_1.2": {
+        "va_clamp": [
+          0.5,
+          1.2
+        ],
+        "trades": 5333,
+        "wr": 60.3,
+        "pnl": -143.5,
+        "mdd_mtm": 138.06,
+        "rr": 0.574,
+        "avg_sl_loss": -5.899,
+        "med_sl_loss": -6.319
+      },
+      "va_0.5_1.5": {
+        "va_clamp": [
+          0.5,
+          1.5
+        ],
+        "trades": 5332,
+        "wr": 60.4,
+        "pnl": -142.18,
+        "mdd_mtm": 137.0,
+        "rr": 0.574,
+        "avg_sl_loss": -5.895,
+        "med_sl_loss": -6.314
+      },
+      "va_0.5_2.0": {
+        "va_clamp": [
+          0.5,
+          2.0
+        ],
+        "trades": 5332,
+        "wr": 60.4,
+        "pnl": -146.49,
+        "mdd_mtm": 140.48,
+        "rr": 0.572,
+        "avg_sl_loss": -5.921,
+        "med_sl_loss": -6.315
+      }
+    },
+    "D2_va_with_cascade": {
+      "no_va": {
+        "va_clamp": [
+          0.0,
+          0.0
+        ],
+        "pnl": 779.34,
+        "mdd_mtm": 1.96,
+        "rr": 3.211,
+        "avg_sl_loss": -0.692
+      },
+      "va_0.5_1.0": {
+        "va_clamp": [
+          0.5,
+          1.0
+        ],
+        "pnl": 657.87,
+        "mdd_mtm": 1.93,
+        "rr": 2.487,
+        "avg_sl_loss": -1.091
+      },
+      "va_0.5_1.2": {
+        "va_clamp": [
+          0.5,
+          1.2
+        ],
+        "pnl": 664.43,
+        "mdd_mtm": 1.93,
+        "rr": 2.528,
+        "avg_sl_loss": -1.071
+      },
+      "va_0.5_1.5": {
+        "va_clamp": [
+          0.5,
+          1.5
+        ],
+        "pnl": 666.94,
+        "mdd_mtm": 1.93,
+        "rr": 2.539,
+        "avg_sl_loss": -1.066
+      },
+      "va_0.5_2.0": {
+        "va_clamp": [
+          0.5,
+          2.0
+        ],
+        "pnl": 665.82,
+        "mdd_mtm": 1.93,
+        "rr": 2.539,
+        "avg_sl_loss": -1.065
+      }
+    },
+    "E_sl_floor_no_va": {
+      "4": {
+        "max_loss_pct": 4,
+        "base_sl_cap": 1.333,
+        "pnl": -103.48,
+        "wr": 55.6,
+        "rr": 0.725,
+        "avg_sl_loss": -4.769,
+        "mdd_mtm": 104.76,
+        "capped": 12937
+      },
+      "5": {
+        "max_loss_pct": 5,
+        "base_sl_cap": 1.667,
+        "pnl": -93.05,
+        "wr": 58.8,
+        "rr": 0.64,
+        "avg_sl_loss": -5.817,
+        "mdd_mtm": 96.01,
+        "capped": 12691
+      },
+      "6": {
+        "max_loss_pct": 6,
+        "base_sl_cap": 2.0,
+        "pnl": -87.98,
+        "wr": 60.6,
+        "rr": 0.595,
+        "avg_sl_loss": -6.817,
+        "mdd_mtm": 91.71,
+        "capped": 12282
+      },
+      "8": {
+        "max_loss_pct": 8,
+        "base_sl_cap": 2.667,
+        "pnl": -69.4,
+        "wr": 62.9,
+        "rr": 0.548,
+        "avg_sl_loss": -8.529,
+        "mdd_mtm": 77.19,
+        "capped": 11523
+      },
+      "10": {
+        "max_loss_pct": 10,
+        "base_sl_cap": 3.333,
+        "pnl": -54.14,
+        "wr": 64.3,
+        "rr": 0.523,
+        "avg_sl_loss": -9.578,
+        "mdd_mtm": 63.8,
+        "capped": 9103
+      },
+      "15": {
+        "max_loss_pct": 15,
+        "base_sl_cap": 5.0,
+        "pnl": -77.73,
+        "wr": 65.1,
+        "rr": 0.492,
+        "avg_sl_loss": -9.994,
+        "mdd_mtm": 83.05,
+        "capped": 0
+      }
+    },
+    "E_sl_floor_va_prod": {
+      "4": {
+        "max_loss_pct": 4,
+        "base_sl_cap": 1.333,
+        "pnl": -215.44,
+        "wr": 45.0,
+        "rr": 1.019,
+        "avg_sl_loss": -3.133,
+        "mdd_mtm": 210.63,
+        "capped": 12937
+      },
+      "5": {
+        "max_loss_pct": 5,
+        "base_sl_cap": 1.667,
+        "pnl": -180.63,
+        "wr": 49.1,
+        "rr": 0.887,
+        "avg_sl_loss": -3.685,
+        "mdd_mtm": 173.81,
+        "capped": 12691
+      },
+      "6": {
+        "max_loss_pct": 6,
+        "base_sl_cap": 2.0,
+        "pnl": -150.84,
+        "wr": 52.2,
+        "rr": 0.801,
+        "avg_sl_loss": -4.175,
+        "mdd_mtm": 147.76,
+        "capped": 12282
+      },
+      "8": {
+        "max_loss_pct": 8,
+        "base_sl_cap": 2.667,
+        "pnl": -136.64,
+        "wr": 56.3,
+        "rr": 0.685,
+        "avg_sl_loss": -5.15,
+        "mdd_mtm": 136.28,
+        "capped": 11523
+      },
+      "10": {
+        "max_loss_pct": 10,
+        "base_sl_cap": 3.333,
+        "pnl": -138.8,
+        "wr": 58.8,
+        "rr": 0.614,
+        "avg_sl_loss": -5.724,
+        "mdd_mtm": 135.39,
+        "capped": 9103
+      },
+      "15": {
+        "max_loss_pct": 15,
+        "base_sl_cap": 5.0,
+        "pnl": -146.49,
+        "wr": 60.4,
+        "rr": 0.572,
+        "avg_sl_loss": -5.921,
+        "mdd_mtm": 140.48,
+        "capped": 0
+      }
+    },
+    "F_wf_validation": {
+      "baseline_no_va": {
+        "folds": [
+          -12.7,
+          -24.5,
+          -9.9,
+          -9.1,
+          -34.6
+        ],
+        "total": -90.8,
+        "avg_wr": 64.3,
+        "avg_rr": 0.498,
+        "avg_sl": -10.094,
+        "pass": false
+      },
+      "prod_va_0.5_2.0": {
+        "folds": [
+          -22.0,
+          -26.3,
+          -19.6,
+          -38.3,
+          -46.2
+        ],
+        "total": -152.5,
+        "avg_wr": 59.6,
+        "avg_rr": 0.569,
+        "avg_sl": -5.893,
+        "pass": false
+      },
+      "va_0.5_1.2": {
+        "folds": [
+          -22.4,
+          -24.7,
+          -18.4,
+          -38.2,
+          -45.7
+        ],
+        "total": -149.5,
+        "avg_wr": 59.6,
+        "avg_rr": 0.571,
+        "avg_sl": -5.871,
+        "pass": false
+      },
+      "va_0.5_1.0_shrink_only": {
+        "folds": [
+          -22.2,
+          -23.9,
+          -18.0,
+          -36.9,
+          -44.9
+        ],
+        "total": -145.9,
+        "avg_wr": 59.6,
+        "avg_rr": 0.574,
+        "avg_sl": -5.841,
+        "pass": false
+      },
+      "cascade98_no_va": {
+        "folds": [
+          80.3,
+          93.6,
+          173.2,
+          113.0,
+          200.5
+        ],
+        "total": 660.6,
+        "avg_wr": 55.7,
+        "avg_rr": 3.125,
+        "avg_sl": -0.69,
+        "pass": true
+      },
+      "cascade98_va_0.5_1.5": {
+        "folds": [
+          68.1,
+          87.8,
+          143.4,
+          93.6,
+          161.9
+        ],
+        "total": 554.8,
+        "avg_wr": 52.1,
+        "avg_rr": 2.484,
+        "avg_sl": -1.061,
+        "pass": true
+      }
+    }
+  },
+  "recommendations": {
+    "priority_1": "Re-enable cascade SL (cascade_tighten_pct=98, preemptive=2/98)",
+    "priority_2": "Reduce vol_adapt clamp_hi from 2.0 to 1.2 or disable",
+    "priority_3": "Consider SL floor at 8% max slot loss",
+    "root_cause": "Vol_adapt clamp_hi=2.0 + cascade OFF = unchecked SL expansion"
+  }
+}

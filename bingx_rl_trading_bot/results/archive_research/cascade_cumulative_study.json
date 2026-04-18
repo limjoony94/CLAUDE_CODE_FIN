@@ -1,0 +1,1084 @@
+{
+  "study": "cascade_cumulative_vs_noncumulative",
+  "date": "2026-03-14",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "tp_scale_factor": 0.72,
+  "n_patterns": 111,
+  "variants": {
+    "cascade_off": {
+      "config": {
+        "name": "cascade_off",
+        "mode": "cascade_off",
+        "keep": 0.15,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1589,
+        "wr": 88.0,
+        "pnl": 367.85,
+        "mdd": 4.88,
+        "pnl_mdd": 75.44,
+        "pnl_per_trade": 0.231,
+        "mdd_mtm": 7.46,
+        "pnl_mdd_mtm": 49.31,
+        "cascade_stats": {
+          "events": 0,
+          "depth_avg": 0.0,
+          "depth_max": 0,
+          "positions_with_cascade": 0,
+          "positions_total": 3057,
+          "sl_avg": 0,
+          "sl_min": 0
+        },
+        "blocked": {
+          "momentum": 36,
+          "agg_risk": 418,
+          "dir_cap": 133,
+          "dup_pat": 362,
+          "max_pos": 6152
+        }
+      }
+    },
+    "cumul_015": {
+      "config": {
+        "name": "cumul_015",
+        "mode": "cumulative",
+        "keep": 0.15,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1846,
+        "wr": 76.8,
+        "pnl": 406.92,
+        "mdd": 1.75,
+        "pnl_mdd": 232.01,
+        "pnl_per_trade": 0.22,
+        "mdd_mtm": 3.81,
+        "pnl_mdd_mtm": 106.8,
+        "cascade_stats": {
+          "events": 328,
+          "depth_avg": 0.1,
+          "depth_max": 2,
+          "positions_with_cascade": 317,
+          "positions_total": 3179,
+          "sl_avg": 0.5494,
+          "sl_min": 0.0957
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 390,
+          "dir_cap": 124,
+          "dup_pat": 381,
+          "max_pos": 6047
+        }
+      }
+    },
+    "noncumul_005": {
+      "config": {
+        "name": "noncumul_005",
+        "mode": "non_cumulative",
+        "keep": 0.05,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1842,
+        "wr": 77.0,
+        "pnl": 446.29,
+        "mdd": 1.7,
+        "pnl_mdd": 263.19,
+        "pnl_per_trade": 0.242,
+        "mdd_mtm": 3.74,
+        "pnl_mdd_mtm": 119.33,
+        "cascade_stats": {
+          "events": 313,
+          "depth_avg": 0.1,
+          "depth_max": 2,
+          "positions_with_cascade": 311,
+          "positions_total": 3175,
+          "sl_avg": 0.1897,
+          "sl_min": 0.0724
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 389,
+          "dir_cap": 122,
+          "dup_pat": 380,
+          "max_pos": 6055
+        }
+      }
+    },
+    "noncumul_010": {
+      "config": {
+        "name": "noncumul_010",
+        "mode": "non_cumulative",
+        "keep": 0.1,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1844,
+        "wr": 76.8,
+        "pnl": 425.54,
+        "mdd": 1.72,
+        "pnl_mdd": 247.28,
+        "pnl_per_trade": 0.231,
+        "mdd_mtm": 3.78,
+        "pnl_mdd_mtm": 112.58,
+        "cascade_stats": {
+          "events": 320,
+          "depth_avg": 0.1,
+          "depth_max": 2,
+          "positions_with_cascade": 315,
+          "positions_total": 3177,
+          "sl_avg": 0.3791,
+          "sl_min": 0.1448
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 390,
+          "dir_cap": 124,
+          "dup_pat": 381,
+          "max_pos": 6049
+        }
+      }
+    },
+    "noncumul_015": {
+      "config": {
+        "name": "noncumul_015",
+        "mode": "non_cumulative",
+        "keep": 0.15,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1845,
+        "wr": 77.0,
+        "pnl": 407.53,
+        "mdd": 1.75,
+        "pnl_mdd": 232.27,
+        "pnl_per_trade": 0.221,
+        "mdd_mtm": 3.81,
+        "pnl_mdd_mtm": 106.96,
+        "cascade_stats": {
+          "events": 325,
+          "depth_avg": 0.1,
+          "depth_max": 2,
+          "positions_with_cascade": 314,
+          "positions_total": 3178,
+          "sl_avg": 0.5687,
+          "sl_min": 0.2172
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 386,
+          "dir_cap": 125,
+          "dup_pat": 375,
+          "max_pos": 6057
+        }
+      }
+    },
+    "noncumul_020": {
+      "config": {
+        "name": "noncumul_020",
+        "mode": "non_cumulative",
+        "keep": 0.2,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1854,
+        "wr": 76.6,
+        "pnl": 388.2,
+        "mdd": 1.8,
+        "pnl_mdd": 216.04,
+        "pnl_per_trade": 0.209,
+        "mdd_mtm": 3.85,
+        "pnl_mdd_mtm": 100.83,
+        "cascade_stats": {
+          "events": 352,
+          "depth_avg": 0.11,
+          "depth_max": 3,
+          "positions_with_cascade": 325,
+          "positions_total": 3183,
+          "sl_avg": 0.7577,
+          "sl_min": 0.2751
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 375,
+          "dir_cap": 131,
+          "dup_pat": 373,
+          "max_pos": 6059
+        }
+      }
+    },
+    "noncumul_030": {
+      "config": {
+        "name": "noncumul_030",
+        "mode": "non_cumulative",
+        "keep": 0.3,
+        "floor": null
+      },
+      "is_metrics": {
+        "trades": 1850,
+        "wr": 77.2,
+        "pnl": 358.98,
+        "mdd": 2.33,
+        "pnl_mdd": 154.19,
+        "pnl_per_trade": 0.194,
+        "mdd_mtm": 4.4,
+        "pnl_mdd_mtm": 81.59,
+        "cascade_stats": {
+          "events": 399,
+          "depth_avg": 0.13,
+          "depth_max": 3,
+          "positions_with_cascade": 341,
+          "positions_total": 3176,
+          "sl_avg": 1.1287,
+          "sl_min": 0.5082
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 387,
+          "dir_cap": 138,
+          "dup_pat": 363,
+          "max_pos": 6057
+        }
+      }
+    },
+    "capped_015_floor03": {
+      "config": {
+        "name": "capped_015_floor03",
+        "mode": "capped_cumulative",
+        "keep": 0.15,
+        "floor": 0.3
+      },
+      "is_metrics": {
+        "trades": 1846,
+        "wr": 76.8,
+        "pnl": 406.79,
+        "mdd": 1.75,
+        "pnl_mdd": 232.42,
+        "pnl_per_trade": 0.22,
+        "mdd_mtm": 3.81,
+        "pnl_mdd_mtm": 106.77,
+        "cascade_stats": {
+          "events": 327,
+          "depth_avg": 0.1,
+          "depth_max": 2,
+          "positions_with_cascade": 316,
+          "positions_total": 3179,
+          "sl_avg": 0.557,
+          "sl_min": 0.3
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 390,
+          "dir_cap": 124,
+          "dup_pat": 381,
+          "max_pos": 6047
+        }
+      }
+    },
+    "capped_015_floor05": {
+      "config": {
+        "name": "capped_015_floor05",
+        "mode": "capped_cumulative",
+        "keep": 0.15,
+        "floor": 0.5
+      },
+      "is_metrics": {
+        "trades": 1844,
+        "wr": 77.1,
+        "pnl": 406.93,
+        "mdd": 1.76,
+        "pnl_mdd": 231.52,
+        "pnl_per_trade": 0.221,
+        "mdd_mtm": 3.82,
+        "pnl_mdd_mtm": 106.53,
+        "cascade_stats": {
+          "events": 326,
+          "depth_avg": 0.1,
+          "depth_max": 2,
+          "positions_with_cascade": 312,
+          "positions_total": 3177,
+          "sl_avg": 0.5899,
+          "sl_min": 0.5
+        },
+        "blocked": {
+          "momentum": 37,
+          "agg_risk": 389,
+          "dir_cap": 122,
+          "dup_pat": 380,
+          "max_pos": 6053
+        }
+      }
+    }
+  },
+  "wf_results": {
+    "cumul_015": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_end_bar": 18660,
+          "oos_end_bar": 37321,
+          "is": {
+            "trades": 419,
+            "wr": 80.0,
+            "pnl": 102.79,
+            "mdd": 1.57,
+            "pnl_mdd": 65.45,
+            "pnl_per_trade": 0.245,
+            "mdd_mtm": 3.81,
+            "pnl_mdd_mtm": 26.98,
+            "cascade_stats": {
+              "events": 64,
+              "depth_avg": 0.08,
+              "depth_max": 2,
+              "positions_with_cascade": 61,
+              "positions_total": 770,
+              "sl_avg": 0.5216,
+              "sl_min": 0.0957
+            },
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 98,
+              "dir_cap": 27,
+              "dup_pat": 91,
+              "max_pos": 1566
+            }
+          },
+          "oos": {
+            "trades": 365,
+            "wr": 80.8,
+            "pnl": 90.74,
+            "mdd": 3.57,
+            "pnl_mdd": 25.4,
+            "pnl_per_trade": 0.249,
+            "mdd_mtm": 7.31,
+            "pnl_mdd_mtm": 12.41,
+            "cascade_stats": {
+              "events": 51,
+              "depth_avg": 0.07,
+              "depth_max": 2,
+              "positions_with_cascade": 49,
+              "positions_total": 733,
+              "sl_avg": 0.5377,
+              "sl_min": 0.0975
+            },
+            "blocked": {
+              "momentum": 8,
+              "agg_risk": 76,
+              "dir_cap": 18,
+              "dup_pat": 76,
+              "max_pos": 1535
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 2,
+          "is_end_bar": 37321,
+          "oos_end_bar": 55981,
+          "is": {
+            "trades": 771,
+            "wr": 81.3,
+            "pnl": 194.87,
+            "mdd": 1.75,
+            "pnl_mdd": 111.11,
+            "pnl_per_trade": 0.253,
+            "mdd_mtm": 3.81,
+            "pnl_mdd_mtm": 51.15,
+            "cascade_stats": {
+              "events": 112,
+              "depth_avg": 0.07,
+              "depth_max": 2,
+              "positions_with_cascade": 107,
+              "positions_total": 1496,
+              "sl_avg": 0.5266,
+              "sl_min": 0.0957
+            },
+            "blocked": {
+              "momentum": 10,
+              "agg_risk": 174,
+              "dir_cap": 45,
+              "dup_pat": 167,
+              "max_pos": 3108
+            }
+          },
+          "oos": {
+            "trades": 507,
+            "wr": 71.8,
+            "pnl": 99.63,
+            "mdd": 2.66,
+            "pnl_mdd": 37.42,
+            "pnl_per_trade": 0.196,
+            "mdd_mtm": 4.59,
+            "pnl_mdd_mtm": 21.71,
+            "cascade_stats": {
+              "events": 108,
+              "depth_avg": 0.13,
+              "depth_max": 2,
+              "positions_with_cascade": 105,
+              "positions_total": 826,
+              "sl_avg": 0.5584,
+              "sl_min": 0.0975
+            },
+            "blocked": {
+              "momentum": 16,
+              "agg_risk": 97,
+              "dir_cap": 45,
+              "dup_pat": 101,
+              "max_pos": 1469
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 3,
+          "is_end_bar": 55981,
+          "oos_end_bar": 74642,
+          "is": {
+            "trades": 1268,
+            "wr": 77.9,
+            "pnl": 295.92,
+            "mdd": 1.75,
+            "pnl_mdd": 168.72,
+            "pnl_per_trade": 0.233,
+            "mdd_mtm": 3.81,
+            "pnl_mdd_mtm": 77.67,
+            "cascade_stats": {
+              "events": 219,
+              "depth_avg": 0.09,
+              "depth_max": 2,
+              "positions_with_cascade": 211,
+              "positions_total": 2316,
+              "sl_avg": 0.5424,
+              "sl_min": 0.0957
+            },
+            "blocked": {
+              "momentum": 26,
+              "agg_risk": 270,
+              "dir_cap": 90,
+              "dup_pat": 264,
+              "max_pos": 4588
+            }
+          },
+          "oos": {
+            "trades": 588,
+            "wr": 73.3,
+            "pnl": 109.27,
+            "mdd": 4.34,
+            "pnl_mdd": 25.17,
+            "pnl_per_trade": 0.186,
+            "mdd_mtm": 5.22,
+            "pnl_mdd_mtm": 20.93,
+            "cascade_stats": {
+              "events": 110,
+              "depth_avg": 0.13,
+              "depth_max": 2,
+              "positions_with_cascade": 107,
+              "positions_total": 872,
+              "sl_avg": 0.5635,
+              "sl_min": 0.0975
+            },
+            "blocked": {
+              "momentum": 11,
+              "agg_risk": 123,
+              "dir_cap": 34,
+              "dup_pat": 119,
+              "max_pos": 1445
+            }
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "total_oos_pnl": 299.64,
+      "all_pass": true,
+      "pass_count": 3
+    },
+    "noncumul_005": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_end_bar": 18660,
+          "oos_end_bar": 37321,
+          "is": {
+            "trades": 419,
+            "wr": 80.0,
+            "pnl": 109.41,
+            "mdd": 1.3,
+            "pnl_mdd": 84.36,
+            "pnl_per_trade": 0.261,
+            "mdd_mtm": 3.74,
+            "pnl_mdd_mtm": 29.25,
+            "cascade_stats": {
+              "events": 60,
+              "depth_avg": 0.08,
+              "depth_max": 1,
+              "positions_with_cascade": 60,
+              "positions_total": 770,
+              "sl_avg": 0.1824,
+              "sl_min": 0.094
+            },
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 98,
+              "dir_cap": 27,
+              "dup_pat": 91,
+              "max_pos": 1566
+            }
+          },
+          "oos": {
+            "trades": 363,
+            "wr": 81.0,
+            "pnl": 96.45,
+            "mdd": 3.54,
+            "pnl_mdd": 27.22,
+            "pnl_per_trade": 0.266,
+            "mdd_mtm": 7.25,
+            "pnl_mdd_mtm": 13.3,
+            "cascade_stats": {
+              "events": 48,
+              "depth_avg": 0.07,
+              "depth_max": 1,
+              "positions_with_cascade": 48,
+              "positions_total": 731,
+              "sl_avg": 0.1872,
+              "sl_min": 0.0724
+            },
+            "blocked": {
+              "momentum": 8,
+              "agg_risk": 76,
+              "dir_cap": 18,
+              "dup_pat": 76,
+              "max_pos": 1537
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 2,
+          "is_end_bar": 37321,
+          "oos_end_bar": 55981,
+          "is": {
+            "trades": 769,
+            "wr": 81.4,
+            "pnl": 206.8,
+            "mdd": 1.7,
+            "pnl_mdd": 121.95,
+            "pnl_per_trade": 0.269,
+            "mdd_mtm": 3.74,
+            "pnl_mdd_mtm": 55.29,
+            "cascade_stats": {
+              "events": 105,
+              "depth_avg": 0.07,
+              "depth_max": 1,
+              "positions_with_cascade": 105,
+              "positions_total": 1494,
+              "sl_avg": 0.1841,
+              "sl_min": 0.0724
+            },
+            "blocked": {
+              "momentum": 10,
+              "agg_risk": 174,
+              "dir_cap": 45,
+              "dup_pat": 167,
+              "max_pos": 3110
+            }
+          },
+          "oos": {
+            "trades": 507,
+            "wr": 71.8,
+            "pnl": 112.33,
+            "mdd": 1.9,
+            "pnl_mdd": 59.15,
+            "pnl_per_trade": 0.222,
+            "mdd_mtm": 4.33,
+            "pnl_mdd_mtm": 25.94,
+            "cascade_stats": {
+              "events": 107,
+              "depth_avg": 0.13,
+              "depth_max": 2,
+              "positions_with_cascade": 105,
+              "positions_total": 826,
+              "sl_avg": 0.1915,
+              "sl_min": 0.0877
+            },
+            "blocked": {
+              "momentum": 16,
+              "agg_risk": 97,
+              "dir_cap": 45,
+              "dup_pat": 101,
+              "max_pos": 1469
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 3,
+          "is_end_bar": 55981,
+          "oos_end_bar": 74642,
+          "is": {
+            "trades": 1266,
+            "wr": 78.0,
+            "pnl": 320.44,
+            "mdd": 1.7,
+            "pnl_mdd": 188.97,
+            "pnl_per_trade": 0.253,
+            "mdd_mtm": 3.74,
+            "pnl_mdd_mtm": 85.68,
+            "cascade_stats": {
+              "events": 211,
+              "depth_avg": 0.09,
+              "depth_max": 2,
+              "positions_with_cascade": 209,
+              "positions_total": 2314,
+              "sl_avg": 0.1878,
+              "sl_min": 0.0724
+            },
+            "blocked": {
+              "momentum": 26,
+              "agg_risk": 270,
+              "dir_cap": 90,
+              "dup_pat": 264,
+              "max_pos": 4590
+            }
+          },
+          "oos": {
+            "trades": 586,
+            "wr": 73.9,
+            "pnl": 124.25,
+            "mdd": 4.28,
+            "pnl_mdd": 29.04,
+            "pnl_per_trade": 0.212,
+            "mdd_mtm": 5.18,
+            "pnl_mdd_mtm": 23.99,
+            "cascade_stats": {
+              "events": 103,
+              "depth_avg": 0.12,
+              "depth_max": 1,
+              "positions_with_cascade": 103,
+              "positions_total": 870,
+              "sl_avg": 0.1936,
+              "sl_min": 0.0921
+            },
+            "blocked": {
+              "momentum": 11,
+              "agg_risk": 122,
+              "dir_cap": 32,
+              "dup_pat": 118,
+              "max_pos": 1451
+            }
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "total_oos_pnl": 333.03,
+      "all_pass": true,
+      "pass_count": 3
+    },
+    "noncumul_010": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_end_bar": 18660,
+          "oos_end_bar": 37321,
+          "is": {
+            "trades": 419,
+            "wr": 80.2,
+            "pnl": 106.51,
+            "mdd": 1.37,
+            "pnl_mdd": 77.83,
+            "pnl_per_trade": 0.254,
+            "mdd_mtm": 3.78,
+            "pnl_mdd_mtm": 28.18,
+            "cascade_stats": {
+              "events": 61,
+              "depth_avg": 0.08,
+              "depth_max": 2,
+              "positions_with_cascade": 60,
+              "positions_total": 770,
+              "sl_avg": 0.3649,
+              "sl_min": 0.188
+            },
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 98,
+              "dir_cap": 27,
+              "dup_pat": 91,
+              "max_pos": 1566
+            }
+          },
+          "oos": {
+            "trades": 363,
+            "wr": 81.0,
+            "pnl": 93.51,
+            "mdd": 3.56,
+            "pnl_mdd": 26.28,
+            "pnl_per_trade": 0.258,
+            "mdd_mtm": 7.28,
+            "pnl_mdd_mtm": 12.84,
+            "cascade_stats": {
+              "events": 49,
+              "depth_avg": 0.07,
+              "depth_max": 2,
+              "positions_with_cascade": 48,
+              "positions_total": 731,
+              "sl_avg": 0.3744,
+              "sl_min": 0.1448
+            },
+            "blocked": {
+              "momentum": 8,
+              "agg_risk": 76,
+              "dir_cap": 18,
+              "dup_pat": 76,
+              "max_pos": 1537
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 2,
+          "is_end_bar": 37321,
+          "oos_end_bar": 55981,
+          "is": {
+            "trades": 769,
+            "wr": 81.5,
+            "pnl": 201.16,
+            "mdd": 1.72,
+            "pnl_mdd": 116.89,
+            "pnl_per_trade": 0.262,
+            "mdd_mtm": 3.78,
+            "pnl_mdd_mtm": 53.22,
+            "cascade_stats": {
+              "events": 107,
+              "depth_avg": 0.07,
+              "depth_max": 2,
+              "positions_with_cascade": 105,
+              "positions_total": 1494,
+              "sl_avg": 0.3681,
+              "sl_min": 0.1448
+            },
+            "blocked": {
+              "momentum": 10,
+              "agg_risk": 174,
+              "dir_cap": 45,
+              "dup_pat": 167,
+              "max_pos": 3110
+            }
+          },
+          "oos": {
+            "trades": 507,
+            "wr": 71.8,
+            "pnl": 105.73,
+            "mdd": 2.21,
+            "pnl_mdd": 47.79,
+            "pnl_per_trade": 0.209,
+            "mdd_mtm": 4.42,
+            "pnl_mdd_mtm": 23.92,
+            "cascade_stats": {
+              "events": 107,
+              "depth_avg": 0.13,
+              "depth_max": 2,
+              "positions_with_cascade": 105,
+              "positions_total": 826,
+              "sl_avg": 0.3829,
+              "sl_min": 0.1755
+            },
+            "blocked": {
+              "momentum": 16,
+              "agg_risk": 97,
+              "dir_cap": 45,
+              "dup_pat": 101,
+              "max_pos": 1469
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 3,
+          "is_end_bar": 55981,
+          "oos_end_bar": 74642,
+          "is": {
+            "trades": 1266,
+            "wr": 78.0,
+            "pnl": 308.25,
+            "mdd": 1.72,
+            "pnl_mdd": 179.12,
+            "pnl_per_trade": 0.243,
+            "mdd_mtm": 3.78,
+            "pnl_mdd_mtm": 81.55,
+            "cascade_stats": {
+              "events": 213,
+              "depth_avg": 0.09,
+              "depth_max": 2,
+              "positions_with_cascade": 209,
+              "positions_total": 2314,
+              "sl_avg": 0.3756,
+              "sl_min": 0.1448
+            },
+            "blocked": {
+              "momentum": 26,
+              "agg_risk": 270,
+              "dir_cap": 90,
+              "dup_pat": 264,
+              "max_pos": 4590
+            }
+          },
+          "oos": {
+            "trades": 588,
+            "wr": 73.3,
+            "pnl": 115.62,
+            "mdd": 4.31,
+            "pnl_mdd": 26.83,
+            "pnl_per_trade": 0.197,
+            "mdd_mtm": 5.2,
+            "pnl_mdd_mtm": 22.23,
+            "cascade_stats": {
+              "events": 108,
+              "depth_avg": 0.12,
+              "depth_max": 2,
+              "positions_with_cascade": 107,
+              "positions_total": 872,
+              "sl_avg": 0.386,
+              "sl_min": 0.1843
+            },
+            "blocked": {
+              "momentum": 11,
+              "agg_risk": 123,
+              "dir_cap": 34,
+              "dup_pat": 119,
+              "max_pos": 1445
+            }
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "total_oos_pnl": 314.86,
+      "all_pass": true,
+      "pass_count": 3
+    },
+    "noncumul_015": {
+      "folds": [
+        {
+          "fold": 1,
+          "is_end_bar": 18660,
+          "oos_end_bar": 37321,
+          "is": {
+            "trades": 420,
+            "wr": 80.0,
+            "pnl": 102.72,
+            "mdd": 1.57,
+            "pnl_mdd": 65.4,
+            "pnl_per_trade": 0.245,
+            "mdd_mtm": 3.81,
+            "pnl_mdd_mtm": 26.96,
+            "cascade_stats": {
+              "events": 64,
+              "depth_avg": 0.08,
+              "depth_max": 2,
+              "positions_with_cascade": 61,
+              "positions_total": 771,
+              "sl_avg": 0.5461,
+              "sl_min": 0.282
+            },
+            "blocked": {
+              "momentum": 2,
+              "agg_risk": 105,
+              "dir_cap": 27,
+              "dup_pat": 91,
+              "max_pos": 1558
+            }
+          },
+          "oos": {
+            "trades": 365,
+            "wr": 80.8,
+            "pnl": 90.39,
+            "mdd": 3.57,
+            "pnl_mdd": 25.31,
+            "pnl_per_trade": 0.248,
+            "mdd_mtm": 7.31,
+            "pnl_mdd_mtm": 12.37,
+            "cascade_stats": {
+              "events": 51,
+              "depth_avg": 0.07,
+              "depth_max": 2,
+              "positions_with_cascade": 49,
+              "positions_total": 733,
+              "sl_avg": 0.5603,
+              "sl_min": 0.2172
+            },
+            "blocked": {
+              "momentum": 8,
+              "agg_risk": 76,
+              "dir_cap": 18,
+              "dup_pat": 76,
+              "max_pos": 1535
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 2,
+          "is_end_bar": 37321,
+          "oos_end_bar": 55981,
+          "is": {
+            "trades": 772,
+            "wr": 81.3,
+            "pnl": 194.44,
+            "mdd": 1.75,
+            "pnl_mdd": 110.82,
+            "pnl_per_trade": 0.252,
+            "mdd_mtm": 3.81,
+            "pnl_mdd_mtm": 51.03,
+            "cascade_stats": {
+              "events": 112,
+              "depth_avg": 0.07,
+              "depth_max": 2,
+              "positions_with_cascade": 107,
+              "positions_total": 1497,
+              "sl_avg": 0.5509,
+              "sl_min": 0.2172
+            },
+            "blocked": {
+              "momentum": 10,
+              "agg_risk": 181,
+              "dir_cap": 45,
+              "dup_pat": 167,
+              "max_pos": 3100
+            }
+          },
+          "oos": {
+            "trades": 507,
+            "wr": 71.8,
+            "pnl": 99.1,
+            "mdd": 2.67,
+            "pnl_mdd": 37.17,
+            "pnl_per_trade": 0.195,
+            "mdd_mtm": 4.6,
+            "pnl_mdd_mtm": 21.54,
+            "cascade_stats": {
+              "events": 108,
+              "depth_avg": 0.13,
+              "depth_max": 2,
+              "positions_with_cascade": 105,
+              "positions_total": 826,
+              "sl_avg": 0.5744,
+              "sl_min": 0.2632
+            },
+            "blocked": {
+              "momentum": 16,
+              "agg_risk": 97,
+              "dir_cap": 45,
+              "dup_pat": 101,
+              "max_pos": 1469
+            }
+          },
+          "oos_pass": "True"
+        },
+        {
+          "fold": 3,
+          "is_end_bar": 55981,
+          "oos_end_bar": 74642,
+          "is": {
+            "trades": 1269,
+            "wr": 77.9,
+            "pnl": 294.96,
+            "mdd": 1.75,
+            "pnl_mdd": 168.12,
+            "pnl_per_trade": 0.232,
+            "mdd_mtm": 3.81,
+            "pnl_mdd_mtm": 77.42,
+            "cascade_stats": {
+              "events": 219,
+              "depth_avg": 0.09,
+              "depth_max": 2,
+              "positions_with_cascade": 211,
+              "positions_total": 2317,
+              "sl_avg": 0.5627,
+              "sl_min": 0.2172
+            },
+            "blocked": {
+              "momentum": 26,
+              "agg_risk": 277,
+              "dir_cap": 90,
+              "dup_pat": 264,
+              "max_pos": 4580
+            }
+          },
+          "oos": {
+            "trades": 586,
+            "wr": 73.9,
+            "pnl": 110.83,
+            "mdd": 4.34,
+            "pnl_mdd": 25.53,
+            "pnl_per_trade": 0.189,
+            "mdd_mtm": 5.22,
+            "pnl_mdd_mtm": 21.23,
+            "cascade_stats": {
+              "events": 107,
+              "depth_avg": 0.12,
+              "depth_max": 2,
+              "positions_with_cascade": 104,
+              "positions_total": 870,
+              "sl_avg": 0.5813,
+              "sl_min": 0.2764
+            },
+            "blocked": {
+              "momentum": 11,
+              "agg_risk": 112,
+              "dir_cap": 35,
+              "dup_pat": 113,
+              "max_pos": 1463
+            }
+          },
+          "oos_pass": "True"
+        }
+      ],
+      "total_oos_pnl": 300.32,
+      "all_pass": true,
+      "pass_count": 3
+    }
+  },
+  "mc_results": {
+    "cumul_015": {
+      "p_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_p": 0.0,
+      "pass": true,
+      "n_trades": 1846
+    },
+    "noncumul_005": {
+      "p_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_p": 0.0,
+      "pass": true,
+      "n_trades": 1842
+    },
+    "noncumul_010": {
+      "p_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_p": 0.0,
+      "pass": true,
+      "n_trades": 1844
+    },
+    "noncumul_015": {
+      "p_values": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_p": 0.0,
+      "pass": true,
+      "n_trades": 1845
+    }
+  },
+  "elapsed_seconds": 34.4
+}

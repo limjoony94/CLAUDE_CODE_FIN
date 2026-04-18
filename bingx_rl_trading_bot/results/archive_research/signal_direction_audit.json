@@ -1,0 +1,1581 @@
+{
+  "study": "signal_direction_audit",
+  "sections": {
+    "overall": [
+      {
+        "horizon_bars": 5,
+        "horizon_label": "25min",
+        "long_accuracy": 51.5,
+        "long_mean_return": 0.0034,
+        "long_total": 8213,
+        "short_accuracy": 49.8,
+        "short_mean_return": 0.0036,
+        "short_total": 8182,
+        "combined_accuracy": 50.6
+      },
+      {
+        "horizon_bars": 10,
+        "horizon_label": "50min",
+        "long_accuracy": 51.4,
+        "long_mean_return": 0.0037,
+        "long_total": 8212,
+        "short_accuracy": 50.7,
+        "short_mean_return": 0.0112,
+        "short_total": 8182,
+        "combined_accuracy": 51.0
+      },
+      {
+        "horizon_bars": 30,
+        "horizon_label": "150min",
+        "long_accuracy": 52.3,
+        "long_mean_return": 0.0154,
+        "long_total": 8212,
+        "short_accuracy": 50.8,
+        "short_mean_return": 0.0381,
+        "short_total": 8178,
+        "combined_accuracy": 51.6
+      },
+      {
+        "horizon_bars": 60,
+        "horizon_label": "300min",
+        "long_accuracy": 52.8,
+        "long_mean_return": 0.0245,
+        "long_total": 8209,
+        "short_accuracy": 52.1,
+        "short_mean_return": 0.0626,
+        "short_total": 8171,
+        "combined_accuracy": 52.4
+      },
+      {
+        "horizon_bars": 288,
+        "horizon_label": "24h",
+        "long_accuracy": 53.0,
+        "long_mean_return": 0.0288,
+        "long_total": 8192,
+        "short_accuracy": 53.6,
+        "short_mean_return": 0.2256,
+        "short_total": 8139,
+        "combined_accuracy": 53.3
+      }
+    ],
+    "period_comparison": {
+      "Earlier_LONG": [
+        {
+          "horizon": 5,
+          "accuracy": 51.5,
+          "mean_return": 0.0085,
+          "n_signals": 6644
+        },
+        {
+          "horizon": 10,
+          "accuracy": 51.6,
+          "mean_return": 0.0103,
+          "n_signals": 6644
+        },
+        {
+          "horizon": 30,
+          "accuracy": 52.4,
+          "mean_return": 0.0252,
+          "n_signals": 6644
+        },
+        {
+          "horizon": 60,
+          "accuracy": 54.0,
+          "mean_return": 0.0482,
+          "n_signals": 6644
+        },
+        {
+          "horizon": 288,
+          "accuracy": 55.4,
+          "mean_return": 0.1611,
+          "n_signals": 6644
+        }
+      ],
+      "Earlier_SHORT": [
+        {
+          "horizon": 5,
+          "accuracy": 49.5,
+          "mean_return": -0.0033,
+          "n_signals": 6400
+        },
+        {
+          "horizon": 10,
+          "accuracy": 50.5,
+          "mean_return": 0.0046,
+          "n_signals": 6400
+        },
+        {
+          "horizon": 30,
+          "accuracy": 50.8,
+          "mean_return": 0.0338,
+          "n_signals": 6400
+        },
+        {
+          "horizon": 60,
+          "accuracy": 52.0,
+          "mean_return": 0.0638,
+          "n_signals": 6400
+        },
+        {
+          "horizon": 288,
+          "accuracy": 52.4,
+          "mean_return": 0.1912,
+          "n_signals": 6400
+        }
+      ],
+      "Recent 60d_LONG": [
+        {
+          "horizon": 5,
+          "accuracy": 51.4,
+          "mean_return": -0.0184,
+          "n_signals": 1569
+        },
+        {
+          "horizon": 10,
+          "accuracy": 50.3,
+          "mean_return": -0.0242,
+          "n_signals": 1568
+        },
+        {
+          "horizon": 30,
+          "accuracy": 51.7,
+          "mean_return": -0.0259,
+          "n_signals": 1568
+        },
+        {
+          "horizon": 60,
+          "accuracy": 48.1,
+          "mean_return": -0.0764,
+          "n_signals": 1565
+        },
+        {
+          "horizon": 288,
+          "accuracy": 42.9,
+          "mean_return": -0.539,
+          "n_signals": 1548
+        }
+      ],
+      "Recent 60d_SHORT": [
+        {
+          "horizon": 5,
+          "accuracy": 51.1,
+          "mean_return": 0.0284,
+          "n_signals": 1782
+        },
+        {
+          "horizon": 10,
+          "accuracy": 51.4,
+          "mean_return": 0.0351,
+          "n_signals": 1782
+        },
+        {
+          "horizon": 30,
+          "accuracy": 50.8,
+          "mean_return": 0.0535,
+          "n_signals": 1778
+        },
+        {
+          "horizon": 60,
+          "accuracy": 52.1,
+          "mean_return": 0.0586,
+          "n_signals": 1771
+        },
+        {
+          "horizon": 288,
+          "accuracy": 57.8,
+          "mean_return": 0.3522,
+          "n_signals": 1739
+        }
+      ]
+    },
+    "quarterly": [
+      {
+        "quarter": "2025-05",
+        "btc_return": 21.3,
+        "long_accuracy": 58.4,
+        "long_n": 2596,
+        "short_accuracy": 49.4,
+        "short_n": 2361
+      },
+      {
+        "quarter": "2025-08",
+        "btc_return": -3.4,
+        "long_accuracy": 55.9,
+        "long_n": 2623,
+        "short_accuracy": 49.8,
+        "short_n": 2317
+      },
+      {
+        "quarter": "2025-11",
+        "btc_return": -24.4,
+        "long_accuracy": 48.6,
+        "long_n": 2317,
+        "short_accuracy": 58.0,
+        "short_n": 2594
+      },
+      {
+        "quarter": "2026-01",
+        "btc_return": -19.0,
+        "long_accuracy": 36.0,
+        "long_n": 656,
+        "short_accuracy": 61.6,
+        "short_n": 867
+      }
+    ],
+    "per_pattern": [
+      {
+        "pattern": "MD-IH-DN",
+        "direction": "LONG",
+        "recent_signals": 5,
+        "recent_accuracy": 0.0,
+        "recent_mean_return": -2.0328,
+        "full_accuracy": 56.2,
+        "full_signals": 48,
+        "accuracy_change": -56.2
+      },
+      {
+        "pattern": "ST-ST-BD",
+        "direction": "LONG",
+        "recent_signals": 18,
+        "recent_accuracy": 16.7,
+        "recent_mean_return": -0.546,
+        "full_accuracy": 45.1,
+        "full_signals": 82,
+        "accuracy_change": -28.5
+      },
+      {
+        "pattern": "MD-DN-BU",
+        "direction": "LONG",
+        "recent_signals": 15,
+        "recent_accuracy": 20.0,
+        "recent_mean_return": -1.6065,
+        "full_accuracy": 43.6,
+        "full_signals": 78,
+        "accuracy_change": -23.6
+      },
+      {
+        "pattern": "H-MD-U",
+        "direction": "LONG",
+        "recent_signals": 15,
+        "recent_accuracy": 20.0,
+        "recent_mean_return": -0.6152,
+        "full_accuracy": 55.2,
+        "full_signals": 67,
+        "accuracy_change": -35.2
+      },
+      {
+        "pattern": "DN-MU-BD",
+        "direction": "LONG",
+        "recent_signals": 18,
+        "recent_accuracy": 22.2,
+        "recent_mean_return": -2.2293,
+        "full_accuracy": 53.3,
+        "full_signals": 75,
+        "accuracy_change": -31.1
+      },
+      {
+        "pattern": "GS-U-DN",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 23.1,
+        "recent_mean_return": -0.6952,
+        "full_accuracy": 48.6,
+        "full_signals": 70,
+        "accuracy_change": -25.5
+      },
+      {
+        "pattern": "BD-U-MD",
+        "direction": "LONG",
+        "recent_signals": 12,
+        "recent_accuracy": 25.0,
+        "recent_mean_return": -1.4385,
+        "full_accuracy": 53.2,
+        "full_signals": 79,
+        "accuracy_change": -28.2
+      },
+      {
+        "pattern": "ST-MU-U",
+        "direction": "LONG",
+        "recent_signals": 23,
+        "recent_accuracy": 26.1,
+        "recent_mean_return": -0.9885,
+        "full_accuracy": 55.6,
+        "full_signals": 160,
+        "accuracy_change": -29.5
+      },
+      {
+        "pattern": "ST-DN-IH",
+        "direction": "LONG",
+        "recent_signals": 15,
+        "recent_accuracy": 26.7,
+        "recent_mean_return": -0.9379,
+        "full_accuracy": 53.0,
+        "full_signals": 83,
+        "accuracy_change": -26.3
+      },
+      {
+        "pattern": "IH-DN-U",
+        "direction": "LONG",
+        "recent_signals": 24,
+        "recent_accuracy": 29.2,
+        "recent_mean_return": -0.7242,
+        "full_accuracy": 44.9,
+        "full_signals": 127,
+        "accuracy_change": -15.7
+      },
+      {
+        "pattern": "D-DN-MU",
+        "direction": "LONG",
+        "recent_signals": 16,
+        "recent_accuracy": 31.2,
+        "recent_mean_return": -2.4558,
+        "full_accuracy": 51.9,
+        "full_signals": 52,
+        "accuracy_change": -20.7
+      },
+      {
+        "pattern": "ST-MU-DN",
+        "direction": "LONG",
+        "recent_signals": 38,
+        "recent_accuracy": 31.6,
+        "recent_mean_return": -0.6443,
+        "full_accuracy": 49.2,
+        "full_signals": 199,
+        "accuracy_change": -17.7
+      },
+      {
+        "pattern": "ST-DN-D",
+        "direction": "LONG",
+        "recent_signals": 24,
+        "recent_accuracy": 33.3,
+        "recent_mean_return": -0.6436,
+        "full_accuracy": 46.8,
+        "full_signals": 109,
+        "accuracy_change": -13.5
+      },
+      {
+        "pattern": "D-BD-U",
+        "direction": "LONG",
+        "recent_signals": 15,
+        "recent_accuracy": 33.3,
+        "recent_mean_return": -0.3898,
+        "full_accuracy": 49.2,
+        "full_signals": 59,
+        "accuracy_change": -15.8
+      },
+      {
+        "pattern": "MU-U-ST",
+        "direction": "LONG",
+        "recent_signals": 32,
+        "recent_accuracy": 34.4,
+        "recent_mean_return": -0.798,
+        "full_accuracy": 49.1,
+        "full_signals": 167,
+        "accuracy_change": -14.7
+      },
+      {
+        "pattern": "DN-U-MU",
+        "direction": "LONG",
+        "recent_signals": 64,
+        "recent_accuracy": 35.9,
+        "recent_mean_return": -1.0151,
+        "full_accuracy": 52.8,
+        "full_signals": 326,
+        "accuracy_change": -16.8
+      },
+      {
+        "pattern": "MD-MU-ST",
+        "direction": "LONG",
+        "recent_signals": 8,
+        "recent_accuracy": 37.5,
+        "recent_mean_return": -0.3766,
+        "full_accuracy": 58.8,
+        "full_signals": 68,
+        "accuracy_change": -21.3
+      },
+      {
+        "pattern": "MD-BD-U",
+        "direction": "LONG",
+        "recent_signals": 21,
+        "recent_accuracy": 38.1,
+        "recent_mean_return": -0.9817,
+        "full_accuracy": 51.8,
+        "full_signals": 110,
+        "accuracy_change": -13.7
+      },
+      {
+        "pattern": "MU-MU-DN",
+        "direction": "LONG",
+        "recent_signals": 21,
+        "recent_accuracy": 38.1,
+        "recent_mean_return": -1.2257,
+        "full_accuracy": 45.2,
+        "full_signals": 115,
+        "accuracy_change": -7.1
+      },
+      {
+        "pattern": "MU-DN-BU",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 38.5,
+        "recent_mean_return": -0.0162,
+        "full_accuracy": 54.5,
+        "full_signals": 77,
+        "accuracy_change": -16.1
+      },
+      {
+        "pattern": "IH-BD-U",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 38.5,
+        "recent_mean_return": -0.6245,
+        "full_accuracy": 51.0,
+        "full_signals": 51,
+        "accuracy_change": -12.5
+      },
+      {
+        "pattern": "DN-ST-MU",
+        "direction": "LONG",
+        "recent_signals": 31,
+        "recent_accuracy": 38.7,
+        "recent_mean_return": -0.7456,
+        "full_accuracy": 49.4,
+        "full_signals": 176,
+        "accuracy_change": -10.7
+      },
+      {
+        "pattern": "H-U-U",
+        "direction": "LONG",
+        "recent_signals": 28,
+        "recent_accuracy": 39.3,
+        "recent_mean_return": -0.1781,
+        "full_accuracy": 45.8,
+        "full_signals": 142,
+        "accuracy_change": -6.5
+      },
+      {
+        "pattern": "ST-MD-ST",
+        "direction": "LONG",
+        "recent_signals": 20,
+        "recent_accuracy": 40.0,
+        "recent_mean_return": -0.6713,
+        "full_accuracy": 54.1,
+        "full_signals": 98,
+        "accuracy_change": -14.1
+      },
+      {
+        "pattern": "U-MD-IH",
+        "direction": "LONG",
+        "recent_signals": 10,
+        "recent_accuracy": 40.0,
+        "recent_mean_return": -1.8002,
+        "full_accuracy": 60.0,
+        "full_signals": 55,
+        "accuracy_change": -20.0
+      },
+      {
+        "pattern": "U-MD-BD",
+        "direction": "LONG",
+        "recent_signals": 20,
+        "recent_accuracy": 40.0,
+        "recent_mean_return": -0.7177,
+        "full_accuracy": 46.8,
+        "full_signals": 94,
+        "accuracy_change": -6.8
+      },
+      {
+        "pattern": "H-MU-U",
+        "direction": "LONG",
+        "recent_signals": 5,
+        "recent_accuracy": 40.0,
+        "recent_mean_return": 0.06,
+        "full_accuracy": 51.8,
+        "full_signals": 56,
+        "accuracy_change": -11.8
+      },
+      {
+        "pattern": "BU-DN-BU",
+        "direction": "SHORT",
+        "recent_signals": 30,
+        "recent_accuracy": 40.0,
+        "recent_mean_return": -0.1924,
+        "full_accuracy": 54.4,
+        "full_signals": 103,
+        "accuracy_change": -14.4
+      },
+      {
+        "pattern": "BD-DN-DN",
+        "direction": "LONG",
+        "recent_signals": 49,
+        "recent_accuracy": 40.8,
+        "recent_mean_return": -0.4645,
+        "full_accuracy": 52.9,
+        "full_signals": 225,
+        "accuracy_change": -12.1
+      },
+      {
+        "pattern": "DN-U-DN",
+        "direction": "LONG",
+        "recent_signals": 209,
+        "recent_accuracy": 41.1,
+        "recent_mean_return": -0.5753,
+        "full_accuracy": 51.3,
+        "full_signals": 1038,
+        "accuracy_change": -10.2
+      },
+      {
+        "pattern": "MU-DN-BD",
+        "direction": "LONG",
+        "recent_signals": 12,
+        "recent_accuracy": 41.7,
+        "recent_mean_return": -1.7587,
+        "full_accuracy": 56.4,
+        "full_signals": 78,
+        "accuracy_change": -14.7
+      },
+      {
+        "pattern": "MU-DN-IH",
+        "direction": "LONG",
+        "recent_signals": 12,
+        "recent_accuracy": 41.7,
+        "recent_mean_return": -1.4703,
+        "full_accuracy": 55.4,
+        "full_signals": 56,
+        "accuracy_change": -13.7
+      },
+      {
+        "pattern": "U-MD-D",
+        "direction": "LONG",
+        "recent_signals": 12,
+        "recent_accuracy": 41.7,
+        "recent_mean_return": -0.3125,
+        "full_accuracy": 48.1,
+        "full_signals": 54,
+        "accuracy_change": -6.5
+      },
+      {
+        "pattern": "BD-DN-U",
+        "direction": "LONG",
+        "recent_signals": 66,
+        "recent_accuracy": 42.4,
+        "recent_mean_return": -0.5408,
+        "full_accuracy": 53.9,
+        "full_signals": 282,
+        "accuracy_change": -11.5
+      },
+      {
+        "pattern": "ST-BD-DN",
+        "direction": "LONG",
+        "recent_signals": 28,
+        "recent_accuracy": 42.9,
+        "recent_mean_return": -0.1191,
+        "full_accuracy": 55.7,
+        "full_signals": 122,
+        "accuracy_change": -12.9
+      },
+      {
+        "pattern": "BU-MU-U",
+        "direction": "SHORT",
+        "recent_signals": 7,
+        "recent_accuracy": 42.9,
+        "recent_mean_return": 0.2535,
+        "full_accuracy": 47.3,
+        "full_signals": 55,
+        "accuracy_change": -4.4
+      },
+      {
+        "pattern": "DN-DN-ST",
+        "direction": "LONG",
+        "recent_signals": 113,
+        "recent_accuracy": 43.4,
+        "recent_mean_return": -0.4668,
+        "full_accuracy": 51.2,
+        "full_signals": 543,
+        "accuracy_change": -7.8
+      },
+      {
+        "pattern": "U-GS-U",
+        "direction": "SHORT",
+        "recent_signals": 16,
+        "recent_accuracy": 43.8,
+        "recent_mean_return": -0.1964,
+        "full_accuracy": 52.9,
+        "full_signals": 70,
+        "accuracy_change": -9.1
+      },
+      {
+        "pattern": "BD-DN-MU",
+        "direction": "LONG",
+        "recent_signals": 16,
+        "recent_accuracy": 43.8,
+        "recent_mean_return": -0.1428,
+        "full_accuracy": 63.0,
+        "full_signals": 73,
+        "accuracy_change": -19.3
+      },
+      {
+        "pattern": "MU-MD-MD",
+        "direction": "LONG",
+        "recent_signals": 9,
+        "recent_accuracy": 44.4,
+        "recent_mean_return": -0.535,
+        "full_accuracy": 54.4,
+        "full_signals": 68,
+        "accuracy_change": -10.0
+      },
+      {
+        "pattern": "H-MD-DN",
+        "direction": "LONG",
+        "recent_signals": 18,
+        "recent_accuracy": 44.4,
+        "recent_mean_return": -0.9127,
+        "full_accuracy": 61.3,
+        "full_signals": 62,
+        "accuracy_change": -16.8
+      },
+      {
+        "pattern": "U-MU-DN",
+        "direction": "LONG",
+        "recent_signals": 56,
+        "recent_accuracy": 44.6,
+        "recent_mean_return": -1.0351,
+        "full_accuracy": 53.7,
+        "full_signals": 324,
+        "accuracy_change": -9.1
+      },
+      {
+        "pattern": "U-ST-MU",
+        "direction": "LONG",
+        "recent_signals": 29,
+        "recent_accuracy": 44.8,
+        "recent_mean_return": -0.0225,
+        "full_accuracy": 50.3,
+        "full_signals": 171,
+        "accuracy_change": -5.5
+      },
+      {
+        "pattern": "DN-MU-H",
+        "direction": "SHORT",
+        "recent_signals": 11,
+        "recent_accuracy": 45.5,
+        "recent_mean_return": -0.5382,
+        "full_accuracy": 50.0,
+        "full_signals": 66,
+        "accuracy_change": -4.5
+      },
+      {
+        "pattern": "BU-BD-U",
+        "direction": "SHORT",
+        "recent_signals": 22,
+        "recent_accuracy": 45.5,
+        "recent_mean_return": -0.236,
+        "full_accuracy": 55.5,
+        "full_signals": 110,
+        "accuracy_change": -10.0
+      },
+      {
+        "pattern": "DN-ST-H",
+        "direction": "SHORT",
+        "recent_signals": 22,
+        "recent_accuracy": 45.5,
+        "recent_mean_return": -0.1453,
+        "full_accuracy": 51.7,
+        "full_signals": 87,
+        "accuracy_change": -6.3
+      },
+      {
+        "pattern": "U-DN-D",
+        "direction": "LONG",
+        "recent_signals": 35,
+        "recent_accuracy": 45.7,
+        "recent_mean_return": -0.48,
+        "full_accuracy": 46.6,
+        "full_signals": 174,
+        "accuracy_change": -0.8
+      },
+      {
+        "pattern": "ST-IH-DN",
+        "direction": "SHORT",
+        "recent_signals": 24,
+        "recent_accuracy": 45.8,
+        "recent_mean_return": -0.5936,
+        "full_accuracy": 57.6,
+        "full_signals": 85,
+        "accuracy_change": -11.8
+      },
+      {
+        "pattern": "MU-U-BU",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 46.2,
+        "recent_mean_return": -0.06,
+        "full_accuracy": 48.9,
+        "full_signals": 92,
+        "accuracy_change": -2.8
+      },
+      {
+        "pattern": "BD-MD-U",
+        "direction": "LONG",
+        "recent_signals": 15,
+        "recent_accuracy": 46.7,
+        "recent_mean_return": -0.8097,
+        "full_accuracy": 53.2,
+        "full_signals": 62,
+        "accuracy_change": -6.6
+      },
+      {
+        "pattern": "DN-MD-ST",
+        "direction": "LONG",
+        "recent_signals": 32,
+        "recent_accuracy": 46.9,
+        "recent_mean_return": 0.4995,
+        "full_accuracy": 55.1,
+        "full_signals": 147,
+        "accuracy_change": -8.2
+      },
+      {
+        "pattern": "DN-BD-MU",
+        "direction": "LONG",
+        "recent_signals": 17,
+        "recent_accuracy": 47.1,
+        "recent_mean_return": 0.104,
+        "full_accuracy": 57.9,
+        "full_signals": 76,
+        "accuracy_change": -10.8
+      },
+      {
+        "pattern": "DN-BU-BU",
+        "direction": "SHORT",
+        "recent_signals": 19,
+        "recent_accuracy": 47.4,
+        "recent_mean_return": 0.3745,
+        "full_accuracy": 61.5,
+        "full_signals": 91,
+        "accuracy_change": -14.2
+      },
+      {
+        "pattern": "DN-DN-D",
+        "direction": "SHORT",
+        "recent_signals": 29,
+        "recent_accuracy": 48.3,
+        "recent_mean_return": 0.6094,
+        "full_accuracy": 52.6,
+        "full_signals": 194,
+        "accuracy_change": -4.3
+      },
+      {
+        "pattern": "U-BU-U",
+        "direction": "SHORT",
+        "recent_signals": 37,
+        "recent_accuracy": 48.6,
+        "recent_mean_return": 0.1395,
+        "full_accuracy": 46.8,
+        "full_signals": 231,
+        "accuracy_change": 1.9
+      },
+      {
+        "pattern": "DN-BD-ST",
+        "direction": "SHORT",
+        "recent_signals": 38,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": -0.0123,
+        "full_accuracy": 51.0,
+        "full_signals": 143,
+        "accuracy_change": -1.0
+      },
+      {
+        "pattern": "MU-DN-MD",
+        "direction": "LONG",
+        "recent_signals": 22,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": -0.9744,
+        "full_accuracy": 56.8,
+        "full_signals": 139,
+        "accuracy_change": -6.8
+      },
+      {
+        "pattern": "U-DN-DF",
+        "direction": "SHORT",
+        "recent_signals": 16,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.0257,
+        "full_accuracy": 47.4,
+        "full_signals": 78,
+        "accuracy_change": 2.6
+      },
+      {
+        "pattern": "DN-U-DF",
+        "direction": "SHORT",
+        "recent_signals": 18,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.4928,
+        "full_accuracy": 48.5,
+        "full_signals": 66,
+        "accuracy_change": 1.5
+      },
+      {
+        "pattern": "ST-BD-U",
+        "direction": "SHORT",
+        "recent_signals": 38,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": -0.4046,
+        "full_accuracy": 48.9,
+        "full_signals": 178,
+        "accuracy_change": 1.1
+      },
+      {
+        "pattern": "MU-BU-DN",
+        "direction": "SHORT",
+        "recent_signals": 20,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": -0.1331,
+        "full_accuracy": 46.7,
+        "full_signals": 92,
+        "accuracy_change": 3.3
+      },
+      {
+        "pattern": "D-MU-DN",
+        "direction": "SHORT",
+        "recent_signals": 14,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": -0.431,
+        "full_accuracy": 57.3,
+        "full_signals": 75,
+        "accuracy_change": -7.3
+      },
+      {
+        "pattern": "BU-BU-DN",
+        "direction": "SHORT",
+        "recent_signals": 28,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.0673,
+        "full_accuracy": 48.7,
+        "full_signals": 117,
+        "accuracy_change": 1.3
+      },
+      {
+        "pattern": "U-IH-ST",
+        "direction": "SHORT",
+        "recent_signals": 8,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.4985,
+        "full_accuracy": 53.4,
+        "full_signals": 58,
+        "accuracy_change": -3.4
+      },
+      {
+        "pattern": "DN-ST-D",
+        "direction": "SHORT",
+        "recent_signals": 20,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.6736,
+        "full_accuracy": 47.4,
+        "full_signals": 95,
+        "accuracy_change": 2.6
+      },
+      {
+        "pattern": "U-BU-MU",
+        "direction": "SHORT",
+        "recent_signals": 8,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.6833,
+        "full_accuracy": 50.9,
+        "full_signals": 55,
+        "accuracy_change": -0.9
+      },
+      {
+        "pattern": "MD-IH-U",
+        "direction": "LONG",
+        "recent_signals": 12,
+        "recent_accuracy": 50.0,
+        "recent_mean_return": 0.0474,
+        "full_accuracy": 50.8,
+        "full_signals": 61,
+        "accuracy_change": -0.8
+      },
+      {
+        "pattern": "DN-U-MD",
+        "direction": "LONG",
+        "recent_signals": 62,
+        "recent_accuracy": 51.6,
+        "recent_mean_return": 0.0059,
+        "full_accuracy": 56.6,
+        "full_signals": 311,
+        "accuracy_change": -5.0
+      },
+      {
+        "pattern": "U-MU-MD",
+        "direction": "LONG",
+        "recent_signals": 17,
+        "recent_accuracy": 52.9,
+        "recent_mean_return": -0.781,
+        "full_accuracy": 61.7,
+        "full_signals": 133,
+        "accuracy_change": -8.7
+      },
+      {
+        "pattern": "IH-U-MD",
+        "direction": "LONG",
+        "recent_signals": 13,
+        "recent_accuracy": 53.8,
+        "recent_mean_return": 0.5606,
+        "full_accuracy": 59.6,
+        "full_signals": 57,
+        "accuracy_change": -5.8
+      },
+      {
+        "pattern": "DN-MD-IH",
+        "direction": "LONG",
+        "recent_signals": 11,
+        "recent_accuracy": 54.5,
+        "recent_mean_return": 0.4835,
+        "full_accuracy": 66.7,
+        "full_signals": 63,
+        "accuracy_change": -12.1
+      },
+      {
+        "pattern": "BU-BU-U",
+        "direction": "SHORT",
+        "recent_signals": 22,
+        "recent_accuracy": 54.5,
+        "recent_mean_return": 0.6369,
+        "full_accuracy": 60.7,
+        "full_signals": 84,
+        "accuracy_change": -6.2
+      },
+      {
+        "pattern": "MD-DN-MU",
+        "direction": "LONG",
+        "recent_signals": 22,
+        "recent_accuracy": 54.5,
+        "recent_mean_return": -0.9593,
+        "full_accuracy": 57.0,
+        "full_signals": 149,
+        "accuracy_change": -2.5
+      },
+      {
+        "pattern": "MD-ST-DN",
+        "direction": "SHORT",
+        "recent_signals": 31,
+        "recent_accuracy": 54.8,
+        "recent_mean_return": -0.2371,
+        "full_accuracy": 53.4,
+        "full_signals": 163,
+        "accuracy_change": 1.5
+      },
+      {
+        "pattern": "DN-MU-ST",
+        "direction": "SHORT",
+        "recent_signals": 29,
+        "recent_accuracy": 55.2,
+        "recent_mean_return": 0.0252,
+        "full_accuracy": 51.4,
+        "full_signals": 181,
+        "accuracy_change": 3.8
+      },
+      {
+        "pattern": "ST-U-ST",
+        "direction": "SHORT",
+        "recent_signals": 87,
+        "recent_accuracy": 55.2,
+        "recent_mean_return": 0.2829,
+        "full_accuracy": 54.3,
+        "full_signals": 324,
+        "accuracy_change": 0.9
+      },
+      {
+        "pattern": "BD-ST-DN",
+        "direction": "SHORT",
+        "recent_signals": 29,
+        "recent_accuracy": 55.2,
+        "recent_mean_return": 0.4603,
+        "full_accuracy": 46.7,
+        "full_signals": 150,
+        "accuracy_change": 8.5
+      },
+      {
+        "pattern": "DN-BD-BU",
+        "direction": "SHORT",
+        "recent_signals": 29,
+        "recent_accuracy": 55.2,
+        "recent_mean_return": 0.429,
+        "full_accuracy": 57.0,
+        "full_signals": 121,
+        "accuracy_change": -1.9
+      },
+      {
+        "pattern": "MD-ST-ST",
+        "direction": "SHORT",
+        "recent_signals": 27,
+        "recent_accuracy": 55.6,
+        "recent_mean_return": -0.1029,
+        "full_accuracy": 53.6,
+        "full_signals": 112,
+        "accuracy_change": 2.0
+      },
+      {
+        "pattern": "DN-ST-ST",
+        "direction": "SHORT",
+        "recent_signals": 55,
+        "recent_accuracy": 56.4,
+        "recent_mean_return": 0.1035,
+        "full_accuracy": 52.5,
+        "full_signals": 299,
+        "accuracy_change": 3.9
+      },
+      {
+        "pattern": "U-BU-BD",
+        "direction": "SHORT",
+        "recent_signals": 21,
+        "recent_accuracy": 57.1,
+        "recent_mean_return": 0.5439,
+        "full_accuracy": 50.9,
+        "full_signals": 106,
+        "accuracy_change": 6.2
+      },
+      {
+        "pattern": "U-U-D",
+        "direction": "SHORT",
+        "recent_signals": 40,
+        "recent_accuracy": 57.5,
+        "recent_mean_return": 0.5474,
+        "full_accuracy": 54.9,
+        "full_signals": 162,
+        "accuracy_change": 2.6
+      },
+      {
+        "pattern": "MU-ST-U",
+        "direction": "LONG",
+        "recent_signals": 26,
+        "recent_accuracy": 57.7,
+        "recent_mean_return": -0.1019,
+        "full_accuracy": 52.2,
+        "full_signals": 186,
+        "accuracy_change": 5.5
+      },
+      {
+        "pattern": "U-U-ST",
+        "direction": "SHORT",
+        "recent_signals": 123,
+        "recent_accuracy": 58.5,
+        "recent_mean_return": 0.1938,
+        "full_accuracy": 53.3,
+        "full_signals": 557,
+        "accuracy_change": 5.2
+      },
+      {
+        "pattern": "BD-BD-ST",
+        "direction": "SHORT",
+        "recent_signals": 22,
+        "recent_accuracy": 59.1,
+        "recent_mean_return": 0.4339,
+        "full_accuracy": 54.1,
+        "full_signals": 61,
+        "accuracy_change": 5.0
+      },
+      {
+        "pattern": "GS-DN-U",
+        "direction": "SHORT",
+        "recent_signals": 27,
+        "recent_accuracy": 59.3,
+        "recent_mean_return": 0.7513,
+        "full_accuracy": 51.7,
+        "full_signals": 89,
+        "accuracy_change": 7.6
+      },
+      {
+        "pattern": "ST-ST-DN",
+        "direction": "SHORT",
+        "recent_signals": 67,
+        "recent_accuracy": 59.7,
+        "recent_mean_return": 0.1749,
+        "full_accuracy": 52.2,
+        "full_signals": 322,
+        "accuracy_change": 7.5
+      },
+      {
+        "pattern": "DN-BD-D",
+        "direction": "SHORT",
+        "recent_signals": 10,
+        "recent_accuracy": 60.0,
+        "recent_mean_return": 0.4361,
+        "full_accuracy": 44.9,
+        "full_signals": 69,
+        "accuracy_change": 15.1
+      },
+      {
+        "pattern": "U-MD-H",
+        "direction": "LONG",
+        "recent_signals": 10,
+        "recent_accuracy": 60.0,
+        "recent_mean_return": -0.1422,
+        "full_accuracy": 53.1,
+        "full_signals": 64,
+        "accuracy_change": 6.9
+      },
+      {
+        "pattern": "D-BU-DN",
+        "direction": "SHORT",
+        "recent_signals": 10,
+        "recent_accuracy": 60.0,
+        "recent_mean_return": 0.1853,
+        "full_accuracy": 61.5,
+        "full_signals": 52,
+        "accuracy_change": -1.5
+      },
+      {
+        "pattern": "MU-IH-DN",
+        "direction": "LONG",
+        "recent_signals": 5,
+        "recent_accuracy": 60.0,
+        "recent_mean_return": -1.3082,
+        "full_accuracy": 62.5,
+        "full_signals": 48,
+        "accuracy_change": -2.5
+      },
+      {
+        "pattern": "ST-ST-U",
+        "direction": "SHORT",
+        "recent_signals": 78,
+        "recent_accuracy": 60.3,
+        "recent_mean_return": 0.3935,
+        "full_accuracy": 55.7,
+        "full_signals": 309,
+        "accuracy_change": 4.6
+      },
+      {
+        "pattern": "ST-ST-ST",
+        "direction": "SHORT",
+        "recent_signals": 48,
+        "recent_accuracy": 60.4,
+        "recent_mean_return": 0.5086,
+        "full_accuracy": 48.4,
+        "full_signals": 192,
+        "accuracy_change": 12.0
+      },
+      {
+        "pattern": "BD-U-ST",
+        "direction": "SHORT",
+        "recent_signals": 43,
+        "recent_accuracy": 60.5,
+        "recent_mean_return": 0.677,
+        "full_accuracy": 55.2,
+        "full_signals": 154,
+        "accuracy_change": 5.3
+      },
+      {
+        "pattern": "BU-ST-ST",
+        "direction": "SHORT",
+        "recent_signals": 18,
+        "recent_accuracy": 61.1,
+        "recent_mean_return": -0.1507,
+        "full_accuracy": 59.5,
+        "full_signals": 74,
+        "accuracy_change": 1.7
+      },
+      {
+        "pattern": "U-BU-MD",
+        "direction": "SHORT",
+        "recent_signals": 18,
+        "recent_accuracy": 61.1,
+        "recent_mean_return": 0.4153,
+        "full_accuracy": 54.4,
+        "full_signals": 103,
+        "accuracy_change": 6.7
+      },
+      {
+        "pattern": "ST-U-H",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 61.5,
+        "recent_mean_return": -0.1216,
+        "full_accuracy": 60.5,
+        "full_signals": 76,
+        "accuracy_change": 1.0
+      },
+      {
+        "pattern": "DN-D-BD",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 61.5,
+        "recent_mean_return": 1.102,
+        "full_accuracy": 51.9,
+        "full_signals": 52,
+        "accuracy_change": 9.6
+      },
+      {
+        "pattern": "ST-DN-MD",
+        "direction": "LONG",
+        "recent_signals": 21,
+        "recent_accuracy": 61.9,
+        "recent_mean_return": 0.5135,
+        "full_accuracy": 58.9,
+        "full_signals": 151,
+        "accuracy_change": 3.0
+      },
+      {
+        "pattern": "U-MU-H",
+        "direction": "LONG",
+        "recent_signals": 8,
+        "recent_accuracy": 62.5,
+        "recent_mean_return": 0.0079,
+        "full_accuracy": 63.6,
+        "full_signals": 66,
+        "accuracy_change": -1.1
+      },
+      {
+        "pattern": "BU-U-ST",
+        "direction": "SHORT",
+        "recent_signals": 27,
+        "recent_accuracy": 63.0,
+        "recent_mean_return": 0.3558,
+        "full_accuracy": 52.4,
+        "full_signals": 145,
+        "accuracy_change": 10.5
+      },
+      {
+        "pattern": "BD-DN-BD",
+        "direction": "LONG",
+        "recent_signals": 19,
+        "recent_accuracy": 63.2,
+        "recent_mean_return": 0.15,
+        "full_accuracy": 58.3,
+        "full_signals": 103,
+        "accuracy_change": 4.9
+      },
+      {
+        "pattern": "ST-MD-U",
+        "direction": "SHORT",
+        "recent_signals": 42,
+        "recent_accuracy": 64.3,
+        "recent_mean_return": 0.9124,
+        "full_accuracy": 52.9,
+        "full_signals": 187,
+        "accuracy_change": 11.3
+      },
+      {
+        "pattern": "DN-BU-MD",
+        "direction": "SHORT",
+        "recent_signals": 17,
+        "recent_accuracy": 64.7,
+        "recent_mean_return": 0.3612,
+        "full_accuracy": 61.5,
+        "full_signals": 65,
+        "accuracy_change": 3.2
+      },
+      {
+        "pattern": "MD-BD-DN",
+        "direction": "LONG",
+        "recent_signals": 17,
+        "recent_accuracy": 64.7,
+        "recent_mean_return": 0.8513,
+        "full_accuracy": 48.8,
+        "full_signals": 84,
+        "accuracy_change": 15.9
+      },
+      {
+        "pattern": "D-ST-U",
+        "direction": "SHORT",
+        "recent_signals": 23,
+        "recent_accuracy": 65.2,
+        "recent_mean_return": 0.3593,
+        "full_accuracy": 52.4,
+        "full_signals": 103,
+        "accuracy_change": 12.8
+      },
+      {
+        "pattern": "ST-H-U",
+        "direction": "SHORT",
+        "recent_signals": 21,
+        "recent_accuracy": 66.7,
+        "recent_mean_return": 0.7456,
+        "full_accuracy": 57.4,
+        "full_signals": 68,
+        "accuracy_change": 9.3
+      },
+      {
+        "pattern": "BD-DN-BU",
+        "direction": "SHORT",
+        "recent_signals": 15,
+        "recent_accuracy": 66.7,
+        "recent_mean_return": 1.1311,
+        "full_accuracy": 57.7,
+        "full_signals": 78,
+        "accuracy_change": 9.0
+      },
+      {
+        "pattern": "U-GS-DN",
+        "direction": "SHORT",
+        "recent_signals": 15,
+        "recent_accuracy": 66.7,
+        "recent_mean_return": 1.6194,
+        "full_accuracy": 56.2,
+        "full_signals": 73,
+        "accuracy_change": 10.5
+      },
+      {
+        "pattern": "ST-MU-D",
+        "direction": "SHORT",
+        "recent_signals": 3,
+        "recent_accuracy": 66.7,
+        "recent_mean_return": -1.6049,
+        "full_accuracy": 64.9,
+        "full_signals": 37,
+        "accuracy_change": 1.8
+      },
+      {
+        "pattern": "MD-DN-MD",
+        "direction": "SHORT",
+        "recent_signals": 18,
+        "recent_accuracy": 66.7,
+        "recent_mean_return": 0.4437,
+        "full_accuracy": 54.0,
+        "full_signals": 100,
+        "accuracy_change": 12.7
+      },
+      {
+        "pattern": "DN-U-GS",
+        "direction": "SHORT",
+        "recent_signals": 16,
+        "recent_accuracy": 68.8,
+        "recent_mean_return": 0.1328,
+        "full_accuracy": 59.0,
+        "full_signals": 78,
+        "accuracy_change": 9.8
+      },
+      {
+        "pattern": "DN-H-BD",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 69.2,
+        "recent_mean_return": 0.7468,
+        "full_accuracy": 52.1,
+        "full_signals": 48,
+        "accuracy_change": 17.1
+      },
+      {
+        "pattern": "D-U-MD",
+        "direction": "SHORT",
+        "recent_signals": 10,
+        "recent_accuracy": 70.0,
+        "recent_mean_return": 0.5566,
+        "full_accuracy": 51.9,
+        "full_signals": 54,
+        "accuracy_change": 18.1
+      },
+      {
+        "pattern": "MD-MD-MU",
+        "direction": "LONG",
+        "recent_signals": 7,
+        "recent_accuracy": 71.4,
+        "recent_mean_return": 0.005,
+        "full_accuracy": 56.0,
+        "full_signals": 75,
+        "accuracy_change": 15.4
+      },
+      {
+        "pattern": "H-DN-ST",
+        "direction": "SHORT",
+        "recent_signals": 14,
+        "recent_accuracy": 71.4,
+        "recent_mean_return": 2.0893,
+        "full_accuracy": 50.6,
+        "full_signals": 81,
+        "accuracy_change": 20.8
+      },
+      {
+        "pattern": "H-U-MD",
+        "direction": "LONG",
+        "recent_signals": 14,
+        "recent_accuracy": 71.4,
+        "recent_mean_return": -0.2585,
+        "full_accuracy": 56.0,
+        "full_signals": 50,
+        "accuracy_change": 15.4
+      },
+      {
+        "pattern": "BD-BD-BU",
+        "direction": "LONG",
+        "recent_signals": 14,
+        "recent_accuracy": 71.4,
+        "recent_mean_return": 1.6008,
+        "full_accuracy": 63.2,
+        "full_signals": 87,
+        "accuracy_change": 8.2
+      },
+      {
+        "pattern": "U-BU-ST",
+        "direction": "SHORT",
+        "recent_signals": 37,
+        "recent_accuracy": 73.0,
+        "recent_mean_return": 0.6466,
+        "full_accuracy": 63.1,
+        "full_signals": 149,
+        "accuracy_change": 9.9
+      },
+      {
+        "pattern": "ST-DN-MU",
+        "direction": "SHORT",
+        "recent_signals": 30,
+        "recent_accuracy": 73.3,
+        "recent_mean_return": 1.0506,
+        "full_accuracy": 56.7,
+        "full_signals": 180,
+        "accuracy_change": 16.7
+      },
+      {
+        "pattern": "MU-MD-ST",
+        "direction": "LONG",
+        "recent_signals": 12,
+        "recent_accuracy": 75.0,
+        "recent_mean_return": -0.0811,
+        "full_accuracy": 53.2,
+        "full_signals": 79,
+        "accuracy_change": 21.8
+      },
+      {
+        "pattern": "ST-MU-ST",
+        "direction": "SHORT",
+        "recent_signals": 20,
+        "recent_accuracy": 75.0,
+        "recent_mean_return": 0.5371,
+        "full_accuracy": 60.8,
+        "full_signals": 79,
+        "accuracy_change": 14.2
+      },
+      {
+        "pattern": "MD-ST-MD",
+        "direction": "LONG",
+        "recent_signals": 4,
+        "recent_accuracy": 75.0,
+        "recent_mean_return": 1.3147,
+        "full_accuracy": 64.7,
+        "full_signals": 51,
+        "accuracy_change": 10.3
+      },
+      {
+        "pattern": "BU-MU-DN",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 76.9,
+        "recent_mean_return": 2.2012,
+        "full_accuracy": 74.6,
+        "full_signals": 67,
+        "accuracy_change": 2.3
+      },
+      {
+        "pattern": "DN-DF-DN",
+        "direction": "SHORT",
+        "recent_signals": 13,
+        "recent_accuracy": 76.9,
+        "recent_mean_return": 1.6694,
+        "full_accuracy": 57.7,
+        "full_signals": 71,
+        "accuracy_change": 19.2
+      },
+      {
+        "pattern": "ST-D-U",
+        "direction": "SHORT",
+        "recent_signals": 15,
+        "recent_accuracy": 80.0,
+        "recent_mean_return": 1.7332,
+        "full_accuracy": 52.9,
+        "full_signals": 104,
+        "accuracy_change": 27.1
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "direction": "SHORT",
+        "recent_signals": 20,
+        "recent_accuracy": 80.0,
+        "recent_mean_return": 1.5646,
+        "full_accuracy": 56.5,
+        "full_signals": 115,
+        "accuracy_change": 23.5
+      },
+      {
+        "pattern": "MU-MU-MU",
+        "direction": "LONG",
+        "recent_signals": 6,
+        "recent_accuracy": 83.3,
+        "recent_mean_return": 0.2012,
+        "full_accuracy": 45.5,
+        "full_signals": 55,
+        "accuracy_change": 37.9
+      },
+      {
+        "pattern": "DN-D-D",
+        "direction": "SHORT",
+        "recent_signals": 6,
+        "recent_accuracy": 83.3,
+        "recent_mean_return": 1.3501,
+        "full_accuracy": 59.1,
+        "full_signals": 44,
+        "accuracy_change": 24.2
+      },
+      {
+        "pattern": "ST-BD-ST",
+        "direction": "SHORT",
+        "recent_signals": 14,
+        "recent_accuracy": 85.7,
+        "recent_mean_return": 0.6036,
+        "full_accuracy": 54.8,
+        "full_signals": 62,
+        "accuracy_change": 30.9
+      }
+    ],
+    "universe": {
+      "universe_long_mean": 45.6,
+      "universe_short_mean": 54.4,
+      "our_long_mean": 44.7,
+      "our_short_mean": 58.2
+    },
+    "mfe_mae": {
+      "LONG": {
+        "n": 1569,
+        "mfe_mean": 1.5734,
+        "mfe_median": 1.1727,
+        "mae_mean": 2.4262,
+        "mae_median": 1.5695,
+        "mfe_mae_ratio": 0.649
+      },
+      "SHORT": {
+        "n": 1782,
+        "mfe_mean": 2.3589,
+        "mfe_median": 1.6785,
+        "mae_mean": 1.7268,
+        "mae_median": 1.2146,
+        "mfe_mae_ratio": 1.366
+      }
+    },
+    "breakeven": {
+      "avg_tp": 1.652,
+      "avg_sl": 3.235,
+      "rr_ratio": 0.5108,
+      "breakeven_wr": 66.2
+    },
+    "verdict": {
+      "long_has_edge": false,
+      "short_has_edge": true,
+      "verdict": "SHORT-only edge \u2014 consider SHORT-only operation or LONG pattern redesign",
+      "long_patterns_above_50": 18,
+      "long_patterns_total": 61,
+      "short_patterns_above_50": 45,
+      "short_patterns_total": 69
+    }
+  },
+  "meta": {
+    "bars": 85634,
+    "patterns": 130,
+    "recent_days": 60,
+    "recent_bar": 68354,
+    "horizons": [
+      5,
+      10,
+      30,
+      60,
+      288
+    ]
+  },
+  "elapsed_seconds": 2.8
+}

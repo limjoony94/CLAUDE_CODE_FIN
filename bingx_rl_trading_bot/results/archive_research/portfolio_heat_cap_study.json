@@ -1,0 +1,550 @@
+{
+  "study": "portfolio_heat_cap",
+  "timestamp": "2026-03-14T00:14:24",
+  "protocol": {
+    "fee": "0.1%",
+    "leverage": 3,
+    "tp_scale": 0.72,
+    "n_slots": 9,
+    "dir_cap": 7,
+    "timeout": 288,
+    "cascade": 85,
+    "agg_risk": "8.0/15.0",
+    "data_bars": 87315,
+    "neutral_window": "0-74642"
+  },
+  "heat_cap_sweep": {
+    "3": {
+      "heat_cap": 3,
+      "is": {
+        "wr": 74.0,
+        "pnl": 306.29,
+        "mdd": 3.87,
+        "pnl_mdd": 79.14,
+        "trades": 1932,
+        "trades_per_day": 7.5,
+        "rr": 0.732,
+        "heat_exits": 154,
+        "heat_exit_pct": 8.0,
+        "heat_exit_avg_pnl": -0.942,
+        "max_bar_dir_loss": 3.651,
+        "max_corr_loss": 3.65
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 68.25,
+            "wr": 77.1,
+            "trades": 341,
+            "mdd": 3.14,
+            "heat_exits": 20
+          },
+          {
+            "fold": 2,
+            "pnl": 104.78,
+            "wr": 71.2,
+            "trades": 732,
+            "mdd": 5.16,
+            "heat_exits": 63
+          },
+          {
+            "fold": 3,
+            "pnl": 41.22,
+            "wr": 70.2,
+            "trades": 326,
+            "mdd": 4.86,
+            "heat_exits": 27
+          }
+        ],
+        "oos_pnl": 214.2,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "4": {
+      "heat_cap": 4,
+      "is": {
+        "wr": 76.4,
+        "pnl": 368.67,
+        "mdd": 3.76,
+        "pnl_mdd": 98.05,
+        "trades": 1878,
+        "trades_per_day": 7.2,
+        "rr": 0.829,
+        "heat_exits": 64,
+        "heat_exit_pct": 3.4,
+        "heat_exit_avg_pnl": -1.06,
+        "max_bar_dir_loss": 3.651,
+        "max_corr_loss": 3.65
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 71.73,
+            "wr": 76.6,
+            "trades": 337,
+            "mdd": 3.76,
+            "heat_exits": 10
+          },
+          {
+            "fold": 2,
+            "pnl": 128.77,
+            "wr": 75.8,
+            "trades": 669,
+            "mdd": 4.72,
+            "heat_exits": 28
+          },
+          {
+            "fold": 3,
+            "pnl": 47.7,
+            "wr": 69.3,
+            "trades": 345,
+            "mdd": 5.99,
+            "heat_exits": 13
+          }
+        ],
+        "oos_pnl": 248.2,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "5": {
+      "heat_cap": 5,
+      "is": {
+        "wr": 76.4,
+        "pnl": 386.35,
+        "mdd": 3.83,
+        "pnl_mdd": 100.87,
+        "trades": 1858,
+        "trades_per_day": 7.2,
+        "rr": 0.914,
+        "heat_exits": 22,
+        "heat_exit_pct": 1.2,
+        "heat_exit_avg_pnl": -1.219,
+        "max_bar_dir_loss": 3.679,
+        "max_corr_loss": 3.68
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 81.57,
+            "wr": 78.4,
+            "trades": 333,
+            "mdd": 3.85,
+            "heat_exits": 1
+          },
+          {
+            "fold": 2,
+            "pnl": 130.36,
+            "wr": 75.1,
+            "trades": 655,
+            "mdd": 5.39,
+            "heat_exits": 12
+          },
+          {
+            "fold": 3,
+            "pnl": 51.43,
+            "wr": 69.4,
+            "trades": 340,
+            "mdd": 6.16,
+            "heat_exits": 3
+          }
+        ],
+        "oos_pnl": 263.4,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "6": {
+      "heat_cap": 6,
+      "is": {
+        "wr": 76.8,
+        "pnl": 403.47,
+        "mdd": 3.81,
+        "pnl_mdd": 105.9,
+        "trades": 1842,
+        "trades_per_day": 7.1,
+        "rr": 0.991,
+        "heat_exits": 4,
+        "heat_exit_pct": 0.2,
+        "heat_exit_avg_pnl": -1.323,
+        "max_bar_dir_loss": 3.679,
+        "max_corr_loss": 3.68
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 82.42,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.85,
+            "heat_exits": 0
+          },
+          {
+            "fold": 2,
+            "pnl": 139.46,
+            "wr": 75.9,
+            "trades": 642,
+            "mdd": 5.02,
+            "heat_exits": 1
+          },
+          {
+            "fold": 3,
+            "pnl": 52.52,
+            "wr": 69.3,
+            "trades": 339,
+            "mdd": 6.29,
+            "heat_exits": 1
+          }
+        ],
+        "oos_pnl": 274.4,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "7": {
+      "heat_cap": 7,
+      "is": {
+        "wr": 76.8,
+        "pnl": 406.9,
+        "mdd": 3.81,
+        "pnl_mdd": 106.8,
+        "trades": 1846,
+        "trades_per_day": 7.1,
+        "rr": 1.009,
+        "heat_exits": 0,
+        "heat_exit_pct": 0.0,
+        "heat_exit_avg_pnl": 0,
+        "max_bar_dir_loss": 3.679,
+        "max_corr_loss": 3.68
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 82.42,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.85,
+            "heat_exits": 0
+          },
+          {
+            "fold": 2,
+            "pnl": 140.78,
+            "wr": 76.1,
+            "trades": 640,
+            "mdd": 5.02,
+            "heat_exits": 0
+          },
+          {
+            "fold": 3,
+            "pnl": 53.59,
+            "wr": 69.3,
+            "trades": 339,
+            "mdd": 6.28,
+            "heat_exits": 0
+          }
+        ],
+        "oos_pnl": 276.8,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "8": {
+      "heat_cap": 8,
+      "is": {
+        "wr": 76.8,
+        "pnl": 406.9,
+        "mdd": 3.81,
+        "pnl_mdd": 106.8,
+        "trades": 1846,
+        "trades_per_day": 7.1,
+        "rr": 1.009,
+        "heat_exits": 0,
+        "heat_exit_pct": 0.0,
+        "heat_exit_avg_pnl": 0,
+        "max_bar_dir_loss": 3.679,
+        "max_corr_loss": 3.68
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 82.42,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.85,
+            "heat_exits": 0
+          },
+          {
+            "fold": 2,
+            "pnl": 140.78,
+            "wr": 76.1,
+            "trades": 640,
+            "mdd": 5.02,
+            "heat_exits": 0
+          },
+          {
+            "fold": 3,
+            "pnl": 53.59,
+            "wr": 69.3,
+            "trades": 339,
+            "mdd": 6.28,
+            "heat_exits": 0
+          }
+        ],
+        "oos_pnl": 276.8,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "10": {
+      "heat_cap": 10,
+      "is": {
+        "wr": 76.8,
+        "pnl": 406.9,
+        "mdd": 3.81,
+        "pnl_mdd": 106.8,
+        "trades": 1846,
+        "trades_per_day": 7.1,
+        "rr": 1.009,
+        "heat_exits": 0,
+        "heat_exit_pct": 0.0,
+        "heat_exit_avg_pnl": 0,
+        "max_bar_dir_loss": 3.679,
+        "max_corr_loss": 3.68
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 82.42,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.85,
+            "heat_exits": 0
+          },
+          {
+            "fold": 2,
+            "pnl": 140.78,
+            "wr": 76.1,
+            "trades": 640,
+            "mdd": 5.02,
+            "heat_exits": 0
+          },
+          {
+            "fold": 3,
+            "pnl": 53.59,
+            "wr": 69.3,
+            "trades": 339,
+            "mdd": 6.28,
+            "heat_exits": 0
+          }
+        ],
+        "oos_pnl": 276.8,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    },
+    "999": {
+      "heat_cap": 999,
+      "is": {
+        "wr": 76.8,
+        "pnl": 406.9,
+        "mdd": 3.81,
+        "pnl_mdd": 106.8,
+        "trades": 1846,
+        "trades_per_day": 7.1,
+        "rr": 1.009,
+        "heat_exits": 0,
+        "heat_exit_pct": 0.0,
+        "heat_exit_avg_pnl": 0,
+        "max_bar_dir_loss": 3.679,
+        "max_corr_loss": 3.68
+      },
+      "wf": {
+        "folds": [
+          {
+            "fold": 1,
+            "pnl": 82.42,
+            "wr": 78.6,
+            "trades": 332,
+            "mdd": 3.85,
+            "heat_exits": 0
+          },
+          {
+            "fold": 2,
+            "pnl": 140.78,
+            "wr": 76.1,
+            "trades": 640,
+            "mdd": 5.02,
+            "heat_exits": 0
+          },
+          {
+            "fold": 3,
+            "pnl": 53.59,
+            "wr": 69.3,
+            "trades": 339,
+            "mdd": 6.28,
+            "heat_exits": 0
+          }
+        ],
+        "oos_pnl": 276.8,
+        "all_pass": true
+      },
+      "mc": {
+        "p_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "max_p": 0.0,
+        "discriminating": true
+      }
+    }
+  },
+  "comparison": [
+    {
+      "heat_cap": 3,
+      "vs_baseline": {
+        "pnl_delta": -100.6,
+        "mdd_delta": 0.06,
+        "pnl_mdd_delta": -27.7,
+        "oos_delta": -62.6
+      },
+      "verdict": "HARMFUL"
+    },
+    {
+      "heat_cap": 4,
+      "vs_baseline": {
+        "pnl_delta": -38.2,
+        "mdd_delta": -0.05,
+        "pnl_mdd_delta": -8.8,
+        "oos_delta": -28.6
+      },
+      "verdict": "KEEP_BASE"
+    },
+    {
+      "heat_cap": 5,
+      "vs_baseline": {
+        "pnl_delta": -20.5,
+        "mdd_delta": 0.02,
+        "pnl_mdd_delta": -5.9,
+        "oos_delta": -13.4
+      },
+      "verdict": "KEEP_BASE"
+    },
+    {
+      "heat_cap": 6,
+      "vs_baseline": {
+        "pnl_delta": -3.4,
+        "mdd_delta": 0.0,
+        "pnl_mdd_delta": -0.9,
+        "oos_delta": -2.4
+      },
+      "verdict": "KEEP_BASE"
+    },
+    {
+      "heat_cap": 7,
+      "vs_baseline": {
+        "pnl_delta": 0.0,
+        "mdd_delta": 0.0,
+        "pnl_mdd_delta": 0.0,
+        "oos_delta": 0.0
+      },
+      "verdict": "KEEP_BASE"
+    },
+    {
+      "heat_cap": 8,
+      "vs_baseline": {
+        "pnl_delta": 0.0,
+        "mdd_delta": 0.0,
+        "pnl_mdd_delta": 0.0,
+        "oos_delta": 0.0
+      },
+      "verdict": "KEEP_BASE"
+    },
+    {
+      "heat_cap": 10,
+      "vs_baseline": {
+        "pnl_delta": 0.0,
+        "mdd_delta": 0.0,
+        "pnl_mdd_delta": 0.0,
+        "oos_delta": 0.0
+      },
+      "verdict": "KEEP_BASE"
+    },
+    {
+      "heat_cap": 999,
+      "vs_baseline": {
+        "pnl_delta": 0.0,
+        "mdd_delta": 0.0,
+        "pnl_mdd_delta": 0.0,
+        "oos_delta": 0.0
+      },
+      "verdict": "BASELINE"
+    }
+  ],
+  "elapsed_seconds": 74.8,
+  "recommendation": "KEEP_BASELINE: No heat_cap value improves MDD sufficiently without harmful PnL degradation"
+}

@@ -1,0 +1,359 @@
+{
+  "study": "early_exit_ablation",
+  "timestamp": "2026-03-03T14:29:53.438081",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "patterns": 130,
+  "signals": 14116,
+  "neutral_window": {
+    "start": 288,
+    "end": 74401,
+    "days": 257.3
+  },
+  "is_results": {
+    "A_baseline": {
+      "trades": 823,
+      "wins": 601,
+      "wr": 73.0,
+      "pnl": 101.1,
+      "mdd": 6.18,
+      "pnl_mdd": 16.35,
+      "tp": 598,
+      "sl": 216,
+      "early_exits": 0,
+      "early_pnl": 0
+    },
+    "B_production": {
+      "trades": 920,
+      "wins": 703,
+      "wr": 76.4,
+      "pnl": 105.9,
+      "mdd": 6.14,
+      "pnl_mdd": 17.26,
+      "tp": 610,
+      "sl": 211,
+      "early_exits": 90,
+      "early_pnl": 13.22
+    },
+    "C_confirm2": {
+      "trades": 1324,
+      "wins": 1098,
+      "wr": 82.9,
+      "pnl": 112.9,
+      "mdd": 5.98,
+      "pnl_mdd": 18.87,
+      "tp": 573,
+      "sl": 220,
+      "early_exits": 522,
+      "early_pnl": 80.08
+    },
+    "D_minprofit0": {
+      "trades": 959,
+      "wins": 722,
+      "wr": 75.3,
+      "pnl": 104.0,
+      "mdd": 6.01,
+      "pnl_mdd": 17.32,
+      "tp": 626,
+      "sl": 215,
+      "early_exits": 109,
+      "early_pnl": 13.36
+    },
+    "E_minprofit0.5": {
+      "trades": 906,
+      "wins": 686,
+      "wr": 75.7,
+      "pnl": 99.9,
+      "mdd": 6.23,
+      "pnl_mdd": 16.04,
+      "tp": 603,
+      "sl": 215,
+      "early_exits": 79,
+      "early_pnl": 13.84
+    },
+    "F_minprofit1.0": {
+      "trades": 892,
+      "wins": 670,
+      "wr": 75.1,
+      "pnl": 97.7,
+      "mdd": 6.18,
+      "pnl_mdd": 15.81,
+      "tp": 600,
+      "sl": 217,
+      "early_exits": 66,
+      "early_pnl": 12.58
+    }
+  },
+  "wf_results": {
+    "A_baseline": [
+      {
+        "trades": 177,
+        "wins": 126,
+        "wr": 71.2,
+        "pnl": 24.0,
+        "mdd": 4.33,
+        "pnl_mdd": 5.55,
+        "tp": 124,
+        "sl": 44,
+        "early_exits": 0,
+        "early_pnl": 0,
+        "fold": 1,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 227,
+        "wins": 156,
+        "wr": 68.7,
+        "pnl": 21.2,
+        "mdd": 5.35,
+        "pnl_mdd": 3.96,
+        "tp": 156,
+        "sl": 62,
+        "early_exits": 0,
+        "early_pnl": 0,
+        "fold": 2,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 256,
+        "wins": 187,
+        "wr": 73.0,
+        "pnl": 32.9,
+        "mdd": 5.25,
+        "pnl_mdd": 6.27,
+        "tp": 184,
+        "sl": 63,
+        "early_exits": 0,
+        "early_pnl": 0,
+        "fold": 3,
+        "oos_bars": 18529
+      }
+    ],
+    "B_production": [
+      {
+        "trades": 181,
+        "wins": 131,
+        "wr": 72.4,
+        "pnl": 23.4,
+        "mdd": 4.22,
+        "pnl_mdd": 5.56,
+        "tp": 121,
+        "sl": 43,
+        "early_exits": 8,
+        "early_pnl": 0.66,
+        "fold": 1,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 265,
+        "wins": 197,
+        "wr": 74.3,
+        "pnl": 27.2,
+        "mdd": 4.86,
+        "pnl_mdd": 5.59,
+        "tp": 174,
+        "sl": 59,
+        "early_exits": 23,
+        "early_pnl": 3.27,
+        "fold": 2,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 282,
+        "wins": 217,
+        "wr": 77.0,
+        "pnl": 35.1,
+        "mdd": 5.23,
+        "pnl_mdd": 6.72,
+        "tp": 182,
+        "sl": 59,
+        "early_exits": 32,
+        "early_pnl": 5.33,
+        "fold": 3,
+        "oos_bars": 18529
+      }
+    ],
+    "C_confirm2": [
+      {
+        "trades": 273,
+        "wins": 228,
+        "wr": 83.5,
+        "pnl": 36.4,
+        "mdd": 3.01,
+        "pnl_mdd": 12.1,
+        "tp": 125,
+        "sl": 38,
+        "early_exits": 102,
+        "early_pnl": 15.41,
+        "fold": 1,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 375,
+        "wins": 300,
+        "wr": 80.0,
+        "pnl": 23.2,
+        "mdd": 5.57,
+        "pnl_mdd": 4.17,
+        "tp": 155,
+        "sl": 67,
+        "early_exits": 144,
+        "early_pnl": 23.64,
+        "fold": 2,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 393,
+        "wins": 323,
+        "wr": 82.2,
+        "pnl": 30.2,
+        "mdd": 10.11,
+        "pnl_mdd": 2.99,
+        "tp": 170,
+        "sl": 64,
+        "early_exits": 150,
+        "early_pnl": 23.88,
+        "fold": 3,
+        "oos_bars": 18529
+      }
+    ],
+    "D_minprofit0": [
+      {
+        "trades": 181,
+        "wins": 131,
+        "wr": 72.4,
+        "pnl": 23.4,
+        "mdd": 4.22,
+        "pnl_mdd": 5.56,
+        "tp": 121,
+        "sl": 43,
+        "early_exits": 8,
+        "early_pnl": 0.66,
+        "fold": 1,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 274,
+        "wins": 199,
+        "wr": 72.6,
+        "pnl": 22.8,
+        "mdd": 5.56,
+        "pnl_mdd": 4.09,
+        "tp": 174,
+        "sl": 60,
+        "early_exits": 31,
+        "early_pnl": 3.65,
+        "fold": 2,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 300,
+        "wins": 230,
+        "wr": 76.7,
+        "pnl": 38.5,
+        "mdd": 5.23,
+        "pnl_mdd": 7.36,
+        "tp": 195,
+        "sl": 58,
+        "early_exits": 38,
+        "early_pnl": 5.28,
+        "fold": 3,
+        "oos_bars": 18529
+      }
+    ],
+    "E_minprofit0.5": [
+      {
+        "trades": 182,
+        "wins": 132,
+        "wr": 72.5,
+        "pnl": 25.3,
+        "mdd": 4.17,
+        "pnl_mdd": 6.05,
+        "tp": 125,
+        "sl": 43,
+        "early_exits": 5,
+        "early_pnl": 0.63,
+        "fold": 1,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 260,
+        "wins": 190,
+        "wr": 73.1,
+        "pnl": 21.2,
+        "mdd": 4.86,
+        "pnl_mdd": 4.37,
+        "tp": 167,
+        "sl": 61,
+        "early_exits": 23,
+        "early_pnl": 3.35,
+        "fold": 2,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 276,
+        "wins": 212,
+        "wr": 76.8,
+        "pnl": 33.1,
+        "mdd": 5.23,
+        "pnl_mdd": 6.32,
+        "tp": 179,
+        "sl": 59,
+        "early_exits": 29,
+        "early_pnl": 5.8,
+        "fold": 3,
+        "oos_bars": 18529
+      }
+    ],
+    "F_minprofit1.0": [
+      {
+        "trades": 177,
+        "wins": 125,
+        "wr": 70.6,
+        "pnl": 22.0,
+        "mdd": 5.5,
+        "pnl_mdd": 4.0,
+        "tp": 121,
+        "sl": 45,
+        "early_exits": 2,
+        "early_pnl": 0.51,
+        "fold": 1,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 257,
+        "wins": 188,
+        "wr": 73.2,
+        "pnl": 22.6,
+        "mdd": 4.79,
+        "pnl_mdd": 4.72,
+        "tp": 167,
+        "sl": 60,
+        "early_exits": 21,
+        "early_pnl": 3.1,
+        "fold": 2,
+        "oos_bars": 18528
+      },
+      {
+        "trades": 276,
+        "wins": 210,
+        "wr": 76.1,
+        "pnl": 32.6,
+        "mdd": 5.65,
+        "pnl_mdd": 5.77,
+        "tp": 180,
+        "sl": 61,
+        "early_exits": 26,
+        "early_pnl": 5.64,
+        "fold": 3,
+        "oos_bars": 18529
+      }
+    ]
+  },
+  "delta": {
+    "pnl": 4.8,
+    "mdd": -0.04,
+    "pnl_mdd": 0.91,
+    "wr": 3.4
+  },
+  "verdict": "GO \u2014 Early Exit improves risk-adjusted performance"
+}

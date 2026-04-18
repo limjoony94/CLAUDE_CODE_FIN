@@ -1,0 +1,989 @@
+{
+  "study": "higher_tf_direction",
+  "timestamp": "2026-03-01T17:02:02.686386",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "protocol": {
+    "leverage": 3,
+    "fee_pct": 0.1,
+    "fee_effective": 0.30000000000000004,
+    "slippage_buffer": 0.02,
+    "mc_seeds": [
+      42,
+      123,
+      7
+    ],
+    "mc_sims": 5000,
+    "min_trades": 20,
+    "max_bars_24h": {
+      "5m": 288,
+      "15m": 96,
+      "1h": 24,
+      "4h": 6
+    }
+  },
+  "data_summary": {
+    "5m": {
+      "n_bars": 85634,
+      "n_days": 297.3
+    },
+    "15m": {
+      "n_bars": 28545,
+      "n_days": 297.3
+    },
+    "1h": {
+      "n_bars": 7137,
+      "n_days": 297.4
+    },
+    "4h": {
+      "n_bars": 1785,
+      "n_days": 297.5
+    }
+  },
+  "phase2_mfe_mae_summary": {
+    "5m": {
+      "total_combos": 2818,
+      "rr_gt1_count": 1409,
+      "rr_gt1_pct": 50.0,
+      "mean_rr": 1.1525,
+      "median_rr": 1.0,
+      "std_rr": 0.7537,
+      "filtered_total": 1674,
+      "filtered_rr_gt1_count": 837,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_mean_rr": 1.0556,
+      "top10": [
+        {
+          "pattern": "D-DF-BD",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 4.9943,
+          "median_mae": 0.4794,
+          "rr_ratio": 10.4172,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 3.623,
+          "mean_mae": 1.0799
+        },
+        {
+          "pattern": "D-H-MD",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 2.7262,
+          "median_mae": 0.2793,
+          "rr_ratio": 9.7625,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.3169,
+          "mean_mae": 0.3188
+        },
+        {
+          "pattern": "MD-BD-DF",
+          "direction": "SHORT",
+          "n_signals": 6,
+          "median_mfe": 2.4603,
+          "median_mae": 0.3214,
+          "rr_ratio": 7.6554,
+          "pct_mfe_gt_mae": 83.33,
+          "mean_mfe": 2.3608,
+          "mean_mae": 0.688
+        },
+        {
+          "pattern": "IH-MD-GS",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.0219,
+          "median_mae": 0.4013,
+          "rr_ratio": 7.5297,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 4.4785,
+          "mean_mae": 1.473
+        },
+        {
+          "pattern": "DF-H-MU",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 1.3194,
+          "median_mae": 0.1808,
+          "rr_ratio": 7.2981,
+          "pct_mfe_gt_mae": 100.0,
+          "mean_mfe": 1.6606,
+          "mean_mae": 0.4124
+        },
+        {
+          "pattern": "DF-MD-MD",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 2.2906,
+          "median_mae": 0.3238,
+          "rr_ratio": 7.0743,
+          "pct_mfe_gt_mae": 100.0,
+          "mean_mfe": 2.3418,
+          "mean_mae": 0.4903
+        },
+        {
+          "pattern": "GS-BD-MD",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 2.407,
+          "median_mae": 0.3644,
+          "rr_ratio": 6.6057,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 1.999,
+          "mean_mae": 0.4946
+        },
+        {
+          "pattern": "IH-GS-MD",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 2.1286,
+          "median_mae": 0.3313,
+          "rr_ratio": 6.4255,
+          "pct_mfe_gt_mae": 100.0,
+          "mean_mfe": 1.9255,
+          "mean_mae": 0.3376
+        },
+        {
+          "pattern": "BD-DF-MU",
+          "direction": "SHORT",
+          "n_signals": 7,
+          "median_mfe": 2.6981,
+          "median_mae": 0.4401,
+          "rr_ratio": 6.1311,
+          "pct_mfe_gt_mae": 71.43,
+          "mean_mfe": 2.0633,
+          "mean_mae": 0.714
+        },
+        {
+          "pattern": "GS-IH-MD",
+          "direction": "LONG",
+          "n_signals": 6,
+          "median_mfe": 1.8812,
+          "median_mae": 0.3085,
+          "rr_ratio": 6.0974,
+          "pct_mfe_gt_mae": 66.67,
+          "mean_mfe": 2.5024,
+          "mean_mae": 0.5521
+        }
+      ]
+    },
+    "15m": {
+      "total_combos": 1748,
+      "rr_gt1_count": 874,
+      "rr_gt1_pct": 50.0,
+      "mean_rr": 1.3168,
+      "median_rr": 1.0,
+      "std_rr": 2.1538,
+      "filtered_total": 674,
+      "filtered_rr_gt1_count": 337,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_mean_rr": 1.0612,
+      "top10": [
+        {
+          "pattern": "BD-IH-MD",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 2.6264,
+          "median_mae": 0.0348,
+          "rr_ratio": 75.3732,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.3229,
+          "mean_mae": 0.4938
+        },
+        {
+          "pattern": "IH-ST-D",
+          "direction": "SHORT",
+          "n_signals": 6,
+          "median_mfe": 2.6082,
+          "median_mae": 0.1519,
+          "rr_ratio": 17.1671,
+          "pct_mfe_gt_mae": 66.67,
+          "mean_mfe": 3.2271,
+          "mean_mae": 0.6589
+        },
+        {
+          "pattern": "D-IH-U",
+          "direction": "SHORT",
+          "n_signals": 6,
+          "median_mfe": 2.1711,
+          "median_mae": 0.1389,
+          "rr_ratio": 15.6301,
+          "pct_mfe_gt_mae": 83.33,
+          "mean_mfe": 2.2885,
+          "mean_mae": 0.6391
+        },
+        {
+          "pattern": "IH-DN-MD",
+          "direction": "SHORT",
+          "n_signals": 6,
+          "median_mfe": 2.5102,
+          "median_mae": 0.1753,
+          "rr_ratio": 14.3164,
+          "pct_mfe_gt_mae": 83.33,
+          "mean_mfe": 2.2209,
+          "mean_mae": 0.7837
+        },
+        {
+          "pattern": "IH-D-DN",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.5369,
+          "median_mae": 0.2582,
+          "rr_ratio": 13.6986,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 3.163,
+          "mean_mae": 0.6006
+        },
+        {
+          "pattern": "DN-IH-MU",
+          "direction": "SHORT",
+          "n_signals": 7,
+          "median_mfe": 1.3796,
+          "median_mae": 0.1253,
+          "rr_ratio": 11.0067,
+          "pct_mfe_gt_mae": 71.43,
+          "mean_mfe": 1.5216,
+          "mean_mae": 0.9086
+        },
+        {
+          "pattern": "GS-BU-U",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.3817,
+          "median_mae": 0.3315,
+          "rr_ratio": 10.2003,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.8453,
+          "mean_mae": 0.744
+        },
+        {
+          "pattern": "BU-DN-GS",
+          "direction": "SHORT",
+          "n_signals": 10,
+          "median_mfe": 2.7952,
+          "median_mae": 0.2756,
+          "rr_ratio": 10.1424,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.4472,
+          "mean_mae": 0.5889
+        },
+        {
+          "pattern": "H-DN-BD",
+          "direction": "LONG",
+          "n_signals": 10,
+          "median_mfe": 1.5381,
+          "median_mae": 0.1544,
+          "rr_ratio": 9.9631,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.2186,
+          "mean_mae": 0.7117
+        },
+        {
+          "pattern": "BD-DN-GS",
+          "direction": "LONG",
+          "n_signals": 8,
+          "median_mfe": 2.7657,
+          "median_mae": 0.3281,
+          "rr_ratio": 8.4283,
+          "pct_mfe_gt_mae": 75.0,
+          "mean_mfe": 2.6372,
+          "mean_mae": 0.7779
+        }
+      ]
+    },
+    "1h": {
+      "total_combos": 730,
+      "rr_gt1_count": 365,
+      "rr_gt1_pct": 50.0,
+      "mean_rr": 1.4294,
+      "median_rr": 1.0,
+      "std_rr": 2.684,
+      "filtered_total": 156,
+      "filtered_rr_gt1_count": 78,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_mean_rr": 1.0739,
+      "top10": [
+        {
+          "pattern": "U-BD-IH",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.2465,
+          "median_mae": 0.0543,
+          "rr_ratio": 59.7446,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.5079,
+          "mean_mae": 0.3683
+        },
+        {
+          "pattern": "ST-MD-MU",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.2466,
+          "median_mae": 0.1333,
+          "rr_ratio": 24.3595,
+          "pct_mfe_gt_mae": 100.0,
+          "mean_mfe": 2.8635,
+          "mean_mae": 0.4687
+        },
+        {
+          "pattern": "GS-DN-DN",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 2.7417,
+          "median_mae": 0.1525,
+          "rr_ratio": 17.9772,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 2.5777,
+          "mean_mae": 0.741
+        },
+        {
+          "pattern": "DN-DF-BU",
+          "direction": "SHORT",
+          "n_signals": 6,
+          "median_mfe": 1.2667,
+          "median_mae": 0.0752,
+          "rr_ratio": 16.8421,
+          "pct_mfe_gt_mae": 66.67,
+          "mean_mfe": 1.5709,
+          "mean_mae": 0.6403
+        },
+        {
+          "pattern": "DF-DN-ST",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.0967,
+          "median_mae": 0.4048,
+          "rr_ratio": 7.6497,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 3.7802,
+          "mean_mae": 0.6923
+        },
+        {
+          "pattern": "U-U-H",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 1.7647,
+          "median_mae": 0.2319,
+          "rr_ratio": 7.6089,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 1.8968,
+          "mean_mae": 0.7323
+        },
+        {
+          "pattern": "MD-U-ST",
+          "direction": "SHORT",
+          "n_signals": 13,
+          "median_mfe": 2.8119,
+          "median_mae": 0.3921,
+          "rr_ratio": 7.1709,
+          "pct_mfe_gt_mae": 84.62,
+          "mean_mfe": 3.1818,
+          "mean_mae": 0.914
+        },
+        {
+          "pattern": "BD-BU-ST",
+          "direction": "SHORT",
+          "n_signals": 9,
+          "median_mfe": 1.3794,
+          "median_mae": 0.1941,
+          "rr_ratio": 7.108,
+          "pct_mfe_gt_mae": 77.78,
+          "mean_mfe": 2.0264,
+          "mean_mae": 0.7781
+        },
+        {
+          "pattern": "D-DN-BU",
+          "direction": "LONG",
+          "n_signals": 9,
+          "median_mfe": 2.5848,
+          "median_mae": 0.3814,
+          "rr_ratio": 6.777,
+          "pct_mfe_gt_mae": 88.89,
+          "mean_mfe": 2.5941,
+          "mean_mae": 0.4454
+        },
+        {
+          "pattern": "BD-BU-BD",
+          "direction": "SHORT",
+          "n_signals": 7,
+          "median_mfe": 2.8242,
+          "median_mae": 0.4707,
+          "rr_ratio": 5.9994,
+          "pct_mfe_gt_mae": 71.43,
+          "mean_mfe": 2.9654,
+          "mean_mae": 1.1297
+        }
+      ]
+    },
+    "4h": {
+      "total_combos": 215,
+      "rr_gt1_count": 106,
+      "rr_gt1_pct": 49.3,
+      "mean_rr": 1.5074,
+      "median_rr": 0.9855,
+      "std_rr": 1.7311,
+      "filtered_total": 20,
+      "filtered_rr_gt1_count": 10,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_mean_rr": 1.1359,
+      "top10": [
+        {
+          "pattern": "U-MU-DN",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 1.9112,
+          "median_mae": 0.0,
+          "rr_ratio": 999.0,
+          "pct_mfe_gt_mae": 60.0,
+          "mean_mfe": 2.2046,
+          "mean_mae": 1.1781
+        },
+        {
+          "pattern": "ST-DN-IH",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 1.6354,
+          "median_mae": 0.0,
+          "rr_ratio": 999.0,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 1.6572,
+          "mean_mae": 0.4966
+        },
+        {
+          "pattern": "U-U-BU",
+          "direction": "LONG",
+          "n_signals": 7,
+          "median_mfe": 2.8445,
+          "median_mae": 0.0,
+          "rr_ratio": 999.0,
+          "pct_mfe_gt_mae": 57.14,
+          "mean_mfe": 2.6543,
+          "mean_mae": 1.9213
+        },
+        {
+          "pattern": "DN-D-U",
+          "direction": "LONG",
+          "n_signals": 7,
+          "median_mfe": 3.4236,
+          "median_mae": 0.3166,
+          "rr_ratio": 10.8134,
+          "pct_mfe_gt_mae": 85.71,
+          "mean_mfe": 3.8165,
+          "mean_mae": 0.6522
+        },
+        {
+          "pattern": "DN-ST-D",
+          "direction": "SHORT",
+          "n_signals": 5,
+          "median_mfe": 3.4405,
+          "median_mae": 0.3288,
+          "rr_ratio": 10.4648,
+          "pct_mfe_gt_mae": 80.0,
+          "mean_mfe": 3.0536,
+          "mean_mae": 0.525
+        },
+        {
+          "pattern": "IH-DN-ST",
+          "direction": "LONG",
+          "n_signals": 5,
+          "median_mfe": 1.3003,
+          "median_mae": 0.1245,
+          "rr_ratio": 10.4461,
+          "pct_mfe_gt_mae": 60.0,
+          "mean_mfe": 1.5106,
+          "mean_mae": 1.1356
+        },
+        {
+          "pattern": "U-DN-D",
+          "direction": "LONG",
+          "n_signals": 6,
+          "median_mfe": 2.3095,
+          "median_mae": 0.2572,
+          "rr_ratio": 8.9811,
+          "pct_mfe_gt_mae": 66.67,
+          "mean_mfe": 2.7746,
+          "mean_mae": 0.9302
+        },
+        {
+          "pattern": "U-BD-U",
+          "direction": "LONG",
+          "n_signals": 8,
+          "median_mfe": 1.9231,
+          "median_mae": 0.2522,
+          "rr_ratio": 7.6262,
+          "pct_mfe_gt_mae": 62.5,
+          "mean_mfe": 1.7258,
+          "mean_mae": 0.7597
+        },
+        {
+          "pattern": "BD-ST-U",
+          "direction": "SHORT",
+          "n_signals": 10,
+          "median_mfe": 2.6193,
+          "median_mae": 0.3755,
+          "rr_ratio": 6.9764,
+          "pct_mfe_gt_mae": 70.0,
+          "mean_mfe": 2.1347,
+          "mean_mae": 1.0955
+        },
+        {
+          "pattern": "DN-ST-U",
+          "direction": "LONG",
+          "n_signals": 18,
+          "median_mfe": 1.7006,
+          "median_mae": 0.2704,
+          "rr_ratio": 6.2892,
+          "pct_mfe_gt_mae": 66.67,
+          "mean_mfe": 2.0083,
+          "mean_mae": 1.1272
+        }
+      ]
+    }
+  },
+  "phase3_symmetry_test": {
+    "5m": {
+      "total": 2818,
+      "rr_gt1": 1409,
+      "rr_gt1_pct": 50.0,
+      "binomial_p": 1.0,
+      "filtered_total": 1674,
+      "filtered_rr_gt1": 837,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_binomial_p": 1.0,
+      "mean_rr": 1.1525,
+      "ttest_stat": 10.7351,
+      "ttest_p": 0.0,
+      "symmetric": true
+    },
+    "15m": {
+      "total": 1748,
+      "rr_gt1": 874,
+      "rr_gt1_pct": 50.0,
+      "binomial_p": 1.0,
+      "filtered_total": 674,
+      "filtered_rr_gt1": 337,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_binomial_p": 1.0,
+      "mean_rr": 1.3168,
+      "ttest_stat": 6.147,
+      "ttest_p": 0.0,
+      "symmetric": true
+    },
+    "1h": {
+      "total": 730,
+      "rr_gt1": 365,
+      "rr_gt1_pct": 50.0,
+      "binomial_p": 1.0,
+      "filtered_total": 156,
+      "filtered_rr_gt1": 78,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_binomial_p": 1.0,
+      "mean_rr": 1.4294,
+      "ttest_stat": 4.3194,
+      "ttest_p": 1.8e-05,
+      "symmetric": true
+    },
+    "4h": {
+      "total": 215,
+      "rr_gt1": 106,
+      "rr_gt1_pct": 49.3,
+      "binomial_p": 0.891547,
+      "filtered_total": 20,
+      "filtered_rr_gt1": 10,
+      "filtered_rr_gt1_pct": 50.0,
+      "filtered_binomial_p": 1.0,
+      "mean_rr": 1.5074,
+      "ttest_stat": 4.2873,
+      "ttest_p": 2.7e-05,
+      "symmetric": true
+    }
+  },
+  "phase4_rr1_backtest": {
+    "15m": {
+      "level_1.0": {
+        "tp_sl_pct": 1.0,
+        "total_tested": 2960,
+        "total_trades": 37352,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_1.5": {
+        "tp_sl_pct": 1.5,
+        "total_tested": 2960,
+        "total_trades": 28484,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_2.0": {
+        "tp_sl_pct": 2.0,
+        "total_tested": 2960,
+        "total_trades": 19816,
+        "edge_patterns": 3,
+        "patterns": [
+          {
+            "pattern": "DN-DN-DN",
+            "direction": "SHORT",
+            "trades": 220,
+            "wr": 60.9,
+            "wr_excess": 10.9,
+            "mc_p": 0.0068,
+            "pnl": 524.67,
+            "mdd": 60.74
+          },
+          {
+            "pattern": "ST-ST-DN",
+            "direction": "SHORT",
+            "trades": 92,
+            "wr": 65.2,
+            "wr_excess": 15.2,
+            "mc_p": 0.0068,
+            "pnl": 246.87,
+            "mdd": 25.83
+          },
+          {
+            "pattern": "D-U-U",
+            "direction": "SHORT",
+            "trades": 35,
+            "wr": 71.4,
+            "wr_excess": 21.4,
+            "mc_p": 0.0084,
+            "pnl": 108.58,
+            "mdd": 18.52
+          }
+        ]
+      },
+      "level_2.5": {
+        "tp_sl_pct": 2.5,
+        "total_tested": 2960,
+        "total_trades": 13360,
+        "edge_patterns": 6,
+        "patterns": [
+          {
+            "pattern": "DN-DN-DN",
+            "direction": "SHORT",
+            "trades": 158,
+            "wr": 65.8,
+            "wr_excess": 15.8,
+            "mc_p": 0.0002,
+            "pnl": 1620.79,
+            "mdd": 55.61
+          },
+          {
+            "pattern": "DN-ST-ST",
+            "direction": "SHORT",
+            "trades": 83,
+            "wr": 67.5,
+            "wr_excess": 17.5,
+            "mc_p": 0.0036,
+            "pnl": 447.83,
+            "mdd": 34.15
+          },
+          {
+            "pattern": "MD-ST-DN",
+            "direction": "SHORT",
+            "trades": 20,
+            "wr": 80.0,
+            "wr_excess": 30.0,
+            "mc_p": 0.0072,
+            "pnl": 119.81,
+            "mdd": 15.98
+          },
+          {
+            "pattern": "ST-ST-DN",
+            "direction": "SHORT",
+            "trades": 73,
+            "wr": 68.5,
+            "wr_excess": 18.5,
+            "mc_p": 0.0026,
+            "pnl": 399.52,
+            "mdd": 34.91
+          },
+          {
+            "pattern": "MU-DN-ST",
+            "direction": "SHORT",
+            "trades": 21,
+            "wr": 81.0,
+            "wr_excess": 31.0,
+            "mc_p": 0.0052,
+            "pnl": 135.63,
+            "mdd": 15.98
+          },
+          {
+            "pattern": "U-DN-BD",
+            "direction": "SHORT",
+            "trades": 49,
+            "wr": 69.4,
+            "wr_excess": 19.4,
+            "mc_p": 0.006,
+            "pnl": 214.48,
+            "mdd": 26.07
+          }
+        ]
+      },
+      "level_3.0": {
+        "tp_sl_pct": 3.0,
+        "total_tested": 2960,
+        "total_trades": 8554,
+        "edge_patterns": 7,
+        "patterns": [
+          {
+            "pattern": "ST-DN-U",
+            "direction": "SHORT",
+            "trades": 72,
+            "wr": 68.1,
+            "wr_excess": 18.1,
+            "mc_p": 0.003,
+            "pnl": 531.27,
+            "mdd": 34.22
+          },
+          {
+            "pattern": "DN-DN-DN",
+            "direction": "SHORT",
+            "trades": 117,
+            "wr": 69.2,
+            "wr_excess": 19.2,
+            "mc_p": 0.0002,
+            "pnl": 2461.27,
+            "mdd": 44.33
+          },
+          {
+            "pattern": "U-ST-DN",
+            "direction": "SHORT",
+            "trades": 79,
+            "wr": 67.1,
+            "wr_excess": 17.1,
+            "mc_p": 0.0044,
+            "pnl": 557.59,
+            "mdd": 32.44
+          },
+          {
+            "pattern": "DN-ST-ST",
+            "direction": "SHORT",
+            "trades": 67,
+            "wr": 73.1,
+            "wr_excess": 23.1,
+            "mc_p": 0.0002,
+            "pnl": 928.44,
+            "mdd": 18.89
+          },
+          {
+            "pattern": "ST-DN-DN",
+            "direction": "SHORT",
+            "trades": 76,
+            "wr": 65.8,
+            "wr_excess": 15.8,
+            "mc_p": 0.0072,
+            "pnl": 412.0,
+            "mdd": 30.5
+          },
+          {
+            "pattern": "ST-ST-DN",
+            "direction": "SHORT",
+            "trades": 54,
+            "wr": 72.2,
+            "wr_excess": 22.2,
+            "mc_p": 0.0014,
+            "pnl": 498.5,
+            "mdd": 20.04
+          },
+          {
+            "pattern": "ST-DN-D",
+            "direction": "SHORT",
+            "trades": 20,
+            "wr": 80.0,
+            "wr_excess": 30.0,
+            "mc_p": 0.0066,
+            "pnl": 157.1,
+            "mdd": 17.74
+          }
+        ]
+      }
+    },
+    "1h": {
+      "level_1.5": {
+        "tp_sl_pct": 1.5,
+        "total_tested": 2010,
+        "total_trades": 3672,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_2.0": {
+        "tp_sl_pct": 2.0,
+        "total_tested": 2010,
+        "total_trades": 2302,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_3.0": {
+        "tp_sl_pct": 3.0,
+        "total_tested": 2010,
+        "total_trades": 792,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_4.0": {
+        "tp_sl_pct": 4.0,
+        "total_tested": 2010,
+        "total_trades": 90,
+        "edge_patterns": 1,
+        "patterns": [
+          {
+            "pattern": "DN-U-DN",
+            "direction": "SHORT",
+            "trades": 21,
+            "wr": 81.0,
+            "wr_excess": 31.0,
+            "mc_p": 0.004,
+            "pnl": 288.06,
+            "mdd": 23.09
+          }
+        ]
+      },
+      "level_5.0": {
+        "tp_sl_pct": 5.0,
+        "total_tested": 2010,
+        "total_trades": 0,
+        "edge_patterns": 0,
+        "patterns": []
+      }
+    },
+    "4h": {
+      "level_2.0": {
+        "tp_sl_pct": 2.0,
+        "total_tested": 1100,
+        "total_trades": 0,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_3.0": {
+        "tp_sl_pct": 3.0,
+        "total_tested": 1100,
+        "total_trades": 0,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_4.0": {
+        "tp_sl_pct": 4.0,
+        "total_tested": 1100,
+        "total_trades": 0,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_5.0": {
+        "tp_sl_pct": 5.0,
+        "total_tested": 1100,
+        "total_trades": 0,
+        "edge_patterns": 0,
+        "patterns": []
+      },
+      "level_7.0": {
+        "tp_sl_pct": 7.0,
+        "total_tested": 1100,
+        "total_trades": 0,
+        "edge_patterns": 0,
+        "patterns": []
+      }
+    }
+  },
+  "phase5_mfe_mae_backtest": {
+    "15m": {
+      "total_edge_patterns": 1,
+      "wf_all_pass": 0,
+      "patterns": [
+        {
+          "tp_percentile": 70,
+          "sl_percentile": 80,
+          "tp_pct": 2.35,
+          "sl_pct": 2.28,
+          "rr": 1.029,
+          "trades": 180,
+          "wr": 61.1,
+          "baseline_wr": 49.3,
+          "wr_excess": 11.8,
+          "pnl": 632.71,
+          "mdd": 57.82,
+          "pnl_mdd": 10.94,
+          "mc_p": 0.0062,
+          "pattern": "DN-DN-DN",
+          "direction": "SHORT",
+          "wf_folds": [
+            {
+              "fold": 1,
+              "oos_trades": 41,
+              "oos_wr": 48.8,
+              "oos_pnl": -22.06,
+              "oos_mdd": 48.66,
+              "pass": false
+            },
+            {
+              "fold": 2,
+              "oos_trades": 69,
+              "oos_wr": 63.8,
+              "oos_pnl": 177.91,
+              "oos_mdd": 44.71,
+              "pass": true
+            },
+            {
+              "fold": 3,
+              "oos_trades": 38,
+              "oos_wr": 76.3,
+              "oos_pnl": 241.29,
+              "oos_mdd": 20.63,
+              "pass": true
+            }
+          ],
+          "wf_pass": "2/3",
+          "wf_all_pass": false
+        }
+      ]
+    },
+    "1h": {
+      "total_edge_patterns": 0,
+      "wf_all_pass": 0,
+      "patterns": []
+    },
+    "4h": {
+      "total_edge_patterns": 0,
+      "wf_all_pass": 0,
+      "patterns": []
+    }
+  },
+  "phase6_direction_filter": {
+    "best_tf": "15m",
+    "edge_patterns_count": 11,
+    "edge_patterns": {
+      "DN-DN-DN": "SHORT",
+      "ST-ST-DN": "SHORT",
+      "D-U-U": "SHORT",
+      "DN-ST-ST": "SHORT",
+      "MD-ST-DN": "SHORT",
+      "MU-DN-ST": "SHORT",
+      "U-DN-BD": "SHORT",
+      "ST-DN-U": "SHORT",
+      "U-ST-DN": "SHORT",
+      "ST-DN-DN": "SHORT",
+      "ST-DN-D": "SHORT"
+    },
+    "direction_signals": 1782,
+    "baseline": {
+      "trades": 92412,
+      "wr": 50.0,
+      "pnl": -100.0,
+      "mdd": 100.0
+    },
+    "filtered": {
+      "trades": 3084,
+      "wr": 60.2,
+      "pnl": 953661066359.2,
+      "mdd": 67.6
+    },
+    "wr_improvement_pp": 10.2,
+    "recommendation": "INVESTIGATE"
+  },
+  "verdict": {
+    "symmetry_breaks_at": "NONE",
+    "all_tfs_symmetric": true,
+    "best_tf": null,
+    "total_wf_pass_patterns": 0,
+    "direction_filter_recommendation": "INVESTIGATE",
+    "conclusion": "All timeframes show symmetric MFE/MAE (R:R ~ 1.0). 3-candle patterns do not provide directional edge on any TF tested. Higher TF direction filter NOT recommended."
+  },
+  "elapsed_seconds": 30.6
+}

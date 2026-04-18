@@ -1,0 +1,2759 @@
+{
+  "section1_n_sweep": {
+    "5": {
+      "trades": 415,
+      "wr": 65.5,
+      "pf": 1.13,
+      "add_pnl": 55.4,
+      "add_edge": 0.133,
+      "add_mdd": 71.7,
+      "cmp_pnl": 55.4,
+      "cmp_mdd": 53.2,
+      "pnl_mdd_ratio": 1.04,
+      "hit_rate": 7.8,
+      "signals_total": 5335,
+      "entered": 415,
+      "skipped": 4920,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 70,
+          "sum_pnl": -15.3,
+          "wr": 62.9,
+          "avg_pnl": -0.219
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 345,
+          "sum_pnl": 70.69,
+          "wr": 66.1,
+          "avg_pnl": 0.205
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 68,
+          "wr": 77.9,
+          "sum_pnl": 53.42,
+          "avg_pnl": 0.786
+        },
+        "6-24h": {
+          "trades": 96,
+          "wr": 81.2,
+          "sum_pnl": 77.5,
+          "avg_pnl": 0.807
+        },
+        "24-48h": {
+          "trades": 63,
+          "wr": 68.3,
+          "sum_pnl": 23.28,
+          "avg_pnl": 0.369
+        },
+        "48h+": {
+          "trades": 188,
+          "wr": 52.1,
+          "sum_pnl": -98.8,
+          "avg_pnl": -0.526
+        }
+      },
+      "exit_reasons": {
+        "SL": {
+          "count": 139,
+          "sum_pnl": -414.69
+        },
+        "TP": {
+          "count": 271,
+          "sum_pnl": 471.62
+        },
+        "END": {
+          "count": 5,
+          "sum_pnl": -1.54
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 55,
+          "oos_wr": 65.5,
+          "oos_pnl": 3.0,
+          "oos_mdd": 14.2,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 178,
+          "oos_wr": 70.2,
+          "oos_pnl": 81.5,
+          "oos_mdd": 19.4,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 130,
+          "oos_wr": 64.6,
+          "oos_pnl": 19.4,
+          "oos_mdd": 30.5,
+          "pass": "True"
+        }
+      ]
+    },
+    "7": {
+      "trades": 611,
+      "wr": 66.0,
+      "pf": 1.12,
+      "add_pnl": 52.4,
+      "add_edge": 0.086,
+      "add_mdd": 61.9,
+      "cmp_pnl": 56.0,
+      "cmp_mdd": 47.6,
+      "pnl_mdd_ratio": 1.18,
+      "hit_rate": 12.1,
+      "signals_total": 5059,
+      "entered": 611,
+      "skipped": 4448,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 100,
+          "sum_pnl": -9.62,
+          "wr": 65.0,
+          "avg_pnl": -0.096
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 511,
+          "sum_pnl": 62.0,
+          "wr": 66.1,
+          "avg_pnl": 0.121
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 100,
+          "wr": 79.0,
+          "sum_pnl": 51.36,
+          "avg_pnl": 0.514
+        },
+        "6-24h": {
+          "trades": 147,
+          "wr": 82.3,
+          "sum_pnl": 83.29,
+          "avg_pnl": 0.567
+        },
+        "24-48h": {
+          "trades": 97,
+          "wr": 67.0,
+          "sum_pnl": 19.41,
+          "avg_pnl": 0.2
+        },
+        "48h+": {
+          "trades": 267,
+          "wr": 51.7,
+          "sum_pnl": -101.68,
+          "avg_pnl": -0.381
+        }
+      },
+      "exit_reasons": {
+        "TP": {
+          "count": 401,
+          "sum_pnl": 471.98
+        },
+        "SL": {
+          "count": 203,
+          "sum_pnl": -418.73
+        },
+        "END": {
+          "count": 7,
+          "sum_pnl": -0.88
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 79,
+          "oos_wr": 68.4,
+          "oos_pnl": 9.5,
+          "oos_mdd": 15.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 250,
+          "oos_wr": 69.6,
+          "oos_pnl": 56.3,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 185,
+          "oos_wr": 66.5,
+          "oos_pnl": 34.9,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        }
+      ]
+    },
+    "8": {
+      "trades": 714,
+      "wr": 66.2,
+      "pf": 1.16,
+      "add_pnl": 66.4,
+      "add_edge": 0.093,
+      "add_mdd": 57.5,
+      "cmp_pnl": 81.7,
+      "cmp_mdd": 44.8,
+      "pnl_mdd_ratio": 1.82,
+      "hit_rate": 14.5,
+      "signals_total": 4923,
+      "entered": 714,
+      "skipped": 4209,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 112,
+          "sum_pnl": -6.48,
+          "wr": 65.2,
+          "avg_pnl": -0.058
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 602,
+          "sum_pnl": 72.9,
+          "wr": 66.4,
+          "avg_pnl": 0.121
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 118,
+          "wr": 79.7,
+          "sum_pnl": 54.63,
+          "avg_pnl": 0.463
+        },
+        "6-24h": {
+          "trades": 174,
+          "wr": 80.5,
+          "sum_pnl": 81.04,
+          "avg_pnl": 0.466
+        },
+        "24-48h": {
+          "trades": 115,
+          "wr": 66.1,
+          "sum_pnl": 16.72,
+          "avg_pnl": 0.145
+        },
+        "48h+": {
+          "trades": 307,
+          "wr": 53.1,
+          "sum_pnl": -85.98,
+          "avg_pnl": -0.28
+        }
+      },
+      "exit_reasons": {
+        "TP": {
+          "count": 471,
+          "sum_pnl": 477.56
+        },
+        "SL": {
+          "count": 235,
+          "sum_pnl": -410.15
+        },
+        "END": {
+          "count": 8,
+          "sum_pnl": -0.99
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 97,
+          "oos_wr": 67.0,
+          "oos_pnl": 6.0,
+          "oos_mdd": 16.2,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 297,
+          "oos_wr": 69.7,
+          "oos_pnl": 63.0,
+          "oos_mdd": 22.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 209,
+          "oos_wr": 66.5,
+          "oos_pnl": 35.9,
+          "oos_mdd": 24.2,
+          "pass": "True"
+        }
+      ]
+    },
+    "9": {
+      "trades": 815,
+      "wr": 67.0,
+      "pf": 1.18,
+      "add_pnl": 74.2,
+      "add_edge": 0.091,
+      "add_mdd": 56.4,
+      "cmp_pnl": 98.1,
+      "cmp_mdd": 43.9,
+      "pnl_mdd_ratio": 2.23,
+      "hit_rate": 17.0,
+      "signals_total": 4807,
+      "entered": 815,
+      "skipped": 3992,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 125,
+          "sum_pnl": -4.74,
+          "wr": 65.6,
+          "avg_pnl": -0.038
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 690,
+          "sum_pnl": 78.91,
+          "wr": 67.2,
+          "avg_pnl": 0.114
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 139,
+          "wr": 81.3,
+          "sum_pnl": 57.77,
+          "avg_pnl": 0.416
+        },
+        "6-24h": {
+          "trades": 200,
+          "wr": 82.0,
+          "sum_pnl": 87.96,
+          "avg_pnl": 0.44
+        },
+        "24-48h": {
+          "trades": 136,
+          "wr": 64.7,
+          "sum_pnl": 12.28,
+          "avg_pnl": 0.09
+        },
+        "48h+": {
+          "trades": 340,
+          "wr": 53.2,
+          "sum_pnl": -83.83,
+          "avg_pnl": -0.247
+        }
+      },
+      "exit_reasons": {
+        "TP": {
+          "count": 543,
+          "sum_pnl": 477.52
+        },
+        "SL": {
+          "count": 263,
+          "sum_pnl": -403.1
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.25
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 111,
+          "oos_wr": 66.7,
+          "oos_pnl": 4.1,
+          "oos_mdd": 14.8,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 333,
+          "oos_wr": 70.0,
+          "oos_pnl": 65.4,
+          "oos_mdd": 22.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 241,
+          "oos_wr": 68.9,
+          "oos_pnl": 50.7,
+          "oos_mdd": 24.4,
+          "pass": "True"
+        }
+      ]
+    },
+    "10": {
+      "trades": 908,
+      "wr": 67.2,
+      "pf": 1.2,
+      "add_pnl": 79.7,
+      "add_edge": 0.088,
+      "add_mdd": 52.9,
+      "cmp_pnl": 110.8,
+      "cmp_mdd": 42.3,
+      "pnl_mdd_ratio": 2.62,
+      "hit_rate": 19.3,
+      "signals_total": 4710,
+      "entered": 908,
+      "skipped": 3802,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 139,
+          "sum_pnl": 0.35,
+          "wr": 67.6,
+          "avg_pnl": 0.003
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 769,
+          "sum_pnl": 79.35,
+          "wr": 67.1,
+          "avg_pnl": 0.103
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 151,
+          "wr": 82.8,
+          "sum_pnl": 57.89,
+          "avg_pnl": 0.383
+        },
+        "6-24h": {
+          "trades": 227,
+          "wr": 82.8,
+          "sum_pnl": 92.36,
+          "avg_pnl": 0.407
+        },
+        "24-48h": {
+          "trades": 151,
+          "wr": 62.3,
+          "sum_pnl": 3.71,
+          "avg_pnl": 0.025
+        },
+        "48h+": {
+          "trades": 379,
+          "wr": 53.6,
+          "sum_pnl": -74.26,
+          "avg_pnl": -0.196
+        }
+      },
+      "exit_reasons": {
+        "TP": {
+          "count": 607,
+          "sum_pnl": 475.98
+        },
+        "SL": {
+          "count": 291,
+          "sum_pnl": -395.96
+        },
+        "END": {
+          "count": 10,
+          "sum_pnl": -0.33
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 124,
+          "oos_wr": 64.5,
+          "oos_pnl": -1.2,
+          "oos_mdd": 15.5,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 367,
+          "oos_wr": 70.6,
+          "oos_pnl": 66.8,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 270,
+          "oos_wr": 69.6,
+          "oos_pnl": 60.5,
+          "oos_mdd": 20.4,
+          "pass": "True"
+        }
+      ]
+    },
+    "11": {
+      "trades": 996,
+      "wr": 67.2,
+      "pf": 1.2,
+      "add_pnl": 76.9,
+      "add_edge": 0.077,
+      "add_mdd": 55.5,
+      "cmp_pnl": 106.2,
+      "cmp_mdd": 43.7,
+      "pnl_mdd_ratio": 2.43,
+      "hit_rate": 21.6,
+      "signals_total": 4612,
+      "entered": 996,
+      "skipped": 3616,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 155,
+          "sum_pnl": -0.24,
+          "wr": 67.1,
+          "avg_pnl": -0.002
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 841,
+          "sum_pnl": 77.14,
+          "wr": 67.2,
+          "avg_pnl": 0.092
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 161,
+          "wr": 83.2,
+          "sum_pnl": 55.25,
+          "avg_pnl": 0.343
+        },
+        "6-24h": {
+          "trades": 254,
+          "wr": 81.5,
+          "sum_pnl": 86.84,
+          "avg_pnl": 0.342
+        },
+        "24-48h": {
+          "trades": 165,
+          "wr": 64.2,
+          "sum_pnl": 7.98,
+          "avg_pnl": 0.048
+        },
+        "48h+": {
+          "trades": 416,
+          "wr": 53.4,
+          "sum_pnl": -73.17,
+          "avg_pnl": -0.176
+        }
+      },
+      "exit_reasons": {
+        "TP": {
+          "count": 666,
+          "sum_pnl": 467.76
+        },
+        "SL": {
+          "count": 319,
+          "sum_pnl": -390.37
+        },
+        "END": {
+          "count": 11,
+          "sum_pnl": -0.48
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 136,
+          "oos_wr": 65.4,
+          "oos_pnl": 0.8,
+          "oos_mdd": 15.0,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 402,
+          "oos_wr": 69.9,
+          "oos_pnl": 60.1,
+          "oos_mdd": 22.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 296,
+          "oos_wr": 70.3,
+          "oos_pnl": 63.1,
+          "oos_mdd": 20.5,
+          "pass": "True"
+        }
+      ]
+    },
+    "13": {
+      "trades": 1158,
+      "wr": 66.5,
+      "pf": 1.16,
+      "add_pnl": 59.8,
+      "add_edge": 0.052,
+      "add_mdd": 61.0,
+      "cmp_pnl": 75.3,
+      "cmp_mdd": 46.5,
+      "pnl_mdd_ratio": 1.62,
+      "hit_rate": 26.5,
+      "signals_total": 4377,
+      "entered": 1158,
+      "skipped": 3219,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 177,
+          "sum_pnl": -7.56,
+          "wr": 65.5,
+          "avg_pnl": -0.043
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 981,
+          "sum_pnl": 67.34,
+          "wr": 66.7,
+          "avg_pnl": 0.069
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 180,
+          "wr": 83.3,
+          "sum_pnl": 51.04,
+          "avg_pnl": 0.284
+        },
+        "6-24h": {
+          "trades": 307,
+          "wr": 78.5,
+          "sum_pnl": 74.89,
+          "avg_pnl": 0.244
+        },
+        "24-48h": {
+          "trades": 194,
+          "wr": 63.9,
+          "sum_pnl": 5.22,
+          "avg_pnl": 0.027
+        },
+        "48h+": {
+          "trades": 477,
+          "wr": 53.5,
+          "sum_pnl": -71.38,
+          "avg_pnl": -0.15
+        }
+      },
+      "exit_reasons": {
+        "TP": {
+          "count": 766,
+          "sum_pnl": 444.21
+        },
+        "SL": {
+          "count": 379,
+          "sum_pnl": -383.93
+        },
+        "END": {
+          "count": 13,
+          "sum_pnl": -0.5
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 165,
+          "oos_wr": 64.8,
+          "oos_pnl": 3.0,
+          "oos_mdd": 15.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 456,
+          "oos_wr": 70.0,
+          "oos_pnl": 60.0,
+          "oos_mdd": 22.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 351,
+          "oos_wr": 70.9,
+          "oos_pnl": 64.7,
+          "oos_mdd": 19.4,
+          "pass": "True"
+        }
+      ]
+    }
+  },
+  "section2_timeout_sweep": {
+    "no_timeout": {
+      "trades": 815,
+      "wr": 67.0,
+      "pf": 1.18,
+      "add_pnl": 74.2,
+      "add_edge": 0.091,
+      "add_mdd": 56.4,
+      "cmp_pnl": 98.1,
+      "cmp_mdd": 43.9,
+      "pnl_mdd_ratio": 2.23,
+      "hit_rate": 17.0,
+      "exit_reasons": {
+        "TP": {
+          "count": 543,
+          "sum_pnl": 477.52
+        },
+        "SL": {
+          "count": 263,
+          "sum_pnl": -403.1
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.25
+        }
+      },
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 125,
+          "sum_pnl": -4.74,
+          "wr": 65.6,
+          "avg_pnl": -0.038
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 690,
+          "sum_pnl": 78.91,
+          "wr": 67.2,
+          "avg_pnl": 0.114
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 139,
+          "wr": 81.3,
+          "sum_pnl": 57.77,
+          "avg_pnl": 0.416
+        },
+        "6-24h": {
+          "trades": 200,
+          "wr": 82.0,
+          "sum_pnl": 87.96,
+          "avg_pnl": 0.44
+        },
+        "24-48h": {
+          "trades": 136,
+          "wr": 64.7,
+          "sum_pnl": 12.28,
+          "avg_pnl": 0.09
+        },
+        "48h+": {
+          "trades": 340,
+          "wr": 53.2,
+          "sum_pnl": -83.83,
+          "avg_pnl": -0.247
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 111,
+          "oos_wr": 66.7,
+          "oos_pnl": 4.1,
+          "oos_mdd": 14.8,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 333,
+          "oos_wr": 70.0,
+          "oos_pnl": 65.4,
+          "oos_mdd": 22.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 241,
+          "oos_wr": 68.9,
+          "oos_pnl": 50.7,
+          "oos_mdd": 24.4,
+          "pass": "True"
+        }
+      ]
+    },
+    "48h_576": {
+      "trades": 1762,
+      "wr": 58.1,
+      "pf": 1.16,
+      "add_pnl": 83.7,
+      "add_edge": 0.048,
+      "add_mdd": 55.0,
+      "cmp_pnl": 119.8,
+      "cmp_mdd": 43.4,
+      "pnl_mdd_ratio": 2.76,
+      "hit_rate": 35.6,
+      "exit_reasons": {
+        "TP": {
+          "count": 754,
+          "sum_pnl": 512.02
+        },
+        "SL": {
+          "count": 260,
+          "sum_pnl": -273.98
+        },
+        "TIMEOUT": {
+          "count": 739,
+          "sum_pnl": -154.04
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.25
+        }
+      },
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 287,
+          "sum_pnl": 13.54,
+          "wr": 61.7,
+          "avg_pnl": 0.047
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1475,
+          "sum_pnl": 70.21,
+          "wr": 57.4,
+          "avg_pnl": 0.048
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 196,
+          "wr": 85.7,
+          "sum_pnl": 85.08,
+          "avg_pnl": 0.434
+        },
+        "6-24h": {
+          "trades": 475,
+          "wr": 79.2,
+          "sum_pnl": 144.12,
+          "avg_pnl": 0.303
+        },
+        "24-48h": {
+          "trades": 349,
+          "wr": 60.5,
+          "sum_pnl": 9.03,
+          "avg_pnl": 0.026
+        },
+        "48h+": {
+          "trades": 742,
+          "wr": 36.1,
+          "sum_pnl": -154.48,
+          "avg_pnl": -0.208
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 383,
+          "oos_wr": 53.0,
+          "oos_pnl": -9.3,
+          "oos_mdd": 17.8,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 487,
+          "oos_wr": 64.1,
+          "oos_pnl": 98.8,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 480,
+          "oos_wr": 60.2,
+          "oos_pnl": 58.3,
+          "oos_mdd": 18.6,
+          "pass": "True"
+        }
+      ]
+    },
+    "72h_864": {
+      "trades": 1373,
+      "wr": 60.5,
+      "pf": 1.24,
+      "add_pnl": 110.7,
+      "add_edge": 0.081,
+      "add_mdd": 42.4,
+      "cmp_pnl": 187.3,
+      "cmp_mdd": 35.7,
+      "pnl_mdd_ratio": 5.25,
+      "hit_rate": 28.0,
+      "exit_reasons": {
+        "TP": {
+          "count": 671,
+          "sum_pnl": 510.11
+        },
+        "SL": {
+          "count": 216,
+          "sum_pnl": -260.51
+        },
+        "TIMEOUT": {
+          "count": 477,
+          "sum_pnl": -138.7
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.25
+        }
+      },
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 232,
+          "sum_pnl": 19.13,
+          "wr": 65.1,
+          "avg_pnl": 0.082
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1141,
+          "sum_pnl": 91.53,
+          "wr": 59.6,
+          "avg_pnl": 0.08
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 175,
+          "wr": 83.4,
+          "sum_pnl": 76.39,
+          "avg_pnl": 0.437
+        },
+        "6-24h": {
+          "trades": 342,
+          "wr": 81.6,
+          "sum_pnl": 138.5,
+          "avg_pnl": 0.405
+        },
+        "24-48h": {
+          "trades": 227,
+          "wr": 70.9,
+          "sum_pnl": 50.37,
+          "avg_pnl": 0.222
+        },
+        "48h+": {
+          "trades": 629,
+          "wr": 39.0,
+          "sum_pnl": -154.61,
+          "avg_pnl": -0.246
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 284,
+          "oos_wr": 55.3,
+          "oos_pnl": 11.0,
+          "oos_mdd": 12.7,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 414,
+          "oos_wr": 66.7,
+          "oos_pnl": 89.1,
+          "oos_mdd": 24.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 399,
+          "oos_wr": 62.7,
+          "oos_pnl": 78.0,
+          "oos_mdd": 16.8,
+          "pass": "True"
+        }
+      ]
+    },
+    "5d_1440": {
+      "trades": 1108,
+      "wr": 63.0,
+      "pf": 1.25,
+      "add_pnl": 109.6,
+      "add_edge": 0.099,
+      "add_mdd": 46.4,
+      "cmp_pnl": 183.2,
+      "cmp_mdd": 38.5,
+      "pnl_mdd_ratio": 4.76,
+      "hit_rate": 22.9,
+      "exit_reasons": {
+        "TP": {
+          "count": 640,
+          "sum_pnl": 516.87
+        },
+        "SL": {
+          "count": 259,
+          "sum_pnl": -342.46
+        },
+        "TIMEOUT": {
+          "count": 200,
+          "sum_pnl": -64.56
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.25
+        }
+      },
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 179,
+          "sum_pnl": 11.18,
+          "wr": 65.9,
+          "avg_pnl": 0.062
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 929,
+          "sum_pnl": 98.42,
+          "wr": 62.4,
+          "avg_pnl": 0.106
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 156,
+          "wr": 83.3,
+          "sum_pnl": 68.94,
+          "avg_pnl": 0.442
+        },
+        "6-24h": {
+          "trades": 259,
+          "wr": 82.6,
+          "sum_pnl": 109.44,
+          "avg_pnl": 0.423
+        },
+        "24-48h": {
+          "trades": 216,
+          "wr": 65.3,
+          "sum_pnl": 22.33,
+          "avg_pnl": 0.103
+        },
+        "48h+": {
+          "trades": 477,
+          "wr": 44.7,
+          "sum_pnl": -91.11,
+          "avg_pnl": -0.191
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 205,
+          "oos_wr": 57.6,
+          "oos_pnl": 7.5,
+          "oos_mdd": 14.9,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 359,
+          "oos_wr": 70.2,
+          "oos_pnl": 97.6,
+          "oos_mdd": 21.5,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 324,
+          "oos_wr": 64.8,
+          "oos_pnl": 81.7,
+          "oos_mdd": 18.9,
+          "pass": "True"
+        }
+      ]
+    },
+    "10d_2880": {
+      "trades": 885,
+      "wr": 65.1,
+      "pf": 1.15,
+      "add_pnl": 62.2,
+      "add_edge": 0.07,
+      "add_mdd": 65.2,
+      "cmp_pnl": 76.0,
+      "cmp_mdd": 49.0,
+      "pnl_mdd_ratio": 1.55,
+      "hit_rate": 18.3,
+      "exit_reasons": {
+        "TP": {
+          "count": 556,
+          "sum_pnl": 472.37
+        },
+        "SL": {
+          "count": 262,
+          "sum_pnl": -383.28
+        },
+        "TIMEOUT": {
+          "count": 58,
+          "sum_pnl": -26.64
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.25
+        }
+      },
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 135,
+          "sum_pnl": -8.22,
+          "wr": 60.7,
+          "avg_pnl": -0.061
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 750,
+          "sum_pnl": 70.42,
+          "wr": 65.9,
+          "avg_pnl": 0.094
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 144,
+          "wr": 81.9,
+          "sum_pnl": 61.02,
+          "avg_pnl": 0.424
+        },
+        "6-24h": {
+          "trades": 218,
+          "wr": 80.3,
+          "sum_pnl": 87.82,
+          "avg_pnl": 0.403
+        },
+        "24-48h": {
+          "trades": 151,
+          "wr": 64.9,
+          "sum_pnl": 12.45,
+          "avg_pnl": 0.082
+        },
+        "48h+": {
+          "trades": 372,
+          "wr": 49.7,
+          "sum_pnl": -99.09,
+          "avg_pnl": -0.266
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 133,
+          "oos_wr": 63.2,
+          "oos_pnl": 1.7,
+          "oos_mdd": 19.0,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 337,
+          "oos_wr": 70.3,
+          "oos_pnl": 68.4,
+          "oos_mdd": 22.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 270,
+          "oos_wr": 67.0,
+          "oos_pnl": 56.5,
+          "oos_mdd": 22.5,
+          "pass": "True"
+        }
+      ]
+    },
+    "24h_288": {
+      "trades": 2734,
+      "wr": 53.8,
+      "pf": 1.19,
+      "add_pnl": 114.3,
+      "add_edge": 0.042,
+      "add_mdd": 30.4,
+      "cmp_pnl": 199.2,
+      "cmp_mdd": 27.1,
+      "pnl_mdd_ratio": 7.35,
+      "hit_rate": 54.9,
+      "exit_reasons": {
+        "TIMEOUT": {
+          "count": 1674,
+          "sum_pnl": -201.02
+        },
+        "TP": {
+          "count": 833,
+          "sum_pnl": 520.52
+        },
+        "SL": {
+          "count": 218,
+          "sum_pnl": -204.29
+        },
+        "END": {
+          "count": 9,
+          "sum_pnl": -0.94
+        }
+      },
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 490,
+          "sum_pnl": 26.41,
+          "wr": 58.8,
+          "avg_pnl": 0.054
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 2244,
+          "sum_pnl": 87.86,
+          "wr": 52.7,
+          "avg_pnl": 0.039
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 277,
+          "wr": 85.9,
+          "sum_pnl": 110.71,
+          "avg_pnl": 0.4
+        },
+        "6-24h": {
+          "trades": 780,
+          "wr": 76.4,
+          "sum_pnl": 206.1,
+          "avg_pnl": 0.264
+        },
+        "24-48h": {
+          "trades": 1677,
+          "wr": 38.0,
+          "sum_pnl": -202.54,
+          "avg_pnl": -0.121
+        },
+        "48h+": {
+          "trades": 0,
+          "wr": 0,
+          "sum_pnl": 0,
+          "avg_pnl": 0
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 637,
+          "oos_wr": 52.0,
+          "oos_pnl": 8.9,
+          "oos_mdd": 14.3,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 719,
+          "oos_wr": 57.0,
+          "oos_pnl": 91.2,
+          "oos_mdd": 20.2,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 713,
+          "oos_wr": 56.2,
+          "oos_pnl": 68.7,
+          "oos_mdd": 21.4,
+          "pass": "True"
+        }
+      ]
+    }
+  },
+  "section3_timeout_n_matrix": {
+    "N7_NT": {
+      "trades": 611,
+      "wr": 66.0,
+      "pf": 1.12,
+      "add_pnl": 52.4,
+      "add_edge": 0.086,
+      "add_mdd": 61.9,
+      "cmp_pnl": 56.0,
+      "cmp_mdd": 47.6,
+      "pnl_mdd_ratio": 1.18,
+      "hit_rate": 12.1,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 100,
+          "sum_pnl": -9.62,
+          "wr": 65.0,
+          "avg_pnl": -0.096
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 511,
+          "sum_pnl": 62.0,
+          "wr": 66.1,
+          "avg_pnl": 0.121
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 79,
+          "oos_wr": 68.4,
+          "oos_pnl": 9.5,
+          "oos_mdd": 15.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 250,
+          "oos_wr": 69.6,
+          "oos_pnl": 56.3,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 185,
+          "oos_wr": 66.5,
+          "oos_pnl": 34.9,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        }
+      ]
+    },
+    "N7_T576": {
+      "trades": 1383,
+      "wr": 57.1,
+      "pf": 1.15,
+      "add_pnl": 83.0,
+      "add_edge": 0.06,
+      "add_mdd": 55.9,
+      "cmp_pnl": 114.3,
+      "cmp_mdd": 44.3,
+      "pnl_mdd_ratio": 2.58,
+      "hit_rate": 26.9,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 235,
+          "sum_pnl": 13.58,
+          "wr": 62.6,
+          "avg_pnl": 0.058
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1148,
+          "sum_pnl": 69.42,
+          "wr": 56.0,
+          "avg_pnl": 0.06
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 303,
+          "oos_wr": 53.1,
+          "oos_pnl": -6.1,
+          "oos_mdd": 17.6,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 384,
+          "oos_wr": 62.8,
+          "oos_pnl": 100.7,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 375,
+          "oos_wr": 58.1,
+          "oos_pnl": 53.1,
+          "oos_mdd": 20.8,
+          "pass": "True"
+        }
+      ]
+    },
+    "N7_T864": {
+      "trades": 1070,
+      "wr": 60.4,
+      "pf": 1.24,
+      "add_pnl": 111.1,
+      "add_edge": 0.104,
+      "add_mdd": 48.1,
+      "cmp_pnl": 183.5,
+      "cmp_mdd": 39.7,
+      "pnl_mdd_ratio": 4.62,
+      "hit_rate": 20.9,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 188,
+          "sum_pnl": 19.76,
+          "wr": 66.5,
+          "avg_pnl": 0.105
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 882,
+          "sum_pnl": 91.34,
+          "wr": 59.1,
+          "avg_pnl": 0.104
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 220,
+          "oos_wr": 55.5,
+          "oos_pnl": 9.8,
+          "oos_mdd": 12.2,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 323,
+          "oos_wr": 65.6,
+          "oos_pnl": 79.6,
+          "oos_mdd": 25.6,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 308,
+          "oos_wr": 63.6,
+          "oos_pnl": 81.3,
+          "oos_mdd": 20.1,
+          "pass": "True"
+        }
+      ]
+    },
+    "N9_NT": {
+      "trades": 815,
+      "wr": 67.0,
+      "pf": 1.18,
+      "add_pnl": 74.2,
+      "add_edge": 0.091,
+      "add_mdd": 56.4,
+      "cmp_pnl": 98.1,
+      "cmp_mdd": 43.9,
+      "pnl_mdd_ratio": 2.23,
+      "hit_rate": 17.0,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 125,
+          "sum_pnl": -4.74,
+          "wr": 65.6,
+          "avg_pnl": -0.038
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 690,
+          "sum_pnl": 78.91,
+          "wr": 67.2,
+          "avg_pnl": 0.114
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 111,
+          "oos_wr": 66.7,
+          "oos_pnl": 4.1,
+          "oos_mdd": 14.8,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 333,
+          "oos_wr": 70.0,
+          "oos_pnl": 65.4,
+          "oos_mdd": 22.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 241,
+          "oos_wr": 68.9,
+          "oos_pnl": 50.7,
+          "oos_mdd": 24.4,
+          "pass": "True"
+        }
+      ]
+    },
+    "N9_T576": {
+      "trades": 1762,
+      "wr": 58.1,
+      "pf": 1.16,
+      "add_pnl": 83.7,
+      "add_edge": 0.048,
+      "add_mdd": 55.0,
+      "cmp_pnl": 119.8,
+      "cmp_mdd": 43.4,
+      "pnl_mdd_ratio": 2.76,
+      "hit_rate": 35.6,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 287,
+          "sum_pnl": 13.54,
+          "wr": 61.7,
+          "avg_pnl": 0.047
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1475,
+          "sum_pnl": 70.21,
+          "wr": 57.4,
+          "avg_pnl": 0.048
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 383,
+          "oos_wr": 53.0,
+          "oos_pnl": -9.3,
+          "oos_mdd": 17.8,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 487,
+          "oos_wr": 64.1,
+          "oos_pnl": 98.8,
+          "oos_mdd": 22.3,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 480,
+          "oos_wr": 60.2,
+          "oos_pnl": 58.3,
+          "oos_mdd": 18.6,
+          "pass": "True"
+        }
+      ]
+    },
+    "N9_T864": {
+      "trades": 1373,
+      "wr": 60.5,
+      "pf": 1.24,
+      "add_pnl": 110.7,
+      "add_edge": 0.081,
+      "add_mdd": 42.4,
+      "cmp_pnl": 187.3,
+      "cmp_mdd": 35.7,
+      "pnl_mdd_ratio": 5.25,
+      "hit_rate": 28.0,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 232,
+          "sum_pnl": 19.13,
+          "wr": 65.1,
+          "avg_pnl": 0.082
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1141,
+          "sum_pnl": 91.53,
+          "wr": 59.6,
+          "avg_pnl": 0.08
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 284,
+          "oos_wr": 55.3,
+          "oos_pnl": 11.0,
+          "oos_mdd": 12.7,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 414,
+          "oos_wr": 66.7,
+          "oos_pnl": 89.1,
+          "oos_mdd": 24.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 399,
+          "oos_wr": 62.7,
+          "oos_pnl": 78.0,
+          "oos_mdd": 16.8,
+          "pass": "True"
+        }
+      ]
+    },
+    "N11_NT": {
+      "trades": 996,
+      "wr": 67.2,
+      "pf": 1.2,
+      "add_pnl": 76.9,
+      "add_edge": 0.077,
+      "add_mdd": 55.5,
+      "cmp_pnl": 106.2,
+      "cmp_mdd": 43.7,
+      "pnl_mdd_ratio": 2.43,
+      "hit_rate": 21.6,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 155,
+          "sum_pnl": -0.24,
+          "wr": 67.1,
+          "avg_pnl": -0.002
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 841,
+          "sum_pnl": 77.14,
+          "wr": 67.2,
+          "avg_pnl": 0.092
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 136,
+          "oos_wr": 65.4,
+          "oos_pnl": 0.8,
+          "oos_mdd": 15.0,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 402,
+          "oos_wr": 69.9,
+          "oos_pnl": 60.1,
+          "oos_mdd": 22.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 296,
+          "oos_wr": 70.3,
+          "oos_pnl": 63.1,
+          "oos_mdd": 20.5,
+          "pass": "True"
+        }
+      ]
+    },
+    "N11_T576": {
+      "trades": 2124,
+      "wr": 58.6,
+      "pf": 1.19,
+      "add_pnl": 92.4,
+      "add_edge": 0.044,
+      "add_mdd": 48.7,
+      "cmp_pnl": 142.4,
+      "cmp_mdd": 39.5,
+      "pnl_mdd_ratio": 3.61,
+      "hit_rate": 44.8,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 370,
+          "sum_pnl": 16.73,
+          "wr": 62.2,
+          "avg_pnl": 0.045
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1754,
+          "sum_pnl": 75.7,
+          "wr": 57.8,
+          "avg_pnl": 0.043
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 458,
+          "oos_wr": 53.3,
+          "oos_pnl": -5.5,
+          "oos_mdd": 16.9,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 592,
+          "oos_wr": 64.4,
+          "oos_pnl": 95.7,
+          "oos_mdd": 18.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 574,
+          "oos_wr": 61.5,
+          "oos_pnl": 65.9,
+          "oos_mdd": 16.5,
+          "pass": "True"
+        }
+      ]
+    },
+    "N11_T864": {
+      "trades": 1663,
+      "wr": 59.8,
+      "pf": 1.2,
+      "add_pnl": 91.6,
+      "add_edge": 0.055,
+      "add_mdd": 40.1,
+      "cmp_pnl": 140.1,
+      "cmp_mdd": 34.0,
+      "pnl_mdd_ratio": 4.12,
+      "hit_rate": 35.2,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 273,
+          "sum_pnl": 13.42,
+          "wr": 63.4,
+          "avg_pnl": 0.049
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1390,
+          "sum_pnl": 78.16,
+          "wr": 59.1,
+          "avg_pnl": 0.056
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 349,
+          "oos_wr": 55.3,
+          "oos_pnl": 13.5,
+          "oos_mdd": 14.6,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 493,
+          "oos_wr": 65.7,
+          "oos_pnl": 67.9,
+          "oos_mdd": 24.1,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 475,
+          "oos_wr": 61.5,
+          "oos_pnl": 61.5,
+          "oos_mdd": 17.8,
+          "pass": "True"
+        }
+      ]
+    },
+    "N13_NT": {
+      "trades": 1158,
+      "wr": 66.5,
+      "pf": 1.16,
+      "add_pnl": 59.8,
+      "add_edge": 0.052,
+      "add_mdd": 61.0,
+      "cmp_pnl": 75.3,
+      "cmp_mdd": 46.5,
+      "pnl_mdd_ratio": 1.62,
+      "hit_rate": 26.5,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 177,
+          "sum_pnl": -7.56,
+          "wr": 65.5,
+          "avg_pnl": -0.043
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 981,
+          "sum_pnl": 67.34,
+          "wr": 66.7,
+          "avg_pnl": 0.069
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 165,
+          "oos_wr": 64.8,
+          "oos_pnl": 3.0,
+          "oos_mdd": 15.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 456,
+          "oos_wr": 70.0,
+          "oos_pnl": 60.0,
+          "oos_mdd": 22.8,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 351,
+          "oos_wr": 70.9,
+          "oos_pnl": 64.7,
+          "oos_mdd": 19.4,
+          "pass": "True"
+        }
+      ]
+    },
+    "N13_T576": {
+      "trades": 2458,
+      "wr": 58.5,
+      "pf": 1.19,
+      "add_pnl": 92.7,
+      "add_edge": 0.038,
+      "add_mdd": 38.9,
+      "cmp_pnl": 144.9,
+      "cmp_mdd": 33.1,
+      "pnl_mdd_ratio": 4.38,
+      "hit_rate": 53.8,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 428,
+          "sum_pnl": 20.05,
+          "wr": 62.6,
+          "avg_pnl": 0.047
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 2030,
+          "sum_pnl": 72.67,
+          "wr": 57.7,
+          "avg_pnl": 0.036
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 536,
+          "oos_wr": 53.5,
+          "oos_pnl": -0.3,
+          "oos_mdd": 15.2,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 683,
+          "oos_wr": 64.3,
+          "oos_pnl": 78.5,
+          "oos_mdd": 21.2,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 657,
+          "oos_wr": 61.5,
+          "oos_pnl": 67.4,
+          "oos_mdd": 16.4,
+          "pass": "True"
+        }
+      ]
+    }
+  },
+  "section4_atr_adaptive_n": {
+    "adapt_9_13_7": {
+      "trades": 1372,
+      "wr": 66.2,
+      "pf": 1.14,
+      "add_pnl": 77.2,
+      "add_edge": 0.056,
+      "add_mdd": 90.5,
+      "cmp_pnl": 100.3,
+      "cmp_mdd": 60.8,
+      "pnl_mdd_ratio": 1.65,
+      "hit_rate": 29.5,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 231,
+          "sum_pnl": -11.8,
+          "wr": 64.9,
+          "avg_pnl": -0.051
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1141,
+          "sum_pnl": 89.02,
+          "wr": 66.4,
+          "avg_pnl": 0.078
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 243,
+          "wr": 84.0,
+          "sum_pnl": 84.82,
+          "avg_pnl": 0.349
+        },
+        "6-24h": {
+          "trades": 437,
+          "wr": 78.3,
+          "sum_pnl": 117.48,
+          "avg_pnl": 0.269
+        },
+        "24-48h": {
+          "trades": 272,
+          "wr": 55.1,
+          "sum_pnl": -15.33,
+          "avg_pnl": -0.056
+        },
+        "48h+": {
+          "trades": 420,
+          "wr": 50.5,
+          "sum_pnl": -109.75,
+          "avg_pnl": -0.261
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 233,
+          "oos_wr": 65.2,
+          "oos_pnl": 5.3,
+          "oos_mdd": 21.4,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 473,
+          "oos_wr": 70.8,
+          "oos_pnl": 101.1,
+          "oos_mdd": 26.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 396,
+          "oos_wr": 69.4,
+          "oos_pnl": 66.9,
+          "oos_mdd": 29.2,
+          "pass": "True"
+        }
+      ],
+      "config": {
+        "base_n": 9,
+        "low_vol_n": 13,
+        "high_vol_n": 7,
+        "vol_lo": 0.8,
+        "vol_hi": 1.2
+      }
+    },
+    "adapt_9_11_7": {
+      "trades": 1194,
+      "wr": 66.2,
+      "pf": 1.13,
+      "add_pnl": 67.3,
+      "add_edge": 0.056,
+      "add_mdd": 87.8,
+      "cmp_pnl": 81.2,
+      "cmp_mdd": 59.7,
+      "pnl_mdd_ratio": 1.36,
+      "hit_rate": 25.1,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 197,
+          "sum_pnl": -15.24,
+          "wr": 64.0,
+          "avg_pnl": -0.077
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 997,
+          "sum_pnl": 82.58,
+          "wr": 66.6,
+          "avg_pnl": 0.083
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 206,
+          "wr": 82.5,
+          "sum_pnl": 79.22,
+          "avg_pnl": 0.385
+        },
+        "6-24h": {
+          "trades": 377,
+          "wr": 79.0,
+          "sum_pnl": 116.77,
+          "avg_pnl": 0.31
+        },
+        "24-48h": {
+          "trades": 220,
+          "wr": 56.8,
+          "sum_pnl": -12.33,
+          "avg_pnl": -0.056
+        },
+        "48h+": {
+          "trades": 391,
+          "wr": 50.4,
+          "sum_pnl": -116.32,
+          "avg_pnl": -0.297
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 194,
+          "oos_wr": 65.5,
+          "oos_pnl": 4.3,
+          "oos_mdd": 21.8,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 425,
+          "oos_wr": 70.6,
+          "oos_pnl": 86.6,
+          "oos_mdd": 26.7,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 344,
+          "oos_wr": 68.9,
+          "oos_pnl": 59.1,
+          "oos_mdd": 29.6,
+          "pass": "True"
+        }
+      ],
+      "config": {
+        "base_n": 9,
+        "low_vol_n": 11,
+        "high_vol_n": 7,
+        "vol_lo": 0.8,
+        "vol_hi": 1.2
+      }
+    },
+    "adapt_9_13_5": {
+      "trades": 1417,
+      "wr": 65.6,
+      "pf": 1.11,
+      "add_pnl": 65.9,
+      "add_edge": 0.047,
+      "add_mdd": 106.0,
+      "cmp_pnl": 74.1,
+      "cmp_mdd": 66.8,
+      "pnl_mdd_ratio": 1.11,
+      "hit_rate": 30.2,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 241,
+          "sum_pnl": -25.98,
+          "wr": 64.3,
+          "avg_pnl": -0.108
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1176,
+          "sum_pnl": 91.92,
+          "wr": 65.9,
+          "avg_pnl": 0.078
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 252,
+          "wr": 83.3,
+          "sum_pnl": 85.46,
+          "avg_pnl": 0.339
+        },
+        "6-24h": {
+          "trades": 465,
+          "wr": 77.6,
+          "sum_pnl": 128.26,
+          "avg_pnl": 0.276
+        },
+        "24-48h": {
+          "trades": 302,
+          "wr": 54.3,
+          "sum_pnl": -21.0,
+          "avg_pnl": -0.07
+        },
+        "48h+": {
+          "trades": 398,
+          "wr": 49.0,
+          "sum_pnl": -126.79,
+          "avg_pnl": -0.319
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 252,
+          "oos_wr": 64.3,
+          "oos_pnl": 0.7,
+          "oos_mdd": 23.5,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 467,
+          "oos_wr": 69.6,
+          "oos_pnl": 101.6,
+          "oos_mdd": 32.7,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 419,
+          "oos_wr": 69.0,
+          "oos_pnl": 54.5,
+          "oos_mdd": 38.2,
+          "pass": "True"
+        }
+      ],
+      "config": {
+        "base_n": 9,
+        "low_vol_n": 13,
+        "high_vol_n": 5,
+        "vol_lo": 0.8,
+        "vol_hi": 1.2
+      }
+    },
+    "adapt_9_11_5": {
+      "trades": 1158,
+      "wr": 66.2,
+      "pf": 1.1,
+      "add_pnl": 57.0,
+      "add_edge": 0.049,
+      "add_mdd": 109.6,
+      "cmp_pnl": 59.7,
+      "cmp_mdd": 67.9,
+      "pnl_mdd_ratio": 0.88,
+      "hit_rate": 24.1,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 190,
+          "sum_pnl": -26.53,
+          "wr": 65.3,
+          "avg_pnl": -0.14
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 968,
+          "sum_pnl": 83.56,
+          "wr": 66.4,
+          "avg_pnl": 0.086
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 189,
+          "wr": 85.7,
+          "sum_pnl": 83.4,
+          "avg_pnl": 0.441
+        },
+        "6-24h": {
+          "trades": 377,
+          "wr": 78.8,
+          "sum_pnl": 123.43,
+          "avg_pnl": 0.327
+        },
+        "24-48h": {
+          "trades": 224,
+          "wr": 57.6,
+          "sum_pnl": -13.45,
+          "avg_pnl": -0.06
+        },
+        "48h+": {
+          "trades": 368,
+          "wr": 48.6,
+          "sum_pnl": -136.36,
+          "avg_pnl": -0.371
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 198,
+          "oos_wr": 65.2,
+          "oos_pnl": 11.1,
+          "oos_mdd": 18.3,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 407,
+          "oos_wr": 71.5,
+          "oos_pnl": 101.6,
+          "oos_mdd": 29.7,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 339,
+          "oos_wr": 69.6,
+          "oos_pnl": 62.6,
+          "oos_mdd": 28.3,
+          "pass": "True"
+        }
+      ],
+      "config": {
+        "base_n": 9,
+        "low_vol_n": 11,
+        "high_vol_n": 5,
+        "vol_lo": 0.7,
+        "vol_hi": 1.3
+      }
+    },
+    "adapt_9_15_5": {
+      "trades": 1556,
+      "wr": 65.9,
+      "pf": 1.11,
+      "add_pnl": 62.7,
+      "add_edge": 0.04,
+      "add_mdd": 108.4,
+      "cmp_pnl": 68.6,
+      "cmp_mdd": 67.6,
+      "pnl_mdd_ratio": 1.01,
+      "hit_rate": 33.7,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 260,
+          "sum_pnl": -25.34,
+          "wr": 66.5,
+          "avg_pnl": -0.097
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 1296,
+          "sum_pnl": 88.05,
+          "wr": 65.7,
+          "avg_pnl": 0.068
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 278,
+          "wr": 84.9,
+          "sum_pnl": 88.74,
+          "avg_pnl": 0.319
+        },
+        "6-24h": {
+          "trades": 515,
+          "wr": 77.5,
+          "sum_pnl": 129.7,
+          "avg_pnl": 0.252
+        },
+        "24-48h": {
+          "trades": 342,
+          "wr": 54.7,
+          "sum_pnl": -17.49,
+          "avg_pnl": -0.051
+        },
+        "48h+": {
+          "trades": 421,
+          "wr": 48.2,
+          "sum_pnl": -138.25,
+          "avg_pnl": -0.328
+        }
+      },
+      "wf_verdict": "FAIL (2/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 293,
+          "oos_wr": 66.2,
+          "oos_pnl": -1.0,
+          "oos_mdd": 21.5,
+          "pass": "False"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 496,
+          "oos_wr": 68.8,
+          "oos_pnl": 100.4,
+          "oos_mdd": 32.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 457,
+          "oos_wr": 69.1,
+          "oos_pnl": 54.8,
+          "oos_mdd": 38.6,
+          "pass": "True"
+        }
+      ],
+      "config": {
+        "base_n": 9,
+        "low_vol_n": 15,
+        "high_vol_n": 5,
+        "vol_lo": 0.8,
+        "vol_hi": 1.2
+      }
+    },
+    "fixed_9": {
+      "trades": 815,
+      "wr": 67.0,
+      "pf": 1.18,
+      "add_pnl": 74.2,
+      "add_edge": 0.091,
+      "add_mdd": 56.4,
+      "cmp_pnl": 98.1,
+      "cmp_mdd": 43.9,
+      "pnl_mdd_ratio": 2.23,
+      "hit_rate": 17.0,
+      "direction": {
+        "long": {
+          "label": "LONG",
+          "trades": 125,
+          "sum_pnl": -4.74,
+          "wr": 65.6,
+          "avg_pnl": -0.038
+        },
+        "short": {
+          "label": "SHORT",
+          "trades": 690,
+          "sum_pnl": 78.91,
+          "wr": 67.2,
+          "avg_pnl": 0.114
+        }
+      },
+      "holding_time": {
+        "0-6h": {
+          "trades": 139,
+          "wr": 81.3,
+          "sum_pnl": 57.77,
+          "avg_pnl": 0.416
+        },
+        "6-24h": {
+          "trades": 200,
+          "wr": 82.0,
+          "sum_pnl": 87.96,
+          "avg_pnl": 0.44
+        },
+        "24-48h": {
+          "trades": 136,
+          "wr": 64.7,
+          "sum_pnl": 12.28,
+          "avg_pnl": 0.09
+        },
+        "48h+": {
+          "trades": 340,
+          "wr": 53.2,
+          "sum_pnl": -83.83,
+          "avg_pnl": -0.247
+        }
+      },
+      "wf_verdict": "PASS (3/3)",
+      "wf_folds": [
+        {
+          "fold": 1,
+          "oos_trades": 111,
+          "oos_wr": 66.7,
+          "oos_pnl": 4.1,
+          "oos_mdd": 14.8,
+          "pass": "True"
+        },
+        {
+          "fold": 2,
+          "oos_trades": 333,
+          "oos_wr": 70.0,
+          "oos_pnl": 65.4,
+          "oos_mdd": 22.9,
+          "pass": "True"
+        },
+        {
+          "fold": 3,
+          "oos_trades": 241,
+          "oos_wr": 68.9,
+          "oos_pnl": 50.7,
+          "oos_mdd": 24.4,
+          "pass": "True"
+        }
+      ],
+      "config": {
+        "base_n": 9,
+        "low_vol_n": 9,
+        "high_vol_n": 9,
+        "vol_lo": 0.8,
+        "vol_hi": 1.2
+      }
+    }
+  },
+  "section5_holding_time": {
+    "holding_time": {
+      "0-6h": {
+        "trades": 139,
+        "wr": 81.3,
+        "sum_pnl": 57.77,
+        "avg_pnl": 0.416
+      },
+      "6-24h": {
+        "trades": 200,
+        "wr": 82.0,
+        "sum_pnl": 87.96,
+        "avg_pnl": 0.44
+      },
+      "24-48h": {
+        "trades": 136,
+        "wr": 64.7,
+        "sum_pnl": 12.28,
+        "avg_pnl": 0.09
+      },
+      "48h+": {
+        "trades": 340,
+        "wr": 53.2,
+        "sum_pnl": -83.83,
+        "avg_pnl": -0.247
+      }
+    },
+    "granular": {
+      "0-2h": {
+        "trades": 37,
+        "wr": 89.2,
+        "sum_pnl": 21.43,
+        "avg_pnl": 0.579,
+        "avg_hold_hours": 1.1
+      },
+      "2-6h": {
+        "trades": 102,
+        "wr": 78.4,
+        "sum_pnl": 36.34,
+        "avg_pnl": 0.356,
+        "avg_hold_hours": 3.7
+      },
+      "6-12h": {
+        "trades": 82,
+        "wr": 86.6,
+        "sum_pnl": 39.68,
+        "avg_pnl": 0.484,
+        "avg_hold_hours": 9.0
+      },
+      "12-24h": {
+        "trades": 118,
+        "wr": 78.8,
+        "sum_pnl": 48.28,
+        "avg_pnl": 0.409,
+        "avg_hold_hours": 17.5
+      },
+      "24-48h": {
+        "trades": 136,
+        "wr": 64.7,
+        "sum_pnl": 12.28,
+        "avg_pnl": 0.09,
+        "avg_hold_hours": 34.9
+      },
+      "48-96h": {
+        "trades": 161,
+        "wr": 52.8,
+        "sum_pnl": -39.83,
+        "avg_pnl": -0.247,
+        "avg_hold_hours": 72.0
+      },
+      "96h+": {
+        "trades": 179,
+        "wr": 53.6,
+        "sum_pnl": -44.01,
+        "avg_pnl": -0.246,
+        "avg_hold_hours": 214.6
+      }
+    },
+    "percentiles": {
+      "p25": 10.6,
+      "p50": 34.2,
+      "p75": 86.5,
+      "p90": 193.9,
+      "p95": 269.7,
+      "p99": 453.2,
+      "mean": 71.1
+    },
+    "long_tail_48h_plus": {
+      "trades": 340,
+      "pct_of_total": 41.7,
+      "wr": 53.2,
+      "sum_pnl": -83.83,
+      "avg_pnl": -0.247,
+      "slot_days_consumed": 2083.1
+    }
+  },
+  "section6_verdict": {
+    "candidates_wf_pass": [
+      {
+        "label": "N9_24h_288",
+        "pnl": 199.2,
+        "mdd": 27.1,
+        "ratio": 7.35,
+        "wr": 53.8,
+        "trades": 2734,
+        "hit_rate": 54.9,
+        "source": "section2"
+      },
+      {
+        "label": "N9_72h_864",
+        "pnl": 187.3,
+        "mdd": 35.7,
+        "ratio": 5.25,
+        "wr": 60.5,
+        "trades": 1373,
+        "hit_rate": 28.0,
+        "source": "section2"
+      },
+      {
+        "label": "N9_T864",
+        "pnl": 187.3,
+        "mdd": 35.7,
+        "ratio": 5.25,
+        "wr": 60.5,
+        "trades": 1373,
+        "hit_rate": 28.0,
+        "source": "section3"
+      },
+      {
+        "label": "N9_5d_1440",
+        "pnl": 183.2,
+        "mdd": 38.5,
+        "ratio": 4.76,
+        "wr": 63.0,
+        "trades": 1108,
+        "hit_rate": 22.9,
+        "source": "section2"
+      },
+      {
+        "label": "N7_T864",
+        "pnl": 183.5,
+        "mdd": 39.7,
+        "ratio": 4.62,
+        "wr": 60.4,
+        "trades": 1070,
+        "hit_rate": 20.9,
+        "source": "section3"
+      },
+      {
+        "label": "N11_T864",
+        "pnl": 140.1,
+        "mdd": 34.0,
+        "ratio": 4.12,
+        "wr": 59.8,
+        "trades": 1663,
+        "hit_rate": 35.2,
+        "source": "section3"
+      },
+      {
+        "label": "N=11_NT",
+        "pnl": 106.2,
+        "mdd": 43.7,
+        "ratio": 2.43,
+        "wr": 67.2,
+        "trades": 996,
+        "hit_rate": 21.6,
+        "source": "section1"
+      },
+      {
+        "label": "N11_NT",
+        "pnl": 106.2,
+        "mdd": 43.7,
+        "ratio": 2.43,
+        "wr": 67.2,
+        "trades": 996,
+        "hit_rate": 21.6,
+        "source": "section3"
+      },
+      {
+        "label": "N=9_NT",
+        "pnl": 98.1,
+        "mdd": 43.9,
+        "ratio": 2.23,
+        "wr": 67.0,
+        "trades": 815,
+        "hit_rate": 17.0,
+        "source": "section1"
+      },
+      {
+        "label": "N9_no_timeout",
+        "pnl": 98.1,
+        "mdd": 43.9,
+        "ratio": 2.23,
+        "wr": 67.0,
+        "trades": 815,
+        "hit_rate": 17.0,
+        "source": "section2"
+      },
+      {
+        "label": "N9_NT",
+        "pnl": 98.1,
+        "mdd": 43.9,
+        "ratio": 2.23,
+        "wr": 67.0,
+        "trades": 815,
+        "hit_rate": 17.0,
+        "source": "section3"
+      },
+      {
+        "label": "adaptive_fixed_9",
+        "pnl": 98.1,
+        "mdd": 43.9,
+        "ratio": 2.23,
+        "wr": 67.0,
+        "trades": 815,
+        "hit_rate": 17.0,
+        "source": "section4"
+      },
+      {
+        "label": "N=8_NT",
+        "pnl": 81.7,
+        "mdd": 44.8,
+        "ratio": 1.82,
+        "wr": 66.2,
+        "trades": 714,
+        "hit_rate": 14.5,
+        "source": "section1"
+      },
+      {
+        "label": "adaptive_adapt_9_13_7",
+        "pnl": 100.3,
+        "mdd": 60.8,
+        "ratio": 1.65,
+        "wr": 66.2,
+        "trades": 1372,
+        "hit_rate": 29.5,
+        "source": "section4"
+      },
+      {
+        "label": "N=13_NT",
+        "pnl": 75.3,
+        "mdd": 46.5,
+        "ratio": 1.62,
+        "wr": 66.5,
+        "trades": 1158,
+        "hit_rate": 26.5,
+        "source": "section1"
+      },
+      {
+        "label": "N13_NT",
+        "pnl": 75.3,
+        "mdd": 46.5,
+        "ratio": 1.62,
+        "wr": 66.5,
+        "trades": 1158,
+        "hit_rate": 26.5,
+        "source": "section3"
+      },
+      {
+        "label": "N9_10d_2880",
+        "pnl": 76.0,
+        "mdd": 49.0,
+        "ratio": 1.55,
+        "wr": 65.1,
+        "trades": 885,
+        "hit_rate": 18.3,
+        "source": "section2"
+      },
+      {
+        "label": "adaptive_adapt_9_11_7",
+        "pnl": 81.2,
+        "mdd": 59.7,
+        "ratio": 1.36,
+        "wr": 66.2,
+        "trades": 1194,
+        "hit_rate": 25.1,
+        "source": "section4"
+      },
+      {
+        "label": "N=7_NT",
+        "pnl": 56.0,
+        "mdd": 47.6,
+        "ratio": 1.18,
+        "wr": 66.0,
+        "trades": 611,
+        "hit_rate": 12.1,
+        "source": "section1"
+      },
+      {
+        "label": "N7_NT",
+        "pnl": 56.0,
+        "mdd": 47.6,
+        "ratio": 1.18,
+        "wr": 66.0,
+        "trades": 611,
+        "hit_rate": 12.1,
+        "source": "section3"
+      },
+      {
+        "label": "adaptive_adapt_9_13_5",
+        "pnl": 74.1,
+        "mdd": 66.8,
+        "ratio": 1.11,
+        "wr": 65.6,
+        "trades": 1417,
+        "hit_rate": 30.2,
+        "source": "section4"
+      },
+      {
+        "label": "N=5_NT",
+        "pnl": 55.4,
+        "mdd": 53.2,
+        "ratio": 1.04,
+        "wr": 65.5,
+        "trades": 415,
+        "hit_rate": 7.8,
+        "source": "section1"
+      },
+      {
+        "label": "adaptive_adapt_9_11_5",
+        "pnl": 59.7,
+        "mdd": 67.9,
+        "ratio": 0.88,
+        "wr": 66.2,
+        "trades": 1158,
+        "hit_rate": 24.1,
+        "source": "section4"
+      }
+    ],
+    "best": {
+      "label": "N9_24h_288",
+      "pnl": 199.2,
+      "mdd": 27.1,
+      "ratio": 7.35,
+      "wr": 53.8,
+      "trades": 2734,
+      "hit_rate": 54.9,
+      "source": "section2"
+    }
+  }
+}

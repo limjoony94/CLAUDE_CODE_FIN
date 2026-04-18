@@ -1,0 +1,551 @@
+{
+  "study": "preemptive_param_crossval",
+  "date": "2026-03-15T17:57:31.029873",
+  "base_params": {
+    "direction_cap": 7,
+    "cascade_tighten_pct": 85,
+    "preemptive_cascade_pct": 5.0,
+    "preemptive_tighten_pct": 85,
+    "agg_risk_counter": 8.0,
+    "agg_risk_with": 15.0
+  },
+  "results": {
+    "BASELINE": {
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 461.93,
+        "mdd": 3.63,
+        "pm": 127.3,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.291
+      },
+      "wf": {
+        "total_oos": 340.0,
+        "verdict": "PASS"
+      }
+    },
+    "NO_PREEMPTIVE": {
+      "is": {
+        "trades": 1883,
+        "wr": 78.9,
+        "pnl": 426.35,
+        "mdd": 3.73,
+        "pm": 114.3,
+        "tp": 1482,
+        "sl": 392,
+        "rr": 0.882
+      },
+      "wf": {
+        "total_oos": 308.4,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_2": {
+      "param": "preemptive_cascade_pct",
+      "value": 2,
+      "is": {
+        "trades": 3302,
+        "wr": 50.2,
+        "pnl": 323.28,
+        "mdd": 2.58,
+        "pm": 125.3,
+        "tp": 1656,
+        "sl": 1637,
+        "rr": 1.846
+      },
+      "wf": {
+        "total_oos": 238.8,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_3": {
+      "param": "preemptive_cascade_pct",
+      "value": 3,
+      "is": {
+        "trades": 2565,
+        "wr": 61.8,
+        "pnl": 429.33,
+        "mdd": 2.81,
+        "pm": 152.8,
+        "tp": 1584,
+        "sl": 972,
+        "rr": 1.736
+      },
+      "wf": {
+        "total_oos": 320.9,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_4": {
+      "param": "preemptive_cascade_pct",
+      "value": 4,
+      "is": {
+        "trades": 2201,
+        "wr": 70.3,
+        "pnl": 468.14,
+        "mdd": 3.39,
+        "pm": 138.1,
+        "tp": 1544,
+        "sl": 648,
+        "rr": 1.542
+      },
+      "wf": {
+        "total_oos": 348.2,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_5": {
+      "param": "preemptive_cascade_pct",
+      "value": 5,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 461.93,
+        "mdd": 3.63,
+        "pm": 127.3,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.291
+      },
+      "wf": {
+        "total_oos": 340.0,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_6": {
+      "param": "preemptive_cascade_pct",
+      "value": 6,
+      "is": {
+        "trades": 1908,
+        "wr": 78.0,
+        "pnl": 445.86,
+        "mdd": 3.63,
+        "pm": 122.8,
+        "tp": 1486,
+        "sl": 413,
+        "rr": 1.025
+      },
+      "wf": {
+        "total_oos": 326.4,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_7": {
+      "param": "preemptive_cascade_pct",
+      "value": 7,
+      "is": {
+        "trades": 1884,
+        "wr": 78.9,
+        "pnl": 443.44,
+        "mdd": 3.63,
+        "pm": 122.2,
+        "tp": 1483,
+        "sl": 392,
+        "rr": 0.97
+      },
+      "wf": {
+        "total_oos": 325.5,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_8": {
+      "param": "preemptive_cascade_pct",
+      "value": 8,
+      "is": {
+        "trades": 1883,
+        "wr": 78.9,
+        "pnl": 433.13,
+        "mdd": 3.63,
+        "pm": 119.3,
+        "tp": 1482,
+        "sl": 392,
+        "rr": 0.916
+      },
+      "wf": {
+        "total_oos": 315.2,
+        "verdict": "PASS"
+      }
+    },
+    "pre_threshold_10": {
+      "param": "preemptive_cascade_pct",
+      "value": 10,
+      "is": {
+        "trades": 1883,
+        "wr": 78.9,
+        "pnl": 426.35,
+        "mdd": 3.73,
+        "pm": 114.3,
+        "tp": 1482,
+        "sl": 392,
+        "rr": 0.882
+      },
+      "wf": {
+        "total_oos": 308.4,
+        "verdict": "PASS"
+      }
+    },
+    "pre_tighten_70": {
+      "param": "preemptive_tighten_pct",
+      "value": 70,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 414.28,
+        "mdd": 3.63,
+        "pm": 114.1,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 0.995
+      },
+      "wf": {
+        "total_oos": 300.8,
+        "verdict": "PASS"
+      }
+    },
+    "pre_tighten_75": {
+      "param": "preemptive_tighten_pct",
+      "value": 75,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 430.16,
+        "mdd": 3.63,
+        "pm": 118.5,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.077
+      },
+      "wf": {
+        "total_oos": 313.6,
+        "verdict": "PASS"
+      }
+    },
+    "pre_tighten_80": {
+      "param": "preemptive_tighten_pct",
+      "value": 80,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 446.04,
+        "mdd": 3.63,
+        "pm": 122.9,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.175
+      },
+      "wf": {
+        "total_oos": 326.8,
+        "verdict": "PASS"
+      }
+    },
+    "pre_tighten_85": {
+      "param": "preemptive_tighten_pct",
+      "value": 85,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 461.93,
+        "mdd": 3.63,
+        "pm": 127.3,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.291
+      },
+      "wf": {
+        "total_oos": 340.0,
+        "verdict": "PASS"
+      }
+    },
+    "pre_tighten_90": {
+      "param": "preemptive_tighten_pct",
+      "value": 90,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 477.81,
+        "mdd": 3.63,
+        "pm": 131.6,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.434
+      },
+      "wf": {
+        "total_oos": 353.2,
+        "verdict": "PASS"
+      }
+    },
+    "pre_tighten_95": {
+      "param": "preemptive_tighten_pct",
+      "value": 95,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 493.68,
+        "mdd": 3.63,
+        "pm": 136.0,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.612
+      },
+      "wf": {
+        "total_oos": 366.4,
+        "verdict": "PASS"
+      }
+    },
+    "cascade_pct_70": {
+      "param": "cascade_tighten_pct",
+      "value": 70,
+      "is": {
+        "trades": 1995,
+        "wr": 75.1,
+        "pnl": 429.27,
+        "mdd": 3.63,
+        "pm": 118.3,
+        "tp": 1496,
+        "sl": 490,
+        "rr": 1.059
+      },
+      "wf": {
+        "total_oos": 312.5,
+        "verdict": "PASS"
+      }
+    },
+    "cascade_pct_75": {
+      "param": "cascade_tighten_pct",
+      "value": 75,
+      "is": {
+        "trades": 2004,
+        "wr": 75.0,
+        "pnl": 439.16,
+        "mdd": 3.63,
+        "pm": 121.0,
+        "tp": 1500,
+        "sl": 495,
+        "rr": 1.123
+      },
+      "wf": {
+        "total_oos": 320.2,
+        "verdict": "PASS"
+      }
+    },
+    "cascade_pct_80": {
+      "param": "cascade_tighten_pct",
+      "value": 80,
+      "is": {
+        "trades": 2004,
+        "wr": 75.0,
+        "pnl": 451.44,
+        "mdd": 3.63,
+        "pm": 124.4,
+        "tp": 1501,
+        "sl": 494,
+        "rr": 1.199
+      },
+      "wf": {
+        "total_oos": 330.5,
+        "verdict": "PASS"
+      }
+    },
+    "cascade_pct_85": {
+      "param": "cascade_tighten_pct",
+      "value": 85,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 461.93,
+        "mdd": 3.63,
+        "pm": 127.3,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.291
+      },
+      "wf": {
+        "total_oos": 340.0,
+        "verdict": "PASS"
+      }
+    },
+    "cascade_pct_90": {
+      "param": "cascade_tighten_pct",
+      "value": 90,
+      "is": {
+        "trades": 2008,
+        "wr": 74.9,
+        "pnl": 473.85,
+        "mdd": 3.63,
+        "pm": 130.5,
+        "tp": 1500,
+        "sl": 499,
+        "rr": 1.401
+      },
+      "wf": {
+        "total_oos": 349.9,
+        "verdict": "PASS"
+      }
+    },
+    "cascade_pct_95": {
+      "param": "cascade_tighten_pct",
+      "value": 95,
+      "is": {
+        "trades": 2009,
+        "wr": 74.9,
+        "pnl": 486.66,
+        "mdd": 3.63,
+        "pm": 134.1,
+        "tp": 1501,
+        "sl": 499,
+        "rr": 1.527
+      },
+      "wf": {
+        "total_oos": 361.2,
+        "verdict": "PASS"
+      }
+    },
+    "dir_cap_4": {
+      "param": "direction_cap",
+      "value": 4,
+      "is": {
+        "trades": 1589,
+        "wr": 77.7,
+        "pnl": 347.69,
+        "mdd": 4.36,
+        "pm": 79.7,
+        "tp": 1231,
+        "sl": 350,
+        "rr": 0.93
+      },
+      "wf": {
+        "total_oos": 268.4,
+        "verdict": "PASS"
+      }
+    },
+    "dir_cap_5": {
+      "param": "direction_cap",
+      "value": 5,
+      "is": {
+        "trades": 1887,
+        "wr": 76.5,
+        "pnl": 435.44,
+        "mdd": 4.37,
+        "pm": 99.6,
+        "tp": 1439,
+        "sl": 439,
+        "rr": 1.18
+      },
+      "wf": {
+        "total_oos": 335.7,
+        "verdict": "PASS"
+      }
+    },
+    "dir_cap_6": {
+      "param": "direction_cap",
+      "value": 6,
+      "is": {
+        "trades": 1912,
+        "wr": 76.9,
+        "pnl": 452.98,
+        "mdd": 3.63,
+        "pm": 124.8,
+        "tp": 1467,
+        "sl": 436,
+        "rr": 1.166
+      },
+      "wf": {
+        "total_oos": 346.2,
+        "verdict": "PASS"
+      }
+    },
+    "dir_cap_7": {
+      "param": "direction_cap",
+      "value": 7,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 461.93,
+        "mdd": 3.63,
+        "pm": 127.3,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.291
+      },
+      "wf": {
+        "total_oos": 340.0,
+        "verdict": "PASS"
+      }
+    },
+    "agg_counter_5": {
+      "param": "agg_risk_counter",
+      "value": 5,
+      "is": {
+        "trades": 1851,
+        "wr": 76.0,
+        "pnl": 411.67,
+        "mdd": 3.94,
+        "pm": 104.5,
+        "tp": 1404,
+        "sl": 438,
+        "rr": 1.149
+      },
+      "wf": {
+        "total_oos": 305.7,
+        "verdict": "PASS"
+      }
+    },
+    "agg_counter_8": {
+      "param": "agg_risk_counter",
+      "value": 8,
+      "is": {
+        "trades": 2006,
+        "wr": 74.9,
+        "pnl": 461.93,
+        "mdd": 3.63,
+        "pm": 127.3,
+        "tp": 1500,
+        "sl": 497,
+        "rr": 1.291
+      },
+      "wf": {
+        "total_oos": 340.0,
+        "verdict": "PASS"
+      }
+    },
+    "agg_counter_10": {
+      "param": "agg_risk_counter",
+      "value": 10,
+      "is": {
+        "trades": 2014,
+        "wr": 76.0,
+        "pnl": 484.06,
+        "mdd": 3.63,
+        "pm": 133.3,
+        "tp": 1527,
+        "sl": 478,
+        "rr": 1.323
+      },
+      "wf": {
+        "total_oos": 361.4,
+        "verdict": "PASS"
+      }
+    },
+    "agg_counter_12": {
+      "param": "agg_risk_counter",
+      "value": 12,
+      "is": {
+        "trades": 2054,
+        "wr": 75.6,
+        "pnl": 493.6,
+        "mdd": 3.63,
+        "pm": 136.0,
+        "tp": 1550,
+        "sl": 495,
+        "rr": 1.366
+      },
+      "wf": {
+        "total_oos": 368.9,
+        "verdict": "PASS"
+      }
+    }
+  },
+  "elapsed_s": 198.9
+}

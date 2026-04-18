@@ -1,0 +1,237 @@
+{
+  "timestamp": "2026-03-01T06:50:02.172871",
+  "h1": {
+    "rr_1.0": {
+      "count": 4,
+      "n_long": 2,
+      "n_short": 2,
+      "mean_wr": 74.3,
+      "mean_edge": 25.7,
+      "mean_rr": 1.06,
+      "portfolio_trades": 94,
+      "portfolio_pnl": 208.1,
+      "portfolio_mdd": 31.0,
+      "top_patterns": [
+        {
+          "pattern": "ST-MU-D",
+          "direction": "SHORT",
+          "tp": 1.5,
+          "sl": 1.2,
+          "rr": 1.25,
+          "trades": 26,
+          "wr": 76.9,
+          "baseline_wr": 44.4,
+          "edge": 32.5,
+          "pnl": 55.8,
+          "mdd": 10.7,
+          "pf": 2.99,
+          "mc_p": 0.0088,
+          "breakeven_wr": 44.44444444444444
+        },
+        {
+          "pattern": "U-MU-H",
+          "direction": "LONG",
+          "tp": 2.0,
+          "sl": 2.0,
+          "rr": 1.0,
+          "trades": 34,
+          "wr": 79.4,
+          "baseline_wr": 50.0,
+          "edge": 29.4,
+          "pnl": 89.8,
+          "mdd": 14.0,
+          "pf": 3.1,
+          "mc_p": 0.0024,
+          "breakeven_wr": 50.0
+        },
+        {
+          "pattern": "DN-D-BD",
+          "direction": "SHORT",
+          "tp": 1.5,
+          "sl": 1.5,
+          "rr": 1.0,
+          "trades": 29,
+          "wr": 72.4,
+          "baseline_wr": 50.0,
+          "edge": 22.4,
+          "pnl": 68.0,
+          "mdd": 13.3,
+          "pf": 2.8,
+          "mc_p": 0.0092,
+          "breakeven_wr": 50.0
+        },
+        {
+          "pattern": "MD-MU-ST",
+          "direction": "LONG",
+          "tp": 2.0,
+          "sl": 2.0,
+          "rr": 1.0,
+          "trades": 35,
+          "wr": 68.6,
+          "baseline_wr": 50.0,
+          "edge": 18.6,
+          "pnl": 79.7,
+          "mdd": 14.6,
+          "pf": 2.53,
+          "mc_p": 0.009,
+          "breakeven_wr": 50.0
+        }
+      ]
+    },
+    "rr_1.5": {
+      "count": 0
+    },
+    "rr_2.0": {
+      "count": 0
+    }
+  },
+  "h2": {
+    "N2_C1": {
+      "pnl": 4051.37,
+      "mdd": 13.28,
+      "trades": 496,
+      "wr": 76.4,
+      "wins": 379,
+      "pnl_per_mdd": 305.16
+    },
+    "N2_C2": {
+      "pnl": 123251138.73,
+      "mdd": 10.72,
+      "trades": 627,
+      "wr": 95.5,
+      "wins": 599,
+      "pnl_per_mdd": 11496261.71
+    },
+    "N3_C1": {
+      "pnl": 1169.71,
+      "mdd": 8.95,
+      "trades": 496,
+      "wr": 76.4,
+      "wins": 379,
+      "pnl_per_mdd": 130.72
+    },
+    "N3_C2": {
+      "pnl": 152684.41,
+      "mdd": 8.95,
+      "trades": 798,
+      "wr": 84.1,
+      "wins": 671,
+      "pnl_per_mdd": 17062.9
+    },
+    "N3_C3": {
+      "pnl": 73405754.43,
+      "mdd": 8.95,
+      "trades": 916,
+      "wr": 95.4,
+      "wins": 874,
+      "pnl_per_mdd": 8203293.47
+    },
+    "N4_C1": {
+      "pnl": 587.17,
+      "mdd": 6.75,
+      "trades": 496,
+      "wr": 76.4,
+      "wins": 379,
+      "pnl_per_mdd": 87.02
+    },
+    "N4_C2": {
+      "pnl": 4717.73,
+      "mdd": 10.33,
+      "trades": 923,
+      "wr": 77.2,
+      "wins": 713,
+      "pnl_per_mdd": 456.79
+    },
+    "N4_C3": {
+      "pnl": 748290.37,
+      "mdd": 9.8,
+      "trades": 1086,
+      "wr": 87.8,
+      "wins": 953,
+      "pnl_per_mdd": 76358.88
+    },
+    "N4_C4": {
+      "pnl": 42330481.21,
+      "mdd": 9.8,
+      "trades": 1179,
+      "wr": 95.2,
+      "wins": 1122,
+      "pnl_per_mdd": 4319590.87
+    },
+    "N5_C1": {
+      "pnl": 372.17,
+      "mdd": 5.42,
+      "trades": 496,
+      "wr": 76.4,
+      "wins": 379,
+      "pnl_per_mdd": 68.72
+    },
+    "N5_C2": {
+      "pnl": 2163.44,
+      "mdd": 8.3,
+      "trades": 923,
+      "wr": 77.2,
+      "wins": 713,
+      "pnl_per_mdd": 260.72
+    },
+    "N5_C3": {
+      "pnl": 36541.34,
+      "mdd": 11.38,
+      "trades": 1212,
+      "wr": 82.2,
+      "wins": 996,
+      "pnl_per_mdd": 3210.4
+    },
+    "N5_C4": {
+      "pnl": 1279754.37,
+      "mdd": 11.38,
+      "trades": 1352,
+      "wr": 89.3,
+      "wins": 1207,
+      "pnl_per_mdd": 112435.06
+    },
+    "N9_C1": {
+      "pnl": 139.26,
+      "mdd": 3.03,
+      "trades": 496,
+      "wr": 76.4,
+      "wins": 379,
+      "pnl_per_mdd": 46.02
+    },
+    "N9_C2": {
+      "pnl": 476.79,
+      "mdd": 4.64,
+      "trades": 923,
+      "wr": 77.2,
+      "wins": 713,
+      "pnl_per_mdd": 102.66
+    },
+    "N9_C3": {
+      "pnl": 1391.34,
+      "mdd": 6.44,
+      "trades": 1302,
+      "wr": 78.4,
+      "wins": 1021,
+      "pnl_per_mdd": 216.17
+    },
+    "N9_C4": {
+      "pnl": 3471.9,
+      "mdd": 7.18,
+      "trades": 1651,
+      "wr": 79.1,
+      "wins": 1306,
+      "pnl_per_mdd": 483.81
+    },
+    "N9_C7": {
+      "pnl": 419461.16,
+      "mdd": 8.1,
+      "trades": 2202,
+      "wr": 88.6,
+      "wins": 1952,
+      "pnl_per_mdd": 51784.42
+    }
+  },
+  "h3": {
+    "n_trades": 51
+  }
+}

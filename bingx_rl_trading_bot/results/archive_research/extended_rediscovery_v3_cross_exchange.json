@@ -1,0 +1,834 @@
+{
+  "meta": {
+    "script": "extended_rediscovery_v3_cross_exchange.py",
+    "timestamp": "2026-02-12T18:43:03.779115",
+    "patterns": 51,
+    "max_bars": 500,
+    "fee_pct": 0.1,
+    "bingx_bars": 77760,
+    "binance_bars": 207360,
+    "bingx_range": "2025-05-05 15:00:00 ~ 2026-01-30 14:55:00",
+    "binance_range": "2024-02-23 05:00:00 ~ 2026-02-12 04:55:00",
+    "elapsed_sec": 38.9
+  },
+  "phase1": {
+    "overlap_period": "2025-05-05 15:00:00 ~ 2026-01-30 14:55:00",
+    "overlap_days": 269,
+    "bx_overlap_bars": 77760,
+    "bn_overlap_bars": 77760,
+    "matched_timestamps": 77760,
+    "type_match_rate": 99.98,
+    "pattern_match_rate": 99.97,
+    "price_divergence": {
+      "median_pct": 0.0,
+      "p95_pct": 0.0,
+      "max_pct": 0.0
+    },
+    "major_mismatches": []
+  },
+  "phase2": {
+    "bingx_metrics": {
+      "pnl": 966.0,
+      "trades": 357,
+      "wr": 84.9,
+      "mdd": 16.2,
+      "pf": 3.99,
+      "max_consec_loss": 2,
+      "avg_win": 4.253,
+      "avg_loss": -5.978
+    },
+    "binance_metrics": {
+      "pnl": 968.1,
+      "trades": 357,
+      "wr": 84.9,
+      "mdd": 16.2,
+      "pf": 4.0,
+      "max_consec_loss": 2,
+      "avg_win": 4.26,
+      "avg_loss": -5.978
+    },
+    "pnl_gap": 2.1,
+    "wr_gap": 0.0,
+    "bx_better_count": 1,
+    "bn_better_count": 1,
+    "per_pattern": [
+      {
+        "pattern": "BD-BD-U",
+        "direction": "LONG",
+        "bx_trades": 7,
+        "bx_wr": 100.0,
+        "bx_pnl": 28.7,
+        "bn_trades": 7,
+        "bn_wr": 100.0,
+        "bn_pnl": 28.7,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BD-BU-DN",
+        "direction": "SHORT",
+        "bx_trades": 7,
+        "bx_wr": 85.7,
+        "bx_pnl": 44.3,
+        "bn_trades": 7,
+        "bn_wr": 85.7,
+        "bn_pnl": 44.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BD-D-D",
+        "direction": "SHORT",
+        "bx_trades": 4,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.2,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.2,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BD-MU-BD",
+        "direction": "LONG",
+        "bx_trades": 5,
+        "bx_wr": 80.0,
+        "bx_pnl": 5.8,
+        "bn_trades": 5,
+        "bn_wr": 80.0,
+        "bn_pnl": 5.8,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BD-ST-U",
+        "direction": "LONG",
+        "bx_trades": 9,
+        "bx_wr": 88.9,
+        "bx_pnl": 26.7,
+        "bn_trades": 9,
+        "bn_wr": 88.9,
+        "bn_pnl": 26.7,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BD-U-H",
+        "direction": "SHORT",
+        "bx_trades": 2,
+        "bx_wr": 100.0,
+        "bx_pnl": 14.8,
+        "bn_trades": 2,
+        "bn_wr": 100.0,
+        "bn_pnl": 14.8,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BU-BU-BD",
+        "direction": "LONG",
+        "bx_trades": 6,
+        "bx_wr": 83.3,
+        "bx_pnl": 21.9,
+        "bn_trades": 7,
+        "bn_wr": 85.7,
+        "bn_pnl": 28.1,
+        "pnl_gap": 6.2
+      },
+      {
+        "pattern": "BU-MD-MD",
+        "direction": "SHORT",
+        "bx_trades": 2,
+        "bx_wr": 100.0,
+        "bx_pnl": 17.8,
+        "bn_trades": 2,
+        "bn_wr": 100.0,
+        "bn_pnl": 17.8,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "BU-ST-GS",
+        "direction": "SHORT",
+        "bx_trades": 2,
+        "bx_wr": 100.0,
+        "bx_pnl": 4.0,
+        "bn_trades": 2,
+        "bn_wr": 100.0,
+        "bn_pnl": 4.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "D-BD-ST",
+        "direction": "SHORT",
+        "bx_trades": 3,
+        "bx_wr": 66.7,
+        "bx_pnl": 1.2,
+        "bn_trades": 3,
+        "bn_wr": 66.7,
+        "bn_pnl": 1.2,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "D-DN-DN",
+        "direction": "SHORT",
+        "bx_trades": 12,
+        "bx_wr": 75.0,
+        "bx_pnl": 39.3,
+        "bn_trades": 12,
+        "bn_wr": 75.0,
+        "bn_pnl": 39.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "D-MU-U",
+        "direction": "LONG",
+        "bx_trades": 6,
+        "bx_wr": 100.0,
+        "bx_pnl": 18.3,
+        "bn_trades": 6,
+        "bn_wr": 100.0,
+        "bn_pnl": 18.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-BD-BD",
+        "direction": "LONG",
+        "bx_trades": 31,
+        "bx_wr": 67.7,
+        "bx_pnl": 40.1,
+        "bn_trades": 31,
+        "bn_wr": 67.7,
+        "bn_pnl": 40.1,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-BD-BU",
+        "direction": "SHORT",
+        "bx_trades": 12,
+        "bx_wr": 83.3,
+        "bx_pnl": 33.3,
+        "bn_trades": 12,
+        "bn_wr": 83.3,
+        "bn_pnl": 33.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-D-BD",
+        "direction": "SHORT",
+        "bx_trades": 5,
+        "bx_wr": 60.0,
+        "bx_pnl": 9.25,
+        "bn_trades": 5,
+        "bn_wr": 60.0,
+        "bn_pnl": 9.25,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-DF-DN",
+        "direction": "SHORT",
+        "bx_trades": 5,
+        "bx_wr": 60.0,
+        "bx_pnl": 5.5,
+        "bn_trades": 5,
+        "bn_wr": 60.0,
+        "bn_pnl": 5.5,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-DF-MU",
+        "direction": "LONG",
+        "bx_trades": 4,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.2,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.2,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-DF-ST",
+        "direction": "LONG",
+        "bx_trades": 4,
+        "bx_wr": 100.0,
+        "bx_pnl": 16.4,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 16.4,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-DN-H",
+        "direction": "LONG",
+        "bx_trades": 18,
+        "bx_wr": 94.4,
+        "bx_pnl": 26.4,
+        "bn_trades": 18,
+        "bn_wr": 94.4,
+        "bn_pnl": 26.4,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "DN-MD-DN",
+        "direction": "LONG",
+        "bx_trades": 19,
+        "bx_wr": 89.5,
+        "bx_pnl": 56.6,
+        "bn_trades": 19,
+        "bn_wr": 89.5,
+        "bn_pnl": 56.6,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "GS-ST-ST",
+        "direction": "LONG",
+        "bx_trades": 4,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.2,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.2,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "H-BU-BU",
+        "direction": "LONG",
+        "bx_trades": 5,
+        "bx_wr": 100.0,
+        "bx_pnl": 20.5,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 16.4,
+        "pnl_gap": -4.1
+      },
+      {
+        "pattern": "H-MU-MD",
+        "direction": "LONG",
+        "bx_trades": 1,
+        "bx_wr": 100.0,
+        "bx_pnl": 2.0,
+        "bn_trades": 1,
+        "bn_wr": 100.0,
+        "bn_pnl": 2.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "H-U-BD",
+        "direction": "SHORT",
+        "bx_trades": 2,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.4,
+        "bn_trades": 2,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.4,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "IH-MD-MD",
+        "direction": "LONG",
+        "bx_trades": 6,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.0,
+        "bn_trades": 6,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "IH-ST-MU",
+        "direction": "LONG",
+        "bx_trades": 4,
+        "bx_wr": 100.0,
+        "bx_pnl": 3.8,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 3.8,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "IH-ST-ST",
+        "direction": "SHORT",
+        "bx_trades": 1,
+        "bx_wr": 100.0,
+        "bx_pnl": 4.1,
+        "bn_trades": 1,
+        "bn_wr": 100.0,
+        "bn_pnl": 4.1,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-BU-MD",
+        "direction": "LONG",
+        "bx_trades": 3,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.3,
+        "bn_trades": 3,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-DN-MU",
+        "direction": "LONG",
+        "bx_trades": 10,
+        "bx_wr": 60.0,
+        "bx_pnl": 5.0,
+        "bn_trades": 10,
+        "bn_wr": 60.0,
+        "bn_pnl": 5.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-H-MD",
+        "direction": "LONG",
+        "bx_trades": 2,
+        "bx_wr": 100.0,
+        "bx_pnl": 4.0,
+        "bn_trades": 2,
+        "bn_wr": 100.0,
+        "bn_pnl": 4.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-MD-MD",
+        "direction": "SHORT",
+        "bx_trades": 1,
+        "bx_wr": 100.0,
+        "bx_pnl": 8.9,
+        "bn_trades": 1,
+        "bn_wr": 100.0,
+        "bn_pnl": 8.9,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-MD-ST",
+        "direction": "LONG",
+        "bx_trades": 5,
+        "bx_wr": 80.0,
+        "bx_pnl": 6.1,
+        "bn_trades": 5,
+        "bn_wr": 80.0,
+        "bn_pnl": 6.1,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-ST-BD",
+        "direction": "LONG",
+        "bx_trades": 5,
+        "bx_wr": 80.0,
+        "bx_pnl": 10.0,
+        "bn_trades": 5,
+        "bn_wr": 80.0,
+        "bn_pnl": 10.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MD-ST-MD",
+        "direction": "LONG",
+        "bx_trades": 2,
+        "bx_wr": 50.0,
+        "bx_pnl": -0.2,
+        "bn_trades": 2,
+        "bn_wr": 50.0,
+        "bn_pnl": -0.2,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MU-BD-ST",
+        "direction": "LONG",
+        "bx_trades": 3,
+        "bx_wr": 100.0,
+        "bx_pnl": 12.3,
+        "bn_trades": 3,
+        "bn_wr": 100.0,
+        "bn_pnl": 12.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MU-DF-U",
+        "direction": "LONG",
+        "bx_trades": 3,
+        "bx_wr": 100.0,
+        "bx_pnl": 9.15,
+        "bn_trades": 3,
+        "bn_wr": 100.0,
+        "bn_pnl": 9.15,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MU-IH-DN",
+        "direction": "LONG",
+        "bx_trades": 7,
+        "bx_wr": 100.0,
+        "bx_pnl": 28.7,
+        "bn_trades": 7,
+        "bn_wr": 100.0,
+        "bn_pnl": 28.7,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "MU-U-H",
+        "direction": "LONG",
+        "bx_trades": 2,
+        "bx_wr": 100.0,
+        "bx_pnl": 10.3,
+        "bn_trades": 2,
+        "bn_wr": 100.0,
+        "bn_pnl": 10.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "ST-BD-BU",
+        "direction": "SHORT",
+        "bx_trades": 1,
+        "bx_wr": 100.0,
+        "bx_pnl": 6.2,
+        "bn_trades": 1,
+        "bn_wr": 100.0,
+        "bn_pnl": 6.2,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "ST-DN-BU",
+        "direction": "SHORT",
+        "bx_trades": 5,
+        "bx_wr": 100.0,
+        "bx_pnl": 20.5,
+        "bn_trades": 5,
+        "bn_wr": 100.0,
+        "bn_pnl": 20.5,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "ST-DN-U",
+        "direction": "SHORT",
+        "bx_trades": 24,
+        "bx_wr": 75.0,
+        "bx_pnl": 57.0,
+        "bn_trades": 24,
+        "bn_wr": 75.0,
+        "bn_pnl": 57.0,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "ST-MU-ST",
+        "direction": "SHORT",
+        "bx_trades": 6,
+        "bx_wr": 83.3,
+        "bx_pnl": 11.4,
+        "bn_trades": 6,
+        "bn_wr": 83.3,
+        "bn_pnl": 11.4,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-GS-DN",
+        "direction": "SHORT",
+        "bx_trades": 4,
+        "bx_wr": 100.0,
+        "bx_pnl": 35.6,
+        "bn_trades": 4,
+        "bn_wr": 100.0,
+        "bn_pnl": 35.6,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-H-MU",
+        "direction": "LONG",
+        "bx_trades": 1,
+        "bx_wr": 100.0,
+        "bx_pnl": 4.4,
+        "bn_trades": 1,
+        "bn_wr": 100.0,
+        "bn_pnl": 4.4,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-MD-GS",
+        "direction": "LONG",
+        "bx_trades": 6,
+        "bx_wr": 100.0,
+        "bx_pnl": 5.7,
+        "bn_trades": 6,
+        "bn_wr": 100.0,
+        "bn_pnl": 5.7,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-MD-MD",
+        "direction": "LONG",
+        "bx_trades": 14,
+        "bx_wr": 42.9,
+        "bx_pnl": 8.8,
+        "bn_trades": 14,
+        "bn_wr": 42.9,
+        "bn_pnl": 8.8,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-MU-H",
+        "direction": "LONG",
+        "bx_trades": 6,
+        "bx_wr": 100.0,
+        "bx_pnl": 18.3,
+        "bn_trades": 6,
+        "bn_wr": 100.0,
+        "bn_pnl": 18.3,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-MU-IH",
+        "direction": "LONG",
+        "bx_trades": 3,
+        "bx_wr": 66.7,
+        "bx_pnl": 4.8,
+        "bn_trades": 3,
+        "bn_wr": 66.7,
+        "bn_pnl": 4.8,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-ST-DF",
+        "direction": "LONG",
+        "bx_trades": 1,
+        "bx_wr": 100.0,
+        "bx_pnl": 4.1,
+        "bn_trades": 1,
+        "bn_wr": 100.0,
+        "bn_pnl": 4.1,
+        "pnl_gap": 0.0
+      },
+      {
+        "pattern": "U-ST-DN",
+        "direction": "SHORT",
+        "bx_trades": 57,
+        "bx_wr": 93.0,
+        "bx_pnl": 180.9,
+        "bn_trades": 57,
+        "bn_wr": 93.0,
+        "bn_pnl": 180.9,
+        "pnl_gap": 0.0
+      }
+    ]
+  },
+  "phase3": {
+    "full_720d": {
+      "pnl": 1164.8,
+      "trades": 1132,
+      "wr": 70.5,
+      "mdd": 77.3,
+      "pf": 1.49,
+      "max_consec_loss": 4,
+      "avg_win": 4.464,
+      "avg_loss": -7.179
+    },
+    "periods": {
+      "pre_overlap": {
+        "days": 437,
+        "pnl": 235.4,
+        "trades": 742,
+        "wr": 64.6,
+        "mdd": 77.3,
+        "pf": 1.12,
+        "max_consec_loss": 4,
+        "avg_win": 4.569,
+        "avg_loss": -7.427
+      },
+      "overlap": {
+        "days": 269,
+        "pnl": 968.1,
+        "trades": 357,
+        "wr": 84.9,
+        "mdd": 16.2,
+        "pf": 4.0,
+        "max_consec_loss": 2,
+        "avg_win": 4.26,
+        "avg_loss": -5.978
+      },
+      "post_overlap": {
+        "days": 12,
+        "pnl": -21.1,
+        "trades": 34,
+        "wr": 52.9,
+        "mdd": 40.75,
+        "pf": 0.82,
+        "max_consec_loss": 3,
+        "avg_win": 5.25,
+        "avg_loss": -7.225
+      }
+    },
+    "quarterly": [
+      {
+        "quarter": "2024Q1",
+        "pnl": -24.05,
+        "trades": 83,
+        "wr": 59.0,
+        "mdd": 77.3,
+        "pf": 0.91,
+        "max_consec_loss": 3,
+        "avg_win": 5.181,
+        "avg_loss": -8.174
+      },
+      {
+        "quarter": "2024Q2",
+        "pnl": 84.85,
+        "trades": 137,
+        "wr": 67.9,
+        "mdd": 48.5,
+        "pf": 1.25,
+        "max_consec_loss": 3,
+        "avg_win": 4.55,
+        "avg_loss": -7.689
+      },
+      {
+        "quarter": "2024Q3",
+        "pnl": 53.6,
+        "trades": 154,
+        "wr": 64.3,
+        "mdd": 37.7,
+        "pf": 1.13,
+        "max_consec_loss": 4,
+        "avg_win": 4.639,
+        "avg_loss": -7.376
+      },
+      {
+        "quarter": "2024Q4",
+        "pnl": 98.05,
+        "trades": 152,
+        "wr": 68.4,
+        "mdd": 44.7,
+        "pf": 1.27,
+        "max_consec_loss": 3,
+        "avg_win": 4.39,
+        "avg_loss": -7.469
+      },
+      {
+        "quarter": "2025Q1",
+        "pnl": 22.85,
+        "trades": 157,
+        "wr": 62.4,
+        "mdd": 57.25,
+        "pf": 1.05,
+        "max_consec_loss": 4,
+        "avg_win": 4.527,
+        "avg_loss": -7.132
+      },
+      {
+        "quarter": "2025Q2",
+        "pnl": 143.3,
+        "trades": 124,
+        "wr": 72.6,
+        "mdd": 27.4,
+        "pf": 1.62,
+        "max_consec_loss": 4,
+        "avg_win": 4.15,
+        "avg_loss": -6.771
+      },
+      {
+        "quarter": "2025Q3",
+        "pnl": 312.75,
+        "trades": 102,
+        "wr": 88.2,
+        "mdd": 10.8,
+        "pf": 8.24,
+        "max_consec_loss": 1,
+        "avg_win": 3.955,
+        "avg_loss": -3.6
+      },
+      {
+        "quarter": "2025Q4",
+        "pnl": 347.85,
+        "trades": 150,
+        "wr": 80.0,
+        "mdd": 14.6,
+        "pf": 2.8,
+        "max_consec_loss": 2,
+        "avg_win": 4.509,
+        "avg_loss": -6.44
+      },
+      {
+        "quarter": "2026Q1",
+        "pnl": 103.35,
+        "trades": 72,
+        "wr": 72.2,
+        "mdd": 37.75,
+        "pf": 1.76,
+        "max_consec_loss": 3,
+        "avg_win": 4.605,
+        "avg_loss": -6.805
+      }
+    ]
+  },
+  "phase4": {
+    "bx_signals": 3899,
+    "bn_signals": 3898,
+    "both_signals": 3898,
+    "bx_only": 1,
+    "bn_only": 0,
+    "signal_overlap_rate": 100.0,
+    "mismatch_reasons": {
+      "different_classification": 1
+    }
+  },
+  "phase5": {
+    "10": {
+      "n": 3898,
+      "bx_mfe_p50": 0.1712,
+      "bx_mae_p50": 0.1674,
+      "bx_diff": 0.0038,
+      "bn_mfe_p50": 0.1712,
+      "bn_mae_p50": 0.1674,
+      "bn_diff": 0.0038
+    },
+    "50": {
+      "n": 3898,
+      "bx_mfe_p50": 0.4216,
+      "bx_mae_p50": 0.3661,
+      "bx_diff": 0.0555,
+      "bn_mfe_p50": 0.4216,
+      "bn_mae_p50": 0.3661,
+      "bn_diff": 0.0555
+    },
+    "100": {
+      "n": 3898,
+      "bx_mfe_p50": 0.6386,
+      "bx_mae_p50": 0.53,
+      "bx_diff": 0.1086,
+      "bn_mfe_p50": 0.6386,
+      "bn_mae_p50": 0.53,
+      "bn_diff": 0.1086
+    },
+    "200": {
+      "n": 3898,
+      "bx_mfe_p50": 0.9856,
+      "bx_mae_p50": 0.7657,
+      "bx_diff": 0.2199,
+      "bn_mfe_p50": 0.9856,
+      "bn_mae_p50": 0.7657,
+      "bn_diff": 0.2199
+    },
+    "500": {
+      "n": 3898,
+      "bx_mfe_p50": 1.7943,
+      "bx_mae_p50": 1.2016,
+      "bx_diff": 0.5926,
+      "bn_mfe_p50": 1.7943,
+      "bn_mae_p50": 1.2016,
+      "bn_diff": 0.5926
+    }
+  },
+  "phase6": {
+    "bingx_270d_full": {
+      "pnl": 966.0,
+      "trades": 357,
+      "wr": 84.9,
+      "mdd": 16.2,
+      "pf": 3.99,
+      "max_consec_loss": 2,
+      "avg_win": 4.253,
+      "avg_loss": -5.978
+    }
+  },
+  "verdict": {
+    "bx_270d_full_pnl": 966.0,
+    "bx_overlap_pnl": 966.0,
+    "bn_overlap_pnl": 968.1,
+    "bn_720d_full_pnl": 1164.8,
+    "signal_overlap_rate": 100.0,
+    "type_match_rate": 100.0,
+    "diagnosis": "REAL EDGE \u2014 Works on both exchanges and extended period"
+  }
+}

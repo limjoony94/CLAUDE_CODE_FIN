@@ -1,0 +1,444 @@
+{
+  "metadata": {
+    "script": "c1_last_7days_backtest.py",
+    "date_run": "2026-04-15T00:39:49.366287",
+    "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+    "eval_start": "2026-03-27 09:15:00",
+    "eval_end": "2026-04-03 09:15:00",
+    "config": {
+      "channel_period": 15,
+      "body_min_ratio": 0.4,
+      "atr_period": 14,
+      "trail_K": 2.5,
+      "max_sl_atr": 3.3,
+      "emergency_sl_pct": 3.0,
+      "max_hold_bars": 192,
+      "sl_min_pct": 0.15,
+      "sl_max_pct": 3.0,
+      "min_bars_between": 2,
+      "trail_activation_pct": 0.05,
+      "fractal_lookback": 10
+    },
+    "fee_rt_pct": 0.1,
+    "leverage": 3
+  },
+  "btc_context": {
+    "period_open": 67716.6,
+    "period_close": 66779.0,
+    "period_high": 69275.0,
+    "period_low": 64914.5,
+    "btc_return_pct": -1.38,
+    "trend": "BEARISH"
+  },
+  "trades": [
+    {
+      "trade_num": 1,
+      "direction": "SHORT",
+      "entry_time": "2026-03-27 10:45:00",
+      "entry_price": 66856.0,
+      "exit_time": "2026-03-27 21:15:00",
+      "exit_price": 66109.4,
+      "pnl_pct": 1.0167,
+      "pnl_pct_3x": 3.0502,
+      "reason": "TRAIL_TP",
+      "bars_held": 43
+    },
+    {
+      "trade_num": 2,
+      "direction": "LONG",
+      "entry_time": "2026-03-27 23:45:00",
+      "entry_price": 66250.9,
+      "exit_time": "2026-03-28 02:15:00",
+      "exit_price": 66250.9,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 11
+    },
+    {
+      "trade_num": 3,
+      "direction": "LONG",
+      "entry_time": "2026-03-28 05:30:00",
+      "entry_price": 66308.1,
+      "exit_time": "2026-03-28 09:30:00",
+      "exit_price": 66308.1,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 17
+    },
+    {
+      "trade_num": 4,
+      "direction": "SHORT",
+      "entry_time": "2026-03-28 10:30:00",
+      "entry_price": 66134.2,
+      "exit_time": "2026-03-28 12:00:00",
+      "exit_price": 66134.2,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 7
+    },
+    {
+      "trade_num": 5,
+      "direction": "LONG",
+      "entry_time": "2026-03-28 13:45:00",
+      "entry_price": 66901.4,
+      "exit_time": "2026-03-28 17:15:00",
+      "exit_price": 66901.4,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 15
+    },
+    {
+      "trade_num": 6,
+      "direction": "SHORT",
+      "entry_time": "2026-03-28 22:00:00",
+      "entry_price": 66645.0,
+      "exit_time": "2026-03-29 02:15:00",
+      "exit_price": 66605.2,
+      "pnl_pct": -0.0402,
+      "pnl_pct_3x": -0.1207,
+      "reason": "TRAIL_TP",
+      "bars_held": 18
+    },
+    {
+      "trade_num": 7,
+      "direction": "LONG",
+      "entry_time": "2026-03-29 03:00:00",
+      "entry_price": 66776.9,
+      "exit_time": "2026-03-29 04:45:00",
+      "exit_price": 66776.9,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 8
+    },
+    {
+      "trade_num": 8,
+      "direction": "SHORT",
+      "entry_time": "2026-03-29 10:30:00",
+      "entry_price": 66437.5,
+      "exit_time": "2026-03-29 11:00:00",
+      "exit_price": 66437.5,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 3
+    },
+    {
+      "trade_num": 9,
+      "direction": "LONG",
+      "entry_time": "2026-03-29 11:45:00",
+      "entry_price": 66862.1,
+      "exit_time": "2026-03-29 13:45:00",
+      "exit_price": 66862.1,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 9
+    },
+    {
+      "trade_num": 10,
+      "direction": "SHORT",
+      "entry_time": "2026-03-29 15:30:00",
+      "entry_price": 66395.1,
+      "exit_time": "2026-03-29 20:15:00",
+      "exit_price": 66395.1,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 20
+    },
+    {
+      "trade_num": 11,
+      "direction": "SHORT",
+      "entry_time": "2026-03-29 22:15:00",
+      "entry_price": 66274.4,
+      "exit_time": "2026-03-29 22:45:00",
+      "exit_price": 65606.4,
+      "pnl_pct": 0.9079,
+      "pnl_pct_3x": 2.7238,
+      "reason": "TRAIL_TP",
+      "bars_held": 3
+    },
+    {
+      "trade_num": 12,
+      "direction": "LONG",
+      "entry_time": "2026-03-30 08:15:00",
+      "entry_price": 67860.6,
+      "exit_time": "2026-03-30 10:00:00",
+      "exit_price": 67860.6,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 8
+    },
+    {
+      "trade_num": 13,
+      "direction": "SHORT",
+      "entry_time": "2026-03-30 14:30:00",
+      "entry_price": 67276.2,
+      "exit_time": "2026-03-30 14:45:00",
+      "exit_price": 67276.2,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 2
+    },
+    {
+      "trade_num": 14,
+      "direction": "SHORT",
+      "entry_time": "2026-03-30 17:30:00",
+      "entry_price": 66785.6,
+      "exit_time": "2026-03-30 21:15:00",
+      "exit_price": 66785.6,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 16
+    },
+    {
+      "trade_num": 15,
+      "direction": "LONG",
+      "entry_time": "2026-03-31 01:00:00",
+      "entry_price": 67175.0,
+      "exit_time": "2026-03-31 03:30:00",
+      "exit_price": 67741.7,
+      "pnl_pct": 0.7437,
+      "pnl_pct_3x": 2.231,
+      "reason": "TRAIL_TP",
+      "bars_held": 11
+    },
+    {
+      "trade_num": 16,
+      "direction": "SHORT",
+      "entry_time": "2026-03-31 07:15:00",
+      "entry_price": 67271.7,
+      "exit_time": "2026-03-31 11:30:00",
+      "exit_price": 66602.1,
+      "pnl_pct": 0.8953,
+      "pnl_pct_3x": 2.6859,
+      "reason": "TRAIL_TP",
+      "bars_held": 18
+    },
+    {
+      "trade_num": 17,
+      "direction": "LONG",
+      "entry_time": "2026-03-31 14:00:00",
+      "entry_price": 67262.0,
+      "exit_time": "2026-03-31 14:45:00",
+      "exit_price": 67262.0,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 4
+    },
+    {
+      "trade_num": 18,
+      "direction": "LONG",
+      "entry_time": "2026-03-31 16:45:00",
+      "entry_price": 67745.3,
+      "exit_time": "2026-04-01 01:30:00",
+      "exit_price": 67924.9,
+      "pnl_pct": 0.1652,
+      "pnl_pct_3x": 0.4955,
+      "reason": "TRAIL_TP",
+      "bars_held": 36
+    },
+    {
+      "trade_num": 19,
+      "direction": "SHORT",
+      "entry_time": "2026-04-01 02:30:00",
+      "entry_price": 67604.9,
+      "exit_time": "2026-04-01 03:45:00",
+      "exit_price": 67604.9,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 6
+    },
+    {
+      "trade_num": 20,
+      "direction": "LONG",
+      "entry_time": "2026-04-01 05:30:00",
+      "entry_price": 68550.6,
+      "exit_time": "2026-04-01 08:00:00",
+      "exit_price": 68648.2,
+      "pnl_pct": 0.0424,
+      "pnl_pct_3x": 0.1271,
+      "reason": "TRAIL_TP",
+      "bars_held": 11
+    },
+    {
+      "trade_num": 21,
+      "direction": "SHORT",
+      "entry_time": "2026-04-01 13:45:00",
+      "entry_price": 68079.3,
+      "exit_time": "2026-04-01 15:15:00",
+      "exit_price": 68755.2,
+      "pnl_pct": -1.0928,
+      "pnl_pct_3x": -3.2784,
+      "reason": "SL",
+      "bars_held": 7
+    },
+    {
+      "trade_num": 22,
+      "direction": "LONG",
+      "entry_time": "2026-04-01 16:00:00",
+      "entry_price": 68880.7,
+      "exit_time": "2026-04-01 17:30:00",
+      "exit_price": 68880.7,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 7
+    },
+    {
+      "trade_num": 23,
+      "direction": "SHORT",
+      "entry_time": "2026-04-01 18:15:00",
+      "entry_price": 68053.8,
+      "exit_time": "2026-04-02 00:30:00",
+      "exit_price": 68053.8,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 26
+    },
+    {
+      "trade_num": 24,
+      "direction": "SHORT",
+      "entry_time": "2026-04-02 01:30:00",
+      "entry_price": 67550.0,
+      "exit_time": "2026-04-02 07:30:00",
+      "exit_price": 66733.7,
+      "pnl_pct": 1.1084,
+      "pnl_pct_3x": 3.3252,
+      "reason": "TRAIL_TP",
+      "bars_held": 25
+    },
+    {
+      "trade_num": 25,
+      "direction": "SHORT",
+      "entry_time": "2026-04-02 10:15:00",
+      "entry_price": 66229.6,
+      "exit_time": "2026-04-02 14:00:00",
+      "exit_price": 66229.6,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 16
+    },
+    {
+      "trade_num": 26,
+      "direction": "LONG",
+      "entry_time": "2026-04-02 14:45:00",
+      "entry_price": 67012.4,
+      "exit_time": "2026-04-02 17:45:00",
+      "exit_price": 67012.4,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 13
+    },
+    {
+      "trade_num": 27,
+      "direction": "SHORT",
+      "entry_time": "2026-04-03 01:45:00",
+      "entry_price": 66537.6,
+      "exit_time": "2026-04-03 05:30:00",
+      "exit_price": 66537.6,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 16
+    },
+    {
+      "trade_num": 28,
+      "direction": "LONG",
+      "entry_time": "2026-04-03 07:30:00",
+      "entry_price": 66915.3,
+      "exit_time": "2026-04-03 09:15:00",
+      "exit_price": 66915.3,
+      "pnl_pct": -0.1,
+      "pnl_pct_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars_held": 8
+    }
+  ],
+  "metrics": {
+    "total_trades": 28,
+    "wins": 7,
+    "losses": 21,
+    "win_rate_pct": 25.0,
+    "avg_win_pct": 0.6971,
+    "avg_loss_pct": -0.1444,
+    "risk_reward": 4.83,
+    "total_pnl_1x": 1.8466,
+    "total_pnl_3x": 5.5396,
+    "mdd_1x": 1.3504,
+    "long_count": 13,
+    "long_pnl_1x": -0.0487,
+    "short_count": 15,
+    "short_pnl_1x": 1.8953,
+    "exit_breakdown": {
+      "TRAIL_TP": 27,
+      "SL": 1
+    },
+    "avg_bars_held": 13.7
+  },
+  "daily_breakdown": {
+    "2026-03-27": {
+      "trades": 1,
+      "pnl_1x": 1.0167,
+      "pnl_3x": 3.0502
+    },
+    "2026-03-28": {
+      "trades": 4,
+      "pnl_1x": -0.4,
+      "pnl_3x": -1.2
+    },
+    "2026-03-29": {
+      "trades": 6,
+      "pnl_1x": 0.4677,
+      "pnl_3x": 1.4031
+    },
+    "2026-03-30": {
+      "trades": 3,
+      "pnl_1x": -0.3,
+      "pnl_3x": -0.9
+    },
+    "2026-03-31": {
+      "trades": 3,
+      "pnl_1x": 1.539,
+      "pnl_3x": 4.6169
+    },
+    "2026-04-01": {
+      "trades": 5,
+      "pnl_1x": -1.0852,
+      "pnl_3x": -3.2558
+    },
+    "2026-04-02": {
+      "trades": 4,
+      "pnl_1x": 0.8084,
+      "pnl_3x": 2.4252
+    },
+    "2026-04-03": {
+      "trades": 2,
+      "pnl_1x": -0.2,
+      "pnl_3x": -0.6
+    }
+  },
+  "comparison": {
+    "expected_daily_pnl_1x": 0.509,
+    "actual_daily_pnl_1x": 0.2638,
+    "expected_trades_per_day": 3.1,
+    "actual_trades_per_day": 4.0,
+    "expected_wr": 36.6,
+    "actual_wr": 25.0,
+    "expected_rr": 3.36,
+    "actual_rr": 4.83
+  }
+}

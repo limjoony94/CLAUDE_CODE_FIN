@@ -1,0 +1,1252 @@
+{
+  "baseline": {
+    "label": "BASELINE",
+    "folds": [
+      {
+        "fold": 1,
+        "oos_start": 19440,
+        "oos_end": 38880,
+        "oos_bars": 19440,
+        "trades": 174,
+        "wr": 70.1,
+        "pnl": 13.34,
+        "mdd": 11.81,
+        "pnl_mdd": 1.13,
+        "pnl_per_trade": 0.077
+      },
+      {
+        "fold": 2,
+        "oos_start": 38880,
+        "oos_end": 58320,
+        "oos_bars": 19440,
+        "trades": 265,
+        "wr": 70.9,
+        "pnl": 32.92,
+        "mdd": 10.25,
+        "pnl_mdd": 3.21,
+        "pnl_per_trade": 0.124
+      },
+      {
+        "fold": 3,
+        "oos_start": 58320,
+        "oos_end": 77760,
+        "oos_bars": 19440,
+        "trades": 274,
+        "wr": 73.4,
+        "pnl": 42.41,
+        "mdd": 9.97,
+        "pnl_mdd": 4.25,
+        "pnl_per_trade": 0.155
+      }
+    ],
+    "total_pnl": 88.67,
+    "max_mdd": 11.81,
+    "pnl_mdd": 7.51,
+    "total_trades": 713,
+    "wf_pass": "3/3",
+    "wf_passed": true,
+    "max_corr_loss": 3.81,
+    "total_blocked": {
+      "spacing": 0,
+      "momentum": 0,
+      "agg_risk": 1665,
+      "dir_cap": 156
+    }
+  },
+  "no_protections": {
+    "label": "NO_PROTECTIONS",
+    "folds": [
+      {
+        "fold": 1,
+        "oos_start": 19440,
+        "oos_end": 38880,
+        "oos_bars": 19440,
+        "trades": 191,
+        "wr": 69.1,
+        "pnl": 19.36,
+        "mdd": 18.27,
+        "pnl_mdd": 1.06,
+        "pnl_per_trade": 0.101
+      },
+      {
+        "fold": 2,
+        "oos_start": 38880,
+        "oos_end": 58320,
+        "oos_bars": 19440,
+        "trades": 343,
+        "wr": 75.8,
+        "pnl": 90.42,
+        "mdd": 13.9,
+        "pnl_mdd": 6.51,
+        "pnl_per_trade": 0.264
+      },
+      {
+        "fold": 3,
+        "oos_start": 58320,
+        "oos_end": 77760,
+        "oos_bars": 19440,
+        "trades": 342,
+        "wr": 75.4,
+        "pnl": 80.94,
+        "mdd": 17.16,
+        "pnl_mdd": 4.72,
+        "pnl_per_trade": 0.237
+      }
+    ],
+    "total_pnl": 190.72,
+    "max_mdd": 18.27,
+    "pnl_mdd": 10.44,
+    "total_trades": 876,
+    "wf_pass": "3/3",
+    "wf_passed": true,
+    "max_corr_loss": 7.3,
+    "total_blocked": {
+      "spacing": 0,
+      "momentum": 0,
+      "agg_risk": 0,
+      "dir_cap": 0
+    }
+  },
+  "H1_entry_spacing": [
+    {
+      "label": "H1_spacing_15min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 172,
+          "wr": 69.8,
+          "pnl": 13.35,
+          "mdd": 12.71,
+          "pnl_mdd": 1.05,
+          "pnl_per_trade": 0.078
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 257,
+          "wr": 71.6,
+          "pnl": 35.07,
+          "mdd": 9.67,
+          "pnl_mdd": 3.63,
+          "pnl_per_trade": 0.136
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 272,
+          "wr": 73.5,
+          "pnl": 39.5,
+          "mdd": 11.41,
+          "pnl_mdd": 3.46,
+          "pnl_per_trade": 0.145
+        }
+      ],
+      "total_pnl": 87.92,
+      "max_mdd": 12.71,
+      "pnl_mdd": 6.92,
+      "total_trades": 701,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.58,
+      "total_blocked": {
+        "spacing": 90,
+        "momentum": 0,
+        "agg_risk": 1631,
+        "dir_cap": 160
+      }
+    },
+    {
+      "label": "H1_spacing_30min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 69.0,
+          "pnl": 11.72,
+          "mdd": 14.12,
+          "pnl_mdd": 0.83,
+          "pnl_per_trade": 0.067
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 247,
+          "wr": 71.7,
+          "pnl": 32.78,
+          "mdd": 11.13,
+          "pnl_mdd": 2.95,
+          "pnl_per_trade": 0.133
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 261,
+          "wr": 73.2,
+          "pnl": 35.73,
+          "mdd": 9.92,
+          "pnl_mdd": 3.6,
+          "pnl_per_trade": 0.137
+        }
+      ],
+      "total_pnl": 80.23,
+      "max_mdd": 14.12,
+      "pnl_mdd": 5.68,
+      "total_trades": 682,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.58,
+      "total_blocked": {
+        "spacing": 169,
+        "momentum": 0,
+        "agg_risk": 1560,
+        "dir_cap": 167
+      }
+    },
+    {
+      "label": "H1_spacing_60min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 166,
+          "wr": 65.7,
+          "pnl": 4.51,
+          "mdd": 16.72,
+          "pnl_mdd": 0.27,
+          "pnl_per_trade": 0.027
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 247,
+          "wr": 72.1,
+          "pnl": 29.81,
+          "mdd": 9.82,
+          "pnl_mdd": 3.04,
+          "pnl_per_trade": 0.121
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 251,
+          "wr": 74.1,
+          "pnl": 32.38,
+          "mdd": 7.78,
+          "pnl_mdd": 4.16,
+          "pnl_per_trade": 0.129
+        }
+      ],
+      "total_pnl": 66.7,
+      "max_mdd": 16.72,
+      "pnl_mdd": 3.99,
+      "total_trades": 664,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.58,
+      "total_blocked": {
+        "spacing": 367,
+        "momentum": 0,
+        "agg_risk": 1421,
+        "dir_cap": 156
+      }
+    },
+    {
+      "label": "H1_spacing_120min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 166,
+          "wr": 65.7,
+          "pnl": 4.49,
+          "mdd": 13.92,
+          "pnl_mdd": 0.32,
+          "pnl_per_trade": 0.027
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 239,
+          "wr": 70.7,
+          "pnl": 24.97,
+          "mdd": 11.36,
+          "pnl_mdd": 2.2,
+          "pnl_per_trade": 0.104
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 231,
+          "wr": 73.2,
+          "pnl": 27.47,
+          "mdd": 10.47,
+          "pnl_mdd": 2.62,
+          "pnl_per_trade": 0.119
+        }
+      ],
+      "total_pnl": 56.93,
+      "max_mdd": 13.92,
+      "pnl_mdd": 4.09,
+      "total_trades": 636,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 4.12,
+      "total_blocked": {
+        "spacing": 671,
+        "momentum": 0,
+        "agg_risk": 1193,
+        "dir_cap": 100
+      }
+    }
+  ],
+  "H2_momentum_guard": [
+    {
+      "label": "H2_lb30min_thr1.0pct_cd30min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 179,
+          "wr": 70.4,
+          "pnl": 14.46,
+          "mdd": 11.78,
+          "pnl_mdd": 1.23,
+          "pnl_per_trade": 0.081
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 256,
+          "wr": 71.9,
+          "pnl": 37.37,
+          "mdd": 10.03,
+          "pnl_mdd": 3.73,
+          "pnl_per_trade": 0.146
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 270,
+          "wr": 74.4,
+          "pnl": 44.61,
+          "mdd": 9.97,
+          "pnl_mdd": 4.48,
+          "pnl_per_trade": 0.165
+        }
+      ],
+      "total_pnl": 96.44,
+      "max_mdd": 11.78,
+      "pnl_mdd": 8.19,
+      "total_trades": 705,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 98,
+        "agg_risk": 1609,
+        "dir_cap": 150
+      }
+    },
+    {
+      "label": "H2_lb30min_thr2.0pct_cd30min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 177,
+          "wr": 70.1,
+          "pnl": 13.97,
+          "mdd": 11.81,
+          "pnl_mdd": 1.18,
+          "pnl_per_trade": 0.079
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 261,
+          "wr": 71.6,
+          "pnl": 34.78,
+          "mdd": 10.11,
+          "pnl_mdd": 3.44,
+          "pnl_per_trade": 0.133
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 270,
+          "wr": 74.1,
+          "pnl": 44.49,
+          "mdd": 9.97,
+          "pnl_mdd": 4.46,
+          "pnl_per_trade": 0.165
+        }
+      ],
+      "total_pnl": 93.24,
+      "max_mdd": 11.81,
+      "pnl_mdd": 7.9,
+      "total_trades": 708,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 16,
+        "agg_risk": 1657,
+        "dir_cap": 155
+      }
+    },
+    {
+      "label": "H2_lb60min_thr1.0pct_cd30min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 179,
+          "wr": 70.4,
+          "pnl": 13.4,
+          "mdd": 12.58,
+          "pnl_mdd": 1.07,
+          "pnl_per_trade": 0.075
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 257,
+          "wr": 71.6,
+          "pnl": 36.28,
+          "mdd": 9.68,
+          "pnl_mdd": 3.75,
+          "pnl_per_trade": 0.141
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 261,
+          "wr": 75.5,
+          "pnl": 44.19,
+          "mdd": 9.97,
+          "pnl_mdd": 4.43,
+          "pnl_per_trade": 0.169
+        }
+      ],
+      "total_pnl": 93.87,
+      "max_mdd": 12.58,
+      "pnl_mdd": 7.46,
+      "total_trades": 697,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 169,
+        "agg_risk": 1588,
+        "dir_cap": 140
+      }
+    },
+    {
+      "label": "H2_lb60min_thr1.0pct_cd60min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 177,
+          "wr": 70.1,
+          "pnl": 12.95,
+          "mdd": 12.63,
+          "pnl_mdd": 1.03,
+          "pnl_per_trade": 0.073
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 255,
+          "wr": 71.8,
+          "pnl": 36.44,
+          "mdd": 9.86,
+          "pnl_mdd": 3.69,
+          "pnl_per_trade": 0.143
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 254,
+          "wr": 76.0,
+          "pnl": 43.27,
+          "mdd": 9.97,
+          "pnl_mdd": 4.34,
+          "pnl_per_trade": 0.17
+        }
+      ],
+      "total_pnl": 92.66,
+      "max_mdd": 12.63,
+      "pnl_mdd": 7.34,
+      "total_trades": 686,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 223,
+        "agg_risk": 1561,
+        "dir_cap": 141
+      }
+    },
+    {
+      "label": "H2_lb60min_thr2.0pct_cd30min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 173,
+          "wr": 69.9,
+          "pnl": 13.06,
+          "mdd": 11.81,
+          "pnl_mdd": 1.11,
+          "pnl_per_trade": 0.076
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 259,
+          "wr": 71.4,
+          "pnl": 34.08,
+          "mdd": 10.16,
+          "pnl_mdd": 3.35,
+          "pnl_per_trade": 0.132
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 269,
+          "wr": 74.3,
+          "pnl": 43.33,
+          "mdd": 9.97,
+          "pnl_mdd": 4.35,
+          "pnl_per_trade": 0.161
+        }
+      ],
+      "total_pnl": 90.47,
+      "max_mdd": 11.81,
+      "pnl_mdd": 7.66,
+      "total_trades": 701,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 27,
+        "agg_risk": 1656,
+        "dir_cap": 151
+      }
+    },
+    {
+      "label": "H2_lb60min_thr2.0pct_cd60min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 70.1,
+          "pnl": 13.62,
+          "mdd": 11.75,
+          "pnl_mdd": 1.16,
+          "pnl_per_trade": 0.078
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 257,
+          "wr": 71.6,
+          "pnl": 34.26,
+          "mdd": 10.15,
+          "pnl_mdd": 3.38,
+          "pnl_per_trade": 0.133
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 261,
+          "wr": 74.3,
+          "pnl": 43.08,
+          "mdd": 9.97,
+          "pnl_mdd": 4.32,
+          "pnl_per_trade": 0.165
+        }
+      ],
+      "total_pnl": 90.96,
+      "max_mdd": 11.75,
+      "pnl_mdd": 7.74,
+      "total_trades": 692,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 48,
+        "agg_risk": 1654,
+        "dir_cap": 149
+      }
+    },
+    {
+      "label": "H2_lb120min_thr2.0pct_cd60min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 172,
+          "wr": 69.8,
+          "pnl": 13.63,
+          "mdd": 11.75,
+          "pnl_mdd": 1.16,
+          "pnl_per_trade": 0.079
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 254,
+          "wr": 70.5,
+          "pnl": 30.2,
+          "mdd": 10.42,
+          "pnl_mdd": 2.9,
+          "pnl_per_trade": 0.119
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 260,
+          "wr": 74.2,
+          "pnl": 43.69,
+          "mdd": 9.97,
+          "pnl_mdd": 4.38,
+          "pnl_per_trade": 0.168
+        }
+      ],
+      "total_pnl": 87.52,
+      "max_mdd": 11.75,
+      "pnl_mdd": 7.45,
+      "total_trades": 686,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 89,
+        "agg_risk": 1639,
+        "dir_cap": 135
+      }
+    },
+    {
+      "label": "H2_lb120min_thr3.0pct_cd60min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 172,
+          "wr": 69.8,
+          "pnl": 13.17,
+          "mdd": 11.8,
+          "pnl_mdd": 1.12,
+          "pnl_per_trade": 0.077
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 256,
+          "wr": 70.3,
+          "pnl": 28.73,
+          "mdd": 10.44,
+          "pnl_mdd": 2.75,
+          "pnl_per_trade": 0.112
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 272,
+          "wr": 73.9,
+          "pnl": 44.25,
+          "mdd": 9.97,
+          "pnl_mdd": 4.44,
+          "pnl_per_trade": 0.163
+        }
+      ],
+      "total_pnl": 86.15,
+      "max_mdd": 11.8,
+      "pnl_mdd": 7.3,
+      "total_trades": 700,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 29,
+        "agg_risk": 1664,
+        "dir_cap": 149
+      }
+    },
+    {
+      "label": "H2_lb120min_thr3.0pct_cd120min",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 171,
+          "wr": 69.6,
+          "pnl": 12.97,
+          "mdd": 11.82,
+          "pnl_mdd": 1.1,
+          "pnl_per_trade": 0.076
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 255,
+          "wr": 70.2,
+          "pnl": 28.15,
+          "mdd": 10.56,
+          "pnl_mdd": 2.66,
+          "pnl_per_trade": 0.11
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 269,
+          "wr": 74.3,
+          "pnl": 44.85,
+          "mdd": 9.97,
+          "pnl_mdd": 4.5,
+          "pnl_per_trade": 0.167
+        }
+      ],
+      "total_pnl": 85.97,
+      "max_mdd": 11.82,
+      "pnl_mdd": 7.27,
+      "total_trades": 695,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 38,
+        "agg_risk": 1671,
+        "dir_cap": 137
+      }
+    }
+  ],
+  "H3_progressive_cap": [
+    {
+      "label": "H3_cap_7/5/3",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 70.1,
+          "pnl": 13.34,
+          "mdd": 11.81,
+          "pnl_mdd": 1.13,
+          "pnl_per_trade": 0.077
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 264,
+          "wr": 71.2,
+          "pnl": 32.46,
+          "mdd": 9.93,
+          "pnl_mdd": 3.27,
+          "pnl_per_trade": 0.123
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 272,
+          "wr": 72.8,
+          "pnl": 40.96,
+          "mdd": 11.08,
+          "pnl_mdd": 3.7,
+          "pnl_per_trade": 0.151
+        }
+      ],
+      "total_pnl": 86.76,
+      "max_mdd": 11.81,
+      "pnl_mdd": 7.35,
+      "total_trades": 710,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 0,
+        "agg_risk": 1621,
+        "dir_cap": 226
+      }
+    },
+    {
+      "label": "H3_cap_7/5/4",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 70.1,
+          "pnl": 13.34,
+          "mdd": 11.81,
+          "pnl_mdd": 1.13,
+          "pnl_per_trade": 0.077
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 267,
+          "wr": 71.2,
+          "pnl": 33.89,
+          "mdd": 9.82,
+          "pnl_mdd": 3.45,
+          "pnl_per_trade": 0.127
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 272,
+          "wr": 72.8,
+          "pnl": 40.96,
+          "mdd": 11.08,
+          "pnl_mdd": 3.7,
+          "pnl_per_trade": 0.151
+        }
+      ],
+      "total_pnl": 88.19,
+      "max_mdd": 11.81,
+      "pnl_mdd": 7.47,
+      "total_trades": 713,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 0,
+        "agg_risk": 1626,
+        "dir_cap": 216
+      }
+    },
+    {
+      "label": "H3_cap_7/6/4",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 70.1,
+          "pnl": 13.34,
+          "mdd": 11.81,
+          "pnl_mdd": 1.13,
+          "pnl_per_trade": 0.077
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 266,
+          "wr": 70.7,
+          "pnl": 32.32,
+          "mdd": 10.77,
+          "pnl_mdd": 3.0,
+          "pnl_per_trade": 0.121
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 273,
+          "wr": 73.3,
+          "pnl": 41.95,
+          "mdd": 10.1,
+          "pnl_mdd": 4.15,
+          "pnl_per_trade": 0.154
+        }
+      ],
+      "total_pnl": 87.61,
+      "max_mdd": 11.81,
+      "pnl_mdd": 7.42,
+      "total_trades": 713,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 0,
+        "agg_risk": 1645,
+        "dir_cap": 183
+      }
+    },
+    {
+      "label": "H3_cap_7/6/5",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 70.1,
+          "pnl": 13.34,
+          "mdd": 11.81,
+          "pnl_mdd": 1.13,
+          "pnl_per_trade": 0.077
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 266,
+          "wr": 70.7,
+          "pnl": 32.36,
+          "mdd": 10.77,
+          "pnl_mdd": 3.01,
+          "pnl_per_trade": 0.122
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 273,
+          "wr": 73.3,
+          "pnl": 41.96,
+          "mdd": 10.1,
+          "pnl_mdd": 4.15,
+          "pnl_per_trade": 0.154
+        }
+      ],
+      "total_pnl": 87.66,
+      "max_mdd": 11.81,
+      "pnl_mdd": 7.42,
+      "total_trades": 713,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 0,
+        "agg_risk": 1654,
+        "dir_cap": 174
+      }
+    },
+    {
+      "label": "H3_cap_6/4/2",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 165,
+          "wr": 70.9,
+          "pnl": 13.02,
+          "mdd": 11.04,
+          "pnl_mdd": 1.18,
+          "pnl_per_trade": 0.079
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 257,
+          "wr": 71.2,
+          "pnl": 28.4,
+          "mdd": 10.1,
+          "pnl_mdd": 2.81,
+          "pnl_per_trade": 0.111
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 265,
+          "wr": 72.1,
+          "pnl": 41.19,
+          "mdd": 8.72,
+          "pnl_mdd": 4.72,
+          "pnl_per_trade": 0.155
+        }
+      ],
+      "total_pnl": 82.61,
+      "max_mdd": 11.04,
+      "pnl_mdd": 7.48,
+      "total_trades": 687,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.81,
+      "total_blocked": {
+        "spacing": 0,
+        "momentum": 0,
+        "agg_risk": 1338,
+        "dir_cap": 721
+      }
+    }
+  ],
+  "combinations": [
+    {
+      "label": "COMBO_H1(15m)+H2(lb6thr1.0cd6)",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 174,
+          "wr": 70.1,
+          "pnl": 14.21,
+          "mdd": 12.68,
+          "pnl_mdd": 1.12,
+          "pnl_per_trade": 0.082
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 256,
+          "wr": 71.5,
+          "pnl": 38.1,
+          "mdd": 9.51,
+          "pnl_mdd": 4.01,
+          "pnl_per_trade": 0.149
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 269,
+          "wr": 74.0,
+          "pnl": 40.35,
+          "mdd": 11.41,
+          "pnl_mdd": 3.54,
+          "pnl_per_trade": 0.15
+        }
+      ],
+      "total_pnl": 92.66,
+      "max_mdd": 12.68,
+      "pnl_mdd": 7.31,
+      "total_trades": 699,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 3.58,
+      "total_blocked": {
+        "spacing": 87,
+        "momentum": 99,
+        "agg_risk": 1561,
+        "dir_cap": 160
+      }
+    },
+    {
+      "label": "COMBO_H1(15m)+H3(6/4/2)",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 166,
+          "wr": 68.7,
+          "pnl": 10.64,
+          "mdd": 12.89,
+          "pnl_mdd": 0.83,
+          "pnl_per_trade": 0.064
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 251,
+          "wr": 70.9,
+          "pnl": 28.57,
+          "mdd": 10.14,
+          "pnl_mdd": 2.82,
+          "pnl_per_trade": 0.114
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 257,
+          "wr": 72.8,
+          "pnl": 36.63,
+          "mdd": 10.83,
+          "pnl_mdd": 3.38,
+          "pnl_per_trade": 0.143
+        }
+      ],
+      "total_pnl": 75.84,
+      "max_mdd": 12.89,
+      "pnl_mdd": 5.88,
+      "total_trades": 674,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 4.51,
+      "total_blocked": {
+        "spacing": 77,
+        "momentum": 0,
+        "agg_risk": 1295,
+        "dir_cap": 686
+      }
+    },
+    {
+      "label": "COMBO_ALL",
+      "folds": [
+        {
+          "fold": 1,
+          "oos_start": 19440,
+          "oos_end": 38880,
+          "oos_bars": 19440,
+          "trades": 169,
+          "wr": 69.2,
+          "pnl": 12.4,
+          "mdd": 12.86,
+          "pnl_mdd": 0.96,
+          "pnl_per_trade": 0.073
+        },
+        {
+          "fold": 2,
+          "oos_start": 38880,
+          "oos_end": 58320,
+          "oos_bars": 19440,
+          "trades": 244,
+          "wr": 71.3,
+          "pnl": 33.15,
+          "mdd": 9.76,
+          "pnl_mdd": 3.4,
+          "pnl_per_trade": 0.136
+        },
+        {
+          "fold": 3,
+          "oos_start": 58320,
+          "oos_end": 77760,
+          "oos_bars": 19440,
+          "trades": 258,
+          "wr": 73.3,
+          "pnl": 39.09,
+          "mdd": 10.83,
+          "pnl_mdd": 3.61,
+          "pnl_per_trade": 0.152
+        }
+      ],
+      "total_pnl": 84.64,
+      "max_mdd": 12.86,
+      "pnl_mdd": 6.58,
+      "total_trades": 671,
+      "wf_pass": "3/3",
+      "wf_passed": true,
+      "max_corr_loss": 4.51,
+      "total_blocked": {
+        "spacing": 75,
+        "momentum": 69,
+        "agg_risk": 1269,
+        "dir_cap": 655
+      }
+    }
+  ]
+}

@@ -1,0 +1,461 @@
+{
+  "study": "trigger_sl_reduction",
+  "generated_at": "2026-04-01T22:13:09.539937",
+  "data_file": "C:\\Users\\J\\OneDrive\\CLAUDE_CODE_FIN\\bingx_rl_trading_bot\\data\\btc_5m_270days_reclassified.csv",
+  "data_bars": 93864,
+  "n_wf_folds": 5,
+  "timeout_bars": 576,
+  "atr_clamp": [
+    1.0,
+    1.5
+  ],
+  "tp_decay_rate": 0.9975,
+  "tp_mode": "mfe_median",
+  "n_slots": 9,
+  "leverage": 3,
+  "fee_pct": 0.1,
+  "results": {
+    "BASELINE": {
+      "config": {
+        "direction_cap": 6,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 2.0,
+        "preemptive_tighten_pct": 98,
+        "individual_cascade_pct": 0.0,
+        "individual_tighten_pct": 0,
+        "sl_cap_pct": 0.0
+      },
+      "oos_pnl": 709.42,
+      "oos_wr": 55.7,
+      "oos_mdd": 0.67,
+      "oos_pnl_mdd": 1051.09,
+      "oos_trades": 4715,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -9.046,
+      "trigger_sl_count": 17,
+      "trigger_sl_total_port": -17.087,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 2002,
+      "cascade_sl_total_port": -133.467,
+      "tp_avg": 3.006,
+      "tp_count": 2610,
+      "tp_total_port": 871.688,
+      "timeout_avg": -1.471,
+      "timeout_count": 59,
+      "timeout_total_port": -9.641,
+      "exit_types": {
+        "TP": {
+          "count": 2610,
+          "avg_pnl_slot": 3.006,
+          "total_pnl_port": 871.688,
+          "avg_pnl_port": 0.334
+        },
+        "CASCADE_SL": {
+          "count": 2002,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -133.467,
+          "avg_pnl_port": -0.067
+        },
+        "TIMEOUT": {
+          "count": 59,
+          "avg_pnl_slot": -1.471,
+          "total_pnl_port": -9.641,
+          "avg_pnl_port": -0.163
+        },
+        "OOS_END": {
+          "count": 27,
+          "avg_pnl_slot": -0.693,
+          "total_pnl_port": -2.078,
+          "avg_pnl_port": -0.077
+        },
+        "TRIGGER_SL": {
+          "count": 17,
+          "avg_pnl_slot": -9.046,
+          "total_pnl_port": -17.087,
+          "avg_pnl_port": -1.005
+        }
+      }
+    },
+    "INDIVIDUAL_2.0": {
+      "config": {
+        "direction_cap": 6,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 0.0,
+        "preemptive_tighten_pct": 0,
+        "individual_cascade_pct": 2.0,
+        "individual_tighten_pct": 98,
+        "sl_cap_pct": 0.0
+      },
+      "oos_pnl": 311.01,
+      "oos_wr": 70.1,
+      "oos_mdd": 5.93,
+      "oos_pnl_mdd": 52.48,
+      "oos_trades": 3182,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -10.524,
+      "trigger_sl_count": 176,
+      "trigger_sl_total_port": -205.796,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 465,
+      "cascade_sl_total_port": -31.0,
+      "tp_avg": 2.833,
+      "tp_count": 2217,
+      "tp_total_port": 697.919,
+      "timeout_avg": -4.495,
+      "timeout_count": 287,
+      "timeout_total_port": -143.345,
+      "exit_types": {
+        "TP": {
+          "count": 2217,
+          "avg_pnl_slot": 2.833,
+          "total_pnl_port": 697.919,
+          "avg_pnl_port": 0.315
+        },
+        "TIMEOUT": {
+          "count": 287,
+          "avg_pnl_slot": -4.495,
+          "total_pnl_port": -143.345,
+          "avg_pnl_port": -0.499
+        },
+        "TRIGGER_SL": {
+          "count": 176,
+          "avg_pnl_slot": -10.524,
+          "total_pnl_port": -205.796,
+          "avg_pnl_port": -1.169
+        },
+        "CASCADE_SL": {
+          "count": 465,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -31.0,
+          "avg_pnl_port": -0.067
+        },
+        "OOS_END": {
+          "count": 37,
+          "avg_pnl_slot": -1.647,
+          "total_pnl_port": -6.772,
+          "avg_pnl_port": -0.183
+        }
+      }
+    },
+    "INDIVIDUAL_1.5": {
+      "config": {
+        "direction_cap": 6,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 0.0,
+        "preemptive_tighten_pct": 0,
+        "individual_cascade_pct": 1.5,
+        "individual_tighten_pct": 98,
+        "sl_cap_pct": 0.0
+      },
+      "oos_pnl": 328.63,
+      "oos_wr": 70.1,
+      "oos_mdd": 5.93,
+      "oos_pnl_mdd": 55.46,
+      "oos_trades": 3179,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -10.285,
+      "trigger_sl_count": 161,
+      "trigger_sl_total_port": -183.988,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 475,
+      "cascade_sl_total_port": -31.667,
+      "tp_avg": 2.834,
+      "tp_count": 2215,
+      "tp_total_port": 697.419,
+      "timeout_avg": -4.527,
+      "timeout_count": 291,
+      "timeout_total_port": -146.366,
+      "exit_types": {
+        "TP": {
+          "count": 2215,
+          "avg_pnl_slot": 2.834,
+          "total_pnl_port": 697.419,
+          "avg_pnl_port": 0.315
+        },
+        "TIMEOUT": {
+          "count": 291,
+          "avg_pnl_slot": -4.527,
+          "total_pnl_port": -146.366,
+          "avg_pnl_port": -0.503
+        },
+        "TRIGGER_SL": {
+          "count": 161,
+          "avg_pnl_slot": -10.285,
+          "total_pnl_port": -183.988,
+          "avg_pnl_port": -1.143
+        },
+        "CASCADE_SL": {
+          "count": 475,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -31.667,
+          "avg_pnl_port": -0.067
+        },
+        "OOS_END": {
+          "count": 37,
+          "avg_pnl_slot": -1.647,
+          "total_pnl_port": -6.772,
+          "avg_pnl_port": -0.183
+        }
+      }
+    },
+    "DC4_PRE1.0": {
+      "config": {
+        "direction_cap": 4,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 1.0,
+        "preemptive_tighten_pct": 98,
+        "individual_cascade_pct": 0.0,
+        "individual_tighten_pct": 0,
+        "sl_cap_pct": 0.0
+      },
+      "oos_pnl": 597.45,
+      "oos_wr": 47.4,
+      "oos_mdd": 1.11,
+      "oos_pnl_mdd": 537.47,
+      "oos_trades": 4760,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -12.637,
+      "trigger_sl_count": 4,
+      "trigger_sl_total_port": -5.616,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 2463,
+      "cascade_sl_total_port": -164.2,
+      "tp_avg": 3.087,
+      "tp_count": 2244,
+      "tp_total_port": 769.579,
+      "timeout_avg": -0.781,
+      "timeout_count": 21,
+      "timeout_total_port": -1.822,
+      "exit_types": {
+        "TP": {
+          "count": 2244,
+          "avg_pnl_slot": 3.087,
+          "total_pnl_port": 769.579,
+          "avg_pnl_port": 0.343
+        },
+        "CASCADE_SL": {
+          "count": 2463,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -164.2,
+          "avg_pnl_port": -0.067
+        },
+        "OOS_END": {
+          "count": 28,
+          "avg_pnl_slot": -0.158,
+          "total_pnl_port": -0.491,
+          "avg_pnl_port": -0.018
+        },
+        "TIMEOUT": {
+          "count": 21,
+          "avg_pnl_slot": -0.781,
+          "total_pnl_port": -1.822,
+          "avg_pnl_port": -0.087
+        },
+        "TRIGGER_SL": {
+          "count": 4,
+          "avg_pnl_slot": -12.637,
+          "total_pnl_port": -5.616,
+          "avg_pnl_port": -1.404
+        }
+      }
+    },
+    "DC4_IND2.0": {
+      "config": {
+        "direction_cap": 4,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 0.0,
+        "preemptive_tighten_pct": 0,
+        "individual_cascade_pct": 2.0,
+        "individual_tighten_pct": 98,
+        "sl_cap_pct": 0.0
+      },
+      "oos_pnl": 212.12,
+      "oos_wr": 70.6,
+      "oos_mdd": 5.34,
+      "oos_pnl_mdd": 39.73,
+      "oos_trades": 2637,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -10.534,
+      "trigger_sl_count": 187,
+      "trigger_sl_total_port": -218.867,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 325,
+      "cascade_sl_total_port": -21.667,
+      "tp_avg": 2.813,
+      "tp_count": 1852,
+      "tp_total_port": 578.859,
+      "timeout_avg": -4.453,
+      "timeout_count": 239,
+      "timeout_total_port": -118.257,
+      "exit_types": {
+        "TP": {
+          "count": 1852,
+          "avg_pnl_slot": 2.813,
+          "total_pnl_port": 578.859,
+          "avg_pnl_port": 0.313
+        },
+        "TIMEOUT": {
+          "count": 239,
+          "avg_pnl_slot": -4.453,
+          "total_pnl_port": -118.257,
+          "avg_pnl_port": -0.495
+        },
+        "TRIGGER_SL": {
+          "count": 187,
+          "avg_pnl_slot": -10.534,
+          "total_pnl_port": -218.867,
+          "avg_pnl_port": -1.17
+        },
+        "CASCADE_SL": {
+          "count": 325,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -21.667,
+          "avg_pnl_port": -0.067
+        },
+        "OOS_END": {
+          "count": 34,
+          "avg_pnl_slot": -2.104,
+          "total_pnl_port": -7.949,
+          "avg_pnl_port": -0.234
+        }
+      }
+    },
+    "SL_CAP_3PCT": {
+      "config": {
+        "direction_cap": 6,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 2.0,
+        "preemptive_tighten_pct": 98,
+        "individual_cascade_pct": 0.0,
+        "individual_tighten_pct": 0,
+        "sl_cap_pct": 3.0
+      },
+      "oos_pnl": 712.13,
+      "oos_wr": 54.6,
+      "oos_mdd": 0.71,
+      "oos_pnl_mdd": 1003.7,
+      "oos_trades": 4462,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -9.145,
+      "trigger_sl_count": 21,
+      "trigger_sl_total_port": -21.339,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 1927,
+      "cascade_sl_total_port": -128.467,
+      "tp_avg": 3.251,
+      "tp_count": 2418,
+      "tp_total_port": 873.443,
+      "timeout_avg": -1.384,
+      "timeout_count": 67,
+      "timeout_total_port": -10.302,
+      "exit_types": {
+        "TP": {
+          "count": 2418,
+          "avg_pnl_slot": 3.251,
+          "total_pnl_port": 873.443,
+          "avg_pnl_port": 0.361
+        },
+        "CASCADE_SL": {
+          "count": 1927,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -128.467,
+          "avg_pnl_port": -0.067
+        },
+        "TIMEOUT": {
+          "count": 67,
+          "avg_pnl_slot": -1.384,
+          "total_pnl_port": -10.302,
+          "avg_pnl_port": -0.154
+        },
+        "OOS_END": {
+          "count": 29,
+          "avg_pnl_slot": -0.374,
+          "total_pnl_port": -1.204,
+          "avg_pnl_port": -0.042
+        },
+        "TRIGGER_SL": {
+          "count": 21,
+          "avg_pnl_slot": -9.145,
+          "total_pnl_port": -21.339,
+          "avg_pnl_port": -1.016
+        }
+      }
+    },
+    "SL_CAP_3PCT_IND2.0": {
+      "config": {
+        "direction_cap": 6,
+        "agg_risk_counter": 10.0,
+        "agg_risk_with": 15.0,
+        "cascade_tighten_pct": 98,
+        "preemptive_cascade_pct": 0.0,
+        "preemptive_tighten_pct": 0,
+        "individual_cascade_pct": 2.0,
+        "individual_tighten_pct": 98,
+        "sl_cap_pct": 3.0
+      },
+      "oos_pnl": 319.05,
+      "oos_wr": 68.0,
+      "oos_mdd": 9.6,
+      "oos_pnl_mdd": 33.23,
+      "oos_trades": 3150,
+      "mc_p": 0.0,
+      "trigger_sl_avg": -9.975,
+      "trigger_sl_count": 232,
+      "trigger_sl_total_port": -257.144,
+      "cascade_sl_avg": -0.6,
+      "cascade_sl_count": 509,
+      "cascade_sl_total_port": -33.933,
+      "tp_avg": 3.077,
+      "tp_count": 2129,
+      "tp_total_port": 727.993,
+      "timeout_avg": -4.121,
+      "timeout_count": 243,
+      "timeout_total_port": -111.278,
+      "exit_types": {
+        "TP": {
+          "count": 2129,
+          "avg_pnl_slot": 3.077,
+          "total_pnl_port": 727.993,
+          "avg_pnl_port": 0.342
+        },
+        "TIMEOUT": {
+          "count": 243,
+          "avg_pnl_slot": -4.121,
+          "total_pnl_port": -111.278,
+          "avg_pnl_port": -0.458
+        },
+        "TRIGGER_SL": {
+          "count": 232,
+          "avg_pnl_slot": -9.975,
+          "total_pnl_port": -257.144,
+          "avg_pnl_port": -1.108
+        },
+        "CASCADE_SL": {
+          "count": 509,
+          "avg_pnl_slot": -0.6,
+          "total_pnl_port": -33.933,
+          "avg_pnl_port": -0.067
+        },
+        "OOS_END": {
+          "count": 37,
+          "avg_pnl_slot": -1.602,
+          "total_pnl_port": -6.584,
+          "avg_pnl_port": -0.178
+        }
+      }
+    }
+  },
+  "elapsed_sec": 15.6
+}

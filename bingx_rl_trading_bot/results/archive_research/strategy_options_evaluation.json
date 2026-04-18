@@ -1,0 +1,472 @@
+{
+  "meta": {
+    "script": "strategy_options_evaluation.py",
+    "version": "v1.27.2",
+    "timestamp": "2026-02-12T13:34:16.445130",
+    "n_folds": 4,
+    "fold_days": 54
+  },
+  "options_summary": {
+    "A_StatusQuo_51": {
+      "pnl": 809.9,
+      "mdd": 14.6,
+      "pnl_mdd": 55.47,
+      "wr": 84.7,
+      "trades": 294,
+      "avg_patterns": 51.0,
+      "look_ahead": "ALL"
+    },
+    "B_Robust4": {
+      "pnl": 116.8,
+      "mdd": 10.2,
+      "pnl_mdd": 11.46,
+      "wr": 87.7,
+      "trades": 57,
+      "avg_patterns": 4.0,
+      "look_ahead": "TP/SL"
+    },
+    "C_Top17": {
+      "pnl": 319.1,
+      "mdd": 21.3,
+      "pnl_mdd": 14.98,
+      "wr": 76.2,
+      "trades": 223,
+      "avg_patterns": 17.0,
+      "look_ahead": "TP/SL"
+    },
+    "D_Dynamic_Train": {
+      "pnl": 80.5,
+      "mdd": 31.7,
+      "pnl_mdd": 2.54,
+      "wr": 68.5,
+      "trades": 89,
+      "avg_patterns": 5.5,
+      "look_ahead": "NONE"
+    },
+    "E_Fresh50_Train": {
+      "pnl": 8.6,
+      "mdd": 101.7,
+      "pnl_mdd": 0.08,
+      "wr": 68.2,
+      "trades": 346,
+      "avg_patterns": 49.0,
+      "look_ahead": "NONE"
+    },
+    "F_Fresh20_Train": {
+      "pnl": -27.4,
+      "mdd": 89.7,
+      "pnl_mdd": -0.31,
+      "wr": 63.6,
+      "trades": 283,
+      "avg_patterns": 20.0,
+      "look_ahead": "NONE"
+    },
+    "G_Dynamic_CurrTPSL": {
+      "pnl": 139.3,
+      "mdd": 22.0,
+      "pnl_mdd": 6.32,
+      "wr": 77.2,
+      "trades": 92,
+      "avg_patterns": 5.5,
+      "look_ahead": "TP/SL"
+    }
+  },
+  "per_fold": {
+    "A_StatusQuo_51": {
+      "folds": [
+        {
+          "pnl": 191.4,
+          "trades": 63,
+          "wr": 88.89,
+          "mdd": 10.8,
+          "pf": 6.84,
+          "pnl_mdd": 17.72
+        },
+        {
+          "pnl": 165.3,
+          "trades": 60,
+          "wr": 83.33,
+          "mdd": 10.7,
+          "pf": 4.31,
+          "pnl_mdd": 15.45
+        },
+        {
+          "pnl": 218.9,
+          "trades": 94,
+          "wr": 79.79,
+          "mdd": 14.1,
+          "pf": 2.78,
+          "pnl_mdd": 15.52
+        },
+        {
+          "pnl": 234.25,
+          "trades": 77,
+          "wr": 88.31,
+          "mdd": 12.7,
+          "pf": 5.46,
+          "pnl_mdd": 18.44
+        }
+      ],
+      "n_patterns": [
+        51,
+        51,
+        51,
+        51
+      ]
+    },
+    "B_Robust4": {
+      "folds": [
+        {
+          "pnl": 41.7,
+          "trades": 18,
+          "wr": 94.44,
+          "mdd": 6.1,
+          "pf": 7.84,
+          "pnl_mdd": 6.84
+        },
+        {
+          "pnl": 40.8,
+          "trades": 15,
+          "wr": 93.33,
+          "mdd": 6.1,
+          "pf": 7.69,
+          "pnl_mdd": 6.69
+        },
+        {
+          "pnl": -0.45,
+          "trades": 12,
+          "wr": 66.67,
+          "mdd": 10.2,
+          "pf": 0.98,
+          "pnl_mdd": -0.04
+        },
+        {
+          "pnl": 34.8,
+          "trades": 12,
+          "wr": 91.67,
+          "mdd": 6.1,
+          "pf": 6.7,
+          "pnl_mdd": 5.7
+        }
+      ],
+      "n_patterns": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "C_Top17": {
+      "folds": [
+        {
+          "pnl": 103.45,
+          "trades": 53,
+          "wr": 77.36,
+          "mdd": 6.1,
+          "pf": 4.63,
+          "pnl_mdd": 16.96
+        },
+        {
+          "pnl": 65.95,
+          "trades": 53,
+          "wr": 73.58,
+          "mdd": 16.65,
+          "pf": 2.34,
+          "pnl_mdd": 3.96
+        },
+        {
+          "pnl": 75.0,
+          "trades": 69,
+          "wr": 73.91,
+          "mdd": 21.3,
+          "pf": 1.86,
+          "pnl_mdd": 3.52
+        },
+        {
+          "pnl": 74.7,
+          "trades": 48,
+          "wr": 81.25,
+          "mdd": 16.8,
+          "pf": 2.3,
+          "pnl_mdd": 4.45
+        }
+      ],
+      "n_patterns": [
+        17,
+        17,
+        17,
+        17
+      ]
+    },
+    "D_Dynamic_Train": {
+      "folds": [
+        {
+          "pnl": 18.3,
+          "trades": 21,
+          "wr": 76.19,
+          "mdd": 10.9,
+          "pf": 1.8,
+          "pnl_mdd": 1.68
+        },
+        {
+          "pnl": 12.8,
+          "trades": 22,
+          "wr": 68.18,
+          "mdd": 21.6,
+          "pf": 1.27,
+          "pnl_mdd": 0.59
+        },
+        {
+          "pnl": 8.8,
+          "trades": 17,
+          "wr": 64.71,
+          "mdd": 24.5,
+          "pf": 1.21,
+          "pnl_mdd": 0.36
+        },
+        {
+          "pnl": 40.6,
+          "trades": 29,
+          "wr": 65.52,
+          "mdd": 24.0,
+          "pf": 1.94,
+          "pnl_mdd": 1.69
+        }
+      ],
+      "n_patterns": [
+        3,
+        6,
+        4,
+        9
+      ]
+    },
+    "E_Fresh50_Train": {
+      "folds": [
+        {
+          "pnl": 43.6,
+          "trades": 86,
+          "wr": 74.42,
+          "mdd": 18.3,
+          "pf": 1.36,
+          "pnl_mdd": 2.38
+        },
+        {
+          "pnl": 49.3,
+          "trades": 74,
+          "wr": 75.68,
+          "mdd": 22.8,
+          "pf": 1.49,
+          "pnl_mdd": 2.16
+        },
+        {
+          "pnl": -38.5,
+          "trades": 112,
+          "wr": 64.29,
+          "mdd": 72.2,
+          "pf": 0.83,
+          "pnl_mdd": -0.53
+        },
+        {
+          "pnl": -45.8,
+          "trades": 74,
+          "wr": 59.46,
+          "mdd": 56.1,
+          "pf": 0.71,
+          "pnl_mdd": -0.82
+        }
+      ],
+      "n_patterns": [
+        49,
+        50,
+        48,
+        49
+      ]
+    },
+    "F_Fresh20_Train": {
+      "folds": [
+        {
+          "pnl": -20.6,
+          "trades": 83,
+          "wr": 63.86,
+          "mdd": 49.5,
+          "pf": 0.86,
+          "pnl_mdd": -0.42
+        },
+        {
+          "pnl": 57.1,
+          "trades": 62,
+          "wr": 77.42,
+          "mdd": 15.1,
+          "pf": 1.64,
+          "pnl_mdd": 3.78
+        },
+        {
+          "pnl": -40.6,
+          "trades": 76,
+          "wr": 60.53,
+          "mdd": 69.3,
+          "pf": 0.76,
+          "pnl_mdd": -0.59
+        },
+        {
+          "pnl": -23.3,
+          "trades": 62,
+          "wr": 53.23,
+          "mdd": 34.8,
+          "pf": 0.81,
+          "pnl_mdd": -0.67
+        }
+      ],
+      "n_patterns": [
+        20,
+        20,
+        20,
+        20
+      ]
+    },
+    "G_Dynamic_CurrTPSL": {
+      "folds": [
+        {
+          "pnl": 55.85,
+          "trades": 19,
+          "wr": 100.0,
+          "mdd": 0,
+          "pf": 999,
+          "pnl_mdd": 999
+        },
+        {
+          "pnl": 45.85,
+          "trades": 26,
+          "wr": 80.77,
+          "mdd": 9.1,
+          "pf": 2.37,
+          "pnl_mdd": 5.04
+        },
+        {
+          "pnl": 0.6,
+          "trades": 18,
+          "wr": 66.67,
+          "mdd": 21.35,
+          "pf": 1.02,
+          "pnl_mdd": 0.03
+        },
+        {
+          "pnl": 37.0,
+          "trades": 29,
+          "wr": 65.52,
+          "mdd": 13.4,
+          "pf": 2.17,
+          "pnl_mdd": 2.76
+        }
+      ],
+      "n_patterns": [
+        3,
+        6,
+        4,
+        9
+      ]
+    }
+  },
+  "in_sample_mc": {
+    "A_StatusQuo_51": {
+      "pnl": 966.0,
+      "wr": 84.87,
+      "mdd": 16.2,
+      "mc_p": 0.0,
+      "mdd_p99": 257.9
+    },
+    "B_Robust4": {
+      "pnl": 156.55,
+      "wr": 89.19,
+      "mdd": 10.2,
+      "mc_p": 0.0,
+      "mdd_p99": 84.5
+    },
+    "C_Top17": {
+      "pnl": 442.1,
+      "wr": 79.2,
+      "mdd": 21.3,
+      "mc_p": 0.0,
+      "mdd_p99": 172.5
+    }
+  },
+  "pattern_groups": {
+    "robust_4": [
+      "U-H-MU",
+      "IH-MD-MD",
+      "MU-DF-U",
+      "BU-ST-GS"
+    ],
+    "top_17": [
+      "U-H-MU",
+      "IH-MD-MD",
+      "MU-DF-U",
+      "BU-ST-GS",
+      "DN-DF-ST",
+      "DN-DN-H",
+      "GS-ST-ST",
+      "H-BU-BU",
+      "MD-MD-ST",
+      "MD-ST-BD",
+      "MU-IH-DN",
+      "U-MD-GS",
+      "U-MD-MD",
+      "U-MU-H",
+      "D-BD-ST",
+      "DN-DF-DN",
+      "ST-MU-ST"
+    ]
+  },
+  "fold_discovery": [
+    {
+      "fold": 1,
+      "train_days": 54,
+      "total_discovered": 57,
+      "rediscovered_from_51": [
+        "U-MU-H",
+        "ST-MU-ST",
+        "DN-DN-H"
+      ]
+    },
+    {
+      "fold": 2,
+      "train_days": 108,
+      "total_discovered": 64,
+      "rediscovered_from_51": [
+        "DN-DF-ST",
+        "IH-MD-MD",
+        "MU-IH-DN",
+        "DN-DF-DN",
+        "MD-MD-ST",
+        "U-H-MU"
+      ]
+    },
+    {
+      "fold": 3,
+      "train_days": 162,
+      "total_discovered": 71,
+      "rediscovered_from_51": [
+        "MU-DF-U",
+        "BU-ST-GS",
+        "GS-ST-ST",
+        "U-H-MU"
+      ]
+    },
+    {
+      "fold": 4,
+      "train_days": 216,
+      "total_discovered": 99,
+      "rediscovered_from_51": [
+        "MU-DF-U",
+        "U-MD-MD",
+        "IH-MD-MD",
+        "MD-ST-BD",
+        "H-BU-BU",
+        "U-MD-GS",
+        "BU-ST-GS",
+        "U-H-MU",
+        "D-BD-ST"
+      ]
+    }
+  ]
+}

@@ -1,12 +1,27 @@
 {
   "sl_trail_tuning": {
-    "phase": "check",
+    "phase": "completed",
     "matchRate": 94,
     "outcome": "STOP",
     "iterationCount": 0,
     "startedAt": "2026-04-18T00:00:00Z",
     "checkedAt": "2026-04-18T22:15:00Z",
-    "notes": "C1 Breakout v2.6 max_sl_atr/trail_K/max_hold_bars 3D grid tuning. 120 combos, STOP (6/7 GO conditions pass, ratio_ok fails). Best candidate (4.5, 2.2, 144) full PnL+183.2% vs baseline+170.5% but MDD 6.56>5.38 → PnL/MDD 27.92 < 34.86 threshold."
+    "completedAt": "2026-04-19T00:00:00Z",
+    "summary": {
+      "type": "research-only",
+      "hypotheses": {
+        "H1_max_sl_atr": "STOP (absolute PnL +12.7pp but MDD +22% → ratio -11.9%)",
+        "H2_trail_K": "CONFIRMED (1D sharp peak; 3D shows interaction with max_sl_atr)",
+        "H3_max_hold_bars": "DEAD (timeout never fires; 96/144/192/288 identical)",
+        "H4_interaction": "CONFIRMED (wider SL pairs with tighter trail)"
+      },
+      "go_conditions_passed": "6/7 (wf_pass, tw_pass, test_ok, mc_pass, ci_pass, nbr_pass)",
+      "go_conditions_failed": "ratio_ok (27.92 < 34.86)",
+      "best_candidate": "(max_sl_atr=4.5, trail_K=2.2, max_hold_bars=144)",
+      "production_changes": "none — baseline (3.3, 2.5, 192) retained",
+      "lessons": "1D grid hides MDD tradeoff; absolute PnL != risk-adjusted optimum; pre-committed protocol saved from selection-after-peek",
+      "infrastructure_verified": "baseline regression drift=0.00"
+    }
   },
   "atr-scanner-alignment": {
     "phase": "archived",

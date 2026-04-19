@@ -1,0 +1,393 @@
+{
+  "timestamp": "2026-04-19T08:36:10.935130+00:00",
+  "combos": {
+    "baseline": {
+      "max_sl_atr": 3.3,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "candidate_C": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    }
+  },
+  "activation_values": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.5,
+    1.0
+  ],
+  "slippage": {
+    "entry_pct": 0.05,
+    "exit_sl_pct": 0.15,
+    "exit_trail_pct": 0.05,
+    "exit_emergency_pct": 0.3,
+    "exit_timeout_pct": 0.05
+  },
+  "runs": {
+    "baseline_a0.00": {
+      "clean": {
+        "count": 1028,
+        "PnL": 169.55,
+        "MDD": 5.38,
+        "WR": 36.6
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 46.09,
+        "MDD": 18.78,
+        "WR": 30.2
+      },
+      "reasons": {
+        "SL": 119,
+        "TRAIL_TP": 954,
+        "EMERGENCY": 1
+      }
+    },
+    "baseline_a0.10": {
+      "clean": {
+        "count": 1876,
+        "PnL": -301.61,
+        "MDD": 301.61,
+        "WR": 1.2
+      },
+      "slip": {
+        "count": 1808,
+        "PnL": -588.32,
+        "MDD": 588.32,
+        "WR": 3.0
+      },
+      "reasons": {
+        "SL": 1622,
+        "TRAIL_TP": 185,
+        "EMERGENCY": 1
+      }
+    },
+    "baseline_a0.20": {
+      "clean": {
+        "count": 1589,
+        "PnL": -227.4,
+        "MDD": 227.4,
+        "WR": 5.3
+      },
+      "slip": {
+        "count": 1518,
+        "PnL": -408.73,
+        "MDD": 408.73,
+        "WR": 8.2
+      },
+      "reasons": {
+        "SL": 1112,
+        "TRAIL_TP": 405,
+        "EMERGENCY": 1
+      }
+    },
+    "baseline_a0.30": {
+      "clean": {
+        "count": 1391,
+        "PnL": -160.42,
+        "MDD": 160.42,
+        "WR": 10.6
+      },
+      "slip": {
+        "count": 1323,
+        "PnL": -267.13,
+        "MDD": 267.13,
+        "WR": 14.3
+      },
+      "reasons": {
+        "SL": 769,
+        "TRAIL_TP": 553,
+        "EMERGENCY": 1
+      }
+    },
+    "baseline_a0.50": {
+      "clean": {
+        "count": 1207,
+        "PnL": -50.49,
+        "MDD": 57.15,
+        "WR": 18.8
+      },
+      "slip": {
+        "count": 1168,
+        "PnL": -101.45,
+        "MDD": 101.45,
+        "WR": 21.3
+      },
+      "reasons": {
+        "SL": 423,
+        "TRAIL_TP": 744,
+        "EMERGENCY": 1
+      }
+    },
+    "baseline_a1.00": {
+      "clean": {
+        "count": 1041,
+        "PnL": 126.06,
+        "MDD": 6.72,
+        "WR": 32.3
+      },
+      "slip": {
+        "count": 1079,
+        "PnL": 22.74,
+        "MDD": 20.46,
+        "WR": 28.5
+      },
+      "reasons": {
+        "SL": 168,
+        "TRAIL_TP": 910,
+        "EMERGENCY": 1
+      }
+    },
+    "candidate_C_a0.00": {
+      "clean": {
+        "count": 1012,
+        "PnL": 192.76,
+        "MDD": 5.2,
+        "WR": 37.0
+      },
+      "slip": {
+        "count": 1057,
+        "PnL": 63.06,
+        "MDD": 14.26,
+        "WR": 30.5
+      },
+      "reasons": {
+        "SL": 101,
+        "TRAIL_TP": 956
+      }
+    },
+    "candidate_C_a0.10": {
+      "clean": {
+        "count": 1819,
+        "PnL": -281.82,
+        "MDD": 281.82,
+        "WR": 1.3
+      },
+      "slip": {
+        "count": 1755,
+        "PnL": -558.66,
+        "MDD": 558.66,
+        "WR": 3.1
+      },
+      "reasons": {
+        "SL": 1563,
+        "TRAIL_TP": 192
+      }
+    },
+    "candidate_C_a0.20": {
+      "clean": {
+        "count": 1538,
+        "PnL": -201.58,
+        "MDD": 201.58,
+        "WR": 5.5
+      },
+      "slip": {
+        "count": 1471,
+        "PnL": -378.66,
+        "MDD": 378.66,
+        "WR": 8.4
+      },
+      "reasons": {
+        "SL": 1063,
+        "TRAIL_TP": 408
+      }
+    },
+    "candidate_C_a0.30": {
+      "clean": {
+        "count": 1343,
+        "PnL": -132.73,
+        "MDD": 132.73,
+        "WR": 11.0
+      },
+      "slip": {
+        "count": 1279,
+        "PnL": -232.79,
+        "MDD": 232.79,
+        "WR": 14.9
+      },
+      "reasons": {
+        "SL": 713,
+        "TRAIL_TP": 566
+      }
+    },
+    "candidate_C_a0.50": {
+      "clean": {
+        "count": 1172,
+        "PnL": -20.3,
+        "MDD": 31.88,
+        "WR": 19.2
+      },
+      "slip": {
+        "count": 1139,
+        "PnL": -77.8,
+        "MDD": 77.8,
+        "WR": 21.7
+      },
+      "reasons": {
+        "SL": 387,
+        "TRAIL_TP": 752
+      }
+    },
+    "candidate_C_a1.00": {
+      "clean": {
+        "count": 1023,
+        "PnL": 150.51,
+        "MDD": 5.87,
+        "WR": 32.6
+      },
+      "slip": {
+        "count": 1060,
+        "PnL": 43.04,
+        "MDD": 14.96,
+        "WR": 28.9
+      },
+      "reasons": {
+        "SL": 147,
+        "TRAIL_TP": 913
+      }
+    }
+  },
+  "regression_check": {
+    "ok": true
+  },
+  "top_validation": {
+    "combo": "candidate_C",
+    "activation": 0.0,
+    "clean": {
+      "count": 1012,
+      "PnL": 192.76,
+      "MDD": 5.2,
+      "WR": 37.0
+    },
+    "slip": {
+      "count": 1057,
+      "PnL": 63.06,
+      "MDD": 14.26,
+      "WR": 30.5
+    },
+    "wf_clean": [
+      5,
+      [
+        22.4,
+        15.95,
+        58.08,
+        32.63,
+        63.69
+      ]
+    ],
+    "wf_slip": [
+      4,
+      [
+        1.19,
+        -9.03,
+        33.56,
+        12.76,
+        24.59
+      ]
+    ],
+    "three_way_clean": {
+      "train": {
+        "PnL": 96.44,
+        "MDD": 4.11,
+        "count": 610
+      },
+      "val": {
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "count": 200
+      },
+      "test": {
+        "PnL": 64.57,
+        "MDD": 5.2,
+        "count": 202
+      }
+    },
+    "three_way_slip": {
+      "train": {
+        "PnL": 25.71,
+        "MDD": 14.26,
+        "count": 640
+      },
+      "val": {
+        "PnL": 11.08,
+        "MDD": 6.02,
+        "count": 206
+      },
+      "test": {
+        "PnL": 26.27,
+        "MDD": 9.55,
+        "count": 211
+      }
+    }
+  },
+  "base_ref": {
+    "clean": {
+      "count": 1012,
+      "PnL": 192.76,
+      "MDD": 5.2,
+      "WR": 37.0
+    },
+    "slip": {
+      "count": 1057,
+      "PnL": 63.06,
+      "MDD": 14.26,
+      "WR": 30.5
+    },
+    "three_way_slip": {
+      "train": {
+        "PnL": 25.71,
+        "MDD": 14.26,
+        "count": 640
+      },
+      "val": {
+        "PnL": 11.08,
+        "MDD": 6.02,
+        "count": 206
+      },
+      "test": {
+        "PnL": 26.27,
+        "MDD": 9.55,
+        "count": 211
+      }
+    }
+  },
+  "activation_stable_check": {
+    "better_count": 0,
+    "details": {
+      "0.2": {
+        "slip_pnl": -378.66,
+        "better": false
+      },
+      "0.3": {
+        "slip_pnl": -232.79,
+        "better": false
+      },
+      "0.5": {
+        "slip_pnl": -77.8,
+        "better": false
+      }
+    },
+    "passed": false
+  },
+  "go_flags": {
+    "wf_clean_pass": true,
+    "wf_slip_pass": false,
+    "tw_pass": true,
+    "train_not_degraded": true,
+    "pnl_improvement": false,
+    "ratio_ok": false,
+    "activation_stable": false,
+    "rollback_ready": true
+  },
+  "verdict": {
+    "outcome": "STOP",
+    "reason": "core flag wf_slip_pass failed",
+    "top_combo": "candidate_C",
+    "top_activation": 0.0
+  },
+  "elapsed_sec": 0.7
+}

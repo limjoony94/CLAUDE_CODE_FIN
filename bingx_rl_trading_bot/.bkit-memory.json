@@ -299,5 +299,21 @@
       "user_concern_resolved": "max(0, projected) clamp is intentional tail-risk protection, not bias",
       "production_changes": "none"
     }
+  },
+  "true_breakeven_sl_move": {
+    "phase": "completed",
+    "matchRate": 95,
+    "outcome": "STOP_HYPOTHESIS_REVERSED",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T19:00:00Z",
+    "completedAt": "2026-04-19T19:45:00Z",
+    "summary": {
+      "type": "negative-result-research",
+      "user_hypothesis": "SL\uc744 \uc190\uc775\ubd84\uae30\ub85c \uc774\ub3d9 (trail \uc720\uc9c0)",
+      "result": "REVERSED \u2014 ACTIVATION=0\uc774 \ucd5c\uc801. \uc804 ACTIVATION>0 \ubaa8\ub450 \uc545\ud654",
+      "key_finding": "C1 pullback \ud3ed(0.3~0.5%) > BE SL margin(0.05%) \u2192 whipsaw 89% SL exit",
+      "production_changes": "none",
+      "conclusion": "Trail/SL \uba54\ucee4\ub2c8\uc998 \uc7ac\uc124\uacc4 DEAD END. C1 \uc6d0\ubcf8(max(0,projected)+fractal)\uc740 \uc218\ud559\uc801 \ucd5c\uc801 \uadfc\uc811"
+    }
   }
 }

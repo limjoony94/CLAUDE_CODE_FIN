@@ -257,5 +257,22 @@
         "Multi-metric ML regime classifier (1~2\uac1c\uc6d4 \ubcc4\uac1c)"
       ]
     }
+  },
+  "breakeven_trail": {
+    "phase": "completed",
+    "matchRate": 97,
+    "outcome": "STOP_HYPOTHESIS_REVERSED",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T17:00:00Z",
+    "completedAt": "2026-04-19T17:30:00Z",
+    "summary": {
+      "type": "negative-result-research",
+      "user_hypothesis": "BUFFER guard prevents net-loss trail exits \u2192 improve PnL",
+      "result": "REVERSED \u2014 all 7 hypotheses rejected, BUFFER>0 causes MDD 5.6x increase",
+      "key_math": "max(0, projected) already acts as implicit breakeven cap; BUFFER removes tail-risk protection",
+      "quantitative": "Trail loss saved +115pp vs SL loss added +149pp = net -34pp",
+      "production_changes": "none",
+      "key_insight": "Original trail design has hidden breakeven-cap role; removing it exposes to fractal SL tail risk"
+    }
   }
 }

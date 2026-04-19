@@ -1,0 +1,499 @@
+{
+  "timestamp": "2026-04-19T08:05:21.348239+00:00",
+  "combos": {
+    "baseline": {
+      "max_sl_atr": 3.3,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "candidate_C": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    }
+  },
+  "buffer_values": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4
+  ],
+  "slippage": {
+    "entry_pct": 0.05,
+    "exit_sl_pct": 0.15,
+    "exit_trail_pct": 0.05,
+    "exit_emergency_pct": 0.3,
+    "exit_timeout_pct": 0.05
+  },
+  "data": {
+    "bars_15m": 31946,
+    "bars_5m": 95838
+  },
+  "runs": {
+    "baseline_b0.00": {
+      "clean": {
+        "count": 1028,
+        "PnL": 169.55,
+        "MDD": 5.38,
+        "WR": 36.6
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 46.09,
+        "MDD": 18.78,
+        "WR": 30.2
+      }
+    },
+    "baseline_b0.10": {
+      "clean": {
+        "count": 738,
+        "PnL": 26.1,
+        "MDD": 25.35,
+        "WR": 55.7
+      },
+      "slip": {
+        "count": 743,
+        "PnL": -102.64,
+        "MDD": 105.88,
+        "WR": 42.8
+      }
+    },
+    "baseline_b0.20": {
+      "clean": {
+        "count": 697,
+        "PnL": 26.68,
+        "MDD": 29.08,
+        "WR": 52.7
+      },
+      "slip": {
+        "count": 703,
+        "PnL": -103.56,
+        "MDD": 106.47,
+        "WR": 53.1
+      }
+    },
+    "baseline_b0.30": {
+      "clean": {
+        "count": 676,
+        "PnL": -2.8,
+        "MDD": 27.76,
+        "WR": 48.2
+      },
+      "slip": {
+        "count": 682,
+        "PnL": -127.26,
+        "MDD": 130.17,
+        "WR": 48.5
+      }
+    },
+    "baseline_b0.40": {
+      "clean": {
+        "count": 644,
+        "PnL": 11.81,
+        "MDD": 21.28,
+        "WR": 47.7
+      },
+      "slip": {
+        "count": 649,
+        "PnL": -115.15,
+        "MDD": 118.06,
+        "WR": 47.1
+      }
+    },
+    "candidate_C_b0.00": {
+      "clean": {
+        "count": 1012,
+        "PnL": 192.76,
+        "MDD": 5.2,
+        "WR": 37.0
+      },
+      "slip": {
+        "count": 1057,
+        "PnL": 63.06,
+        "MDD": 14.26,
+        "WR": 30.5
+      }
+    },
+    "candidate_C_b0.10": {
+      "clean": {
+        "count": 693,
+        "PnL": 7.55,
+        "MDD": 27.03,
+        "WR": 58.3
+      },
+      "slip": {
+        "count": 700,
+        "PnL": -104.6,
+        "MDD": 108.82,
+        "WR": 44.7
+      }
+    },
+    "candidate_C_b0.20": {
+      "clean": {
+        "count": 663,
+        "PnL": -3.76,
+        "MDD": 35.17,
+        "WR": 54.9
+      },
+      "slip": {
+        "count": 664,
+        "PnL": -111.7,
+        "MDD": 115.86,
+        "WR": 55.4
+      }
+    },
+    "candidate_C_b0.30": {
+      "clean": {
+        "count": 635,
+        "PnL": -35.28,
+        "MDD": 44.14,
+        "WR": 50.2
+      },
+      "slip": {
+        "count": 635,
+        "PnL": -135.97,
+        "MDD": 139.3,
+        "WR": 50.6
+      }
+    },
+    "candidate_C_b0.40": {
+      "clean": {
+        "count": 594,
+        "PnL": -1.49,
+        "MDD": 27.42,
+        "WR": 50.3
+      },
+      "slip": {
+        "count": 594,
+        "PnL": -98.77,
+        "MDD": 107.74,
+        "WR": 50.5
+      }
+    }
+  },
+  "trail_breakdown": {
+    "baseline_b0.00": {
+      "trail_total": 954,
+      "trail_loss_count": 630,
+      "trail_profit_count": 324,
+      "trail_loss_sum": -115.04,
+      "trail_profit_sum": 289.09,
+      "non_trail_count": 120,
+      "non_trail_pnl": -127.96,
+      "non_trail_reasons": {
+        "SL": 119,
+        "EMERGENCY": 1,
+        "TIMEOUT": 0
+      }
+    },
+    "baseline_b0.10": {
+      "trail_total": 419,
+      "trail_loss_count": 102,
+      "trail_profit_count": 317,
+      "trail_loss_sum": -6.67,
+      "trail_profit_sum": 294.53,
+      "non_trail_count": 324,
+      "non_trail_pnl": -390.5,
+      "non_trail_reasons": {
+        "SL": 320,
+        "EMERGENCY": 2,
+        "TIMEOUT": 2
+      }
+    },
+    "baseline_b0.20": {
+      "trail_total": 372,
+      "trail_loss_count": 0,
+      "trail_profit_count": 372,
+      "trail_loss_sum": 0,
+      "trail_profit_sum": 299.59,
+      "non_trail_count": 331,
+      "non_trail_pnl": -403.15,
+      "non_trail_reasons": {
+        "SL": 327,
+        "EMERGENCY": 2,
+        "TIMEOUT": 2
+      }
+    },
+    "baseline_b0.30": {
+      "trail_total": 329,
+      "trail_loss_count": 0,
+      "trail_profit_count": 329,
+      "trail_loss_sum": 0,
+      "trail_profit_sum": 299.72,
+      "non_trail_count": 353,
+      "non_trail_pnl": -426.98,
+      "non_trail_reasons": {
+        "SL": 347,
+        "EMERGENCY": 2,
+        "TIMEOUT": 4
+      }
+    },
+    "baseline_b0.40": {
+      "trail_total": 304,
+      "trail_loss_count": 0,
+      "trail_profit_count": 304,
+      "trail_loss_sum": 0,
+      "trail_profit_sum": 305.84,
+      "non_trail_count": 345,
+      "non_trail_pnl": -420.99,
+      "non_trail_reasons": {
+        "SL": 338,
+        "EMERGENCY": 2,
+        "TIMEOUT": 5
+      }
+    },
+    "candidate_C_b0.00": {
+      "trail_total": 956,
+      "trail_loss_count": 634,
+      "trail_profit_count": 322,
+      "trail_loss_sum": -116.05,
+      "trail_profit_sum": 288.9,
+      "non_trail_count": 101,
+      "non_trail_pnl": -109.8,
+      "non_trail_reasons": {
+        "SL": 101,
+        "EMERGENCY": 0,
+        "TIMEOUT": 0
+      }
+    },
+    "candidate_C_b0.10": {
+      "trail_total": 414,
+      "trail_loss_count": 101,
+      "trail_profit_count": 313,
+      "trail_loss_sum": -7.13,
+      "trail_profit_sum": 281.86,
+      "non_trail_count": 286,
+      "non_trail_pnl": -379.33,
+      "non_trail_reasons": {
+        "SL": 280,
+        "EMERGENCY": 2,
+        "TIMEOUT": 4
+      }
+    },
+    "candidate_C_b0.20": {
+      "trail_total": 368,
+      "trail_loss_count": 0,
+      "trail_profit_count": 368,
+      "trail_loss_sum": 0,
+      "trail_profit_sum": 283.92,
+      "non_trail_count": 296,
+      "non_trail_pnl": -395.62,
+      "non_trail_reasons": {
+        "SL": 290,
+        "EMERGENCY": 2,
+        "TIMEOUT": 4
+      }
+    },
+    "candidate_C_b0.30": {
+      "trail_total": 320,
+      "trail_loss_count": 0,
+      "trail_profit_count": 320,
+      "trail_loss_sum": 0,
+      "trail_profit_sum": 284.43,
+      "non_trail_count": 315,
+      "non_trail_pnl": -420.39,
+      "non_trail_reasons": {
+        "SL": 307,
+        "EMERGENCY": 2,
+        "TIMEOUT": 6
+      }
+    },
+    "candidate_C_b0.40": {
+      "trail_total": 299,
+      "trail_loss_count": 0,
+      "trail_profit_count": 299,
+      "trail_loss_sum": 0,
+      "trail_profit_sum": 296.21,
+      "non_trail_count": 295,
+      "non_trail_pnl": -394.98,
+      "non_trail_reasons": {
+        "SL": 285,
+        "EMERGENCY": 2,
+        "TIMEOUT": 8
+      }
+    }
+  },
+  "regression_check": {
+    "ok": true,
+    "baseline_b0_clean": 169.55,
+    "baseline_b0_slip": 46.09
+  },
+  "top_validation": {
+    "combo": "candidate_C",
+    "buffer": 0.0,
+    "clean": {
+      "count": 1012,
+      "PnL": 192.76,
+      "MDD": 5.2,
+      "WR": 37.0
+    },
+    "slip": {
+      "count": 1057,
+      "PnL": 63.06,
+      "MDD": 14.26,
+      "WR": 30.5
+    },
+    "wf_clean": [
+      5,
+      [
+        22.4,
+        15.95,
+        58.08,
+        32.63,
+        63.69
+      ]
+    ],
+    "wf_slip": [
+      4,
+      [
+        1.19,
+        -9.03,
+        33.56,
+        12.76,
+        24.59
+      ]
+    ],
+    "three_way_clean": {
+      "train": {
+        "PnL": 96.44,
+        "MDD": 4.11,
+        "count": 610
+      },
+      "val": {
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "count": 200
+      },
+      "test": {
+        "PnL": 64.57,
+        "MDD": 5.2,
+        "count": 202
+      }
+    },
+    "three_way_slip": {
+      "train": {
+        "PnL": 25.71,
+        "MDD": 14.26,
+        "count": 640
+      },
+      "val": {
+        "PnL": 11.08,
+        "MDD": 6.02,
+        "count": 206
+      },
+      "test": {
+        "PnL": 26.27,
+        "MDD": 9.55,
+        "count": 211
+      }
+    }
+  },
+  "base_reference_same_combo_b0": {
+    "clean": {
+      "count": 1012,
+      "PnL": 192.76,
+      "MDD": 5.2,
+      "WR": 37.0
+    },
+    "slip": {
+      "count": 1057,
+      "PnL": 63.06,
+      "MDD": 14.26,
+      "WR": 30.5
+    },
+    "three_way_clean": {
+      "train": {
+        "PnL": 96.44,
+        "MDD": 4.11,
+        "count": 610
+      },
+      "val": {
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "count": 200
+      },
+      "test": {
+        "PnL": 64.57,
+        "MDD": 5.2,
+        "count": 202
+      }
+    },
+    "three_way_slip": {
+      "train": {
+        "PnL": 25.71,
+        "MDD": 14.26,
+        "count": 640
+      },
+      "val": {
+        "PnL": 11.08,
+        "MDD": 6.02,
+        "count": 206
+      },
+      "test": {
+        "PnL": 26.27,
+        "MDD": 9.55,
+        "count": 211
+      }
+    },
+    "wf_clean": [
+      5,
+      [
+        22.4,
+        15.95,
+        58.08,
+        32.63,
+        63.69
+      ]
+    ],
+    "wf_slip": [
+      4,
+      [
+        1.19,
+        -9.03,
+        33.56,
+        12.76,
+        24.59
+      ]
+    ]
+  },
+  "buffer_stable_check": {
+    "better_count": 0,
+    "details": {
+      "0.1": {
+        "slip_pnl": -104.6,
+        "better": false
+      },
+      "0.2": {
+        "slip_pnl": -111.7,
+        "better": false
+      },
+      "0.3": {
+        "slip_pnl": -135.97,
+        "better": false
+      },
+      "0.4": {
+        "slip_pnl": -98.77,
+        "better": false
+      }
+    },
+    "passed": false
+  },
+  "go_flags": {
+    "wf_clean_pass": true,
+    "wf_slip_pass": false,
+    "tw_pass": true,
+    "train_not_degraded": true,
+    "pnl_improvement": false,
+    "ratio_ok": true,
+    "buffer_stable": false,
+    "rollback_ready": true
+  },
+  "verdict": {
+    "outcome": "STOP",
+    "reason": "core flag wf_slip_pass failed",
+    "top_combo": "candidate_C",
+    "top_buffer": 0.0
+  },
+  "elapsed_sec": 0.7
+}

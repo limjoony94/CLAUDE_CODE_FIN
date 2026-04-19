@@ -1,0 +1,337 @@
+{
+  "timestamp": "2026-04-19T06:16:10.058849+00:00",
+  "combos": {
+    "baseline": {
+      "max_sl_atr": 3.3,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "candidate_C": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    }
+  },
+  "slippage_scenarios": {
+    "low": {
+      "entry_pct": 0.025,
+      "exit_sl_pct": 0.075,
+      "exit_trail_pct": 0.025,
+      "exit_emergency_pct": 0.15,
+      "exit_timeout_pct": 0.025
+    },
+    "med": {
+      "entry_pct": 0.05,
+      "exit_sl_pct": 0.15,
+      "exit_trail_pct": 0.05,
+      "exit_emergency_pct": 0.3,
+      "exit_timeout_pct": 0.05
+    },
+    "high": {
+      "entry_pct": 0.1,
+      "exit_sl_pct": 0.3,
+      "exit_trail_pct": 0.1,
+      "exit_emergency_pct": 0.6,
+      "exit_timeout_pct": 0.1
+    }
+  },
+  "data": {
+    "bars_15m": 31946,
+    "bars_5m": 95838
+  },
+  "baseline_clean": {
+    "count": 1028,
+    "PnL": 169.55,
+    "MDD": 5.38,
+    "WR": 36.6
+  },
+  "baseline_slip_low": {
+    "count": 1074,
+    "PnL": 105.84,
+    "MDD": 7.1,
+    "WR": 32.7
+  },
+  "baseline_slip_med": {
+    "count": 1074,
+    "PnL": 46.09,
+    "MDD": 18.78,
+    "WR": 30.2
+  },
+  "baseline_slip_high": {
+    "count": 1074,
+    "PnL": -73.39,
+    "MDD": 74.67,
+    "WR": 26.4
+  },
+  "candidate_C_clean": {
+    "count": 1012,
+    "PnL": 192.76,
+    "MDD": 5.2,
+    "WR": 37.0
+  },
+  "candidate_C_slip_low": {
+    "count": 1057,
+    "PnL": 120.95,
+    "MDD": 8.1,
+    "WR": 32.9
+  },
+  "candidate_C_slip_med": {
+    "count": 1057,
+    "PnL": 63.06,
+    "MDD": 14.26,
+    "WR": 30.5
+  },
+  "candidate_C_slip_high": {
+    "count": 1057,
+    "PnL": -52.73,
+    "MDD": 64.41,
+    "WR": 26.8
+  },
+  "baseline_validation": {
+    "three_way_clean": {
+      "train": {
+        "PnL": 94.03,
+        "MDD": 4.27,
+        "count": 617
+      },
+      "val": {
+        "PnL": 21.21,
+        "MDD": 5.38,
+        "count": 204
+      },
+      "test": {
+        "PnL": 54.3,
+        "MDD": 4.1,
+        "count": 207
+      },
+      "boundary_train": 19178,
+      "boundary_val": 25562
+    },
+    "three_way_slip": {
+      "train": {
+        "PnL": 21.17,
+        "MDD": 18.78,
+        "count": 646
+      },
+      "val": {
+        "PnL": 4.01,
+        "MDD": 7.12,
+        "count": 210
+      },
+      "test": {
+        "PnL": 20.91,
+        "MDD": 8.65,
+        "count": 218
+      },
+      "boundary_train": 19178,
+      "boundary_val": 25562
+    },
+    "slip_low": {
+      "count": 1074,
+      "PnL": 105.84,
+      "MDD": 7.1,
+      "WR": 32.7
+    },
+    "slip_med": {
+      "count": 1074,
+      "PnL": 46.09,
+      "MDD": 18.78,
+      "WR": 30.2
+    },
+    "slip_high": {
+      "count": 1074,
+      "PnL": -73.39,
+      "MDD": 74.67,
+      "WR": 26.4
+    }
+  },
+  "candidate_C_validation": {
+    "wf_clean": [
+      5,
+      [
+        22.4,
+        15.95,
+        58.08,
+        32.63,
+        63.69
+      ]
+    ],
+    "wf_slip_med": [
+      4,
+      [
+        1.19,
+        -9.03,
+        33.56,
+        12.76,
+        24.59
+      ]
+    ],
+    "three_way_clean": {
+      "train": {
+        "PnL": 96.44,
+        "MDD": 4.11,
+        "count": 610
+      },
+      "val": {
+        "PnL": 31.74,
+        "MDD": 2.96,
+        "count": 200
+      },
+      "test": {
+        "PnL": 64.57,
+        "MDD": 5.2,
+        "count": 202
+      },
+      "boundary_train": 19178,
+      "boundary_val": 25562
+    },
+    "three_way_slip": {
+      "train": {
+        "PnL": 25.71,
+        "MDD": 14.26,
+        "count": 640
+      },
+      "val": {
+        "PnL": 11.08,
+        "MDD": 6.02,
+        "count": 206
+      },
+      "test": {
+        "PnL": 26.27,
+        "MDD": 9.55,
+        "count": 211
+      },
+      "boundary_train": 19178,
+      "boundary_val": 25562
+    },
+    "mc_p": 0.013,
+    "bootstrap": {
+      "obs_pnl": 63.057,
+      "pnl_ci_lo": 11.497,
+      "pnl_ci_hi": 117.665
+    },
+    "slip_low": {
+      "count": 1057,
+      "PnL": 120.95,
+      "MDD": 8.1,
+      "WR": 32.9
+    },
+    "slip_med": {
+      "count": 1057,
+      "PnL": 63.06,
+      "MDD": 14.26,
+      "WR": 30.5
+    },
+    "slip_high": {
+      "count": 1057,
+      "PnL": -52.73,
+      "MDD": 64.41,
+      "WR": 26.8
+    },
+    "neighborhood": {
+      "neighbors": [
+        {
+          "combo": {
+            "max_sl_atr": 3.6,
+            "trail_K": 2.5,
+            "max_hold_bars": 192
+          },
+          "PnL": 57.91,
+          "MDD": 14.74,
+          "count": 1061,
+          "positive": true
+        },
+        {
+          "combo": {
+            "max_sl_atr": 4.5,
+            "trail_K": 2.5,
+            "max_hold_bars": 192
+          },
+          "PnL": 65.59,
+          "MDD": 12.27,
+          "count": 1046,
+          "positive": true
+        },
+        {
+          "combo": {
+            "max_sl_atr": 4.0,
+            "trail_K": 2.2,
+            "max_hold_bars": 192
+          },
+          "PnL": 36.43,
+          "MDD": 27.61,
+          "count": 1166,
+          "positive": true
+        },
+        {
+          "combo": {
+            "max_sl_atr": 4.0,
+            "trail_K": 2.8,
+            "max_hold_bars": 192
+          },
+          "PnL": 60.3,
+          "MDD": 16.97,
+          "count": 969,
+          "positive": true
+        },
+        {
+          "combo": {
+            "max_sl_atr": 4.0,
+            "trail_K": 2.5,
+            "max_hold_bars": 144
+          },
+          "PnL": 63.06,
+          "MDD": 14.26,
+          "count": 1057,
+          "positive": true
+        },
+        {
+          "combo": {
+            "max_sl_atr": 4.0,
+            "trail_K": 2.5,
+            "max_hold_bars": 288
+          },
+          "PnL": 63.06,
+          "MDD": 14.26,
+          "count": 1057,
+          "positive": true
+        }
+      ],
+      "positive_count": 6,
+      "total": 6
+    }
+  },
+  "go_flags": {
+    "wf_clean_pass": true,
+    "wf_slip_pass": false,
+    "tw_pass": true,
+    "test_not_worse": true,
+    "nbr_pass": true,
+    "mc_pass": false,
+    "ci_pass": true,
+    "train_not_degraded": true,
+    "slip_sensitivity": true,
+    "_slip_details": {
+      "low": {
+        "baseline_ratio": 14.91,
+        "candidate_ratio": 14.93,
+        "winner": "candidate"
+      },
+      "med": {
+        "baseline_ratio": 2.45,
+        "candidate_ratio": 4.42,
+        "winner": "candidate"
+      },
+      "high": {
+        "baseline_ratio": -0.98,
+        "candidate_ratio": -0.82,
+        "winner": "candidate"
+      }
+    }
+  },
+  "verdict": {
+    "outcome": "STOP",
+    "reason": "core flag wf_slip_pass failed"
+  },
+  "elapsed_sec": 0.6
+}

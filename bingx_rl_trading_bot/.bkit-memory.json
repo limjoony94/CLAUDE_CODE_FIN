@@ -330,5 +330,22 @@
       "reason": "Emergency rare (<2% events), fractal SL\uc774 tail \ucc98\ub9ac \uc774\ubbf8 \ucd5c\uc801",
       "dead_end_confirmed": "3rd exit mechanism redesign rejection"
     }
+  },
+  "body_filter_tuning": {
+    "phase": "completed",
+    "matchRate": 95,
+    "outcome": "STOP_8of9_NEAR_GO",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T20:00:00Z",
+    "completedAt": "2026-04-19T20:30:00Z",
+    "summary": {
+      "type": "research-with-high-value-insight",
+      "breakthrough": "Entry selectivity\ucd95\uc5d0\uc11c Exit 3\ucd95 \ubaa8\ub4e0 \uc2e4\ud328 \uadf9\ubcf5",
+      "top_candidate": "candidate_C_b0.60 (max_sl_atr=4.0, trail_K=2.5, max_hold_bars=192, body_min_ratio=0.60)",
+      "slip_improvement": "+69.13 vs baseline +46.09 = +23pp",
+      "ratio_improvement": "6.84 vs baseline 2.45 = +179%",
+      "flags_passed": "8/9 (\uc720\uc77c \uc2e4\ud328 wf_slip_pass, fold 2 -5.62)",
+      "conditional_go_trigger": "30\uc77c LIVE 4-\uc870\uac74 \ubaa8\ub450 \ucda9\uc871 \uc2dc production \ud6c4\ubcf4"
+    }
   }
 }

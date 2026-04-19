@@ -1,0 +1,248 @@
+{
+  "timestamp": "2026-04-19T08:52:29.690305+00:00",
+  "combos": {
+    "baseline": {
+      "max_sl_atr": 3.3,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "candidate_C": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    }
+  },
+  "body_values": [
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.6
+  ],
+  "runs": {
+    "baseline_b0.25": {
+      "clean": {
+        "count": 1049,
+        "PnL": 172.7,
+        "MDD": 6.3,
+        "WR": 36.2
+      },
+      "slip": {
+        "count": 1095,
+        "PnL": 50.63,
+        "MDD": 19.63,
+        "WR": 30.1
+      },
+      "ratio": 2.58
+    },
+    "baseline_b0.30": {
+      "clean": {
+        "count": 1045,
+        "PnL": 172.35,
+        "MDD": 6.3,
+        "WR": 36.4
+      },
+      "slip": {
+        "count": 1092,
+        "PnL": 50.35,
+        "MDD": 18.93,
+        "WR": 30.0
+      },
+      "ratio": 2.66
+    },
+    "baseline_b0.35": {
+      "clean": {
+        "count": 1040,
+        "PnL": 169.07,
+        "MDD": 5.38,
+        "WR": 36.2
+      },
+      "slip": {
+        "count": 1088,
+        "PnL": 47.52,
+        "MDD": 19.92,
+        "WR": 30.0
+      },
+      "ratio": 2.39
+    },
+    "baseline_b0.40": {
+      "clean": {
+        "count": 1028,
+        "PnL": 169.55,
+        "MDD": 5.38,
+        "WR": 36.6
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 46.09,
+        "MDD": 18.78,
+        "WR": 30.2
+      },
+      "ratio": 2.45
+    },
+    "baseline_b0.45": {
+      "clean": {
+        "count": 1011,
+        "PnL": 167.37,
+        "MDD": 5.38,
+        "WR": 36.9
+      },
+      "slip": {
+        "count": 1054,
+        "PnL": 46.75,
+        "MDD": 18.19,
+        "WR": 30.5
+      },
+      "ratio": 2.57
+    },
+    "baseline_b0.50": {
+      "clean": {
+        "count": 990,
+        "PnL": 162.3,
+        "MDD": 5.38,
+        "WR": 36.9
+      },
+      "slip": {
+        "count": 1032,
+        "PnL": 43.34,
+        "MDD": 16.26,
+        "WR": 30.3
+      },
+      "ratio": 2.67
+    },
+    "baseline_b0.60": {
+      "clean": {
+        "count": 920,
+        "PnL": 170.27,
+        "MDD": 5.98,
+        "WR": 37.8
+      },
+      "slip": {
+        "count": 952,
+        "PnL": 48.67,
+        "MDD": 11.66,
+        "WR": 30.8
+      },
+      "ratio": 4.17
+    },
+    "candidate_C_b0.25": {
+      "clean": {
+        "count": 1031,
+        "PnL": 200.14,
+        "MDD": 6.79,
+        "WR": 36.8
+      },
+      "slip": {
+        "count": 1076,
+        "PnL": 71.89,
+        "MDD": 14.31,
+        "WR": 30.6
+      },
+      "ratio": 5.02
+    },
+    "candidate_C_b0.30": {
+      "clean": {
+        "count": 1028,
+        "PnL": 199.44,
+        "MDD": 6.79,
+        "WR": 36.9
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 71.16,
+        "MDD": 13.87,
+        "WR": 30.4
+      },
+      "ratio": 5.13
+    },
+    "candidate_C_b0.35": {
+      "clean": {
+        "count": 1023,
+        "PnL": 196.72,
+        "MDD": 4.8,
+        "WR": 36.8
+      },
+      "slip": {
+        "count": 1070,
+        "PnL": 68.2,
+        "MDD": 15.0,
+        "WR": 30.4
+      },
+      "ratio": 4.55
+    },
+    "candidate_C_b0.40": {
+      "clean": {
+        "count": 1012,
+        "PnL": 192.76,
+        "MDD": 5.2,
+        "WR": 37.0
+      },
+      "slip": {
+        "count": 1057,
+        "PnL": 63.06,
+        "MDD": 14.26,
+        "WR": 30.5
+      },
+      "ratio": 4.42
+    },
+    "candidate_C_b0.45": {
+      "clean": {
+        "count": 996,
+        "PnL": 191.75,
+        "MDD": 5.22,
+        "WR": 37.3
+      },
+      "slip": {
+        "count": 1038,
+        "PnL": 64.24,
+        "MDD": 14.14,
+        "WR": 30.8
+      },
+      "ratio": 4.54
+    },
+    "candidate_C_b0.50": {
+      "clean": {
+        "count": 974,
+        "PnL": 186.58,
+        "MDD": 5.22,
+        "WR": 37.4
+      },
+      "slip": {
+        "count": 1015,
+        "PnL": 60.49,
+        "MDD": 13.64,
+        "WR": 30.7
+      },
+      "ratio": 4.43
+    },
+    "candidate_C_b0.60": {
+      "clean": {
+        "count": 904,
+        "PnL": 191.07,
+        "MDD": 6.35,
+        "WR": 38.5
+      },
+      "slip": {
+        "count": 937,
+        "PnL": 69.13,
+        "MDD": 10.1,
+        "WR": 31.1
+      },
+      "ratio": 6.84
+    }
+  },
+  "go_flags": {
+    "pnl_improvement": true,
+    "trade_count_ok": true,
+    "ratio_ok": true,
+    "rollback_ready": true
+  },
+  "top_candidate": "candidate_C_b0.25",
+  "verdict": {
+    "outcome": "GO",
+    "flags_passed": 4
+  },
+  "elapsed_sec": 0.6
+}

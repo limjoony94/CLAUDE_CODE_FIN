@@ -1,0 +1,238 @@
+{
+  "timestamp": "2026-04-19T08:47:13.592454+00:00",
+  "combos": {
+    "baseline": {
+      "max_sl_atr": 3.3,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "candidate_C": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    }
+  },
+  "esl_values": [
+    1.5,
+    2.0,
+    2.5,
+    3.0
+  ],
+  "runs": {
+    "baseline_esl1.5": {
+      "clean": {
+        "count": 1030,
+        "PnL": 160.88,
+        "MDD": 6.45,
+        "WR": 36.5
+      },
+      "slip": {
+        "count": 1077,
+        "PnL": 34.33,
+        "MDD": 18.78,
+        "WR": 30.1
+      },
+      "reasons_slip": {
+        "SL": 112,
+        "TRAIL_TP": 949,
+        "EMERGENCY": 16
+      },
+      "reasons_clean": {
+        "SL": 144,
+        "TRAIL_TP": 873,
+        "EMERGENCY": 13
+      }
+    },
+    "baseline_esl2.0": {
+      "clean": {
+        "count": 1028,
+        "PnL": 170.91,
+        "MDD": 4.48,
+        "WR": 36.6
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 47.36,
+        "MDD": 18.78,
+        "WR": 30.2
+      },
+      "reasons_slip": {
+        "SL": 116,
+        "TRAIL_TP": 954,
+        "EMERGENCY": 4
+      },
+      "reasons_clean": {
+        "SL": 147,
+        "TRAIL_TP": 879,
+        "EMERGENCY": 2
+      }
+    },
+    "baseline_esl2.5": {
+      "clean": {
+        "count": 1028,
+        "PnL": 169.95,
+        "MDD": 4.98,
+        "WR": 36.6
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 46.4,
+        "MDD": 18.78,
+        "WR": 30.2
+      },
+      "reasons_slip": {
+        "SL": 118,
+        "TRAIL_TP": 954,
+        "EMERGENCY": 2
+      },
+      "reasons_clean": {
+        "SL": 148,
+        "TRAIL_TP": 879,
+        "EMERGENCY": 1
+      }
+    },
+    "baseline_esl3.0": {
+      "clean": {
+        "count": 1028,
+        "PnL": 169.55,
+        "MDD": 5.38,
+        "WR": 36.6
+      },
+      "slip": {
+        "count": 1074,
+        "PnL": 46.09,
+        "MDD": 18.78,
+        "WR": 30.2
+      },
+      "reasons_slip": {
+        "SL": 119,
+        "TRAIL_TP": 954,
+        "EMERGENCY": 1
+      },
+      "reasons_clean": {
+        "SL": 149,
+        "TRAIL_TP": 879
+      }
+    },
+    "candidate_C_esl1.5": {
+      "clean": {
+        "count": 1017,
+        "PnL": 170.61,
+        "MDD": 5.36,
+        "WR": 36.7
+      },
+      "slip": {
+        "count": 1065,
+        "PnL": 42.62,
+        "MDD": 14.26,
+        "WR": 30.1
+      },
+      "reasons_slip": {
+        "SL": 89,
+        "TRAIL_TP": 954,
+        "EMERGENCY": 22
+      },
+      "reasons_clean": {
+        "SL": 121,
+        "TRAIL_TP": 881,
+        "EMERGENCY": 15
+      }
+    },
+    "candidate_C_esl2.0": {
+      "clean": {
+        "count": 1015,
+        "PnL": 179.67,
+        "MDD": 5.2,
+        "WR": 36.7
+      },
+      "slip": {
+        "count": 1060,
+        "PnL": 54.68,
+        "MDD": 14.26,
+        "WR": 30.3
+      },
+      "reasons_slip": {
+        "SL": 98,
+        "TRAIL_TP": 956,
+        "EMERGENCY": 6
+      },
+      "reasons_clean": {
+        "SL": 122,
+        "TRAIL_TP": 887,
+        "EMERGENCY": 6
+      }
+    },
+    "candidate_C_esl2.5": {
+      "clean": {
+        "count": 1013,
+        "PnL": 188.83,
+        "MDD": 5.2,
+        "WR": 36.8
+      },
+      "slip": {
+        "count": 1058,
+        "PnL": 58.51,
+        "MDD": 14.26,
+        "WR": 30.3
+      },
+      "reasons_slip": {
+        "SL": 100,
+        "TRAIL_TP": 956,
+        "EMERGENCY": 2
+      },
+      "reasons_clean": {
+        "SL": 122,
+        "TRAIL_TP": 890,
+        "EMERGENCY": 1
+      }
+    },
+    "candidate_C_esl3.0": {
+      "clean": {
+        "count": 1012,
+        "PnL": 192.76,
+        "MDD": 5.2,
+        "WR": 37.0
+      },
+      "slip": {
+        "count": 1057,
+        "PnL": 63.06,
+        "MDD": 14.26,
+        "WR": 30.5
+      },
+      "reasons_slip": {
+        "SL": 101,
+        "TRAIL_TP": 956
+      },
+      "reasons_clean": {
+        "SL": 122,
+        "TRAIL_TP": 890
+      }
+    }
+  },
+  "regression": {
+    "ok": true
+  },
+  "improvements_vs_base": [
+    {
+      "key": "baseline_esl1.5",
+      "pnl_delta": -11.76,
+      "mdd_pct_change": 0.0
+    },
+    {
+      "key": "baseline_esl2.0",
+      "pnl_delta": 1.27,
+      "mdd_pct_change": 0.0
+    },
+    {
+      "key": "baseline_esl2.5",
+      "pnl_delta": 0.31,
+      "mdd_pct_change": 0.0
+    },
+    {
+      "key": "baseline_esl3.0",
+      "pnl_delta": 0.0,
+      "mdd_pct_change": 0.0
+    }
+  ],
+  "elapsed_sec": 0.4
+}

@@ -315,5 +315,20 @@
       "production_changes": "none",
       "conclusion": "Trail/SL \uba54\ucee4\ub2c8\uc998 \uc7ac\uc124\uacc4 DEAD END. C1 \uc6d0\ubcf8(max(0,projected)+fractal)\uc740 \uc218\ud559\uc801 \ucd5c\uc801 \uadfc\uc811"
     }
+  },
+  "emergency_sl_reduction": {
+    "phase": "completed",
+    "matchRate": 100,
+    "outcome": "STOP_NO_IMPROVEMENT",
+    "startedAt": "2026-04-19T19:45:00Z",
+    "completedAt": "2026-04-19T20:00:00Z",
+    "iterationCount": 0,
+    "summary": {
+      "type": "negative-result-research",
+      "sweep": "ESL 1.5/2.0/2.5/3.0 \u00d7 2 combos \u00d7 2 modes",
+      "result": "MDD unchanged, PnL margin or worse (esl=1.5 -11.76pp)",
+      "reason": "Emergency rare (<2% events), fractal SL\uc774 tail \ucc98\ub9ac \uc774\ubbf8 \ucd5c\uc801",
+      "dead_end_confirmed": "3rd exit mechanism redesign rejection"
+    }
   }
 }

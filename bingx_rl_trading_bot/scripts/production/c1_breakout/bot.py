@@ -812,6 +812,24 @@ class C1BreakoutBot:
         min_bars = cfg.get('min_bars_between', 2)
         if (len(self.positions) < self.max_positions
                 and self.bars_since_last_exit >= min_bars):
+            # Regime filter (trend) — skip entry in low-trend (choppy) regimes.
+            # Disabled by default; enable after 30-day LIVE validation.
+            tf_cfg = cfg.get('trend_filter', {}) or {}
+            if tf_cfg.get('enabled', False):
+                lb = tf_cfg.get('lookback_bars', 192)
+                min_trend = tf_cfg.get('min_abs_trend_pct', 1.0)
+                if bar >= lb:
+                    c_past = candles['close'][bar - lb]
+                    c_now = candles['close'][bar]
+                    if c_past > 0:
+                        trend_pct = abs((c_now / c_past - 1) * 100)
+                        if trend_pct < min_trend:
+                            logger.info(
+                                f"Trend filter skip: |trend|={trend_pct:.2f}% "
+                                f"< {min_trend}% (lb={lb})")
+                            self._save_state()
+                            return
+
             sig = self.signal.check_entry(
                 candles['open'][bar], candles['high'][bar], candles['low'][bar],
                 candles['close'][bar], ch_h[bar], ch_l[bar], cur_atr, sw_l[bar], sw_h[bar])

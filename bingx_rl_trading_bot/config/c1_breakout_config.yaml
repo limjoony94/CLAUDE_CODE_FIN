@@ -17,6 +17,13 @@ strategy:
   max_positions: 1       # BTC 단일종목 = 1포지션
   backstop_tp_atr: 0      # Disabled — trail has no cap, SL only on exchange
 
+  # regime_filter_trend PDCA (2026-04-19): 9/9 GO BT but neighborhood 2/25 overfit 의심.
+  # 30일 LIVE 관찰 후 조건부 활성화 예정. 기본값 false(무동작).
+  trend_filter:
+    enabled: false              # 30일 LIVE sample 수집 후 재평가 시 true로 변경
+    lookback_bars: 192          # 2일 rolling
+    min_abs_trend_pct: 1.0      # |(close/close_lb - 1)*100| ≥ 1.0 시 진입 허용
+
 risk: {}  # No halt brakes — all removed per 2026-04-13
 
 exchange:

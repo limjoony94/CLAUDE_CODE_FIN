@@ -347,5 +347,23 @@
       "flags_passed": "8/9 (\uc720\uc77c \uc2e4\ud328 wf_slip_pass, fold 2 -5.62)",
       "conditional_go_trigger": "30\uc77c LIVE 4-\uc870\uac74 \ubaa8\ub450 \ucda9\uc871 \uc2dc production \ud6c4\ubcf4"
     }
+  },
+  "regime_filter_lowvol": {
+    "phase": "completed",
+    "matchRate": 100,
+    "outcome": "STOP_TRADEOFF_CONFIRMED",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T20:30:00Z",
+    "completedAt": "2026-04-19T21:00:00Z",
+    "summary": {
+      "type": "negative-result-but-informative",
+      "grid": "5 THR \u00d7 3 LOOKBACK = 15 runs",
+      "best_fold2_positive": "thr0.24_lb192: fold2=+0.92, but fold1 -3.75 (\uc74c\uc218 \uc804\ud658)",
+      "tradeoff": "fold 2 \uc591\uc218 \ubd88\uac00\ub2a5 without \uc804\uccb4 -15pp",
+      "reason": "fold 1(ATR% 0.248) vs fold 2(0.229) \ubbf8\ubd84\ub9ac",
+      "validates_prediction": "fold2_regime_analysis H7 PARTIAL \uc608\uc5b8 \uc2e4\uc99d",
+      "final_candidate": "candidate_C_b0.60 \uc720\uc9c0 (fold 2 \uac10\uc218, 30\uc77c LIVE \ub300\uae30)",
+      "next_option": "Trend filter(+5% threshold) \ubbf8\uac80\uc99d \u2014 \ube60\ub978 PDCA \uac00\uce58"
+    }
   }
 }

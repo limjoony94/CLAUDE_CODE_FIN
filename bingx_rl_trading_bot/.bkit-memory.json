@@ -220,5 +220,42 @@
         "30-day LIVE fix-\ud6c4 slippage recalibration"
       ]
     }
+  },
+  "fold2_regime_analysis": {
+    "phase": "completed",
+    "matchRate": 98,
+    "outcome": "DIAGNOSTIC_CONCLUSIVE",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T16:00:00Z",
+    "checkedAt": "2026-04-19T15:45:00Z",
+    "completedAt": "2026-04-19T16:00:00Z",
+    "summary": {
+      "type": "diagnostic-research",
+      "parent_pdca": "candidate_c_validation (fold 2 \uc6d0\uc778 \uaddc\uba85)",
+      "fold_2_period": "2025-07-11 ~ 2025-09-15",
+      "hypotheses_result": {
+        "H1_low_vol": "TRUE (ATR% 0.229 vs 0.318)",
+        "H2_low_breakout": "FALSE (3.36 vs 3.14 tpd)",
+        "H3_high_sl_exit": "FALSE (9.0 vs 9.7%)",
+        "H4_poor_rr": "TRUE (2.22 vs 3.00)",
+        "H5_widening_sl_amplifies": "REVERSED (cand -9.03 better than base -11.53)",
+        "H6_concentrated_loss": "TRUE (worst 3 windows = 101% of fold 2)",
+        "H7_regime_filter": "PARTIAL (1 clean filter, fold_1 included)"
+      },
+      "key_finding": "Fold 2 failure is 12-day cluster (2025-07-26~08-07) not structural candidate_C weakness. Baseline also fails worse in same period.",
+      "production_changes": "none",
+      "lessons": [
+        "Sub-window microscopy: 12-day concentration explains entire fold loss",
+        "H5 reversal: widening SL mitigates (not amplifies) whipsaw",
+        "Single-metric regime filter limited \u2014 multi-metric ML needed",
+        "Baseline comparison mandatory for attribution"
+      ],
+      "implications_for_candidate_c": "Not structural defect \u2192 conditional GO path viable. STOP maintained but not permanent.",
+      "follow_ups": [
+        "Regime-conditional candidate_C PDCA (2~4\uc8fc)",
+        "Baseline slip-WF re-evaluation (\uc989\uc2dc)",
+        "Multi-metric ML regime classifier (1~2\uac1c\uc6d4 \ubcc4\uac1c)"
+      ]
+    }
   }
 }

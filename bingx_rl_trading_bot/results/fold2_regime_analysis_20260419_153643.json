@@ -1,0 +1,1042 @@
+{
+  "timestamp": "2026-04-19T06:36:43.127213+00:00",
+  "combos": {
+    "baseline": {
+      "max_sl_atr": 3.3,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    },
+    "candidate_C": {
+      "max_sl_atr": 4.0,
+      "trail_K": 2.5,
+      "max_hold_bars": 192
+    }
+  },
+  "fold_boundaries": {
+    "fold_1": {
+      "bars": [
+        31,
+        6407
+      ],
+      "label": "2025-05-05~2025-07-11"
+    },
+    "fold_2": {
+      "bars": [
+        6407,
+        12783
+      ],
+      "label": "2025-07-11~2025-09-15"
+    },
+    "fold_3": {
+      "bars": [
+        12783,
+        19159
+      ],
+      "label": "2025-09-15~2025-11-21"
+    },
+    "fold_4": {
+      "bars": [
+        19159,
+        25535
+      ],
+      "label": "2025-11-21~2026-01-26"
+    },
+    "fold_5": {
+      "bars": [
+        25535,
+        31916
+      ],
+      "label": "2026-01-26~2026-04-03"
+    }
+  },
+  "slippage_used": {
+    "entry_pct": 0.05,
+    "exit_sl_pct": 0.15,
+    "exit_trail_pct": 0.05,
+    "exit_emergency_pct": 0.3,
+    "exit_timeout_pct": 0.05
+  },
+  "regime_by_fold": {
+    "fold_1": {
+      "atr_avg": 261.91,
+      "atr_pct_avg": 0.248,
+      "returns_std_pct": 0.1837,
+      "range_pct_avg": 0.248,
+      "trend_pct_half": 11.9,
+      "trend_pct_full": 24.17,
+      "sideways_index": 95.72,
+      "price_first": 95010.5,
+      "price_last": 117978.8,
+      "price_max": 118395.9,
+      "price_min": 93327.0,
+      "bars": 6376
+    },
+    "fold_2": {
+      "atr_avg": 264.14,
+      "atr_pct_avg": 0.229,
+      "returns_std_pct": 0.1692,
+      "range_pct_avg": 0.229,
+      "trend_pct_half": -5.66,
+      "trend_pct_full": -2.59,
+      "sideways_index": 65.62,
+      "price_first": 117950.0,
+      "price_last": 114889.5,
+      "price_max": 124545.6,
+      "price_min": 107211.5,
+      "bars": 6376
+    },
+    "fold_3": {
+      "atr_avg": 336.92,
+      "atr_pct_avg": 0.307,
+      "returns_std_pct": 0.232,
+      "range_pct_avg": 0.313,
+      "trend_pct_half": -19.86,
+      "trend_pct_full": -25.52,
+      "sideways_index": 121.45,
+      "price_first": 115252.7,
+      "price_last": 85843.2,
+      "price_max": 126208.5,
+      "price_min": 85288.0,
+      "bars": 6376
+    },
+    "fold_4": {
+      "atr_avg": 259.76,
+      "atr_pct_avg": 0.289,
+      "returns_std_pct": 0.2296,
+      "range_pct_avg": 0.289,
+      "trend_pct_half": 1.54,
+      "trend_pct_full": 2.43,
+      "sideways_index": 66.72,
+      "price_first": 86016.6,
+      "price_last": 88102.8,
+      "price_max": 97932.1,
+      "price_min": 80600.0,
+      "bars": 6376
+    },
+    "fold_5": {
+      "atr_avg": 302.91,
+      "atr_pct_avg": 0.429,
+      "returns_std_pct": 0.3219,
+      "range_pct_avg": 0.43,
+      "trend_pct_half": -0.18,
+      "trend_pct_full": -24.45,
+      "sideways_index": 101.63,
+      "price_first": 88137.0,
+      "price_last": 66587.9,
+      "price_max": 90592.7,
+      "price_min": 59809.1,
+      "bars": 6381
+    }
+  },
+  "strategy_by_fold_combo": {
+    "baseline": {
+      "fold_1": {
+        "count": 220,
+        "trades_per_day": 3.31,
+        "wr_pct": 30.0,
+        "pnl_sum": -2.08,
+        "avg_win": 0.729,
+        "avg_loss": -0.326,
+        "rr": 2.24,
+        "exit_reason_pct": {
+          "SL": 12.3,
+          "TRAIL_TP": 87.7
+        },
+        "max_consec_loss": 12,
+        "median_bars_held": 14
+      },
+      "fold_2": {
+        "count": 225,
+        "trades_per_day": 3.39,
+        "wr_pct": 26.2,
+        "pnl_sum": -11.53,
+        "avg_win": 0.609,
+        "avg_loss": -0.286,
+        "rr": 2.13,
+        "exit_reason_pct": {
+          "TRAIL_TP": 88.9,
+          "SL": 11.1
+        },
+        "max_consec_loss": 14,
+        "median_bars_held": 13
+      },
+      "fold_3": {
+        "count": 201,
+        "trades_per_day": 3.03,
+        "wr_pct": 37.3,
+        "pnl_sum": 34.79,
+        "avg_win": 1.049,
+        "avg_loss": -0.349,
+        "rr": 3.01,
+        "exit_reason_pct": {
+          "TRAIL_TP": 87.6,
+          "SL": 12.4
+        },
+        "max_consec_loss": 10,
+        "median_bars_held": 16
+      },
+      "fold_4": {
+        "count": 209,
+        "trades_per_day": 3.15,
+        "wr_pct": 27.8,
+        "pnl_sum": 5.45,
+        "avg_win": 0.935,
+        "avg_loss": -0.323,
+        "rr": 2.89,
+        "exit_reason_pct": {
+          "EMERGENCY": 0.5,
+          "SL": 10.5,
+          "TRAIL_TP": 89.0
+        },
+        "max_consec_loss": 14,
+        "median_bars_held": 14
+      },
+      "fold_5": {
+        "count": 219,
+        "trades_per_day": 3.29,
+        "wr_pct": 30.1,
+        "pnl_sum": 19.47,
+        "avg_win": 1.092,
+        "avg_loss": -0.344,
+        "rr": 3.18,
+        "exit_reason_pct": {
+          "SL": 9.1,
+          "TRAIL_TP": 90.9
+        },
+        "max_consec_loss": 9,
+        "median_bars_held": 14
+      }
+    },
+    "candidate_C": {
+      "fold_1": {
+        "count": 217,
+        "trades_per_day": 3.27,
+        "wr_pct": 29.5,
+        "pnl_sum": 1.19,
+        "avg_win": 0.752,
+        "avg_loss": -0.307,
+        "rr": 2.45,
+        "exit_reason_pct": {
+          "SL": 10.1,
+          "TRAIL_TP": 89.9
+        },
+        "max_consec_loss": 12,
+        "median_bars_held": 14
+      },
+      "fold_2": {
+        "count": 223,
+        "trades_per_day": 3.36,
+        "wr_pct": 26.5,
+        "pnl_sum": -9.03,
+        "avg_win": 0.602,
+        "avg_loss": -0.272,
+        "rr": 2.22,
+        "exit_reason_pct": {
+          "TRAIL_TP": 91.0,
+          "SL": 9.0
+        },
+        "max_consec_loss": 13,
+        "median_bars_held": 13
+      },
+      "fold_3": {
+        "count": 200,
+        "trades_per_day": 3.01,
+        "wr_pct": 37.0,
+        "pnl_sum": 33.56,
+        "avg_win": 1.057,
+        "avg_loss": -0.355,
+        "rr": 2.98,
+        "exit_reason_pct": {
+          "TRAIL_TP": 87.5,
+          "SL": 12.5
+        },
+        "max_consec_loss": 10,
+        "median_bars_held": 16
+      },
+      "fold_4": {
+        "count": 205,
+        "trades_per_day": 3.09,
+        "wr_pct": 28.3,
+        "pnl_sum": 12.76,
+        "avg_win": 0.926,
+        "avg_loss": -0.279,
+        "rr": 3.32,
+        "exit_reason_pct": {
+          "TRAIL_TP": 91.2,
+          "SL": 8.8
+        },
+        "max_consec_loss": 14,
+        "median_bars_held": 14
+      },
+      "fold_5": {
+        "count": 212,
+        "trades_per_day": 3.19,
+        "wr_pct": 31.6,
+        "pnl_sum": 24.59,
+        "avg_win": 1.094,
+        "avg_loss": -0.336,
+        "rr": 3.26,
+        "exit_reason_pct": {
+          "SL": 7.5,
+          "TRAIL_TP": 92.5
+        },
+        "max_consec_loss": 9,
+        "median_bars_held": 14
+      }
+    }
+  },
+  "fold_2_sub_windows": {
+    "all_windows": [
+      {
+        "start": "2025-07-11",
+        "end": "2025-07-16",
+        "trades": 17,
+        "pnl": 0.45,
+        "wr": 23.5
+      },
+      {
+        "start": "2025-07-13",
+        "end": "2025-07-18",
+        "trades": 19,
+        "pnl": 1.65,
+        "wr": 31.6
+      },
+      {
+        "start": "2025-07-16",
+        "end": "2025-07-21",
+        "trades": 17,
+        "pnl": -2.24,
+        "wr": 17.6
+      },
+      {
+        "start": "2025-07-18",
+        "end": "2025-07-23",
+        "trades": 15,
+        "pnl": -1.98,
+        "wr": 20.0
+      },
+      {
+        "start": "2025-07-21",
+        "end": "2025-07-26",
+        "trades": 18,
+        "pnl": -0.42,
+        "wr": 22.2
+      },
+      {
+        "start": "2025-07-23",
+        "end": "2025-07-28",
+        "trades": 17,
+        "pnl": -1.91,
+        "wr": 17.6
+      },
+      {
+        "start": "2025-07-26",
+        "end": "2025-07-31",
+        "trades": 17,
+        "pnl": -3.04,
+        "wr": 23.5
+      },
+      {
+        "start": "2025-07-28",
+        "end": "2025-08-02",
+        "trades": 17,
+        "pnl": 0.56,
+        "wr": 29.4
+      },
+      {
+        "start": "2025-07-31",
+        "end": "2025-08-05",
+        "trades": 16,
+        "pnl": -2.35,
+        "wr": 18.8
+      },
+      {
+        "start": "2025-08-02",
+        "end": "2025-08-07",
+        "trades": 17,
+        "pnl": -3.77,
+        "wr": 17.6
+      },
+      {
+        "start": "2025-08-05",
+        "end": "2025-08-10",
+        "trades": 16,
+        "pnl": -1.99,
+        "wr": 18.8
+      },
+      {
+        "start": "2025-08-07",
+        "end": "2025-08-12",
+        "trades": 15,
+        "pnl": 0.27,
+        "wr": 26.7
+      },
+      {
+        "start": "2025-08-10",
+        "end": "2025-08-15",
+        "trades": 14,
+        "pnl": 6.2,
+        "wr": 42.9
+      },
+      {
+        "start": "2025-08-12",
+        "end": "2025-08-17",
+        "trades": 13,
+        "pnl": 3.97,
+        "wr": 38.5
+      },
+      {
+        "start": "2025-08-15",
+        "end": "2025-08-20",
+        "trades": 18,
+        "pnl": -1.61,
+        "wr": 22.2
+      },
+      {
+        "start": "2025-08-17",
+        "end": "2025-08-22",
+        "trades": 20,
+        "pnl": -2.02,
+        "wr": 20.0
+      },
+      {
+        "start": "2025-08-20",
+        "end": "2025-08-25",
+        "trades": 14,
+        "pnl": 0.01,
+        "wr": 28.6
+      },
+      {
+        "start": "2025-08-22",
+        "end": "2025-08-27",
+        "trades": 15,
+        "pnl": -0.87,
+        "wr": 26.7
+      },
+      {
+        "start": "2025-08-25",
+        "end": "2025-08-30",
+        "trades": 18,
+        "pnl": 0.44,
+        "wr": 33.3
+      },
+      {
+        "start": "2025-08-27",
+        "end": "2025-09-01",
+        "trades": 18,
+        "pnl": 0.45,
+        "wr": 33.3
+      },
+      {
+        "start": "2025-08-30",
+        "end": "2025-09-04",
+        "trades": 19,
+        "pnl": -1.72,
+        "wr": 26.3
+      },
+      {
+        "start": "2025-09-01",
+        "end": "2025-09-06",
+        "trades": 18,
+        "pnl": -1.14,
+        "wr": 33.3
+      },
+      {
+        "start": "2025-09-04",
+        "end": "2025-09-09",
+        "trades": 17,
+        "pnl": -1.12,
+        "wr": 41.2
+      },
+      {
+        "start": "2025-09-06",
+        "end": "2025-09-11",
+        "trades": 17,
+        "pnl": -0.91,
+        "wr": 41.2
+      },
+      {
+        "start": "2025-09-09",
+        "end": "2025-09-14",
+        "trades": 16,
+        "pnl": -0.91,
+        "wr": 31.2
+      }
+    ],
+    "worst_3": [
+      {
+        "start": "2025-08-02",
+        "end": "2025-08-07",
+        "trades": 17,
+        "pnl": -3.77,
+        "wr": 17.6
+      },
+      {
+        "start": "2025-07-26",
+        "end": "2025-07-31",
+        "trades": 17,
+        "pnl": -3.04,
+        "wr": 23.5
+      },
+      {
+        "start": "2025-07-31",
+        "end": "2025-08-05",
+        "trades": 16,
+        "pnl": -2.35,
+        "wr": 18.8
+      }
+    ],
+    "best_3": [
+      {
+        "start": "2025-07-13",
+        "end": "2025-07-18",
+        "trades": 19,
+        "pnl": 1.65,
+        "wr": 31.6
+      },
+      {
+        "start": "2025-08-12",
+        "end": "2025-08-17",
+        "trades": 13,
+        "pnl": 3.97,
+        "wr": 38.5
+      },
+      {
+        "start": "2025-08-10",
+        "end": "2025-08-15",
+        "trades": 14,
+        "pnl": 6.2,
+        "wr": 42.9
+      }
+    ]
+  },
+  "regime_filter_candidates": [
+    {
+      "rule": "atr_pct_avg < 0.3",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_4"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_4"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.307,
+        "fold_4": 0.289,
+        "fold_5": 0.429
+      }
+    },
+    {
+      "rule": "atr_pct_avg < 0.4",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.307,
+        "fold_4": 0.289,
+        "fold_5": 0.429
+      }
+    },
+    {
+      "rule": "atr_pct_avg < 0.5",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.307,
+        "fold_4": 0.289,
+        "fold_5": 0.429
+      }
+    },
+    {
+      "rule": "atr_pct_avg < 0.55",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.307,
+        "fold_4": 0.289,
+        "fold_5": 0.429
+      }
+    },
+    {
+      "rule": "atr_pct_avg < 0.6",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.307,
+        "fold_4": 0.289,
+        "fold_5": 0.429
+      }
+    },
+    {
+      "rule": "atr_pct_avg < 0.7",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.307,
+        "fold_4": 0.289,
+        "fold_5": 0.429
+      }
+    },
+    {
+      "rule": "returns_std_pct < 0.05",
+      "flagged_folds": [],
+      "flags_fold_2": false,
+      "also_flags": [],
+      "fold_values": {
+        "fold_1": 0.1837,
+        "fold_2": 0.1692,
+        "fold_3": 0.232,
+        "fold_4": 0.2296,
+        "fold_5": 0.3219
+      }
+    },
+    {
+      "rule": "returns_std_pct < 0.08",
+      "flagged_folds": [],
+      "flags_fold_2": false,
+      "also_flags": [],
+      "fold_values": {
+        "fold_1": 0.1837,
+        "fold_2": 0.1692,
+        "fold_3": 0.232,
+        "fold_4": 0.2296,
+        "fold_5": 0.3219
+      }
+    },
+    {
+      "rule": "returns_std_pct < 0.1",
+      "flagged_folds": [],
+      "flags_fold_2": false,
+      "also_flags": [],
+      "fold_values": {
+        "fold_1": 0.1837,
+        "fold_2": 0.1692,
+        "fold_3": 0.232,
+        "fold_4": 0.2296,
+        "fold_5": 0.3219
+      }
+    },
+    {
+      "rule": "returns_std_pct < 0.12",
+      "flagged_folds": [],
+      "flags_fold_2": false,
+      "also_flags": [],
+      "fold_values": {
+        "fold_1": 0.1837,
+        "fold_2": 0.1692,
+        "fold_3": 0.232,
+        "fold_4": 0.2296,
+        "fold_5": 0.3219
+      }
+    },
+    {
+      "rule": "returns_std_pct < 0.15",
+      "flagged_folds": [],
+      "flags_fold_2": false,
+      "also_flags": [],
+      "fold_values": {
+        "fold_1": 0.1837,
+        "fold_2": 0.1692,
+        "fold_3": 0.232,
+        "fold_4": 0.2296,
+        "fold_5": 0.3219
+      }
+    },
+    {
+      "rule": "returns_std_pct < 0.2",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1"
+      ],
+      "fold_values": {
+        "fold_1": 0.1837,
+        "fold_2": 0.1692,
+        "fold_3": 0.232,
+        "fold_4": 0.2296,
+        "fold_5": 0.3219
+      }
+    },
+    {
+      "rule": "sideways_index > 30",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 95.72,
+        "fold_2": 65.62,
+        "fold_3": 121.45,
+        "fold_4": 66.72,
+        "fold_5": 101.63
+      }
+    },
+    {
+      "rule": "sideways_index > 40",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 95.72,
+        "fold_2": 65.62,
+        "fold_3": 121.45,
+        "fold_4": 66.72,
+        "fold_5": 101.63
+      }
+    },
+    {
+      "rule": "sideways_index > 50",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 95.72,
+        "fold_2": 65.62,
+        "fold_3": 121.45,
+        "fold_4": 66.72,
+        "fold_5": 101.63
+      }
+    },
+    {
+      "rule": "sideways_index > 60",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 95.72,
+        "fold_2": 65.62,
+        "fold_3": 121.45,
+        "fold_4": 66.72,
+        "fold_5": 101.63
+      }
+    },
+    {
+      "rule": "sideways_index > 80",
+      "flagged_folds": [
+        "fold_1",
+        "fold_3",
+        "fold_5"
+      ],
+      "flags_fold_2": false,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 95.72,
+        "fold_2": 65.62,
+        "fold_3": 121.45,
+        "fold_4": 66.72,
+        "fold_5": 101.63
+      }
+    },
+    {
+      "rule": "sideways_index > 100",
+      "flagged_folds": [
+        "fold_3",
+        "fold_5"
+      ],
+      "flags_fold_2": false,
+      "also_flags": [
+        "fold_3",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 95.72,
+        "fold_2": 65.62,
+        "fold_3": 121.45,
+        "fold_4": 66.72,
+        "fold_5": 101.63
+      }
+    },
+    {
+      "rule": "range_pct_avg < 0.2",
+      "flagged_folds": [],
+      "flags_fold_2": false,
+      "also_flags": [],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.313,
+        "fold_4": 0.289,
+        "fold_5": 0.43
+      }
+    },
+    {
+      "rule": "range_pct_avg < 0.3",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_4"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_4"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.313,
+        "fold_4": 0.289,
+        "fold_5": 0.43
+      }
+    },
+    {
+      "rule": "range_pct_avg < 0.4",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.313,
+        "fold_4": 0.289,
+        "fold_5": 0.43
+      }
+    },
+    {
+      "rule": "range_pct_avg < 0.5",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.313,
+        "fold_4": 0.289,
+        "fold_5": 0.43
+      }
+    },
+    {
+      "rule": "range_pct_avg < 0.6",
+      "flagged_folds": [
+        "fold_1",
+        "fold_2",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "flags_fold_2": true,
+      "also_flags": [
+        "fold_1",
+        "fold_3",
+        "fold_4",
+        "fold_5"
+      ],
+      "fold_values": {
+        "fold_1": 0.248,
+        "fold_2": 0.229,
+        "fold_3": 0.313,
+        "fold_4": 0.289,
+        "fold_5": 0.43
+      }
+    }
+  ],
+  "hypothesis_summary": {
+    "H1_low_vol": {
+      "fold_2": 0.229,
+      "others_avg": 0.318,
+      "ratio": 0.72,
+      "verdict": true
+    },
+    "H2_low_breakout": {
+      "fold_2": 3.36,
+      "others_avg": 3.14,
+      "ratio": 1.07,
+      "verdict": false
+    },
+    "H3_high_sl_exit": {
+      "fold_2": 9.0,
+      "others_avg": 9.7,
+      "verdict": false
+    },
+    "H4_poor_rr": {
+      "fold_2": 2.22,
+      "others_avg": 3.0,
+      "verdict": true
+    },
+    "H5_widening_sl_amplifies": {
+      "baseline_pnl": -11.53,
+      "candidate_pnl": -9.03,
+      "diff_cand_minus_base": 2.5,
+      "verdict_baseline_better": false
+    },
+    "H6_concentrated_loss": {
+      "worst_3_pnl_sum": -9.16,
+      "fold_2_total": -9.03,
+      "worst_1_window": {
+        "start": "2025-08-02",
+        "end": "2025-08-07",
+        "trades": 17,
+        "pnl": -3.77,
+        "wr": 17.6
+      },
+      "verdict_concentrated": true
+    },
+    "H7_regime_filter_viable": {
+      "clean_filter_count": 1,
+      "top_3_candidates": [
+        {
+          "rule": "returns_std_pct < 0.2",
+          "flagged_folds": [
+            "fold_1",
+            "fold_2"
+          ],
+          "flags_fold_2": true,
+          "also_flags": [
+            "fold_1"
+          ],
+          "fold_values": {
+            "fold_1": 0.1837,
+            "fold_2": 0.1692,
+            "fold_3": 0.232,
+            "fold_4": 0.2296,
+            "fold_5": 0.3219
+          }
+        }
+      ],
+      "verdict": true
+    }
+  },
+  "elapsed_sec": 0.1
+}

@@ -365,5 +365,26 @@
       "final_candidate": "candidate_C_b0.60 \uc720\uc9c0 (fold 2 \uac10\uc218, 30\uc77c LIVE \ub300\uae30)",
       "next_option": "Trend filter(+5% threshold) \ubbf8\uac80\uc99d \u2014 \ube60\ub978 PDCA \uac00\uce58"
     }
+  },
+  "regime_filter_trend": {
+    "phase": "completed",
+    "matchRate": 100,
+    "outcome": "GO_9of9_FIRST_FULL",
+    "iterationCount": 0,
+    "startedAt": "2026-04-19T21:00:00Z",
+    "completedAt": "2026-04-19T21:30:00Z",
+    "summary": {
+      "type": "breakthrough-research",
+      "config": "cand_C_b0.60 + trend_filter(thr=1.0%, lb=192)",
+      "vs_baseline_b040_slip": "PnL +46.09\u2192+70.92 (+54%), MDD 18.78\u21927.25 (-61%), Ratio 2.45\u21929.78 (+299%)",
+      "wf_slip": "3/5 \u2192 5/5",
+      "fold_2_slip": "-11.53 \u2192 +1.01 (\uc591\uc218 \uc804\ud658)",
+      "mc_p": "0.005 (strict <0.01)",
+      "bootstrap_ci": "[+27.3, +113.5]",
+      "flags_9of9": "ALL PASS",
+      "production_protocol": "30-day LIVE \uad00\ucc30 \ud6c4 \uc870\uac74\ubd80 \uc801\uc6a9",
+      "config_changes_required": "max_sl_atr 3.3\u21924.0, body_min_ratio 0.40\u21920.60, + trend_filter section",
+      "code_changes_required": "bot.py entry gate with rolling trend calc"
+    }
   }
 }

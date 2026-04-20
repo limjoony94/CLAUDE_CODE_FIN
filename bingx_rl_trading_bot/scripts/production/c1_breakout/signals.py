@@ -27,6 +27,11 @@ class C1BreakoutSignal:
         self.sl_max_pct = config.get('sl_max_pct', 3.0)
         self.min_bars_between_trades = config.get('min_bars_between', 2)
         self.trail_activation_pct = config.get('trail_activation_pct', 0.05)
+        # Progressive trail (v4.8.0): best_pnl >= threshold_pct 이후 trail_K_post로 전환
+        pt_cfg = config.get('progressive_trail', {}) or {}
+        self.prog_trail_enabled = pt_cfg.get('enabled', False)
+        self.prog_trail_threshold = pt_cfg.get('threshold_pct', 0.9)
+        self.prog_trail_K_post = pt_cfg.get('trail_K_post', 0.5)
 
     def check_entry(self, bar_open, bar_high, bar_low, bar_close,
                     channel_high, channel_low, atr_val,
@@ -97,6 +102,12 @@ class C1BreakoutSignal:
             'sl_pct': sl_pct,
         }
 
+    def get_effective_trail_k(self, best_pnl):
+        """Return trail_K for current best_pnl, applying progressive switch if enabled."""
+        if self.prog_trail_enabled and best_pnl >= self.prog_trail_threshold:
+            return self.prog_trail_K_post
+        return self.trail_K
+
     def check_exit(self, direction, entry_price, best_price,
                    current_high, current_low, current_close,
                    sl_price, atr_val, bars_held):
@@ -146,7 +157,9 @@ class C1BreakoutSignal:
         if (best_pnl > self.trail_activation_pct
                 and not math.isnan(atr_val) and atr_val > 0
                 and not math.isnan(current_close) and current_close > 0):
-            trail_dist_pct = self.trail_K * atr_val / current_close * 100
+            # Progressive trail: once best_pnl crosses threshold, switch to tighter K
+            k_effective = self.get_effective_trail_k(best_pnl)
+            trail_dist_pct = k_effective * atr_val / current_close * 100
             drawdown = best_pnl - cur_pnl
             if drawdown >= trail_dist_pct:
                 realized_pnl = max(0, best_pnl - trail_dist_pct)

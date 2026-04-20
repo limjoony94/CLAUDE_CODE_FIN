@@ -1,0 +1,476 @@
+{
+  "timestamp": "20260421_003533",
+  "target": {
+    "tk_base": 2.5,
+    "tk_post": 0.5,
+    "threshold": 0.9
+  },
+  "baseline": {
+    "tk_base": 2.5,
+    "tk_post": 2.5,
+    "threshold": 99.0
+  },
+  "results": {
+    "full": {
+      "baseline": {
+        "clean": {
+          "n": 667,
+          "pnl": 168.18,
+          "daily": 0.505,
+          "wr": 39.9,
+          "rr": 3.99,
+          "mdd": 4.85,
+          "mean_net": 0.252,
+          "tpd": 2.0,
+          "ex_top5": 48.9
+        },
+        "slip_low": {
+          "n": 667,
+          "pnl": 131.09,
+          "daily": 0.394,
+          "wr": 37.3,
+          "rr": 3.42,
+          "mdd": 5.8,
+          "mean_net": 0.197,
+          "tpd": 2.0,
+          "ex_top5": 13.44
+        },
+        "slip_med": {
+          "n": 667,
+          "pnl": 94.0,
+          "daily": 0.282,
+          "wr": 35.4,
+          "rr": 2.96,
+          "mdd": 7.91,
+          "mean_net": 0.141,
+          "tpd": 2.0,
+          "ex_top5": -22.01
+        },
+        "slip_high": {
+          "n": 667,
+          "pnl": 19.82,
+          "daily": 0.06,
+          "wr": 31.0,
+          "rr": 2.44,
+          "mdd": 30.97,
+          "mean_net": 0.03,
+          "tpd": 2.0,
+          "ex_top5": -92.91
+        }
+      },
+      "target": {
+        "clean": {
+          "n": 758,
+          "pnl": 206.38,
+          "daily": 0.62,
+          "wr": 43.5,
+          "rr": 3.61,
+          "mdd": 4.14,
+          "mean_net": 0.272,
+          "tpd": 2.28,
+          "ex_top5": 120.42
+        },
+        "slip_low": {
+          "n": 758,
+          "pnl": 164.43,
+          "daily": 0.494,
+          "wr": 42.0,
+          "rr": 2.99,
+          "mdd": 4.54,
+          "mean_net": 0.217,
+          "tpd": 2.28,
+          "ex_top5": 80.32
+        },
+        "slip_med": {
+          "n": 758,
+          "pnl": 122.49,
+          "daily": 0.368,
+          "wr": 40.6,
+          "rr": 2.53,
+          "mdd": 4.97,
+          "mean_net": 0.162,
+          "tpd": 2.28,
+          "ex_top5": 40.23
+        },
+        "slip_high": {
+          "n": 758,
+          "pnl": 38.61,
+          "daily": 0.116,
+          "wr": 39.2,
+          "rr": 1.82,
+          "mdd": 27.44,
+          "mean_net": 0.051,
+          "tpd": 2.28,
+          "ex_top5": -39.97
+        }
+      }
+    },
+    "wf": {
+      "baseline_folds": [
+        3.98,
+        1.24,
+        37.2,
+        11.92,
+        39.67
+      ],
+      "baseline_pos": 5,
+      "target_folds": [
+        4.26,
+        5.07,
+        47.04,
+        31.08,
+        35.03
+      ],
+      "target_pos": 5
+    },
+    "oos_split": {
+      "results": [
+        {
+          "split": [
+            0.6,
+            0.2,
+            0.2
+          ],
+          "base": {
+            "train": 42.42,
+            "val": 11.92,
+            "test": 39.67
+          },
+          "target": {
+            "train": 52.21,
+            "val": 35.25,
+            "test": 35.03
+          },
+          "pass": true
+        },
+        {
+          "split": [
+            0.5,
+            0.25,
+            0.25
+          ],
+          "base": {
+            "train": 15.56,
+            "val": 38.13,
+            "test": 40.31
+          },
+          "target": {
+            "train": 22.73,
+            "val": 56.83,
+            "test": 42.93
+          },
+          "pass": true
+        },
+        {
+          "split": [
+            0.7,
+            0.15,
+            0.15
+          ],
+          "base": {
+            "train": 51.22,
+            "val": 33.71,
+            "test": 9.07
+          },
+          "target": {
+            "train": 72.07,
+            "val": 30.88,
+            "test": 19.54
+          },
+          "pass": true
+        },
+        {
+          "split": [
+            0.55,
+            0.15,
+            0.3
+          ],
+          "base": {
+            "train": 25.99,
+            "val": 25.23,
+            "test": 42.78
+          },
+          "target": {
+            "train": 33.68,
+            "val": 38.39,
+            "test": 50.42
+          },
+          "pass": true
+        },
+        {
+          "split": [
+            0.6,
+            0.15,
+            0.25
+          ],
+          "base": {
+            "train": 42.42,
+            "val": 11.28,
+            "test": 40.31
+          },
+          "target": {
+            "train": 52.21,
+            "val": 27.35,
+            "test": 42.93
+          },
+          "pass": true
+        }
+      ],
+      "pass_count": 5
+    },
+    "3way": {
+      "baseline": {
+        "train": 42.42,
+        "val": 11.92,
+        "test": 39.67
+      },
+      "target": {
+        "train": 52.21,
+        "val": 35.25,
+        "test": 35.03
+      },
+      "target_all_pos": true
+    },
+    "boot": {
+      "baseline": {
+        "mean": 0.911,
+        "median": 0.418,
+        "std": 2.851,
+        "pos_pct": 59.9,
+        "sharpe": 0.319,
+        "p5": -2.54,
+        "p_loss_2pp": 8.7
+      },
+      "target": {
+        "mean": 1.224,
+        "median": 1.019,
+        "std": 2.297,
+        "pos_pct": 68.0,
+        "sharpe": 0.533,
+        "p5": -2.48,
+        "p_loss_2pp": 7.3
+      },
+      "relative": 64.7
+    },
+    "neighbor": {
+      "results": [
+        {
+          "thr": 0.7,
+          "tk": 0.3,
+          "pnl": 113.19,
+          "ex5": 34.39,
+          "go": true
+        },
+        {
+          "thr": 0.7,
+          "tk": 0.4,
+          "pnl": 105.94,
+          "ex5": 27.42,
+          "go": true
+        },
+        {
+          "thr": 0.7,
+          "tk": 0.5,
+          "pnl": 103.94,
+          "ex5": 21.85,
+          "go": false
+        },
+        {
+          "thr": 0.7,
+          "tk": 0.6,
+          "pnl": 99.18,
+          "ex5": 16.28,
+          "go": false
+        },
+        {
+          "thr": 0.7,
+          "tk": 0.7,
+          "pnl": 95.94,
+          "ex5": 11.81,
+          "go": false
+        },
+        {
+          "thr": 0.8,
+          "tk": 0.3,
+          "pnl": 122.37,
+          "ex5": 41.51,
+          "go": true
+        },
+        {
+          "thr": 0.8,
+          "tk": 0.4,
+          "pnl": 116.69,
+          "ex5": 37.87,
+          "go": true
+        },
+        {
+          "thr": 0.8,
+          "tk": 0.5,
+          "pnl": 115.57,
+          "ex5": 33.74,
+          "go": true
+        },
+        {
+          "thr": 0.8,
+          "tk": 0.6,
+          "pnl": 110.11,
+          "ex5": 26.49,
+          "go": true
+        },
+        {
+          "thr": 0.8,
+          "tk": 0.7,
+          "pnl": 105.05,
+          "ex5": 20.38,
+          "go": true
+        },
+        {
+          "thr": 0.9,
+          "tk": 0.3,
+          "pnl": 125.33,
+          "ex5": 45.17,
+          "go": true
+        },
+        {
+          "thr": 0.9,
+          "tk": 0.4,
+          "pnl": 122.02,
+          "ex5": 41.4,
+          "go": true
+        },
+        {
+          "thr": 0.9,
+          "tk": 0.5,
+          "pnl": 122.49,
+          "ex5": 40.23,
+          "go": true
+        },
+        {
+          "thr": 0.9,
+          "tk": 0.6,
+          "pnl": 116.9,
+          "ex5": 32.42,
+          "go": true
+        },
+        {
+          "thr": 0.9,
+          "tk": 0.7,
+          "pnl": 113.22,
+          "ex5": 26.99,
+          "go": true
+        },
+        {
+          "thr": 1.0,
+          "tk": 0.3,
+          "pnl": 120.19,
+          "ex5": 41.34,
+          "go": true
+        },
+        {
+          "thr": 1.0,
+          "tk": 0.4,
+          "pnl": 118.81,
+          "ex5": 38.8,
+          "go": true
+        },
+        {
+          "thr": 1.0,
+          "tk": 0.5,
+          "pnl": 120.01,
+          "ex5": 36.47,
+          "go": true
+        },
+        {
+          "thr": 1.0,
+          "tk": 0.6,
+          "pnl": 113.14,
+          "ex5": 27.5,
+          "go": true
+        },
+        {
+          "thr": 1.0,
+          "tk": 0.7,
+          "pnl": 108.36,
+          "ex5": 21.85,
+          "go": true
+        },
+        {
+          "thr": 1.1,
+          "tk": 0.3,
+          "pnl": 117.56,
+          "ex5": 37.03,
+          "go": true
+        },
+        {
+          "thr": 1.1,
+          "tk": 0.4,
+          "pnl": 114.96,
+          "ex5": 32.74,
+          "go": true
+        },
+        {
+          "thr": 1.1,
+          "tk": 0.5,
+          "pnl": 115.87,
+          "ex5": 29.62,
+          "go": true
+        },
+        {
+          "thr": 1.1,
+          "tk": 0.6,
+          "pnl": 108.99,
+          "ex5": 23.16,
+          "go": true
+        },
+        {
+          "thr": 1.1,
+          "tk": 0.7,
+          "pnl": 104.04,
+          "ex5": 17.01,
+          "go": true
+        }
+      ],
+      "go_count": 22
+    },
+    "consistency": {
+      "h1_cand": 22.73,
+      "h2_cand": 99.76,
+      "h1_base": 15.56,
+      "h2_base": 78.44,
+      "h1_delta": 7.17,
+      "h2_delta": 21.32,
+      "pass": true
+    },
+    "mc": {
+      "p_value": 0.0,
+      "real_pnl": 122.49
+    },
+    "fold2": {
+      "baseline_fold2": 1.24,
+      "target_fold2": 5.07,
+      "delta": 3.84,
+      "pass": true
+    }
+  },
+  "flags": {
+    "f1_full_clean_gain": true,
+    "f2_full_slip_med_gain": true,
+    "f3_strict_wf_5of5": true,
+    "f4_oos_split_5of5": true,
+    "f5_3way_all_positive": true,
+    "f6_bootstrap_core": true,
+    "f7_bootstrap_relative": true,
+    "f8_neighborhood_8plus": true,
+    "f9_structural_halves": true
+  },
+  "warnings": {
+    "w1_mc_p_under_0.01": true,
+    "w2_f6_ex_top5_pass": true,
+    "w3_mdd_improved": true,
+    "w4_sharpe_0.45": true,
+    "w5_fold2_pass": true
+  },
+  "core_pass": 9,
+  "warning_pass": 5,
+  "verdict": "FULL GO \u2014 deploy-ready (enabled=false)"
+}

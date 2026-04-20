@@ -1,7 +1,16 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.7.9 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-18
+> **Version**: v4.8.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Progressive Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-21
 >
+> **v4.8.0 (2026-04-21)**: ⭐⭐ **progressive_trail PDCA 세션 최초 9/9 CORE + 5/5 WARN FULL GO**.
+>   - **signals.py** `get_effective_trail_k(best_pnl)` — best_pnl ≥ threshold 시 tk_post 반환
+>   - **bot.py** `_calc_trail_trigger_price` baton-touch 수식에 dynamic K 적용 (backtest 완벽 일치)
+>   - **config.yaml** `progressive_trail` 섹션 추가 (enabled=false, threshold=0.9%, tk_post=0.5)
+>   - **신규 Pytest 8 케이스** — 127/127 PASS (기존 119 + progressive 8)
+>   - **검증 수치** (vs cand_C+trend baseline, SLIP_MED): PnL +94→+122 (+30%), MDD 7.91→4.97 (-37%),
+>     Sharpe 0.319→0.533 (+67%), ex_top5 -22→+40 (**F6 구조적 해결**), Neighborhood 22/25 non-sharp,
+>     MC p=0.0000 (beat 999/999), 2-half Δ +7.17/+21.32 structural
+>   - **30일 LIVE 관찰 후 enabled=true 검토** (pre-activation TRAILING_STOP_MARKET과의 호환성 현장 확인 필요)
 > **v4.7.9 (2026-04-18)**: 문서·워크스페이스 구조 전면 개편.
 >   - 레거시(Pattern/CP/MAVS/BTV/Volspike) 연구 스크립트/문서/결과 `archive/legacy_*`로 이동
 >   - `claudedocs/BUG_HISTORY.md` 신설 — BUG#1~65 연대기·카테고리·교훈

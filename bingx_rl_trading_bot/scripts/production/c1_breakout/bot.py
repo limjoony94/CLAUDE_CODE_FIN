@@ -1075,7 +1075,6 @@ class C1BreakoutBot:
         d = pos['direction']
         ep = pos['entry_price']
         bp = pos.get('best_price', ep)
-        trail_K = self.config['strategy'].get('trail_K', 2.5)
         activation = self.config['strategy'].get('trail_activation_pct', 0.05)
 
         if math.isnan(cur_atr) or cur_atr <= 0:
@@ -1088,6 +1087,9 @@ class C1BreakoutBot:
             best_pnl = (1 - bp / ep) * 100
         if best_pnl <= activation:
             return None
+
+        # Progressive trail: signals.py와 동일하게 best_pnl 기반 dynamic K
+        trail_K = self.signal.get_effective_trail_k(best_pnl)
 
         k_atr = trail_K * cur_atr
 

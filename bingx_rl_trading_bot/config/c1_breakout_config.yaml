@@ -24,6 +24,14 @@ strategy:
     lookback_bars: 192          # 2일 rolling
     min_abs_trend_pct: 1.0      # |(close/close_lb - 1)*100| ≥ 1.0 시 진입 허용
 
+  # progressive_trail PDCA (2026-04-21): 9/9 CORE + 5/5 WARN FULL GO.
+  # Neighborhood 22/25 (non-sharp-peak), MC p=0.0000, 2-half delta 양호.
+  # 30일 LIVE 관찰 후 enabled=true 검토.
+  progressive_trail:
+    enabled: false              # 30일 LIVE sample 후 활성 검토
+    threshold_pct: 0.9          # best_pnl 0.9% 초과 시 tk_post로 전환
+    trail_K_post: 0.5           # 전환 후 tight trail K
+
 risk: {}  # No halt brakes — all removed per 2026-04-13
 
 exchange:

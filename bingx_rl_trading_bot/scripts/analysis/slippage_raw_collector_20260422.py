@@ -115,30 +115,31 @@ def parse_logs():
 
 
 def fetch_exchange_trades():
-    """Fetch all BTC fills from BingX since 04-12."""
+    """Fetch all BTC fills from BingX since 04-12 (same yaml logic as bot.py:322)."""
     import ccxt
-    # api_keys
     import yaml
     key_file = ROOT / 'config' / 'api_keys.yaml'
-    if key_file.exists():
-        with open(key_file) as f:
-            keys = yaml.safe_load(f) or {}
-        bingx_keys = keys.get('bingx', {})
-    else:
-        bingx_keys = {}
-
-    exchange = ccxt.bingx({
-        'apiKey': bingx_keys.get('api_key', ''),
-        'secret': bingx_keys.get('secret_key', ''),
-        'options': {'defaultType': 'swap'},
-    })
-    if not bingx_keys.get('api_key'):
-        print("WARN: api_keys.yaml not found or no keys — using public endpoints only")
+    if not key_file.exists():
+        print("WARN: api_keys.yaml missing")
+        return []
+    with open(key_file) as f:
+        keys = yaml.safe_load(f) or {}
+    bk = keys.get('bingx', keys)
+    if isinstance(bk, dict) and 'mainnet' in bk:
+        bk = bk['mainnet']
+    api_key = bk.get('api_key', '')
+    secret = bk.get('secret_key', '')
+    if not api_key:
+        print("WARN: no api_key in api_keys.yaml")
         return []
 
+    exchange = ccxt.bingx({
+        'apiKey': api_key, 'secret': secret,
+        'options': {'defaultType': 'swap'},
+    })
+
     since_ts = int(datetime(2026, 4, 12, 0, 0, tzinfo=timezone.utc).timestamp() * 1000)
-    all_t = []
-    since = since_ts
+    all_t, since = [], since_ts
     try:
         while True:
             batch = exchange.fetch_my_trades('BTC-USDT', since=since, limit=1000)
@@ -153,6 +154,130 @@ def fetch_exchange_trades():
     except Exception as e:
         print(f"WARN: fetch_my_trades failed: {e}")
     return all_t
+
+
+def fetch_exchange_orders():
+    """Fetch order history — trigger prices for STOP/TRAILING orders."""
+    import ccxt, yaml
+    key_file = ROOT / 'config' / 'api_keys.yaml'
+    if not key_file.exists():
+        return []
+    with open(key_file) as f:
+        keys = yaml.safe_load(f) or {}
+    bk = keys.get('bingx', keys)
+    if isinstance(bk, dict) and 'mainnet' in bk:
+        bk = bk['mainnet']
+    api_key = bk.get('api_key', '')
+    secret = bk.get('secret_key', '')
+    if not api_key:
+        return []
+    exchange = ccxt.bingx({
+        'apiKey': api_key, 'secret': secret,
+        'options': {'defaultType': 'swap'},
+    })
+    since_ts = int(datetime(2026, 4, 12, 0, 0, tzinfo=timezone.utc).timestamp() * 1000)
+    orders = []
+    try:
+        # Try closed orders endpoint
+        since = since_ts
+        while True:
+            batch = exchange.fetch_closed_orders('BTC-USDT', since=since, limit=500)
+            if not batch:
+                break
+            orders.extend(batch)
+            if batch[-1]['timestamp'] <= since:
+                break
+            since = batch[-1]['timestamp'] + 1
+            if len(orders) > 3000:
+                break
+    except Exception as e:
+        print(f"WARN: fetch_closed_orders failed: {e}")
+    return orders
+
+
+def analyze_trades(fills, orders):
+    """Match fills to orders, compute exit trigger vs fill slippage.
+
+    Strategy: for each closed STOP_MARKET/TRAILING order with filled status,
+    compare its triggerPrice (or stopPrice) to its average fill price.
+    """
+    # Map order_id → order dict for fast lookup
+    order_by_id = {}
+    for o in orders:
+        oid = o.get('id') or o.get('orderId') or ''
+        if oid:
+            order_by_id[str(oid)] = o
+
+    # Group fills by order id and classify
+    fills_by_order = {}
+    for f in fills:
+        oid = str(f.get('order') or f.get('orderId') or '')
+        fills_by_order.setdefault(oid, []).append(f)
+
+    analyses = []
+    for oid, order in order_by_id.items():
+        order_type = (order.get('type') or '').upper()
+        info = order.get('info') or {}
+        order_info_type = (info.get('type') or info.get('origType') or '').upper()
+        status = (order.get('status') or '').lower()
+        if status not in ('closed', 'filled'):
+            continue
+
+        # Trigger / stop price
+        trig = (order.get('triggerPrice') or order.get('stopPrice')
+                or info.get('triggerPrice') or info.get('stopPrice') or 0)
+        try:
+            trig = float(trig) if trig else 0.0
+        except (TypeError, ValueError):
+            trig = 0.0
+
+        avg = order.get('average') or info.get('avgPrice') or 0
+        try:
+            avg = float(avg) if avg else 0.0
+        except (TypeError, ValueError):
+            avg = 0.0
+
+        side = (order.get('side') or '').lower()
+        amt = order.get('amount') or order.get('filled') or 0
+
+        if trig > 0 and avg > 0:
+            # Slippage: positive = adverse for a closing order
+            # For SELL (closing LONG): fill < trigger is adverse
+            # For BUY (closing SHORT): fill > trigger is adverse
+            if side == 'sell':
+                slip_pct = (trig - avg) / trig * 100  # positive if adverse
+            else:
+                slip_pct = (avg - trig) / trig * 100
+            analyses.append({
+                'order_id': oid, 'type': order_type, 'info_type': order_info_type,
+                'side': side, 'amount': amt,
+                'trigger': trig, 'fill_avg': avg,
+                'slip_pct': round(slip_pct, 4),
+                'ts': order.get('timestamp'),
+                'reduceOnly': info.get('reduceOnly', False),
+            })
+
+    # Summary stats by order type
+    by_type = {}
+    for a in analyses:
+        key = a['info_type'] or a['type']
+        by_type.setdefault(key, []).append(a['slip_pct'])
+    type_stats = {}
+    for k, vals in by_type.items():
+        if vals:
+            type_stats[k] = {
+                'count': len(vals),
+                'mean_pct': round(sum(vals)/len(vals), 4),
+                'median_pct': round(sorted(vals)[len(vals)//2], 4),
+                'min_pct': round(min(vals), 4),
+                'max_pct': round(max(vals), 4),
+            }
+
+    return {
+        'per_order': analyses,
+        'by_type_summary': type_stats,
+        'total_analyzed': len(analyses),
+    }
 
 
 def summarize_entry_slips(slips):
@@ -199,6 +324,15 @@ def main():
     xch = fetch_exchange_trades()
     print(f"Got {len(xch)} exchange fills")
 
+    print("\nFetching exchange orders...")
+    ords = fetch_exchange_orders()
+    print(f"Got {len(ords)} exchange closed orders")
+
+    # Per-trade slippage analysis using exchange fills
+    # A trade has an entry fill and an exit fill (opposite side or reduceOnly)
+    # Group by orderId from fills → match to state.json trades
+    trade_slip_analysis = analyze_trades(xch, ords)
+
     out = {
         'generated_at': datetime.now().isoformat(),
         'period': '2026-04-12 to 2026-04-22',
@@ -207,7 +341,10 @@ def main():
         'event_types': event_types,
         'events': events,
         'exchange_trades_count': len(xch),
-        'exchange_trades': xch[:100] if xch else [],  # cap output
+        'exchange_trades': xch,
+        'exchange_orders_count': len(ords),
+        'exchange_orders': ords,
+        'trade_slip_analysis': trade_slip_analysis,
     }
     path = ROOT / 'results' / f'slippage_raw_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
     path.parent.mkdir(exist_ok=True)

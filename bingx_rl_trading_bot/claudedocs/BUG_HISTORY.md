@@ -1,7 +1,7 @@
 # C1 Breakout v2.6 — BUG History
 
 > **Scope**: BUG#1~65 연대기. C1 Breakout v2.x 개발 과정 누적 수정 사항.
-> **Updated**: 2026-04-18 (v4.7.9)
+> **Updated**: 2026-04-21 (v4.8.0 — progressive_trail dynamic K helper 교훈 추가)
 > **Source**: `scripts/production/c1_breakout/bot.py` docstring + 커밋 히스토리.
 
 ## 카테고리 요약
@@ -208,8 +208,16 @@ v2.3~v2.5 사이클에서 16~30건 수정 (BUG#1~34). 상세는 이전 커밋 �
 - Sanity check: channel (BUG#53), current_close (BUG#60), leverage 관계 (BUG#52), partial fill (BUG#55)
 - 연속 실패 감지: candle fetch (BUG#51), trail update (BUG#59)
 
+### Dynamic parameter helper (v4.8.0 progressive_trail)
+- **Anti-pattern**: signals.py에 `k_post if best_pnl >= thr else trail_K` 직접 작성, bot.py에
+  별도로 동일 로직 중복 → 수식 divergence 리스크 (BUG#61b 유형 재발)
+- **Best practice**: 단일 helper 함수(`signal.get_effective_trail_k(best_pnl)`)로 양쪽 호출 통일
+- **근거**: signals.py L105-109, bot.py L1092 모두 동일 helper 호출 → 수식 100% 일치가
+  구조적으로 보장. "설계에 한 번, 구현에 여러 번"이 아니라 "설계와 구현 모두 한 함수"
+
 ---
 
 ## 관련 테스트
 
-`scripts/tests/` 의 113개 pytest 케이스가 regression 방지. BUG → Test 매핑은 [run-tests 커맨드 문서](../../.claude/commands/run-tests.md) 참조.
+`scripts/tests/` 의 127개 pytest 케이스가 regression 방지 (v4.8.0 기준, progressive_trail 8 cases 포함).
+BUG → Test 매핑은 [run-tests 커맨드 문서](../../.claude/commands/run-tests.md) 참조.

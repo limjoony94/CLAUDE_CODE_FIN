@@ -1,7 +1,7 @@
 # 백테스트 ↔ 라이브 정합성 체크리스트
 
 > **목적**: 백테스트 결과가 라이브 환경에서 재현되는지 체계적으로 검증.
-> **현재 상태 (v4.7.9, 2026-04-18)**: **20/22 정합**. 남은 2건은 구조적 한계로 수용.
+> **현재 상태 (v4.8.0, 2026-04-21)**: **20/22 정합** (progressive_trail dynamic K 추가 후에도 유지). 남은 2건은 구조적 한계로 수용.
 
 ## 검증 방식
 
@@ -28,7 +28,7 @@
 | 8 | **수수료 (0.10% RT)** | ✅ | 백테스트 시뮬. 라이브: BingX taker 0.05% × 2 (동일) |
 | 9 | **Emergency SL (3.0%)** | ✅ | `signals.py::check_exit` 공유 |
 | 10 | **Timeout (192 bars = 48h)** | ✅ | `check_exit` 공유, `bars_held` 증가는 cycle 단위 |
-| 11 | **Trail 수식 — `cur² - best·cur + trail_K·ATR·entry = 0`** | ✅ | `signals.py::check_exit` TRAIL path. 라이브는 `bot.py::_calc_trail_trigger_price`가 **100% 동일 수식** (BUG#61b) |
+| 11 | **Trail 수식 — `cur² - best·cur + trail_K·ATR·entry = 0`** | ✅ | `signals.py::check_exit` TRAIL path. 라이브는 `bot.py::_calc_trail_trigger_price`가 **100% 동일 수식** (BUG#61b). v4.8.0부터 `trail_K`는 `signal.get_effective_trail_k(best_pnl)`로 dynamic — progressive_trail 활성 시 `best_pnl >= threshold_pct` 구간에서 `trail_K_post` 반환, 백테스트/라이브 공통 helper 사용으로 수식 divergence 구조적 차단 |
 | 12 | **Trail activation threshold (`trail_activation_pct` = 0.05%)** | ✅ | 백테스트: `check_exit` 내부. 라이브: `activatePrice = entry × (1 ± 0.0005)` (BUG#62) |
 | 13 | **Trail 매 bar 재평가 (backtest "re-check every bar")** | ✅ | 백테스트: 매 bar close. 라이브: 매 cycle `_update_exchange_trail`에서 best_price-driven 재계산 (BUG#63) |
 | 14 | **`best_price` 초기값 (= entry_price)** | ✅ | 백테스트: 진입 봉 close 또는 high. 라이브: `fill_price`와 동기화 (BUG#64) |
@@ -57,6 +57,7 @@
 | BUG#46 정책 확립 (2026-04-15) | 17/22 | Tighten never / LOOSEN only, tracking 리셋 억제 |
 | BUG#48 orphan 복원 (2026-04-17) | 18/22 | 재시작 시 실제 SL 보존 |
 | BUG#61~65 통합 (2026-04-18) | **20/22** | Baton-touch + activation 정합 + best sync + 실제 체결가 |
+| progressive_trail v4.8.0 (2026-04-21) | **20/22 유지** | `get_effective_trail_k(best_pnl)` helper 단일화로 signals.py↔bot.py 수식 divergence 구조적 방지. Pre-activation 구조적 한계(#21)는 변동 없음 (best_pnl<0.05%는 progressive 무관) |
 
 ---
 

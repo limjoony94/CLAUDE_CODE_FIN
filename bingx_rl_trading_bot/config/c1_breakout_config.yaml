@@ -26,9 +26,9 @@ strategy:
 
   # progressive_trail PDCA (2026-04-21): 9/9 CORE + 5/5 WARN FULL GO.
   # Neighborhood 22/25 (non-sharp-peak), MC p=0.0000, 2-half delta 양호.
-  # 30일 LIVE 관찰 후 enabled=true 검토.
+  # 2026-04-21 사용자 명령으로 30일 baseline 대기 없이 즉시 활성 전환.
   progressive_trail:
-    enabled: false              # 30일 LIVE sample 후 활성 검토
+    enabled: true               # 2026-04-21 즉시 활성 (사용자 명령)
     threshold_pct: 0.9          # best_pnl 0.9% 초과 시 tk_post로 전환
     trail_K_post: 0.5           # 전환 후 tight trail K
 

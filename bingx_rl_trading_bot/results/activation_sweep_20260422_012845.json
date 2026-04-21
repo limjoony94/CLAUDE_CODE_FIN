@@ -1,0 +1,1531 @@
+{
+  "baseline": {
+    "channel_period": 15,
+    "body_min_ratio": 0.4,
+    "atr_period": 14,
+    "trail_K": 2.5,
+    "max_sl_atr": 3.3,
+    "emergency_sl_pct": 3.0,
+    "max_hold_bars": 192,
+    "sl_min_pct": 0.15,
+    "sl_max_pct": 3.0,
+    "min_bars_between": 2,
+    "trail_activation_pct": 0.05,
+    "fractal_lookback": 10,
+    "progressive_trail": {
+      "enabled": false
+    }
+  },
+  "results": {
+    "0.05": {
+      "trades": 27,
+      "wr_pct": 37.04,
+      "sum_pnl_3x": 10.1627,
+      "end_bal": 2296.75,
+      "net_pct": 9.3692,
+      "mdd_pct": -11.5287,
+      "reasons": {
+        "TRAIL_TP": 22,
+        "SL": 5
+      },
+      "activation_pct": 0.05,
+      "trades_list": [
+        {
+          "dir": "SHORT",
+          "entry": 71692.2,
+          "exit": 71643.2,
+          "pnl1x": -0.0316,
+          "pnl3x": -0.0948,
+          "reason": "TRAIL_TP",
+          "bars": 24,
+          "t_exit": "2026-04-12 07:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 71048.7,
+          "exit": 70933.6,
+          "pnl1x": 0.0621,
+          "pnl3x": 0.1862,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-12 17:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71099.9,
+          "exit": 71099.9,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-12 22:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 70863.3,
+          "exit": 70863.3,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 27,
+          "t_exit": "2026-04-13 11:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71040.4,
+          "exit": 74312.7,
+          "pnl1x": 4.5062,
+          "pnl3x": 13.5187,
+          "reason": "TRAIL_TP",
+          "bars": 58,
+          "t_exit": "2026-04-14 03:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74184.5,
+          "exit": 74751.3,
+          "pnl1x": -0.864,
+          "pnl3x": -2.5921,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-14 07:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74321.2,
+          "exit": 74895.9,
+          "pnl1x": -0.8733,
+          "pnl3x": -2.6198,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-14 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75803.0,
+          "exit": 75017.8,
+          "pnl1x": -1.1358,
+          "pnl3x": -3.4075,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-14 14:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74503.5,
+          "exit": 74503.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 14,
+          "t_exit": "2026-04-15 03:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 73976.3,
+          "exit": 73954.2,
+          "pnl1x": -0.0701,
+          "pnl3x": -0.2104,
+          "reason": "TRAIL_TP",
+          "bars": 12,
+          "t_exit": "2026-04-15 08:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74292.3,
+          "exit": 74292.3,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 4,
+          "t_exit": "2026-04-15 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74349.7,
+          "exit": 74612.9,
+          "pnl1x": 0.254,
+          "pnl3x": 0.7619,
+          "reason": "TRAIL_TP",
+          "bars": 10,
+          "t_exit": "2026-04-15 21:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74670.1,
+          "exit": 74659.1,
+          "pnl1x": -0.0853,
+          "pnl3x": -0.2559,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-16 12:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74932.7,
+          "exit": 74368.6,
+          "pnl1x": -0.8528,
+          "pnl3x": -2.5583,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-16 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75001.7,
+          "exit": 75001.7,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 16,
+          "t_exit": "2026-04-16 22:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74713.6,
+          "exit": 74713.6,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 22,
+          "t_exit": "2026-04-17 06:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75298.6,
+          "exit": 75658.1,
+          "pnl1x": 0.3775,
+          "pnl3x": 1.1324,
+          "reason": "TRAIL_TP",
+          "bars": 6,
+          "t_exit": "2026-04-17 10:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76877.7,
+          "exit": 77216.4,
+          "pnl1x": 0.3405,
+          "pnl3x": 1.0216,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-17 17:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 77009.5,
+          "exit": 76179.9,
+          "pnl1x": 0.9773,
+          "pnl3x": 2.9318,
+          "reason": "TRAIL_TP",
+          "bars": 62,
+          "t_exit": "2026-04-18 14:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75499.4,
+          "exit": 75224.8,
+          "pnl1x": 0.2637,
+          "pnl3x": 0.7912,
+          "reason": "TRAIL_TP",
+          "bars": 39,
+          "t_exit": "2026-04-19 11:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75560.4,
+          "exit": 75617.4,
+          "pnl1x": -0.0246,
+          "pnl3x": -0.0737,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-19 16:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75347.1,
+          "exit": 74297.4,
+          "pnl1x": 1.2931,
+          "pnl3x": 3.8793,
+          "reason": "TRAIL_TP",
+          "bars": 33,
+          "t_exit": "2026-04-20 01:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74110.1,
+          "exit": 74702.2,
+          "pnl1x": -0.8989,
+          "pnl3x": -2.6968,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-20 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75175.0,
+          "exit": 75879.2,
+          "pnl1x": 0.8367,
+          "pnl3x": 2.5102,
+          "reason": "TRAIL_TP",
+          "bars": 57,
+          "t_exit": "2026-04-20 21:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75713.1,
+          "exit": 75713.1,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 30,
+          "t_exit": "2026-04-21 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76139.2,
+          "exit": 76301.3,
+          "pnl1x": 0.1129,
+          "pnl3x": 0.3387,
+          "reason": "TRAIL_TP",
+          "bars": 8,
+          "t_exit": "2026-04-21 09:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75796.5,
+          "exit": 75796.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 8,
+          "t_exit": "2026-04-21 14:30:00"
+        }
+      ]
+    },
+    "0.1": {
+      "trades": 27,
+      "wr_pct": 37.04,
+      "sum_pnl_3x": 10.1627,
+      "end_bal": 2296.75,
+      "net_pct": 9.3692,
+      "mdd_pct": -11.5287,
+      "reasons": {
+        "TRAIL_TP": 22,
+        "SL": 5
+      },
+      "activation_pct": 0.1,
+      "trades_list": [
+        {
+          "dir": "SHORT",
+          "entry": 71692.2,
+          "exit": 71643.2,
+          "pnl1x": -0.0316,
+          "pnl3x": -0.0948,
+          "reason": "TRAIL_TP",
+          "bars": 24,
+          "t_exit": "2026-04-12 07:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 71048.7,
+          "exit": 70933.6,
+          "pnl1x": 0.0621,
+          "pnl3x": 0.1862,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-12 17:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71099.9,
+          "exit": 71099.9,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-12 22:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 70863.3,
+          "exit": 70863.3,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 27,
+          "t_exit": "2026-04-13 11:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71040.4,
+          "exit": 74312.7,
+          "pnl1x": 4.5062,
+          "pnl3x": 13.5187,
+          "reason": "TRAIL_TP",
+          "bars": 58,
+          "t_exit": "2026-04-14 03:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74184.5,
+          "exit": 74751.3,
+          "pnl1x": -0.864,
+          "pnl3x": -2.5921,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-14 07:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74321.2,
+          "exit": 74895.9,
+          "pnl1x": -0.8733,
+          "pnl3x": -2.6198,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-14 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75803.0,
+          "exit": 75017.8,
+          "pnl1x": -1.1358,
+          "pnl3x": -3.4075,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-14 14:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74503.5,
+          "exit": 74503.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 14,
+          "t_exit": "2026-04-15 03:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 73976.3,
+          "exit": 73954.2,
+          "pnl1x": -0.0701,
+          "pnl3x": -0.2104,
+          "reason": "TRAIL_TP",
+          "bars": 12,
+          "t_exit": "2026-04-15 08:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74292.3,
+          "exit": 74292.3,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 4,
+          "t_exit": "2026-04-15 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74349.7,
+          "exit": 74612.9,
+          "pnl1x": 0.254,
+          "pnl3x": 0.7619,
+          "reason": "TRAIL_TP",
+          "bars": 10,
+          "t_exit": "2026-04-15 21:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74670.1,
+          "exit": 74659.1,
+          "pnl1x": -0.0853,
+          "pnl3x": -0.2559,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-16 12:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74932.7,
+          "exit": 74368.6,
+          "pnl1x": -0.8528,
+          "pnl3x": -2.5583,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-16 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75001.7,
+          "exit": 75001.7,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 16,
+          "t_exit": "2026-04-16 22:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74713.6,
+          "exit": 74713.6,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 22,
+          "t_exit": "2026-04-17 06:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75298.6,
+          "exit": 75658.1,
+          "pnl1x": 0.3775,
+          "pnl3x": 1.1324,
+          "reason": "TRAIL_TP",
+          "bars": 6,
+          "t_exit": "2026-04-17 10:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76877.7,
+          "exit": 77216.4,
+          "pnl1x": 0.3405,
+          "pnl3x": 1.0216,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-17 17:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 77009.5,
+          "exit": 76179.9,
+          "pnl1x": 0.9773,
+          "pnl3x": 2.9318,
+          "reason": "TRAIL_TP",
+          "bars": 62,
+          "t_exit": "2026-04-18 14:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75499.4,
+          "exit": 75224.8,
+          "pnl1x": 0.2637,
+          "pnl3x": 0.7912,
+          "reason": "TRAIL_TP",
+          "bars": 39,
+          "t_exit": "2026-04-19 11:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75560.4,
+          "exit": 75617.4,
+          "pnl1x": -0.0246,
+          "pnl3x": -0.0737,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-19 16:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75347.1,
+          "exit": 74297.4,
+          "pnl1x": 1.2931,
+          "pnl3x": 3.8793,
+          "reason": "TRAIL_TP",
+          "bars": 33,
+          "t_exit": "2026-04-20 01:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74110.1,
+          "exit": 74702.2,
+          "pnl1x": -0.8989,
+          "pnl3x": -2.6968,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-20 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75175.0,
+          "exit": 75879.2,
+          "pnl1x": 0.8367,
+          "pnl3x": 2.5102,
+          "reason": "TRAIL_TP",
+          "bars": 57,
+          "t_exit": "2026-04-20 21:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75713.1,
+          "exit": 75713.1,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 30,
+          "t_exit": "2026-04-21 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76139.2,
+          "exit": 76301.3,
+          "pnl1x": 0.1129,
+          "pnl3x": 0.3387,
+          "reason": "TRAIL_TP",
+          "bars": 8,
+          "t_exit": "2026-04-21 09:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75796.5,
+          "exit": 75796.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 8,
+          "t_exit": "2026-04-21 14:30:00"
+        }
+      ]
+    },
+    "0.2": {
+      "trades": 27,
+      "wr_pct": 37.04,
+      "sum_pnl_3x": 7.5003,
+      "end_bal": 2235.42,
+      "net_pct": 6.4485,
+      "mdd_pct": -13.8912,
+      "reasons": {
+        "TRAIL_TP": 21,
+        "SL": 6
+      },
+      "activation_pct": 0.2,
+      "trades_list": [
+        {
+          "dir": "SHORT",
+          "entry": 71692.2,
+          "exit": 71643.2,
+          "pnl1x": -0.0316,
+          "pnl3x": -0.0948,
+          "reason": "TRAIL_TP",
+          "bars": 24,
+          "t_exit": "2026-04-12 07:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 71048.7,
+          "exit": 70933.6,
+          "pnl1x": 0.0621,
+          "pnl3x": 0.1862,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-12 17:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71099.9,
+          "exit": 71099.9,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-12 22:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 70863.3,
+          "exit": 70863.3,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 27,
+          "t_exit": "2026-04-13 11:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71040.4,
+          "exit": 74312.7,
+          "pnl1x": 4.5062,
+          "pnl3x": 13.5187,
+          "reason": "TRAIL_TP",
+          "bars": 58,
+          "t_exit": "2026-04-14 03:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74184.5,
+          "exit": 74751.3,
+          "pnl1x": -0.864,
+          "pnl3x": -2.5921,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-14 07:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74321.2,
+          "exit": 74895.9,
+          "pnl1x": -0.8733,
+          "pnl3x": -2.6198,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-14 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75803.0,
+          "exit": 75017.8,
+          "pnl1x": -1.1358,
+          "pnl3x": -3.4075,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-14 14:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74503.5,
+          "exit": 74503.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 14,
+          "t_exit": "2026-04-15 03:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 73976.3,
+          "exit": 73954.2,
+          "pnl1x": -0.0701,
+          "pnl3x": -0.2104,
+          "reason": "TRAIL_TP",
+          "bars": 12,
+          "t_exit": "2026-04-15 08:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74292.3,
+          "exit": 73633.0,
+          "pnl1x": -0.9875,
+          "pnl3x": -2.9624,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-15 15:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74349.7,
+          "exit": 74612.9,
+          "pnl1x": 0.254,
+          "pnl3x": 0.7619,
+          "reason": "TRAIL_TP",
+          "bars": 10,
+          "t_exit": "2026-04-15 21:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74670.1,
+          "exit": 74659.1,
+          "pnl1x": -0.0853,
+          "pnl3x": -0.2559,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-16 12:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74932.7,
+          "exit": 74368.6,
+          "pnl1x": -0.8528,
+          "pnl3x": -2.5583,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-16 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75001.7,
+          "exit": 75001.7,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 16,
+          "t_exit": "2026-04-16 22:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74713.6,
+          "exit": 74713.6,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 22,
+          "t_exit": "2026-04-17 06:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75298.6,
+          "exit": 75658.1,
+          "pnl1x": 0.3775,
+          "pnl3x": 1.1324,
+          "reason": "TRAIL_TP",
+          "bars": 6,
+          "t_exit": "2026-04-17 10:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76877.7,
+          "exit": 77216.4,
+          "pnl1x": 0.3405,
+          "pnl3x": 1.0216,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-17 17:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 77009.5,
+          "exit": 76179.9,
+          "pnl1x": 0.9773,
+          "pnl3x": 2.9318,
+          "reason": "TRAIL_TP",
+          "bars": 62,
+          "t_exit": "2026-04-18 14:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75499.4,
+          "exit": 75224.8,
+          "pnl1x": 0.2637,
+          "pnl3x": 0.7912,
+          "reason": "TRAIL_TP",
+          "bars": 39,
+          "t_exit": "2026-04-19 11:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75560.4,
+          "exit": 75617.4,
+          "pnl1x": -0.0246,
+          "pnl3x": -0.0737,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-19 16:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75347.1,
+          "exit": 74297.4,
+          "pnl1x": 1.2931,
+          "pnl3x": 3.8793,
+          "reason": "TRAIL_TP",
+          "bars": 33,
+          "t_exit": "2026-04-20 01:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74110.1,
+          "exit": 74702.2,
+          "pnl1x": -0.8989,
+          "pnl3x": -2.6968,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-20 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75175.0,
+          "exit": 75879.2,
+          "pnl1x": 0.8367,
+          "pnl3x": 2.5102,
+          "reason": "TRAIL_TP",
+          "bars": 57,
+          "t_exit": "2026-04-20 21:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75713.1,
+          "exit": 75713.1,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 30,
+          "t_exit": "2026-04-21 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76139.2,
+          "exit": 76301.3,
+          "pnl1x": 0.1129,
+          "pnl3x": 0.3387,
+          "reason": "TRAIL_TP",
+          "bars": 8,
+          "t_exit": "2026-04-21 09:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75796.5,
+          "exit": 75796.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 8,
+          "t_exit": "2026-04-21 14:30:00"
+        }
+      ]
+    },
+    "0.5": {
+      "trades": 24,
+      "wr_pct": 33.33,
+      "sum_pnl_3x": -9.1713,
+      "end_bal": 1896.69,
+      "net_pct": -9.6814,
+      "mdd_pct": -18.0003,
+      "reasons": {
+        "TRAIL_TP": 13,
+        "SL": 11
+      },
+      "activation_pct": 0.5,
+      "trades_list": [
+        {
+          "dir": "SHORT",
+          "entry": 71692.2,
+          "exit": 71643.2,
+          "pnl1x": -0.0316,
+          "pnl3x": -0.0948,
+          "reason": "TRAIL_TP",
+          "bars": 24,
+          "t_exit": "2026-04-12 07:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 71048.7,
+          "exit": 70933.6,
+          "pnl1x": 0.0621,
+          "pnl3x": 0.1862,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-12 17:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71099.9,
+          "exit": 70610.4,
+          "pnl1x": -0.7884,
+          "pnl3x": -2.3653,
+          "reason": "SL",
+          "bars": 18,
+          "t_exit": "2026-04-12 22:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 70863.3,
+          "exit": 71249.7,
+          "pnl1x": -0.6453,
+          "pnl3x": -1.9358,
+          "reason": "SL",
+          "bars": 36,
+          "t_exit": "2026-04-13 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71942.7,
+          "exit": 74305.6,
+          "pnl1x": 3.1844,
+          "pnl3x": 9.5533,
+          "reason": "TRAIL_TP",
+          "bars": 51,
+          "t_exit": "2026-04-14 03:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74184.5,
+          "exit": 74751.3,
+          "pnl1x": -0.864,
+          "pnl3x": -2.5921,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-14 07:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74321.2,
+          "exit": 74895.9,
+          "pnl1x": -0.8733,
+          "pnl3x": -2.6198,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-14 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75803.0,
+          "exit": 75017.8,
+          "pnl1x": -1.1358,
+          "pnl3x": -3.4075,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-14 14:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74503.5,
+          "exit": 73774.9,
+          "pnl1x": -1.0779,
+          "pnl3x": -3.2338,
+          "reason": "SL",
+          "bars": 29,
+          "t_exit": "2026-04-15 07:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74292.3,
+          "exit": 73633.0,
+          "pnl1x": -0.9875,
+          "pnl3x": -2.9624,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-15 15:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74349.7,
+          "exit": 74612.9,
+          "pnl1x": 0.254,
+          "pnl3x": 0.7619,
+          "reason": "TRAIL_TP",
+          "bars": 10,
+          "t_exit": "2026-04-15 21:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74670.1,
+          "exit": 74659.1,
+          "pnl1x": -0.0853,
+          "pnl3x": -0.2559,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-16 12:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74932.7,
+          "exit": 74368.6,
+          "pnl1x": -0.8528,
+          "pnl3x": -2.5583,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-16 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75001.7,
+          "exit": 75001.7,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 16,
+          "t_exit": "2026-04-16 22:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74713.6,
+          "exit": 75159.7,
+          "pnl1x": -0.6971,
+          "pnl3x": -2.0912,
+          "reason": "SL",
+          "bars": 29,
+          "t_exit": "2026-04-17 08:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75874.5,
+          "exit": 75874.5,
+          "pnl1x": -0.1,
+          "pnl3x": -0.3,
+          "reason": "TRAIL_TP",
+          "bars": 4,
+          "t_exit": "2026-04-17 10:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76877.7,
+          "exit": 77216.4,
+          "pnl1x": 0.3405,
+          "pnl3x": 1.0216,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-17 17:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 77009.5,
+          "exit": 76179.9,
+          "pnl1x": 0.9773,
+          "pnl3x": 2.9318,
+          "reason": "TRAIL_TP",
+          "bars": 62,
+          "t_exit": "2026-04-18 14:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75499.4,
+          "exit": 75224.8,
+          "pnl1x": 0.2637,
+          "pnl3x": 0.7912,
+          "reason": "TRAIL_TP",
+          "bars": 39,
+          "t_exit": "2026-04-19 11:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75560.4,
+          "exit": 75617.4,
+          "pnl1x": -0.0246,
+          "pnl3x": -0.0737,
+          "reason": "TRAIL_TP",
+          "bars": 18,
+          "t_exit": "2026-04-19 16:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75347.1,
+          "exit": 74297.4,
+          "pnl1x": 1.2931,
+          "pnl3x": 3.8793,
+          "reason": "TRAIL_TP",
+          "bars": 33,
+          "t_exit": "2026-04-20 01:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74110.1,
+          "exit": 74702.2,
+          "pnl1x": -0.8989,
+          "pnl3x": -2.6968,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-20 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75175.0,
+          "exit": 75879.2,
+          "pnl1x": 0.8367,
+          "pnl3x": 2.5102,
+          "reason": "TRAIL_TP",
+          "bars": 57,
+          "t_exit": "2026-04-20 21:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75713.1,
+          "exit": 76475.1,
+          "pnl1x": -1.1065,
+          "pnl3x": -3.3194,
+          "reason": "SL",
+          "bars": 39,
+          "t_exit": "2026-04-21 08:45:00"
+        }
+      ]
+    },
+    "1.0": {
+      "trades": 19,
+      "wr_pct": 47.37,
+      "sum_pnl_3x": 1.1959,
+      "end_bal": 2102.95,
+      "net_pct": 0.1404,
+      "mdd_pct": -13.9656,
+      "reasons": {
+        "TRAIL_TP": 9,
+        "SL": 10
+      },
+      "activation_pct": 1.0,
+      "trades_list": [
+        {
+          "dir": "SHORT",
+          "entry": 71692.2,
+          "exit": 70936.8,
+          "pnl1x": 0.9537,
+          "pnl3x": 2.861,
+          "reason": "TRAIL_TP",
+          "bars": 63,
+          "t_exit": "2026-04-12 17:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71099.9,
+          "exit": 70610.4,
+          "pnl1x": -0.7884,
+          "pnl3x": -2.3653,
+          "reason": "SL",
+          "bars": 18,
+          "t_exit": "2026-04-12 22:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 70863.3,
+          "exit": 71249.7,
+          "pnl1x": -0.6453,
+          "pnl3x": -1.9358,
+          "reason": "SL",
+          "bars": 36,
+          "t_exit": "2026-04-13 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71942.7,
+          "exit": 74305.6,
+          "pnl1x": 3.1844,
+          "pnl3x": 9.5533,
+          "reason": "TRAIL_TP",
+          "bars": 51,
+          "t_exit": "2026-04-14 03:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74184.5,
+          "exit": 74751.3,
+          "pnl1x": -0.864,
+          "pnl3x": -2.5921,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-14 07:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74321.2,
+          "exit": 74895.9,
+          "pnl1x": -0.8733,
+          "pnl3x": -2.6198,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-14 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75803.0,
+          "exit": 75017.8,
+          "pnl1x": -1.1358,
+          "pnl3x": -3.4075,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-14 14:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74503.5,
+          "exit": 73774.9,
+          "pnl1x": -1.0779,
+          "pnl3x": -3.2338,
+          "reason": "SL",
+          "bars": 29,
+          "t_exit": "2026-04-15 07:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74292.3,
+          "exit": 73633.0,
+          "pnl1x": -0.9875,
+          "pnl3x": -2.9624,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-15 15:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74349.7,
+          "exit": 74612.9,
+          "pnl1x": 0.254,
+          "pnl3x": 0.7619,
+          "reason": "TRAIL_TP",
+          "bars": 10,
+          "t_exit": "2026-04-15 21:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74670.1,
+          "exit": 74058.6,
+          "pnl1x": 0.719,
+          "pnl3x": 2.1569,
+          "reason": "TRAIL_TP",
+          "bars": 29,
+          "t_exit": "2026-04-16 15:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75001.7,
+          "exit": 75660.8,
+          "pnl1x": 0.7788,
+          "pnl3x": 2.3364,
+          "reason": "TRAIL_TP",
+          "bars": 61,
+          "t_exit": "2026-04-17 10:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76877.7,
+          "exit": 77216.4,
+          "pnl1x": 0.3405,
+          "pnl3x": 1.0216,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-17 17:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 77009.5,
+          "exit": 76179.9,
+          "pnl1x": 0.9773,
+          "pnl3x": 2.9318,
+          "reason": "TRAIL_TP",
+          "bars": 62,
+          "t_exit": "2026-04-18 14:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75499.4,
+          "exit": 75847.6,
+          "pnl1x": -0.5612,
+          "pnl3x": -1.6836,
+          "reason": "SL",
+          "bars": 48,
+          "t_exit": "2026-04-19 13:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75347.1,
+          "exit": 74297.4,
+          "pnl1x": 1.2931,
+          "pnl3x": 3.8793,
+          "reason": "TRAIL_TP",
+          "bars": 33,
+          "t_exit": "2026-04-20 01:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74110.1,
+          "exit": 74702.2,
+          "pnl1x": -0.8989,
+          "pnl3x": -2.6968,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-20 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75175.0,
+          "exit": 75879.2,
+          "pnl1x": 0.8367,
+          "pnl3x": 2.5102,
+          "reason": "TRAIL_TP",
+          "bars": 57,
+          "t_exit": "2026-04-20 21:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75713.1,
+          "exit": 76475.1,
+          "pnl1x": -1.1065,
+          "pnl3x": -3.3194,
+          "reason": "SL",
+          "bars": 39,
+          "t_exit": "2026-04-21 08:45:00"
+        }
+      ]
+    },
+    "1.5": {
+      "trades": 18,
+      "wr_pct": 38.89,
+      "sum_pnl_3x": -5.2779,
+      "end_bal": 1970.35,
+      "net_pct": -6.1736,
+      "mdd_pct": -17.0242,
+      "reasons": {
+        "TRAIL_TP": 7,
+        "SL": 11
+      },
+      "activation_pct": 1.5,
+      "trades_list": [
+        {
+          "dir": "SHORT",
+          "entry": 71692.2,
+          "exit": 70936.8,
+          "pnl1x": 0.9537,
+          "pnl3x": 2.861,
+          "reason": "TRAIL_TP",
+          "bars": 63,
+          "t_exit": "2026-04-12 17:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71099.9,
+          "exit": 70610.4,
+          "pnl1x": -0.7884,
+          "pnl3x": -2.3653,
+          "reason": "SL",
+          "bars": 18,
+          "t_exit": "2026-04-12 22:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 70863.3,
+          "exit": 71249.7,
+          "pnl1x": -0.6453,
+          "pnl3x": -1.9358,
+          "reason": "SL",
+          "bars": 36,
+          "t_exit": "2026-04-13 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 71942.7,
+          "exit": 74305.6,
+          "pnl1x": 3.1844,
+          "pnl3x": 9.5533,
+          "reason": "TRAIL_TP",
+          "bars": 51,
+          "t_exit": "2026-04-14 03:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74184.5,
+          "exit": 74751.3,
+          "pnl1x": -0.864,
+          "pnl3x": -2.5921,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-14 07:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74321.2,
+          "exit": 74895.9,
+          "pnl1x": -0.8733,
+          "pnl3x": -2.6198,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-14 13:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75803.0,
+          "exit": 75017.8,
+          "pnl1x": -1.1358,
+          "pnl3x": -3.4075,
+          "reason": "SL",
+          "bars": 2,
+          "t_exit": "2026-04-14 14:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74503.5,
+          "exit": 73774.9,
+          "pnl1x": -1.0779,
+          "pnl3x": -3.2338,
+          "reason": "SL",
+          "bars": 29,
+          "t_exit": "2026-04-15 07:15:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74292.3,
+          "exit": 73633.0,
+          "pnl1x": -0.9875,
+          "pnl3x": -2.9624,
+          "reason": "SL",
+          "bars": 12,
+          "t_exit": "2026-04-15 15:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 74349.7,
+          "exit": 73543.0,
+          "pnl1x": -1.185,
+          "pnl3x": -3.555,
+          "reason": "SL",
+          "bars": 76,
+          "t_exit": "2026-04-16 13:45:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75001.7,
+          "exit": 75660.8,
+          "pnl1x": 0.7788,
+          "pnl3x": 2.3364,
+          "reason": "TRAIL_TP",
+          "bars": 61,
+          "t_exit": "2026-04-17 10:00:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 76877.7,
+          "exit": 77216.4,
+          "pnl1x": 0.3405,
+          "pnl3x": 1.0216,
+          "reason": "TRAIL_TP",
+          "bars": 17,
+          "t_exit": "2026-04-17 17:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 77009.5,
+          "exit": 76179.9,
+          "pnl1x": 0.9773,
+          "pnl3x": 2.9318,
+          "reason": "TRAIL_TP",
+          "bars": 62,
+          "t_exit": "2026-04-18 14:45:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75499.4,
+          "exit": 75847.6,
+          "pnl1x": -0.5612,
+          "pnl3x": -1.6836,
+          "reason": "SL",
+          "bars": 48,
+          "t_exit": "2026-04-19 13:15:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75347.1,
+          "exit": 74297.4,
+          "pnl1x": 1.2931,
+          "pnl3x": 3.8793,
+          "reason": "TRAIL_TP",
+          "bars": 33,
+          "t_exit": "2026-04-20 01:00:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 74110.1,
+          "exit": 74702.2,
+          "pnl1x": -0.8989,
+          "pnl3x": -2.6968,
+          "reason": "SL",
+          "bars": 5,
+          "t_exit": "2026-04-20 06:30:00"
+        },
+        {
+          "dir": "LONG",
+          "entry": 75175.0,
+          "exit": 75879.2,
+          "pnl1x": 0.8367,
+          "pnl3x": 2.5102,
+          "reason": "TRAIL_TP",
+          "bars": 57,
+          "t_exit": "2026-04-20 21:30:00"
+        },
+        {
+          "dir": "SHORT",
+          "entry": 75713.1,
+          "exit": 76475.1,
+          "pnl1x": -1.1065,
+          "pnl3x": -3.3194,
+          "reason": "SL",
+          "bars": 39,
+          "t_exit": "2026-04-21 08:45:00"
+        }
+      ]
+    }
+  }
+}

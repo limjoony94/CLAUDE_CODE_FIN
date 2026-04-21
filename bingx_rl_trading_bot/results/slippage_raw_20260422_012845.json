@@ -1,0 +1,1163 @@
+{
+  "generated_at": "2026-04-22T01:28:45.672793",
+  "period": "2026-04-12 to 2026-04-22",
+  "entry_slippage_stats": {
+    "count": 26,
+    "mean_pct": 0.0045,
+    "median_pct": 0.015,
+    "min_pct": -0.159,
+    "max_pct": 0.195,
+    "adv_mean_pct": 0.0583,
+    "adv_max_pct": 0.195
+  },
+  "entry_slippage_samples": [
+    {
+      "ts": "2026-04-13 23:00:06",
+      "slip_pct": 0.071,
+      "signal": 71617.5,
+      "fill": 71668.6
+    },
+    {
+      "ts": "2026-04-14 15:00:06",
+      "slip_pct": 0.057,
+      "signal": 74184.0,
+      "fill": 74226.0
+    },
+    {
+      "ts": "2026-04-14 19:45:06",
+      "slip_pct": -0.028,
+      "signal": 74321.0,
+      "fill": 74300.0
+    },
+    {
+      "ts": "2026-04-14 22:45:06",
+      "slip_pct": -0.035,
+      "signal": 75138.1,
+      "fill": 75112.0
+    },
+    {
+      "ts": "2026-04-15 09:15:06",
+      "slip_pct": 0.025,
+      "signal": 74503.3,
+      "fill": 74521.9
+    },
+    {
+      "ts": "2026-04-15 14:30:07",
+      "slip_pct": -0.038,
+      "signal": 73976.1,
+      "fill": 73948.3
+    },
+    {
+      "ts": "2026-04-15 21:45:06",
+      "slip_pct": 0.018,
+      "signal": 74292.5,
+      "fill": 74305.7
+    },
+    {
+      "ts": "2026-04-16 04:00:07",
+      "slip_pct": 0.016,
+      "signal": 74349.9,
+      "fill": 74361.5
+    },
+    {
+      "ts": "2026-04-16 17:00:07",
+      "slip_pct": -0.027,
+      "signal": 74670.0,
+      "fill": 74649.9
+    },
+    {
+      "ts": "2026-04-16 22:30:06",
+      "slip_pct": 0.03,
+      "signal": 74935.4,
+      "fill": 74958.2
+    },
+    {
+      "ts": "2026-04-16 23:00:06",
+      "slip_pct": -0.13,
+      "signal": 73749.4,
+      "fill": 73653.8
+    },
+    {
+      "ts": "2026-04-17 04:00:06",
+      "slip_pct": 0.071,
+      "signal": 75001.9,
+      "fill": 75055.5
+    },
+    {
+      "ts": "2026-04-17 10:30:07",
+      "slip_pct": -0.046,
+      "signal": 74714.1,
+      "fill": 74680.0
+    },
+    {
+      "ts": "2026-04-17 17:45:07",
+      "slip_pct": 0.021,
+      "signal": 75299.3,
+      "fill": 75315.2
+    },
+    {
+      "ts": "2026-04-17 22:15:06",
+      "slip_pct": 0.038,
+      "signal": 76876.5,
+      "fill": 76905.5
+    },
+    {
+      "ts": "2026-04-17 23:00:06",
+      "slip_pct": 0.195,
+      "signal": 77298.1,
+      "fill": 77448.6
+    },
+    {
+      "ts": "2026-04-19 10:30:06",
+      "slip_pct": -0.017,
+      "signal": 75499.2,
+      "fill": 75486.3
+    },
+    {
+      "ts": "2026-04-19 16:15:06",
+      "slip_pct": -0.028,
+      "signal": 75195.2,
+      "fill": 75173.8
+    },
+    {
+      "ts": "2026-04-20 02:00:06",
+      "slip_pct": -0.159,
+      "signal": 75347.1,
+      "fill": 75227.0
+    },
+    {
+      "ts": "2026-04-20 14:30:07",
+      "slip_pct": -0.022,
+      "signal": 74110.0,
+      "fill": 74093.7
+    },
+    {
+      "ts": "2026-04-20 16:30:06",
+      "slip_pct": 0.07,
+      "signal": 75175.0,
+      "fill": 75227.4
+    },
+    {
+      "ts": "2026-04-21 03:00:06",
+      "slip_pct": 0.103,
+      "signal": 75851.1,
+      "fill": 75929.6
+    },
+    {
+      "ts": "2026-04-21 08:15:06",
+      "slip_pct": -0.044,
+      "signal": 75713.1,
+      "fill": 75680.0
+    },
+    {
+      "ts": "2026-04-21 16:30:06",
+      "slip_pct": 0.087,
+      "signal": 76138.5,
+      "fill": 76205.0
+    },
+    {
+      "ts": "2026-04-21 21:45:06",
+      "slip_pct": -0.126,
+      "signal": 75795.2,
+      "fill": 75700.0
+    },
+    {
+      "ts": "2026-04-22 00:00:06",
+      "slip_pct": 0.014,
+      "signal": 75627.1,
+      "fill": 75637.6
+    }
+  ],
+  "event_types": {
+    "entry": 33,
+    "market_fill": 30,
+    "sl_order": 30,
+    "trail_order": 29,
+    "ghost_exit": 24
+  },
+  "events": [
+    {
+      "type": "entry",
+      "ts": "2026-04-13 14:00:06",
+      "dir": "SHORT",
+      "price": 70863.3,
+      "sl": 71249.7
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-13 14:15:05",
+      "dir": "SHORT",
+      "price": 70795.0,
+      "sl": 71249.7
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-13 14:45:05",
+      "dir": "SHORT",
+      "price": 70718.3,
+      "sl": 71249.7
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-13 17:45:06",
+      "dir": "SHORT",
+      "price": 70565.6,
+      "sl": 71073.83
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-13 17:45:06",
+      "dir": "SHORT",
+      "qty": 0.0088,
+      "fill": 70560.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-13 17:45:06",
+      "price": 71073.8
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-13 17:45:07",
+      "callback_pct": 0.5,
+      "activate": 70489.4
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-13 22:00:06",
+      "dir": "SHORT",
+      "entry": 70560.0,
+      "reason": "EXCHANGE_SL",
+      "exit": 71080.3,
+      "pnl_pct": -2.51
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-13 23:00:06",
+      "dir": "LONG",
+      "price": 71617.5,
+      "sl": 70920.27
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-13 23:00:06",
+      "dir": "LONG",
+      "qty": 0.0084,
+      "fill": 71668.6
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-13 23:00:07",
+      "price": 70920.3
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-14 10:09:59",
+      "dir": "LONG",
+      "entry": 71668.6,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74026.6,
+      "pnl_pct": 9.57
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-14 15:00:05",
+      "dir": "SHORT",
+      "price": 74184.0,
+      "sl": 74751.23
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-14 15:00:06",
+      "dir": "SHORT",
+      "qty": 0.0893,
+      "fill": 74226.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-14 15:00:06",
+      "price": 74751.2
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-14 15:00:06",
+      "callback_pct": 0.6,
+      "activate": 74151.8
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-14 16:15:06",
+      "dir": "SHORT",
+      "entry": 74226.0,
+      "reason": "EXCHANGE_SL",
+      "exit": 74782.5,
+      "pnl_pct": -2.55
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-14 19:45:05",
+      "dir": "SHORT",
+      "price": 74321.0,
+      "sl": 74895.9
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-14 19:45:06",
+      "dir": "SHORT",
+      "qty": 0.0869,
+      "fill": 74300.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-14 19:45:06",
+      "price": 74895.9
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-14 19:45:06",
+      "callback_pct": 0.6,
+      "activate": 74225.7
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-14 22:30:06",
+      "dir": "SHORT",
+      "entry": 74300.0,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74630.0,
+      "pnl_pct": -1.63
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-14 22:45:06",
+      "dir": "LONG",
+      "price": 75138.1,
+      "sl": 74463.51
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-14 22:45:06",
+      "dir": "LONG",
+      "qty": 0.0846,
+      "fill": 75112.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-14 22:45:07",
+      "price": 74463.5
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-14 22:45:07",
+      "callback_pct": 0.7,
+      "activate": 75187.1
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-14 23:45:06",
+      "dir": "LONG",
+      "entry": 75112.0,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 75448.0,
+      "pnl_pct": 1.04
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-15 09:15:06",
+      "dir": "LONG",
+      "price": 74503.3,
+      "sl": 73774.9
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-15 09:15:06",
+      "dir": "LONG",
+      "qty": 0.0862,
+      "fill": 74521.9
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-15 09:15:07",
+      "price": 73774.9
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-15 09:15:07",
+      "callback_pct": 0.9,
+      "activate": 74596.4
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-15 14:30:06",
+      "dir": "SHORT",
+      "price": 73976.1,
+      "sl": 74616.86
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-15 14:30:07",
+      "dir": "SHORT",
+      "qty": 0.0854,
+      "fill": 73948.3
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-15 14:30:07",
+      "price": 74616.9
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-15 14:30:07",
+      "callback_pct": 0.7,
+      "activate": 73874.4
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-15 21:45:05",
+      "dir": "LONG",
+      "price": 74292.5,
+      "sl": 73632.7
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-15 21:45:06",
+      "dir": "LONG",
+      "qty": 0.0847,
+      "fill": 74305.7
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-15 21:45:06",
+      "price": 73632.7
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-15 21:45:06",
+      "callback_pct": 0.7,
+      "activate": 74380.0
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-15 22:45:06",
+      "dir": "LONG",
+      "entry": 74305.7,
+      "reason": "EXCHANGE_SL",
+      "exit": 73854.8,
+      "pnl_pct": -2.12
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-16 04:00:06",
+      "dir": "LONG",
+      "price": 74349.9,
+      "sl": 73543.0
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-16 04:00:07",
+      "dir": "LONG",
+      "qty": 0.0829,
+      "fill": 74361.5
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-16 04:00:07",
+      "price": 73543.0
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-16 04:00:07",
+      "callback_pct": 0.8,
+      "activate": 74435.9
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-16 05:15:06",
+      "dir": "LONG",
+      "entry": 74361.5,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74622.4,
+      "pnl_pct": 0.75
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-16 17:00:06",
+      "dir": "SHORT",
+      "price": 74670.0,
+      "sl": 75221.2
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-16 17:00:07",
+      "dir": "SHORT",
+      "qty": 0.0831,
+      "fill": 74649.9
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-16 17:00:07",
+      "price": 75221.2
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-16 17:00:07",
+      "callback_pct": 0.6,
+      "activate": 74575.3
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-16 21:15:05",
+      "dir": "SHORT",
+      "entry": 74649.9,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74685.6,
+      "pnl_pct": -0.44
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-16 22:30:06",
+      "dir": "LONG",
+      "price": 74935.4,
+      "sl": 74368.39
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-16 22:30:06",
+      "dir": "LONG",
+      "qty": 0.0825,
+      "fill": 74958.2
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-16 22:30:07",
+      "price": 74368.4
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-16 22:30:07",
+      "callback_pct": 0.6,
+      "activate": 75033.2
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-16 22:45:06",
+      "dir": "LONG",
+      "entry": 74958.2,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74442.4,
+      "pnl_pct": -2.36
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-16 23:00:05",
+      "dir": "SHORT",
+      "price": 73749.4,
+      "sl": 74660.86
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-16 23:00:06",
+      "dir": "SHORT",
+      "qty": 0.0818,
+      "fill": 73653.8
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-16 23:00:06",
+      "price": 74660.9
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-16 23:00:06",
+      "callback_pct": 0.9,
+      "activate": 73580.1
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-17 00:00:05",
+      "dir": "SHORT",
+      "entry": 73653.8,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74058.7,
+      "pnl_pct": -1.95
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-17 04:00:05",
+      "dir": "LONG",
+      "price": 75001.9,
+      "sl": 73918.1
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-17 04:00:06",
+      "dir": "LONG",
+      "qty": 0.0789,
+      "fill": 75055.5
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-17 04:00:06",
+      "price": 73918.1
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-17 04:00:06",
+      "callback_pct": 1.1,
+      "activate": 75130.6
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-17 10:30:06",
+      "dir": "SHORT",
+      "price": 74714.1,
+      "sl": 75159.7
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-17 10:30:07",
+      "dir": "SHORT",
+      "qty": 0.0782,
+      "fill": 74680.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-17 10:30:07",
+      "price": 75159.7
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-17 10:30:07",
+      "callback_pct": 0.7,
+      "activate": 74605.3
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-17 17:45:06",
+      "dir": "LONG",
+      "price": 75299.3,
+      "sl": 74771.88
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-17 17:45:07",
+      "dir": "LONG",
+      "qty": 0.0767,
+      "fill": 75315.2
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-17 17:45:07",
+      "price": 74771.9
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-17 17:45:07",
+      "callback_pct": 0.5,
+      "activate": 75390.5
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-17 18:45:06",
+      "dir": "LONG",
+      "entry": 75315.2,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 75630.1,
+      "pnl_pct": 0.95
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-17 22:15:05",
+      "dir": "LONG",
+      "price": 76876.5,
+      "sl": 75786.3
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-17 22:15:06",
+      "dir": "LONG",
+      "qty": 0.0759,
+      "fill": 76905.5
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-17 22:15:06",
+      "price": 75786.3
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-17 22:15:06",
+      "callback_pct": 1.1,
+      "activate": 76982.4
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-17 22:45:07",
+      "dir": "LONG",
+      "entry": 76905.5,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 76159.5,
+      "pnl_pct": -3.21
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-17 23:00:05",
+      "dir": "LONG",
+      "price": 77298.1,
+      "sl": 75957.68
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-17 23:00:06",
+      "dir": "LONG",
+      "qty": 0.0731,
+      "fill": 77448.6
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-17 23:00:06",
+      "price": 75957.7
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-17 23:00:06",
+      "callback_pct": 1.3,
+      "activate": 77526.0
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-18 02:30:06",
+      "dir": "LONG",
+      "entry": 77448.6,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 77268.3,
+      "pnl_pct": -1.0
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-18 08:30:06",
+      "dir": "SHORT",
+      "price": 77009.3,
+      "sl": 77793.61
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-18 08:30:07",
+      "dir": "SHORT",
+      "qty": 0.0727,
+      "fill": 77004.1
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-18 08:30:07",
+      "price": 77793.6
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-18 08:30:07",
+      "callback_pct": 0.8,
+      "activate": 76927.1
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-18 21:30:06",
+      "dir": "SHORT",
+      "entry": 77004.1,
+      "reason": "EXCHANGE_SL",
+      "exit": 76213.1,
+      "pnl_pct": 2.78
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-19 10:30:06",
+      "dir": "SHORT",
+      "price": 75499.2,
+      "sl": 75847.6
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-19 10:30:06",
+      "dir": "SHORT",
+      "qty": 0.0761,
+      "fill": 75486.3
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-19 10:30:06",
+      "price": 75847.6
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-19 10:30:07",
+      "callback_pct": 0.4,
+      "activate": 75448.6
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-19 11:45:06",
+      "dir": "SHORT",
+      "entry": 75486.3,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 75672.6,
+      "pnl_pct": -1.04
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-19 16:15:05",
+      "dir": "SHORT",
+      "price": 75195.2,
+      "sl": 75687.62
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-19 16:15:06",
+      "dir": "SHORT",
+      "qty": 0.0756,
+      "fill": 75173.8
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-19 16:15:06",
+      "price": 75687.6
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-19 16:15:06",
+      "callback_pct": 0.5,
+      "activate": 75136.2
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-19 17:00:06",
+      "dir": "SHORT",
+      "entry": 75173.8,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 75219.4,
+      "pnl_pct": -0.48
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-19 20:15:05",
+      "dir": "LONG",
+      "price": 75388.6,
+      "sl": 74853.55
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-19 20:15:06",
+      "dir": "LONG",
+      "qty": 0.0751,
+      "fill": 75386.4
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-19 20:15:06",
+      "price": 74853.6
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-19 20:15:07",
+      "callback_pct": 0.5,
+      "activate": 75424.1
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-19 23:15:06",
+      "dir": "LONG",
+      "entry": 75386.4,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 75800.0,
+      "pnl_pct": 1.35
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-20 02:00:05",
+      "dir": "SHORT",
+      "price": 75347.1,
+      "sl": 76136.31
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-20 02:00:06",
+      "dir": "SHORT",
+      "qty": 0.0761,
+      "fill": 75227.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-20 02:00:06",
+      "price": 76136.3
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-20 02:00:06",
+      "callback_pct": 0.8,
+      "activate": 75189.4
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-20 10:00:06",
+      "dir": "SHORT",
+      "entry": 75227.0,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74278.0,
+      "pnl_pct": 3.48
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-20 14:30:06",
+      "dir": "SHORT",
+      "price": 74110.0,
+      "sl": 74702.2
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-20 14:30:07",
+      "dir": "SHORT",
+      "qty": 0.08,
+      "fill": 74093.7
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-20 14:30:07",
+      "price": 74702.2
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-20 14:30:07",
+      "callback_pct": 0.6,
+      "activate": 74056.7
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-20 15:45:06",
+      "dir": "SHORT",
+      "entry": 74093.7,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74521.4,
+      "pnl_pct": -2.03
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-20 16:30:05",
+      "dir": "LONG",
+      "price": 75175.0,
+      "sl": 74342.08
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-20 16:30:06",
+      "dir": "LONG",
+      "qty": 0.0773,
+      "fill": 75227.4
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-20 16:30:06",
+      "price": 74342.1
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-20 16:30:06",
+      "callback_pct": 0.8,
+      "activate": 75265.0
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-20 17:15:06",
+      "dir": "LONG",
+      "entry": 75227.4,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 74621.7,
+      "pnl_pct": -2.72
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-21 03:00:06",
+      "dir": "LONG",
+      "price": 75851.1,
+      "sl": 74787.62
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-21 03:00:06",
+      "dir": "LONG",
+      "qty": 0.0746,
+      "fill": 75929.6
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-21 03:00:07",
+      "price": 74787.6
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-21 03:00:07",
+      "callback_pct": 1.1,
+      "activate": 75967.6
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-21 08:15:06",
+      "dir": "SHORT",
+      "price": 75713.1,
+      "sl": 76475.02
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-21 08:15:06",
+      "dir": "SHORT",
+      "qty": 0.0743,
+      "fill": 75680.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-21 08:15:06",
+      "price": 76475.0
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-21 08:15:07",
+      "callback_pct": 0.8,
+      "activate": 75642.2
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-21 10:15:06",
+      "dir": "SHORT",
+      "entry": 75680.0,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 76178.0,
+      "pnl_pct": -2.27
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-21 11:45:06",
+      "dir": "SHORT",
+      "price": 75569.1,
+      "sl": 76220.2
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-21 11:45:07",
+      "dir": "SHORT",
+      "qty": 0.0727,
+      "fill": 75568.1
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-21 11:45:07",
+      "price": 76220.2
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-21 11:45:07",
+      "callback_pct": 0.7,
+      "activate": 75530.3
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-21 15:45:06",
+      "dir": "SHORT",
+      "entry": 75568.1,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 75998.3,
+      "pnl_pct": -2.01
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-21 16:30:05",
+      "dir": "LONG",
+      "price": 76138.5,
+      "sl": 75547.26
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-21 16:30:06",
+      "dir": "LONG",
+      "qty": 0.0707,
+      "fill": 76205.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-21 16:30:06",
+      "price": 75547.3
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-21 16:30:06",
+      "callback_pct": 0.6,
+      "activate": 76243.1
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-21 18:15:06",
+      "dir": "LONG",
+      "entry": 76205.0,
+      "reason": "EXCHANGE_SL",
+      "exit": 76315.6,
+      "pnl_pct": 0.14
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-21 21:45:06",
+      "dir": "SHORT",
+      "price": 75795.2,
+      "sl": 76692.04
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-21 21:45:06",
+      "dir": "SHORT",
+      "qty": 0.0712,
+      "fill": 75700.0
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-21 21:45:06",
+      "price": 76692.0
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-21 21:45:07",
+      "callback_pct": 0.9,
+      "activate": 75662.2
+    },
+    {
+      "type": "ghost_exit",
+      "ts": "2026-04-21 23:45:05",
+      "dir": "SHORT",
+      "entry": 75700.0,
+      "reason": "EXCHANGE_TRAIL",
+      "exit": 76345.0,
+      "pnl_pct": -2.86
+    },
+    {
+      "type": "entry",
+      "ts": "2026-04-22 00:00:06",
+      "dir": "SHORT",
+      "price": 75627.1,
+      "sl": 76555.7
+    },
+    {
+      "type": "market_fill",
+      "ts": "2026-04-22 00:00:06",
+      "dir": "SHORT",
+      "qty": 0.0693,
+      "fill": 75637.6
+    },
+    {
+      "type": "sl_order",
+      "ts": "2026-04-22 00:00:06",
+      "price": 76555.7
+    },
+    {
+      "type": "trail_order",
+      "ts": "2026-04-22 00:00:07",
+      "callback_pct": 1.1,
+      "activate": 75599.8
+    }
+  ],
+  "exchange_trades_count": 0,
+  "exchange_trades": []
+}

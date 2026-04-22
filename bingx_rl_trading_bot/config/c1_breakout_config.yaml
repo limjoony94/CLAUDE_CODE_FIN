@@ -32,6 +32,15 @@ strategy:
     threshold_pct: 0.9          # best_pnl 0.9% 초과 시 tk_post로 전환
     trail_K_post: 0.5           # 전환 후 tight trail K
 
+  # activation_gated_trail PDCA (F옵션, 2026-04-22):
+  # E(pre_activation_baton) Phase 1 파산 확인 후 역방향 접근.
+  # Entry 직후 TRAILING_STOP_MARKET 배치 제거 → classic BT 로직 1:1 LIVE 재현.
+  # Pre-activation 구간: fractal SL + emergency SL만 보호 (BT와 동일).
+  # Activation 도달 시점(best_pnl ≥ trail_activation_pct)에 baton STOP_MARKET 최초 배치.
+  # 기본 false — paper test + canary 후 true 전환.
+  activation_gated_trail:
+    enabled: false              # 구현 후 검증 거친 뒤 true 예정
+
 risk: {}  # No halt brakes — all removed per 2026-04-13
 
 exchange:

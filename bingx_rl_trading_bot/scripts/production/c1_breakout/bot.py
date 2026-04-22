@@ -1020,30 +1020,39 @@ class C1BreakoutBot:
             # 3. Trail TP — exchange native TRAILING_STOP_MARKET (backup)
             # Bot's check_exit is primary (backtest math, 15m check).
             # Exchange trail is backup when bot is down.
-            trail_K = self.config['strategy'].get('trail_K', 2.5)
-            ref_price = fill_price if fill_price > 0 else price
-            atr_pct = atr_val / ref_price * 100
-            callback = round(max(0.1, min(5.0, trail_K * atr_pct)), 1)
-            try:
-                tp_side = 'sell' if direction == 'LONG' else 'buy'
-                # BUG#62: activatePrice aligned with backtest trail_activation_pct
-                # Previous 0.001 (0.1%) was 2x stricter than backtest (0.05%)
-                # Now matches: activates when price moves trail_activation_pct from entry
-                act_pct = self.config['strategy'].get('trail_activation_pct', 0.05) / 100
-                activate = round(ref_price * (1 + act_pct) if direction == 'LONG'
-                                 else ref_price * (1 - act_pct), 1)
-                self.exchange.create_order(
-                    symbol, 'TRAILING_STOP_MARKET', tp_side, filled_qty,
-                    params={'positionSide': 'BOTH',
-                            'activatePrice': activate,
-                            'trailingPercent': callback,  # BUG#35: priceRate bypasses CCXT ÷100 conversion
-                            'reduceOnly': True})
-                pos_obj = self.positions[-1] if self.positions else None
-                if pos_obj:
-                    pos_obj['last_callback'] = callback
-                logger.info(f"Trail TP: callback={callback}% activate=${activate:.1f}")
-            except Exception as e:
-                logger.warning(f"Trail TP on exchange failed (bot will manage): {e}")
+            #
+            # F option (activation_gated_trail): if enabled, SKIP TRAILING placement
+            # at entry. baton STOP_MARKET will be placed once best_pnl reaches
+            # trail_activation_pct (handled in _update_exchange_trail). This matches
+            # classic BT semantics where trail is only evaluated after activation.
+            ag_cfg = self.config['strategy'].get('activation_gated_trail', {}) or {}
+            if ag_cfg.get('enabled', False):
+                logger.info("Trail TP: skipped at entry (activation_gated_trail=true)")
+            else:
+                trail_K = self.config['strategy'].get('trail_K', 2.5)
+                ref_price = fill_price if fill_price > 0 else price
+                atr_pct = atr_val / ref_price * 100
+                callback = round(max(0.1, min(5.0, trail_K * atr_pct)), 1)
+                try:
+                    tp_side = 'sell' if direction == 'LONG' else 'buy'
+                    # BUG#62: activatePrice aligned with backtest trail_activation_pct
+                    # Previous 0.001 (0.1%) was 2x stricter than backtest (0.05%)
+                    # Now matches: activates when price moves trail_activation_pct from entry
+                    act_pct = self.config['strategy'].get('trail_activation_pct', 0.05) / 100
+                    activate = round(ref_price * (1 + act_pct) if direction == 'LONG'
+                                     else ref_price * (1 - act_pct), 1)
+                    self.exchange.create_order(
+                        symbol, 'TRAILING_STOP_MARKET', tp_side, filled_qty,
+                        params={'positionSide': 'BOTH',
+                                'activatePrice': activate,
+                                'trailingPercent': callback,  # BUG#35: priceRate bypasses CCXT ÷100 conversion
+                                'reduceOnly': True})
+                    pos_obj = self.positions[-1] if self.positions else None
+                    if pos_obj:
+                        pos_obj['last_callback'] = callback
+                    logger.info(f"Trail TP: callback={callback}% activate=${activate:.1f}")
+                except Exception as e:
+                    logger.warning(f"Trail TP on exchange failed (bot will manage): {e}")
 
             return True
         except Exception as e:
@@ -1163,6 +1172,39 @@ class C1BreakoutBot:
                                 'reduceOnly': True})
                     pos['sl_order_id'] = sl_result.get('id', '')
                     logger.warning(f"SL STOP was missing — re-placed @ ${pos['sl_price']:.1f}")
+
+            # ── F option: activation_gated_trail ──
+            # Pre-activation 구간엔 trail 배치 자체를 하지 않음 (classic BT 로직).
+            # Activation 도달 시점에만 아래 baton 로직으로 진입.
+            ag_cfg = self.config['strategy'].get('activation_gated_trail', {}) or {}
+            ag_enabled = ag_cfg.get('enabled', False)
+            if ag_enabled:
+                bp_ag = pos.get('best_price', cur_price)
+                ep_ag = pos.get('entry_price', cur_price)
+                d_ag = pos.get('direction', 'LONG')
+                act_ag = self.config['strategy'].get('trail_activation_pct', 0.05)
+                best_pnl_ag = ((bp_ag / ep_ag - 1) * 100 if d_ag == 'LONG'
+                               else (1 - bp_ag / ep_ag) * 100)
+                if best_pnl_ag <= act_ag:
+                    # Pre-activation: cancel any stray trail order, do not place new.
+                    stray_ids = []
+                    for order in orders:
+                        oid = order.get('id', '')
+                        if oid == pos.get('sl_order_id', ''):
+                            continue
+                        o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
+                        if 'TRAILING' in o_type.upper() or (pos.get('trail_order_id') and oid == pos['trail_order_id']):
+                            stray_ids.append(oid)
+                    for oid in stray_ids:
+                        try:
+                            self.exchange.cancel_order(oid, symbol)
+                            logger.info(f"activation_gated: cancelled stray trail {oid[:8]}...")
+                        except Exception:
+                            pass
+                    if stray_ids:
+                        pos['trail_order_id'] = ''
+                    self._trail_update_fail_streak = 0
+                    return  # skip all trail logic until activation reached
 
             # ── 2. Verify trail exists — re-place if missing ──
             # BUG#61: trail may be TRAILING_STOP_MARKET (pre-activation) or

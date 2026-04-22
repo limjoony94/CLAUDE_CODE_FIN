@@ -37,9 +37,10 @@ strategy:
   # Entry 직후 TRAILING_STOP_MARKET 배치 제거 → classic BT 로직 1:1 LIVE 재현.
   # Pre-activation 구간: fractal SL + emergency SL만 보호 (BT와 동일).
   # Activation 도달 시점(best_pnl ≥ trail_activation_pct)에 baton STOP_MARKET 최초 배치.
-  # 기본 false — paper test + canary 후 true 전환.
+  # 2026-04-22 Canary 시작: Phase 2 구현 + 138/138 pytest PASS 후 활성.
+  # 현 포지션 close 후 봇 재시작 시 다음 entry부터 F 적용.
   activation_gated_trail:
-    enabled: false              # 구현 후 검증 거친 뒤 true 예정
+    enabled: true               # 2026-04-22 Canary (다음 신규 entry부터 적용)
 
 risk: {}  # No halt brakes — all removed per 2026-04-13
 

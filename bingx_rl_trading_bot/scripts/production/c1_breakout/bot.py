@@ -1021,13 +1021,15 @@ class C1BreakoutBot:
             # Bot's check_exit is primary (backtest math, 15m check).
             # Exchange trail is backup when bot is down.
             #
-            # F option (activation_gated_trail): if enabled, SKIP TRAILING placement
-            # at entry. baton STOP_MARKET will be placed once best_pnl reaches
-            # trail_activation_pct (handled in _update_exchange_trail). This matches
-            # classic BT semantics where trail is only evaluated after activation.
+            # F v1 (activation_gated_trail): SKIP TRAILING at entry, baton later.
+            # F v2 (f_v2_cycle_exit): SKIP TRAILING at entry AND all trail placements.
+            #   → cycle check_exit is the ONLY trail mechanism.
             ag_cfg = self.config['strategy'].get('activation_gated_trail', {}) or {}
-            if ag_cfg.get('enabled', False):
-                logger.info("Trail TP: skipped at entry (activation_gated_trail=true)")
+            fv2_cfg = self.config['strategy'].get('f_v2_cycle_exit', {}) or {}
+            skip_trailing = ag_cfg.get('enabled', False) or fv2_cfg.get('enabled', False)
+            if skip_trailing:
+                reason = 'f_v2_cycle_exit' if fv2_cfg.get('enabled', False) else 'activation_gated_trail'
+                logger.info(f"Trail TP: skipped at entry ({reason}=true)")
             else:
                 trail_K = self.config['strategy'].get('trail_K', 2.5)
                 ref_price = fill_price if fill_price > 0 else price
@@ -1173,7 +1175,32 @@ class C1BreakoutBot:
                     pos['sl_order_id'] = sl_result.get('id', '')
                     logger.warning(f"SL STOP was missing — re-placed @ ${pos['sl_price']:.1f}")
 
-            # ── F option: activation_gated_trail ──
+            # ── F v2: cycle_exit — skip ALL trail placement ──
+            # cycle check_exit (process_candles:801) handles trail TP via MARKET close.
+            # Only fractal SL remains on exchange for crash safety.
+            fv2_cfg = self.config['strategy'].get('f_v2_cycle_exit', {}) or {}
+            if fv2_cfg.get('enabled', False):
+                # Cancel any stray trail orders (TRAILING or baton STOP_MARKET from prev cycle)
+                stray = []
+                for order in orders:
+                    oid = order.get('id', '')
+                    if oid == pos.get('sl_order_id', ''):
+                        continue
+                    o_type = (order.get('info') or {}).get('type', '') or order.get('type', '')
+                    if 'TRAIL' in o_type.upper() or (pos.get('trail_order_id') and oid == pos['trail_order_id']):
+                        stray.append(oid)
+                for oid in stray:
+                    try:
+                        self.exchange.cancel_order(oid, symbol)
+                        logger.info(f"F v2: cancelled stray trail {oid[:8]}...")
+                    except Exception:
+                        pass
+                if stray:
+                    pos['trail_order_id'] = ''
+                self._trail_update_fail_streak = 0
+                return  # no trail placement; cycle check_exit handles trail TP
+
+            # ── F v1 option: activation_gated_trail (legacy, kept for reference) ──
             # Pre-activation 구간엔 trail 배치 자체를 하지 않음 (classic BT 로직).
             # Activation 도달 시점에만 아래 baton 로직으로 진입.
             ag_cfg = self.config['strategy'].get('activation_gated_trail', {}) or {}

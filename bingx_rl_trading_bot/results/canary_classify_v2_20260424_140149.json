@@ -1,0 +1,261 @@
+{
+  "date": "2026-04-24T14:01:49.351448",
+  "results": [
+    {
+      "trade": {
+        "i": 34,
+        "dir": "LONG",
+        "entry_fill": 78285.9,
+        "exit": 78905.0,
+        "pnl_pct": 2.07,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-22 14:16:56",
+        "bars": 16
+      },
+      "entry_log": {
+        "utc": "2026-04-22 11:30:07",
+        "dir": "LONG",
+        "signal": 78267.8,
+        "sl": 77683.24,
+        "sl_pct": 0.75,
+        "atr": 177.14
+      },
+      "batons_count": 5,
+      "last_baton": {
+        "utc": "2026-04-22 14:15:06",
+        "trigger": 78919.2,
+        "best": 79033.2
+      },
+      "best_pnl_max": 0.9545780274608839,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "C",
+      "desc": "Baton tighter, fired at drawdown 0.16% < BT trail 0.56% \u2192 F v2 likely helps"
+    },
+    {
+      "trade": {
+        "i": 35,
+        "dir": "LONG",
+        "entry_fill": 79250.0,
+        "exit": 78727.4,
+        "pnl_pct": -2.28,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-22 16:43:44",
+        "bars": 16
+      },
+      "entry_log": {
+        "utc": "2026-04-22 15:45:05",
+        "dir": "LONG",
+        "signal": 79236.1,
+        "sl": 78321.64,
+        "sl_pct": 1.15,
+        "atr": 277.11
+      },
+      "batons_count": 2,
+      "last_baton": {
+        "utc": "2026-04-22 16:15:06",
+        "trigger": 78732.7,
+        "best": 79425.0
+      },
+      "best_pnl_max": 0.22082018927445102,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "B*",
+      "desc": "Baton tighter, fired at drawdown 0.88% >= BT trail 0.88% \u2192 BT would also exit"
+    },
+    {
+      "trade": {
+        "i": 36,
+        "dir": "SHORT",
+        "entry_fill": 78535.7,
+        "exit": 78443.8,
+        "pnl_pct": 0.05,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-23 00:29:39",
+        "bars": 6
+      },
+      "entry_log": {
+        "utc": "2026-04-22 20:30:06",
+        "dir": "SHORT",
+        "signal": 78546.2,
+        "sl": 79357.54,
+        "sl_pct": 1.03,
+        "atr": 245.86
+      },
+      "batons_count": 6,
+      "last_baton": {
+        "utc": "2026-04-23 00:15:07",
+        "trigger": 78424.5,
+        "best": 77850.0
+      },
+      "best_pnl_max": 0.8731061160720532,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "B*",
+      "desc": "Baton tighter, fired at drawdown 0.76% >= BT trail 0.78% \u2192 BT would also exit"
+    },
+    {
+      "trade": {
+        "i": 37,
+        "dir": "LONG",
+        "entry_fill": 78260.3,
+        "exit": 77805.8,
+        "pnl_pct": -2.04,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-23 08:33:34",
+        "bars": 12
+      },
+      "entry_log": {
+        "utc": "2026-04-23 06:30:06",
+        "dir": "LONG",
+        "signal": 78244.5,
+        "sl": 77541.0,
+        "sl_pct": 0.9,
+        "atr": 213.18
+      },
+      "batons_count": 2,
+      "last_baton": {
+        "utc": "2026-04-23 07:30:06",
+        "trigger": 77810.2,
+        "best": 78299.8
+      },
+      "best_pnl_max": 0.05047258955050982,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "C",
+      "desc": "Baton tighter, fired at drawdown 0.63% < BT trail 0.68% \u2192 F v2 likely helps"
+    },
+    {
+      "trade": {
+        "i": 38,
+        "dir": "SHORT",
+        "entry_fill": 77540.0,
+        "exit": 77188.2,
+        "pnl_pct": 1.06,
+        "reason": "TRAIL_TP",
+        "exit_utc": "2026-04-23 10:15:06",
+        "bars": 4
+      },
+      "entry_log": {
+        "utc": "2026-04-23 09:15:05",
+        "dir": "SHORT",
+        "signal": 77544.8,
+        "sl": 78250.52,
+        "sl_pct": 0.91,
+        "atr": 213.85
+      },
+      "batons_count": 1,
+      "last_baton": {
+        "utc": "2026-04-23 09:30:06",
+        "trigger": 77997.1,
+        "best": 77469.9
+      },
+      "best_pnl_max": 0.09040495228269663,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "C",
+      "desc": "Baton tighter, fired at drawdown -0.36% < BT trail 0.69% \u2192 F v2 likely helps"
+    },
+    {
+      "trade": {
+        "i": 39,
+        "dir": "LONG",
+        "entry_fill": 78140.0,
+        "exit": 77940.4,
+        "pnl_pct": -1.07,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-23 17:01:47",
+        "bars": 8
+      },
+      "entry_log": {
+        "utc": "2026-04-23 15:00:05",
+        "dir": "LONG",
+        "signal": 78136.8,
+        "sl": 77329.22,
+        "sl_pct": 1.03,
+        "atr": 244.72
+      },
+      "batons_count": 1,
+      "last_baton": {
+        "utc": "2026-04-23 15:30:06",
+        "trigger": 77963.1,
+        "best": 78636.4
+      },
+      "best_pnl_max": 0.6352700281545776,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "B*",
+      "desc": "Baton tighter, fired at drawdown 0.89% >= BT trail 0.78% \u2192 BT would also exit"
+    },
+    {
+      "trade": {
+        "i": 40,
+        "dir": "SHORT",
+        "entry_fill": 77059.6,
+        "exit": 77789.9,
+        "pnl_pct": -3.14,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-23 18:00:47",
+        "bars": 1
+      },
+      "entry_log": {
+        "utc": "2026-04-23 17:45:05",
+        "dir": "SHORT",
+        "signal": 77143.7,
+        "sl": 78181.82,
+        "sl_pct": 1.35,
+        "atr": 314.58
+      },
+      "batons_count": 1,
+      "last_baton": {
+        "utc": "2026-04-23 18:00:06",
+        "trigger": 77781.0,
+        "best": 76905.3
+      },
+      "best_pnl_max": 0.2002346235900565,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "B*",
+      "desc": "Baton tighter, fired at drawdown 1.15% >= BT trail 1.01% \u2192 BT would also exit"
+    },
+    {
+      "trade": {
+        "i": 41,
+        "dir": "LONG",
+        "entry_fill": 78285.0,
+        "exit": 77942.0,
+        "pnl_pct": -1.61,
+        "reason": "EXCHANGE_SL",
+        "exit_utc": "2026-04-24 01:32:08",
+        "bars": 12
+      },
+      "entry_log": {
+        "utc": "2026-04-23 22:45:06",
+        "dir": "LONG",
+        "signal": 78272.0,
+        "sl": 77463.62,
+        "sl_pct": 1.03,
+        "atr": 244.96
+      },
+      "batons_count": 2,
+      "last_baton": {
+        "utc": "2026-04-24 01:00:06",
+        "trigger": 77949.3,
+        "best": 78453.7
+      },
+      "best_pnl_max": 0.2154946669221447,
+      "activation_crossed": true,
+      "baton_vs_sl": "tighter",
+      "class": "C",
+      "desc": "Baton tighter, fired at drawdown 0.65% < BT trail 0.79% \u2192 F v2 likely helps"
+    }
+  ],
+  "class_count": {
+    "C": 4,
+    "B*": 4
+  },
+  "losers_class": {
+    "B*": 3,
+    "C": 2
+  }
+}

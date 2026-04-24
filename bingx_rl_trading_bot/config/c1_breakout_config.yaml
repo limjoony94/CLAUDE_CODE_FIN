@@ -44,9 +44,10 @@ strategy:
   #   _update_exchange_trail에서 trail 관련 배치 로직 전부 skip, SL만 verify.
   # Fractal SL은 거래소 STOP_MARKET 유지 (crash safety).
   # Advisor 검증: Class C 4/8 (50%) — ~50% trades 개선 기대.
-  # Class B* 4/8는 entry slippage/신호 타이밍 divergence (별도 조사).
+  # Entry timing 검증: BT=LIVE 동일 bar (±0.02% slippage 미미).
+  # 2026-04-24 Canary 시작: 150/150 pytest PASS 후 활성.
   f_v2_cycle_exit:
-    enabled: false              # 구현 + 138/138 pytest 후 Canary 전환 예정
+    enabled: true               # 2026-04-24 Canary (50% trades 개선 기대)
 
 risk: {}  # No halt brakes — all removed per 2026-04-13
 

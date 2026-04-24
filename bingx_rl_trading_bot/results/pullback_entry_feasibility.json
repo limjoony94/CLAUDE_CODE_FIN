@@ -1,0 +1,533 @@
+{
+  "strategy": "pullback_entry_v1",
+  "phase": "1A",
+  "timestamp": "2026-04-24T06:51:44.912952",
+  "data_window": {
+    "start": "2025-05-06 03:30:00",
+    "end": "2026-04-03 09:15:00",
+    "days": 332.2
+  },
+  "sweep_grid": {
+    "pullback_pct": [
+      0.001,
+      0.002,
+      0.003,
+      0.004,
+      0.005
+    ],
+    "ttl_bars": [
+      4,
+      8,
+      16
+    ]
+  },
+  "sweep_results": [
+    {
+      "pullback_pct": 0.001,
+      "ttl_bars": 4,
+      "fill_rate": 83.7,
+      "summary": {
+        "trades": 677,
+        "daily_pnl": 0.4426,
+        "total_pnl_1x": 147.04,
+        "WR": 37.08,
+        "RR": 4.134,
+        "avg_win": 0.9939,
+        "avg_loss": 0.2404,
+        "MDD_1x": 6.11,
+        "trades_per_day": 2.04,
+        "exit_reasons": {
+          "TRAIL_TP": 589,
+          "SL": 74,
+          "SL_SAMEBAR": 5,
+          "TRAIL_TP_SAMEBAR": 9
+        },
+        "events": {
+          "signals": 1763,
+          "placed": 809,
+          "skipped_chan": 954,
+          "skipped_sl": 0,
+          "filled": 677,
+          "cancelled_ttl": 132
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.001,
+      "ttl_bars": 8,
+      "fill_rate": 88.4,
+      "summary": {
+        "trades": 696,
+        "daily_pnl": 0.4199,
+        "total_pnl_1x": 139.51,
+        "WR": 36.64,
+        "RR": 3.961,
+        "avg_win": 0.971,
+        "avg_loss": 0.2451,
+        "MDD_1x": 6.11,
+        "trades_per_day": 2.09,
+        "exit_reasons": {
+          "TRAIL_TP": 599,
+          "SL": 81,
+          "TRAIL_TP_SAMEBAR": 10,
+          "SL_SAMEBAR": 6
+        },
+        "events": {
+          "signals": 1714,
+          "placed": 787,
+          "skipped_chan": 927,
+          "skipped_sl": 0,
+          "filled": 696,
+          "cancelled_ttl": 91
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.001,
+      "ttl_bars": 16,
+      "fill_rate": 91.7,
+      "summary": {
+        "trades": 693,
+        "daily_pnl": 0.4366,
+        "total_pnl_1x": 145.06,
+        "WR": 37.66,
+        "RR": 3.868,
+        "avg_win": 0.9715,
+        "avg_loss": 0.2512,
+        "MDD_1x": 6.11,
+        "trades_per_day": 2.09,
+        "exit_reasons": {
+          "TRAIL_TP": 595,
+          "SL": 83,
+          "TRAIL_TP_SAMEBAR": 9,
+          "SL_SAMEBAR": 6
+        },
+        "events": {
+          "signals": 1655,
+          "placed": 756,
+          "skipped_chan": 899,
+          "skipped_sl": 0,
+          "filled": 693,
+          "cancelled_ttl": 63
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.002,
+      "ttl_bars": 4,
+      "fill_rate": 68.8,
+      "summary": {
+        "trades": 393,
+        "daily_pnl": 0.218,
+        "total_pnl_1x": 72.44,
+        "WR": 35.62,
+        "RR": 3.506,
+        "avg_win": 1.0677,
+        "avg_loss": 0.3045,
+        "MDD_1x": 8.4,
+        "trades_per_day": 1.18,
+        "exit_reasons": {
+          "TRAIL_TP": 325,
+          "SL": 56,
+          "TRAIL_TP_SAMEBAR": 7,
+          "SL_SAMEBAR": 5
+        },
+        "events": {
+          "signals": 2381,
+          "placed": 571,
+          "skipped_chan": 1810,
+          "skipped_sl": 0,
+          "filled": 393,
+          "cancelled_ttl": 178
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.002,
+      "ttl_bars": 8,
+      "fill_rate": 76.0,
+      "summary": {
+        "trades": 414,
+        "daily_pnl": 0.2196,
+        "total_pnl_1x": 72.98,
+        "WR": 35.27,
+        "RR": 3.496,
+        "avg_win": 1.0525,
+        "avg_loss": 0.3011,
+        "MDD_1x": 7.94,
+        "trades_per_day": 1.25,
+        "exit_reasons": {
+          "TRAIL_TP": 340,
+          "TRAIL_TP_SAMEBAR": 8,
+          "SL": 59,
+          "SL_SAMEBAR": 7
+        },
+        "events": {
+          "signals": 2305,
+          "placed": 545,
+          "skipped_chan": 1760,
+          "skipped_sl": 0,
+          "filled": 414,
+          "cancelled_ttl": 131
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.002,
+      "ttl_bars": 16,
+      "fill_rate": 80.9,
+      "summary": {
+        "trades": 419,
+        "daily_pnl": 0.2497,
+        "total_pnl_1x": 82.96,
+        "WR": 35.56,
+        "RR": 3.704,
+        "avg_win": 1.0902,
+        "avg_loss": 0.2944,
+        "MDD_1x": 7.76,
+        "trades_per_day": 1.26,
+        "exit_reasons": {
+          "TRAIL_TP": 342,
+          "TRAIL_TP_SAMEBAR": 9,
+          "SL": 61,
+          "SL_SAMEBAR": 7
+        },
+        "events": {
+          "signals": 2226,
+          "placed": 518,
+          "skipped_chan": 1708,
+          "skipped_sl": 0,
+          "filled": 419,
+          "cancelled_ttl": 99
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.003,
+      "ttl_bars": 4,
+      "fill_rate": 62.2,
+      "summary": {
+        "trades": 239,
+        "daily_pnl": 0.1629,
+        "total_pnl_1x": 54.13,
+        "WR": 34.73,
+        "RR": 4.059,
+        "avg_win": 1.2147,
+        "avg_loss": 0.2993,
+        "MDD_1x": 8.65,
+        "trades_per_day": 0.72,
+        "exit_reasons": {
+          "TRAIL_TP": 196,
+          "SL": 37,
+          "TRAIL_TP_SAMEBAR": 5,
+          "SL_SAMEBAR": 1
+        },
+        "events": {
+          "signals": 2725,
+          "placed": 384,
+          "skipped_chan": 2341,
+          "skipped_sl": 0,
+          "filled": 239,
+          "cancelled_ttl": 145
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.003,
+      "ttl_bars": 8,
+      "fill_rate": 68.7,
+      "summary": {
+        "trades": 255,
+        "daily_pnl": 0.1871,
+        "total_pnl_1x": 62.16,
+        "WR": 36.08,
+        "RR": 3.997,
+        "avg_win": 1.2137,
+        "avg_loss": 0.3037,
+        "MDD_1x": 8.16,
+        "trades_per_day": 0.77,
+        "exit_reasons": {
+          "TRAIL_TP": 210,
+          "SL": 39,
+          "TRAIL_TP_SAMEBAR": 4,
+          "SL_SAMEBAR": 2
+        },
+        "events": {
+          "signals": 2659,
+          "placed": 371,
+          "skipped_chan": 2288,
+          "skipped_sl": 0,
+          "filled": 255,
+          "cancelled_ttl": 116
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.003,
+      "ttl_bars": 16,
+      "fill_rate": 73.9,
+      "summary": {
+        "trades": 264,
+        "daily_pnl": 0.2037,
+        "total_pnl_1x": 67.66,
+        "WR": 37.5,
+        "RR": 3.858,
+        "avg_win": 1.2033,
+        "avg_loss": 0.3119,
+        "MDD_1x": 8.06,
+        "trades_per_day": 0.79,
+        "exit_reasons": {
+          "TRAIL_TP": 215,
+          "SL": 42,
+          "SL_SAMEBAR": 3,
+          "TRAIL_TP_SAMEBAR": 4
+        },
+        "events": {
+          "signals": 2588,
+          "placed": 357,
+          "skipped_chan": 2231,
+          "skipped_sl": 0,
+          "filled": 264,
+          "cancelled_ttl": 93
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.004,
+      "ttl_bars": 4,
+      "fill_rate": 55.8,
+      "summary": {
+        "trades": 155,
+        "daily_pnl": 0.0935,
+        "total_pnl_1x": 31.06,
+        "WR": 30.32,
+        "RR": 4.128,
+        "avg_win": 1.4903,
+        "avg_loss": 0.361,
+        "MDD_1x": 8.44,
+        "trades_per_day": 0.47,
+        "exit_reasons": {
+          "TRAIL_TP": 115,
+          "SL": 37,
+          "TRAIL_TP_SAMEBAR": 2,
+          "SL_SAMEBAR": 1
+        },
+        "events": {
+          "signals": 2918,
+          "placed": 278,
+          "skipped_chan": 2640,
+          "skipped_sl": 0,
+          "filled": 155,
+          "cancelled_ttl": 123
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.004,
+      "ttl_bars": 8,
+      "fill_rate": 61.6,
+      "summary": {
+        "trades": 165,
+        "daily_pnl": 0.1176,
+        "total_pnl_1x": 39.08,
+        "WR": 33.94,
+        "RR": 3.821,
+        "avg_win": 1.4224,
+        "avg_loss": 0.3723,
+        "MDD_1x": 8.16,
+        "trades_per_day": 0.5,
+        "exit_reasons": {
+          "TRAIL_TP": 124,
+          "SL": 38,
+          "TRAIL_TP_SAMEBAR": 2,
+          "SL_SAMEBAR": 1
+        },
+        "events": {
+          "signals": 2859,
+          "placed": 268,
+          "skipped_chan": 2591,
+          "skipped_sl": 0,
+          "filled": 165,
+          "cancelled_ttl": 103
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.004,
+      "ttl_bars": 16,
+      "fill_rate": 69.0,
+      "summary": {
+        "trades": 178,
+        "daily_pnl": 0.1144,
+        "total_pnl_1x": 38.01,
+        "WR": 35.39,
+        "RR": 3.416,
+        "avg_win": 1.296,
+        "avg_loss": 0.3794,
+        "MDD_1x": 8.76,
+        "trades_per_day": 0.54,
+        "exit_reasons": {
+          "TRAIL_TP": 132,
+          "SL": 40,
+          "TRAIL_TP_SAMEBAR": 3,
+          "SL_SAMEBAR": 3
+        },
+        "events": {
+          "signals": 2780,
+          "placed": 258,
+          "skipped_chan": 2522,
+          "skipped_sl": 0,
+          "filled": 178,
+          "cancelled_ttl": 80
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.005,
+      "ttl_bars": 4,
+      "fill_rate": 46.1,
+      "summary": {
+        "trades": 89,
+        "daily_pnl": 0.0683,
+        "total_pnl_1x": 22.68,
+        "WR": 29.21,
+        "RR": 4.408,
+        "avg_win": 1.9368,
+        "avg_loss": 0.4394,
+        "MDD_1x": 6.65,
+        "trades_per_day": 0.27,
+        "exit_reasons": {
+          "SL": 25,
+          "TRAIL_TP": 61,
+          "SL_SAMEBAR": 2,
+          "TRAIL_TP_SAMEBAR": 1
+        },
+        "events": {
+          "signals": 3030,
+          "placed": 193,
+          "skipped_chan": 2836,
+          "skipped_sl": 1,
+          "filled": 89,
+          "cancelled_ttl": 104
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.005,
+      "ttl_bars": 8,
+      "fill_rate": 52.4,
+      "summary": {
+        "trades": 98,
+        "daily_pnl": 0.078,
+        "total_pnl_1x": 25.9,
+        "WR": 31.63,
+        "RR": 4.029,
+        "avg_win": 1.8023,
+        "avg_loss": 0.4474,
+        "MDD_1x": 7.81,
+        "trades_per_day": 0.29,
+        "exit_reasons": {
+          "SL": 28,
+          "TRAIL_TP": 67,
+          "SL_SAMEBAR": 2,
+          "TRAIL_TP_SAMEBAR": 1
+        },
+        "events": {
+          "signals": 2985,
+          "placed": 187,
+          "skipped_chan": 2797,
+          "skipped_sl": 1,
+          "filled": 98,
+          "cancelled_ttl": 89
+        }
+      }
+    },
+    {
+      "pullback_pct": 0.005,
+      "ttl_bars": 16,
+      "fill_rate": 60.7,
+      "summary": {
+        "trades": 111,
+        "daily_pnl": 0.0808,
+        "total_pnl_1x": 26.86,
+        "WR": 34.23,
+        "RR": 3.546,
+        "avg_win": 1.5423,
+        "avg_loss": 0.4349,
+        "MDD_1x": 6.97,
+        "trades_per_day": 0.33,
+        "exit_reasons": {
+          "SL": 29,
+          "TRAIL_TP": 78,
+          "SL_SAMEBAR": 3,
+          "TRAIL_TP_SAMEBAR": 1
+        },
+        "events": {
+          "signals": 2916,
+          "placed": 183,
+          "skipped_chan": 2732,
+          "skipped_sl": 1,
+          "filled": 111,
+          "cancelled_ttl": 72
+        }
+      }
+    }
+  ],
+  "best_config": {
+    "pullback_pct": 0.001,
+    "ttl_bars": 4,
+    "summary": {
+      "trades": 677,
+      "daily_pnl": 0.4426,
+      "total_pnl_1x": 147.04,
+      "WR": 37.08,
+      "RR": 4.134,
+      "avg_win": 0.9939,
+      "avg_loss": 0.2404,
+      "MDD_1x": 6.11,
+      "trades_per_day": 2.04,
+      "exit_reasons": {
+        "TRAIL_TP": 589,
+        "SL": 74,
+        "SL_SAMEBAR": 5,
+        "TRAIL_TP_SAMEBAR": 9
+      },
+      "events": {
+        "signals": 1763,
+        "placed": 809,
+        "skipped_chan": 954,
+        "skipped_sl": 0,
+        "filled": 677,
+        "cancelled_ttl": 132
+      }
+    },
+    "three_way": {
+      "valid": true,
+      "train_pnl": 45.48,
+      "val_pnl": 52.37,
+      "test_pnl": 49.19,
+      "train_wr": 38.2,
+      "val_wr": 39.1,
+      "test_wr": 33.9,
+      "all_positive": true,
+      "train_not_degraded": true
+    },
+    "go_gate": {
+      "G1_daily>0": true,
+      "G2_WR>=30": true,
+      "G3_MDD<=10.8": true,
+      "G4_tpd>=1": true,
+      "G5_3way_positive": true,
+      "passed": "5/5",
+      "verdict": "PASS"
+    }
+  },
+  "c1_baseline": {
+    "daily_pnl": 0.509,
+    "total_pnl_1x": 169.5,
+    "WR": 36.6,
+    "RR": 3.36,
+    "MDD_1x": 5.4,
+    "trades_per_day": 3.1
+  }
+}

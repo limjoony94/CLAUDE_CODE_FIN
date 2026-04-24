@@ -1,0 +1,688 @@
+{
+  "window_utc": [
+    "2026-04-18T12:00:00+00:00",
+    "2026-04-22T11:00:00+00:00"
+  ],
+  "prog_flip_utc": "2026-04-21T08:41:00+00:00",
+  "n_live": 16,
+  "n_bt_window": 17,
+  "n_bt_all": 26,
+  "class_counts": {
+    "D": 2,
+    "C": 2,
+    "UNMATCHED": 5,
+    "A+": 1,
+    "A": 4,
+    "B": 2
+  },
+  "attribution": {
+    "n_pairs": 16,
+    "n_matched": 11,
+    "n_unmatched_live": 5,
+    "total_live_pnl_3x_matched_only": 0.98,
+    "total_live_pnl_3x_all_in_window": -6.99,
+    "total_bt_pnl_3x_matched_only": 11.87,
+    "gap_matched_3x": -10.89,
+    "gap_total_3x": -18.86,
+    "sum_entry_price_diff_1x_pct": 0.397,
+    "sum_exit_price_diff_1x_pct": 3.223,
+    "entry_slip_contrib_3x_pp": -1.19,
+    "exit_price_diff_contrib_3x_pp": -9.67,
+    "true_exit_slip_3x_pp_floor": -0.247,
+    "structural_timing_3x_pp": -9.42,
+    "decomp_residual_3x_pp": -0.03,
+    "reason_mismatch_D_delta_3x": -0.35,
+    "n_trail_like_trades_for_slip": 11
+  },
+  "fv2_counterfactual": {
+    "fv2_addresses_count": 6,
+    "fv2_would_worsen_count": 2,
+    "fv2_neutral_count": 3,
+    "matched_gap_closable_by_fv2_3x": 10.89,
+    "unmatched_live_pnl_3x": -7.97,
+    "n_unmatched_live": 5,
+    "note": "matched_gap_closable == -gap_matched_3x by construction; unmatched trades are outside F v2 reach.",
+    "per_trade": [
+      {
+        "entry_time": "2026-04-18T00:01:03+00:00",
+        "dir": "SHORT",
+        "live_pnl_3x": 2.7817,
+        "bt_pnl_3x": 2.9318,
+        "fv2_gain_3x": 0.15,
+        "class": "D"
+      },
+      {
+        "entry_time": "2026-04-19T01:42:21+00:00",
+        "dir": "SHORT",
+        "live_pnl_3x": -1.0404,
+        "bt_pnl_3x": 0.7912,
+        "fv2_gain_3x": 1.832,
+        "class": "C"
+      },
+      {
+        "entry_time": "2026-04-19T11:17:59+00:00",
+        "dir": "LONG",
+        "live_pnl_3x": 1.3459,
+        "bt_pnl_3x": -0.0737,
+        "fv2_gain_3x": -1.42,
+        "class": "A+"
+      },
+      {
+        "entry_time": "2026-04-19T17:06:45+00:00",
+        "dir": "SHORT",
+        "live_pnl_3x": 3.4845,
+        "bt_pnl_3x": 3.8793,
+        "fv2_gain_3x": 0.395,
+        "class": "A"
+      },
+      {
+        "entry_time": "2026-04-20T05:36:03+00:00",
+        "dir": "SHORT",
+        "live_pnl_3x": -2.0317,
+        "bt_pnl_3x": -2.6968,
+        "fv2_gain_3x": -0.665,
+        "class": "A"
+      },
+      {
+        "entry_time": "2026-04-20T07:32:49+00:00",
+        "dir": "LONG",
+        "live_pnl_3x": -2.7155,
+        "bt_pnl_3x": 2.5102,
+        "fv2_gain_3x": 5.226,
+        "class": "C"
+      },
+      {
+        "entry_time": "2026-04-20T23:21:40+00:00",
+        "dir": "SHORT",
+        "live_pnl_3x": -2.2741,
+        "bt_pnl_3x": -0.3,
+        "fv2_gain_3x": 1.974,
+        "class": "B"
+      },
+      {
+        "entry_time": "2026-04-21T07:37:17+00:00",
+        "dir": "LONG",
+        "live_pnl_3x": 0.1354,
+        "bt_pnl_3x": 0.3387,
+        "fv2_gain_3x": 0.203,
+        "class": "D"
+      },
+      {
+        "entry_time": "2026-04-21T12:55:38+00:00",
+        "dir": "SHORT",
+        "live_pnl_3x": -2.8561,
+        "bt_pnl_3x": -0.3,
+        "fv2_gain_3x": 2.556,
+        "class": "B"
+      },
+      {
+        "entry_time": "2026-04-21T23:45:05.559595+00:00",
+        "dir": "LONG",
+        "live_pnl_3x": 2.0754,
+        "bt_pnl_3x": 2.3565,
+        "fv2_gain_3x": 0.281,
+        "class": "A"
+      },
+      {
+        "entry_time": "2026-04-22T03:00:05.394395+00:00",
+        "dir": "LONG",
+        "live_pnl_3x": 2.077,
+        "bt_pnl_3x": 2.4366,
+        "fv2_gain_3x": 0.36,
+        "class": "A"
+      }
+    ]
+  },
+  "pairs": [
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 77004.1,
+        "exit_price": 76213.1,
+        "pnl_3x": 2.7817,
+        "reason": "EXCHANGE_SL",
+        "bars_held": 49,
+        "entry_time": "2026-04-18T00:01:03+00:00",
+        "exit_time": "2026-04-18T12:16:03"
+      },
+      "bt": {
+        "dir": "SHORT",
+        "entry_price": 77009.5,
+        "exit_price": 76179.89,
+        "pnl_1x_net": 0.9773,
+        "pnl_3x": 2.9318,
+        "reason": "TRAIL_TP",
+        "bars": 62,
+        "entry_time": "2026-04-17T23:30:00+00:00",
+        "exit_time": "2026-04-18T14:45:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "D",
+        "note": "LIVE SL stepped above entry (baton) \u2248 BT TRAIL_TP",
+        "entry_slip_pct": 0.007,
+        "exit_slip_pct": 0.0436,
+        "live_pnl_3x": 2.7817,
+        "bt_pnl_3x": 2.9318,
+        "delta_3x": -0.1501,
+        "reason_compare": "EXCHANGE_SL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 1863
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75486.3,
+        "exit_price": 75672.6,
+        "pnl_3x": -1.0404,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 4,
+        "entry_time": "2026-04-19T01:42:21+00:00",
+        "exit_time": "2026-04-19T02:42:21"
+      },
+      "bt": {
+        "dir": "SHORT",
+        "entry_price": 75499.4,
+        "exit_price": 75224.79,
+        "pnl_1x_net": 0.2637,
+        "pnl_3x": 0.7912,
+        "reason": "TRAIL_TP",
+        "bars": 39,
+        "entry_time": "2026-04-19T01:30:00+00:00",
+        "exit_time": "2026-04-19T11:00:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "C",
+        "note": "LIVE TRAILING took loss; BT would have profited",
+        "entry_slip_pct": 0.0174,
+        "exit_slip_pct": 0.5953,
+        "live_pnl_3x": -1.0404,
+        "bt_pnl_3x": 0.7912,
+        "delta_3x": -1.8316,
+        "reason_compare": "EXCHANGE_TRAIL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 741
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75173.8,
+        "exit_price": 75219.4,
+        "pnl_3x": -0.482,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 2,
+        "entry_time": "2026-04-19T07:23:35+00:00",
+        "exit_time": "2026-04-19T07:53:35"
+      },
+      "bt": null,
+      "cls": {
+        "class": "UNMATCHED",
+        "note": "no BT counterpart"
+      },
+      "entry_gap_sec": null
+    },
+    {
+      "live": {
+        "direction": "LONG",
+        "entry_price": 75386.4,
+        "exit_price": 75800.0,
+        "pnl_3x": 1.3459,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 11,
+        "entry_time": "2026-04-19T11:17:59+00:00",
+        "exit_time": "2026-04-19T14:02:59"
+      },
+      "bt": {
+        "dir": "LONG",
+        "entry_price": 75560.4,
+        "exit_price": 75617.39,
+        "pnl_1x_net": -0.0246,
+        "pnl_3x": -0.0737,
+        "reason": "TRAIL_TP",
+        "bars": 18,
+        "entry_time": "2026-04-19T12:00:00+00:00",
+        "exit_time": "2026-04-19T16:15:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "A+",
+        "note": "LIVE better than BT (+1.42pp)",
+        "entry_slip_pct": -0.2303,
+        "exit_slip_pct": -0.2415,
+        "live_pnl_3x": 1.3459,
+        "bt_pnl_3x": -0.0737,
+        "delta_3x": 1.4196,
+        "reason_compare": "EXCHANGE_TRAIL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 2521
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75227.0,
+        "exit_price": 74278.0,
+        "pnl_3x": 3.4845,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 31,
+        "entry_time": "2026-04-19T17:06:45+00:00",
+        "exit_time": "2026-04-20T00:51:45"
+      },
+      "bt": {
+        "dir": "SHORT",
+        "entry_price": 75347.1,
+        "exit_price": 74297.44,
+        "pnl_1x_net": 1.2931,
+        "pnl_3x": 3.8793,
+        "reason": "TRAIL_TP",
+        "bars": 33,
+        "entry_time": "2026-04-19T17:00:00+00:00",
+        "exit_time": "2026-04-20T01:00:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "A",
+        "note": "exit outcome within 1pp; minor timing/slip",
+        "entry_slip_pct": 0.1594,
+        "exit_slip_pct": -0.0262,
+        "live_pnl_3x": 3.4845,
+        "bt_pnl_3x": 3.8793,
+        "delta_3x": -0.3948,
+        "reason_compare": "EXCHANGE_TRAIL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 405
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 74093.7,
+        "exit_price": 74521.4,
+        "pnl_3x": -2.0317,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 4,
+        "entry_time": "2026-04-20T05:36:03+00:00",
+        "exit_time": "2026-04-20T06:36:03"
+      },
+      "bt": {
+        "dir": "SHORT",
+        "entry_price": 74110.1,
+        "exit_price": 74702.2,
+        "pnl_1x_net": -0.8989,
+        "pnl_3x": -2.6968,
+        "reason": "SL",
+        "bars": 5,
+        "entry_time": "2026-04-20T05:30:00+00:00",
+        "exit_time": "2026-04-20T06:30:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "A",
+        "note": "minor delta",
+        "entry_slip_pct": 0.0221,
+        "exit_slip_pct": -0.242,
+        "live_pnl_3x": -2.0317,
+        "bt_pnl_3x": -2.6968,
+        "delta_3x": 0.6651,
+        "reason_compare": "EXCHANGE_TRAIL vs SL"
+      },
+      "entry_gap_sec": 363
+    },
+    {
+      "live": {
+        "direction": "LONG",
+        "entry_price": 75227.4,
+        "exit_price": 74621.7,
+        "pnl_3x": -2.7155,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 2,
+        "entry_time": "2026-04-20T07:32:49+00:00",
+        "exit_time": "2026-04-20T08:02:49"
+      },
+      "bt": {
+        "dir": "LONG",
+        "entry_price": 75175.0,
+        "exit_price": 75879.19,
+        "pnl_1x_net": 0.8367,
+        "pnl_3x": 2.5102,
+        "reason": "TRAIL_TP",
+        "bars": 57,
+        "entry_time": "2026-04-20T07:30:00+00:00",
+        "exit_time": "2026-04-20T21:30:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "C",
+        "note": "LIVE TRAILING took loss; BT would have profited",
+        "entry_slip_pct": 0.0697,
+        "exit_slip_pct": 1.6572,
+        "live_pnl_3x": -2.7155,
+        "bt_pnl_3x": 2.5102,
+        "delta_3x": -5.2257,
+        "reason_compare": "EXCHANGE_TRAIL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 169
+    },
+    {
+      "live": {
+        "direction": "LONG",
+        "entry_price": 75929.6,
+        "exit_price": 75850.4,
+        "pnl_3x": -0.6129,
+        "reason": "TRAIL_TP",
+        "bars_held": 15,
+        "entry_time": "2026-04-20T18:00:06.122591+00:00",
+        "exit_time": "2026-04-20T21:45:06.122591"
+      },
+      "bt": null,
+      "cls": {
+        "class": "UNMATCHED",
+        "note": "no BT counterpart"
+      },
+      "entry_gap_sec": null
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75680.0,
+        "exit_price": 76178.0,
+        "pnl_3x": -2.2741,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 7,
+        "entry_time": "2026-04-20T23:21:40+00:00",
+        "exit_time": "2026-04-21T01:06:40"
+      },
+      "bt": {
+        "dir": "SHORT",
+        "entry_price": 75713.1,
+        "exit_price": 75713.1,
+        "pnl_1x_net": -0.1,
+        "pnl_3x": -0.3,
+        "reason": "TRAIL_TP",
+        "bars": 30,
+        "entry_time": "2026-04-20T23:15:00+00:00",
+        "exit_time": "2026-04-21T06:30:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "B",
+        "note": "LIVE TRAILING tighter than BT trail",
+        "entry_slip_pct": 0.0437,
+        "exit_slip_pct": 0.614,
+        "live_pnl_3x": -2.2741,
+        "bt_pnl_3x": -0.3,
+        "delta_3x": -1.9741,
+        "reason_compare": "EXCHANGE_TRAIL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 400
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75568.1,
+        "exit_price": 75998.3,
+        "pnl_3x": -2.0079,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 15,
+        "entry_time": "2026-04-21T02:49:12+00:00",
+        "exit_time": "2026-04-21T06:34:12"
+      },
+      "bt": null,
+      "cls": {
+        "class": "UNMATCHED",
+        "note": "no BT counterpart"
+      },
+      "entry_gap_sec": null
+    },
+    {
+      "live": {
+        "direction": "LONG",
+        "entry_price": 76205.0,
+        "exit_price": 76315.6,
+        "pnl_3x": 0.1354,
+        "reason": "EXCHANGE_SL",
+        "bars_held": 6,
+        "entry_time": "2026-04-21T07:37:17+00:00",
+        "exit_time": "2026-04-21T09:07:17"
+      },
+      "bt": {
+        "dir": "LONG",
+        "entry_price": 76139.2,
+        "exit_price": 76301.3,
+        "pnl_1x_net": 0.1129,
+        "pnl_3x": 0.3387,
+        "reason": "TRAIL_TP",
+        "bars": 8,
+        "entry_time": "2026-04-21T07:30:00+00:00",
+        "exit_time": "2026-04-21T09:15:00+00:00",
+        "prog_active_at_entry": false
+      },
+      "cls": {
+        "class": "D",
+        "note": "LIVE SL stepped above entry (baton) \u2248 BT TRAIL_TP",
+        "entry_slip_pct": 0.0864,
+        "exit_slip_pct": -0.0187,
+        "live_pnl_3x": 0.1354,
+        "bt_pnl_3x": 0.3387,
+        "delta_3x": -0.2033,
+        "reason_compare": "EXCHANGE_SL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 437
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75700.0,
+        "exit_price": 76345.0,
+        "pnl_3x": -2.8561,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 7,
+        "entry_time": "2026-04-21T12:55:38+00:00",
+        "exit_time": "2026-04-21T14:40:38"
+      },
+      "bt": {
+        "dir": "SHORT",
+        "entry_price": 75796.5,
+        "exit_price": 75796.5,
+        "pnl_1x_net": -0.1,
+        "pnl_3x": -0.3,
+        "reason": "TRAIL_TP",
+        "bars": 8,
+        "entry_time": "2026-04-21T12:45:00+00:00",
+        "exit_time": "2026-04-21T14:30:00+00:00",
+        "prog_active_at_entry": true
+      },
+      "cls": {
+        "class": "B",
+        "note": "LIVE TRAILING tighter than BT trail",
+        "entry_slip_pct": 0.1273,
+        "exit_slip_pct": 0.7236,
+        "live_pnl_3x": -2.8561,
+        "bt_pnl_3x": -0.3,
+        "delta_3x": -2.5561,
+        "reason_compare": "EXCHANGE_TRAIL vs TRAIL_TP"
+      },
+      "entry_gap_sec": 638
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 75637.6,
+        "exit_price": 75815.2,
+        "pnl_3x": -1.0044,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 10,
+        "entry_time": "2026-04-21T15:13:55+00:00",
+        "exit_time": "2026-04-21T17:43:55"
+      },
+      "bt": null,
+      "cls": {
+        "class": "UNMATCHED",
+        "note": "no BT counterpart"
+      },
+      "entry_gap_sec": null
+    },
+    {
+      "live": {
+        "direction": "SHORT",
+        "entry_price": 74800.1,
+        "exit_price": 75688.2,
+        "pnl_3x": -3.8619,
+        "reason": "EXCHANGE_TRAIL",
+        "bars_held": 2,
+        "entry_time": "2026-04-21T19:56:31+00:00",
+        "exit_time": "2026-04-21T20:26:31"
+      },
+      "bt": null,
+      "cls": {
+        "class": "UNMATCHED",
+        "note": "no BT counterpart"
+      },
+      "entry_gap_sec": null
+    },
+    {
+      "live": {
+        "direction": "LONG",
+        "entry_price": 76080.0,
+        "exit_price": 76682.4,
+        "pnl_3x": 2.0754,
+        "reason": "TRAIL_TP",
+        "bars_held": 10,
+        "entry_time": "2026-04-21T23:45:05.559595+00:00",
+        "exit_time": "2026-04-22T02:15:05.559595"
+      },
+      "bt": {
+        "dir": "LONG",
+        "entry_price": 76043.4,
+        "exit_price": 76716.78,
+        "pnl_1x_net": 0.7855,
+        "pnl_3x": 2.3565,
+        "reason": "TRAIL_TP",
+        "bars": 10,
+        "entry_time": "2026-04-21T23:45:00+00:00",
+        "exit_time": "2026-04-22T02:00:00+00:00",
+        "prog_active_at_entry": true
+      },
+      "cls": {
+        "class": "A",
+        "note": "both cycle-TRAIL_TP, close match",
+        "entry_slip_pct": 0.0481,
+        "exit_slip_pct": 0.0448,
+        "live_pnl_3x": 2.0754,
+        "bt_pnl_3x": 2.3565,
+        "delta_3x": -0.2811,
+        "reason_compare": "TRAIL_TP vs TRAIL_TP"
+      },
+      "entry_gap_sec": 5
+    },
+    {
+      "live": {
+        "direction": "LONG",
+        "entry_price": 77605.4,
+        "exit_price": 78220.3,
+        "pnl_3x": 2.077,
+        "reason": "TRAIL_TP",
+        "bars_held": 10,
+        "entry_time": "2026-04-22T03:00:05.394395+00:00",
+        "exit_time": "2026-04-22T05:30:05.394395"
+      },
+      "bt": {
+        "dir": "LONG",
+        "entry_price": 77569.4,
+        "exit_price": 78276.99,
+        "pnl_1x_net": 0.8122,
+        "pnl_3x": 2.4366,
+        "reason": "TRAIL_TP",
+        "bars": 10,
+        "entry_time": "2026-04-22T03:00:00+00:00",
+        "exit_time": "2026-04-22T05:15:00+00:00",
+        "prog_active_at_entry": true
+      },
+      "cls": {
+        "class": "A",
+        "note": "both cycle-TRAIL_TP, close match",
+        "entry_slip_pct": 0.0464,
+        "exit_slip_pct": 0.0724,
+        "live_pnl_3x": 2.077,
+        "bt_pnl_3x": 2.4366,
+        "delta_3x": -0.3596,
+        "reason_compare": "TRAIL_TP vs TRAIL_TP"
+      },
+      "entry_gap_sec": 5
+    }
+  ],
+  "unmatched_bt": [
+    {
+      "dir": "LONG",
+      "entry_price": 74932.7,
+      "exit_price": 74368.63,
+      "pnl_1x_net": -0.8528,
+      "pnl_3x": -2.5583,
+      "reason": "SL",
+      "bars": 2,
+      "entry_time": "2026-04-16T13:30:00+00:00",
+      "exit_time": "2026-04-16T13:45:00+00:00",
+      "prog_active_at_entry": false
+    },
+    {
+      "dir": "LONG",
+      "entry_price": 75001.7,
+      "exit_price": 75001.7,
+      "pnl_1x_net": -0.1,
+      "pnl_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars": 16,
+      "entry_time": "2026-04-16T19:00:00+00:00",
+      "exit_time": "2026-04-16T22:45:00+00:00",
+      "prog_active_at_entry": false
+    },
+    {
+      "dir": "SHORT",
+      "entry_price": 74713.6,
+      "exit_price": 74713.6,
+      "pnl_1x_net": -0.1,
+      "pnl_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars": 22,
+      "entry_time": "2026-04-17T01:30:00+00:00",
+      "exit_time": "2026-04-17T06:45:00+00:00",
+      "prog_active_at_entry": false
+    },
+    {
+      "dir": "LONG",
+      "entry_price": 75298.6,
+      "exit_price": 75658.14,
+      "pnl_1x_net": 0.3775,
+      "pnl_3x": 1.1324,
+      "reason": "TRAIL_TP",
+      "bars": 6,
+      "entry_time": "2026-04-17T08:45:00+00:00",
+      "exit_time": "2026-04-17T10:00:00+00:00",
+      "prog_active_at_entry": false
+    },
+    {
+      "dir": "LONG",
+      "entry_price": 76877.7,
+      "exit_price": 77216.37,
+      "pnl_1x_net": 0.3405,
+      "pnl_3x": 1.0216,
+      "reason": "TRAIL_TP",
+      "bars": 17,
+      "entry_time": "2026-04-17T13:15:00+00:00",
+      "exit_time": "2026-04-17T17:15:00+00:00",
+      "prog_active_at_entry": false
+    },
+    {
+      "dir": "SHORT",
+      "entry_price": 75289.4,
+      "exit_price": 75289.4,
+      "pnl_1x_net": -0.1,
+      "pnl_3x": -0.3,
+      "reason": "TRAIL_TP",
+      "bars": 14,
+      "entry_time": "2026-04-21T17:30:00+00:00",
+      "exit_time": "2026-04-21T20:45:00+00:00",
+      "prog_active_at_entry": true
+    }
+  ],
+  "generated_at": "2026-04-24T10:52:56.127716+00:00"
+}

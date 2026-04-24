@@ -1,0 +1,80 @@
+{
+  "strategy": "fade_breakout_v1",
+  "phase": 1,
+  "timestamp": "2026-04-24T06:43:36.089428",
+  "params": {
+    "extension_pct": 0.005,
+    "sl_offset_pct": 0.015,
+    "limit_ttl_bars": 16,
+    "timeout_bars": 96,
+    "cooldown_bars": 2,
+    "fee_rt_pct": 0.1,
+    "warmup_bars": 50
+  },
+  "summary": {
+    "trades": 572,
+    "days": 332.2,
+    "daily_pnl": -0.2196,
+    "total_pnl_1x": -72.94,
+    "WR": 64.69,
+    "RR": 0.365,
+    "avg_win": 0.3991,
+    "avg_loss": 1.0921,
+    "MDD_1x": 74.73,
+    "trades_per_day": 1.72,
+    "exit_reasons": {
+      "SL": 160,
+      "TP_SAMEBAR": 87,
+      "SL_SAMEBAR": 40,
+      "TP": 282,
+      "TIMEOUT": 3
+    },
+    "direction_split": {
+      "LONG_fade": 302,
+      "SHORT_fade": 270
+    },
+    "bars_waited_avg": 2.0,
+    "bars_held_avg": 8.5,
+    "bars_waited_max": 15,
+    "bars_held_max": 96,
+    "limit_events": {
+      "placed": 1910,
+      "filled": 572,
+      "cancelled_reentry": 1325,
+      "cancelled_ttl": 13
+    }
+  },
+  "three_way_split": {
+    "valid": true,
+    "train_pnl": -21.7,
+    "val_pnl": -35.04,
+    "test_pnl": -16.2,
+    "train_wr": 65.3,
+    "val_wr": 61.1,
+    "test_wr": 67.7,
+    "all_positive": false,
+    "train_not_degraded": false
+  },
+  "go_gate": {
+    "G1_daily_pnl>0": false,
+    "G2_WR>=33": true,
+    "G3_MDD<=10": false,
+    "G4_trades_per_day>=1": true,
+    "G5_3way_all_positive": false,
+    "total_passed": "2/5",
+    "verdict": "FAIL"
+  },
+  "c1_baseline": {
+    "daily_pnl": 0.509,
+    "total_pnl_1x": 169.5,
+    "WR": 36.6,
+    "RR": 3.36,
+    "MDD_1x": 5.4,
+    "trades_per_day": 3.1
+  },
+  "trades_count": 572,
+  "data_window": {
+    "start": "2025-05-06 03:30:00",
+    "end": "2026-04-03 09:15:00"
+  }
+}

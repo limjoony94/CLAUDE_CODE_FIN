@@ -1,0 +1,525 @@
+{
+  "sweep": [
+    {
+      "min_bars_between": 2,
+      "baseline": {
+        "trades": 1197,
+        "WR": 39.1,
+        "PnL_1x": 213.94,
+        "daily_PnL_1x": 0.6429,
+        "MDD_1x": 5.38,
+        "RR": 3.1,
+        "days": 332.8
+      },
+      "perturbed_trail_K": {
+        "trades": 1208,
+        "WR": 39.1,
+        "PnL_1x": 221.01,
+        "daily_PnL_1x": 0.6641,
+        "MDD_1x": 5.38,
+        "RR": 3.22,
+        "days": 332.8
+      },
+      "perturbed_exit_delay": {
+        "trades": 1180,
+        "WR": 39.7,
+        "PnL_1x": 216.27,
+        "daily_PnL_1x": 0.6499,
+        "MDD_1x": 5.98,
+        "RR": 3.01,
+        "days": 332.8
+      },
+      "drift_trail_K": {
+        "drift_fraction": 0.0238,
+        "matched": 1188,
+        "unmatched_a": 9,
+        "unmatched_b": 20,
+        "union": 1217,
+        "tol_bars": 2
+      },
+      "drift_exit_delay": {
+        "drift_fraction": 0.0548,
+        "matched": 1155,
+        "unmatched_a": 42,
+        "unmatched_b": 25,
+        "union": 1222,
+        "tol_bars": 2
+      },
+      "three_way_baseline": {
+        "train": {
+          "trades": 398,
+          "PnL_1x": 41.43
+        },
+        "val": {
+          "trades": 393,
+          "PnL_1x": 90.06
+        },
+        "test": {
+          "trades": 406,
+          "PnL_1x": 82.46
+        }
+      },
+      "three_way_perturbed": {
+        "train": {
+          "trades": 403,
+          "PnL_1x": 44.24
+        },
+        "val": {
+          "trades": 398,
+          "PnL_1x": 91.75
+        },
+        "test": {
+          "trades": 407,
+          "PnL_1x": 85.01
+        }
+      },
+      "max_drift": 0.0548,
+      "go_gate": {
+        "daily_not_worse": true,
+        "drift_halved": false,
+        "three_way_all_positive": true,
+        "overall": false
+      }
+    },
+    {
+      "min_bars_between": 3,
+      "baseline": {
+        "trades": 1150,
+        "WR": 39.6,
+        "PnL_1x": 209.87,
+        "daily_PnL_1x": 0.6307,
+        "MDD_1x": 5.64,
+        "RR": 3.09,
+        "days": 332.8
+      },
+      "perturbed_trail_K": {
+        "trades": 1163,
+        "WR": 39.5,
+        "PnL_1x": 214.27,
+        "daily_PnL_1x": 0.6439,
+        "MDD_1x": 5.72,
+        "RR": 3.18,
+        "days": 332.8
+      },
+      "perturbed_exit_delay": {
+        "trades": 1136,
+        "WR": 39.5,
+        "PnL_1x": 202.72,
+        "daily_PnL_1x": 0.6092,
+        "MDD_1x": 7.22,
+        "RR": 2.94,
+        "days": 332.8
+      },
+      "drift_trail_K": {
+        "drift_fraction": 0.0365,
+        "matched": 1135,
+        "unmatched_a": 15,
+        "unmatched_b": 28,
+        "union": 1178,
+        "tol_bars": 2
+      },
+      "drift_exit_delay": {
+        "drift_fraction": 0.0344,
+        "matched": 1123,
+        "unmatched_a": 27,
+        "unmatched_b": 13,
+        "union": 1163,
+        "tol_bars": 2
+      },
+      "three_way_baseline": {
+        "train": {
+          "trades": 378,
+          "PnL_1x": 40.11
+        },
+        "val": {
+          "trades": 382,
+          "PnL_1x": 80.91
+        },
+        "test": {
+          "trades": 390,
+          "PnL_1x": 88.85
+        }
+      },
+      "three_way_perturbed": {
+        "train": {
+          "trades": 384,
+          "PnL_1x": 45.32
+        },
+        "val": {
+          "trades": 386,
+          "PnL_1x": 81.02
+        },
+        "test": {
+          "trades": 393,
+          "PnL_1x": 87.94
+        }
+      },
+      "max_drift": 0.0365,
+      "go_gate": {
+        "daily_not_worse": false,
+        "drift_halved": false,
+        "three_way_all_positive": true,
+        "overall": false
+      }
+    },
+    {
+      "min_bars_between": 4,
+      "baseline": {
+        "trades": 1109,
+        "WR": 40.4,
+        "PnL_1x": 213.87,
+        "daily_PnL_1x": 0.6427,
+        "MDD_1x": 5.85,
+        "RR": 3.1,
+        "days": 332.8
+      },
+      "perturbed_trail_K": {
+        "trades": 1119,
+        "WR": 39.9,
+        "PnL_1x": 215.93,
+        "daily_PnL_1x": 0.6489,
+        "MDD_1x": 5.95,
+        "RR": 3.21,
+        "days": 332.8
+      },
+      "perturbed_exit_delay": {
+        "trades": 1090,
+        "WR": 40.5,
+        "PnL_1x": 203.88,
+        "daily_PnL_1x": 0.6127,
+        "MDD_1x": 7.2,
+        "RR": 2.94,
+        "days": 332.8
+      },
+      "drift_trail_K": {
+        "drift_fraction": 0.0318,
+        "matched": 1096,
+        "unmatched_a": 13,
+        "unmatched_b": 23,
+        "union": 1132,
+        "tol_bars": 2
+      },
+      "drift_exit_delay": {
+        "drift_fraction": 0.0505,
+        "matched": 1071,
+        "unmatched_a": 38,
+        "unmatched_b": 19,
+        "union": 1128,
+        "tol_bars": 2
+      },
+      "three_way_baseline": {
+        "train": {
+          "trades": 364,
+          "PnL_1x": 38.83
+        },
+        "val": {
+          "trades": 368,
+          "PnL_1x": 84.27
+        },
+        "test": {
+          "trades": 377,
+          "PnL_1x": 90.77
+        }
+      },
+      "three_way_perturbed": {
+        "train": {
+          "trades": 368,
+          "PnL_1x": 42.81
+        },
+        "val": {
+          "trades": 371,
+          "PnL_1x": 83.88
+        },
+        "test": {
+          "trades": 380,
+          "PnL_1x": 89.24
+        }
+      },
+      "max_drift": 0.0505,
+      "go_gate": {
+        "daily_not_worse": false,
+        "drift_halved": false,
+        "three_way_all_positive": true,
+        "overall": false
+      }
+    },
+    {
+      "min_bars_between": 6,
+      "baseline": {
+        "trades": 1038,
+        "WR": 40.4,
+        "PnL_1x": 212.29,
+        "daily_PnL_1x": 0.6379,
+        "MDD_1x": 6.23,
+        "RR": 3.29,
+        "days": 332.8
+      },
+      "perturbed_trail_K": {
+        "trades": 1045,
+        "WR": 40.1,
+        "PnL_1x": 210.77,
+        "daily_PnL_1x": 0.6334,
+        "MDD_1x": 6.2,
+        "RR": 3.34,
+        "days": 332.8
+      },
+      "perturbed_exit_delay": {
+        "trades": 1023,
+        "WR": 41.2,
+        "PnL_1x": 211.45,
+        "daily_PnL_1x": 0.6354,
+        "MDD_1x": 5.39,
+        "RR": 3.14,
+        "days": 332.8
+      },
+      "drift_trail_K": {
+        "drift_fraction": 0.0218,
+        "matched": 1030,
+        "unmatched_a": 8,
+        "unmatched_b": 15,
+        "union": 1053,
+        "tol_bars": 2
+      },
+      "drift_exit_delay": {
+        "drift_fraction": 0.0483,
+        "matched": 1005,
+        "unmatched_a": 33,
+        "unmatched_b": 18,
+        "union": 1056,
+        "tol_bars": 2
+      },
+      "three_way_baseline": {
+        "train": {
+          "trades": 336,
+          "PnL_1x": 43.61
+        },
+        "val": {
+          "trades": 346,
+          "PnL_1x": 76.21
+        },
+        "test": {
+          "trades": 356,
+          "PnL_1x": 92.47
+        }
+      },
+      "three_way_perturbed": {
+        "train": {
+          "trades": 339,
+          "PnL_1x": 46.13
+        },
+        "val": {
+          "trades": 347,
+          "PnL_1x": 74.24
+        },
+        "test": {
+          "trades": 359,
+          "PnL_1x": 90.4
+        }
+      },
+      "max_drift": 0.0483,
+      "go_gate": {
+        "daily_not_worse": false,
+        "drift_halved": false,
+        "three_way_all_positive": true,
+        "overall": false
+      }
+    },
+    {
+      "min_bars_between": 8,
+      "baseline": {
+        "trades": 991,
+        "WR": 39.2,
+        "PnL_1x": 188.28,
+        "daily_PnL_1x": 0.5658,
+        "MDD_1x": 6.44,
+        "RR": 3.32,
+        "days": 332.8
+      },
+      "perturbed_trail_K": {
+        "trades": 1000,
+        "WR": 39.4,
+        "PnL_1x": 193.11,
+        "daily_PnL_1x": 0.5803,
+        "MDD_1x": 6.42,
+        "RR": 3.41,
+        "days": 332.8
+      },
+      "perturbed_exit_delay": {
+        "trades": 983,
+        "WR": 38.7,
+        "PnL_1x": 174.37,
+        "daily_PnL_1x": 0.524,
+        "MDD_1x": 7.25,
+        "RR": 3.12,
+        "days": 332.8
+      },
+      "drift_trail_K": {
+        "drift_fraction": 0.0307,
+        "matched": 980,
+        "unmatched_a": 11,
+        "unmatched_b": 20,
+        "union": 1011,
+        "tol_bars": 2
+      },
+      "drift_exit_delay": {
+        "drift_fraction": 0.0723,
+        "matched": 950,
+        "unmatched_a": 41,
+        "unmatched_b": 33,
+        "union": 1024,
+        "tol_bars": 2
+      },
+      "three_way_baseline": {
+        "train": {
+          "trades": 324,
+          "PnL_1x": 43.64
+        },
+        "val": {
+          "trades": 329,
+          "PnL_1x": 72.98
+        },
+        "test": {
+          "trades": 338,
+          "PnL_1x": 71.66
+        }
+      },
+      "three_way_perturbed": {
+        "train": {
+          "trades": 327,
+          "PnL_1x": 46.49
+        },
+        "val": {
+          "trades": 329,
+          "PnL_1x": 71.71
+        },
+        "test": {
+          "trades": 344,
+          "PnL_1x": 74.91
+        }
+      },
+      "max_drift": 0.0723,
+      "go_gate": {
+        "daily_not_worse": false,
+        "drift_halved": false,
+        "three_way_all_positive": true,
+        "overall": false
+      }
+    },
+    {
+      "min_bars_between": 12,
+      "baseline": {
+        "trades": 888,
+        "WR": 37.8,
+        "PnL_1x": 140.82,
+        "daily_PnL_1x": 0.4232,
+        "MDD_1x": 7.0,
+        "RR": 3.04,
+        "days": 332.8
+      },
+      "perturbed_trail_K": {
+        "trades": 896,
+        "WR": 37.8,
+        "PnL_1x": 143.32,
+        "daily_PnL_1x": 0.4307,
+        "MDD_1x": 9.04,
+        "RR": 3.12,
+        "days": 332.8
+      },
+      "perturbed_exit_delay": {
+        "trades": 876,
+        "WR": 38.0,
+        "PnL_1x": 137.03,
+        "daily_PnL_1x": 0.4118,
+        "MDD_1x": 7.24,
+        "RR": 2.91,
+        "days": 332.8
+      },
+      "drift_trail_K": {
+        "drift_fraction": 0.0244,
+        "matched": 881,
+        "unmatched_a": 7,
+        "unmatched_b": 15,
+        "union": 903,
+        "tol_bars": 2
+      },
+      "drift_exit_delay": {
+        "drift_fraction": 0.053,
+        "matched": 858,
+        "unmatched_a": 30,
+        "unmatched_b": 18,
+        "union": 906,
+        "tol_bars": 2
+      },
+      "three_way_baseline": {
+        "train": {
+          "trades": 288,
+          "PnL_1x": 36.48
+        },
+        "val": {
+          "trades": 301,
+          "PnL_1x": 54.09
+        },
+        "test": {
+          "trades": 299,
+          "PnL_1x": 50.25
+        }
+      },
+      "three_way_perturbed": {
+        "train": {
+          "trades": 292,
+          "PnL_1x": 41.52
+        },
+        "val": {
+          "trades": 303,
+          "PnL_1x": 50.12
+        },
+        "test": {
+          "trades": 301,
+          "PnL_1x": 51.68
+        }
+      },
+      "max_drift": 0.053,
+      "go_gate": {
+        "daily_not_worse": false,
+        "drift_halved": false,
+        "three_way_all_positive": true,
+        "overall": false
+      }
+    }
+  ],
+  "meta": {
+    "base_cfg": {
+      "channel_period": 15,
+      "body_min_ratio": 0.4,
+      "atr_period": 14,
+      "trail_K": 2.5,
+      "max_sl_atr": 3.3,
+      "emergency_sl_pct": 3.0,
+      "max_hold_bars": 192,
+      "sl_min_pct": 0.15,
+      "sl_max_pct": 3.0,
+      "min_bars_between": 2,
+      "trail_activation_pct": 0.05,
+      "fractal_lookback": 10
+    },
+    "progressive_trail": {
+      "enabled": true,
+      "threshold_pct": 0.9,
+      "trail_K_post": 0.5
+    },
+    "perturbation": {
+      "trail_K": 2.45
+    },
+    "drift_tol_bars": 2,
+    "fee_rt_pct": 0.1,
+    "leverage_3x_reference": 3,
+    "bars": 31946,
+    "period_start": "2025-05-05 15:00:00",
+    "period_end": "2026-04-03 09:15:00",
+    "current_baseline_daily_PnL_1x": 0.6429,
+    "current_baseline_drift_fraction_trail_K": 0.0238,
+    "current_baseline_drift_fraction_exit_delay": 0.0548,
+    "current_baseline_drift_fraction_max": 0.0548
+  },
+  "generated_at": "2026-04-24T20:28:15.289277"
+}

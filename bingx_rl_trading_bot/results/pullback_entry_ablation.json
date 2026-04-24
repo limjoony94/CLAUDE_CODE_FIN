@@ -1,0 +1,488 @@
+{
+  "phase": "1B",
+  "timestamp": "2026-04-24T09:44:06.843872",
+  "data_window": {
+    "start": "2025-05-06 03:30:00",
+    "end": "2026-04-03 09:15:00",
+    "days": 332.2
+  },
+  "ablation": {
+    "T0_C1_baseline": {
+      "summary": {
+        "trades": 988,
+        "daily_pnl": 0.5145,
+        "total_pnl_1x": 170.92,
+        "WR": 36.64,
+        "RR": 3.477,
+        "avg_win": 0.9392,
+        "avg_loss": 0.2701,
+        "MDD_1x": 5.38,
+        "trades_per_day": 2.97,
+        "per_trade": 0.173,
+        "exit_reasons": {
+          "TRAIL_TP": 846,
+          "SL": 137,
+          "TRAIL_TP_SAMEBAR": 3,
+          "SL_SAMEBAR": 2
+        },
+        "entry_modes": {
+          "immediate": 988
+        },
+        "events": {
+          "signals": 988,
+          "filter_rejected": 0,
+          "pullback_placed": 0,
+          "pullback_filled": 0,
+          "pullback_ttl_skip": 0,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 0,
+          "invalid_fb": 0,
+          "immediate": 988
+        }
+      },
+      "three_way": {
+        "valid": true,
+        "train_pnl": 28.97,
+        "val_pnl": 66.96,
+        "test_pnl": 74.99,
+        "train_wr": 34.3,
+        "val_wr": 40.1,
+        "test_wr": 35.5,
+        "all_positive": true,
+        "train_not_degraded": true
+      },
+      "trades_n": 988
+    },
+    "T1_filter_only": {
+      "summary": {
+        "trades": 748,
+        "daily_pnl": 0.4848,
+        "total_pnl_1x": 161.08,
+        "WR": 37.17,
+        "RR": 3.789,
+        "avg_win": 1.0463,
+        "avg_loss": 0.2761,
+        "MDD_1x": 6.6,
+        "trades_per_day": 2.25,
+        "per_trade": 0.2153,
+        "exit_reasons": {
+          "TRAIL_TP": 651,
+          "SL": 86,
+          "SL_SAMEBAR": 4,
+          "TRAIL_TP_SAMEBAR": 7
+        },
+        "entry_modes": {
+          "immediate": 748
+        },
+        "events": {
+          "signals": 1634,
+          "filter_rejected": 886,
+          "pullback_placed": 0,
+          "pullback_filled": 0,
+          "pullback_ttl_skip": 0,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 0,
+          "invalid_fb": 0,
+          "immediate": 748
+        }
+      },
+      "three_way": {
+        "valid": true,
+        "train_pnl": 38.02,
+        "val_pnl": 64.85,
+        "test_pnl": 58.22,
+        "train_wr": 36.9,
+        "val_wr": 41.8,
+        "test_wr": 32.8,
+        "all_positive": true,
+        "train_not_degraded": true
+      },
+      "trades_n": 748
+    },
+    "T2_pullback_skip": {
+      "summary": {
+        "trades": 677,
+        "daily_pnl": 0.4426,
+        "total_pnl_1x": 147.04,
+        "WR": 37.08,
+        "RR": 4.134,
+        "avg_win": 0.9939,
+        "avg_loss": 0.2404,
+        "MDD_1x": 6.11,
+        "trades_per_day": 2.04,
+        "per_trade": 0.2172,
+        "exit_reasons": {
+          "TRAIL_TP": 589,
+          "SL": 74,
+          "SL_SAMEBAR": 5,
+          "TRAIL_TP_SAMEBAR": 9
+        },
+        "entry_modes": {
+          "pullback_fill": 677
+        },
+        "events": {
+          "signals": 1763,
+          "filter_rejected": 0,
+          "pullback_placed": 809,
+          "pullback_filled": 677,
+          "pullback_ttl_skip": 132,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 954,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "three_way": {
+        "valid": true,
+        "train_pnl": 45.48,
+        "val_pnl": 52.37,
+        "test_pnl": 49.19,
+        "train_wr": 38.2,
+        "val_wr": 39.1,
+        "test_wr": 33.9,
+        "all_positive": true,
+        "train_not_degraded": true
+      },
+      "trades_n": 677
+    },
+    "T3_pullback_immediate": {
+      "summary": {
+        "trades": 984,
+        "daily_pnl": 0.5264,
+        "total_pnl_1x": 174.91,
+        "WR": 36.38,
+        "RR": 3.712,
+        "avg_win": 0.9237,
+        "avg_loss": 0.2489,
+        "MDD_1x": 4.35,
+        "trades_per_day": 2.96,
+        "per_trade": 0.1777,
+        "exit_reasons": {
+          "TRAIL_TP": 848,
+          "SL": 130,
+          "TRAIL_TP_SAMEBAR": 4,
+          "SL_SAMEBAR": 2
+        },
+        "entry_modes": {
+          "pullback_fill": 384,
+          "invalid_fallback": 527,
+          "ttl_fallback": 73
+        },
+        "events": {
+          "signals": 984,
+          "filter_rejected": 0,
+          "pullback_placed": 457,
+          "pullback_filled": 384,
+          "pullback_ttl_skip": 0,
+          "pullback_ttl_fb": 73,
+          "invalid_skip": 0,
+          "invalid_fb": 527,
+          "immediate": 0
+        }
+      },
+      "three_way": {
+        "valid": true,
+        "train_pnl": 34.21,
+        "val_pnl": 64.68,
+        "test_pnl": 76.02,
+        "train_wr": 34.8,
+        "val_wr": 38.1,
+        "test_wr": 36.3,
+        "all_positive": true,
+        "train_not_degraded": true
+      },
+      "trades_n": 984
+    }
+  },
+  "ablation_effects": {
+    "T0_daily": 0.5145,
+    "T1_daily": 0.4848,
+    "T2_daily": 0.4426,
+    "T3_daily": 0.5264,
+    "filter_effect": -0.0297,
+    "timing_effect": 0.0119,
+    "synergy": -0.0838
+  },
+  "neighborhood": {
+    "0.050%": {
+      "summary": {
+        "trades": 849,
+        "daily_pnl": 0.4787,
+        "total_pnl_1x": 159.06,
+        "WR": 36.75,
+        "RR": 3.899,
+        "avg_win": 0.9126,
+        "avg_loss": 0.234,
+        "MDD_1x": 4.78,
+        "trades_per_day": 2.56,
+        "per_trade": 0.1873,
+        "exit_reasons": {
+          "TRAIL_TP": 744,
+          "SL": 91,
+          "TRAIL_TP_SAMEBAR": 9,
+          "SL_SAMEBAR": 5
+        },
+        "entry_modes": {
+          "pullback_fill": 849
+        },
+        "events": {
+          "signals": 1383,
+          "filter_rejected": 0,
+          "pullback_placed": 935,
+          "pullback_filled": 849,
+          "pullback_ttl_skip": 86,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 448,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 90.8
+    },
+    "0.075%": {
+      "summary": {
+        "trades": 773,
+        "daily_pnl": 0.4682,
+        "total_pnl_1x": 155.55,
+        "WR": 35.83,
+        "RR": 4.175,
+        "avg_win": 0.9832,
+        "avg_loss": 0.2355,
+        "MDD_1x": 4.94,
+        "trades_per_day": 2.33,
+        "per_trade": 0.2012,
+        "exit_reasons": {
+          "TRAIL_TP": 671,
+          "SL_SAMEBAR": 7,
+          "SL": 84,
+          "TRAIL_TP_SAMEBAR": 11
+        },
+        "entry_modes": {
+          "pullback_fill": 773
+        },
+        "events": {
+          "signals": 1576,
+          "filter_rejected": 0,
+          "pullback_placed": 882,
+          "pullback_filled": 773,
+          "pullback_ttl_skip": 109,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 694,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 87.6
+    },
+    "0.100%": {
+      "summary": {
+        "trades": 677,
+        "daily_pnl": 0.4426,
+        "total_pnl_1x": 147.04,
+        "WR": 37.08,
+        "RR": 4.134,
+        "avg_win": 0.9939,
+        "avg_loss": 0.2404,
+        "MDD_1x": 6.11,
+        "trades_per_day": 2.04,
+        "per_trade": 0.2172,
+        "exit_reasons": {
+          "TRAIL_TP": 589,
+          "SL": 74,
+          "SL_SAMEBAR": 5,
+          "TRAIL_TP_SAMEBAR": 9
+        },
+        "entry_modes": {
+          "pullback_fill": 677
+        },
+        "events": {
+          "signals": 1763,
+          "filter_rejected": 0,
+          "pullback_placed": 809,
+          "pullback_filled": 677,
+          "pullback_ttl_skip": 132,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 954,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 83.7
+    },
+    "0.125%": {
+      "summary": {
+        "trades": 597,
+        "daily_pnl": 0.3997,
+        "total_pnl_1x": 132.79,
+        "WR": 37.02,
+        "RR": 4.21,
+        "avg_win": 1.0084,
+        "avg_loss": 0.2395,
+        "MDD_1x": 5.36,
+        "trades_per_day": 1.8,
+        "per_trade": 0.2224,
+        "exit_reasons": {
+          "TRAIL_TP": 517,
+          "SL": 64,
+          "TRAIL_TP_SAMEBAR": 10,
+          "SL_SAMEBAR": 6
+        },
+        "entry_modes": {
+          "pullback_fill": 597
+        },
+        "events": {
+          "signals": 1937,
+          "filter_rejected": 0,
+          "pullback_placed": 745,
+          "pullback_filled": 597,
+          "pullback_ttl_skip": 148,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 1192,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 80.1
+    },
+    "0.150%": {
+      "summary": {
+        "trades": 518,
+        "daily_pnl": 0.2986,
+        "total_pnl_1x": 99.19,
+        "WR": 36.29,
+        "RR": 3.747,
+        "avg_win": 0.9927,
+        "avg_loss": 0.2649,
+        "MDD_1x": 7.51,
+        "trades_per_day": 1.56,
+        "per_trade": 0.1915,
+        "exit_reasons": {
+          "TRAIL_TP": 440,
+          "SL": 65,
+          "TRAIL_TP_SAMEBAR": 8,
+          "SL_SAMEBAR": 5
+        },
+        "entry_modes": {
+          "pullback_fill": 518
+        },
+        "events": {
+          "signals": 2113,
+          "filter_rejected": 0,
+          "pullback_placed": 683,
+          "pullback_filled": 518,
+          "pullback_ttl_skip": 165,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 1430,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 75.8
+    },
+    "0.175%": {
+      "summary": {
+        "trades": 453,
+        "daily_pnl": 0.267,
+        "total_pnl_1x": 88.7,
+        "WR": 35.98,
+        "RR": 3.731,
+        "avg_win": 1.0401,
+        "avg_loss": 0.2788,
+        "MDD_1x": 7.86,
+        "trades_per_day": 1.36,
+        "per_trade": 0.1958,
+        "exit_reasons": {
+          "TRAIL_TP": 381,
+          "SL": 59,
+          "TRAIL_TP_SAMEBAR": 7,
+          "SL_SAMEBAR": 6
+        },
+        "entry_modes": {
+          "pullback_fill": 453
+        },
+        "events": {
+          "signals": 2241,
+          "filter_rejected": 0,
+          "pullback_placed": 625,
+          "pullback_filled": 453,
+          "pullback_ttl_skip": 172,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 1616,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 72.5
+    },
+    "0.200%": {
+      "summary": {
+        "trades": 393,
+        "daily_pnl": 0.218,
+        "total_pnl_1x": 72.44,
+        "WR": 35.62,
+        "RR": 3.506,
+        "avg_win": 1.0677,
+        "avg_loss": 0.3045,
+        "MDD_1x": 8.4,
+        "trades_per_day": 1.18,
+        "per_trade": 0.1843,
+        "exit_reasons": {
+          "TRAIL_TP": 325,
+          "SL": 56,
+          "TRAIL_TP_SAMEBAR": 7,
+          "SL_SAMEBAR": 5
+        },
+        "entry_modes": {
+          "pullback_fill": 393
+        },
+        "events": {
+          "signals": 2381,
+          "filter_rejected": 0,
+          "pullback_placed": 571,
+          "pullback_filled": 393,
+          "pullback_ttl_skip": 178,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 1810,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 68.8
+    },
+    "0.250%": {
+      "summary": {
+        "trades": 300,
+        "daily_pnl": 0.1979,
+        "total_pnl_1x": 65.74,
+        "WR": 34.67,
+        "RR": 4.01,
+        "avg_win": 1.1926,
+        "avg_loss": 0.2974,
+        "MDD_1x": 9.47,
+        "trades_per_day": 0.9,
+        "per_trade": 0.2191,
+        "exit_reasons": {
+          "TRAIL_TP": 246,
+          "SL": 45,
+          "TRAIL_TP_SAMEBAR": 6,
+          "SL_SAMEBAR": 3
+        },
+        "entry_modes": {
+          "pullback_fill": 300
+        },
+        "events": {
+          "signals": 2569,
+          "filter_rejected": 0,
+          "pullback_placed": 462,
+          "pullback_filled": 300,
+          "pullback_ttl_skip": 162,
+          "pullback_ttl_fb": 0,
+          "invalid_skip": 2107,
+          "invalid_fb": 0,
+          "immediate": 0
+        }
+      },
+      "fill_rate": 64.9
+    }
+  }
+}

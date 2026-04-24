@@ -1,0 +1,653 @@
+{
+  "timestamp": "2026-04-24T20:48:14.748809",
+  "data_window": {
+    "start": "2025-05-06 03:30:00",
+    "end": "2026-04-03 09:15:00",
+    "days": 332.2
+  },
+  "grid": {
+    "trail_K": [
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5
+    ],
+    "max_sl_atr": [
+      2.5,
+      3.0,
+      3.3,
+      4.0,
+      5.0
+    ]
+  },
+  "production_config": {
+    "trail_K": 2.5,
+    "max_sl_atr": 3.3
+  },
+  "baseline_daily": {
+    "ZERO": 0.5144480326069917,
+    "LOW": 0.2984593196425772,
+    "MED": 0.07828687882113185,
+    "HIGH": -0.569950148926164,
+    "STRESS": -1.6079360401316822
+  },
+  "results": [
+    {
+      "trail_K": 1.5,
+      "max_sl_atr": 2.5,
+      "trades": 1428,
+      "ZERO": 0.2759,
+      "LOW": -0.0367,
+      "MED": -0.3552,
+      "HIGH": -1.2934,
+      "STRESS": -2.7957,
+      "three_way": {
+        "train": 13.4,
+        "val": 39.03,
+        "test": 39.22,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 1.5,
+      "max_sl_atr": 3.0,
+      "trades": 1399,
+      "ZERO": 0.3324,
+      "LOW": 0.0203,
+      "MED": -0.2964,
+      "HIGH": -1.238,
+      "STRESS": -2.7481,
+      "three_way": {
+        "train": 16.98,
+        "val": 46.06,
+        "test": 47.41,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 1.5,
+      "max_sl_atr": 3.3,
+      "trades": 1383,
+      "ZERO": 0.3543,
+      "LOW": 0.0438,
+      "MED": -0.2708,
+      "HIGH": -1.2089,
+      "STRESS": -2.7142,
+      "three_way": {
+        "train": 19.59,
+        "val": 45.99,
+        "test": 52.12,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 1.5,
+      "max_sl_atr": 4.0,
+      "trades": 1353,
+      "ZERO": 0.3906,
+      "LOW": 0.085,
+      "MED": -0.2242,
+      "HIGH": -1.1491,
+      "STRESS": -2.634,
+      "three_way": {
+        "train": 22.37,
+        "val": 50.55,
+        "test": 56.87,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 1.5,
+      "max_sl_atr": 5.0,
+      "trades": 1319,
+      "ZERO": 0.3743,
+      "LOW": 0.0751,
+      "MED": -0.2273,
+      "HIGH": -1.1337,
+      "STRESS": -2.5892,
+      "three_way": {
+        "train": 25.35,
+        "val": 45.53,
+        "test": 53.48,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.0,
+      "max_sl_atr": 2.5,
+      "trades": 1204,
+      "ZERO": 0.3396,
+      "LOW": 0.082,
+      "MED": -0.1821,
+      "HIGH": -0.951,
+      "STRESS": -2.18,
+      "three_way": {
+        "train": 17.78,
+        "val": 38.76,
+        "test": 56.3,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.0,
+      "max_sl_atr": 3.0,
+      "trades": 1171,
+      "ZERO": 0.4074,
+      "LOW": 0.1494,
+      "MED": -0.1131,
+      "HIGH": -0.8887,
+      "STRESS": -2.1314,
+      "three_way": {
+        "train": 26.37,
+        "val": 56.96,
+        "test": 52.03,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.0,
+      "max_sl_atr": 3.3,
+      "trades": 1160,
+      "ZERO": 0.4387,
+      "LOW": 0.1804,
+      "MED": -0.0819,
+      "HIGH": -0.8608,
+      "STRESS": -2.1098,
+      "three_way": {
+        "train": 29.5,
+        "val": 62.18,
+        "test": 54.06,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.0,
+      "max_sl_atr": 4.0,
+      "trades": 1140,
+      "ZERO": 0.5107,
+      "LOW": 0.2539,
+      "MED": -0.0061,
+      "HIGH": -0.7826,
+      "STRESS": -2.029,
+      "three_way": {
+        "train": 34.09,
+        "val": 63.05,
+        "test": 72.53,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.0,
+      "max_sl_atr": 5.0,
+      "trades": 1112,
+      "ZERO": 0.5264,
+      "LOW": 0.2747,
+      "MED": 0.0202,
+      "HIGH": -0.7415,
+      "STRESS": -1.9647,
+      "three_way": {
+        "train": 36.0,
+        "val": 59.59,
+        "test": 79.29,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": true,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 2,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 2.5,
+      "trades": 1027,
+      "ZERO": 0.3278,
+      "LOW": 0.1177,
+      "MED": -0.1,
+      "HIGH": -0.7194,
+      "STRESS": -1.7054,
+      "three_way": {
+        "train": 12.55,
+        "val": 40.44,
+        "test": 55.9,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 3.0,
+      "trades": 998,
+      "ZERO": 0.4596,
+      "LOW": 0.2457,
+      "MED": 0.0266,
+      "HIGH": -0.612,
+      "STRESS": -1.6329,
+      "three_way": {
+        "train": 23.65,
+        "val": 61.38,
+        "test": 67.67,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 3.3,
+      "trades": 988,
+      "ZERO": 0.5144,
+      "LOW": 0.2985,
+      "MED": 0.0783,
+      "HIGH": -0.57,
+      "STRESS": -1.6079,
+      "three_way": {
+        "train": 28.97,
+        "val": 66.96,
+        "test": 74.99,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": true
+    },
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 4.0,
+      "trades": 975,
+      "ZERO": 0.5799,
+      "LOW": 0.3636,
+      "MED": 0.1438,
+      "HIGH": -0.5077,
+      "STRESS": -1.5522,
+      "three_way": {
+        "train": 32.61,
+        "val": 74.24,
+        "test": 85.8,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": true,
+        "MED": true,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 4,
+      "is_production": false
+    },
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 5.0,
+      "trades": 963,
+      "ZERO": 0.5972,
+      "LOW": 0.382,
+      "MED": 0.1637,
+      "HIGH": -0.4857,
+      "STRESS": -1.5275,
+      "three_way": {
+        "train": 37.63,
+        "val": 73.15,
+        "test": 87.63,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": true,
+        "MED": true,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 4,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.0,
+      "max_sl_atr": 2.5,
+      "trades": 906,
+      "ZERO": 0.1284,
+      "LOW": -0.0461,
+      "MED": -0.2296,
+      "HIGH": -0.7347,
+      "STRESS": -1.5342,
+      "three_way": {
+        "train": 2.46,
+        "val": 17.98,
+        "test": 22.21,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.0,
+      "max_sl_atr": 3.0,
+      "trades": 874,
+      "ZERO": 0.2926,
+      "LOW": 0.113,
+      "MED": -0.0728,
+      "HIGH": -0.6027,
+      "STRESS": -1.4467,
+      "three_way": {
+        "train": 13.39,
+        "val": 40.82,
+        "test": 42.99,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": true
+      },
+      "passed_flags": 1,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.0,
+      "max_sl_atr": 3.3,
+      "trades": 864,
+      "ZERO": 0.3546,
+      "LOW": 0.1727,
+      "MED": -0.0144,
+      "HIGH": -0.5549,
+      "STRESS": -1.4177,
+      "three_way": {
+        "train": 17.83,
+        "val": 45.66,
+        "test": 54.33,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 2,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.0,
+      "max_sl_atr": 4.0,
+      "trades": 854,
+      "ZERO": 0.4053,
+      "LOW": 0.2212,
+      "MED": 0.0328,
+      "HIGH": -0.5178,
+      "STRESS": -1.3985,
+      "three_way": {
+        "train": 22.56,
+        "val": 49.76,
+        "test": 62.34,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 2,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.0,
+      "max_sl_atr": 5.0,
+      "trades": 840,
+      "ZERO": 0.4587,
+      "LOW": 0.2751,
+      "MED": 0.0879,
+      "HIGH": -0.4633,
+      "STRESS": -1.346,
+      "three_way": {
+        "train": 31.8,
+        "val": 52.29,
+        "test": 68.3,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": true,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 3,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.5,
+      "max_sl_atr": 2.5,
+      "trades": 794,
+      "ZERO": 0.0539,
+      "LOW": -0.0911,
+      "MED": -0.2458,
+      "HIGH": -0.6587,
+      "STRESS": -1.3084,
+      "three_way": {
+        "train": -4.72,
+        "val": 17.1,
+        "test": 5.52,
+        "all_positive": false
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": false,
+        "3way_all_pos": false
+      },
+      "passed_flags": 0,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.5,
+      "max_sl_atr": 3.0,
+      "trades": 755,
+      "ZERO": 0.2222,
+      "LOW": 0.0736,
+      "MED": -0.0818,
+      "HIGH": -0.5149,
+      "STRESS": -1.2018,
+      "three_way": {
+        "train": 15.03,
+        "val": 33.64,
+        "test": 25.16,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 2,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.5,
+      "max_sl_atr": 3.3,
+      "trades": 742,
+      "ZERO": 0.2815,
+      "LOW": 0.1317,
+      "MED": -0.024,
+      "HIGH": -0.464,
+      "STRESS": -1.1636,
+      "three_way": {
+        "train": 20.82,
+        "val": 37.92,
+        "test": 34.77,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 2,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.5,
+      "max_sl_atr": 4.0,
+      "trades": 724,
+      "ZERO": 0.3643,
+      "LOW": 0.2124,
+      "MED": 0.056,
+      "HIGH": -0.395,
+      "STRESS": -1.1145,
+      "three_way": {
+        "train": 23.76,
+        "val": 50.0,
+        "test": 47.29,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": false,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 2,
+      "is_production": false
+    },
+    {
+      "trail_K": 3.5,
+      "max_sl_atr": 5.0,
+      "trades": 709,
+      "ZERO": 0.4543,
+      "LOW": 0.3026,
+      "MED": 0.1472,
+      "HIGH": -0.3051,
+      "STRESS": -1.028,
+      "three_way": {
+        "train": 29.8,
+        "val": 54.03,
+        "test": 67.11,
+        "all_positive": true
+      },
+      "beats_baseline": {
+        "ZERO": false,
+        "MED": true,
+        "HIGH": true,
+        "3way_all_pos": true
+      },
+      "passed_flags": 3,
+      "is_production": false
+    }
+  ],
+  "go_gate_passed": [
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 4.0,
+      "ZERO": 0.5799,
+      "MED": 0.1438,
+      "HIGH": -0.5077
+    },
+    {
+      "trail_K": 2.5,
+      "max_sl_atr": 5.0,
+      "ZERO": 0.5972,
+      "MED": 0.1637,
+      "HIGH": -0.4857
+    }
+  ]
+}

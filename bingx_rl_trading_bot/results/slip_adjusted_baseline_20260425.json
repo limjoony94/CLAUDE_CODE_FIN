@@ -1,0 +1,129 @@
+{
+  "timestamp": "2026-04-24T17:28:31.030906",
+  "data_window": {
+    "start": "2025-05-06 03:30:00",
+    "end": "2026-04-03 09:15:00",
+    "days": 332.2
+  },
+  "config": {
+    "channel_period": 15,
+    "body_min_ratio": 0.4,
+    "atr_period": 14,
+    "trail_K": 2.5,
+    "max_sl_atr": 3.3,
+    "emergency_sl_pct": 3.0,
+    "max_hold_bars": 192,
+    "sl_min_pct": 0.15,
+    "sl_max_pct": 3.0,
+    "min_bars_between": 2,
+    "trail_activation_pct": 0.05,
+    "fractal_lookback": 10,
+    "progressive_trail": {
+      "enabled": false
+    }
+  },
+  "total_trades": 988,
+  "reason_counts": {
+    "TRAIL_TP": 849,
+    "SL": 139
+  },
+  "scenarios": {
+    "ZERO": {
+      "total_pnl": 170.92,
+      "daily_pnl": 0.5144,
+      "WR": 36.64,
+      "RR": 3.477,
+      "MDD": 5.38,
+      "avg_win": 0.9392,
+      "avg_loss": 0.2701,
+      "delta_vs_zero": 0.0,
+      "slip_cost_daily": 0.0,
+      "slip_cost_pct": 0.0
+    },
+    "LOW": {
+      "total_pnl": 99.16,
+      "daily_pnl": 0.2985,
+      "WR": 32.69,
+      "RR": 3.014,
+      "MDD": 7.08,
+      "avg_win": 0.9688,
+      "avg_loss": 0.3214,
+      "delta_vs_zero": -0.216,
+      "slip_cost_daily": 0.216,
+      "slip_cost_pct": 42.0
+    },
+    "MED": {
+      "total_pnl": 26.01,
+      "daily_pnl": 0.0783,
+      "WR": 29.25,
+      "RR": 2.658,
+      "MDD": 28.61,
+      "avg_win": 0.9995,
+      "avg_loss": 0.3761,
+      "delta_vs_zero": -0.4362,
+      "slip_cost_daily": 0.4362,
+      "slip_cost_pct": 84.8
+    },
+    "HIGH": {
+      "total_pnl": -189.36,
+      "daily_pnl": -0.57,
+      "WR": 22.67,
+      "RR": 1.86,
+      "MDD": 190.2,
+      "avg_win": 1.0135,
+      "avg_loss": 0.545,
+      "delta_vs_zero": -1.0844,
+      "slip_cost_daily": 1.0844,
+      "slip_cost_pct": 210.8
+    },
+    "STRESS": {
+      "total_pnl": -534.22,
+      "daily_pnl": -1.6079,
+      "WR": 13.77,
+      "RR": 1.429,
+      "MDD": 534.22,
+      "avg_win": 1.1605,
+      "avg_loss": 0.8123,
+      "delta_vs_zero": -2.1224,
+      "slip_cost_daily": 2.1224,
+      "slip_cost_pct": 412.6
+    }
+  },
+  "slip_scenarios_def": {
+    "ZERO": {
+      "entry": 0.0,
+      "exit_trail": 0.0,
+      "exit_sl": 0.0,
+      "exit_emerg": 0.0,
+      "exit_timeout": 0.0
+    },
+    "LOW": {
+      "entry": 0.029,
+      "exit_trail": 0.05,
+      "exit_sl": 0.005,
+      "exit_emerg": 0.1,
+      "exit_timeout": 0.03
+    },
+    "MED": {
+      "entry": 0.058,
+      "exit_trail": 0.1,
+      "exit_sl": 0.02,
+      "exit_emerg": 0.2,
+      "exit_timeout": 0.06
+    },
+    "HIGH": {
+      "entry": 0.1,
+      "exit_trail": 0.3,
+      "exit_sl": 0.05,
+      "exit_emerg": 0.4,
+      "exit_timeout": 0.12
+    },
+    "STRESS": {
+      "entry": 0.15,
+      "exit_trail": 0.64,
+      "exit_sl": 0.1,
+      "exit_emerg": 0.5,
+      "exit_timeout": 0.2
+    }
+  }
+}

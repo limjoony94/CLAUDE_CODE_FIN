@@ -33,14 +33,17 @@ strategy:
     trail_K_post: 0.5           # 전환 후 tight trail K
 
   # activation_gated_trail PDCA (F옵션, 2026-04-22):
-  # E(pre_activation_baton) Phase 1 파산 확인 후 역방향 접근.
-  # Entry 직후 TRAILING_STOP_MARKET 배치 제거 → classic BT 로직 1:1 LIVE 재현.
-  # Pre-activation 구간: fractal SL + emergency SL만 보호 (BT와 동일).
-  # Activation 도달 시점(best_pnl ≥ trail_activation_pct)에 baton STOP_MARKET 최초 배치.
-  # 2026-04-22 Canary 시작: Phase 2 구현 + 138/138 pytest PASS 후 활성.
-  # 현 포지션 close 후 봇 재시작 시 다음 entry부터 F 적용.
+  # E(pre_activation_baton) Phase 1 파산 확인 후 역방향 접근 시도.
+  # 2026-04-22 Canary 시작 → 2026-04-24 ROLLBACK:
+  #   - 8 trades 동안 BT +3.60% vs LIVE -6.96%, gap -10.56pp (2일)
+  #   - Exit reasons: BT 100% TRAIL_TP vs LIVE 87.5% EXCHANGE_SL
+  #   - 근본 원인: BT check_exit의 "soft break-even" (best_pnl>0.05% 후 entry 회귀 시
+  #     trail_dist 초과 → close에서 exit) 메커니즘이 LIVE baton STOP_MARKET(fixed trigger)에
+  #     의해 복원되지 않음. Entry 회귀 시 STOP은 trigger 안 됨 → SL까지 대기.
+  #   - Plan GO 조건 4/7 실패 → STOP 판정
+  # F v2 재설계: check_exit를 LIVE bot cycle에 직접 통합 + MARKET close
   activation_gated_trail:
-    enabled: true               # 2026-04-22 Canary (다음 신규 entry부터 적용)
+    enabled: false              # 2026-04-24 ROLLBACK (F v1 structural 실패)
 
 risk: {}  # No halt brakes — all removed per 2026-04-13
 

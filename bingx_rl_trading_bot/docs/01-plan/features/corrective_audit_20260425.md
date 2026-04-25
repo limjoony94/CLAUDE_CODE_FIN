@@ -74,10 +74,19 @@
 3. WF 결과는 mixed (4/5 positive, 1/5 negative). expected ≈ +4.9pp avg over folds
 4. Fold 2 regime이 CURRENT와 substantially 다르므로 worst-case fold 재현 가능성 낮음
 
-**조건부 회귀 트리거 (자동 revert criteria)**:
-- 5 consecutive trades 중 3 이상 SL hit at distance > 3.3 ATR (4.5 cap이 없었다면 발생 안 했을 SL) → max_sl 3.3 환원
-- Daily PnL 누적 < -10% in 7 days (max_sl 4.5 도입 후) → 즉시 환원
-- Fold 2 regime 진입 신호 감지 (rolling 14d trend |net| < 1% AND ATR% mean < 0.25) → 사전 환원
+**조건부 회귀 트리거: 단일 pre-registered 평가** (advisor 권고로 noisy multi-trigger 제거):
+
+> 노이지 multi-trigger (5/3 SL hit, daily PnL 7d, regime threshold)는 power-checked되지 않아
+> false alarm 또는 post-hoc fit risk 큼 → 제거. 단일 명확 평가로 대체.
+
+| 항목 | 사양 |
+|------|------|
+| **평가 시점** | Trade #44 시작 후 **30 trades 누적 시점** (≈ 2026-05-06, 3 trades/day 기준) |
+| **측정 metric** | combined-cohort (#44..#73) 누적 additive 1x PnL |
+| **Decision rule** | **PnL < -5pp** (Fold 2 worst-case underperformance 등가) → max_sl 3.3 revert.<br>그 외 → keep, 추가 검토 안 함 |
+| **근거 (-5pp 임계)** | WF Fold 2: 4.5 vs 3.3 = -5.13pp / 54 days. 30 trades (~10d)에서 동일 환경 반복 시 -1pp 예상이지만, **변동성 buffer 포함하여 -5pp를 전체 cohort 위험 임계로 채택** (false alarm 회피, fold-level 명확 underperformance만 trigger) |
+| **계산 방법** | `sum(trade.pnl_pct for trade in #44..#73)` from `c1_breakout_state.json` |
+| **No code** | 모니터링 스크립트 작성 안 함. `MEMORY.md`에 calendar reminder 등록만 |
 
 ---
 
@@ -87,9 +96,9 @@
 |--------|------|------------|
 | Pre-F v2, max_sl 3.3 | trades #1 ~ #42 | Baseline (existing) |
 | F v2 only, max_sl 3.3 | trade #43 | Slippage isolated (1 sample) |
-| F v2 + max_sl 4.5 | trades #44+ | Combined effect — must be ≥ baseline |
+| F v2 + max_sl 4.5 | trades #44 ~ #73 | Combined effect — pre-registered eval |
 
-10 trades 후 cohort 비교 보고서 생성 (`/pdca analyze` trigger 권장).
+Trade #74 시점에 1회만 평가 (`/pdca analyze` trigger). 평가 결과 GO/REVERT 둘 중 하나로 종료.
 
 ---
 
@@ -107,5 +116,7 @@
 - [x] Stop hunt control group 측정 → 결과 문서화
 - [x] Fold 2 regime 분석 → CURRENT 위치 확인
 - [x] Trade #44 contamination 결정 → B 채택
-- [ ] Honest commit message 작성 (다음 step)
-- [ ] MEMORY.md `lessons_learned` 갱신 — process bug 회고
+- [x] Honest commit message 작성 (`8b6953c`)
+- [x] MEMORY.md `lessons_learned` 갱신 — process bug 회고
+- [x] (2026-04-26 advisor 후속) Noisy multi-trigger 제거 → 단일 pre-registered eval로 교체
+- [x] MEMORY.md `pre_registered_evaluation_max_sl_4.5` 캘린더 리마인더 등록

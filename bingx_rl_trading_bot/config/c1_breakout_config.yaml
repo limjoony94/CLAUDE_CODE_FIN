@@ -7,7 +7,10 @@ strategy:
   body_min_ratio: 0.4
   atr_period: 14
   trail_K: 2.5
-  max_sl_atr: 3.3
+  # max_sl_atr 4.5 (2026-04-25 wider_sl_sweep: 333d +28pp 1x, SL% 14.3→10.5).
+  # Stop hunt 회피 quick win — 22d/333d 모두 sweet spot 일관.
+  # 이전 3.3 (legacy): wick exit에 SL 자주 hit, BT-LIVE 갭 누적.
+  max_sl_atr: 4.5
   emergency_sl_pct: 3.0
   max_hold_bars: 192    # 48 hours
   sl_min_pct: 0.15

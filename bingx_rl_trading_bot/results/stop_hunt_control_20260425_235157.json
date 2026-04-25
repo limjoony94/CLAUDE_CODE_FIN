@@ -1,0 +1,254 @@
+{
+  "date": "2026-04-25T23:51:57.841280",
+  "seed": 42,
+  "lookahead_bars": 8,
+  "n_control": 34,
+  "n_pos_control": 34,
+  "n_wick_control": 13,
+  "avg_recover_control": 0.38534108730240474,
+  "actual_pos_rate": 0.9705882352941176,
+  "control_pos_rate": 1.0,
+  "actual_wick_rate": 0.6764705882352942,
+  "control_wick_rate": 0.38235294117647056,
+  "actual_avg_recover": 0.615,
+  "samples": [
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-23T21:30:00",
+      "exit_p": 77716.1,
+      "recover_pct": 0.4580775412044608,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-13T17:45:00",
+      "exit_p": 70647.5,
+      "recover_pct": 0.32117201599489603,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-12T15:15:00",
+      "exit_p": 71671.8,
+      "recover_pct": 0.1685460669328842,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-25T09:15:00",
+      "exit_p": 77277.3,
+      "recover_pct": 0.002717486247586058,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-16T14:15:00",
+      "exit_p": 75026.3,
+      "recover_pct": 0.08970187787482911,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-16T02:15:00",
+      "exit_p": 74081.9,
+      "recover_pct": 0.8037050885574057,
+      "wick": true
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-15T16:30:00",
+      "exit_p": 73562.0,
+      "recover_pct": 0.10412984965064276,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-14T05:00:00",
+      "exit_p": 73019.8,
+      "recover_pct": 1.1798169811475792,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-25T08:00:00",
+      "exit_p": 77340.5,
+      "recover_pct": 0.1801126188736857,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-13T15:15:00",
+      "exit_p": 70995.4,
+      "recover_pct": 0.1076126058871543,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-24T16:30:00",
+      "exit_p": 77612.5,
+      "recover_pct": 0.3114189080367172,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-25T09:00:00",
+      "exit_p": 77378.6,
+      "recover_pct": 0.1475860250767158,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-21T20:30:00",
+      "exit_p": 76442.0,
+      "recover_pct": 1.0083461971167722,
+      "wick": true
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-13T11:30:00",
+      "exit_p": 71014.0,
+      "recover_pct": 0.21024023431999733,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-22T18:00:00",
+      "exit_p": 78004.1,
+      "recover_pct": 0.12063468458709968,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-19T03:15:00",
+      "exit_p": 75620.8,
+      "recover_pct": 0.291983158072915,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-12T17:00:00",
+      "exit_p": 71610.8,
+      "recover_pct": 0.17902327581872718,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-12T16:30:00",
+      "exit_p": 71710.3,
+      "recover_pct": 0.3019092096951205,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-13T13:00:00",
+      "exit_p": 70926.1,
+      "recover_pct": 0.4026726409601061,
+      "wick": true
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-15T15:15:00",
+      "exit_p": 73887.1,
+      "recover_pct": 0.5436672978097823,
+      "wick": true
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-15T19:00:00",
+      "exit_p": 74075.7,
+      "recover_pct": 0.43968534890658756,
+      "wick": true
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-20T23:15:00",
+      "exit_p": 75530.7,
+      "recover_pct": 1.152776288317197,
+      "wick": true
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-22T21:00:00",
+      "exit_p": 78382.7,
+      "recover_pct": 0.3976642805108743,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-12T15:45:00",
+      "exit_p": 71618.1,
+      "recover_pct": 0.16881207404272688,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-22T10:30:00",
+      "exit_p": 76216.4,
+      "recover_pct": 1.946300271332691,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-15T10:15:00",
+      "exit_p": 74636.9,
+      "recover_pct": 0.08454263239765562,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-25T02:45:00",
+      "exit_p": 77646.1,
+      "recover_pct": 0.07972068139931585,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-24T05:30:00",
+      "exit_p": 77951.9,
+      "recover_pct": 0.4116641159484359,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-24T23:00:00",
+      "exit_p": 77830.6,
+      "recover_pct": 0.4676823768543477,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-19T02:30:00",
+      "exit_p": 75837.4,
+      "recover_pct": 0.025712906824337335,
+      "wick": false
+    },
+    {
+      "dir": "SHORT",
+      "exit_ts": "2026-04-15T15:45:00",
+      "exit_p": 73857.3,
+      "recover_pct": 0.5035385804788541,
+      "wick": true
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-19T14:15:00",
+      "exit_p": 75524.3,
+      "recover_pct": 0.1464429329368048,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-22T17:45:00",
+      "exit_p": 77967.7,
+      "recover_pct": 0.23381477201456874,
+      "wick": false
+    },
+    {
+      "dir": "LONG",
+      "exit_ts": "2026-04-16T15:00:00",
+      "exit_p": 74977.8,
+      "recover_pct": 0.11016594245228757,
+      "wick": false
+    }
+  ]
+}

@@ -336,6 +336,25 @@ class C1BreakoutBot:
             # Force initial time sync
             self.exchange.milliseconds()
             logger.info(f"Exchange connected (time offset: {self.exchange._time_offset}ms)")
+            # BUG#66 (2026-04-26): Verify One-way mode at startup.
+            # Hedge mode (dualSidePosition=true) rejects positionSide='BOTH' with
+            # error 109400, causing all ENTRY orders to fail silently. Bot was
+            # observed for ~2 days with 0 trades because account had been
+            # switched to Hedge mode externally (UI). Auto-correct on startup.
+            try:
+                mode = self.exchange.fetch_position_mode()
+                if mode.get('hedged'):
+                    logger.warning("Position mode is HEDGE — switching to ONE-WAY (config assumption)")
+                    self.exchange.set_position_mode(hedged=False)
+                    mode2 = self.exchange.fetch_position_mode()
+                    if mode2.get('hedged'):
+                        logger.error("CRITICAL: failed to switch to One-way mode — aborting")
+                        sys.exit(1)
+                    logger.info("Position mode → ONE-WAY OK")
+                else:
+                    logger.info("Position mode: ONE-WAY OK")
+            except Exception as e:
+                logger.warning(f"Position mode check failed: {e} — continuing with assumption ONE-WAY")
             # Set leverage on exchange — verify it matches config
             target_lev = self.config['exchange'].get('leverage', 1)
             try:

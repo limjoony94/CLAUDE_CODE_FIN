@@ -1,6 +1,14 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.8.0 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Progressive Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-21
+> **Version**: v4.8.1 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Progressive Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-26
+>
+> **v4.8.1 (2026-04-26)**: 🚨 **BUG#66 [CRITICAL]**: Hedge-mode auto-correct.
+>   - 거래소 계정이 외부에서 Hedge mode (`dualSidePosition=true`)로 전환되면
+>     봇 코드의 `positionSide='BOTH'`가 109400 에러로 거부되어 **모든 ENTRY가 silent fail**.
+>     2026-04-26 14:00, 14:15 두 ENTRY 시도 실패 → 약 2일간 거래 0건 관측.
+>   - `_init_exchange` 시작 시 `fetch_position_mode()` → hedged=true이면
+>     `set_position_mode(hedged=False)` 자동 전환 + 검증 fail 시 sys.exit(1).
+>   - 거래소가 hedge → one-way 전환 거부하면 즉시 abort (silent failure 회피).
 >
 > **v4.8.0 (2026-04-21)**: ⭐⭐ **progressive_trail PDCA 세션 최초 9/9 CORE + 5/5 WARN FULL GO**.
 >   - **signals.py** `get_effective_trail_k(best_pnl)` — best_pnl ≥ threshold 시 tk_post 반환

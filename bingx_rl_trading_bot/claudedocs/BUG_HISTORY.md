@@ -171,6 +171,28 @@ Pre-activation (best_pnl ≤ activation_pct)은 여전히 TRAILING_STOP_MARKET (
 
 `_do_close`가 실제 fill 사용. `exit_slippage_pct` 기록 (모니터링). API 에러 시 theoretical로 safe degrade.
 
+### BUG#66 (2026-04-26) — Hedge mode silent ENTRY failure 자동 교정 [CRITICAL]
+**위치**: `_init_exchange` (bot.py L339-356, leverage 설정 직전)
+**Root cause**: 봇 코드는 N=1 One-way mode 가정으로 모든 ENTRY/SL/Trail 주문에 `positionSide='BOTH'` 사용. 그런데 거래소 계정이 외부에서 (BingX UI, 다른 봇, API 호출 등) Hedge mode (`dualSidePosition=true`)로 전환되면 BOTH가 거부됨 → 에러 109400 "In the Hedge mode, the 'PositionSide' field can only be set to LONG or SHORT". 결과적으로 ENTRY는 logger 로그만 남기고 ORDER FAILED로 rollback. **봇은 alive로 보이지만 거래 0건 — silent failure**.
+
+**증상 (2026-04-26)**:
+- 14:00 ENTRY LONG @ $77732.80 → 109400 → ORDER FAILED
+- 14:15 ENTRY LONG @ $78104.90 → 109400 → ORDER FAILED
+- 04-24 ~ 04-26 약 2일간 거래 0건, 사용자 모름 (state.json mtime은 5min cycle로 신선해 보임)
+
+**Fix**: `_init_exchange`에서 leverage 설정 전:
+1. `fetch_position_mode()` 호출 → `hedged: True`인지 확인
+2. 만약 hedge면 `set_position_mode(hedged=False)` 호출 → 재검증
+3. 재검증에서도 hedge로 남으면 `sys.exit(1)` (silent fail 회피, 명확한 abort)
+4. 정상이면 "Position mode: ONE-WAY OK" 로그
+
+**검증** (재시작 후):
+```
+2026-04-26 16:04:54 INFO: Exchange connected (time offset: 1882ms)
+2026-04-26 16:04:54 INFO: Position mode: ONE-WAY OK
+2026-04-26 16:04:56 INFO: Leverage set to 10x
+```
+
 ---
 
 ## 레거시 버그 (BUG#1~34, v2.5 이전)
@@ -198,6 +220,11 @@ v2.3~v2.5 사이클에서 16~30건 수정 (BUG#1~34). 상세는 이전 커밋 �
 - 매 cycle 백테스트 수식 재평가 (BUG#63)
 - 실제 체결가 기록 (BUG#65)
 - 자세히: [BACKTEST_LIVE_PARITY.md](BACKTEST_LIVE_PARITY.md)
+
+### Silent failure 회피
+- Hedge mode 자동 교정 + abort if cannot fix (BUG#66)
+- ORDER FAILED는 무성 (silent) 알림 — 일정 횟수 누적 시 watchdog 또는 사용자 알림 필요
+- 일반 원칙: **bot.alive ≠ bot.healthy**. ENTRY 시도 vs 성공률을 별도 메트릭으로 추적해야 함
 
 ### 재시작 / 크래시 복구
 - Orphan 채택은 거래소 실제 주문 조회 (BUG#48)

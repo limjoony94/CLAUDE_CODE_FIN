@@ -88,6 +88,29 @@
 | **계산 방법** | `sum(trade.pnl_pct for trade in #44..#73)` from `c1_breakout_state.json` |
 | **No code** | 모니터링 스크립트 작성 안 함. `MEMORY.md`에 calendar reminder 등록만 |
 
+### Brake ≠ Validation (2026-04-26 advisor 보강)
+
+**Selection variance 측정 결과** (`eval_window_variance_20260426.json`):
+- 272d 전체에서 rolling 30-trade window 914개 중 **-5pp 도달 0건** (min -2.09%)
+- Random skip 30% 추가해도 0% 도달
+- ∴ -5pp는 brake로서 정확 (false positive 0%, high specificity by design)
+
+**그러나 brake 미발동이 "변경 validated" 의미는 아님**. 다른 결정:
+
+| 도구 | 질문 | 임계 / 방법 |
+|------|------|-------------|
+| **Brake** (auto-revert) | catastrophe인가? | PnL < -5pp → 즉시 revert |
+| **Validation** (manual review) | 효과적인가? | Trade #74 시점에 cohort 30-trade PnL을 baseline 914 window 분포에서 rank |
+
+**Validation 절차** (Trade #74 시점, brake 발동과 무관하게 1회 실행):
+1. cohort PnL = `sum(pnl_pct for #44..#73)` 측정
+2. `eval_window_variance_20260426.json`의 baseline 분포 (mean +7.01%, σ 4.64, P5 +0.61%, P25 +3.76%, P50 +6.14%) 와 비교
+3. cohort가 위치한 percentile 식별
+4. **cohort < baseline P25 (+3.76%)** → flag for review (NOT auto-revert)
+5. Review 결과로 결정: keep / 추가 측정 / 다음 단계
+
+**Why manual?** Auto-trigger를 추가하면 process theater 재발. Validation은 사람의 판단 (regime mismatch, sample fluke, 시장 변동성 등 문맥 고려)이 필요한 영역.
+
 ---
 
 ## 4. 향후 분석 계획 (분리 cohort 분석)

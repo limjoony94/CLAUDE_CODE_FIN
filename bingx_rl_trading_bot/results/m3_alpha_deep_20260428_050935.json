@@ -1,0 +1,170 @@
+{
+  "date": "2026-04-27T20:09:35.711426+00:00",
+  "spec": "\u03b1 ETH-lag + \uace0\ubcc0\ub3d9\uc131",
+  "test1_strict_verify": {
+    "seeds_strict_pass": 6,
+    "seeds_relaxed_pass": 10,
+    "per_seed": [
+      {
+        "seed": 42,
+        "random_p50": 0.3121,
+        "random_pct": 66.47,
+        "diff_p50": 0.12970000000000004,
+        "diff_pct": 10.409999999999997
+      },
+      {
+        "seed": 142,
+        "random_p50": 0.3353,
+        "random_pct": 65.9,
+        "diff_p50": 0.10650000000000004,
+        "diff_pct": 10.97999999999999
+      },
+      {
+        "seed": 242,
+        "random_p50": 0.3328,
+        "random_pct": 65.32,
+        "diff_p50": 0.10900000000000004,
+        "diff_pct": 11.560000000000002
+      },
+      {
+        "seed": 342,
+        "random_p50": 0.2845,
+        "random_pct": 60.69,
+        "diff_p50": 0.15730000000000005,
+        "diff_pct": 16.189999999999998
+      },
+      {
+        "seed": 442,
+        "random_p50": 0.271,
+        "random_pct": 60.12,
+        "diff_p50": 0.1708,
+        "diff_pct": 16.759999999999998
+      },
+      {
+        "seed": 542,
+        "random_p50": 0.3181,
+        "random_pct": 71.68,
+        "diff_p50": 0.12370000000000003,
+        "diff_pct": 5.199999999999989
+      },
+      {
+        "seed": 642,
+        "random_p50": 0.2985,
+        "random_pct": 67.05,
+        "diff_p50": 0.14330000000000004,
+        "diff_pct": 9.829999999999998
+      },
+      {
+        "seed": 742,
+        "random_p50": 0.2821,
+        "random_pct": 65.32,
+        "diff_p50": 0.1597,
+        "diff_pct": 11.560000000000002
+      },
+      {
+        "seed": 842,
+        "random_p50": 0.3443,
+        "random_pct": 67.05,
+        "diff_p50": 0.09750000000000003,
+        "diff_pct": 9.829999999999998
+      },
+      {
+        "seed": 942,
+        "random_p50": 0.3372,
+        "random_pct": 67.63,
+        "diff_p50": 0.10460000000000003,
+        "diff_pct": 9.25
+      }
+    ],
+    "avg_diff_p50": 0.13021000000000002,
+    "std_diff_p50": 0.024905639923519327
+  },
+  "test2_friction_breakdown": [
+    {
+      "friction": 0.0,
+      "n_trades": 186,
+      "daily_net": -0.0199,
+      "sum_net": -6.13,
+      "sum_gross": -6.13,
+      "wr_pct": 32.8,
+      "rr": 1.764
+    },
+    {
+      "friction": 0.05,
+      "n_trades": 186,
+      "daily_net": -0.0501,
+      "sum_net": -15.43,
+      "sum_gross": -6.13,
+      "wr_pct": 28.49,
+      "rr": 1.742
+    },
+    {
+      "friction": 0.1,
+      "n_trades": 186,
+      "daily_net": -0.0803,
+      "sum_net": -24.73,
+      "sum_gross": -6.13,
+      "wr_pct": 26.34,
+      "rr": 1.587
+    },
+    {
+      "friction": 0.15,
+      "n_trades": 186,
+      "daily_net": -0.1105,
+      "sum_net": -34.03,
+      "sum_gross": -6.13,
+      "wr_pct": 25.81,
+      "rr": 1.348
+    },
+    {
+      "friction": 0.2,
+      "n_trades": 186,
+      "daily_net": -0.1407,
+      "sum_net": -43.33,
+      "sum_gross": -6.13,
+      "wr_pct": 23.12,
+      "rr": 1.299
+    },
+    {
+      "friction": 0.25,
+      "n_trades": 186,
+      "daily_net": -0.1709,
+      "sum_net": -52.63,
+      "sum_gross": -6.13,
+      "wr_pct": 18.82,
+      "rr": 1.421
+    },
+    {
+      "friction": 0.3,
+      "n_trades": 186,
+      "daily_net": -0.2011,
+      "sum_net": -61.93,
+      "sum_gross": -6.13,
+      "wr_pct": 18.28,
+      "rr": 1.253
+    },
+    {
+      "friction": 0.5,
+      "n_trades": 186,
+      "daily_net": -0.3218,
+      "sum_net": -99.13,
+      "sum_gross": -6.13,
+      "wr_pct": 13.98,
+      "rr": 0.948
+    },
+    {
+      "friction": 0.8,
+      "n_trades": 186,
+      "daily_net": -0.503,
+      "sum_net": -154.93,
+      "sum_gross": -6.13,
+      "wr_pct": 8.6,
+      "rr": 0.759
+    }
+  ],
+  "test4_entry_vs_exit_attribution": {
+    "alpha_zero_friction_daily_gross": -0.0199,
+    "random_zero_friction_daily_gross": -0.07146666666666668,
+    "diff": 0.05156666666666668
+  }
+}

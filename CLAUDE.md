@@ -1,6 +1,15 @@
-# CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
+# CLAUDE_CODE_FIN - 🪦 C1 Breakout SHELVED (2026-04-27)
 
-> **Version**: v4.9.0 | **Bot**: 🛑 **HALTED (2026-04-27)** | **Updated**: 2026-04-27
+> **Version**: v4.9.1 | **Bot**: 🪦 **SHELVED — Postmortem only** | **Updated**: 2026-04-27
+>
+> **v4.9.1 (2026-04-27)**: 🪦 **C1 Breakout v2.6 폐기 결정**. Advisor recommendation post-3-diagnostics.
+>   - **D1 (intrabar SL)**: 85.7% wick rate. SL이 BTC noise에 너무 tight (전략 설계 결함)
+>   - **D2 (trail bleed)**: Trail 설계 OK, F v2 cycle MARKET slippage가 dominant
+>   - **D3 (rolling 14d distribution)** 🚨: LIVE -12.86% < BT P0. 939 windows 중 0/939이 -5% 도달
+>   - **결론**: BT 모델이 LIVE 시장을 representation 못함 (foundation problem, not parameter)
+>   - **Redesign 거부**: 단순 fix 다중 issue에 통하지 않음, intrabar BT 재구축 = 2-4주 coin flip
+>   - **Postmortem**: `bingx_rl_trading_bot/docs/04-report/c1_breakout_postmortem_20260427.md`
+>   - **다음 전략 결정 = user-level, time pressure 0**
 >
 > **v4.9.0 (2026-04-27)**: 🛑 **봇 정지 — LIVE -12.86%/14d at n=46**.
 >   - Advisor escalation: brake framework는 cohort delta 가정. 실제 BT-LIVE parity 깨짐.

@@ -883,8 +883,15 @@ class C1BreakoutBot:
         # BUG#65: close on exchange FIRST, capture actual fill price
         actual_fill = None
         actual_ts = None
+        exit_method = 'MARKET'  # tracked in trade_history for F v3 cohort analysis
         if self.exchange:
-            actual_fill, actual_ts = self._exchange_close(d)
+            # F v3 LIMIT close (only for TRAIL_TP — SL/Emergency/Timeout still MARKET)
+            fv3_cfg = self.config['strategy'].get('f_v3_limit_close', {}) or {}
+            if fv3_cfg.get('enabled', False) and exit_signal['reason'] == 'TRAIL_TP':
+                actual_fill, actual_ts, exit_method = self._exchange_close_limit(
+                    d, xp, fv3_cfg.get('timeout_s', 60))
+            else:
+                actual_fill, actual_ts = self._exchange_close(d)
 
         # Use actual fill if available (more accurate than theoretical)
         recorded_exit = actual_fill if actual_fill and actual_fill > 0 else xp
@@ -919,6 +926,7 @@ class C1BreakoutBot:
             'exit_time': record_exit_time.replace(tzinfo=None).isoformat()
                          if record_exit_time.tzinfo else record_exit_time.isoformat(),
             'exit_slippage_pct': round(slip, 4) if actual_fill else None,
+            'exit_method': exit_method,  # F v3 cohort: MARKET/LIMIT/MARKET_FALLBACK
         })
         self.bars_since_last_exit = 0  # BUG#16: reset for min_bars_between
         self.last_exit_time = exit_dt  # BUG#54: accurate restart reconciliation
@@ -1466,6 +1474,79 @@ class C1BreakoutBot:
                     f"SL verification + tighten backup are NOT running")
             else:
                 logger.warning(f"Trail update failed: {e}")
+
+    def _exchange_close_limit(self, direction, target_price, timeout_s=60):
+        """F v3: Close via LIMIT @ target_price, poll for fill, MARKET fallback on timeout.
+
+        Returns (actual_fill, actual_ts, method) where method ∈
+        {'LIMIT', 'MARKET_FALLBACK', 'MARKET_ERROR_FALLBACK'}.
+
+        Design (Plan f_v3_limit_close.plan.md, Option A):
+          1. Check live position → get qty
+          2. LIMIT order @ target_price (theoretical TRAIL_TP exit)
+          3. Poll fetch_order every 2s up to timeout_s
+          4. Filled → return actual fill, method='LIMIT'
+          5. Timeout → cancel + MARKET fallback via _exchange_close
+        """
+        try:
+            symbol = self.config['exchange']['symbol']
+            side = 'sell' if direction == 'LONG' else 'buy'
+            live = self._get_live_positions()
+            if not (live and direction in live):
+                logger.warning("F v3: no live position — falling back to MARKET")
+                fill, ts = self._exchange_close(direction)
+                return fill, ts, 'MARKET_FALLBACK'
+            qty = live[direction]['contracts']
+            target_price = round(float(target_price), 1)
+
+            # Place LIMIT
+            try:
+                order = self.exchange.create_order(symbol, 'limit', side, qty, target_price,
+                    params={'positionSide': 'BOTH', 'reduceOnly': True})
+                order_id = order.get('id')
+                logger.info(f"F v3 LIMIT {side} {qty} @ ${target_price:.1f} (id={str(order_id)[:8]})")
+            except Exception as e:
+                logger.error(f"F v3 LIMIT placement failed: {e} — MARKET fallback")
+                fill, ts = self._exchange_close(direction)
+                return fill, ts, 'MARKET_ERROR_FALLBACK'
+
+            # Poll for fill
+            poll_start = time.time()
+            actual_fill = None
+            actual_ts = None
+            while time.time() - poll_start < timeout_s:
+                time.sleep(2)
+                try:
+                    o = self.exchange.fetch_order(order_id, symbol)
+                    status = (o.get('status') or '').lower()
+                    if status == 'closed':
+                        avg = o.get('average') or o.get('price') or target_price
+                        actual_fill = float(avg)
+                        actual_ts = int(o.get('timestamp') or int(time.time() * 1000))
+                        slip_pct = (actual_fill / target_price - 1) * 100 if direction == 'LONG' \
+                                   else (1 - actual_fill / target_price) * 100
+                        elapsed = time.time() - poll_start
+                        logger.info(f"F v3 LIMIT filled @ ${actual_fill:.1f} "
+                                    f"(target ${target_price:.1f} | slip {slip_pct:+.4f}% | {elapsed:.1f}s)")
+                        return actual_fill, actual_ts, 'LIMIT'
+                    if status in ('canceled', 'cancelled', 'rejected', 'expired'):
+                        logger.warning(f"F v3 LIMIT terminated by exchange: {status}")
+                        break
+                except Exception as e:
+                    logger.warning(f"F v3 fetch_order error: {e}")
+
+            # Timeout — cancel + MARKET fallback
+            try:
+                self.exchange.cancel_order(order_id, symbol)
+                logger.info(f"F v3 LIMIT timeout — cancelled (id={str(order_id)[:8]})")
+            except Exception as e:
+                logger.warning(f"F v3 cancel failed: {e}")
+            fill, ts = self._exchange_close(direction)
+            return fill, ts, 'MARKET_FALLBACK'
+        except Exception as e:
+            logger.error(f"F v3 close error: {e} — MARKET fallback")
+            fill, ts = self._exchange_close(direction)
+            return fill, ts, 'MARKET_ERROR_FALLBACK'
 
     def _exchange_close(self, direction):
         """Close position via MARKET + cancel remaining orders.

@@ -52,6 +52,14 @@ strategy:
   f_v2_cycle_exit:
     enabled: true               # 2026-04-24 Canary (50% trades 개선 기대)
 
+  # f_v3_limit_close PDCA (F v3, 2026-04-27):
+  # F v2 cycle MARKET close의 -0.84% avg slippage (n=3: #43 -0.638%, #45 -0.605%, #46 -1.285%) 해결.
+  # TRAIL_TP 시 LIMIT @ theoretical exit_price 배치, 60s timeout 시 MARKET fallback.
+  # ⚠️ enabled=false (Trade #74 brake 후 활성화 prep). 현 cohort #44~#73에 영향 없음.
+  f_v3_limit_close:
+    enabled: false              # Brake fire 후 활성화 (single-variable 원칙 보호)
+    timeout_s: 60               # LIMIT 대기 (cycle 15min 내 안전)
+
 risk: {}  # No halt brakes — all removed per 2026-04-13
 
 exchange:

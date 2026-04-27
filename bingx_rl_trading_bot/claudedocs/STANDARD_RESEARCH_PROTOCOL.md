@@ -134,6 +134,37 @@ def calculate_tp_sl(entry_price, direction, tp_pct, sl_pct):
 
 ---
 
+## Phase 2.5: Mandatory Pre-BT Gates (필수 사전 검증, 2026-04-28 추가)
+
+> **추가 사유**: M1-A scalping NEGATIVE result (`docs/04-report/m1_scalping_v1_negative_result_20260427.md`).
+> Random baseline 비교가 BT 후 Phase 2.7에야 실행되어 폐기 결정 늦어짐.
+> 이후 모든 strategy는 본 6개 gate를 **Phase 3 BT 진입 전 순서대로 통과 필수**.
+
+### Gates (in order, all must pass before Phase 3)
+
+| # | Gate | Pass condition | Reference |
+|---|------|----------------|-----------|
+| 1 | Data integrity | 사용 timeframe 모두 ≥99% bar alignment, missing < 1% | `m1_data_integrity_*.py` |
+| 2 | Entry frequency sanity | 일평균 ≥ criterion 7 threshold (M1: ≥2/day) | `m1_entry_frequency_*.py` |
+| 3 | Friction model registered | `claudedocs/{strategy}_friction_model.md` 사전 등록 | `m1_friction_model.md` |
+| 4 | Baselines registered | no-trade, B&H, **random entry** 3종 사전 정의 | `m1_baseline_definition.md` |
+| 5 | Entry signal isolation | Fixed-N-bar exit (3 horizons), gross PnL > 0 in ≥2 horizons | `m1_entry_signal_isolation.py` |
+| 6 | Random baseline comparison | candidate MFE P50 ≥ random MFE P50 (or candidate gross PnL clearly > random with same exit) | `m1_random_entry_baseline.py` |
+
+### 실패 시 처리
+
+- Gate 1~4: 데이터/등록 부족 → 보강 후 재진행
+- **Gate 5 fail (entry signal no edge)**: BT 진행 금지, 사용자 보고. Spec-tuning은 C1/M1 함정.
+- **Gate 6 fail (random ≥ candidate)**: BT 진행 금지, 사용자 보고. Filter alpha 부재.
+
+### 운영 원칙 (`lessons_fix_impulse_pattern_20260427.md`)
+
+- Gate 5 또는 6 fail 시 자동 발생하는 "fix variant 시도" 충동 = **process bug**
+- 충동 발견 시: stop → advisor 호출 → EV back-of-envelope → 사용자 보고 (capital risk 0 컨텍스트)
+- Spec evolution log (`docs/01-plan/features/{strategy}.plan.md`) entry는 **advisor 검토 후만** 추가
+
+---
+
 ## Phase 3: Backtest Execution (백테스트 실행)
 
 ### 3.1 Position Sizing 표준
@@ -711,3 +742,4 @@ results/                                         ← 검증 결과 JSON
 |---------|------|---------|
 | 1.0 | 2026-01-19 | Initial release |
 | 2.0 | 2026-02-11 | v1.27.0 기준 업데이트: MC sign randomization 10k sims, WF 5-fold, Edge Test 추가, 데이터 270일, 검증 기준 강화 |
+| 2.1 | 2026-04-28 | Phase 2.5 (Mandatory pre-BT gates) 추가. M1-A NEGATIVE result에서 도출. 6 gates: data integrity / entry frequency / friction / baselines / **entry signal isolation** / **random baseline comparison**. |

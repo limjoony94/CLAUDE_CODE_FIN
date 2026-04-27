@@ -1,6 +1,15 @@
 # CLAUDE_CODE_FIN - C1 Breakout v2.6 15m BTC 트레이딩 봇
 
-> **Version**: v4.8.1 | **Bot**: C1 Breakout v2.6 (15m Channel Breakout + Fractal SL + Progressive Trail TP, N=1, Exch 10x / Trade 3x) | **Updated**: 2026-04-26
+> **Version**: v4.9.0 | **Bot**: 🛑 **HALTED (2026-04-27)** | **Updated**: 2026-04-27
+>
+> **v4.9.0 (2026-04-27)**: 🛑 **봇 정지 — LIVE -12.86%/14d at n=46**.
+>   - Advisor escalation: brake framework는 cohort delta 가정. 실제 BT-LIVE parity 깨짐.
+>   - 모든 exit type 손실 (TRAIL_TP -0.15%, EXCHANGE_TRAIL -0.19%, SL -0.52% per trade 1x).
+>   - WR 28.3% vs BT 39.7% = -11.4pp. Selection variance ±5pp/30 의 2배 → structural mismatch.
+>   - **F v3 enable 금지**: anxiety candidate pattern 회피. F v3 코드는 enabled=false 보존.
+>   - Pre-registered eval (#74 cohort) **invalidated** by broader picture.
+>   - **Diagnostic mode**: 3개 우선순위 (intrabar replay, best_pnl 분포, regime mismatch).
+>   - 다음 production 적용은 **new BT-LIVE parity 검증 통과 후**.
 >
 > **v4.8.1 (2026-04-26)**: 🚨 **BUG#66 [CRITICAL]**: Hedge-mode auto-correct.
 >   - 거래소 계정이 외부에서 Hedge mode (`dualSidePosition=true`)로 전환되면

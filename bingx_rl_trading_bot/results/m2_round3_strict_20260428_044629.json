@@ -1,0 +1,390 @@
+{
+  "date": "2026-04-27T19:46:29.496811+00:00",
+  "criteria": {
+    "strict_delta_p50_pp": 0.1,
+    "strict_delta_pct_pp": 10.0,
+    "n_random_seeds": 10,
+    "robust_pass_seeds_threshold": 7
+  },
+  "results": [
+    {
+      "variant": "A.1_extreme_funding_fade",
+      "raw_signals": 0,
+      "per_day": 0.0,
+      "verdict": "NO_SIGNALS",
+      "cand_mfe_p50": null,
+      "random_seeds": [],
+      "random_avg_p50": null,
+      "random_avg_pct": null,
+      "gate5_horizons_pos": 0,
+      "gate5_pass": false,
+      "gate6_diff_p50": null,
+      "gate6_diff_pct": null,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "asymmetry": null
+    },
+    {
+      "variant": "A.2_funding_cross_zero",
+      "raw_signals": 10,
+      "per_day": 0.014,
+      "cand_mfe_p50": 0.2894,
+      "cand_mae_p50": -0.292,
+      "cand_pct_above": 60.0,
+      "asymmetry": -0.0026,
+      "isolation": {
+        "h4": {
+          "n_trades": 10,
+          "gross_sum": -2.08,
+          "gross_avg": -0.2078,
+          "gross_wr_pct": 50.0,
+          "net_avg": -0.4078
+        },
+        "h8": {
+          "n_trades": 10,
+          "gross_sum": -1.68,
+          "gross_avg": -0.1677,
+          "gross_wr_pct": 40.0,
+          "net_avg": -0.3677
+        },
+        "h16": {
+          "n_trades": 10,
+          "gross_sum": -1.88,
+          "gross_avg": -0.1879,
+          "gross_wr_pct": 40.0,
+          "net_avg": -0.3879
+        }
+      },
+      "gate5_horizons_pos": 0,
+      "gate5_pass": false,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.5771,
+      "random_p50_std": 0.2501,
+      "random_avg_pct": 79.0,
+      "random_pct_std": 11.3578,
+      "gate6_diff_p50": -0.2877,
+      "gate6_diff_pct": -19.0,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_BOTH"
+    },
+    {
+      "variant": "A.3_sustained_extreme",
+      "raw_signals": 367,
+      "per_day": 0.51,
+      "cand_mfe_p50": 0.6619,
+      "cand_mae_p50": -0.4794,
+      "cand_pct_above": 78.16,
+      "asymmetry": 0.1825,
+      "isolation": {
+        "h4": {
+          "n_trades": 106,
+          "gross_sum": 0.86,
+          "gross_avg": 0.0081,
+          "gross_wr_pct": 43.4,
+          "net_avg": -0.1919
+        },
+        "h8": {
+          "n_trades": 87,
+          "gross_sum": -3.52,
+          "gross_avg": -0.0404,
+          "gross_wr_pct": 36.78,
+          "net_avg": -0.2404
+        },
+        "h16": {
+          "n_trades": 71,
+          "gross_sum": 20.79,
+          "gross_avg": 0.2928,
+          "gross_wr_pct": 47.89,
+          "net_avg": 0.0928
+        }
+      },
+      "gate5_horizons_pos": 2,
+      "gate5_pass": true,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.4023,
+      "random_p50_std": 0.0541,
+      "random_avg_pct": 73.332,
+      "random_pct_std": 6.3541,
+      "gate6_diff_p50": 0.2596,
+      "gate6_diff_pct": 4.83,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 2,
+      "seeds_total": 10,
+      "verdict": "FAIL_G6_STRICT"
+    },
+    {
+      "variant": "B.1_volume_spike_break",
+      "raw_signals": 1499,
+      "per_day": 2.082,
+      "cand_mfe_p50": 0.4862,
+      "cand_mae_p50": -0.473,
+      "cand_pct_above": 74.65,
+      "asymmetry": 0.0132,
+      "isolation": {
+        "h4": {
+          "n_trades": 932,
+          "gross_sum": -21.14,
+          "gross_avg": -0.0227,
+          "gross_wr_pct": 44.21,
+          "net_avg": -0.2227
+        },
+        "h8": {
+          "n_trades": 856,
+          "gross_sum": -26.39,
+          "gross_avg": -0.0308,
+          "gross_wr_pct": 45.79,
+          "net_avg": -0.2308
+        },
+        "h16": {
+          "n_trades": 767,
+          "gross_sum": -3.0,
+          "gross_avg": -0.0039,
+          "gross_wr_pct": 46.41,
+          "net_avg": -0.2039
+        }
+      },
+      "gate5_horizons_pos": 0,
+      "gate5_pass": false,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.3893,
+      "random_p50_std": 0.0154,
+      "random_avg_pct": 71.296,
+      "random_pct_std": 1.4173,
+      "gate6_diff_p50": 0.0969,
+      "gate6_diff_pct": 3.35,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_BOTH"
+    },
+    {
+      "variant": "B.2_volume_divergence_fade",
+      "raw_signals": 1689,
+      "per_day": 2.346,
+      "cand_mfe_p50": 0.3836,
+      "cand_mae_p50": -0.3856,
+      "cand_pct_above": 71.84,
+      "asymmetry": -0.002,
+      "isolation": {
+        "h4": {
+          "n_trades": 1130,
+          "gross_sum": 5.13,
+          "gross_avg": 0.0045,
+          "gross_wr_pct": 52.92,
+          "net_avg": -0.1955
+        },
+        "h8": {
+          "n_trades": 1030,
+          "gross_sum": -4.51,
+          "gross_avg": -0.0044,
+          "gross_wr_pct": 53.98,
+          "net_avg": -0.2044
+        },
+        "h16": {
+          "n_trades": 927,
+          "gross_sum": -49.15,
+          "gross_avg": -0.053,
+          "gross_wr_pct": 52.86,
+          "net_avg": -0.253
+        }
+      },
+      "gate5_horizons_pos": 1,
+      "gate5_pass": false,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.3969,
+      "random_p50_std": 0.0151,
+      "random_avg_pct": 71.446,
+      "random_pct_std": 0.9857,
+      "gate6_diff_p50": -0.0133,
+      "gate6_diff_pct": 0.39,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_BOTH"
+    },
+    {
+      "variant": "B.3_vwap_bounce",
+      "raw_signals": 5089,
+      "per_day": 7.068,
+      "cand_mfe_p50": 0.2668,
+      "cand_mae_p50": -0.2942,
+      "cand_pct_above": 61.68,
+      "asymmetry": -0.0274,
+      "isolation": {
+        "h4": {
+          "n_trades": 1942,
+          "gross_sum": -14.14,
+          "gross_avg": -0.0073,
+          "gross_wr_pct": 48.92,
+          "net_avg": -0.2073
+        },
+        "h8": {
+          "n_trades": 1516,
+          "gross_sum": -30.5,
+          "gross_avg": -0.0201,
+          "gross_wr_pct": 48.15,
+          "net_avg": -0.2201
+        },
+        "h16": {
+          "n_trades": 1123,
+          "gross_sum": -0.89,
+          "gross_avg": -0.0008,
+          "gross_wr_pct": 48.44,
+          "net_avg": -0.2008
+        }
+      },
+      "gate5_horizons_pos": 0,
+      "gate5_pass": false,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.3892,
+      "random_p50_std": 0.0109,
+      "random_avg_pct": 71.799,
+      "random_pct_std": 0.9289,
+      "gate6_diff_p50": -0.1224,
+      "gate6_diff_pct": -10.12,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_BOTH"
+    },
+    {
+      "variant": "C.1_spread_mean_rev",
+      "raw_signals": 2018,
+      "per_day": 2.803,
+      "cand_mfe_p50": 0.3386,
+      "cand_mae_p50": -0.3668,
+      "cand_pct_above": 70.59,
+      "asymmetry": -0.0282,
+      "isolation": {
+        "h4": {
+          "n_trades": 542,
+          "gross_sum": -7.35,
+          "gross_avg": -0.0136,
+          "gross_wr_pct": 46.86,
+          "net_avg": -0.2136
+        },
+        "h8": {
+          "n_trades": 425,
+          "gross_sum": -16.66,
+          "gross_avg": -0.0392,
+          "gross_wr_pct": 45.65,
+          "net_avg": -0.2392
+        },
+        "h16": {
+          "n_trades": 335,
+          "gross_sum": -8.7,
+          "gross_avg": -0.026,
+          "gross_wr_pct": 45.07,
+          "net_avg": -0.226
+        }
+      },
+      "gate5_horizons_pos": 0,
+      "gate5_pass": false,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.2826,
+      "random_p50_std": 0.0195,
+      "random_avg_pct": 62.494,
+      "random_pct_std": 2.4831,
+      "gate6_diff_p50": 0.056,
+      "gate6_diff_pct": 8.1,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_BOTH"
+    },
+    {
+      "variant": "C.2_correlation_breakdown",
+      "raw_signals": 389,
+      "per_day": 0.54,
+      "cand_mfe_p50": 0.3218,
+      "cand_mae_p50": -0.2281,
+      "cand_pct_above": 75.56,
+      "asymmetry": 0.0937,
+      "isolation": {
+        "h4": {
+          "n_trades": 67,
+          "gross_sum": 5.4,
+          "gross_avg": 0.0805,
+          "gross_wr_pct": 50.75,
+          "net_avg": -0.1195
+        },
+        "h8": {
+          "n_trades": 45,
+          "gross_sum": 0.91,
+          "gross_avg": 0.0202,
+          "gross_wr_pct": 57.78,
+          "net_avg": -0.1798
+        },
+        "h16": {
+          "n_trades": 31,
+          "gross_sum": -2.89,
+          "gross_avg": -0.0931,
+          "gross_wr_pct": 48.39,
+          "net_avg": -0.2931
+        }
+      },
+      "gate5_horizons_pos": 2,
+      "gate5_pass": true,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.3196,
+      "random_p50_std": 0.0534,
+      "random_avg_pct": 66.889,
+      "random_pct_std": 5.1118,
+      "gate6_diff_p50": 0.0022,
+      "gate6_diff_pct": 8.67,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_G6_STRICT"
+    },
+    {
+      "variant": "C.3_eth_leads_btc",
+      "raw_signals": 603,
+      "per_day": 0.838,
+      "cand_mfe_p50": 0.3428,
+      "cand_mae_p50": -0.3579,
+      "cand_pct_above": 67.86,
+      "asymmetry": -0.0151,
+      "isolation": {
+        "h4": {
+          "n_trades": 483,
+          "gross_sum": 11.8,
+          "gross_avg": 0.0244,
+          "gross_wr_pct": 46.58,
+          "net_avg": -0.1756
+        },
+        "h8": {
+          "n_trades": 420,
+          "gross_sum": -6.23,
+          "gross_avg": -0.0148,
+          "gross_wr_pct": 44.29,
+          "net_avg": -0.2148
+        },
+        "h16": {
+          "n_trades": 357,
+          "gross_sum": 17.0,
+          "gross_avg": 0.0476,
+          "gross_wr_pct": 46.22,
+          "net_avg": -0.1524
+        }
+      },
+      "gate5_horizons_pos": 2,
+      "gate5_pass": true,
+      "random_seeds_count": 10,
+      "random_avg_p50": 0.2861,
+      "random_p50_std": 0.0187,
+      "random_avg_pct": 62.643,
+      "random_pct_std": 2.3982,
+      "gate6_diff_p50": 0.0567,
+      "gate6_diff_pct": 5.22,
+      "gate6_strict_pass": false,
+      "seeds_passing_strict": 0,
+      "seeds_total": 10,
+      "verdict": "FAIL_G6_STRICT"
+    }
+  ],
+  "n_robust_pass": 0,
+  "n_strict_fragile": 0
+}

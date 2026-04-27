@@ -1,0 +1,55 @@
+{
+  "date": "2026-04-27T12:18:14.691774+00:00",
+  "spec": "M1-A entry, fixed-N-bar exit (no SL/trail/emergency)",
+  "friction_per_trade_pct": 0.2,
+  "horizons_bars": [
+    12,
+    24,
+    48
+  ],
+  "results": [
+    {
+      "label": "fixed_exit_12bars_60min",
+      "n": 1813,
+      "days": 719,
+      "trades_per_day": 2.522,
+      "gross_sum": 15.27,
+      "gross_avg": 0.0084,
+      "gross_wr_pct": 49.7,
+      "net_sum": -347.33,
+      "net_avg": -0.1916,
+      "net_wr_pct": 24.16,
+      "daily_gross_pct": 0.0212,
+      "daily_net_pct": -0.4831
+    },
+    {
+      "label": "fixed_exit_24bars_120min",
+      "n": 1565,
+      "days": 719,
+      "trades_per_day": 2.177,
+      "gross_sum": 24.13,
+      "gross_avg": 0.0154,
+      "gross_wr_pct": 49.84,
+      "net_sum": -288.87,
+      "net_avg": -0.1846,
+      "net_wr_pct": 31.25,
+      "daily_gross_pct": 0.0336,
+      "daily_net_pct": -0.4018
+    },
+    {
+      "label": "fixed_exit_48bars_240min",
+      "n": 1298,
+      "days": 719,
+      "trades_per_day": 1.805,
+      "gross_sum": 1.28,
+      "gross_avg": 0.001,
+      "gross_wr_pct": 49.61,
+      "net_sum": -258.32,
+      "net_avg": -0.199,
+      "net_wr_pct": 35.75,
+      "daily_gross_pct": 0.0018,
+      "daily_net_pct": -0.3593
+    }
+  ],
+  "verdict": "EDGE_EXISTS"
+}

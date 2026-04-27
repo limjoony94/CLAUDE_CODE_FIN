@@ -1,0 +1,67 @@
+{
+  "date": "2026-04-27T12:03:28.097020+00:00",
+  "within_tf": {
+    "5m": {
+      "label": "5m",
+      "n_bars": 207360,
+      "first_ts": "2024-02-23T05:00:00+00:00",
+      "last_ts": "2026-02-12T04:55:00+00:00",
+      "days": 720.0,
+      "expected_freq_min": 5.0,
+      "n_expected_gap": 207359,
+      "n_short_gap": 0,
+      "n_long_gap": 0,
+      "max_gap_min": 5.0,
+      "pct_aligned": 100.0
+    },
+    "15m": {
+      "label": "15m",
+      "n_bars": 69120,
+      "first_ts": "2024-02-23T05:00:00+00:00",
+      "last_ts": "2026-02-12T04:45:00+00:00",
+      "days": 719.99,
+      "expected_freq_min": 15.0,
+      "n_expected_gap": 69119,
+      "n_short_gap": 0,
+      "n_long_gap": 0,
+      "max_gap_min": 15.0,
+      "pct_aligned": 100.0
+    },
+    "1h": {
+      "label": "1h",
+      "n_bars": 17280,
+      "first_ts": "2024-02-23T05:00:00+00:00",
+      "last_ts": "2026-02-12T04:00:00+00:00",
+      "days": 719.96,
+      "expected_freq_min": 60.0,
+      "n_expected_gap": 17279,
+      "n_short_gap": 0,
+      "n_long_gap": 0,
+      "max_gap_min": 60.0,
+      "pct_aligned": 100.0
+    },
+    "4h": {
+      "label": "4h",
+      "n_bars": 4320,
+      "first_ts": "2024-02-23T08:00:00+00:00",
+      "last_ts": "2026-02-12T04:00:00+00:00",
+      "days": 719.83,
+      "expected_freq_min": 240.0,
+      "n_expected_gap": 4319,
+      "n_short_gap": 0,
+      "n_long_gap": 0,
+      "max_gap_min": 240.0,
+      "pct_aligned": 100.0
+    }
+  },
+  "cross_tf_alignment": {
+    "sampled": 10000,
+    "missing_15m": 0,
+    "missing_1h": 0,
+    "missing_4h": 2,
+    "pct_missing_15m": 0.0,
+    "pct_missing_1h": 0.0,
+    "pct_missing_4h": 0.02
+  },
+  "verdict": "PASS"
+}

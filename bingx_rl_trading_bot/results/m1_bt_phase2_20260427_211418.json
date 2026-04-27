@@ -1,0 +1,31 @@
+{
+  "date": "2026-04-27T12:14:18.272791+00:00",
+  "spec": "M1-A (Plan \u00a73 + Phase 0.2 D3 buffered)",
+  "period": {
+    "start": "2024-02-23T14:40:00.000000000",
+    "end": "2026-02-11T13:55:00.000000000",
+    "days": 718
+  },
+  "n_trades": 2147,
+  "trades_per_day": 2.99,
+  "wr_pct": 12.99,
+  "sum_net_1x_pct": -496.25,
+  "sum_gross_1x_pct": -66.85,
+  "avg_net_per_trade_pct": -0.2311,
+  "rr": 0.948,
+  "daily_1x_pct": -0.6912,
+  "reasons": {
+    "SL": 828,
+    "TRAIL_TP": 1276,
+    "TIMEOUT": 41,
+    "EMERGENCY": 2
+  },
+  "criterion_pass": {
+    "1_WR_50pct": false,
+    "2_RR_1.0": "False",
+    "5_daily_0.2pct": "False",
+    "6_avg_gt_friction": "False",
+    "7_2trades_per_day": true
+  },
+  "criterion_pass_count": "1"
+}

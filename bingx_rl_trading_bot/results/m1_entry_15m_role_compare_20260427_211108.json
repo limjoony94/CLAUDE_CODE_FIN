@@ -1,0 +1,54 @@
+{
+  "date": "2026-04-27T12:11:08.994209+00:00",
+  "usable_days": 719.7118055555555,
+  "common_funnel": {
+    "A": 171313,
+    "B": 17818,
+    "C": 6670,
+    "A_per_day": 238.03,
+    "B_per_day": 24.757,
+    "C_per_day": 9.268
+  },
+  "variants_15m_role": [
+    {
+      "label": "D1 (15m EMA9>EMA21 strict)",
+      "role": "D1",
+      "long_n": 726,
+      "short_n": 521,
+      "total_n": 1247,
+      "long_per_day": 1.009,
+      "short_per_day": 0.724,
+      "total_per_day": 1.733
+    },
+    {
+      "label": "D2 (15m close>EMA21)",
+      "role": "D2",
+      "long_n": 336,
+      "short_n": 252,
+      "total_n": 588,
+      "long_per_day": 0.467,
+      "short_per_day": 0.35,
+      "total_per_day": 0.817
+    },
+    {
+      "label": "D3 (15m EMA9\u2265EMA21\u00b70.999, 0.1% buffer)",
+      "role": "D3",
+      "long_n": 1824,
+      "short_n": 1431,
+      "total_n": 3255,
+      "long_per_day": 2.534,
+      "short_per_day": 1.988,
+      "total_per_day": 4.523
+    },
+    {
+      "label": "D4 (15m omitted)",
+      "role": "OMITTED",
+      "long_n": 3431,
+      "short_n": 3239,
+      "total_n": 6670,
+      "long_per_day": 4.767,
+      "short_per_day": 4.5,
+      "total_per_day": 9.268
+    }
+  ]
+}

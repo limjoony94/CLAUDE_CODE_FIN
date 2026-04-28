@@ -121,7 +121,7 @@ Edge magnitude bounded by something other than mechanism choice, friction parame
 - **L2 orderbook microstructure** (last in-scope, ~3 weeks away) — different signal layer, unknown gross ceiling
 - **Capital-scale change unlocks DeFi-R1 only**: $1,500 → $15,000 raises DeFi-R1 from $27 to $691/yr. Crypto perp strategies are scale-invariant. Caveat: even $150K cap yields DeFi-R1 net 4.89% which still fails T4. Capital scaling **rescues $ amounts, not %**.
 - **Markets entirely outside this codebase** — equity factors, FX carry — but those require different infrastructure and the user's BingX setup constraint excludes them
-- **Higher gross-alpha markets/structures**: longer-dated options sellers (theta), volatility arb, leverage on small alpha (e.g. 5× leverage on PB-R1-maker → ~15%/yr but with 5× MDD), CeFi yield enhancement — none tested in this codebase
+- **Higher gross-alpha markets/structures**: longer-dated options theta, volatility arb, leveraged factor strategies, CeFi yield enhancement — **none tested in this codebase. Quantitative claims for these would be untested speculation. Listed as exploration directions, not validated paths.**
 
 ---
 

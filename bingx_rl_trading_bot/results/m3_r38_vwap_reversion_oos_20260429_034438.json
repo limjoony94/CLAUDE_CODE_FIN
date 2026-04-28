@@ -1,0 +1,87 @@
+{
+  "date": "2026-04-28T18:44:38.346473+00:00",
+  "pre_reg": "claudedocs/m3_round38_vwap_reversion_prereg.md",
+  "pre_reg_commit": "a257838",
+  "locked_params": {
+    "vwap_dev_min_pct": 0.5,
+    "body_min_ratio": 0.4,
+    "volume_mult": 1.0,
+    "wick_to_body_min": 2.0,
+    "session_reset_hour_utc": 0
+  },
+  "friction": 0.07,
+  "full_signals_count": 4,
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n": 1,
+        "daily": 0.7995,
+        "wr": 100.0,
+        "rr": Infinity,
+        "avg_g": 0.8695
+      },
+      {
+        "fold": 2,
+        "n": 0,
+        "daily": null,
+        "wr": null,
+        "rr": null,
+        "avg_g": null
+      },
+      {
+        "fold": 3,
+        "n": 1,
+        "daily": -0.1443,
+        "wr": 0.0,
+        "rr": 0.0,
+        "avg_g": -0.0743
+      },
+      {
+        "fold": 4,
+        "n": 0,
+        "daily": null,
+        "wr": null,
+        "rr": null,
+        "avg_g": null
+      },
+      {
+        "fold": 5,
+        "n": 0,
+        "daily": null,
+        "wr": null,
+        "rr": null,
+        "avg_g": null
+      }
+    ],
+    "pos_count": 1,
+    "pass": false
+  },
+  "test_2_bootstrap": {
+    "mean": -0.0066936,
+    "pos_rate": 0.002,
+    "p5": 0.0,
+    "active_rate": 0.012,
+    "pass": false
+  },
+  "test_3_train_test": {
+    "train": {
+      "n": 3,
+      "days": 315,
+      "per_day": 0.01,
+      "sum_net": -0.63,
+      "avg_net": -0.2102,
+      "avg_gross": -0.1402,
+      "wr_pct": 33.33,
+      "rr": 1.118,
+      "daily_net": -0.002,
+      "reasons": {
+        "SL": 2,
+        "TRAIL_TP": 1
+      }
+    },
+    "test": null,
+    "pass": false
+  },
+  "all_pass": false
+}

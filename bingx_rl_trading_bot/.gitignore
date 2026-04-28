@@ -83,3 +83,6 @@ logs/archive_*
 scripts/data_pipeline/storage/*.parquet
 scripts/data_pipeline/storage/*.jsonl
 scripts/data_pipeline/storage/run.log
+
+# Binance Vision aggTrades raw (large; rebuildable from Binance)
+data/binance_vision_aggtrades/

@@ -1,0 +1,101 @@
+{
+  "date": "2026-04-28T20:36:48.347261+00:00",
+  "pre_reg_commit": "f584711",
+  "locked_params": {
+    "imb_extreme_threshold": 0.85,
+    "intensity_pctile": 0.9,
+    "intensity_lookback_min": 60,
+    "min_bars_between_15m": 2
+  },
+  "friction": 0.07,
+  "full_signals_count": 820,
+  "signals_per_day": 2.806217025524027,
+  "vacuity_gate_pass": true,
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n": 90,
+        "daily": -0.1203,
+        "wr": 34.44,
+        "rr": 1.067,
+        "avg_g": 0.0058
+      },
+      {
+        "fold": 2,
+        "n": 108,
+        "daily": -0.2225,
+        "wr": 22.22,
+        "rr": 1.328,
+        "avg_g": -0.0268
+      },
+      {
+        "fold": 3,
+        "n": 65,
+        "daily": -0.1247,
+        "wr": 24.62,
+        "rr": 1.247,
+        "avg_g": -0.0163
+      },
+      {
+        "fold": 4,
+        "n": 32,
+        "daily": -0.0214,
+        "wr": 25.0,
+        "rr": 2.409,
+        "avg_g": 0.0393
+      },
+      {
+        "fold": 5,
+        "n": 62,
+        "daily": -0.0257,
+        "wr": 24.19,
+        "rr": 2.767,
+        "avg_g": 0.0551
+      }
+    ],
+    "pos_count": 0,
+    "pass": false
+  },
+  "test_2_bootstrap": {
+    "mean": -0.25359450000000006,
+    "pos_rate": 0.283,
+    "p5": -1.4731,
+    "active_rate": 0.922,
+    "pass": false
+  },
+  "test_3_train_test": {
+    "train": {
+      "n": 299,
+      "days": 174,
+      "per_day": 1.718,
+      "sum_net": -17.99,
+      "avg_net": -0.0602,
+      "avg_gross": 0.0098,
+      "wr_pct": 28.43,
+      "rr": 1.505,
+      "daily_net": -0.1034,
+      "reasons": {
+        "SL": 200,
+        "TRAIL_TP": 99
+      }
+    },
+    "test": {
+      "n": 115,
+      "days": 105,
+      "per_day": 1.095,
+      "sum_net": -4.26,
+      "avg_net": -0.0371,
+      "avg_gross": 0.0329,
+      "wr_pct": 25.22,
+      "rr": 2.226,
+      "daily_net": -0.0406,
+      "reasons": {
+        "SL": 84,
+        "TRAIL_TP": 31
+      }
+    },
+    "pass": "False"
+  },
+  "all_pass": false
+}

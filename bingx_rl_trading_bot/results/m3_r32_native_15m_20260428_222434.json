@@ -1,0 +1,169 @@
+{
+  "date": "2026-04-28T13:24:34.510890+00:00",
+  "mechanism": "R21 native 15m + C1 production exit",
+  "n_signals": 681,
+  "configs": {
+    "R21-native-15m + prod (prog ON)": [
+      {
+        "n": 311,
+        "days": 714,
+        "per_day": 0.436,
+        "sum_net": -28.73,
+        "avg_net": -0.0924,
+        "avg_gross": -0.0224,
+        "wr_pct": 32.48,
+        "rr": 1.459,
+        "daily_net": -0.0402,
+        "reasons": {
+          "TRAIL_TP": 99,
+          "SL": 211,
+          "EMERGENCY": 1
+        }
+      },
+      321
+    ],
+    "R21-native-15m + prod (prog OFF)": [
+      {
+        "n": 311,
+        "days": 715,
+        "per_day": 0.435,
+        "sum_net": -44.67,
+        "avg_net": -0.1436,
+        "avg_gross": -0.0736,
+        "wr_pct": 29.26,
+        "rr": 1.328,
+        "daily_net": -0.0625,
+        "reasons": {
+          "TRAIL_TP": 94,
+          "SL": 216,
+          "EMERGENCY": 1
+        }
+      },
+      321
+    ]
+  },
+  "best_friction": {
+    "A maker": {
+      "n": 311,
+      "days": 714,
+      "per_day": 0.436,
+      "sum_net": -19.4,
+      "avg_net": -0.0624,
+      "avg_gross": -0.0224,
+      "wr_pct": 32.48,
+      "rr": 1.631,
+      "daily_net": -0.0272,
+      "reasons": {
+        "TRAIL_TP": 99,
+        "SL": 211,
+        "EMERGENCY": 1
+      }
+    },
+    "B mixed": {
+      "n": 311,
+      "days": 714,
+      "per_day": 0.436,
+      "sum_net": -28.73,
+      "avg_net": -0.0924,
+      "avg_gross": -0.0224,
+      "wr_pct": 32.48,
+      "rr": 1.459,
+      "daily_net": -0.0402,
+      "reasons": {
+        "TRAIL_TP": 99,
+        "SL": 211,
+        "EMERGENCY": 1
+      }
+    },
+    "C taker": {
+      "n": 311,
+      "days": 714,
+      "per_day": 0.436,
+      "sum_net": -38.06,
+      "avg_net": -0.1224,
+      "avg_gross": -0.0224,
+      "wr_pct": 31.83,
+      "rr": 1.348,
+      "daily_net": -0.0533,
+      "reasons": {
+        "TRAIL_TP": 99,
+        "SL": 211,
+        "EMERGENCY": 1
+      }
+    },
+    "D worst": {
+      "n": 311,
+      "days": 714,
+      "per_day": 0.436,
+      "sum_net": -53.61,
+      "avg_net": -0.1724,
+      "avg_gross": -0.0224,
+      "wr_pct": 30.23,
+      "rr": 1.217,
+      "daily_net": -0.0751,
+      "reasons": {
+        "TRAIL_TP": 99,
+        "SL": 211,
+        "EMERGENCY": 1
+      }
+    }
+  },
+  "bootstrap": {
+    "mean": -0.0849455,
+    "pos_rate": 0.253,
+    "p5": -1.1343999999999999,
+    "p_vs_bh": 0.451
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": -0.037,
+        "n": 55,
+        "wr": 29.09,
+        "rr": 1.849
+      },
+      {
+        "fold": 2,
+        "daily": -0.1037,
+        "n": 55,
+        "wr": 29.09,
+        "rr": 1.142
+      },
+      {
+        "fold": 3,
+        "daily": 0.002,
+        "n": 51,
+        "wr": 37.25,
+        "rr": 1.716
+      },
+      {
+        "fold": 4,
+        "daily": -0.0447,
+        "n": 41,
+        "wr": 31.71,
+        "rr": 1.118
+      },
+      {
+        "fold": 5,
+        "daily": 0.0016,
+        "n": 47,
+        "wr": 40.43,
+        "rr": 1.493
+      }
+    ],
+    "pos_count": 2
+  },
+  "conditions": {
+    "wf_3of5": false,
+    "taker_C": "False",
+    "mixed_B": "False",
+    "maker_A": "False",
+    "bootstrap": false,
+    "gross_ge_0.10": "False",
+    "freq_ge_2": false,
+    "wr_ge_40": false,
+    "rr_ge_1": "True"
+  },
+  "all_pass": false
+}

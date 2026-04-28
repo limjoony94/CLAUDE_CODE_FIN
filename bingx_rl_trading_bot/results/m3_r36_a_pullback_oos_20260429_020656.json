@@ -1,0 +1,96 @@
+{
+  "date": "2026-04-28T17:06:56.855245+00:00",
+  "pre_reg": "claudedocs/m3_round36_a_pullback_oos_prereg.md",
+  "locked_params": {
+    "ema_dist_pct": 0.5,
+    "volume_mult": 1.0
+  },
+  "friction": 0.07,
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n": 34,
+        "daily": 0.0547,
+        "wr": 52.94,
+        "rr": 1.332,
+        "avg_g": 0.2358
+      },
+      {
+        "fold": 2,
+        "n": 33,
+        "daily": -0.0975,
+        "wr": 39.39,
+        "rr": 0.638,
+        "avg_g": -0.2462
+      },
+      {
+        "fold": 3,
+        "n": 39,
+        "daily": -0.0349,
+        "wr": 43.59,
+        "rr": 0.999,
+        "avg_g": -0.0294
+      },
+      {
+        "fold": 4,
+        "n": 30,
+        "daily": -0.0003,
+        "wr": 40.0,
+        "rr": 1.491,
+        "avg_g": 0.0687
+      },
+      {
+        "fold": 5,
+        "n": 32,
+        "daily": 0.0849,
+        "wr": 59.38,
+        "rr": 1.427,
+        "avg_g": 0.3803
+      }
+    ],
+    "pos_count": 2,
+    "pass": false
+  },
+  "test_2_bootstrap": {
+    "mean": -0.0242312,
+    "pos_rate": 0.212,
+    "p5": -1.3239999999999998,
+    "active_rate": 0.479,
+    "pass": false
+  },
+  "test_3_train_test": {
+    "train": {
+      "n": 117,
+      "days": 416,
+      "per_day": 0.281,
+      "sum_net": -9.27,
+      "avg_net": -0.0792,
+      "avg_gross": -0.0092,
+      "wr_pct": 43.59,
+      "rr": 1.06,
+      "daily_net": -0.0223,
+      "reasons": {
+        "TRAIL_TP": 61,
+        "SL": 56
+      }
+    },
+    "test": {
+      "n": 82,
+      "days": 284,
+      "per_day": 0.289,
+      "sum_net": 11.54,
+      "avg_net": 0.1407,
+      "avg_gross": 0.2107,
+      "wr_pct": 50.0,
+      "rr": 1.52,
+      "daily_net": 0.0406,
+      "reasons": {
+        "TRAIL_TP": 50,
+        "SL": 32
+      }
+    },
+    "pass": "False"
+  },
+  "all_pass": false
+}

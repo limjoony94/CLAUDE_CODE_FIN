@@ -1,0 +1,138 @@
+{
+  "date": "2026-04-28T12:20:23.632053+00:00",
+  "mechanism": "Bollinger Squeeze breakout",
+  "n_signals": 969,
+  "scenarios": {
+    "A maker": {
+      "n": 611,
+      "days": 310,
+      "per_day": 1.971,
+      "sum_net": -30.81,
+      "avg_net": -0.0504,
+      "avg_gross": -0.0104,
+      "wr_pct": 47.14,
+      "rr": 0.826,
+      "daily_net": -0.0994,
+      "reasons": {
+        "TP": 214,
+        "SL": 181,
+        "TIMEOUT": 206,
+        "EMERGENCY": 10
+      }
+    },
+    "B mixed": {
+      "n": 611,
+      "days": 310,
+      "per_day": 1.971,
+      "sum_net": -42.72,
+      "avg_net": -0.0699,
+      "avg_gross": -0.0104,
+      "wr_pct": 44.84,
+      "rr": 0.816,
+      "daily_net": -0.1378,
+      "reasons": {
+        "TP": 214,
+        "SL": 181,
+        "TIMEOUT": 206,
+        "EMERGENCY": 10
+      }
+    },
+    "C taker": {
+      "n": 611,
+      "days": 310,
+      "per_day": 1.971,
+      "sum_net": -67.47,
+      "avg_net": -0.1104,
+      "avg_gross": -0.0104,
+      "wr_pct": 42.23,
+      "rr": 0.695,
+      "daily_net": -0.2176,
+      "reasons": {
+        "TP": 214,
+        "SL": 181,
+        "TIMEOUT": 206,
+        "EMERGENCY": 10
+      }
+    },
+    "D worst": {
+      "n": 611,
+      "days": 310,
+      "per_day": 1.971,
+      "sum_net": -87.32,
+      "avg_net": -0.1429,
+      "avg_gross": -0.0104,
+      "wr_pct": 39.93,
+      "rr": 0.656,
+      "daily_net": -0.2817,
+      "reasons": {
+        "TP": 214,
+        "SL": 181,
+        "TIMEOUT": 206,
+        "EMERGENCY": 10
+      }
+    }
+  },
+  "t_test": {
+    "mean": -0.06991043939791836,
+    "std": 0.4133809929783395,
+    "n": 611,
+    "t_stat": -4.1803450727026314,
+    "p_value_one_sided": 0.9999833154474528,
+    "significant_at_0.05": "False"
+  },
+  "bootstrap": {
+    "mean": -0.20702626673995117,
+    "pos_rate": 0.128,
+    "p5": -1.6943987723899843,
+    "p_vs_bh": 0.453
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 2,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 3,
+        "daily": -0.0055,
+        "n": 124,
+        "wr": 53.23
+      },
+      {
+        "fold": 4,
+        "daily": -0.102,
+        "n": 226,
+        "wr": 45.58
+      },
+      {
+        "fold": 5,
+        "daily": -0.2546,
+        "n": 261,
+        "wr": 40.23
+      }
+    ],
+    "pos_count": 0
+  },
+  "lookahead_leaks": 0,
+  "conditions": {
+    "lookahead": true,
+    "wf_3of5": false,
+    "taker_C": "False",
+    "mixed_B": "False",
+    "maker_A": "False",
+    "bootstrap": false,
+    "gross_ge_0.10": "False",
+    "freq_ge_2": false,
+    "wr_rr": false,
+    "t_test_significant": "False"
+  },
+  "all_pass": false
+}

@@ -264,7 +264,12 @@ EXIT_PARAMS = {
 
 
 def run_bt_with_spec(df, h1, h4, valid_mask, spec, friction=0.20, params=None):
-    """Spec-parameterized BT. Common exit framework. Returns trades."""
+    """Spec-parameterized BT. Exit framework via spec.get('exit_params', EXIT_PARAMS).
+    Supports use_sl, use_trail flags for α′ (fixed-N exit only)."""
+    exit_params = spec.get('exit_params', EXIT_PARAMS)
+    use_sl = exit_params.get('use_sl', True)
+    use_trail = exit_params.get('use_trail', True)
+
     n = len(df)
     op = df['open'].values
     high = df['high'].values
@@ -300,25 +305,25 @@ def run_bt_with_spec(df, h1, h4, valid_mask, spec, friction=0.20, params=None):
                 exit_price, exit_reason = pemerg, 'EMERGENCY'
             elif pdir == 'SHORT' and high[i] >= pemerg:
                 exit_price, exit_reason = pemerg, 'EMERGENCY'
-            # SL
-            if exit_price is None:
+            # SL (optional)
+            if exit_price is None and use_sl:
                 if pdir == 'LONG' and low[i] <= psl:
                     exit_price, exit_reason = psl, 'SL'
                 elif pdir == 'SHORT' and high[i] >= psl:
                     exit_price, exit_reason = psl, 'SL'
-            # Trail TP
-            if exit_price is None:
+            # Trail TP (optional)
+            if exit_price is None and use_trail:
                 if pdir == 'LONG':
-                    trigger = pbest - EXIT_PARAMS['trail_k'] * atr_now
+                    trigger = pbest - exit_params['trail_k'] * atr_now
                     if low[i] <= trigger:
                         exit_price, exit_reason = trigger, 'TRAIL_TP'
                 else:
-                    trigger = pbest + EXIT_PARAMS['trail_k'] * atr_now
+                    trigger = pbest + exit_params['trail_k'] * atr_now
                     if high[i] >= trigger:
                         exit_price, exit_reason = trigger, 'TRAIL_TP'
             # Timeout
             held = i - pstart
-            if exit_price is None and held >= EXIT_PARAMS['timeout_bars']:
+            if exit_price is None and held >= exit_params['timeout_bars']:
                 exit_price, exit_reason = cl[i], 'TIMEOUT'
 
             if exit_price is not None:
@@ -329,25 +334,30 @@ def run_bt_with_spec(df, h1, h4, valid_mask, spec, friction=0.20, params=None):
                                 'gross_pct': round(gross, 4), 'net_pct': round(net, 4),
                                 'reason': exit_reason, 'bars_held': held})
                 in_pos = False
-                cooldown_until = i + EXIT_PARAMS['min_bars_between']
+                cooldown_until = i + exit_params['min_bars_between']
 
         if not in_pos and i >= cooldown_until and i in signal_set:
             ni = i + 1
             if ni < n:
                 pentry = op[ni]
                 pdir = signal_set[i]
-                # SL: max(swing, entry - 2*ATR)
-                atr_dist = EXIT_PARAMS['sl_atr_mult'] * (atr[i] if not np.isnan(atr[i]) else 0)
-                if pdir == 'LONG':
-                    atr_sl = pentry - atr_dist
-                    structural = sw_low[i] if not np.isnan(sw_low[i]) else atr_sl
-                    psl = max(structural, atr_sl)
-                    pemerg = pentry * (1 - EXIT_PARAMS['emergency_pct'] / 100)
+                # SL: max(swing, entry - sl_atr_mult*ATR) — only computed if use_sl
+                if use_sl:
+                    atr_dist = exit_params['sl_atr_mult'] * (atr[i] if not np.isnan(atr[i]) else 0)
+                    if pdir == 'LONG':
+                        atr_sl = pentry - atr_dist
+                        structural = sw_low[i] if not np.isnan(sw_low[i]) else atr_sl
+                        psl = max(structural, atr_sl)
+                    else:
+                        atr_sl = pentry + atr_dist
+                        structural = sw_high[i] if not np.isnan(sw_high[i]) else atr_sl
+                        psl = min(structural, atr_sl)
                 else:
-                    atr_sl = pentry + atr_dist
-                    structural = sw_high[i] if not np.isnan(sw_high[i]) else atr_sl
-                    psl = min(structural, atr_sl)
-                    pemerg = pentry * (1 + EXIT_PARAMS['emergency_pct'] / 100)
+                    psl = None  # not used
+                if pdir == 'LONG':
+                    pemerg = pentry * (1 - exit_params['emergency_pct'] / 100)
+                else:
+                    pemerg = pentry * (1 + exit_params['emergency_pct'] / 100)
                 pbest = high[ni] if pdir == 'LONG' else low[ni]
                 pstart = ni
                 in_pos = True

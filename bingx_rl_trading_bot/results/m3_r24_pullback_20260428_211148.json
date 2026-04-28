@@ -1,0 +1,129 @@
+{
+  "date": "2026-04-28T12:11:48.792151+00:00",
+  "mechanism": "pullback continuation MA bounce",
+  "n_signals": 1019,
+  "scenarios": {
+    "A maker": {
+      "n": 834,
+      "days": 311,
+      "per_day": 2.682,
+      "sum_net": -29.1,
+      "avg_net": -0.0349,
+      "avg_gross": 0.0051,
+      "wr_pct": 47.84,
+      "rr": 0.689,
+      "daily_net": -0.0936,
+      "reasons": {
+        "SL": 268,
+        "TP": 544,
+        "EMERGENCY": 2,
+        "TIMEOUT": 20
+      }
+    },
+    "B mixed": {
+      "n": 834,
+      "days": 311,
+      "per_day": 2.682,
+      "sum_net": -37.8,
+      "avg_net": -0.0453,
+      "avg_gross": 0.0051,
+      "wr_pct": 47.6,
+      "rr": 0.626,
+      "daily_net": -0.1215,
+      "reasons": {
+        "SL": 268,
+        "TP": 544,
+        "EMERGENCY": 2,
+        "TIMEOUT": 20
+      }
+    },
+    "C taker": {
+      "n": 834,
+      "days": 311,
+      "per_day": 2.682,
+      "sum_net": -79.14,
+      "avg_net": -0.0949,
+      "avg_gross": 0.0051,
+      "wr_pct": 28.66,
+      "rr": 0.706,
+      "daily_net": -0.2545,
+      "reasons": {
+        "SL": 268,
+        "TP": 544,
+        "EMERGENCY": 2,
+        "TIMEOUT": 20
+      }
+    },
+    "D worst": {
+      "n": 834,
+      "days": 311,
+      "per_day": 2.682,
+      "sum_net": -93.64,
+      "avg_net": -0.1123,
+      "avg_gross": 0.0051,
+      "wr_pct": 28.3,
+      "rr": 0.633,
+      "daily_net": -0.3011,
+      "reasons": {
+        "SL": 268,
+        "TP": 544,
+        "EMERGENCY": 2,
+        "TIMEOUT": 20
+      }
+    }
+  },
+  "bootstrap": {
+    "mean": -0.1591198,
+    "pos_rate": 0.118,
+    "p5": -1.09023,
+    "p_vs_bh": 0.47
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 2,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 3,
+        "daily": -0.0753,
+        "n": 184,
+        "wr": 50.0
+      },
+      {
+        "fold": 4,
+        "daily": -0.1885,
+        "n": 330,
+        "wr": 41.21
+      },
+      {
+        "fold": 5,
+        "daily": -0.0858,
+        "n": 320,
+        "wr": 52.81
+      }
+    ],
+    "pos_count": 0
+  },
+  "lookahead_leaks": 0,
+  "conditions": {
+    "test1_lookahead": true,
+    "test2_wf_3of5": false,
+    "test3a_taker_C": "False",
+    "test3b_mixed_B": "False",
+    "test3c_maker_A": "False",
+    "test4_bootstrap": false,
+    "test5_gross_vs_fee": "False",
+    "test6_freq_2": true,
+    "test7_wr50_rr1": false
+  },
+  "all_pass": false
+}

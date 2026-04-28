@@ -78,3 +78,8 @@ logs/archive_*
 *backup*.json
 *backup*.py
 *.backup
+
+# WebSocket recorder data (large parquet, kept locally only)
+scripts/data_pipeline/storage/*.parquet
+scripts/data_pipeline/storage/*.jsonl
+scripts/data_pipeline/storage/run.log

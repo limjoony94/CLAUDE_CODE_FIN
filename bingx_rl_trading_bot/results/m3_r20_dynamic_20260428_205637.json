@@ -1,0 +1,86 @@
+{
+  "date": "2026-04-28T11:56:37.460707+00:00",
+  "pre_reg": "claudedocs/m3_round20_dynamic_scalping.md",
+  "n_signals_total": 1177,
+  "full_bt_summary": {
+    "n": 789,
+    "days": 311,
+    "per_day": 2.537,
+    "sum_net": -84.13,
+    "sum_gross": -5.23,
+    "avg_net": -0.1066,
+    "avg_gross": -0.0066,
+    "wr_pct": 23.57,
+    "rr": 1.002,
+    "daily_net": -0.2705
+  },
+  "test_results": {
+    "test1_lookahead": {
+      "pass": true,
+      "audited": 20,
+      "leaks": 0
+    },
+    "test3_friction": {
+      "pass": "False",
+      "results": {
+        "taker (0.10%)": {
+          "n": 789,
+          "days": 311,
+          "per_day": 2.537,
+          "sum_net": -84.13,
+          "sum_gross": -5.23,
+          "avg_net": -0.1066,
+          "avg_gross": -0.0066,
+          "wr_pct": 23.57,
+          "rr": 1.002,
+          "daily_net": -0.2705
+        },
+        "mixed (0.07%)": {
+          "n": 789,
+          "days": 311,
+          "per_day": 2.537,
+          "sum_net": -60.46,
+          "sum_gross": -5.23,
+          "avg_net": -0.0766,
+          "avg_gross": -0.0066,
+          "wr_pct": 30.54,
+          "rr": 0.957,
+          "daily_net": -0.1944
+        },
+        "maker (0.04%)": {
+          "n": 789,
+          "days": 311,
+          "per_day": 2.537,
+          "sum_net": -36.79,
+          "sum_gross": -5.23,
+          "avg_net": -0.0466,
+          "avg_gross": -0.0066,
+          "wr_pct": 39.04,
+          "rr": 0.916,
+          "daily_net": -0.1183
+        }
+      }
+    },
+    "test4_bootstrap": {
+      "pass": "False",
+      "mean": -0.3692268,
+      "pos_rate": 0.028,
+      "p5": -1.536665,
+      "p_vs_bh": 0.43
+    },
+    "test5_gross_vs_fee": {
+      "pass": "False",
+      "avg_gross": -0.0066
+    },
+    "test6_frequency": {
+      "pass": true,
+      "per_day": 2.537
+    },
+    "test7_wr_rr": {
+      "pass": false,
+      "wr_pct": 23.57,
+      "rr": 1.002
+    }
+  },
+  "all_pass": false
+}

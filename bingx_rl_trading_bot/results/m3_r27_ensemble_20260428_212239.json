@@ -1,0 +1,318 @@
+{
+  "date": "2026-04-28T12:22:39.209757+00:00",
+  "mechanism": "R21+R24 ensemble",
+  "n_signals": {
+    "r21": 989,
+    "r24": 1019,
+    "ensemble": 1989,
+    "overlap": 19
+  },
+  "scenarios_summary": {
+    "A maker": {
+      "n": 1551,
+      "days": 311,
+      "per_day": 4.987,
+      "sum_net": -50.23,
+      "avg_net": -0.0324,
+      "avg_gross": 0.0076,
+      "wr_pct": 46.62,
+      "rr": 0.86,
+      "daily_net": -0.1615,
+      "reasons": {
+        "TP2": 514,
+        "TIMEOUT": 238,
+        "EMERGENCY": 8,
+        "SL": 791
+      }
+    },
+    "B mixed": {
+      "n": 1551,
+      "days": 311,
+      "per_day": 4.987,
+      "sum_net": -81.34,
+      "avg_net": -0.0524,
+      "avg_gross": 0.0076,
+      "wr_pct": 36.94,
+      "rr": 1.095,
+      "daily_net": -0.2615,
+      "reasons": {
+        "TP2": 514,
+        "TIMEOUT": 238,
+        "EMERGENCY": 8,
+        "SL": 791
+      }
+    },
+    "C taker": {
+      "n": 1551,
+      "days": 311,
+      "per_day": 4.987,
+      "sum_net": -143.29,
+      "avg_net": -0.0924,
+      "avg_gross": 0.0076,
+      "wr_pct": 27.98,
+      "rr": 1.174,
+      "daily_net": -0.4607,
+      "reasons": {
+        "TP2": 514,
+        "TIMEOUT": 238,
+        "EMERGENCY": 8,
+        "SL": 791
+      }
+    },
+    "D worst": {
+      "n": 1551,
+      "days": 311,
+      "per_day": 4.987,
+      "sum_net": -195.14,
+      "avg_net": -0.1258,
+      "avg_gross": 0.0076,
+      "wr_pct": 26.11,
+      "rr": 1.044,
+      "daily_net": -0.6274,
+      "reasons": {
+        "TP2": 514,
+        "TIMEOUT": 238,
+        "EMERGENCY": 8,
+        "SL": 791
+      }
+    }
+  },
+  "t_test": {
+    "mean": -0.05244132817537073,
+    "std": 0.3376795030994043,
+    "t_stat": -6.116104276612813,
+    "p_one_sided": 0.9999999993941954,
+    "sig_05": false
+  },
+  "per_direction": {
+    "LONG": {
+      "n": 827,
+      "avg_net": -0.0616,
+      "wr_pct": 36.15,
+      "sum_net": -50.9
+    },
+    "SHORT": {
+      "n": 724,
+      "avg_net": -0.042,
+      "wr_pct": 37.85,
+      "sum_net": -30.43
+    }
+  },
+  "time_of_day": {
+    "0": {
+      "n": 87,
+      "avg_net": -0.1411,
+      "wr_pct": 21.84,
+      "sum_net": -12.28
+    },
+    "1": {
+      "n": 63,
+      "avg_net": -0.0796,
+      "wr_pct": 34.92,
+      "sum_net": -5.02
+    },
+    "2": {
+      "n": 61,
+      "avg_net": -0.1004,
+      "wr_pct": 24.59,
+      "sum_net": -6.12
+    },
+    "3": {
+      "n": 62,
+      "avg_net": 0.0119,
+      "wr_pct": 45.16,
+      "sum_net": 0.74
+    },
+    "4": {
+      "n": 49,
+      "avg_net": -0.1115,
+      "wr_pct": 30.61,
+      "sum_net": -5.46
+    },
+    "5": {
+      "n": 58,
+      "avg_net": -0.0959,
+      "wr_pct": 25.86,
+      "sum_net": -5.56
+    },
+    "6": {
+      "n": 73,
+      "avg_net": -0.0322,
+      "wr_pct": 38.36,
+      "sum_net": -2.35
+    },
+    "7": {
+      "n": 80,
+      "avg_net": -0.0317,
+      "wr_pct": 43.75,
+      "sum_net": -2.54
+    },
+    "8": {
+      "n": 77,
+      "avg_net": -0.0354,
+      "wr_pct": 38.96,
+      "sum_net": -2.72
+    },
+    "9": {
+      "n": 62,
+      "avg_net": 0.0057,
+      "wr_pct": 41.94,
+      "sum_net": 0.35
+    },
+    "10": {
+      "n": 59,
+      "avg_net": -0.093,
+      "wr_pct": 27.12,
+      "sum_net": -5.49
+    },
+    "11": {
+      "n": 68,
+      "avg_net": -0.031,
+      "wr_pct": 44.12,
+      "sum_net": -2.11
+    },
+    "12": {
+      "n": 80,
+      "avg_net": -0.0396,
+      "wr_pct": 36.25,
+      "sum_net": -3.16
+    },
+    "13": {
+      "n": 94,
+      "avg_net": -0.058,
+      "wr_pct": 41.49,
+      "sum_net": -5.45
+    },
+    "14": {
+      "n": 105,
+      "avg_net": 0.012,
+      "wr_pct": 48.57,
+      "sum_net": 1.26
+    },
+    "15": {
+      "n": 59,
+      "avg_net": -0.0511,
+      "wr_pct": 32.2,
+      "sum_net": -3.01
+    },
+    "16": {
+      "n": 48,
+      "avg_net": -0.0895,
+      "wr_pct": 39.58,
+      "sum_net": -4.29
+    },
+    "17": {
+      "n": 50,
+      "avg_net": -0.0348,
+      "wr_pct": 36.0,
+      "sum_net": -1.74
+    },
+    "18": {
+      "n": 41,
+      "avg_net": 0.0049,
+      "wr_pct": 46.34,
+      "sum_net": 0.2
+    },
+    "19": {
+      "n": 55,
+      "avg_net": -0.0738,
+      "wr_pct": 36.36,
+      "sum_net": -4.06
+    },
+    "20": {
+      "n": 50,
+      "avg_net": -0.0897,
+      "wr_pct": 42.0,
+      "sum_net": -4.49
+    },
+    "21": {
+      "n": 47,
+      "avg_net": -0.0414,
+      "wr_pct": 29.79,
+      "sum_net": -1.95
+    },
+    "22": {
+      "n": 61,
+      "avg_net": -0.0233,
+      "wr_pct": 37.7,
+      "sum_net": -1.42
+    },
+    "23": {
+      "n": 62,
+      "avg_net": -0.075,
+      "wr_pct": 35.48,
+      "sum_net": -4.65
+    }
+  },
+  "positive_hours": [
+    3,
+    9,
+    14,
+    18
+  ],
+  "edge_decay": {
+    "q1_rolling_daily": -0.20084166666666667,
+    "q2_rolling_daily": -0.3188366666666667,
+    "q3_rolling_daily": -0.17245666666666667,
+    "final_rolling_daily": -0.13087000000000001
+  },
+  "sharpe_dd": {
+    "sharpe": -6.613145378749376,
+    "max_drawdown_pct": -57.31027655630162,
+    "mean_daily": -0.25986102236421726,
+    "std_daily": 0.7507226254742503
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 2,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 3,
+        "daily": -0.2317,
+        "n": 363,
+        "wr": 37.19
+      },
+      {
+        "fold": 4,
+        "daily": -0.3465,
+        "n": 592,
+        "wr": 34.46
+      },
+      {
+        "fold": 5,
+        "daily": -0.195,
+        "n": 594,
+        "wr": 39.39
+      }
+    ],
+    "pos_count": 0
+  },
+  "bootstrap": {
+    "mean": -0.3369202,
+    "pos_rate": 0.098,
+    "p5": -2.13332,
+    "p_vs_bh": 0.443
+  },
+  "conditions": {
+    "wf_3of5": false,
+    "taker_C": "False",
+    "mixed_B": "False",
+    "maker_A": "False",
+    "bootstrap": false,
+    "gross_ge_0.10": "False",
+    "freq_ge_2": true,
+    "wr_rr": false,
+    "t_test_sig": false
+  },
+  "all_pass": false
+}

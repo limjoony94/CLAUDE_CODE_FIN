@@ -1,0 +1,104 @@
+{
+  "date": "2026-04-28T18:59:53.852263+00:00",
+  "pre_reg_commit": "4da8d38",
+  "locked_params": {
+    "macd_fast": 12,
+    "macd_slow": 26,
+    "macd_signal": 9,
+    "body_min_ratio": 0.4
+  },
+  "friction": 0.07,
+  "full_signals_count": 5534,
+  "signals_per_day": 7.686111111111111,
+  "vacuity_gate_pass": true,
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n": 473,
+        "daily": -0.1108,
+        "wr": 41.23,
+        "rr": 1.307,
+        "avg_g": 0.0421
+      },
+      {
+        "fold": 2,
+        "n": 463,
+        "daily": -0.3049,
+        "wr": 39.52,
+        "rr": 1.214,
+        "avg_g": -0.0084
+      },
+      {
+        "fold": 3,
+        "n": 453,
+        "daily": -0.0897,
+        "wr": 41.94,
+        "rr": 1.28,
+        "avg_g": 0.0464
+      },
+      {
+        "fold": 4,
+        "n": 438,
+        "daily": -0.2057,
+        "wr": 34.02,
+        "rr": 1.519,
+        "avg_g": 0.0141
+      },
+      {
+        "fold": 5,
+        "n": 455,
+        "daily": -0.0459,
+        "wr": 41.76,
+        "rr": 1.342,
+        "avg_g": 0.058
+      }
+    ],
+    "pos_count": 0,
+    "pass": false
+  },
+  "test_2_bootstrap": {
+    "mean": -0.43156949999999994,
+    "pos_rate": 0.406,
+    "p5": -4.20618,
+    "active_rate": 1.0,
+    "pass": false
+  },
+  "test_3_train_test": {
+    "train": {
+      "n": 1687,
+      "days": 431,
+      "per_day": 3.914,
+      "sum_net": -63.57,
+      "avg_net": -0.0377,
+      "avg_gross": 0.0323,
+      "wr_pct": 41.49,
+      "rr": 1.261,
+      "daily_net": -0.1475,
+      "reasons": {
+        "SL": 865,
+        "TRAIL_TP": 808,
+        "EMERGENCY": 13,
+        "TIMEOUT": 1
+      }
+    },
+    "test": {
+      "n": 1073,
+      "days": 287,
+      "per_day": 3.739,
+      "sum_net": -38.45,
+      "avg_net": -0.0358,
+      "avg_gross": 0.0342,
+      "wr_pct": 37.56,
+      "rr": 1.453,
+      "daily_net": -0.134,
+      "reasons": {
+        "SL": 600,
+        "TRAIL_TP": 471,
+        "EMERGENCY": 2
+      }
+    },
+    "pass": "False"
+  },
+  "all_pass": false
+}

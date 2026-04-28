@@ -1,0 +1,168 @@
+{
+  "date": "2026-04-28T07:20:27.335342+00:00",
+  "spec_doc": "claudedocs/m3_round7_specs.md",
+  "matrix": {
+    "psi": {
+      "C1": false,
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    "tau": {
+      "C1": false,
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    }
+  },
+  "full_results": {
+    "psi": {
+      "C1": {
+        "pass": false,
+        "metrics": {
+          "cand_mfe_p50": 0.3999,
+          "cand_mae_p50": -0.4209,
+          "random_p50": 0.3883,
+          "random_pct": 69.016,
+          "diff_p50": 0.0116,
+          "diff_pct": -2.12,
+          "asymmetry": -0.021,
+          "n_signals": 284,
+          "n_after_seq": 142
+        },
+        "details": {
+          "random_per_seed": [
+            {
+              "n": 142,
+              "mfe_p25": 0.2046,
+              "mfe_p50": 0.433,
+              "mfe_p75": 0.6971,
+              "mae_p25": -0.7853,
+              "mae_p50": -0.3724,
+              "pct_mfe_gt_friction": 76.06
+            },
+            {
+              "n": 142,
+              "mfe_p25": 0.1663,
+              "mfe_p50": 0.3992,
+              "mfe_p75": 0.6374,
+              "mae_p25": -0.7266,
+              "mae_p50": -0.4118,
+              "pct_mfe_gt_friction": 67.61
+            },
+            {
+              "n": 142,
+              "mfe_p25": 0.1587,
+              "mfe_p50": 0.328,
+              "mfe_p75": 0.6339,
+              "mae_p25": -0.7949,
+              "mae_p50": -0.3364,
+              "pct_mfe_gt_friction": 65.49
+            },
+            {
+              "n": 142,
+              "mfe_p25": 0.1425,
+              "mfe_p50": 0.353,
+              "mfe_p75": 0.6857,
+              "mae_p25": -0.7083,
+              "mae_p50": -0.3225,
+              "pct_mfe_gt_friction": 64.79
+            },
+            {
+              "n": 142,
+              "mfe_p25": 0.1889,
+              "mfe_p50": 0.4283,
+              "mfe_p75": 0.7168,
+              "mae_p25": -0.7417,
+              "mae_p50": -0.3783,
+              "pct_mfe_gt_friction": 71.13
+            }
+          ]
+        }
+      },
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    "tau": {
+      "C1": {
+        "pass": false,
+        "metrics": {
+          "cand_mfe_p50": 0.2639,
+          "cand_mae_p50": -0.3233,
+          "random_p50": 0.3047,
+          "random_pct": 64.07,
+          "diff_p50": -0.0408,
+          "diff_pct": -8.32,
+          "asymmetry": -0.0594,
+          "n_signals": 239,
+          "n_after_seq": 226
+        },
+        "details": {
+          "random_per_seed": [
+            {
+              "n": 226,
+              "mfe_p25": 0.1169,
+              "mfe_p50": 0.3186,
+              "mfe_p75": 0.6352,
+              "mae_p25": -0.5069,
+              "mae_p50": -0.2671,
+              "pct_mfe_gt_friction": 63.72
+            },
+            {
+              "n": 226,
+              "mfe_p25": 0.1668,
+              "mfe_p50": 0.3379,
+              "mfe_p75": 0.7163,
+              "mae_p25": -0.5278,
+              "mae_p50": -0.2711,
+              "pct_mfe_gt_friction": 70.35
+            },
+            {
+              "n": 226,
+              "mfe_p25": 0.1143,
+              "mfe_p50": 0.2614,
+              "mfe_p75": 0.4829,
+              "mae_p25": -0.6375,
+              "mae_p50": -0.3134,
+              "pct_mfe_gt_friction": 57.52
+            },
+            {
+              "n": 226,
+              "mfe_p25": 0.1312,
+              "mfe_p50": 0.3332,
+              "mfe_p75": 0.6157,
+              "mae_p25": -0.5762,
+              "mae_p50": -0.3049,
+              "pct_mfe_gt_friction": 65.04
+            },
+            {
+              "n": 226,
+              "mfe_p25": 0.1356,
+              "mfe_p50": 0.2726,
+              "mfe_p75": 0.5191,
+              "mae_p25": -0.5245,
+              "mae_p50": -0.3033,
+              "pct_mfe_gt_friction": 63.72
+            }
+          ]
+        }
+      },
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    }
+  }
+}

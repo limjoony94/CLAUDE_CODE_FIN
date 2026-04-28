@@ -1,0 +1,107 @@
+{
+  "date": "2026-04-28T07:59:52.236539+00:00",
+  "spec": "\u03b1 entry + N=4 fixed timeout exit",
+  "pre_reg": "claudedocs/m3_round9c_alpha_N4_prereg.md",
+  "pre_reg_friction": 0.04,
+  "full_sample": {
+    "n": 195,
+    "daily": 0.0195,
+    "wr": 46.67,
+    "rr": 1.306,
+    "sum_gross": 13.8,
+    "sum_net": 6.0
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": null,
+        "n": 0,
+        "wr": null,
+        "rr": null
+      },
+      {
+        "fold": 2,
+        "daily": null,
+        "n": 0,
+        "wr": null,
+        "rr": null
+      },
+      {
+        "fold": 3,
+        "daily": 0.0368,
+        "n": 49,
+        "wr": 46.94,
+        "rr": 1.439
+      },
+      {
+        "fold": 4,
+        "daily": -0.0146,
+        "n": 95,
+        "wr": 43.16,
+        "rr": 1.197
+      },
+      {
+        "fold": 5,
+        "daily": 0.0453,
+        "n": 51,
+        "wr": 52.94,
+        "rr": 1.208
+      }
+    ],
+    "positive_count": 2,
+    "pass": false
+  },
+  "three_way": {
+    "splits": {
+      "train": {
+        "daily": null,
+        "n": 0,
+        "wr": null,
+        "rr": null
+      },
+      "val": {
+        "daily": 0.0368,
+        "n": 49,
+        "wr": 46.94,
+        "rr": 1.439
+      },
+      "test": {
+        "daily": 0.0152,
+        "n": 146,
+        "wr": 46.58,
+        "rr": 1.27
+      }
+    },
+    "test_positive": "True",
+    "pass": "True"
+  },
+  "bootstrap": {
+    "n": 200,
+    "mean": 0.007414499999999993,
+    "pos_rate": 0.09,
+    "pass": false
+  },
+  "friction_sensitivity": {
+    "results": {
+      "0.02": {
+        "daily": 0.0321
+      },
+      "0.04": {
+        "daily": 0.0195
+      },
+      "0.06": {
+        "daily": 0.0068
+      }
+    },
+    "all_positive": true,
+    "pass": true
+  },
+  "robustness": {
+    "wr": 46.67,
+    "rr": 1.306,
+    "n": 195,
+    "pass": true
+  },
+  "overall_pass": false
+}

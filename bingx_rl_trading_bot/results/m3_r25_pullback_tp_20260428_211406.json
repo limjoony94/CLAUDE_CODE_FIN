@@ -1,0 +1,264 @@
+{
+  "date": "2026-04-28T12:14:06.165538+00:00",
+  "sweep_results": {
+    "10": {
+      "n": 851,
+      "days": 311,
+      "per_day": 2.736,
+      "sum_net": -38.62,
+      "avg_net": -0.0454,
+      "avg_gross": 0.004,
+      "wr_pct": 46.65,
+      "rr": 0.603,
+      "daily_net": -0.1242,
+      "reasons": {
+        "SL": 250,
+        "TP": 584,
+        "EMERGENCY": 2,
+        "TIMEOUT": 15
+      }
+    },
+    "15": {
+      "n": 843,
+      "days": 311,
+      "per_day": 2.711,
+      "sum_net": -36.33,
+      "avg_net": -0.0431,
+      "avg_gross": 0.0068,
+      "wr_pct": 46.74,
+      "rr": 0.645,
+      "daily_net": -0.1168,
+      "reasons": {
+        "SL": 257,
+        "TP": 566,
+        "EMERGENCY": 2,
+        "TIMEOUT": 18
+      }
+    },
+    "20": {
+      "n": 834,
+      "days": 311,
+      "per_day": 2.682,
+      "sum_net": -37.8,
+      "avg_net": -0.0453,
+      "avg_gross": 0.0051,
+      "wr_pct": 47.72,
+      "rr": 0.623,
+      "daily_net": -0.1215,
+      "reasons": {
+        "SL": 268,
+        "TP": 544,
+        "EMERGENCY": 2,
+        "TIMEOUT": 20
+      }
+    },
+    "30": {
+      "n": 818,
+      "days": 311,
+      "per_day": 2.63,
+      "sum_net": -36.32,
+      "avg_net": -0.0444,
+      "avg_gross": 0.007,
+      "wr_pct": 47.43,
+      "rr": 0.67,
+      "daily_net": -0.1168,
+      "reasons": {
+        "SL": 283,
+        "TP": 507,
+        "EMERGENCY": 2,
+        "TIMEOUT": 26
+      }
+    },
+    "40": {
+      "n": 810,
+      "days": 311,
+      "per_day": 2.605,
+      "sum_net": -36.31,
+      "avg_net": -0.0448,
+      "avg_gross": 0.0072,
+      "wr_pct": 47.41,
+      "rr": 0.683,
+      "daily_net": -0.1167,
+      "reasons": {
+        "SL": 289,
+        "TP": 485,
+        "EMERGENCY": 3,
+        "TIMEOUT": 33
+      }
+    },
+    "60": {
+      "n": 786,
+      "days": 311,
+      "per_day": 2.527,
+      "sum_net": -39.52,
+      "avg_net": -0.0503,
+      "avg_gross": 0.0034,
+      "wr_pct": 46.06,
+      "rr": 0.721,
+      "daily_net": -0.1271,
+      "reasons": {
+        "SL": 313,
+        "TP": 427,
+        "EMERGENCY": 3,
+        "TIMEOUT": 43
+      }
+    },
+    "80": {
+      "n": 774,
+      "days": 311,
+      "per_day": 2.489,
+      "sum_net": -39.37,
+      "avg_net": -0.0509,
+      "avg_gross": 0.0041,
+      "wr_pct": 44.57,
+      "rr": 0.789,
+      "daily_net": -0.1266,
+      "reasons": {
+        "SL": 330,
+        "TP": 389,
+        "EMERGENCY": 3,
+        "TIMEOUT": 52
+      }
+    },
+    "100": {
+      "n": 764,
+      "days": 311,
+      "per_day": 2.457,
+      "sum_net": -40.3,
+      "avg_net": -0.0528,
+      "avg_gross": 0.0031,
+      "wr_pct": 43.72,
+      "rr": 0.816,
+      "daily_net": -0.1296,
+      "reasons": {
+        "SL": 337,
+        "TP": 361,
+        "EMERGENCY": 3,
+        "TIMEOUT": 63
+      }
+    }
+  },
+  "best_tp_lb": 40,
+  "fric_scenarios": {
+    "A maker": {
+      "n": 810,
+      "days": 311,
+      "per_day": 2.605,
+      "sum_net": -26.56,
+      "avg_net": -0.0328,
+      "avg_gross": 0.0072,
+      "wr_pct": 47.78,
+      "rr": 0.752,
+      "daily_net": -0.0854,
+      "reasons": {
+        "SL": 289,
+        "TP": 485,
+        "EMERGENCY": 3,
+        "TIMEOUT": 33
+      }
+    },
+    "B mixed": {
+      "n": 810,
+      "days": 311,
+      "per_day": 2.605,
+      "sum_net": -36.31,
+      "avg_net": -0.0448,
+      "avg_gross": 0.0072,
+      "wr_pct": 47.41,
+      "rr": 0.683,
+      "daily_net": -0.1167,
+      "reasons": {
+        "SL": 289,
+        "TP": 485,
+        "EMERGENCY": 3,
+        "TIMEOUT": 33
+      }
+    },
+    "C taker": {
+      "n": 810,
+      "days": 311,
+      "per_day": 2.605,
+      "sum_net": -75.16,
+      "avg_net": -0.0928,
+      "avg_gross": 0.0072,
+      "wr_pct": 30.86,
+      "rr": 0.776,
+      "daily_net": -0.2417,
+      "reasons": {
+        "SL": 289,
+        "TP": 485,
+        "EMERGENCY": 3,
+        "TIMEOUT": 33
+      }
+    },
+    "D worst": {
+      "n": 810,
+      "days": 311,
+      "per_day": 2.605,
+      "sum_net": -91.41,
+      "avg_net": -0.1128,
+      "avg_gross": 0.0072,
+      "wr_pct": 30.49,
+      "rr": 0.685,
+      "daily_net": -0.2939,
+      "reasons": {
+        "SL": 289,
+        "TP": 485,
+        "EMERGENCY": 3,
+        "TIMEOUT": 33
+      }
+    }
+  },
+  "bootstrap": {
+    "mean": -0.1523529703652347,
+    "pos_rate": 0.118,
+    "p5": -1.1201128251557777,
+    "p_vs_bh": 0.466
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 2,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 3,
+        "daily": -0.0603,
+        "n": 180,
+        "wr": 50.56
+      },
+      {
+        "fold": 4,
+        "daily": -0.1925,
+        "n": 320,
+        "wr": 42.19
+      },
+      {
+        "fold": 5,
+        "daily": -0.0782,
+        "n": 310,
+        "wr": 50.97
+      }
+    ],
+    "pos_count": 0
+  },
+  "conditions": {
+    "wf_3of5": false,
+    "taker_C": "False",
+    "mixed_B": "False",
+    "maker_A": "False",
+    "bootstrap": false,
+    "gross_ge_0.10": "False",
+    "freq_ge_2": true,
+    "wr_rr": false
+  },
+  "all_pass": false
+}

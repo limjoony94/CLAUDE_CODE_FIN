@@ -1,0 +1,133 @@
+{
+  "date": "2026-04-28T12:06:40.282604+00:00",
+  "pre_reg": "claudedocs/m3_round22_stop_hunt.md",
+  "n_signals": 397,
+  "scenarios": {
+    "A maker both": {
+      "n": 370,
+      "days": 307,
+      "per_day": 1.205,
+      "sum_net": -20.81,
+      "sum_gross": -6.01,
+      "avg_net": -0.0562,
+      "avg_gross": -0.0162,
+      "wr_pct": 28.92,
+      "rr": 1.431,
+      "daily_net": -0.0678,
+      "reasons": {
+        "SL": 239,
+        "TIMEOUT": 94,
+        "TP2": 35,
+        "EMERGENCY": 2
+      }
+    },
+    "B mixed (TP-mkr/SL-tkr)": {
+      "n": 370,
+      "days": 307,
+      "per_day": 1.205,
+      "sum_net": -30.86,
+      "sum_gross": -6.01,
+      "avg_net": -0.0834,
+      "avg_gross": -0.0162,
+      "wr_pct": 27.57,
+      "rr": 1.224,
+      "daily_net": -0.1005,
+      "reasons": {
+        "SL": 239,
+        "TIMEOUT": 94,
+        "TP2": 35,
+        "EMERGENCY": 2
+      }
+    },
+    "C taker both": {
+      "n": 370,
+      "days": 307,
+      "per_day": 1.205,
+      "sum_net": -43.01,
+      "sum_gross": -6.01,
+      "avg_net": -0.1162,
+      "avg_gross": -0.0162,
+      "wr_pct": 25.41,
+      "rr": 1.021,
+      "daily_net": -0.1401,
+      "reasons": {
+        "SL": 239,
+        "TIMEOUT": 94,
+        "TP2": 35,
+        "EMERGENCY": 2
+      }
+    },
+    "D worst": {
+      "n": 370,
+      "days": 307,
+      "per_day": 1.205,
+      "sum_net": -59.76,
+      "sum_gross": -6.01,
+      "avg_net": -0.1615,
+      "avg_gross": -0.0162,
+      "wr_pct": 20.27,
+      "rr": 1.005,
+      "daily_net": -0.1947,
+      "reasons": {
+        "SL": 239,
+        "TIMEOUT": 94,
+        "TP2": 35,
+        "EMERGENCY": 2
+      }
+    }
+  },
+  "bootstrap": {
+    "mean": -0.11788310000000002,
+    "pos_rate": 0.104,
+    "p5": -0.84013,
+    "p_vs_bh": 0.469
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 2,
+        "daily": null,
+        "n": 0,
+        "wr": null
+      },
+      {
+        "fold": 3,
+        "daily": -0.0793,
+        "n": 88,
+        "wr": 32.95
+      },
+      {
+        "fold": 4,
+        "daily": -0.1168,
+        "n": 141,
+        "wr": 23.4
+      },
+      {
+        "fold": 5,
+        "daily": -0.1009,
+        "n": 140,
+        "wr": 28.57
+      }
+    ],
+    "pos_count": 0
+  },
+  "lookahead_leaks": 0,
+  "conditions": {
+    "test1_lookahead": true,
+    "test2_wf_3of5": false,
+    "test3a_taker_C": "False",
+    "test3b_mixed_B": "False",
+    "test3c_maker_A": "False",
+    "test4_bootstrap": false,
+    "test5_gross_vs_fee": "False",
+    "test6_freq_2": false,
+    "test7_wr50_rr1": false
+  },
+  "all_pass": false
+}

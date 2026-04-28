@@ -1,0 +1,168 @@
+{
+  "date": "2026-04-28T07:07:24.288674+00:00",
+  "spec_doc": "claudedocs/m3_round4_specs.md",
+  "matrix": {
+    "mu": {
+      "C1": false,
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    "pi": {
+      "C1": false,
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    }
+  },
+  "full_results": {
+    "mu": {
+      "C1": {
+        "pass": false,
+        "metrics": {
+          "cand_mfe_p50": 0.301,
+          "cand_mae_p50": -0.341,
+          "random_p50": 0.3713,
+          "random_pct": 70.47,
+          "diff_p50": -0.0703,
+          "diff_pct": -4.03,
+          "asymmetry": -0.04,
+          "n_signals": 777,
+          "n_after_seq": 149
+        },
+        "details": {
+          "random_per_seed": [
+            {
+              "n": 149,
+              "mfe_p25": 0.1337,
+              "mfe_p50": 0.3687,
+              "mfe_p75": 0.7776,
+              "mae_p25": -0.736,
+              "mae_p50": -0.3804,
+              "pct_mfe_gt_friction": 67.79
+            },
+            {
+              "n": 149,
+              "mfe_p25": 0.1619,
+              "mfe_p50": 0.3926,
+              "mfe_p75": 0.6607,
+              "mae_p25": -0.6185,
+              "mae_p50": -0.3571,
+              "pct_mfe_gt_friction": 71.14
+            },
+            {
+              "n": 149,
+              "mfe_p25": 0.1587,
+              "mfe_p50": 0.3665,
+              "mfe_p75": 0.6113,
+              "mae_p25": -0.7215,
+              "mae_p50": -0.3291,
+              "pct_mfe_gt_friction": 67.11
+            },
+            {
+              "n": 149,
+              "mfe_p25": 0.1691,
+              "mfe_p50": 0.3656,
+              "mfe_p75": 0.6297,
+              "mae_p25": -0.6994,
+              "mae_p50": -0.3659,
+              "pct_mfe_gt_friction": 72.48
+            },
+            {
+              "n": 149,
+              "mfe_p25": 0.1981,
+              "mfe_p50": 0.3632,
+              "mfe_p75": 0.696,
+              "mae_p25": -0.7932,
+              "mae_p50": -0.3485,
+              "pct_mfe_gt_friction": 73.83
+            }
+          ]
+        }
+      },
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    },
+    "pi": {
+      "C1": {
+        "pass": false,
+        "metrics": {
+          "cand_mfe_p50": 0.293,
+          "cand_mae_p50": -0.2835,
+          "random_p50": 0.2804,
+          "random_pct": 61.338,
+          "diff_p50": 0.0126,
+          "diff_pct": 2.31,
+          "asymmetry": 0.0095,
+          "n_signals": 812,
+          "n_after_seq": 597
+        },
+        "details": {
+          "random_per_seed": [
+            {
+              "n": 597,
+              "mfe_p25": 0.1211,
+              "mfe_p50": 0.2697,
+              "mfe_p75": 0.5308,
+              "mae_p25": -0.5482,
+              "mae_p50": -0.2856,
+              "pct_mfe_gt_friction": 60.8
+            },
+            {
+              "n": 597,
+              "mfe_p25": 0.1211,
+              "mfe_p50": 0.2903,
+              "mfe_p75": 0.5585,
+              "mae_p25": -0.5577,
+              "mae_p50": -0.2852,
+              "pct_mfe_gt_friction": 63.15
+            },
+            {
+              "n": 597,
+              "mfe_p25": 0.1412,
+              "mfe_p50": 0.2948,
+              "mfe_p75": 0.5461,
+              "mae_p25": -0.4983,
+              "mae_p50": -0.2799,
+              "pct_mfe_gt_friction": 64.15
+            },
+            {
+              "n": 597,
+              "mfe_p25": 0.1147,
+              "mfe_p50": 0.2582,
+              "mfe_p75": 0.5268,
+              "mae_p25": -0.5703,
+              "mae_p50": -0.306,
+              "pct_mfe_gt_friction": 58.29
+            },
+            {
+              "n": 597,
+              "mfe_p25": 0.1123,
+              "mfe_p50": 0.2891,
+              "mfe_p75": 0.5178,
+              "mae_p25": -0.585,
+              "mae_p50": -0.3132,
+              "pct_mfe_gt_friction": 60.3
+            }
+          ]
+        }
+      },
+      "skipped": [
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+=== DeFi-Track Week 1 Reconnaissance — 20260429_080950 ===
+
+panel rows=122,342  pools=150  range=2022-02-11 → 2026-04-28
+
+## Q1 — Per-project APY distribution
+  aave-v3             n= 53  median_apy=p25:0.01% / p50:0.77% / p75:3.07%  lifetime_p25=490d
+  compound-v3         n= 26  median_apy=p25:0.00% / p50:0.00% / p75:0.00%  lifetime_p25=639d
+  convex-finance      n= 23  median_apy=p25:2.51% / p50:4.12% / p75:7.41%  lifetime_p25=670d
+  curve-dex           n= 42  median_apy=p25:0.65% / p50:1.98% / p75:3.86%  lifetime_p25=418d
+  pendle              n=  6  median_apy=p25:2.52% / p50:2.66% / p75:3.50%  lifetime_p25=182d
+
+## Q2 — Zero-month rate (APY ≤ 0.5%)
+  overall: 1,530/4,125 = 37.09% of pool-months
+  aave-v3             zero_rate= 50.90%  (732/1438)
+  compound-v3         zero_rate= 74.93%  (529/706)
+  convex-finance      zero_rate=  6.33%  (46/727)
+  curve-dex           zero_rate= 19.39%  (223/1150)
+  pendle              zero_rate=  0.00%  (0/104)
+
+## Q3 — Survivor curve (lifetime months)
+  ≥6m: 133 (88.7%)  ≥12m: 124 (82.7%)  ≥24m: 85 (56.7%)
+  aave-v3             n= 53  6m=87%  12m=81%  24m=58%
+  compound-v3         n= 26  6m=100%  12m=100%  24m=42%
+  convex-finance      n= 23  6m=96%  12m=91%  24m=70%
+  curve-dex           n= 42  6m=83%  12m=76%  24m=60%
+  pendle              n=  6  6m=67%  12m=33%  24m=33%
+
+## Q4 — Catastrophic weeks (≥50% APY drop AND ≥25% TVL drop, WoW)
+  117/104,289 pool-weeks = 0.112%
+  by project:
+    curve-dex           60
+    convex-finance      36
+    aave-v3             21
+
+## Q5 — Cross-sectional dispersion (top-3 vs bottom-3 monthly APY median)
+  months=51  spread_pp: p25=11.36  med=13.81  p75=16.62  mean=14.17
+  months >3pp: 51/51  >5pp: 50/51  >10pp: 45/51

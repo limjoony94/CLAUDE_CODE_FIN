@@ -1,0 +1,105 @@
+{
+  "date": "2026-04-28T18:49:37.687403+00:00",
+  "pre_reg": "claudedocs/m3_round39_orb_prereg.md",
+  "pre_reg_commit": "39d6276",
+  "locked_params": {
+    "opening_range_minutes": 60,
+    "break_buffer_pct": 0.0,
+    "body_min_ratio": 0.4,
+    "volume_mult": 1.0,
+    "max_entries_per_day": 1
+  },
+  "friction": 0.07,
+  "full_signals_count": 569,
+  "signals_per_day": 0.7902777777777777,
+  "vacuity_gate_pass": true,
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n": 87,
+        "daily": -0.042,
+        "wr": 43.68,
+        "rr": 1.119,
+        "avg_g": 0.013
+      },
+      {
+        "fold": 2,
+        "n": 95,
+        "daily": -0.0677,
+        "wr": 47.37,
+        "rr": 0.897,
+        "avg_g": -0.0148
+      },
+      {
+        "fold": 3,
+        "n": 81,
+        "daily": -0.0233,
+        "wr": 48.15,
+        "rr": 0.972,
+        "avg_g": 0.0364
+      },
+      {
+        "fold": 4,
+        "n": 92,
+        "daily": 0.0021,
+        "wr": 46.74,
+        "rr": 1.149,
+        "avg_g": 0.0727
+      },
+      {
+        "fold": 5,
+        "n": 95,
+        "daily": -0.0911,
+        "wr": 38.95,
+        "rr": 1.164,
+        "avg_g": -0.0432
+      }
+    ],
+    "pos_count": 1,
+    "pass": false
+  },
+  "test_2_bootstrap": {
+    "mean": -0.16641209999999998,
+    "pos_rate": 0.449,
+    "p5": -2.5421,
+    "active_rate": 0.987,
+    "pass": false
+  },
+  "test_3_train_test": {
+    "train": {
+      "n": 333,
+      "days": 430,
+      "per_day": 0.774,
+      "sum_net": -28.4,
+      "avg_net": -0.0853,
+      "avg_gross": -0.0153,
+      "wr_pct": 44.14,
+      "rr": 1.031,
+      "daily_net": -0.066,
+      "reasons": {
+        "TRAIL_TP": 179,
+        "SL": 150,
+        "EMERGENCY": 4
+      }
+    },
+    "test": {
+      "n": 216,
+      "days": 286,
+      "per_day": 0.755,
+      "sum_net": -8.02,
+      "avg_net": -0.0371,
+      "avg_gross": 0.0329,
+      "wr_pct": 44.91,
+      "rr": 1.099,
+      "daily_net": -0.0281,
+      "reasons": {
+        "SL": 90,
+        "TRAIL_TP": 125,
+        "TIMEOUT": 1
+      }
+    },
+    "pass": "False"
+  },
+  "all_pass": false
+}

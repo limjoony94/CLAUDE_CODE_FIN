@@ -1,0 +1,80 @@
+{
+  "date": "2026-04-28T11:00:10.198205+00:00",
+  "pre_reg": "claudedocs/m3_round15_timeframe_potential.md",
+  "timeframe_results": {
+    "1h": [
+      {
+        "params": [
+          0.3,
+          0.4,
+          50
+        ],
+        "N": 2,
+        "train_daily": 0.1543,
+        "train_n": 22,
+        "train_wr": 59.09,
+        "test_daily": -0.1268,
+        "test_n": 307,
+        "test_wr": 38.76
+      },
+      {
+        "params": [
+          0.3,
+          0.4,
+          60
+        ],
+        "N": 2,
+        "train_daily": 0.1337,
+        "train_n": 21,
+        "train_wr": 57.14,
+        "test_daily": -0.1307,
+        "test_n": 257,
+        "test_wr": 38.13
+      }
+    ],
+    "4h": [],
+    "1d": []
+  },
+  "timeframe_potential": {
+    "1h": {
+      "name": "1h",
+      "n_configs": 2,
+      "p_train_pos": 100.0,
+      "p_test_pos": 0.0,
+      "p_both_pos": 0.0,
+      "corr_tt": null,
+      "median_test": -0.1288,
+      "max_test": -0.1268,
+      "min_test": -0.1307,
+      "best_config": {
+        "params": [
+          0.3,
+          0.4,
+          50
+        ],
+        "N": 2,
+        "train_daily": 0.1543,
+        "train_n": 22,
+        "train_wr": 59.09,
+        "test_daily": -0.1268,
+        "test_n": 307,
+        "test_wr": 38.76
+      },
+      "potential_score": -12.88,
+      "phase2_eligible": "False"
+    },
+    "4h": {
+      "name": "4h",
+      "n_configs": 0,
+      "note": "no valid configs",
+      "potential_score": -999
+    },
+    "1d": {
+      "name": "1d",
+      "n_configs": 0,
+      "note": "no valid configs",
+      "potential_score": -999
+    }
+  },
+  "eligible": []
+}

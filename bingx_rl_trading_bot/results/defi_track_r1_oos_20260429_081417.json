@@ -1,0 +1,193 @@
+{
+  "date": "2026-04-28T23:14:17.534082+00:00",
+  "pre_reg_commit": "266d808",
+  "verdict": "FAIL",
+  "locked": {
+    "universe_chains": [
+      "Arbitrum",
+      "OP Mainnet",
+      "Base",
+      "Polygon"
+    ],
+    "lookback_days": 30,
+    "top_n": 3,
+    "rebalance_frequency_days": 30,
+    "friction_per_swap_pct": 0.4,
+    "min_pool_history_days": 30,
+    "capital_usd": 1500,
+    "position_size_usd": 500
+  },
+  "gates": {
+    "wf_min_positive_folds": 3,
+    "wf_total_folds": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 90,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "magnitude_min_net_apy_pct": 7.3,
+    "tail_max_5d_dd_pct": 10.0
+  },
+  "vacuity": {
+    "pass": true,
+    "median_eligible_per_month": 26.0,
+    "mean_eligible_per_month": 25.4,
+    "gate_median": 5,
+    "gate_mean": 8,
+    "months_with_top_n_pools": 45,
+    "total_months": 50
+  },
+  "full_sample": {
+    "n_days": 1314,
+    "cum_gross_pct": 19.371696338336175,
+    "cum_net_pct": 6.556744422354144,
+    "avg_daily_net_pct": 0.00485201774037114,
+    "avg_daily_gross_pct": 0.013477081159955108,
+    "avg_daily_fric_pct": 0.008625063419583969,
+    "annualized_net_apy_pct": 1.7709864752354663,
+    "annualized_gross_apy_pct": 4.919134623383615,
+    "max_dd_pct": 0.9533508903518192,
+    "worst_5d_net_pct": -0.7467701701817098,
+    "sharpe_annualized": 1.515195097333009,
+    "n_rebalances": 44,
+    "avg_swaps_per_rebal": 1.9318181818181819
+  },
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n_days": 219,
+        "cum_gross_pct": 1.178145992442725,
+        "cum_net_pct": -1.3570151537768749,
+        "avg_daily_net_pct": -0.006219248619025426,
+        "avg_daily_gross_pct": 0.005348483496651895,
+        "avg_daily_fric_pct": 0.011567732115677323,
+        "annualized_net_apy_pct": -2.2700257459442805,
+        "annualized_gross_apy_pct": 1.9521964762779418,
+        "max_dd_pct": 1.152472473920362,
+        "worst_5d_net_pct": -0.501407367758222,
+        "sharpe_annualized": -1.9054360996966755,
+        "n_rebalances": 8,
+        "avg_swaps_per_rebal": 2.375
+      },
+      {
+        "fold": 2,
+        "n_days": 219,
+        "cum_gross_pct": 4.63184966184671,
+        "cum_net_pct": 2.282484938132767,
+        "avg_daily_net_pct": 0.010327445594747712,
+        "avg_daily_gross_pct": 0.020677521698248474,
+        "avg_daily_fric_pct": 0.010350076103500762,
+        "annualized_net_apy_pct": 3.769517642082915,
+        "annualized_gross_apy_pct": 7.547295419860693,
+        "max_dd_pct": 0.5195034455399907,
+        "worst_5d_net_pct": -0.45622066841464193,
+        "sharpe_annualized": 2.987125450136404,
+        "n_rebalances": 8,
+        "avg_swaps_per_rebal": 2.125
+      },
+      {
+        "fold": 3,
+        "n_days": 219,
+        "cum_gross_pct": 4.300839416908775,
+        "cum_net_pct": 1.6862540860926867,
+        "avg_daily_net_pct": 0.007662406382906782,
+        "avg_daily_gross_pct": 0.019230138498584102,
+        "avg_daily_fric_pct": 0.01156773211567732,
+        "annualized_net_apy_pct": 2.796778329760975,
+        "annualized_gross_apy_pct": 7.019000551983197,
+        "max_dd_pct": 0.7203632881679646,
+        "worst_5d_net_pct": -0.48616979988059805,
+        "sharpe_annualized": 2.0083427692846243,
+        "n_rebalances": 8,
+        "avg_swaps_per_rebal": 2.375
+      },
+      {
+        "fold": 4,
+        "n_days": 219,
+        "cum_gross_pct": 3.0027307930803104,
+        "cum_net_pct": -0.11485568708263783,
+        "avg_daily_net_pct": -0.0004927948435257567,
+        "avg_daily_gross_pct": 0.013510249296504686,
+        "avg_daily_fric_pct": 0.014003044140030443,
+        "annualized_net_apy_pct": -0.1798701178869012,
+        "annualized_gross_apy_pct": 4.93124099322421,
+        "max_dd_pct": 0.7878320365818848,
+        "worst_5d_net_pct": -0.7436141162123433,
+        "sharpe_annualized": -0.11770419120775552,
+        "n_rebalances": 8,
+        "avg_swaps_per_rebal": 2.875
+      },
+      {
+        "fold": 5,
+        "n_days": 219,
+        "cum_gross_pct": 2.2708620802222024,
+        "cum_net_pct": 0.24233910860862462,
+        "avg_daily_net_pct": 0.001121399906081034,
+        "avg_daily_gross_pct": 0.010253819997405236,
+        "avg_daily_fric_pct": 0.0091324200913242,
+        "annualized_net_apy_pct": 0.40931096571957737,
+        "annualized_gross_apy_pct": 3.742644299052911,
+        "max_dd_pct": 0.5937571309925533,
+        "worst_5d_net_pct": -0.4903893634782386,
+        "sharpe_annualized": 0.37645252696391995,
+        "n_rebalances": 8,
+        "avg_swaps_per_rebal": 1.875
+      }
+    ],
+    "pos_count": 3,
+    "pass": true
+  },
+  "test_2_bs": {
+    "n_iter": 1000,
+    "window_days": 90,
+    "mean_cum_pct": 0.45161252076222264,
+    "pos_rate": 0.643,
+    "p5_pct": -0.3438421270719938,
+    "p95_pct": 1.7785952996433236,
+    "pass": true
+  },
+  "test_3_tt": {
+    "train": {
+      "n_days": 716,
+      "cum_gross_pct": 9.72428252537625,
+      "cum_net_pct": 4.156133444773991,
+      "avg_daily_net_pct": 0.005699774807404131,
+      "avg_daily_gross_pct": 0.012962344639806365,
+      "avg_daily_fric_pct": 0.007262569832402235,
+      "annualized_net_apy_pct": 2.080417804702508,
+      "annualized_gross_apy_pct": 4.731255793529323,
+      "max_dd_pct": 0.8108609358228028,
+      "worst_5d_net_pct": -0.490789749615117,
+      "sharpe_annualized": 2.192747263228573,
+      "n_rebalances": 24,
+      "avg_swaps_per_rebal": 1.625
+    },
+    "test": {
+      "n_days": 568,
+      "cum_gross_pct": 8.462074866873625,
+      "cum_net_pct": 2.13089735756391,
+      "avg_daily_net_pct": 0.0037389523652531405,
+      "avg_daily_gross_pct": 0.014302332646943283,
+      "avg_daily_fric_pct": 0.01056338028169014,
+      "annualized_net_apy_pct": 1.3647176133173964,
+      "annualized_gross_apy_pct": 5.2203514161342985,
+      "max_dd_pct": 0.9478522204045303,
+      "worst_5d_net_pct": -0.7455440039765948,
+      "sharpe_annualized": 0.978211477535809,
+      "n_rebalances": 19,
+      "avg_swaps_per_rebal": 2.3684210526315788
+    },
+    "pass": true
+  },
+  "test_4_magnitude": {
+    "annualized_net_apy_pct": 1.7709864752354663,
+    "gate": 7.3,
+    "pass": false
+  },
+  "test_5_tail": {
+    "worst_5d_net_pct": -0.7467701701817098,
+    "gate": -10.0,
+    "pass": true
+  },
+  "all_pass": false
+}

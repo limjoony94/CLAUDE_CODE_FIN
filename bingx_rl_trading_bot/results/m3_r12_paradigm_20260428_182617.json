@@ -1,0 +1,211 @@
+{
+  "date": "2026-04-28T09:26:17.761591+00:00",
+  "pre_reg": "claudedocs/m3_round12_paradigm_shift.md",
+  "pair_trade": {
+    "best": {
+      "z_entry": 2.0,
+      "z_exit": 0.0,
+      "n": 256,
+      "days": 309,
+      "per_day": 0.828,
+      "sum_net": -61.54,
+      "sum_gross": -20.58,
+      "avg_net": -0.2404,
+      "avg_gross": -0.0804,
+      "wr_pct": 47.27,
+      "rr": 0.825,
+      "daily_net": -0.1991
+    },
+    "all_results": [
+      {
+        "z_entry": 2.0,
+        "z_exit": 0.0,
+        "n": 256,
+        "days": 309,
+        "per_day": 0.828,
+        "sum_net": -61.54,
+        "sum_gross": -20.58,
+        "avg_net": -0.2404,
+        "avg_gross": -0.0804,
+        "wr_pct": 47.27,
+        "rr": 0.825,
+        "daily_net": -0.1991
+      },
+      {
+        "z_entry": 2.0,
+        "z_exit": 0.5,
+        "n": 610,
+        "days": 310,
+        "per_day": 1.968,
+        "sum_net": -129.12,
+        "sum_gross": -31.52,
+        "avg_net": -0.2117,
+        "avg_gross": -0.0517,
+        "wr_pct": 56.23,
+        "rr": 0.404,
+        "daily_net": -0.4165
+      },
+      {
+        "z_entry": 2.0,
+        "z_exit": 1.0,
+        "n": 711,
+        "days": 310,
+        "per_day": 2.294,
+        "sum_net": -147.54,
+        "sum_gross": -33.78,
+        "avg_net": -0.2075,
+        "avg_gross": -0.0475,
+        "wr_pct": 54.43,
+        "rr": 0.385,
+        "daily_net": -0.4759
+      },
+      {
+        "z_entry": 2.5,
+        "z_exit": 0.0,
+        "n": 224,
+        "days": 309,
+        "per_day": 0.725,
+        "sum_net": -63.21,
+        "sum_gross": -27.37,
+        "avg_net": -0.2822,
+        "avg_gross": -0.1222,
+        "wr_pct": 47.77,
+        "rr": 0.762,
+        "daily_net": -0.2046
+      },
+      {
+        "z_entry": 2.5,
+        "z_exit": 0.5,
+        "n": 423,
+        "days": 310,
+        "per_day": 1.365,
+        "sum_net": -82.53,
+        "sum_gross": -14.85,
+        "avg_net": -0.1951,
+        "avg_gross": -0.0351,
+        "wr_pct": 58.63,
+        "rr": 0.416,
+        "daily_net": -0.2662
+      },
+      {
+        "z_entry": 2.5,
+        "z_exit": 1.0,
+        "n": 450,
+        "days": 310,
+        "per_day": 1.452,
+        "sum_net": -103.91,
+        "sum_gross": -31.91,
+        "avg_net": -0.2309,
+        "avg_gross": -0.0709,
+        "wr_pct": 54.22,
+        "rr": 0.406,
+        "daily_net": -0.3352
+      },
+      {
+        "z_entry": 3.0,
+        "z_exit": 0.0,
+        "n": 175,
+        "days": 309,
+        "per_day": 0.566,
+        "sum_net": -74.96,
+        "sum_gross": -46.96,
+        "avg_net": -0.4284,
+        "avg_gross": -0.2684,
+        "wr_pct": 44.57,
+        "rr": 0.734,
+        "daily_net": -0.2426
+      },
+      {
+        "z_entry": 3.0,
+        "z_exit": 0.5,
+        "n": 269,
+        "days": 309,
+        "per_day": 0.871,
+        "sum_net": -70.97,
+        "sum_gross": -27.93,
+        "avg_net": -0.2638,
+        "avg_gross": -0.1038,
+        "wr_pct": 55.39,
+        "rr": 0.422,
+        "daily_net": -0.2297
+      },
+      {
+        "z_entry": 3.0,
+        "z_exit": 1.0,
+        "n": 272,
+        "days": 309,
+        "per_day": 0.88,
+        "sum_net": -84.87,
+        "sum_gross": -41.35,
+        "avg_net": -0.312,
+        "avg_gross": -0.152,
+        "wr_pct": 51.1,
+        "rr": 0.395,
+        "daily_net": -0.2747
+      }
+    ],
+    "cond": {
+      "c1_daily_positive": "False",
+      "c2_per_day_ge_0.5": true,
+      "c3_wr_ge_50": false
+    }
+  },
+  "funding_harvest": {
+    "best_threshold": 0.01,
+    "best_metrics": {
+      "n_cycles": 97,
+      "days": 89,
+      "per_day": 1.09,
+      "sum_net": 9.63,
+      "sum_gross": 17.39,
+      "avg_net": 0.0993,
+      "avg_gross": 0.1793,
+      "wr_pct": 51.55,
+      "daily_net": 0.1082
+    },
+    "all_results": {
+      "0.0": {
+        "n_cycles": 267,
+        "days": 89,
+        "per_day": 3.0,
+        "sum_net": 8.57,
+        "sum_gross": 29.93,
+        "avg_net": 0.0321,
+        "avg_gross": 0.1121,
+        "wr_pct": 44.57,
+        "daily_net": 0.0963
+      },
+      "0.005": {
+        "n_cycles": 192,
+        "days": 89,
+        "per_day": 2.157,
+        "sum_net": 3.6,
+        "sum_gross": 18.96,
+        "avg_net": 0.0187,
+        "avg_gross": 0.0987,
+        "wr_pct": 46.35,
+        "daily_net": 0.0404
+      },
+      "0.01": {
+        "n_cycles": 97,
+        "days": 89,
+        "per_day": 1.09,
+        "sum_net": 9.63,
+        "sum_gross": 17.39,
+        "avg_net": 0.0993,
+        "avg_gross": 0.1793,
+        "wr_pct": 51.55,
+        "daily_net": 0.1082
+      },
+      "0.015": null,
+      "0.02": null
+    },
+    "cond": {
+      "c1_daily_positive": "True",
+      "c2_per_day_ge_1": true,
+      "c3_wr_ge_40": true
+    }
+  },
+  "pair_surface_pass": false,
+  "funding_surface_pass": true
+}

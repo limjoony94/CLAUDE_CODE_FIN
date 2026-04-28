@@ -1,0 +1,41 @@
+{
+  "date": "2026-04-28T11:59:54.865397+00:00",
+  "pre_reg": "claudedocs/m3_round21_structure_pattern.md",
+  "n_signals": 989,
+  "scenario_B_summary": {
+    "n": 817,
+    "days": 310,
+    "per_day": 2.635,
+    "sum_net": -46.58,
+    "sum_gross": 7.85,
+    "avg_net": -0.057,
+    "avg_gross": 0.0096,
+    "wr_pct": 29.13,
+    "rr": 1.646,
+    "daily_net": -0.1503,
+    "reasons": {
+      "SL": 528,
+      "EMERGENCY": 4,
+      "TP2": 92,
+      "TIMEOUT": 193
+    }
+  },
+  "bootstrap": {
+    "mean": -0.2010924,
+    "pos_rate": 0.118,
+    "p5": -1.437,
+    "p_better_bh": 0.45
+  },
+  "lookahead_leaks": 0,
+  "conditions": {
+    "test1_lookahead": true,
+    "test3_friction_taker_C_pass": "False",
+    "test3_friction_maker_A_pass": "False",
+    "test3_friction_mixed_B_pass": "False",
+    "test4_bootstrap": "False",
+    "test5_gross_vs_fee": "False",
+    "test6_frequency": true,
+    "test7_wr_rr": false
+  },
+  "all_pass": false
+}

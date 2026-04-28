@@ -79,7 +79,9 @@ def inspect(date_str: str) -> dict:
             report['verdict_flags'].append('depth_shallow')
         if report['depth']['interval_ms_p99'] > 30000:
             report['verdict_flags'].append('depth_p99_gap')
-        if report['depth']['duration_hours'] < 23:
+        if report['depth']['duration_hours'] < 17:
+            # Inspection runs at +24h after collector start; the latest UTC-day
+            # file holds ~19-20h. Threshold <17h catches truly stunted runs.
             report['verdict_flags'].append('depth_short_duration')
 
     # --- TRADES ---
@@ -218,6 +220,16 @@ def main() -> None:
         json.dump(report, f, indent=2, default=str)
     print(f'\nSaved: {out_md}')
     print(f'Saved: {out_json}')
+
+    # Surface RED verdict via alert file (next session pickup)
+    if 'RED' in report.get('verdict', ''):
+        alert_p = STORAGE / f'ALERT_RED_{date_str}.txt'
+        with open(alert_p, 'w', encoding='utf-8') as f:
+            f.write(f'Day-1 inspection RED verdict\n')
+            f.write(f'Date: {date_str}\n')
+            f.write(f'Flags: {", ".join(report["verdict_flags"])}\n')
+            f.write(f'See: {out_md}\n')
+        print(f'\n*** ALERT: RED verdict written to {alert_p} ***')
 
 
 if __name__ == '__main__':

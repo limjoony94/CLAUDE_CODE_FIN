@@ -1,0 +1,149 @@
+{
+  "date": "2026-04-28T13:05:09.017263+00:00",
+  "mechanism": "C1 PRODUCTION exact (max_sl_atr=4.5, prog_trail ON, sl_bounds, trail_activation)",
+  "n_signals": 6463,
+  "scenarios": {
+    "A maker (0.04)": {
+      "n": 1996,
+      "days": 719,
+      "per_day": 2.776,
+      "sum_net": 3.35,
+      "avg_net": 0.0017,
+      "avg_gross": 0.0417,
+      "wr_pct": 53.31,
+      "rr": 0.879,
+      "daily_net": 0.0047,
+      "reasons": {
+        "TRAIL_TP": 1250,
+        "SL": 725,
+        "EMERGENCY": 20,
+        "TIMEOUT": 1
+      }
+    },
+    "B mixed (0.07)": {
+      "n": 1996,
+      "days": 719,
+      "per_day": 2.776,
+      "sum_net": -56.53,
+      "avg_net": -0.0283,
+      "avg_gross": 0.0417,
+      "wr_pct": 51.65,
+      "rr": 0.875,
+      "daily_net": -0.0786,
+      "reasons": {
+        "TRAIL_TP": 1250,
+        "SL": 725,
+        "EMERGENCY": 20,
+        "TIMEOUT": 1
+      }
+    },
+    "C taker (0.10)": {
+      "n": 1996,
+      "days": 719,
+      "per_day": 2.776,
+      "sum_net": -116.41,
+      "avg_net": -0.0583,
+      "avg_gross": 0.0417,
+      "wr_pct": 50.15,
+      "rr": 0.865,
+      "daily_net": -0.1619,
+      "reasons": {
+        "TRAIL_TP": 1250,
+        "SL": 725,
+        "EMERGENCY": 20,
+        "TIMEOUT": 1
+      }
+    },
+    "D worst (0.15)": {
+      "n": 1996,
+      "days": 719,
+      "per_day": 2.776,
+      "sum_net": -216.21,
+      "avg_net": -0.1083,
+      "avg_gross": 0.0417,
+      "wr_pct": 48.4,
+      "rr": 0.823,
+      "daily_net": -0.3007,
+      "reasons": {
+        "TRAIL_TP": 1250,
+        "SL": 725,
+        "EMERGENCY": 20,
+        "TIMEOUT": 1
+      }
+    }
+  },
+  "window_333d_recent": {
+    "n": 942,
+    "days": 332,
+    "per_day": 2.837,
+    "sum_net": -47.95,
+    "avg_net": -0.0509,
+    "avg_gross": 0.0191,
+    "wr_pct": 46.92,
+    "rr": 0.986,
+    "daily_net": -0.1444,
+    "reasons": {
+      "TRAIL_TP": 575,
+      "EMERGENCY": 6,
+      "SL": 361
+    }
+  },
+  "bootstrap": {
+    "mean": -0.10550119999999999,
+    "pos_rate": 0.469,
+    "p5": -4.065389999999999,
+    "p_vs_bh": 0.426
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "daily": 0.2052,
+        "n": 325,
+        "wr": 56.92,
+        "rr": 0.903
+      },
+      {
+        "fold": 2,
+        "daily": -0.3409,
+        "n": 337,
+        "wr": 52.52,
+        "rr": 0.701
+      },
+      {
+        "fold": 3,
+        "daily": -0.1858,
+        "n": 349,
+        "wr": 50.72,
+        "rr": 0.824
+      },
+      {
+        "fold": 4,
+        "daily": -0.1705,
+        "n": 331,
+        "wr": 41.69,
+        "rr": 1.142
+      },
+      {
+        "fold": 5,
+        "daily": -0.0646,
+        "n": 336,
+        "wr": 50.89,
+        "rr": 0.916
+      }
+    ],
+    "pos_count": 1
+  },
+  "conditions": {
+    "wf_3of5": false,
+    "taker_C": "False",
+    "mixed_B": "False",
+    "maker_A": "False",
+    "bootstrap": false,
+    "gross_ge_0.10": "False",
+    "freq_ge_2": true,
+    "wr_ge_40": true,
+    "rr_ge_1": "False"
+  },
+  "all_pass": false
+}

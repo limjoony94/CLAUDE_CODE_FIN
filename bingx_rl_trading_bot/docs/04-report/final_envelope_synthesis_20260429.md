@@ -12,7 +12,7 @@ total. Same magnitude pattern as 14-round retail BTC arc — 4th alpha family
 
 ## Bottom line
 
-**Retail capital envelope at $1,500: net annualized ~$25-100/year (1-7% APY) regardless of alpha family.**
+**Underlying alpha across all 4 tested families: 3-5%/yr gross APY. Capital scaling shifts $ amounts but cannot clear the magnitude gate.**
 
 This is the conclusion from **15 rounds × 3 friction regimes × 4 alpha families** of pre-registered OOS testing:
 - BTC perp directional (8 rounds, OHLCV)
@@ -20,9 +20,23 @@ This is the conclusion from **15 rounds × 3 friction regimes × 4 alpha familie
 - Crypto cross-sectional momentum (3 rounds, daily)
 - DeFi L2 yield rotation (1 round, monthly)
 
-All four families produce statistically robust edge above zero, all four fail the magnitude gate at retail $1,500 capital, all four converge in the same band. The 0.05%/day gate (advisor's interim) is not achievable on any tested envelope. 0.2%/day (user's original) is not achievable at this capital scale on the tested markets.
+All four families produce statistically robust edge above zero, all four fail the magnitude gate. The 0.05%/day gate (advisor's interim, ~18%/yr) is not achievable. 0.2%/day (user's original, ~73%/yr) is **15-25× the underlying alpha**.
 
-**Strengthened hypothesis**: friction-as-fraction-of-position-size is the binding constraint, not strategy choice. At $500-positions, both taker fees (0.07%/round-trip) and L2 gas ($1-2/swap = 0.4%) consume similar fractions of available alpha across markets.
+### Friction-type distinction (matters for capital-scaling reasoning)
+| Family | Friction type | Scale behavior |
+|--------|---------------|----------------|
+| PB-R1-maker | %-of-notional (0.04%) | **Scale-invariant**. Net %APY identical at any capital. |
+| DeFi-R1 | $-fixed gas ($2/swap) | **Capital-sensitive**. Net % rises with capital but **asymptotes at gross 4.92%**. |
+
+Position-size sweep (DeFi-R1) verified by `results/defi_track_r1_position_sweep_*.json`:
+
+| Capital | DeFi-R1 net APY | DeFi-R1 net $/yr |
+|---------|-----------------|-------------------|
+| $1,500 | 1.77% | $27 |
+| $15,000 | 4.60% | $691 |
+| $150,000 | 4.89% | $7,331 |
+
+**Even at $150K capital, DeFi-R1 net APY (4.89%) still FAILS the 7.3% magnitude gate by 33%.** Capital scaling helps but cannot bridge the alpha gap. Same is true for PB-R1-maker (capped at ~3% gross-net at any scale). The underlying alpha is genuinely small across all tested envelopes — capital does not manufacture alpha.
 
 ---
 
@@ -104,10 +118,10 @@ Edge magnitude bounded by something other than mechanism choice, friction parame
 - **"Different markets fix the band"** — assumption was DeFi yields had different alpha profile; result shows same magnitude ceiling. Fourth independent alpha family hits same retail-capital binding.
 
 ### Does NOT rule out
-- **L2 orderbook microstructure** (last in-scope, ~3 weeks away) — different signal layer, unknown ceiling
-- **Capital-scale change** — same strategies at 10× capital ($15,000) where mainnet gas / Ethereum DeFi pools become economic; or 100× ($150,000) where the friction-fraction shrinks below the alpha
+- **L2 orderbook microstructure** (last in-scope, ~3 weeks away) — different signal layer, unknown gross ceiling
+- **Capital-scale change unlocks DeFi-R1 only**: $1,500 → $15,000 raises DeFi-R1 from $27 to $691/yr. Crypto perp strategies are scale-invariant. Caveat: even $150K cap yields DeFi-R1 net 4.89% which still fails T4. Capital scaling **rescues $ amounts, not %**.
 - **Markets entirely outside this codebase** — equity factors, FX carry — but those require different infrastructure and the user's BingX setup constraint excludes them
-- **Smaller targets accepted at retail BTC** — deploying R1-maker at conservative sizing for ~$45/year on $1,500 is real
+- **Higher gross-alpha markets/structures**: longer-dated options sellers (theta), volatility arb, leverage on small alpha (e.g. 5× leverage on PB-R1-maker → ~15%/yr but with 5× MDD), CeFi yield enhancement — none tested in this codebase
 
 ---
 

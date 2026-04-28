@@ -1,0 +1,78 @@
+{
+  "date": "2026-04-28T23:22:09.143600+00:00",
+  "sweep_sizes_usd": [
+    500,
+    5000,
+    50000
+  ],
+  "gas_assumption_usd_per_swap": 2.0,
+  "defi_r1_sweep": [
+    {
+      "n_days": 1314,
+      "cum_gross_pct": 19.371696338336175,
+      "cum_net_pct": 6.556744422354144,
+      "avg_daily_net_pct": 0.00485201774037114,
+      "avg_daily_gross_pct": 0.013477081159955108,
+      "avg_daily_fric_pct": 0.008625063419583969,
+      "annualized_net_apy_pct": 1.7709864752354663,
+      "annualized_gross_apy_pct": 4.919134623383615,
+      "max_dd_pct": 0.9533508903518192,
+      "worst_5d_net_pct": -0.7467701701817098,
+      "sharpe_annualized": 1.515195097333009,
+      "n_rebalances": 44,
+      "avg_swaps_per_rebal": 1.9318181818181819,
+      "position_size_usd": 500,
+      "capital_usd": 1500,
+      "gas_per_swap_usd": 2.0,
+      "friction_per_swap_pct_used": 0.4
+    },
+    {
+      "n_days": 1314,
+      "cum_gross_pct": 19.371696338336175,
+      "cum_net_pct": 18.026351199764413,
+      "avg_daily_net_pct": 0.012614574817996712,
+      "avg_daily_gross_pct": 0.013477081159955108,
+      "avg_daily_fric_pct": 0.0008625063419583967,
+      "annualized_net_apy_pct": 4.6043198085688,
+      "annualized_gross_apy_pct": 4.919134623383615,
+      "max_dd_pct": 0.06892560890432023,
+      "worst_5d_net_pct": -0.026481971200309484,
+      "sharpe_annualized": 22.804729592143577,
+      "n_rebalances": 44,
+      "avg_swaps_per_rebal": 1.9318181818181819,
+      "position_size_usd": 5000,
+      "capital_usd": 15000,
+      "gas_per_swap_usd": 2.0,
+      "friction_per_swap_pct_used": 0.04
+    },
+    {
+      "n_days": 1314,
+      "cum_gross_pct": 19.371696338336175,
+      "cum_net_pct": 19.236501034210395,
+      "avg_daily_net_pct": 0.013390830525759269,
+      "avg_daily_gross_pct": 0.013477081159955108,
+      "avg_daily_fric_pct": 8.625063419583967e-05,
+      "annualized_net_apy_pct": 4.887653141902133,
+      "annualized_gross_apy_pct": 4.919134623383615,
+      "max_dd_pct": 0.0,
+      "worst_5d_net_pct": 0.009655751330250872,
+      "sharpe_annualized": 29.325234451526473,
+      "n_rebalances": 44,
+      "avg_swaps_per_rebal": 1.9318181818181819,
+      "position_size_usd": 50000,
+      "capital_usd": 150000,
+      "gas_per_swap_usd": 2.0,
+      "friction_per_swap_pct_used": 0.004
+    }
+  ],
+  "pb_r1_maker_analytical": {
+    "friction_type": "percent_of_notional",
+    "scale_invariance": true,
+    "net_apy_pct_yr": 3.0,
+    "net_usd_at_1500": 45,
+    "net_usd_at_15000": 450,
+    "net_usd_at_150000": 4500,
+    "note": "friction_per_transaction=0.04% is %-of-notional, mathematically invariant to position size. Net %APY identical at all scales."
+  },
+  "advisor_hypothesis": "DeFi friction is $-per-swap, scales inversely with position. PB-R1-maker friction is %-of-notional, scale-invariant. Convergence at $1,500 is coincidence, not universal capital-binds."
+}

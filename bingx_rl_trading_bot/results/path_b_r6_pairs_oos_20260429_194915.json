@@ -1,0 +1,35 @@
+{
+  "date": "2026-04-29T10:49:15.455640+00:00",
+  "pre_reg_commit": "bdcfb5b",
+  "verdict": "INCONCLUSIVE_NOT_COINTEGRATED",
+  "gate_A": {
+    "pass": false,
+    "pval": 0.05510367377157855,
+    "adf_stat": -2.82270004913906
+  },
+  "locked": {
+    "long_leg": "ETH/USDT",
+    "short_leg": "BTC/USDT",
+    "lookback_days": 60,
+    "entry_z_threshold": 1.0,
+    "exit_z_threshold": 0.0,
+    "stop_z_threshold": 4.0,
+    "friction_per_transaction_pct": 0.07,
+    "capital_usd": 1500,
+    "long_position_usd": 750,
+    "short_position_usd": 750
+  },
+  "gates": {
+    "adf_max_pval": 0.05,
+    "min_entry_events": 50,
+    "random_baseline_pct_threshold": 0.95,
+    "wf_min_pos_folds": 3,
+    "wf_total_folds": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 60,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "magnitude_min_apy_pct": 4.0,
+    "tail_max_5d_dd_pct": 5.0
+  }
+}

@@ -1,0 +1,143 @@
+// =============================================================================
+// R5 Cash-and-Carry Regime Indicator — Independent Verification on TradingView
+// =============================================================================
+// Pre-reg: bingx_rl_trading_bot/claudedocs/path_b_r5_btc_cash_and_carry_prereg.md
+// Python framework result: 6/7 PASS, T4 borderline FAIL by 0.72pp.
+//   3.28%/yr net APY on $1500 over 800 days (≈$49/yr).
+//   USD bank-interest tier (3-5%).
+//
+// NOTE — Pine Script cannot true-backtest R5 because R5 is a 2-symbol
+// delta-neutral hedge (long BTC spot + short BTC perp). TradingView Strategy
+// Tester is single-symbol. This script is therefore an INDICATOR that:
+//   1. Detects regime (7d trailing funding APY ≥ 3% in / ≤ 0% out)
+//   2. Tracks cumulative carry P&L (funding accrued - friction)
+//   3. Lets you visually verify the 3.28%/yr Python framework number
+//
+// To independently verify R5:
+//   - Apply this to BINANCE:BTCUSDT.P (or BingX equivalent if available)
+//   - Set chart timeframe to 1D
+//   - Compare cumulative carry plot to ~+3.28%/yr over the data range
+//
+// Sign convention audit (per advisor 2026-04-30):
+//   - Perp short receives funding when funding_rate > 0
+//   - daily_funding_pct_of_capital = funding_8h × 3 × perp_notional / capital × 100
+//   - perp_notional = $750 (half of $1500), so multiplier = 0.5
+//   - friction at entry/exit only: 0.10% spot + 0.04% perp = 0.14% × notional/cap × 0.5 = 0.07% per turn
+// =============================================================================
+
+//@version=5
+indicator("R5 Cash-and-Carry Regime (1× delta-neutral)", overlay=false, format=format.percent)
+
+// --- Locked parameters (matching Python framework) ---
+entry_apy_threshold = input.float(3.0, "Entry: 7d trailing APY ≥ (%)", minval=0.5, maxval=20)
+exit_apy_threshold  = input.float(0.0, "Exit: 7d trailing APY ≤ (%)",  minval=-5,  maxval=5)
+spot_friction_pct   = input.float(0.10, "Spot friction per side (%)", minval=0, maxval=1)
+perp_friction_pct   = input.float(0.04, "Perp friction per side (%)", minval=0, maxval=1)
+capital_usd         = input.float(1500, "Capital (USD)",   minval=1)
+perp_notional_usd   = input.float(750,  "Perp leg (USD)",  minval=1)
+
+// --- Funding rate access ---
+// TradingView exposes funding via the perp symbol. Fallback to a synthetic if
+// data unavailable: replace with manual import or use BINANCE:BTCUSDT.P chart.
+funding_rate_8h = request.security(syminfo.tickerid, "480", close - close[1] > 0 ? 0.0001 : 0.0001)
+// For real use, replace above with:
+//   funding_rate_8h = request.security(syminfo.tickerid + ".funding", "480", close)
+// or chart-overlay funding rate symbol per exchange. Pine has no canonical
+// funding rate getter — verify your data source manually.
+
+// Aggregate to daily (3 funding events per day)
+daily_funding = funding_rate_8h * 3
+
+// Trailing 7d mean APY
+lookback_days = 7
+rolling_mean_daily = ta.sma(daily_funding, lookback_days)
+rolling_apy_pct = rolling_mean_daily * 365 * 100
+
+// --- Regime detection ---
+var bool in_regime = false
+just_entered = false
+just_exited = false
+
+if not in_regime and rolling_apy_pct >= entry_apy_threshold
+    in_regime := true
+    just_entered := true
+if in_regime and rolling_apy_pct <= exit_apy_threshold
+    in_regime := false
+    just_exited := true
+
+// --- Cumulative carry P&L tracking ---
+var float cum_funding_pct  = 0.0
+var float cum_friction_pct = 0.0
+var float cum_net_pct      = 0.0
+
+// Friction at entry/exit
+fric_per_turn = (spot_friction_pct * perp_notional_usd / capital_usd
+              + perp_friction_pct * perp_notional_usd / capital_usd)
+
+if just_entered or just_exited
+    cum_friction_pct := cum_friction_pct + fric_per_turn
+
+// Funding accrual while in regime
+if in_regime
+    daily_pnl_pct = daily_funding * perp_notional_usd / capital_usd * 100
+    cum_funding_pct := cum_funding_pct + daily_pnl_pct
+
+cum_net_pct := cum_funding_pct - cum_friction_pct
+
+// --- Plots ---
+plot(cum_net_pct, "Cumulative Carry P&L (% of capital)",
+     color=cum_net_pct >= 0 ? color.green : color.red, linewidth=2)
+plot(cum_funding_pct, "Gross Funding Accrued",
+     color=color.new(color.blue, 50), linewidth=1)
+plot(cum_friction_pct, "Cumulative Friction",
+     color=color.new(color.orange, 50), linewidth=1)
+hline(0, "Zero", color=color.gray, linestyle=hline.style_dashed)
+
+// Regime background
+bgcolor(in_regime ? color.new(color.green, 90) : color.new(color.red, 95),
+        title="Regime On/Off")
+
+// Annualized APY (if in regime ≥ 30 days)
+var float days_in_regime = 0
+if in_regime
+    days_in_regime := days_in_regime + 1
+
+annualized_apy = days_in_regime > 30 ?
+                 cum_net_pct * 365 / days_in_regime : na
+
+// --- Info table ---
+var table info = table.new(position.top_right, 2, 5, border_width=1)
+if barstate.islast
+    table.cell(info, 0, 0, "Regime",        bgcolor=color.gray, text_color=color.white)
+    table.cell(info, 1, 0, in_regime ? "ON" : "OFF",
+               bgcolor=in_regime ? color.green : color.red, text_color=color.white)
+    table.cell(info, 0, 1, "7d APY",        bgcolor=color.gray, text_color=color.white)
+    table.cell(info, 1, 1, str.tostring(rolling_apy_pct, "#.##") + "%")
+    table.cell(info, 0, 2, "Cum Net %",     bgcolor=color.gray, text_color=color.white)
+    table.cell(info, 1, 2, str.tostring(cum_net_pct, "#.####") + "%")
+    table.cell(info, 0, 3, "Days in regime",bgcolor=color.gray, text_color=color.white)
+    table.cell(info, 1, 3, str.tostring(days_in_regime, "#"))
+    table.cell(info, 0, 4, "Annualized APY",bgcolor=color.gray, text_color=color.white)
+    table.cell(info, 1, 4, na(annualized_apy) ? "n/a" :
+                            str.tostring(annualized_apy, "#.##") + "%")
+
+// =============================================================================
+// IMPORTANT — independent verification protocol:
+// =============================================================================
+// 1. Set chart to BINANCE:BTCUSDT.P 1D (or BingX equivalent)
+// 2. Find a 30+ day window of "regime on" (green background)
+// 3. Read "Annualized APY" cell — should approximate +3.28%/yr if regime active
+//    over full 800-day Python framework window
+// 4. If number matches → R5 framework independently confirmed via TradingView
+// 5. If number diverges by >1pp → likely cause is funding rate data source
+//    mismatch (BingX vs Binance funding differ slightly). Replace
+//    request.security() funding source with BingX-specific feed if available.
+//
+// CAVEATS:
+// - Pine Script has no canonical funding rate getter — placeholder above must
+//   be replaced with your exchange's actual funding feed
+// - This is INDICATOR not true backtest (R5 is multi-symbol; Pine is
+//   single-symbol). For full backtest, use the Python framework or paper trade.
+// - No basis drift modeled here — R5 assumes hedged delta-neutral; in practice
+//   spot+perp basis can drift up to 1-3% intraday on candle-aligned data.
+// =============================================================================

@@ -1,0 +1,70 @@
+{
+  "date": "2026-04-29T20:16:46.122756+00:00",
+  "pre_reg_commit": "5b9c193",
+  "locked": {
+    "asset": "BTC/USDT",
+    "tf": "1h",
+    "channel_lookback_bars": 15,
+    "body_min_pct_of_range": 0.4,
+    "atr_period": 14,
+    "fractal_lookback": 5,
+    "fractal_atr_mult_cap": 3.3,
+    "trail_atr_mult": 2.5,
+    "max_hold_bars": 192,
+    "limit_entry_offset_pct": 0.05,
+    "limit_max_wait_bars": 1,
+    "maker_friction_per_side_pct": 0.02,
+    "taker_friction_per_side_pct": 0.05,
+    "capital_usd": 1500
+  },
+  "gates": {
+    "gate_A_min_setups": 100,
+    "wf_min_pos_folds": 3,
+    "wf_total_folds": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 3,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "t4_min_daily_pct": 0.2,
+    "t5_min_wr": 0.3,
+    "t7_min_trades_per_day": 2.0,
+    "t8_min_per_trade_gross_pct": 0.07,
+    "t9_max_5d_dd_pct": 15.0
+  },
+  "fill_diagnostics": {
+    "n_signals": 1552,
+    "n_filled": 760,
+    "n_unfilled": 73,
+    "fill_rate": 0.4896907216494845
+  },
+  "full_summary": {
+    "n_trades": 760,
+    "cum_net_pct": -89.23492477965918,
+    "avg_gross_per_trade_pct": -0.23642403923120886,
+    "avg_net_per_trade_pct": -0.28100298659962997,
+    "avg_friction_per_trade_pct": 0.044578947368421044,
+    "wr": 0.3460526315789474,
+    "rr_realized": 1.118361130094352,
+    "daily_pct": -0.2966314298036489,
+    "trades_per_day": 1.0556166444817408,
+    "worst_5d_pct": -11.041847160347004
+  },
+  "t4": {
+    "daily_pct": -0.2966314298036489,
+    "pass": false
+  },
+  "t7": {
+    "trades_per_day": 1.0556166444817408,
+    "pass": false
+  },
+  "t8_taker_baseline": {
+    "gross_pct": -0.23642403923120886,
+    "pass": false
+  },
+  "t8_maker_realized": {
+    "gross_pct": -0.23642403923120886,
+    "avg_friction": 0.044578947368421044,
+    "pass": false
+  },
+  "verdict_hard": 0
+}

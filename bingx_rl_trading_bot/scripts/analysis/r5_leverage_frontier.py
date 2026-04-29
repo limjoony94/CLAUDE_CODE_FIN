@@ -36,7 +36,8 @@ LOCKED = {
     'exit_threshold_apy_pct': 0.0,
     'lookback_funding_days': 7,
     'sim_paths': 1000,
-    'sim_path_length_days': 365,
+    'sim_path_length_days': 200,        # 250d data limit, scale annualization
+    'annualization_factor': 365 / 200,  # for per-year ruin prob
     'ruin_threshold_per_year': 0.01,
     't4_daily_threshold_pct': 0.20,
     'baseline_1x_apy_pct': 3.28,
@@ -152,7 +153,12 @@ def run_leverage(df: pd.DataFrame, L: float, rng: np.random.Generator) -> dict:
     n_data = len(df)
     path_len = LOCKED['sim_path_length_days']
     if n_data < path_len:
-        return {'leverage': L, 'error': 'insufficient data'}
+        return {'leverage': L, 'error': 'insufficient data',
+                'expected_daily_pct': 0.0, 'ruin_prob': 1.0,
+                'expected_apy_pct': 0.0, 'survivor_apy_pct': 0.0,
+                'survivor_daily_pct': 0.0, 'final_cap_p5': 0.0,
+                'final_cap_p50': 0.0, 'final_cap_p95': 0.0,
+                'liquidation_threshold_pct': 0.0}
 
     n_paths = LOCKED['sim_paths']
     starts = rng.integers(0, n_data - path_len, size=n_paths)
@@ -162,7 +168,9 @@ def run_leverage(df: pd.DataFrame, L: float, rng: np.random.Generator) -> dict:
     ruined = np.array([s['ruin'] for s in sims])
     mean_dailies = np.array([s['mean_daily_pct'] for s in sims])
 
-    ruin_prob = float(ruined.mean())
+    # Per-path ruin → annualize: P(ruin per 200d) × (365/200) ≈ P(ruin per yr) for low p
+    ruin_prob_per_path = float(ruined.mean())
+    ruin_prob = min(1.0, ruin_prob_per_path * LOCKED['annualization_factor'])
     # Survivor mean (excluding ruined paths)
     survivor_mask = ~ruined
     if survivor_mask.sum() > 0:

@@ -1,0 +1,47 @@
+{
+  "date": "20260428",
+  "verdict_flags": [
+    "depth_short_duration"
+  ],
+  "depth": {
+    "rows": 180,
+    "file_size_mb": 0.1,
+    "ts_first": "2026-04-28T19:15:34.742000+00:00",
+    "ts_last": "2026-04-28T19:17:05.155000+00:00",
+    "interval_ms_median": 501.0,
+    "interval_ms_p95": 515.1,
+    "interval_ms_p99": 564.2199999999999,
+    "interval_ms_max": 607,
+    "spread_bps_median": 0.05258750231828469,
+    "spread_bps_p95": 0.762654141606848,
+    "bid_levels_median": 20,
+    "ask_levels_median": 20,
+    "duration_hours": 0.03,
+    "effective_hz": 1.991
+  },
+  "trades": {
+    "rows": 480,
+    "file_size_mb": 0.01,
+    "ts_first": "2026-04-28T19:15:35.038000+00:00",
+    "ts_last": "2026-04-28T19:17:04.910000+00:00",
+    "interval_ms_median": 199.0,
+    "interval_ms_p95": 210.09999999999997,
+    "interval_ms_p99": 1008.4799999999975,
+    "interval_ms_max": 2436,
+    "price_min": 76036.2,
+    "price_max": 76069.7,
+    "qty_median": 0.0039,
+    "qty_p99": 0.3609749999999998,
+    "maker_share": 0.46458333333333335,
+    "duration_hours": 0.02,
+    "effective_hz": 5.341
+  },
+  "gaps": {
+    "count": 0,
+    "total_duration_sec": 0,
+    "longest_sec": 0,
+    "depth_gaps": 0,
+    "trade_gaps": 0
+  },
+  "verdict": "YELLOW \u2014 continue but flag"
+}

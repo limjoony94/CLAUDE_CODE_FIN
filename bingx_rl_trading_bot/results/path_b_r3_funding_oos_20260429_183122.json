@@ -1,0 +1,50 @@
+{
+  "date": "2026-04-29T09:31:22.418924+00:00",
+  "pre_reg_commit": "4435c76",
+  "verdict": "INCONCLUSIVE_VACUOUS",
+  "gate_A": {
+    "pass": true,
+    "mean_rho": 0.005798371073092364,
+    "median_rho": 0.01818181818181818,
+    "gate_max_abs_rho": 0.7,
+    "n_dates": 770
+  },
+  "gate_B": {
+    "pass": false,
+    "median_funding_std_per_8h": 3.818344795944231e-05,
+    "gate_min": 0.0005,
+    "note": "cross-sectional std of trailing 7d mean funding"
+  },
+  "locked": {
+    "universe": [
+      "BTC/USDT",
+      "ETH/USDT",
+      "SOL/USDT",
+      "BNB/USDT",
+      "XRP/USDT",
+      "ADA/USDT",
+      "DOGE/USDT",
+      "AVAX/USDT",
+      "TRX/USDT",
+      "LINK/USDT"
+    ],
+    "lookback_funding_periods": 21,
+    "long_bottom_n": 3,
+    "short_top_n": 3,
+    "rebalance_frequency_days": 7,
+    "friction_per_transaction": 0.07,
+    "momentum_lookback_days_for_corr": 30
+  },
+  "gates": {
+    "orth_max_rho": 0.7,
+    "vacuity_min_funding_std_per_8h": 0.0005,
+    "wf_min_pos": 3,
+    "wf_total": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 30,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "magnitude_min_daily_net_pct": 0.02,
+    "tail_max_5d_dd_pct": 10.0
+  }
+}

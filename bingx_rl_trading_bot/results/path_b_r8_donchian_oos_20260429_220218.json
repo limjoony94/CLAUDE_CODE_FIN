@@ -1,0 +1,270 @@
+{
+  "date": "2026-04-29T13:02:18.699330+00:00",
+  "pre_reg_commit": "3e8f00e",
+  "live_parity_prior": "0/1 (C1)",
+  "verdict": "FAIL",
+  "locked": {
+    "asset": "BTC/USDT",
+    "timeframe": "1h",
+    "channel_lookback_bars": 24,
+    "body_min_ratio": 0.4,
+    "atr_period": 14,
+    "sl_atr_mult": 1.0,
+    "tp_atr_mult": 3.0,
+    "max_hold_bars": 48,
+    "friction_pct": 0.07,
+    "cooldown_bars": 1
+  },
+  "gates": {
+    "min_breakout_events": 1000,
+    "body_filter_min_retention": 0.4,
+    "random_baseline_pct": 0.95,
+    "wf_min_pos": 3,
+    "wf_total": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 3,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "magnitude_min_daily_pct": 0.2,
+    "wr_min": 0.3,
+    "rr_min": 1.5,
+    "trades_per_day_min": 2.0,
+    "per_trade_gross_min_pct": 0.07,
+    "tail_max_5d_dd_pct": 15.0
+  },
+  "gate_A": {
+    "breakouts_total": 1357,
+    "long_breakouts": 720,
+    "short_breakouts": 637,
+    "gate_min": 1000,
+    "pass": true
+  },
+  "gate_B": {
+    "pre_filter": 1357,
+    "post_filter": 1157,
+    "retention": 0.8526160648489315,
+    "gate_min": 0.4,
+    "pass": true
+  },
+  "full_sample": {
+    "n_trades": 648,
+    "n_days": 721,
+    "cum_net_pct": -58.653030365323076,
+    "avg_daily_net_pct": -0.11398514222821524,
+    "avg_trades_per_day": 0.8987517337031901,
+    "win_rate": 0.27314814814814814,
+    "avg_gross_per_trade_pct": 0.013173938971384018,
+    "avg_win_pct": 1.8056663295360615,
+    "avg_loss_pct": -0.853049316081584,
+    "rr_ratio": 2.116719743508207,
+    "max_dd_pct": 67.50149434046361,
+    "worst_5d_pct": -9.268933130659518,
+    "sharpe_annualized": -1.665809495927965,
+    "long_share": 0.5370370370370371,
+    "exit_distribution": {
+      "SL": 468,
+      "TP": 173,
+      "TIMEOUT": 7
+    }
+  },
+  "wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n_trades": 103,
+        "n_days": 121,
+        "cum_net_pct": 9.91421861993076,
+        "avg_daily_net_pct": 0.08930619652146235,
+        "avg_trades_per_day": 0.8512396694214877,
+        "win_rate": 0.3300970873786408,
+        "avg_gross_per_trade_pct": 0.2449131046514267,
+        "avg_win_pct": 2.1140412953183687,
+        "avg_loss_pct": -0.885092090749675,
+        "rr_ratio": 2.3884986855184427,
+        "max_dd_pct": 9.869555523357832,
+        "worst_5d_pct": -5.0647635952021375,
+        "sharpe_annualized": 1.1298702666305056,
+        "long_share": 0.5436893203883495,
+        "exit_distribution": {
+          "SL": 69,
+          "TP": 33,
+          "TIMEOUT": 1
+        }
+      },
+      {
+        "fold": 2,
+        "n_trades": 120,
+        "n_days": 121,
+        "cum_net_pct": -35.19357391184623,
+        "avg_daily_net_pct": -0.3503689135398885,
+        "avg_trades_per_day": 0.9917355371900827,
+        "win_rate": 0.2,
+        "avg_gross_per_trade_pct": -0.21328865448605422,
+        "avg_win_pct": 1.896218510127573,
+        "avg_loss_pct": -0.9156654456394611,
+        "rr_ratio": 2.0708638937481543,
+        "max_dd_pct": 36.445443846440156,
+        "worst_5d_pct": -7.71260761546878,
+        "sharpe_annualized": -5.449375542504121,
+        "long_share": 0.525,
+        "exit_distribution": {
+          "SL": 96,
+          "TP": 24
+        }
+      },
+      {
+        "fold": 3,
+        "n_trades": 113,
+        "n_days": 121,
+        "cum_net_pct": -21.247479932535818,
+        "avg_daily_net_pct": -0.18989773468893842,
+        "avg_trades_per_day": 0.9338842975206612,
+        "win_rate": 0.2743362831858407,
+        "avg_gross_per_trade_pct": -0.0633418221005446,
+        "avg_win_pct": 1.6110608833607662,
+        "avg_loss_pct": -0.8892745522139672,
+        "rr_ratio": 1.8116574677076005,
+        "max_dd_pct": 32.113521803932784,
+        "worst_5d_pct": -9.268933130659518,
+        "sharpe_annualized": -2.988364622575553,
+        "long_share": 0.5221238938053098,
+        "exit_distribution": {
+          "SL": 82,
+          "TP": 30,
+          "TIMEOUT": 1
+        }
+      },
+      {
+        "fold": 4,
+        "n_trades": 106,
+        "n_days": 121,
+        "cum_net_pct": -17.542169433092603,
+        "avg_daily_net_pct": -0.15596374886025832,
+        "avg_trades_per_day": 0.8760330578512396,
+        "win_rate": 0.24528301886792453,
+        "avg_gross_per_trade_pct": -0.03803409068010617,
+        "avg_win_pct": 1.1790996772511777,
+        "avg_loss_pct": -0.6191025652577734,
+        "rr_ratio": 1.9045304339196856,
+        "max_dd_pct": 21.888020985507627,
+        "worst_5d_pct": -4.175244303812741,
+        "sharpe_annualized": -3.6386231392632995,
+        "long_share": 0.5943396226415094,
+        "exit_distribution": {
+          "SL": 79,
+          "TP": 25,
+          "TIMEOUT": 2
+        }
+      },
+      {
+        "fold": 5,
+        "n_trades": 103,
+        "n_days": 121,
+        "cum_net_pct": -11.541561332818262,
+        "avg_daily_net_pct": -0.08989909052049856,
+        "avg_trades_per_day": 0.8512396694214877,
+        "win_rate": 0.2621359223300971,
+        "avg_gross_per_trade_pct": 0.03439038880601626,
+        "avg_win_pct": 2.02247998232586,
+        "avg_loss_pct": -0.8616414404707703,
+        "rr_ratio": 2.347240844429266,
+        "max_dd_pct": 18.48803613432846,
+        "worst_5d_pct": -6.232928155450546,
+        "sharpe_annualized": -1.1140187332470968,
+        "long_share": 0.47572815533980584,
+        "exit_distribution": {
+          "SL": 76,
+          "TP": 27
+        }
+      }
+    ],
+    "pos_count": 1,
+    "pass": false
+  },
+  "bootstrap_3d": {
+    "pos_rate": 0.4052924791086351,
+    "mean": -0.33890732792344463,
+    "p5": -3.72497151576765,
+    "p95": 3.6246126699233443,
+    "pass": false
+  },
+  "train_test": {
+    "train": {
+      "n_trades": 392,
+      "n_days": 433,
+      "cum_net_pct": -42.47204692122462,
+      "avg_daily_net_pct": -0.11839051767004206,
+      "avg_trades_per_day": 0.9053117782909931,
+      "win_rate": 0.2780612244897959,
+      "avg_gross_per_trade_pct": 0.009226800634877028,
+      "avg_win_pct": 1.9610467003815664,
+      "avg_loss_pct": -0.9364564823064274,
+      "rr_ratio": 2.0941140751694562,
+      "max_dd_pct": 52.85798544636526,
+      "worst_5d_pct": -9.268933130659518,
+      "sharpe_annualized": -1.659161883101301,
+      "long_share": 0.5357142857142857,
+      "exit_distribution": {
+        "SL": 281,
+        "TP": 107,
+        "TIMEOUT": 4
+      }
+    },
+    "test": {
+      "n_trades": 255,
+      "n_days": 289,
+      "cum_net_pct": -27.647748168749697,
+      "avg_daily_net_pct": -0.10471322715023913,
+      "avg_trades_per_day": 0.8823529411764706,
+      "win_rate": 0.26666666666666666,
+      "avg_gross_per_trade_pct": 0.02132500922972901,
+      "avg_win_pct": 1.5566007350925317,
+      "avg_loss_pct": -0.7278661638112901,
+      "rr_ratio": 2.138580981621373,
+      "max_dd_pct": 33.62009798540314,
+      "worst_5d_pct": -6.232928155450546,
+      "sharpe_annualized": -1.6440957207328721,
+      "long_share": 0.5411764705882353,
+      "exit_distribution": {
+        "SL": 186,
+        "TP": 66,
+        "TIMEOUT": 3
+      }
+    },
+    "pass": false
+  },
+  "tests": {
+    "T4_magnitude": {
+      "value": -0.11398514222821524,
+      "pass": false,
+      "hard": true
+    },
+    "T5_WR": {
+      "value": 0.27314814814814814,
+      "pass": false,
+      "relaxed": true
+    },
+    "T6_RR": {
+      "value": 2.116719743508207,
+      "pass": true,
+      "relaxed": true
+    },
+    "T7_freq": {
+      "value": 0.8987517337031901,
+      "pass": false,
+      "hard": true
+    },
+    "T8_per_trade": {
+      "value": 0.013173938971384018,
+      "pass": false,
+      "hard": true
+    },
+    "T9_tail": {
+      "value": -9.268933130659518,
+      "pass": true,
+      "relaxed": true
+    }
+  },
+  "hard_pass": false,
+  "all_pass": false
+}

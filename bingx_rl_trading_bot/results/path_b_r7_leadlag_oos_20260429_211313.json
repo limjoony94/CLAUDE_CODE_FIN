@@ -1,0 +1,54 @@
+{
+  "date": "2026-04-29T12:13:13.973834+00:00",
+  "pre_reg_commit": "654a015",
+  "verdict": "INCONCLUSIVE_VACUOUS",
+  "gate_A": {
+    "corrs": {
+      "lag_1": 0.0013494786112308848,
+      "lag_2": -0.023815620836355057,
+      "lag_3": -0.0009382639281491627,
+      "lag_4": 0.006273975224201311,
+      "lag_5": 0.0023934789131949785,
+      "lag_6": -0.0026032924649900635
+    },
+    "max_corr": 0.006273975224201311,
+    "gate_min": 0.05,
+    "pass": false
+  },
+  "gate_B": {
+    "n_candidates": 23641,
+    "gate_min": 2000,
+    "pass": true
+  },
+  "locked": {
+    "asset_trade": "BTC/USDT",
+    "asset_signal": "ETH/USDT",
+    "signal_lookback_bars": 3,
+    "signal_threshold_pct": 0.3,
+    "sma_short_periods": 240,
+    "sma_long_periods": 600,
+    "atr_period": 14,
+    "tp_atr_mult": 1.5,
+    "sl_atr_mult": 1.0,
+    "max_hold_bars": 6,
+    "friction_pct": 0.07,
+    "capital_usd": 1500
+  },
+  "gates": {
+    "corr_min_lag1to6": 0.05,
+    "min_signal_events": 2000,
+    "random_baseline_pct": 0.95,
+    "wf_min_pos": 3,
+    "wf_total": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 3,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "magnitude_min_daily_pct": 0.2,
+    "wr_min": 0.4,
+    "rr_min": 1.0,
+    "trades_per_day_min": 2.0,
+    "per_trade_gross_min_pct": 0.07,
+    "tail_max_5d_dd_pct": 10.0
+  }
+}

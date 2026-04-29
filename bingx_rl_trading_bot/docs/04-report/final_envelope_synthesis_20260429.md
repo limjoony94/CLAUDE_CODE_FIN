@@ -82,6 +82,13 @@ Position-size sweep (DeFi-R1) verified by `results/defi_track_r1_position_sweep_
 |-------|-----------|----------|---------|----------------|
 | **DeFi-R1** | Top-3 trailing 30d APY, monthly rebalance, L2 only | 0.4%/swap (~3.15%/yr drag) | FAIL T4 magnitude (4/5 PASS) | **+0.0049%/day** |
 
+### Phase 5 — Funding-Rate Carry Attempt (R3, INCONCLUSIVE)
+| Round | Mechanism | Result | Note |
+|-------|-----------|--------|------|
+| **PB-R3** | Long bottom-3 / short top-3 funding rate, weekly rebal, 10-coin universe | **INCONCLUSIVE_VACUOUS** | Gate A (orthogonality vs momentum) PASS ρ=+0.006. Gate B vacuity FAIL — universe funding dispersion 0.0038%/8h vs gate 0.05%/8h. Anchor on Hu 2024 was 30+ coin universe; 10-coin universe inherits ~12× lower dispersion structurally. Per pre-reg: NOT counted as round 16 due to vacuity FAIL. |
+
+**R3 finding (informational, not round-count)**: crypto carry factor *exists* in our universe (orthogonal to momentum) but *binds on universe size*. Activating would require Bybit/OKX data sources to expand to 30+ coins — different infrastructure, new pre-reg required.
+
 **Conclusion**: 4th alpha family — entirely different market (DeFi yield, not directional crypto), different signal (cross-sectional APY dispersion, not price momentum), different friction profile (gas not taker fee). Same magnitude ceiling.
 - Gross APY 4.92%/yr, friction 3.15%/yr, **net 1.77%/yr = $26 on $1,500**
 - T1 WF 3/5 PASS, T2 BS 64% PASS, T3 TT both positive PASS, T5 tail -0.75% PASS

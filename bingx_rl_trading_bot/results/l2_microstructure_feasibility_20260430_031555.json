@@ -1,0 +1,59 @@
+{
+  "date": "2026-04-29T18:15:55.907417+00:00",
+  "pre_reg_commit": "b35095e",
+  "locked": {
+    "friction_rt_pct": 0.07,
+    "min_events_per_feature": 500,
+    "F1_obi_threshold": 0.1,
+    "F1_horizon_ms": 5000,
+    "F2_ofi_zscore_threshold": 1.0,
+    "F2_window_ms": 1000,
+    "F2_horizon_ms": 5000,
+    "F3_window_ms": 5000,
+    "F3_lambda_lookback_ms": 300000,
+    "F3_top_decile_threshold": 1.0,
+    "F3_horizon_ms": 5000,
+    "F4_short_qty_ratio": 0.3,
+    "F4_long_qty_ratio": 0.7,
+    "F4_lookback_ms": 30000,
+    "F4_horizon_ms": 30000
+  },
+  "sample_duration_h": 18.259087222222224,
+  "depth_rows": 129204,
+  "trade_rows": 460062,
+  "features": [
+    {
+      "feature": "F1_OBI",
+      "n_events": 120807,
+      "avg_gross_pct": 0.0008996209319982142,
+      "hit_rate": 0.4704942594386087,
+      "edge_after_friction_pct": -0.06910037906800179,
+      "pass": false
+    },
+    {
+      "feature": "F2_OFI",
+      "n_events": 5150,
+      "avg_gross_pct": 0.0007586189616804693,
+      "hit_rate": 0.4683495145631068,
+      "edge_after_friction_pct": -0.06924138103831953,
+      "pass": false
+    },
+    {
+      "feature": "F3_Kyle",
+      "n_events": 1308,
+      "avg_gross_pct": 0.002117944872665008,
+      "hit_rate": 0.5290519877675841,
+      "edge_after_friction_pct": -0.067882055127335,
+      "pass": false
+    },
+    {
+      "feature": "F4_Queue",
+      "n_events": 58967,
+      "avg_gross_pct": 0.002425365735915429,
+      "hit_rate": 0.5485949768514593,
+      "edge_after_friction_pct": -0.06757463426408458,
+      "pass": false
+    }
+  ],
+  "n_pass": 0
+}

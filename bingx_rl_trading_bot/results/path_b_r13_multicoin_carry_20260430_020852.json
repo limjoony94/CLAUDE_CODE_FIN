@@ -1,0 +1,229 @@
+{
+  "date": "2026-04-29T17:08:52.965693+00:00",
+  "pre_reg_commit": "825684d",
+  "locked": {
+    "capital_usd": 1500,
+    "coin_universe": [
+      "LINK/USDT",
+      "DOGE/USDT",
+      "ADA/USDT",
+      "ETH/USDT",
+      "BTC/USDT",
+      "XRP/USDT",
+      "SOL/USDT",
+      "AVAX/USDT"
+    ],
+    "pair_capital_usd": 187.5,
+    "per_leg_usd": 93.75,
+    "spot_friction_per_side_pct": 0.1,
+    "perp_friction_per_side_pct": 0.04,
+    "entry_threshold_apy_pct": 3.0,
+    "exit_threshold_apy_pct": 0.0,
+    "lookback_funding_periods_for_regime": 21
+  },
+  "gates": {
+    "gate_A_min_active_coins": 5,
+    "gate_A_min_active_days_per_coin": 100,
+    "wf_min_pos_folds": 3,
+    "wf_total_folds": 5,
+    "bs_n_iter": 1000,
+    "bs_window_days": 30,
+    "bs_min_pos_rate": 0.5,
+    "tt_split": 0.6,
+    "magnitude_t4_min_daily_pct": 0.2,
+    "tail_t9_max_5d_dd_pct": 15.0,
+    "t7_min_trades_per_day": 2.0,
+    "t8_min_per_trade_gross_pct": 0.07
+  },
+  "full_sample": {
+    "n_days": 801,
+    "cum_net_pct": 6.443586220020081,
+    "cum_funding_pct": 7.540815437500001,
+    "cum_friction_pct": 1.2950000000000002,
+    "avg_daily_net_pct": 0.007797522393882646,
+    "annualized_net_apy_pct": 2.846095673767166,
+    "avg_coins_in_position": 5.980024968789014,
+    "n_trades_total": 148,
+    "avg_trades_per_day": 0.18476903870162298,
+    "per_trade_gross_pct": 0.05095145565878379,
+    "max_dd_pct": 0.1865836785866641,
+    "worst_5d_net_pct": -0.07000000000000339,
+    "daily_std_pct": 0.01641082895869891,
+    "sharpe_annualized": 9.077631394364099
+  },
+  "gate_A": {
+    "per_coin_active_days": {
+      "ADA/USDT": 546,
+      "AVAX/USDT": 375,
+      "BTC/USDT": 578,
+      "DOGE/USDT": 524,
+      "ETH/USDT": 570,
+      "LINK/USDT": 625,
+      "SOL/USDT": 410,
+      "XRP/USDT": 512
+    },
+    "active_coins": 8,
+    "gate": 5,
+    "pass": true
+  },
+  "gate_B": {
+    "actual_cum_pct": 6.443586220020081,
+    "random_p95_pct": 5.507532188480698,
+    "random_mean_pct": 5.263844907791079,
+    "random_min_pct": 4.645388731974465,
+    "random_max_pct": 5.764069216000256,
+    "pass": true
+  },
+  "test_1_wf": {
+    "folds": [
+      {
+        "fold": 1,
+        "n_days": 133,
+        "cum_net_pct": 0.6253460654129572,
+        "cum_funding_pct": 0.8859711250000002,
+        "cum_friction_pct": 0.26250000000000007,
+        "avg_daily_net_pct": 0.004687752819548872,
+        "annualized_net_apy_pct": 1.7110297791353384,
+        "avg_coins_in_position": 6.172932330827067,
+        "n_trades_total": 30,
+        "avg_trades_per_day": 0.22556390977443608,
+        "per_trade_gross_pct": 0.02953237083333334,
+        "max_dd_pct": 0.07000000000000339,
+        "worst_5d_net_pct": -0.07000000000000339,
+        "daily_std_pct": 0.009342991211569581,
+        "sharpe_annualized": 9.585730077051307
+      },
+      {
+        "fold": 2,
+        "n_days": 133,
+        "cum_net_pct": 1.0171848127497496,
+        "cum_funding_pct": 1.3097496249999998,
+        "cum_friction_pct": 0.29750000000000004,
+        "avg_daily_net_pct": 0.007610899436090226,
+        "annualized_net_apy_pct": 2.7779782941729327,
+        "avg_coins_in_position": 5.669172932330827,
+        "n_trades_total": 34,
+        "avg_trades_per_day": 0.2556390977443609,
+        "per_trade_gross_pct": 0.03852204779411764,
+        "max_dd_pct": 0.1182868767924481,
+        "worst_5d_net_pct": -0.07000000000000339,
+        "daily_std_pct": 0.015803236487865652,
+        "sharpe_annualized": 9.20102851541171
+      },
+      {
+        "fold": 3,
+        "n_days": 133,
+        "cum_net_pct": 0.5028312076244434,
+        "cum_funding_pct": 0.7291123125000001,
+        "cum_friction_pct": 0.22750000000000004,
+        "avg_daily_net_pct": 0.00377152114661654,
+        "annualized_net_apy_pct": 1.376605218515037,
+        "avg_coins_in_position": 5.864661654135339,
+        "n_trades_total": 26,
+        "avg_trades_per_day": 0.19548872180451127,
+        "per_trade_gross_pct": 0.028042781250000003,
+        "max_dd_pct": 0.0450663778067841,
+        "worst_5d_net_pct": -0.022561465782278134,
+        "daily_std_pct": 0.006921861690817149,
+        "sharpe_annualized": 10.40974430750632
+      },
+      {
+        "fold": 4,
+        "n_days": 133,
+        "cum_net_pct": 0.37352948344271386,
+        "cum_funding_pct": 0.6703895625,
+        "cum_friction_pct": 0.29750000000000004,
+        "avg_daily_net_pct": 0.0028036809210526315,
+        "annualized_net_apy_pct": 1.0233435361842105,
+        "avg_coins_in_position": 6.015037593984962,
+        "n_trades_total": 34,
+        "avg_trades_per_day": 0.2556390977443609,
+        "per_trade_gross_pct": 0.01971734007352941,
+        "max_dd_pct": 0.09651998954301816,
+        "worst_5d_net_pct": -0.06125000000000158,
+        "daily_std_pct": 0.008767546448822494,
+        "sharpe_annualized": 6.109377247026938
+      },
+      {
+        "fold": 5,
+        "n_days": 133,
+        "cum_net_pct": -0.1064434116277102,
+        "cum_funding_pct": 0.217273875,
+        "cum_friction_pct": 0.32375000000000004,
+        "avg_daily_net_pct": -0.0008005723684210527,
+        "annualized_net_apy_pct": -0.29220891447368424,
+        "avg_coins_in_position": 3.0225563909774436,
+        "n_trades_total": 37,
+        "avg_trades_per_day": 0.2781954887218045,
+        "per_trade_gross_pct": 0.005872266891891892,
+        "max_dd_pct": 0.18658367858669103,
+        "worst_5d_net_pct": -0.044402403403942525,
+        "daily_std_pct": 0.005973434055356938,
+        "sharpe_annualized": -2.5604892397276946
+      }
+    ],
+    "pos_count": 4,
+    "pass": true
+  },
+  "test_2_bootstrap": {
+    "n_iter": 771,
+    "mean_cum_pct": 0.22043453595447107,
+    "pos_rate": 0.754863813229572,
+    "p5": -0.060458761823117824,
+    "p95": 0.8717829998078463,
+    "pass": true
+  },
+  "test_3_train_test": {
+    "train": {
+      "n_days": 480,
+      "cum_net_pct": 5.596333843128765,
+      "cum_funding_pct": 6.1290779375,
+      "cum_friction_pct": 0.6825000000000001,
+      "avg_daily_net_pct": 0.011347037369791669,
+      "annualized_net_apy_pct": 4.141668639973959,
+      "avg_coins_in_position": 6.49375,
+      "n_trades_total": 78,
+      "avg_trades_per_day": 0.1625,
+      "per_trade_gross_pct": 0.07857792227564102,
+      "max_dd_pct": 0.13318882665033374,
+      "worst_5d_net_pct": -0.07000000000000339,
+      "daily_std_pct": 0.01962831507024353,
+      "sharpe_annualized": 11.044495861443028
+    },
+    "test": {
+      "n_days": 321,
+      "cum_net_pct": 0.7387885010176953,
+      "cum_funding_pct": 1.3836667500000002,
+      "cum_friction_pct": 0.6475000000000001,
+      "avg_daily_net_pct": 0.0022933543613707164,
+      "annualized_net_apy_pct": 0.8370743419003115,
+      "avg_coins_in_position": 5.074766355140187,
+      "n_trades_total": 74,
+      "avg_trades_per_day": 0.23052959501557632,
+      "per_trade_gross_pct": 0.018698199324324326,
+      "max_dd_pct": 0.18658367858672037,
+      "worst_5d_net_pct": -0.047644557181192315,
+      "daily_std_pct": 0.007309384358043822,
+      "sharpe_annualized": 5.994276864848593
+    },
+    "pass": true
+  },
+  "t4_daily": {
+    "avg_daily_pct": 0.007797522393882646,
+    "pass": false
+  },
+  "t7_trades_per_day": {
+    "avg_tpd": 0.18476903870162298,
+    "pass": false
+  },
+  "t8_per_trade_gross": {
+    "gross_pct": 0.05095145565878379,
+    "pass": false
+  },
+  "t9_worst_5d": {
+    "worst_5d_pct": -0.07000000000000339,
+    "pass": true
+  },
+  "verdict_total_pass": 6,
+  "verdict_hard_pass": 0
+}

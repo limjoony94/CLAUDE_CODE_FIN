@@ -89,6 +89,11 @@ class StateManager:
             return GridState()
 
     def save(self, state: GridState):
+        """Atomic save with OneDrive-aware retry (C1 BUG#58 precedent).
+
+        OneDrive can lock files during sync, causing tmp.replace to fail with
+        WinError 5. Retries with backoff; falls back to direct write if all fail.
+        """
         state.last_update_ts_ms = int(time.time() * 1000)
         data = {
             'active': state.active,
@@ -100,13 +105,29 @@ class StateManager:
             'open_positions': [asdict(p) for p in state.open_positions],
             'last_update_ts_ms': state.last_update_ts_ms,
         }
+        # Try atomic save with retries (OneDrive lock recovery)
+        for attempt, delay in enumerate([0, 0.5, 1.0, 2.0]):
+            if delay > 0:
+                time.sleep(delay)
+            try:
+                tmp = self.path.with_suffix('.tmp')
+                with open(tmp, 'w') as f:
+                    json.dump(data, f, indent=2)
+                tmp.replace(self.path)
+                if attempt > 0:
+                    logger.debug(f"State save succeeded on retry {attempt}")
+                return
+            except (PermissionError, OSError) as e:
+                if attempt < 3:
+                    continue
+                logger.warning(f"State atomic save failed after retries: {e}; "
+                                f"falling back to direct write")
+        # Direct write fallback (less atomic, but functional)
         try:
-            tmp = self.path.with_suffix('.tmp')
-            with open(tmp, 'w') as f:
+            with open(self.path, 'w') as f:
                 json.dump(data, f, indent=2)
-            tmp.replace(self.path)
         except Exception as e:
-            logger.error(f"State save failed: {e}")
+            logger.error(f"State direct write also failed: {e}")
 
 
 class GridManager:
@@ -203,16 +224,22 @@ class GridManager:
         self.sm.save(self.state)
 
     def _on_fill(self, level: GridLevel):
-        """Grid level filled → open position + place TP limit on opposite side."""
+        """Grid level filled → open position + place TP limit on opposite side.
+
+        BT-LIVE parity: TP price computed from level.price (the limit), not fill_price.
+        For LIMIT orders these should be equal, but explicit level.price ensures
+        exact BT match even if exchange records partial-fill price differences.
+        """
         # Position side: buy fill = LONG, sell fill = SHORT
         pos_side = 'long' if level.side == 'buy' else 'short'
-        # TP price: +spacing for LONG, -spacing for SHORT
+        # TP price computed from grid level price (BT parity)
         if pos_side == 'long':
-            tp_price = level.fill_price * (1 + self.spacing)
+            tp_price = level.price * (1 + self.spacing)
         else:
-            tp_price = level.fill_price * (1 - self.spacing)
+            tp_price = level.price * (1 - self.spacing)
 
-        qty_btc = level.notional_usd / level.fill_price
+        # Quantity from notional / level.price (BT parity — entry price = level price)
+        qty_btc = level.notional_usd / level.price
 
         # Place TP limit
         tp_order_id = None
@@ -236,7 +263,7 @@ class GridManager:
             logger.error(f"TP placement failed: {e}")
 
         pos = OpenPosition(
-            side=pos_side, entry_price=level.fill_price,
+            side=pos_side, entry_price=level.price,  # use level.price (BT parity)
             notional_usd=level.notional_usd, qty_btc=qty_btc,
             grid_level_idx=level.level_idx, grid_level_side=level.side,
             tp_price=tp_price, tp_order_id=tp_order_id,
@@ -284,7 +311,9 @@ class GridManager:
             return
         level = levels[pos.grid_level_idx]
 
-        # Per-TP compound: recompute notional from latest balance
+        # Per-TP compound: recompute notional from latest balance.
+        # On API failure, KEEP existing level.notional_usd (consistency with other levels)
+        # rather than falling back to fixed config (which would mismatch).
         if self.notional_callback is not None:
             try:
                 new_notional = self.notional_callback()
@@ -294,8 +323,12 @@ class GridManager:
                     if abs(new_notional - old) > 0.01:
                         logger.info(f"Compound update lv {pos.grid_level_idx}: "
                                      f"${old:.2f} → ${new_notional:.2f}")
+                else:
+                    logger.warning(f"Compound recompute returned non-positive value; "
+                                    f"keeping existing notional ${level.notional_usd:.2f}")
             except Exception as e:
-                logger.warning(f"Notional recompute failed (using old): {e}")
+                logger.warning(f"Notional recompute failed: {e}; "
+                                f"keeping existing notional ${level.notional_usd:.2f}")
 
         try:
             qty = level.notional_usd / level.price

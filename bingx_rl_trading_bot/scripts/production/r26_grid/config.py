@@ -69,10 +69,10 @@ def load_config(path: str = 'config/r26_grid_config.yaml') -> dict:
         raise ValueError(f"grid_spacing_pct {s['grid_spacing_pct']}% out of range (0, 5]")
     if s['grid_levels_each_side'] < 1 or s['grid_levels_each_side'] > 20:
         raise ValueError(f"grid_levels_each_side {s['grid_levels_each_side']} out of range [1, 20]")
-    if s['trend_exit_distance_pct'] <= s['grid_spacing_pct'] * s['grid_levels_each_side']:
-        # Trend exit should be beyond grid extent
+    if s['trend_exit_distance_pct'] < s['grid_spacing_pct'] * s['grid_levels_each_side']:
+        # Trend exit should be at least grid extent (R26 BT uses equal: 1.5% = 0.30% × 5)
         raise ValueError(
-            f"trend_exit_distance ({s['trend_exit_distance_pct']}%) must exceed "
+            f"trend_exit_distance ({s['trend_exit_distance_pct']}%) must be >= "
             f"grid extent ({s['grid_spacing_pct'] * s['grid_levels_each_side']}%)")
 
     ex_lev = e.get('exchange_leverage', 10)
@@ -93,12 +93,24 @@ def load_config(path: str = 'config/r26_grid_config.yaml') -> dict:
 
 
 def load_api_keys(path: str = 'config/api_keys.yaml') -> dict:
-    """Load BingX API keys from yaml. Required keys: bingx.api_key, bingx.secret."""
+    """Load BingX API keys (matches C1 pattern).
+
+    Supports two formats:
+      A: {'bingx': {'api_key': ..., 'secret': ...}}
+      B: {'bingx': {'mainnet': {'api_key': ..., 'secret_key': ...}}}  (C1 format)
+
+    Returns: {'api_key': ..., 'secret': ...}
+    """
     if not os.path.exists(path):
         raise FileNotFoundError(f"API keys file not found: {path}")
     with open(path, 'r') as f:
         keys = yaml.safe_load(f) or {}
-    bingx = keys.get('bingx', {})
-    if 'api_key' not in bingx or 'secret' not in bingx:
-        raise ValueError(f"API keys missing bingx.api_key or bingx.secret in {path}")
-    return bingx
+    bk = keys.get('bingx', keys)
+    # If nested mainnet/testnet, prefer mainnet
+    if isinstance(bk, dict) and 'mainnet' in bk:
+        bk = bk['mainnet']
+    api_key = bk.get('api_key', '')
+    secret = bk.get('secret_key', bk.get('secret', ''))
+    if not api_key or not secret:
+        raise ValueError(f"API keys missing api_key/secret in {path}")
+    return {'api_key': api_key, 'secret': secret}

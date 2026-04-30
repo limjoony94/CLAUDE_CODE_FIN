@@ -26,7 +26,7 @@ risk:
                                     # (just below L=10× liquidation threshold 9.95%)
 
 exchange:
-  symbol: BTC-USDT
+  symbol: BTC/USDT:USDT  # CCXT format for BingX BTC perpetual swap
   timeframe: 1h
   exchange_leverage: 10           # exchange margin setting (per user)
   trading_leverage: 10            # actual position sizing leverage (must equal exchange_leverage at L=10×)

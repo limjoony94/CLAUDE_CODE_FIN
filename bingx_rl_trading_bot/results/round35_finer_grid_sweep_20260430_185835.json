@@ -1,0 +1,2332 @@
+{
+  "date": "2026-04-30T09:58:35.758460+00:00",
+  "pre_reg_commit": "bceedc2",
+  "grid": {
+    "grid_spacing_pct": [
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6
+    ],
+    "grid_levels_each_side": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "trend_exit_distance_pct": [
+      1.0,
+      1.25,
+      1.5,
+      1.75,
+      2.0
+    ]
+  },
+  "fixed": {
+    "capital_usd": 1500,
+    "atr_period": 20,
+    "atr_pct_median_lookback_bars": 720,
+    "maker_friction_per_side_pct": 0.02,
+    "taker_friction_per_side_pct": 0.05,
+    "max_grid_lifetime_bars": 168,
+    "train_test_split": 0.6
+  },
+  "criteria": {
+    "stability_gate_bs_pos_min": 0.85,
+    "switch_test_bs_pos_min": 0.85,
+    "switch_daily_improvement_pct": 0.02,
+    "switch_retention_min": 0.6,
+    "wf_min_pos_folds": 4,
+    "wf_min_bs_pos_per_fold": 0.8,
+    "wf_total_folds": 5
+  },
+  "baseline": {
+    "spacing": 0.3,
+    "levels": 5,
+    "te_dist": 1.5
+  },
+  "baseline_train": {
+    "config": {
+      "spacing": 0.3,
+      "levels": 5,
+      "te_dist": 1.5
+    },
+    "cum_net_pct": 23.54647778294346,
+    "cum_harvest_pct": 25.87199999999932,
+    "cum_drift_pct": -2.325522217055862,
+    "daily_pct": 0.05857332781826731,
+    "n_cycles": 924,
+    "n_grid_setups": 125,
+    "n_trend_exits": 122,
+    "n_days": 402.0,
+    "bs_pos_rate": 0.9715639810426541
+  },
+  "baseline_test": {
+    "cum_net_pct": 12.670919522663326,
+    "cum_harvest_pct": 16.491999999999667,
+    "cum_drift_pct": -3.8210804773363423,
+    "daily_pct": 0.04399624834258099,
+    "n_cycles": 589,
+    "n_grid_setups": 86,
+    "n_trend_exits": 82,
+    "n_days": 288.0,
+    "bs_pos_rate": 0.9036144578313253
+  },
+  "all_train_results": [
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 19.08271653238293,
+      "cum_harvest_pct": 21.78000000000006,
+      "cum_drift_pct": -2.697283467617134,
+      "daily_pct": 0.047469444110405296,
+      "n_cycles": 726,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9560439560439561
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 17.889464970013947,
+      "cum_harvest_pct": 20.790000000000045,
+      "cum_drift_pct": -2.900535029986098,
+      "daily_pct": 0.04450115664182574,
+      "n_cycles": 693,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9548022598870056
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 18.049790582525322,
+      "cum_harvest_pct": 20.22000000000003,
+      "cum_drift_pct": -2.1702094174747097,
+      "daily_pct": 0.044899976573446077,
+      "n_cycles": 674,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9709302325581395
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 15.730963407893526,
+      "cum_harvest_pct": 18.150000000000038,
+      "cum_drift_pct": -2.4190365921065116,
+      "daily_pct": 0.039131749770879416,
+      "n_cycles": 605,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9685534591194969
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 15.280963407893537,
+      "cum_harvest_pct": 17.70000000000005,
+      "cum_drift_pct": -2.4190365921065116,
+      "daily_pct": 0.03801234678580482,
+      "n_cycles": 590,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.967741935483871
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 4,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 17.98359283999463,
+      "cum_harvest_pct": 20.74500000000016,
+      "cum_drift_pct": -2.7614071600055334,
+      "daily_pct": 0.04473530557212594,
+      "n_cycles": 922,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9528795811518325
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 4,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 16.87323832432585,
+      "cum_harvest_pct": 19.845000000000113,
+      "cum_drift_pct": -2.9717616756742635,
+      "daily_pct": 0.041973229662502116,
+      "n_cycles": 882,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9516129032258065
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 4,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 16.970982533709375,
+      "cum_harvest_pct": 19.395000000000095,
+      "cum_drift_pct": -2.424017466290722,
+      "daily_pct": 0.04221637446196362,
+      "n_cycles": 862,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9668508287292817
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 4,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 15.077348930515452,
+      "cum_harvest_pct": 17.572500000000048,
+      "cum_drift_pct": -2.495151069484595,
+      "daily_pct": 0.03750584311073495,
+      "n_cycles": 781,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.963855421686747
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 4,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 14.60484893051543,
+      "cum_harvest_pct": 17.100000000000026,
+      "cum_drift_pct": -2.495151069484595,
+      "daily_pct": 0.03633046997640654,
+      "n_cycles": 760,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9631901840490797
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 17.521795628443,
+      "cum_harvest_pct": 19.818000000000158,
+      "cum_drift_pct": -2.296204371557157,
+      "daily_pct": 0.043586556289659205,
+      "n_cycles": 1101,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9563106796116505
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 16.579512015907984,
+      "cum_harvest_pct": 19.044000000000125,
+      "cum_drift_pct": -2.4644879840921408,
+      "daily_pct": 0.041242567203751204,
+      "n_cycles": 1058,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9547738693467337
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 16.639707383414812,
+      "cum_harvest_pct": 18.66600000000012,
+      "cum_drift_pct": -2.026292616585308,
+      "daily_pct": 0.041392306923917446,
+      "n_cycles": 1037,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9690721649484536
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 14.944800500859653,
+      "cum_harvest_pct": 17.02800000000006,
+      "cum_drift_pct": -2.0831994991404064,
+      "daily_pct": 0.03717612064890461,
+      "n_cycles": 946,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9668508287292817
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 14.444123115316405,
+      "cum_harvest_pct": 16.578000000000042,
+      "cum_drift_pct": -2.133876884683637,
+      "daily_pct": 0.03593065451571245,
+      "n_cycles": 921,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9657142857142857
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 6,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 16.739764350705062,
+      "cum_harvest_pct": 18.87000000000017,
+      "cum_drift_pct": -2.1302356492951082,
+      "daily_pct": 0.041641204852500155,
+      "n_cycles": 1258,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.958139534883721
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 6,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 16.014528006925886,
+      "cum_harvest_pct": 18.28500000000015,
+      "cum_drift_pct": -2.2704719930742616,
+      "daily_pct": 0.03983713434558678,
+      "n_cycles": 1219,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9571428571428572
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 6,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 16.094690813181575,
+      "cum_harvest_pct": 18.000000000000142,
+      "cum_drift_pct": -1.9053091868185679,
+      "daily_pct": 0.04003654431139695,
+      "n_cycles": 1200,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9707317073170731
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 6,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 14.547268411052272,
+      "cum_harvest_pct": 16.50000000000009,
+      "cum_drift_pct": -1.9527315889478163,
+      "daily_pct": 0.036187234853363864,
+      "n_cycles": 1100,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.968421052631579
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 6,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 14.04348928639392,
+      "cum_harvest_pct": 16.095000000000084,
+      "cum_drift_pct": -2.051510713606165,
+      "daily_pct": 0.03493405295122866,
+      "n_cycles": 1073,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9675675675675676
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 16.186940872032995,
+      "cum_harvest_pct": 18.012857142857374,
+      "cum_drift_pct": -1.8259162708243784,
+      "daily_pct": 0.04026602206973382,
+      "n_cycles": 1401,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9592760180995475
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 15.6038811487937,
+      "cum_harvest_pct": 17.55000000000021,
+      "cum_drift_pct": -1.94611885120651,
+      "daily_pct": 0.03881562474824304,
+      "n_cycles": 1365,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.958139534883721
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 15.698306411298566,
+      "cum_harvest_pct": 17.331428571428766,
+      "cum_drift_pct": -1.633122160130201,
+      "daily_pct": 0.0390505134609417,
+      "n_cycles": 1348,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9714285714285714
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 14.256230066616315,
+      "cum_harvest_pct": 15.930000000000158,
+      "cum_drift_pct": -1.6737699333838425,
+      "daily_pct": 0.03546325887217989,
+      "n_cycles": 1239,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9693877551020408
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 13.862990816909157,
+      "cum_harvest_pct": 15.621428571428726,
+      "cum_drift_pct": -1.75843775451957,
+      "daily_pct": 0.03448505178335611,
+      "n_cycles": 1215,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9689119170984456
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 27.6181102928902,
+      "cum_harvest_pct": 30.706666666666084,
+      "cum_drift_pct": -3.0885563737758823,
+      "daily_pct": 0.06870176689773681,
+      "n_cycles": 658,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.96875
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 26.06130827348766,
+      "cum_harvest_pct": 29.446666666666093,
+      "cum_drift_pct": -3.3853583931784335,
+      "daily_pct": 0.06482912505842701,
+      "n_cycles": 631,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9679144385026738
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 25.350926984234626,
+      "cum_harvest_pct": 28.79333333333277,
+      "cum_drift_pct": -3.442406349098147,
+      "daily_pct": 0.06306200742346922,
+      "n_cycles": 617,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.967032967032967
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 22.908598920074372,
+      "cum_harvest_pct": 26.226666666666166,
+      "cum_drift_pct": -3.3180677465917943,
+      "daily_pct": 0.056986564477796944,
+      "n_cycles": 562,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9644970414201184
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 22.07875583182736,
+      "cum_harvest_pct": 25.57333333333283,
+      "cum_drift_pct": -3.4945775015054705,
+      "daily_pct": 0.054922278188625266,
+      "n_cycles": 548,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9520958083832335
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 4,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 25.88348471017138,
+      "cum_harvest_pct": 28.52499999999951,
+      "cum_drift_pct": -2.6415152898281287,
+      "daily_pct": 0.06438677788599846,
+      "n_cycles": 815,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9716981132075472
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 4,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 24.855883195619462,
+      "cum_harvest_pct": 27.719999999999505,
+      "cum_drift_pct": -2.8641168043800427,
+      "daily_pct": 0.06183055521298374,
+      "n_cycles": 792,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9711538461538461
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 4,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 24.393097228679682,
+      "cum_harvest_pct": 27.29999999999951,
+      "cum_drift_pct": -2.9069027713198277,
+      "daily_pct": 0.06067934633999921,
+      "n_cycles": 780,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9704433497536946
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 4,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 22.24635118055949,
+      "cum_harvest_pct": 25.05999999999955,
+      "cum_drift_pct": -2.8136488194400626,
+      "daily_pct": 0.05533918204119276,
+      "n_cycles": 716,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9682539682539683
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 4,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 21.469146909315743,
+      "cum_harvest_pct": 24.49999999999955,
+      "cum_drift_pct": -3.030853090683805,
+      "daily_pct": 0.05340583808287498,
+      "n_cycles": 700,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9619565217391305
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 24.570787768136814,
+      "cum_harvest_pct": 26.683999999999315,
+      "cum_drift_pct": -2.113212231862503,
+      "daily_pct": 0.06112136260730551,
+      "n_cycles": 953,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9728506787330317
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 23.83270655649529,
+      "cum_harvest_pct": 26.123999999999324,
+      "cum_drift_pct": -2.291293443504034,
+      "daily_pct": 0.05928533969277435,
+      "n_cycles": 933,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9722222222222222
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 23.54647778294346,
+      "cum_harvest_pct": 25.87199999999932,
+      "cum_drift_pct": -2.325522217055862,
+      "daily_pct": 0.05857332781826731,
+      "n_cycles": 924,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9715639810426541
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 21.243074862149474,
+      "cum_harvest_pct": 23.827999999999427,
+      "cum_drift_pct": -2.584925137849954,
+      "daily_pct": 0.052843469806341976,
+      "n_cycles": 851,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9545454545454546
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 21.06731752745237,
+      "cum_harvest_pct": 23.491999999999415,
+      "cum_drift_pct": -2.424682472547044,
+      "daily_pct": 0.05240626250610043,
+      "n_cycles": 839,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9689119170984456
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 6,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 23.018989806780983,
+      "cum_harvest_pct": 24.779999999999735,
+      "cum_drift_pct": -1.761010193218752,
+      "daily_pct": 0.05726116867358454,
+      "n_cycles": 1062,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9779735682819384
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 6,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 22.403922130413036,
+      "cum_harvest_pct": 24.313333333333066,
+      "cum_drift_pct": -1.9094112029200279,
+      "daily_pct": 0.05573114957814188,
+      "n_cycles": 1042,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9773755656108597
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 6,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 22.258731485786516,
+      "cum_harvest_pct": 24.1966666666664,
+      "cum_drift_pct": -1.9379351808798846,
+      "daily_pct": 0.055369978820364464,
+      "n_cycles": 1037,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9769585253456221
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 6,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 20.362562385124765,
+      "cum_harvest_pct": 22.516666666666392,
+      "cum_drift_pct": -2.154104281541628,
+      "daily_pct": 0.05065314026150439,
+      "n_cycles": 965,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9658536585365853
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 6,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 20.379431272877188,
+      "cum_harvest_pct": 22.399999999999725,
+      "cum_drift_pct": -2.0205687271225368,
+      "daily_pct": 0.050695102668848725,
+      "n_cycles": 960,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9751243781094527
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 21.184352155375503,
+      "cum_harvest_pct": 22.95999999999955,
+      "cum_drift_pct": -1.7756478446240462,
+      "daily_pct": 0.052697393421332096,
+      "n_cycles": 1148,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9655172413793104
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 20.65715128991727,
+      "cum_harvest_pct": 22.55999999999955,
+      "cum_drift_pct": -1.9028487100822824,
+      "daily_pct": 0.05138594848238127,
+      "n_cycles": 1128,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9647577092511013
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 20.59270216595167,
+      "cum_harvest_pct": 22.519999999999545,
+      "cum_drift_pct": -1.927297834047874,
+      "daily_pct": 0.05122562727848674,
+      "n_cycles": 1126,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9644444444444444
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 19.007414365384502,
+      "cum_harvest_pct": 21.119999999999585,
+      "cum_drift_pct": -2.1125856346150824,
+      "daily_pct": 0.047282125287026126,
+      "n_cycles": 1056,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9575471698113207
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 19.161873412029436,
+      "cum_harvest_pct": 21.159999999999584,
+      "cum_drift_pct": -1.998126587970147,
+      "daily_pct": 0.0476663517712175,
+      "n_cycles": 1058,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9624413145539906
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 29.480505872355593,
+      "cum_harvest_pct": 36.92333333333318,
+      "cum_drift_pct": -7.44282746097759,
+      "daily_pct": 0.07333459172227759,
+      "n_cycles": 583,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9009433962264151
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 3,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 28.741044384204425,
+      "cum_harvest_pct": 36.16333333333319,
+      "cum_drift_pct": -7.422288949128767,
+      "daily_pct": 0.07149513528409061,
+      "n_cycles": 571,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.912621359223301
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 29.920594787502278,
+      "cum_harvest_pct": 35.9733333333332,
+      "cum_drift_pct": -6.052738545830924,
+      "daily_pct": 0.0744293402674186,
+      "n_cycles": 568,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9257425742574258
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 3,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 26.366677182870514,
+      "cum_harvest_pct": 33.059999999999924,
+      "cum_drift_pct": -6.693322817129409,
+      "daily_pct": 0.06558874921112068,
+      "n_cycles": 522,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9042553191489362
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 3,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 25.486529934419355,
+      "cum_harvest_pct": 32.29999999999994,
+      "cum_drift_pct": -6.813470065580585,
+      "daily_pct": 0.06339932819507302,
+      "n_cycles": 510,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9027027027027027
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 4,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 28.047879404266588,
+      "cum_harvest_pct": 33.62999999999978,
+      "cum_drift_pct": -5.582120595733192,
+      "daily_pct": 0.06977084428922037,
+      "n_cycles": 708,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9144144144144144
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 4,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 27.493283288153215,
+      "cum_harvest_pct": 33.05999999999979,
+      "cum_drift_pct": -5.566716711846575,
+      "daily_pct": 0.06839125196058014,
+      "n_cycles": 696,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9162790697674419
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 4,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 28.615446090626588,
+      "cum_harvest_pct": 33.15499999999978,
+      "cum_drift_pct": -4.5395539093731925,
+      "daily_pct": 0.07118270171797658,
+      "n_cycles": 698,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.933649289099526
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 4,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 25.30770821499188,
+      "cum_harvest_pct": 30.732499999999824,
+      "cum_drift_pct": -5.424791785007945,
+      "daily_pct": 0.06295449804724348,
+      "n_cycles": 647,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9191919191919192
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 4,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 25.337397450814393,
+      "cum_harvest_pct": 30.44749999999983,
+      "cum_drift_pct": -5.11010254918544,
+      "daily_pct": 0.0630283518676975,
+      "n_cycles": 641,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9179487179487179
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 25.77346352616238,
+      "cum_harvest_pct": 30.514000000000138,
+      "cum_drift_pct": -4.740536473837759,
+      "daily_pct": 0.06411309334866264,
+      "n_cycles": 803,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9227467811158798
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 5,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 25.329786633271667,
+      "cum_harvest_pct": 30.05800000000013,
+      "cum_drift_pct": -4.728213366728465,
+      "daily_pct": 0.06300941948575041,
+      "n_cycles": 791,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9247787610619469
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 26.41751687525038,
+      "cum_harvest_pct": 30.32400000000014,
+      "cum_drift_pct": -3.90648312474976,
+      "daily_pct": 0.06571521610758801,
+      "n_cycles": 798,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9372197309417041
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 5,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 23.771326574742574,
+      "cum_harvest_pct": 28.386000000000134,
+      "cum_drift_pct": -4.614673425257561,
+      "daily_pct": 0.05913265317100143,
+      "n_cycles": 747,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9230769230769231
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 5,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 23.993587772457698,
+      "cum_harvest_pct": 28.424000000000138,
+      "cum_drift_pct": -4.430412227542441,
+      "daily_pct": 0.059685541722531585,
+      "n_cycles": 748,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9241706161137441
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 6,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 23.689978665414863,
+      "cum_harvest_pct": 27.708333333333126,
+      "cum_drift_pct": -4.018354667918265,
+      "daily_pct": 0.05893029518759916,
+      "n_cycles": 875,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9324894514767933
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 6,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 23.383581254672613,
+      "cum_harvest_pct": 27.391666666666467,
+      "cum_drift_pct": -4.008085411993854,
+      "daily_pct": 0.05816811257381247,
+      "n_cycles": 865,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9356223175965666
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 6,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 24.353356456321535,
+      "cum_harvest_pct": 27.676666666666467,
+      "cum_drift_pct": -3.3233102103449315,
+      "daily_pct": 0.060580488697317254,
+      "n_cycles": 874,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.948051948051948
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 6,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 22.105021709402138,
+      "cum_harvest_pct": 26.06166666666649,
+      "cum_drift_pct": -3.9566449572643507,
+      "daily_pct": 0.05498761619254263,
+      "n_cycles": 823,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9357798165137615
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 6,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 22.511906040831413,
+      "cum_harvest_pct": 26.31499999999983,
+      "cum_drift_pct": -3.803093959168417,
+      "daily_pct": 0.05599976627072491,
+      "n_cycles": 831,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9363636363636364
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 21.87998171321274,
+      "cum_harvest_pct": 25.324285714285537,
+      "cum_drift_pct": -3.444304001072798,
+      "daily_pct": 0.05442781520699686,
+      "n_cycles": 933,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9504132231404959
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 7,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 21.698783932576536,
+      "cum_harvest_pct": 25.134285714285554,
+      "cum_drift_pct": -3.435501781709017,
+      "daily_pct": 0.05397707445914561,
+      "n_cycles": 926,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9539748953974896
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 22.469762380296004,
+      "cum_harvest_pct": 25.378571428571263,
+      "cum_drift_pct": -2.9088090482752595,
+      "daily_pct": 0.05589493129426867,
+      "n_cycles": 935,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9704641350210971
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 7,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 20.657161465201852,
+      "cum_harvest_pct": 24.048571428571297,
+      "cum_drift_pct": -3.391409963369443,
+      "daily_pct": 0.05138597379403446,
+      "n_cycles": 886,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9559471365638766
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 7,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 20.97280488130447,
+      "cum_harvest_pct": 24.292857142857002,
+      "cum_drift_pct": -3.320052261552533,
+      "daily_pct": 0.0521711564211554,
+      "n_cycles": 895,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9559471365638766
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 34.68801609845074,
+      "cum_harvest_pct": 42.71999999999945,
+      "cum_drift_pct": -8.031983901548712,
+      "daily_pct": 0.08628859725982771,
+      "n_cycles": 534,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9216589861751152
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 34.23359588478786,
+      "cum_harvest_pct": 42.159999999999464,
+      "cum_drift_pct": -7.926404115211602,
+      "daily_pct": 0.08515819871837776,
+      "n_cycles": 527,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.919431279620853
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 35.49062960655746,
+      "cum_harvest_pct": 42.079999999999465,
+      "cum_drift_pct": -6.589370393442001,
+      "daily_pct": 0.08828514827501856,
+      "n_cycles": 526,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9368932038834952
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 30.203808407741505,
+      "cum_harvest_pct": 38.71999999999954,
+      "cum_drift_pct": -8.51619159225803,
+      "daily_pct": 0.07513385176055101,
+      "n_cycles": 484,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9162303664921466
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 31.470157905745864,
+      "cum_harvest_pct": 38.47999999999954,
+      "cum_drift_pct": -7.0098420942536785,
+      "daily_pct": 0.07828397488991509,
+      "n_cycles": 481,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9162303664921466
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 30.591948541735846,
+      "cum_harvest_pct": 37.49999999999965,
+      "cum_drift_pct": -6.908051458263806,
+      "daily_pct": 0.07609937448192997,
+      "n_cycles": 625,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9307359307359307
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 30.251133381488668,
+      "cum_harvest_pct": 37.07999999999964,
+      "cum_drift_pct": -6.8288666185109745,
+      "daily_pct": 0.07525157557584246,
+      "n_cycles": 618,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9292035398230089
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 31.493908672815863,
+      "cum_harvest_pct": 37.31999999999964,
+      "cum_drift_pct": -5.826091327183773,
+      "daily_pct": 0.07834305640003945,
+      "n_cycles": 622,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9459459459459459
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 27.58090948488402,
+      "cum_harvest_pct": 34.859999999999644,
+      "cum_drift_pct": -7.279090515115622,
+      "daily_pct": 0.06860922757433836,
+      "n_cycles": 581,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9320388349514563
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 28.78215218488595,
+      "cum_harvest_pct": 35.099999999999646,
+      "cum_drift_pct": -6.317847815113697,
+      "daily_pct": 0.07159739349474116,
+      "n_cycles": 585,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.933649289099526
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 26.949431243737376,
+      "cum_harvest_pct": 33.16799999999961,
+      "cum_drift_pct": -6.218568756262234,
+      "daily_pct": 0.06703838617845119,
+      "n_cycles": 691,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9285714285714286
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 26.82077911553961,
+      "cum_harvest_pct": 32.97599999999958,
+      "cum_drift_pct": -6.155220884459968,
+      "daily_pct": 0.066718356008805,
+      "n_cycles": 687,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9279661016949152
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 27.95899934860137,
+      "cum_harvest_pct": 33.31199999999958,
+      "cum_drift_pct": -5.353000651398209,
+      "daily_pct": 0.06954974962338649,
+      "n_cycles": 694,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.944206008583691
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 24.738590369675812,
+      "cum_harvest_pct": 31.29599999999959,
+      "cum_drift_pct": -6.55740963032378,
+      "daily_pct": 0.061538782014118935,
+      "n_cycles": 652,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9318181818181818
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 25.891584529677317,
+      "cum_harvest_pct": 31.679999999999556,
+      "cum_drift_pct": -5.788415470322239,
+      "daily_pct": 0.0644069266907396,
+      "n_cycles": 660,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9327354260089686
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 6,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 24.250575148031245,
+      "cum_harvest_pct": 29.799999999999553,
+      "cum_drift_pct": -5.5494248519683085,
+      "daily_pct": 0.06032481380107275,
+      "n_cycles": 745,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9465020576131687
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 6,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 24.257266471638495,
+      "cum_harvest_pct": 29.71999999999955,
+      "cum_drift_pct": -5.462733528361057,
+      "daily_pct": 0.06034145888467287,
+      "n_cycles": 743,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9465020576131687
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 6,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 25.205783332523282,
+      "cum_harvest_pct": 29.99999999999954,
+      "cum_drift_pct": -4.794216667476258,
+      "daily_pct": 0.06270095356349076,
+      "n_cycles": 750,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9583333333333334
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 6,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 22.568207752979976,
+      "cum_harvest_pct": 28.399999999999572,
+      "cum_drift_pct": -5.831792247019597,
+      "daily_pct": 0.056139820281044715,
+      "n_cycles": 710,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9432314410480349
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 6,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 23.569036219647927,
+      "cum_harvest_pct": 28.759999999999575,
+      "cum_drift_pct": -5.190963780351647,
+      "daily_pct": 0.05862944333245753,
+      "n_cycles": 719,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9439655172413793
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 21.924037215974167,
+      "cum_harvest_pct": 26.91428571428551,
+      "cum_drift_pct": -4.9902484983113435,
+      "daily_pct": 0.054537406009885984,
+      "n_cycles": 785,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9437751004016064
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 22.03262977906608,
+      "cum_harvest_pct": 26.94857142857121,
+      "cum_drift_pct": -4.915941649505128,
+      "daily_pct": 0.05480753676384597,
+      "n_cycles": 786,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9437751004016064
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 22.845644231253047,
+      "cum_harvest_pct": 27.188571428571205,
+      "cum_drift_pct": -4.342927197318157,
+      "daily_pct": 0.056829960774261314,
+      "n_cycles": 793,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9552845528455285
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 20.591713904596645,
+      "cum_harvest_pct": 25.919999999999824,
+      "cum_drift_pct": -5.32828609540318,
+      "daily_pct": 0.05122316891690708,
+      "n_cycles": 756,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9404255319148936
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 21.579860991645603,
+      "cum_harvest_pct": 26.262857142856948,
+      "cum_drift_pct": -4.682996151211347,
+      "daily_pct": 0.05368124624787463,
+      "n_cycles": 766,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9411764705882353
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 28.533794708938416,
+      "cum_harvest_pct": 43.499999999999936,
+      "cum_drift_pct": -14.966205291061522,
+      "daily_pct": 0.07097958882820501,
+      "n_cycles": 450,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8578199052132701
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 3,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 28.426259223905532,
+      "cum_harvest_pct": 43.3066666666666,
+      "cum_drift_pct": -14.88040744276107,
+      "daily_pct": 0.07071208762165555,
+      "n_cycles": 448,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8536585365853658
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 30.017925334527156,
+      "cum_harvest_pct": 43.5966666666666,
+      "cum_drift_pct": -13.578741332139442,
+      "daily_pct": 0.0746714560560377,
+      "n_cycles": 451,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8712871287128713
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 3,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 26.301827854081452,
+      "cum_harvest_pct": 40.98666666666666,
+      "cum_drift_pct": -14.684838812585207,
+      "daily_pct": 0.06542743247283943,
+      "n_cycles": 424,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8541666666666666
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 3,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 27.534075898691686,
+      "cum_harvest_pct": 41.179999999999986,
+      "cum_drift_pct": -13.6459241013083,
+      "daily_pct": 0.06849272611614847,
+      "n_cycles": 426,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8638743455497382
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 4,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 24.799924526316534,
+      "cum_harvest_pct": 37.48249999999991,
+      "cum_drift_pct": -12.682575473683375,
+      "daily_pct": 0.061691354543075956,
+      "n_cycles": 517,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8699551569506726
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 4,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 24.864272912541843,
+      "cum_harvest_pct": 37.48249999999988,
+      "cum_drift_pct": -12.618227087458036,
+      "daily_pct": 0.06185142515557672,
+      "n_cycles": 517,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8727272727272727
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 4,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 26.20302249550806,
+      "cum_harvest_pct": 37.84499999999987,
+      "cum_drift_pct": -11.641977504491813,
+      "daily_pct": 0.06518164799877627,
+      "n_cycles": 522,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8858447488584474
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 4,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 23.351185140429436,
+      "cum_harvest_pct": 35.887499999999946,
+      "cum_drift_pct": -12.536314859570512,
+      "daily_pct": 0.058087525224948845,
+      "n_cycles": 495,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8701923076923077
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 4,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 24.82768557312852,
+      "cum_harvest_pct": 36.61249999999992,
+      "cum_drift_pct": -11.784814426871398,
+      "daily_pct": 0.061760411873454026,
+      "n_cycles": 505,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8851674641148325
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 22.130772431078817,
+      "cum_harvest_pct": 33.001999999999946,
+      "cum_drift_pct": -10.87122756892113,
+      "daily_pct": 0.055051672714126414,
+      "n_cycles": 569,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8739130434782608
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 5,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 22.338932856585522,
+      "cum_harvest_pct": 33.117999999999945,
+      "cum_drift_pct": -10.779067143414421,
+      "daily_pct": 0.055569484717874436,
+      "n_cycles": 571,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8733624454148472
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 23.51997683575521,
+      "cum_harvest_pct": 33.40799999999994,
+      "cum_drift_pct": -9.888023164244727,
+      "daily_pct": 0.05850740506406768,
+      "n_cycles": 576,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8903508771929824
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 5,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 21.43661407671558,
+      "cum_harvest_pct": 32.01599999999995,
+      "cum_drift_pct": -10.57938592328437,
+      "daily_pct": 0.053324910638595964,
+      "n_cycles": 552,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8772727272727273
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 5,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 22.55302558132511,
+      "cum_harvest_pct": 32.59599999999994,
+      "cum_drift_pct": -10.042974418674833,
+      "daily_pct": 0.05610205368488833,
+      "n_cycles": 562,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8863636363636364
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 6,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 19.71014051281247,
+      "cum_harvest_pct": 29.19333333333321,
+      "cum_drift_pct": -9.483192820520742,
+      "daily_pct": 0.04903020028062803,
+      "n_cycles": 604,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8851063829787233
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 6,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 20.028607534068037,
+      "cum_harvest_pct": 29.434999999999857,
+      "cum_drift_pct": -9.406392465931818,
+      "daily_pct": 0.04982240680116427,
+      "n_cycles": 609,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8846153846153846
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 6,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 20.964477516709444,
+      "cum_harvest_pct": 29.628333333333188,
+      "cum_drift_pct": -8.663855816623744,
+      "daily_pct": 0.05215044158385434,
+      "n_cycles": 613,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8969957081545065
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 6,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 19.366146603021036,
+      "cum_harvest_pct": 28.709999999999862,
+      "cum_drift_pct": -9.343853396978828,
+      "daily_pct": 0.04817449403736576,
+      "n_cycles": 594,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8854625550660793
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 6,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 20.35201813801771,
+      "cum_harvest_pct": 29.14499999999987,
+      "cum_drift_pct": -8.792981861982163,
+      "daily_pct": 0.05062691079108883,
+      "n_cycles": 603,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8942731277533039
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 17.6510302112706,
+      "cum_harvest_pct": 25.934285714285878,
+      "cum_drift_pct": -8.283255503015274,
+      "daily_pct": 0.043908035351419406,
+      "n_cycles": 626,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8865546218487395
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 7,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 17.965430515203966,
+      "cum_harvest_pct": 26.182857142857305,
+      "cum_drift_pct": -8.217426627653339,
+      "daily_pct": 0.04469012565971136,
+      "n_cycles": 632,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8860759493670886
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 18.72617621461088,
+      "cum_harvest_pct": 26.307142857143017,
+      "cum_drift_pct": -7.580966642532135,
+      "daily_pct": 0.046582527897041995,
+      "n_cycles": 635,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8983050847457628
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 7,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 17.521892574306527,
+      "cum_harvest_pct": 25.685714285714447,
+      "cum_drift_pct": -8.163821711407921,
+      "daily_pct": 0.0435867974485237,
+      "n_cycles": 620,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8869565217391304
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 7,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 18.325496747160816,
+      "cum_harvest_pct": 26.017142857143025,
+      "cum_drift_pct": -7.691646109982209,
+      "daily_pct": 0.04558581280388263,
+      "n_cycles": 628,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8956521739130435
+    }
+  ],
+  "stability_gated_count": 125,
+  "stability_gated_top10": [
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 35.49062960655746,
+      "cum_harvest_pct": 42.079999999999465,
+      "cum_drift_pct": -6.589370393442001,
+      "daily_pct": 0.08828514827501856,
+      "n_cycles": 526,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9368932038834952
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 34.68801609845074,
+      "cum_harvest_pct": 42.71999999999945,
+      "cum_drift_pct": -8.031983901548712,
+      "daily_pct": 0.08628859725982771,
+      "n_cycles": 534,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9216589861751152
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 34.23359588478786,
+      "cum_harvest_pct": 42.159999999999464,
+      "cum_drift_pct": -7.926404115211602,
+      "daily_pct": 0.08515819871837776,
+      "n_cycles": 527,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.919431279620853
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 31.493908672815863,
+      "cum_harvest_pct": 37.31999999999964,
+      "cum_drift_pct": -5.826091327183773,
+      "daily_pct": 0.07834305640003945,
+      "n_cycles": 622,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9459459459459459
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 2.0
+      },
+      "cum_net_pct": 31.470157905745864,
+      "cum_harvest_pct": 38.47999999999954,
+      "cum_drift_pct": -7.0098420942536785,
+      "daily_pct": 0.07828397488991509,
+      "n_cycles": 481,
+      "n_grid_setups": 109,
+      "n_trend_exits": 102,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9162303664921466
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 30.591948541735846,
+      "cum_harvest_pct": 37.49999999999965,
+      "cum_drift_pct": -6.908051458263806,
+      "daily_pct": 0.07609937448192997,
+      "n_cycles": 625,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9307359307359307
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 4,
+        "te_dist": 1.25
+      },
+      "cum_net_pct": 30.251133381488668,
+      "cum_harvest_pct": 37.07999999999964,
+      "cum_drift_pct": -6.8288666185109745,
+      "daily_pct": 0.07525157557584246,
+      "n_cycles": 618,
+      "n_grid_setups": 129,
+      "n_trend_exits": 126,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9292035398230089
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.75
+      },
+      "cum_net_pct": 30.203808407741505,
+      "cum_harvest_pct": 38.71999999999954,
+      "cum_drift_pct": -8.51619159225803,
+      "daily_pct": 0.07513385176055101,
+      "n_cycles": 484,
+      "n_grid_setups": 112,
+      "n_trend_exits": 107,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9162303664921466
+    },
+    {
+      "config": {
+        "spacing": 0.6,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 30.017925334527156,
+      "cum_harvest_pct": 43.5966666666666,
+      "cum_drift_pct": -13.578741332139442,
+      "daily_pct": 0.0746714560560377,
+      "n_cycles": 451,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8712871287128713
+    },
+    {
+      "config": {
+        "spacing": 0.4,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 29.920594787502278,
+      "cum_harvest_pct": 35.9733333333332,
+      "cum_drift_pct": -6.052738545830924,
+      "daily_pct": 0.0744293402674186,
+      "n_cycles": 568,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9257425742574258
+    }
+  ],
+  "winner_train": {
+    "config": {
+      "spacing": 0.5,
+      "levels": 3,
+      "te_dist": 1.5
+    },
+    "cum_net_pct": 35.49062960655746,
+    "cum_harvest_pct": 42.079999999999465,
+    "cum_drift_pct": -6.589370393442001,
+    "daily_pct": 0.08828514827501856,
+    "n_cycles": 526,
+    "n_grid_setups": 125,
+    "n_trend_exits": 122,
+    "n_days": 402.0,
+    "bs_pos_rate": 0.9368932038834952
+  },
+  "winner_test": {
+    "cum_net_pct": 14.667395480631079,
+    "cum_harvest_pct": 25.119999999999724,
+    "cum_drift_pct": -10.452604519368645,
+    "daily_pct": 0.050928456529969024,
+    "n_cycles": 314,
+    "n_grid_setups": 86,
+    "n_trend_exits": 82,
+    "n_days": 288.0,
+    "bs_pos_rate": 0.8108108108108109
+  },
+  "wf_folds": [
+    {
+      "cum_net_pct": 12.87842744448284,
+      "cum_harvest_pct": 14.159999999999851,
+      "cum_drift_pct": -1.2815725555170112,
+      "daily_pct": 0.10732022870402366,
+      "n_cycles": 177,
+      "n_grid_setups": 44,
+      "n_trend_exits": 43,
+      "n_days": 120.0,
+      "bs_pos_rate": 0.9672131147540983
+    },
+    {
+      "cum_net_pct": 11.719458895609275,
+      "cum_harvest_pct": 13.599999999999858,
+      "cum_drift_pct": -1.8805411043905824,
+      "daily_pct": 0.09766215746341063,
+      "n_cycles": 170,
+      "n_grid_setups": 39,
+      "n_trend_exits": 38,
+      "n_days": 120.0,
+      "bs_pos_rate": 0.9016393442622951
+    },
+    {
+      "cum_net_pct": 7.817401960301314,
+      "cum_harvest_pct": 10.47999999999989,
+      "cum_drift_pct": -2.6625980396985756,
+      "daily_pct": 0.06514501633584428,
+      "n_cycles": 131,
+      "n_grid_setups": 34,
+      "n_trend_exits": 31,
+      "n_days": 120.0,
+      "bs_pos_rate": 0.9193548387096774
+    },
+    {
+      "cum_net_pct": 3.16553100627445,
+      "cum_harvest_pct": 8.319999999999911,
+      "cum_drift_pct": -5.1544689937254615,
+      "daily_pct": 0.026379425052287082,
+      "n_cycles": 104,
+      "n_grid_setups": 31,
+      "n_trend_exits": 28,
+      "n_days": 120.0,
+      "bs_pos_rate": 0.7192982456140351
+    },
+    {
+      "cum_net_pct": 7.281460232024803,
+      "cum_harvest_pct": 11.759999999999861,
+      "cum_drift_pct": -4.478539767975058,
+      "daily_pct": 0.06067883526687336,
+      "n_cycles": 147,
+      "n_grid_setups": 38,
+      "n_trend_exits": 37,
+      "n_days": 120.0,
+      "bs_pos_rate": 0.7857142857142857
+    }
+  ],
+  "switch_test_bs_ok": false,
+  "switch_daily_imp_ok": false,
+  "switch_retention_ok": false,
+  "switch_wf_pos_ok": true,
+  "switch_wf_bs_ok": false,
+  "switch_recommended": false
+}

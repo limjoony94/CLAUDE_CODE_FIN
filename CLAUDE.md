@@ -217,6 +217,13 @@ Claude는 사용자 의도를 감지하여 아래 규칙에 따라 **자동으�
 4. **git commit 후 production 파일 포함 시** → CLAUDE.md Version History 업데이트 제안
 5. **비정상 결과 감지 시** (PnL > 5000%, WF 전부 FAIL) → 자동 경고 + 원인 분석 제안
 6. **새 세션 시작 시** → Serena 메모리 확인 (`ccxt_bingx_pitfalls`, `research_protocol_standard`)
+7. **새 전략 LIVE deploy 제안 시** → 자동 5-Gate 체크리스트 강제 (memory `strategy_deploy_5gate_protocol.md` 참조). C1 + R26 두 번 같은 BT-LIVE parity bug 재발 방지:
+   - Gate 1: 모델 충실도 audit (LIVE 코드 ↔ BT 1:1 mapping 표)
+   - Gate 2: n≥20 multi-window mean+median 양수, sign test p<0.05
+   - Gate 3: 데이터 source 일치 (LIVE 거래소 동일)
+   - Gate 4: ⭐ Paper trade ≥7d (BT vs paper gap < 0.1%/day)
+   - Gate 5: D-1/D-3/D-7 cron auto-halt
+   한 gate 미통과 → deploy BLOCK
 
 ### Serena MCP 자동 활용
 

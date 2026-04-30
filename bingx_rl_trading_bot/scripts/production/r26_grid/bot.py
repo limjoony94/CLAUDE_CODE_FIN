@@ -247,12 +247,13 @@ class R26GridBot:
                               f"falling back to fixed ${risk_cfg['per_level_notional_usd']}")
                 return float(risk_cfg['per_level_notional_usd'])
             util = risk_cfg.get('balance_utilization_pct', 100) / 100
-            leverage = self.config['exchange']['exchange_leverage']
+            # USE trading_leverage (actual sizing), NOT exchange_leverage (max permission)
+            leverage = self.config['exchange']['trading_leverage']
             total_levels = 2 * self.config['strategy']['grid_levels_each_side']
             per_level = (equity * util * leverage) / total_levels
             logger.info(f"Auto-sized per_level_notional=${per_level:.2f} "
                           f"from balance ${equity:.2f} × util {util*100:.0f}% × "
-                          f"leverage {leverage}× / {total_levels} levels")
+                          f"trading_leverage {leverage}× / {total_levels} levels")
             return per_level
         return float(risk_cfg['per_level_notional_usd'])
 

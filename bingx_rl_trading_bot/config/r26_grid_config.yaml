@@ -28,8 +28,9 @@ risk:
 exchange:
   symbol: BTC/USDT:USDT  # CCXT format for BingX BTC perpetual swap
   timeframe: 1h
-  exchange_leverage: 10           # exchange margin setting (per user)
-  trading_leverage: 10            # actual position sizing leverage (must equal exchange_leverage at L=10×)
+  exchange_leverage: 10           # exchange margin setting (max permission, fixed at user's 10×)
+  trading_leverage: 4             # actual position sizing leverage (R34 result: L=4× = first DEPLOYABLE)
+                                   # daily +0.21%, liq buffer 24.88% adverse (vs historical max 9.47%)
   position_mode: One-Way          # use BOTH positionSide
   candle_bars_fetch: 800          # need 30d of 1h for ATR median
   hedge_mode_check: true          # BUG#66 protection — verify one-way mode on init

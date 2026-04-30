@@ -1,0 +1,48 @@
+# R26 Grid Trading Bot — Configuration
+# Pre-reg: claudedocs/round26_grid_ranging_prereg.md (commit bd9a233)
+# Verification: round34_r26_leverage_prereg.md (commit eb1a271)
+
+strategy:
+  # LOCKED grid parameters (matches BT exactly — DO NOT modify without re-validation)
+  grid_spacing_pct: 0.30        # 0.30% between levels (5x friction margin)
+  grid_levels_each_side: 5       # 5 buy + 5 sell = 10 total
+  trend_exit_distance_pct: 1.5   # force exit when |price - init_mid| > 1.5%
+  max_grid_lifetime_bars: 168    # 7 days at 1h
+  atr_period: 20
+  atr_pct_median_lookback_bars: 720  # 30 days at 1h
+
+risk:
+  # User manually adjusts via per_level_notional_usd
+  per_level_notional_usd: 150    # MANUALLY MANAGED (user said: margin 사용자 수동 조절)
+                                  # At L=10× exchange / 10× trading: $150 notional, $15 margin
+                                  # At L=10× exchange / 1× trading: $150 notional, $150 margin
+                                  # User must size based on capital + leverage choice
+
+  # Hard halts (auto sys.exit)
+  halt_daily_loss_pct: 3.0       # daily NAV < -3% → halt
+  halt_30d_loss_pct: 10.0        # 30d cum NAV < -10% → halt
+  halt_consecutive_api_errors: 10
+  halt_emergency_adverse_pct: 9.0  # 5m candle adverse > 9% on open position → emergency close
+                                    # (just below L=10× liquidation threshold 9.95%)
+
+exchange:
+  symbol: BTC-USDT
+  timeframe: 1h
+  exchange_leverage: 10           # exchange margin setting (per user)
+  trading_leverage: 10            # actual position sizing leverage (must equal exchange_leverage at L=10×)
+  position_mode: One-Way          # use BOTH positionSide
+  candle_bars_fetch: 800          # need 30d of 1h for ATR median
+  hedge_mode_check: true          # BUG#66 protection — verify one-way mode on init
+
+bot:
+  poll_interval_seconds: 300      # 5 min poll (grid bots don't need 1m updates)
+  warmup_bars: 720                # 30d of 1h for filter
+
+logging:
+  log_path: logs/r26_grid.log
+  state_path: results/r26_grid_state.json
+  log_rotate_daily: true
+  log_retention_days: 30
+
+# API keys path (separate file)
+api_keys_path: config/api_keys.yaml

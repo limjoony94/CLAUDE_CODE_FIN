@@ -44,11 +44,14 @@ class R26GridBot:
         self.sm = StateManager(self.config['logging']['state_path'])
         self.state = self.sm.load()
         # Pass notional_callback for per-TP compound + journal_path for trade journal
+        # + per-position SL config
         self.grid = GridManager(
             self.exchange, self.symbol, self.state, self.sm,
             spacing_pct=self.config['strategy']['grid_spacing_pct'],
             notional_callback=self._compute_per_level_notional,
-            journal_path=self.config['logging'].get('journal_path')
+            journal_path=self.config['logging'].get('journal_path'),
+            per_position_sl_enabled=self.config['strategy'].get('per_position_stop_loss_enabled', False),
+            per_position_sl_pct=self.config['strategy'].get('per_position_stop_loss_pct', 2.0),
         )
         # Reconcile state vs exchange (catches orphans from crash + race)
         self._reconcile_state_exchange()
@@ -284,8 +287,9 @@ class R26GridBot:
 
         # 4. Active grid management
         if self.state.active:
-            # Check fills + TPs
+            # Check fills + SL (before TP, in case both fired) + TPs
             self.grid.check_fills(current_price)
+            self.grid.check_sl_fills()
             self.grid.check_tp_fills()
 
             # Trend exit signal

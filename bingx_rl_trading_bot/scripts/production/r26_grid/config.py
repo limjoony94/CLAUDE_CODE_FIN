@@ -11,6 +11,8 @@ DEFAULT_CONFIG = {
         'max_grid_lifetime_bars': 168,
         'atr_period': 20,
         'atr_pct_median_lookback_bars': 720,
+        'per_position_stop_loss_enabled': False,
+        'per_position_stop_loss_pct': 2.0,
     },
     'risk': {
         'auto_size_from_balance': False,

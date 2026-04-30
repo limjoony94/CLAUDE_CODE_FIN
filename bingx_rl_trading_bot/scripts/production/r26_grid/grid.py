@@ -45,6 +45,9 @@ class OpenPosition:
     tp_price: float
     tp_order_id: Optional[str] = None
     open_ts_ms: int = 0
+    # Per-position STOP_MARKET (real-time SL)
+    sl_price: Optional[float] = None
+    sl_order_id: Optional[str] = None
 
 
 @dataclass
@@ -137,10 +140,14 @@ class GridManager:
 
     def __init__(self, exchange, symbol: str, state: GridState,
                   state_manager: StateManager, spacing_pct: float,
-                  notional_callback=None, journal_path: str = None):
+                  notional_callback=None, journal_path: str = None,
+                  per_position_sl_enabled: bool = False,
+                  per_position_sl_pct: float = 2.0):
         """
         notional_callback: optional function returning current per_level_notional.
         journal_path: optional path for structured JSONL trade journal.
+        per_position_sl_enabled: if True, places STOP_MARKET on exchange per fill.
+        per_position_sl_pct: trigger distance from entry (% adverse).
         """
         self.ex = exchange
         self.symbol = symbol
@@ -151,6 +158,8 @@ class GridManager:
         self.journal_path = Path(journal_path) if journal_path else None
         if self.journal_path:
             self.journal_path.parent.mkdir(parents=True, exist_ok=True)
+        self.per_position_sl_enabled = per_position_sl_enabled
+        self.per_position_sl_pct = per_position_sl_pct / 100
 
     def _journal(self, event: str, **kwargs):
         """Write structured trade journal event (JSONL format)."""
@@ -286,19 +295,98 @@ class GridManager:
         except Exception as e:
             logger.error(f"TP placement failed: {e}")
 
+        # Per-position STOP_MARKET (real-time SL on exchange)
+        sl_price = None
+        sl_order_id = None
+        if self.per_position_sl_enabled:
+            if pos_side == 'long':
+                sl_price = level.price * (1 - self.per_position_sl_pct)
+            else:
+                sl_price = level.price * (1 + self.per_position_sl_pct)
+            try:
+                # BingX STOP_MARKET via reduceOnly close order with stopPrice
+                if pos_side == 'long':
+                    sl_order = self.ex.create_order(
+                        self.symbol, 'STOP_MARKET', 'sell', qty_btc, None,
+                        {'positionSide': 'BOTH', 'reduceOnly': True,
+                         'stopPrice': sl_price, 'triggerType': 'MARK_PRICE'}
+                    )
+                else:
+                    sl_order = self.ex.create_order(
+                        self.symbol, 'STOP_MARKET', 'buy', qty_btc, None,
+                        {'positionSide': 'BOTH', 'reduceOnly': True,
+                         'stopPrice': sl_price, 'triggerType': 'MARK_PRICE'}
+                    )
+                sl_order_id = sl_order.get('id')
+                logger.info(f"SL placed: side={pos_side}, qty={qty_btc:.6f}, "
+                             f"entry={level.price:.2f}, sl={sl_price:.2f} "
+                             f"({self.per_position_sl_pct*100:.2f}% adverse), "
+                             f"sl_order_id={sl_order_id}")
+            except Exception as e:
+                logger.error(f"SL placement failed: {e} (position open without exchange SL)")
+
         pos = OpenPosition(
             side=pos_side, entry_price=level.price,  # use level.price (BT parity)
             notional_usd=level.notional_usd, qty_btc=qty_btc,
             grid_level_idx=level.level_idx, grid_level_side=level.side,
             tp_price=tp_price, tp_order_id=tp_order_id,
             open_ts_ms=level.fill_ts_ms,
+            sl_price=sl_price, sl_order_id=sl_order_id,
         )
         self.state.open_positions.append(pos)
         self._journal('grid_fill', side=pos_side, level_idx=level.level_idx,
                        grid_side=level.side, entry_price=level.price,
                        fill_price_actual=level.fill_price, qty_btc=qty_btc,
                        notional_usd=level.notional_usd, tp_price=tp_price,
-                       tp_order_id=tp_order_id)
+                       tp_order_id=tp_order_id,
+                       sl_price=sl_price, sl_order_id=sl_order_id)
+
+    def check_sl_fills(self):
+        """Poll SL orders for fills → if SL hit, position closed at exchange.
+        Cancel paired TP order, remove from open positions, replace grid level."""
+        if not self.per_position_sl_enabled:
+            return
+        remaining = []
+        for pos in self.state.open_positions:
+            if not pos.sl_order_id:
+                remaining.append(pos)
+                continue
+            try:
+                order = self.ex.fetch_order(pos.sl_order_id, self.symbol)
+                status = order.get('status')
+                if status == 'closed':
+                    # SL triggered — position closed
+                    fill_price = float(order.get('average') or order.get('price') or pos.sl_price)
+                    realized_pnl_pct = (fill_price - pos.entry_price) / pos.entry_price * 100
+                    if pos.side == 'short':
+                        realized_pnl_pct = -realized_pnl_pct
+                    friction_pct = 0.07  # taker SL exit
+                    net_pnl_pct = realized_pnl_pct - friction_pct
+                    hold_seconds = (int(time.time() * 1000) - pos.open_ts_ms) / 1000
+                    logger.warning(f"SL TRIGGERED: side={pos.side}, entry={pos.entry_price:.2f}, "
+                                    f"sl={pos.sl_price:.2f}, fill={fill_price:.2f}, "
+                                    f"loss={realized_pnl_pct:+.4f}%, hold={hold_seconds/60:.1f}min")
+                    self._journal('sl_triggered', side=pos.side, entry_price=pos.entry_price,
+                                   sl_price=pos.sl_price, fill_price=fill_price,
+                                   gross_pnl_pct=realized_pnl_pct, net_pnl_pct=net_pnl_pct,
+                                   hold_seconds=hold_seconds,
+                                   level_idx=pos.grid_level_idx, grid_side=pos.grid_level_side)
+                    # Cancel paired TP
+                    if pos.tp_order_id:
+                        try:
+                            self.ex.cancel_order(pos.tp_order_id, self.symbol)
+                        except Exception as e:
+                            logger.warning(f"TP cancel after SL trigger failed: {e}")
+                    # Replace grid level
+                    self._replace_grid_level(pos)
+                    # Don't add back to open_positions
+                else:
+                    remaining.append(pos)
+            except Exception as e:
+                logger.warning(f"SL fetch_order {pos.sl_order_id} failed: {e}")
+                remaining.append(pos)
+        self.state.open_positions = remaining
+        self.sm.save(self.state)
 
     # -------- TP fill detection --------
     def check_tp_fills(self):
@@ -312,6 +400,12 @@ class GridManager:
                 order = self.ex.fetch_order(pos.tp_order_id, self.symbol)
                 status = order.get('status')
                 if status == 'closed':
+                    # TP filled — cancel paired SL order to avoid double-close
+                    if pos.sl_order_id:
+                        try:
+                            self.ex.cancel_order(pos.sl_order_id, self.symbol)
+                        except Exception as e:
+                            logger.warning(f"SL cancel failed for {pos.sl_order_id} (may already be filled/cancelled): {e}")
                     fill_price = float(order.get('average') or order.get('price') or pos.tp_price)
                     realized_pnl_pct = (fill_price - pos.entry_price) / pos.entry_price * 100
                     if pos.side == 'short':
@@ -421,13 +515,18 @@ class GridManager:
                     logger.warning(f"Cancel order {level.order_id} failed: {e}")
                 level.order_id = None
 
-        # Cancel TP orders + market close positions
+        # Cancel TP + SL orders + market close positions
         for pos in self.state.open_positions:
             if pos.tp_order_id:
                 try:
                     self.ex.cancel_order(pos.tp_order_id, self.symbol)
                 except Exception as e:
                     logger.warning(f"Cancel TP {pos.tp_order_id} failed: {e}")
+            if pos.sl_order_id:
+                try:
+                    self.ex.cancel_order(pos.sl_order_id, self.symbol)
+                except Exception as e:
+                    logger.warning(f"Cancel SL {pos.sl_order_id} failed: {e}")
 
             # Market close
             try:

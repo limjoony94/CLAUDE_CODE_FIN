@@ -11,6 +11,11 @@ strategy:
   atr_period: 20
   atr_pct_median_lookback_bars: 720  # 30 days at 1h
 
+  # Per-position STOP_MARKET (real-time SL on exchange, fix for 5min poll latency)
+  per_position_stop_loss_enabled: true
+  per_position_stop_loss_pct: 2.0   # 2.0% adverse from entry → exchange-side STOP_MARKET
+                                      # Cleanly between 1.5% trend_exit and 24.88% liquidation
+
 risk:
   # Auto-size from account balance (NEW)
   auto_size_from_balance: true   # if true: per_level_notional = balance × util × leverage / total_levels
@@ -22,8 +27,9 @@ risk:
   halt_daily_loss_pct: 3.0       # daily NAV < -3% → halt
   halt_30d_loss_pct: 10.0        # 30d cum NAV < -10% → halt
   halt_consecutive_api_errors: 10
-  halt_emergency_adverse_pct: 9.0  # 5m candle adverse > 9% on open position → emergency close
-                                    # (just below L=10× liquidation threshold 9.95%)
+  halt_emergency_adverse_pct: 20.0  # adverse > 20% on open position → emergency close
+                                    # At trading_leverage=4×: liquidation = 24.88% → 4.88pp safety buffer
+                                    # (was 9.0% mis-calibrated for 10× leverage; corrected for 4×)
 
 exchange:
   symbol: BTC/USDT:USDT  # CCXT format for BingX BTC perpetual swap

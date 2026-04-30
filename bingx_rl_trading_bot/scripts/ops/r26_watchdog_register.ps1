@@ -16,6 +16,7 @@ $TaskName = 'R26GridBotWatchdog'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $watchdogScript = Join-Path $scriptDir 'r26_watchdog.ps1'
+$silentLauncher = Join-Path $scriptDir 'r26_watchdog_silent.vbs'
 
 if ($Action -eq 'Status') {
     & schtasks /Query /TN $TaskName /V /FO LIST 2>&1 | Out-Host
@@ -27,12 +28,13 @@ if ($Action -eq 'Unregister') {
     exit 0
 }
 
-# Register: every 5 min using schtasks
-# /SC MINUTE /MO 5 = every 5 minutes
-$cmd = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$watchdogScript`""
+# Register: every 5 min using schtasks via SILENT VBS launcher (no window popup)
+# wscript.exe runs .vbs without console window, .vbs launches PowerShell with vbHide
+$cmd = "wscript.exe `"$silentLauncher`""
 
-Write-Host "Registering scheduled task '$TaskName'..."
-Write-Host "  Watchdog: $watchdogScript"
+Write-Host "Registering scheduled task '$TaskName' (silent VBS wrapper)..."
+Write-Host "  VBS launcher: $silentLauncher"
+Write-Host "  Watchdog logic: $watchdogScript"
 Write-Host "  Interval: every 5 min"
 Write-Host "  Command: $cmd"
 Write-Host ""

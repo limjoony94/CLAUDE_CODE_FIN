@@ -49,6 +49,8 @@ class R26GridBot:
             spacing_pct=self.config['strategy']['grid_spacing_pct'],
             notional_callback=self._compute_per_level_notional
         )
+        # Reconcile state vs exchange (catches orphans from crash + race)
+        self._reconcile_state_exchange()
 
     def _init_exchange(self) -> ccxt.bingx:
         ex = ccxt.bingx({
@@ -86,6 +88,71 @@ class R26GridBot:
             logger.error(f"Failed to set leverage {ex_lev}×: {e}. Continuing — verify manually.")
 
         return ex
+
+    def _reconcile_state_exchange(self):
+        """On startup, compare state JSON to actual exchange state.
+
+        Detects:
+        1. State levels with order_id NOT in exchange open orders → order was
+           filled or canceled while bot was offline
+        2. Exchange open orders NOT in state → orphan orders, cancel them
+        3. Exchange positions NOT in state.open_positions → orphan positions,
+           emergency close them (no TP, can't predict behavior)
+        """
+        if not self.state.active:
+            logger.info("State inactive — skipping reconciliation")
+            return
+
+        try:
+            open_orders = self.exchange.fetch_open_orders(self.symbol)
+            open_order_ids = {str(o.get('id')) for o in open_orders}
+            logger.info(f"Reconciliation: {len(open_orders)} open orders on exchange")
+
+            # Check state levels — order_id should be in exchange open orders
+            state_order_ids = set()
+            stale_levels = []
+            for level in (self.state.buy_levels + self.state.sell_levels):
+                if level.order_id and not level.filled:
+                    state_order_ids.add(str(level.order_id))
+                    if str(level.order_id) not in open_order_ids:
+                        stale_levels.append(level)
+
+            for level in stale_levels:
+                logger.warning(f"Stale state level (order missing from exchange): "
+                                f"side={level.side} lv={level.level_idx} "
+                                f"order_id={level.order_id} — clearing order_id, "
+                                f"force_close_all triggered")
+            if stale_levels:
+                logger.warning("Triggering force_close_all due to stale state — "
+                                "safer than running with unknown order status")
+                self.grid.force_close_all(reason='RECONCILE_STALE_STATE')
+                return
+
+            # Check for orphan orders on exchange (in exchange, not in state)
+            orphan_orders = [oid for oid in open_order_ids if oid not in state_order_ids]
+            if orphan_orders:
+                logger.warning(f"Orphan orders on exchange (not tracked by bot): "
+                                f"{orphan_orders} — cancelling")
+                for oid in orphan_orders:
+                    try:
+                        self.exchange.cancel_order(oid, self.symbol)
+                    except Exception as e:
+                        logger.error(f"Failed to cancel orphan {oid}: {e}")
+
+            # Check positions
+            positions = self.exchange.fetch_positions([self.symbol])
+            actual_positions = [p for p in positions if abs(float(p.get('contracts') or 0)) > 0]
+            tracked_qty = sum(abs(p.qty_btc) for p in self.state.open_positions)
+            actual_qty = sum(abs(float(p.get('contracts') or 0)) for p in actual_positions)
+            logger.info(f"Reconciliation: tracked positions qty={tracked_qty:.6f}, "
+                          f"exchange actual qty={actual_qty:.6f}")
+            if abs(tracked_qty - actual_qty) > 0.0005:  # 0.0005 BTC tolerance
+                logger.warning(f"Position qty mismatch: state {tracked_qty:.6f} vs "
+                                f"exchange {actual_qty:.6f}. force_close_all to clean state")
+                self.grid.force_close_all(reason='RECONCILE_POS_MISMATCH')
+
+        except Exception as e:
+            logger.error(f"Reconciliation failed (non-fatal, continuing): {e}")
 
     def fetch_recent_candles(self) -> pd.DataFrame:
         """Fetch last N bars of timeframe candles for ranging filter."""

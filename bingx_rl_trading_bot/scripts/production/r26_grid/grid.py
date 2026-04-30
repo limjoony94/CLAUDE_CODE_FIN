@@ -113,12 +113,19 @@ class GridManager:
     """Manage grid lifecycle: setup, fill detection, TP placement, force close."""
 
     def __init__(self, exchange, symbol: str, state: GridState,
-                  state_manager: StateManager, spacing_pct: float):
+                  state_manager: StateManager, spacing_pct: float,
+                  notional_callback=None):
+        """
+        notional_callback: optional function returning current per_level_notional.
+            If set, called on each TP fill to recompute grid size from latest balance
+            (per-TP compound). Otherwise grid uses fixed initial notional.
+        """
         self.ex = exchange
         self.symbol = symbol
         self.state = state
         self.sm = state_manager
         self.spacing = spacing_pct / 100
+        self.notional_callback = notional_callback
 
     # -------- Grid setup --------
     def setup_grid(self, init_mid: float, ts_ms: int, levels_each_side: int,
@@ -267,11 +274,29 @@ class GridManager:
         self.sm.save(self.state)
 
     def _replace_grid_level(self, pos: OpenPosition):
-        """After TP fill, restore the grid level for next cycle."""
+        """After TP fill, restore the grid level for next cycle.
+
+        If notional_callback is set, recomputes per-level notional from current
+        balance (per-TP compound). Otherwise uses original level notional.
+        """
         levels = self.state.buy_levels if pos.grid_level_side == 'buy' else self.state.sell_levels
         if pos.grid_level_idx >= len(levels):
             return
         level = levels[pos.grid_level_idx]
+
+        # Per-TP compound: recompute notional from latest balance
+        if self.notional_callback is not None:
+            try:
+                new_notional = self.notional_callback()
+                if new_notional > 0:
+                    old = level.notional_usd
+                    level.notional_usd = new_notional
+                    if abs(new_notional - old) > 0.01:
+                        logger.info(f"Compound update lv {pos.grid_level_idx}: "
+                                     f"${old:.2f} → ${new_notional:.2f}")
+            except Exception as e:
+                logger.warning(f"Notional recompute failed (using old): {e}")
+
         try:
             qty = level.notional_usd / level.price
             if level.side == 'buy':
@@ -289,7 +314,8 @@ class GridManager:
             level.fill_price = None
             level.fill_ts_ms = None
             logger.info(f"Grid level re-placed: side={level.side}, lv={level.level_idx}, "
-                         f"price={level.price:.2f}, order_id={level.order_id}")
+                         f"price={level.price:.2f}, qty={qty:.6f}, "
+                         f"notional=${level.notional_usd:.2f}, order_id={level.order_id}")
         except Exception as e:
             logger.error(f"Grid level replacement failed: {e}")
 

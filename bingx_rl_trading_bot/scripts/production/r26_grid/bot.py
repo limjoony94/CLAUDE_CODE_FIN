@@ -43,9 +43,11 @@ class R26GridBot:
         self.exchange = self._init_exchange()
         self.sm = StateManager(self.config['logging']['state_path'])
         self.state = self.sm.load()
+        # Pass notional_callback for per-TP compound (re-computes size on each TP fill)
         self.grid = GridManager(
             self.exchange, self.symbol, self.state, self.sm,
-            spacing_pct=self.config['strategy']['grid_spacing_pct']
+            spacing_pct=self.config['strategy']['grid_spacing_pct'],
+            notional_callback=self._compute_per_level_notional
         )
 
     def _init_exchange(self) -> ccxt.bingx:

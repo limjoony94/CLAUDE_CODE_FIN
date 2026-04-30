@@ -12,11 +12,11 @@ strategy:
   atr_pct_median_lookback_bars: 720  # 30 days at 1h
 
 risk:
-  # User manually adjusts via per_level_notional_usd
-  per_level_notional_usd: 150    # MANUALLY MANAGED (user said: margin 사용자 수동 조절)
-                                  # At L=10× exchange / 10× trading: $150 notional, $15 margin
-                                  # At L=10× exchange / 1× trading: $150 notional, $150 margin
-                                  # User must size based on capital + leverage choice
+  # Auto-size from account balance (NEW)
+  auto_size_from_balance: true   # if true: per_level_notional = balance × util × leverage / total_levels
+  balance_utilization_pct: 100   # use 100% of balance as max margin
+  # Manual fallback if auto_size_from_balance: false
+  per_level_notional_usd: 150    # ignored when auto_size_from_balance=true
 
   # Hard halts (auto sys.exit)
   halt_daily_loss_pct: 3.0       # daily NAV < -3% → halt

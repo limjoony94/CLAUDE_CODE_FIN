@@ -13,6 +13,8 @@ DEFAULT_CONFIG = {
         'atr_pct_median_lookback_bars': 720,
     },
     'risk': {
+        'auto_size_from_balance': False,
+        'balance_utilization_pct': 100,
         'per_level_notional_usd': 150,
         'halt_daily_loss_pct': 3.0,
         'halt_30d_loss_pct': 10.0,
@@ -86,8 +88,12 @@ def load_config(path: str = 'config/r26_grid_config.yaml') -> dict:
 
     if r['halt_daily_loss_pct'] <= 0 or r['halt_daily_loss_pct'] > 50:
         raise ValueError(f"halt_daily_loss_pct {r['halt_daily_loss_pct']}% out of sane range")
-    if r['per_level_notional_usd'] <= 0:
-        raise ValueError(f"per_level_notional_usd must be positive: {r['per_level_notional_usd']}")
+    if not r.get('auto_size_from_balance', False):
+        if r['per_level_notional_usd'] <= 0:
+            raise ValueError(f"per_level_notional_usd must be positive: {r['per_level_notional_usd']}")
+    util = r.get('balance_utilization_pct', 100)
+    if util <= 0 or util > 100:
+        raise ValueError(f"balance_utilization_pct {util}% out of range (0, 100]")
 
     return config
 

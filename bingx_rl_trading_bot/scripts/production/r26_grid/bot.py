@@ -210,13 +210,38 @@ class R26GridBot:
 
         # 5. Setup new grid if no active grid + ranging
         if not self.state.active and ranging:
-            logger.info(f"Setting up new grid at mid={current_price:.2f}")
+            per_level_notional = self._compute_per_level_notional()
+            logger.info(f"Setting up new grid at mid={current_price:.2f}, "
+                         f"per_level_notional=${per_level_notional:.2f}")
             self.grid.setup_grid(
                 init_mid=current_price,
                 ts_ms=current_ts_ms,
                 levels_each_side=self.config['strategy']['grid_levels_each_side'],
-                per_level_notional_usd=self.config['risk']['per_level_notional_usd']
+                per_level_notional_usd=per_level_notional
             )
+
+    def _compute_per_level_notional(self) -> float:
+        """Compute per-level notional based on auto-size mode.
+
+        If auto_size_from_balance: per_level = balance × util × leverage / total_levels
+        Else: use fixed per_level_notional_usd from config.
+        """
+        risk_cfg = self.config['risk']
+        if risk_cfg.get('auto_size_from_balance', False):
+            equity = self.get_account_equity()
+            if equity <= 0:
+                logger.error(f"Cannot fetch balance for auto-size; "
+                              f"falling back to fixed ${risk_cfg['per_level_notional_usd']}")
+                return float(risk_cfg['per_level_notional_usd'])
+            util = risk_cfg.get('balance_utilization_pct', 100) / 100
+            leverage = self.config['exchange']['exchange_leverage']
+            total_levels = 2 * self.config['strategy']['grid_levels_each_side']
+            per_level = (equity * util * leverage) / total_levels
+            logger.info(f"Auto-sized per_level_notional=${per_level:.2f} "
+                          f"from balance ${equity:.2f} × util {util*100:.0f}% × "
+                          f"leverage {leverage}× / {total_levels} levels")
+            return per_level
+        return float(risk_cfg['per_level_notional_usd'])
 
     def run(self):
         """Main loop."""

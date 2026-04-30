@@ -1,0 +1,176 @@
+{
+  "date": "2026-04-30T23:44:31.471976+00:00",
+  "n_candidates": 10,
+  "rankings": [
+    {
+      "name": "C2_funding_zscore_spread",
+      "verdict": "CAUTION",
+      "total_score": 3.9539999999999997,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Long high-funding coin perp + short low-funding coin perp when z-score divergence > 2. Pair-trade harvesting funding gap.",
+      "most_similar_kb": "R5_single_carry",
+      "similarity": 0.6249999999999999,
+      "dimensions": {
+        "friction_arithmetic": 0.7,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.3750000000000001,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.5389999999999999,
+        "gate1_readiness": 1.0
+      }
+    },
+    {
+      "name": "C9_basis_widening_event",
+      "verdict": "CAUTION",
+      "total_score": 3.898,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Quiet most of the time; opens BTC spot-perp basis trade only when basis Z-score > 2.5 (rare event). Lower trade count, higher per-trade quality.",
+      "most_similar_kb": "R5_single_carry",
+      "similarity": 0.7499999999999999,
+      "dimensions": {
+        "friction_arithmetic": 1.0,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.2500000000000001,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.308,
+        "gate1_readiness": 1.0
+      }
+    },
+    {
+      "name": "C5_basis_momentum_filter",
+      "verdict": "CAUTION",
+      "total_score": 3.753,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "R5 single-coin carry gated by 30d momentum filter. Skip carry during downtrends (typical funding compression / basis collapse periods).",
+      "most_similar_kb": "R5_single_carry",
+      "similarity": 0.8749999999999998,
+      "dimensions": {
+        "friction_arithmetic": 0.7,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.12500000000000022,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.5879999999999999,
+        "gate1_readiness": 1.0
+      }
+    },
+    {
+      "name": "C10_xs_volatility_carry",
+      "verdict": "CAUTION",
+      "total_score": 3.592,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Cross-sectional low-vol anomaly: short high-vol coin, long low-vol coin. Daily rebal. Tested in equities (Frazzini-Pedersen 2014) but not retail crypto.",
+      "most_similar_kb": "PathB_R1_xs_momentum",
+      "similarity": 0.7499999999999999,
+      "dimensions": {
+        "friction_arithmetic": 0.7,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.2500000000000001,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.462,
+        "gate1_readiness": 0.84
+      }
+    },
+    {
+      "name": "C8_daily_xs_pure_carry_combo",
+      "verdict": "CAUTION",
+      "total_score": 3.543,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Long top-funding-rate coin (collect funding) + short bottom-funding coin (collect funding) hedged by spot. Two-sided carry.",
+      "most_similar_kb": "R5_single_carry",
+      "similarity": 0.6249999999999999,
+      "dimensions": {
+        "friction_arithmetic": 0.4,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.3750000000000001,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.5879999999999999,
+        "gate1_readiness": 0.84
+      }
+    },
+    {
+      "name": "C1_dispersion_carry",
+      "verdict": "CAUTION",
+      "total_score": 3.494,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Top-2 widest 7d-funding-rate coins, weekly rebal, hedge with spot. Avoids R13 equal-weight dilution.",
+      "most_similar_kb": "R5_single_carry",
+      "similarity": 0.7499999999999999,
+      "dimensions": {
+        "friction_arithmetic": 0.4,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.2500000000000001,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.504,
+        "gate1_readiness": 1.0
+      }
+    },
+    {
+      "name": "C3_xs_momentum_sentiment_gated",
+      "verdict": "CAUTION",
+      "total_score": 3.3899999999999997,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "XS momentum (top-2 / bottom-2 8-coin) gated by aggregate sentiment (LSI / fear-greed / funding z-score). Skip entries in regime conflicts. Builds on PathB-R1.",
+      "most_similar_kb": "PathB_R1_xs_momentum",
+      "similarity": 0.8749999999999998,
+      "dimensions": {
+        "friction_arithmetic": 0.7,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.12500000000000022,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.385,
+        "gate1_readiness": 0.84
+      }
+    },
+    {
+      "name": "C7_funding_taker_skim",
+      "verdict": "CAUTION",
+      "total_score": 3.1370000000000005,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Just-in-time funding skim: open spot+perp 1h before funding payment, hold through tick, close. Eliminates 7h holding cost vs continuous carry.",
+      "most_similar_kb": "R5_single_carry",
+      "similarity": 0.8749999999999998,
+      "dimensions": {
+        "friction_arithmetic": 0.0,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.12500000000000022,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.6719999999999999,
+        "gate1_readiness": 1.0
+      }
+    },
+    {
+      "name": "C4_regime_ensemble",
+      "verdict": "CAUTION",
+      "total_score": 3.1025,
+      "level_eligible": "L1_only_with_caveats",
+      "description": "Regime detector \u2192 activates carry (high-funding) / grid (low-vol ranging) / MR (mid-vol) sub-strategies. R26 grid bug NOT replicated (re-arm modeled).",
+      "most_similar_kb": "R26_grid_ranging",
+      "similarity": 0.8749999999999998,
+      "dimensions": {
+        "friction_arithmetic": 0.7,
+        "capital_scale_binding": 0.4,
+        "mechanism_novelty": 0.06250000000000011,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.7,
+        "gate1_readiness": 0.24
+      }
+    },
+    {
+      "name": "C6_multi_grid_volatility_conditional",
+      "verdict": "BLOCK",
+      "total_score": 2.395,
+      "level_eligible": "rejected",
+      "description": "R26 variant w/ multi-coin (BTC/ETH/SOL) grid pool, regime filter requires ALL pairs in low-vol ranging. Re-arm AND halt properly modeled.",
+      "most_similar_kb": "R26_grid_ranging",
+      "similarity": 0.7499999999999999,
+      "dimensions": {
+        "friction_arithmetic": 0.4,
+        "capital_scale_binding": 0.34,
+        "mechanism_novelty": 0.12500000000000006,
+        "substrate_availability": 1.0,
+        "path_dependent_failure": 0.44000000000000006,
+        "gate1_readiness": 0.09
+      }
+    }
+  ]
+}

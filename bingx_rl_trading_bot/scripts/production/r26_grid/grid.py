@@ -15,6 +15,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+# Module-level imports (used by _journal)
+
 logger = logging.getLogger('r26_grid.grid')
 
 
@@ -135,11 +137,10 @@ class GridManager:
 
     def __init__(self, exchange, symbol: str, state: GridState,
                   state_manager: StateManager, spacing_pct: float,
-                  notional_callback=None):
+                  notional_callback=None, journal_path: str = None):
         """
         notional_callback: optional function returning current per_level_notional.
-            If set, called on each TP fill to recompute grid size from latest balance
-            (per-TP compound). Otherwise grid uses fixed initial notional.
+        journal_path: optional path for structured JSONL trade journal.
         """
         self.ex = exchange
         self.symbol = symbol
@@ -147,6 +148,24 @@ class GridManager:
         self.sm = state_manager
         self.spacing = spacing_pct / 100
         self.notional_callback = notional_callback
+        self.journal_path = Path(journal_path) if journal_path else None
+        if self.journal_path:
+            self.journal_path.parent.mkdir(parents=True, exist_ok=True)
+
+    def _journal(self, event: str, **kwargs):
+        """Write structured trade journal event (JSONL format)."""
+        if not self.journal_path:
+            return
+        record = {
+            'ts_utc': datetime.now(timezone.utc).isoformat(),
+            'event': event,
+            **kwargs
+        }
+        try:
+            with open(self.journal_path, 'a') as f:
+                f.write(json.dumps(record, default=str) + '\n')
+        except Exception as e:
+            logger.warning(f"Journal write failed for {event}: {e}")
 
     # -------- Grid setup --------
     def setup_grid(self, init_mid: float, ts_ms: int, levels_each_side: int,
@@ -199,6 +218,11 @@ class GridManager:
         logger.info(f"Grid initialized at mid={init_mid:.2f} with "
                      f"{len(self.state.buy_levels)} buys + "
                      f"{len(self.state.sell_levels)} sells")
+        self._journal('grid_setup', init_mid=init_mid,
+                       per_level_notional_usd=per_level_notional_usd,
+                       levels_each_side=levels_each_side,
+                       buy_levels=[lv.price for lv in self.state.buy_levels],
+                       sell_levels=[lv.price for lv in self.state.sell_levels])
 
     # -------- Fill detection --------
     def check_fills(self, mark_price: float):
@@ -270,6 +294,11 @@ class GridManager:
             open_ts_ms=level.fill_ts_ms,
         )
         self.state.open_positions.append(pos)
+        self._journal('grid_fill', side=pos_side, level_idx=level.level_idx,
+                       grid_side=level.side, entry_price=level.price,
+                       fill_price_actual=level.fill_price, qty_btc=qty_btc,
+                       notional_usd=level.notional_usd, tp_price=tp_price,
+                       tp_order_id=tp_order_id)
 
     # -------- TP fill detection --------
     def check_tp_fills(self):
@@ -287,8 +316,21 @@ class GridManager:
                     realized_pnl_pct = (fill_price - pos.entry_price) / pos.entry_price * 100
                     if pos.side == 'short':
                         realized_pnl_pct = -realized_pnl_pct
+                    # Friction: maker on TP fill, taker on entry (assumed) = 0.07% RT total approx
+                    friction_pct = 0.07
+                    net_pnl_pct = realized_pnl_pct - friction_pct
+                    hold_seconds = (int(time.time() * 1000) - pos.open_ts_ms) / 1000
                     logger.info(f"TP filled: side={pos.side}, entry={pos.entry_price:.2f}, "
-                                 f"exit={fill_price:.2f}, pnl={realized_pnl_pct:+.4f}%")
+                                 f"exit={fill_price:.2f}, gross={realized_pnl_pct:+.4f}%, "
+                                 f"net={net_pnl_pct:+.4f}%, hold={hold_seconds/60:.1f}min")
+                    self._journal('tp_fill', side=pos.side, entry_price=pos.entry_price,
+                                   exit_price=fill_price, qty_btc=pos.qty_btc,
+                                   notional_usd=pos.notional_usd,
+                                   gross_pnl_pct=realized_pnl_pct,
+                                   net_pnl_pct=net_pnl_pct,
+                                   hold_seconds=hold_seconds,
+                                   level_idx=pos.grid_level_idx,
+                                   grid_side=pos.grid_level_side)
                     # Re-place the grid level (reset to pre-fill state)
                     self._replace_grid_level(pos)
                     # Don't add back to open_positions
@@ -323,6 +365,9 @@ class GridManager:
                     if abs(new_notional - old) > 0.01:
                         logger.info(f"Compound update lv {pos.grid_level_idx}: "
                                      f"${old:.2f} → ${new_notional:.2f}")
+                        self._journal('compound_update', level_idx=pos.grid_level_idx,
+                                       grid_side=pos.grid_level_side,
+                                       old_notional_usd=old, new_notional_usd=new_notional)
                 else:
                     logger.warning(f"Compound recompute returned non-positive value; "
                                     f"keeping existing notional ${level.notional_usd:.2f}")
@@ -354,6 +399,17 @@ class GridManager:
 
     # -------- Force close all (trend exit, halt) --------
     def force_close_all(self, reason: str = 'TREND_EXIT'):
+        n_orders_to_cancel = sum(1 for lv in self.state.buy_levels + self.state.sell_levels
+                                  if lv.order_id and not lv.filled)
+        n_positions = len(self.state.open_positions)
+        self._journal('force_close_start', reason=reason,
+                       n_orders_to_cancel=n_orders_to_cancel,
+                       n_positions_to_close=n_positions,
+                       init_mid=self.state.init_mid)
+        self._force_close_all_impl(reason)
+        self._journal('force_close_complete', reason=reason)
+
+    def _force_close_all_impl(self, reason: str = 'TREND_EXIT'):
         """Cancel all open orders + market close all open positions (taker)."""
         # Cancel all grid orders (both filled-tracking but not-yet-tp and unfilled)
         for level in (self.state.buy_levels + self.state.sell_levels):

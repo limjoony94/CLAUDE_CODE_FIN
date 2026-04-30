@@ -36,9 +36,12 @@ DEFAULT_CONFIG = {
     },
     'logging': {
         'log_path': 'logs/r26_grid.log',
+        'journal_path': 'logs/r26_trades.jsonl',
         'state_path': 'results/r26_grid_state.json',
         'log_rotate_daily': True,
         'log_retention_days': 30,
+        'cycle_heartbeat_compact': True,
+        'balance_snapshot_every_n_cycles': 12,
     },
     'api_keys_path': 'config/api_keys.yaml',
 }

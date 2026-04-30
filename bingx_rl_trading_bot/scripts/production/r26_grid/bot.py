@@ -43,14 +43,18 @@ class R26GridBot:
         self.exchange = self._init_exchange()
         self.sm = StateManager(self.config['logging']['state_path'])
         self.state = self.sm.load()
-        # Pass notional_callback for per-TP compound (re-computes size on each TP fill)
+        # Pass notional_callback for per-TP compound + journal_path for trade journal
         self.grid = GridManager(
             self.exchange, self.symbol, self.state, self.sm,
             spacing_pct=self.config['strategy']['grid_spacing_pct'],
-            notional_callback=self._compute_per_level_notional
+            notional_callback=self._compute_per_level_notional,
+            journal_path=self.config['logging'].get('journal_path')
         )
         # Reconcile state vs exchange (catches orphans from crash + race)
         self._reconcile_state_exchange()
+        # Cycle counter for periodic balance snapshot
+        self._cycle_count = 0
+        self._last_cycle_summary = None
 
     def _init_exchange(self) -> ccxt.bingx:
         ex = ccxt.bingx({
@@ -251,9 +255,24 @@ class R26GridBot:
             lookback_bars=self.config['strategy']['atr_pct_median_lookback_bars']
         )
 
-        logger.info(f"Cycle: price={current_price:.2f}, ranging={ranging}, "
-                     f"grid_active={self.state.active}, "
-                     f"open_pos={len(self.state.open_positions)}")
+        # Compact cycle heartbeat: log only on state change OR every N cycles
+        self._cycle_count += 1
+        cycle_summary = (round(current_price, 0), ranging, self.state.active,
+                          len(self.state.open_positions))
+        snapshot_n = self.config['logging'].get('balance_snapshot_every_n_cycles', 12)
+        compact_mode = self.config['logging'].get('cycle_heartbeat_compact', True)
+        should_log_cycle = (
+            (not compact_mode) or
+            (cycle_summary != self._last_cycle_summary) or
+            (self._cycle_count % snapshot_n == 0)
+        )
+        if should_log_cycle:
+            equity = self.get_account_equity() if self._cycle_count % snapshot_n == 0 else None
+            extra = f", equity=${equity:.2f}" if equity and equity > 0 else ""
+            logger.info(f"Cycle: price={current_price:.2f}, ranging={ranging}, "
+                         f"grid_active={self.state.active}, "
+                         f"open_pos={len(self.state.open_positions)}{extra}")
+        self._last_cycle_summary = cycle_summary
 
         # 3. Halt check (BEFORE any new orders)
         halt_reason = self.check_halts()

@@ -41,9 +41,12 @@ bot:
 
 logging:
   log_path: logs/r26_grid.log
+  journal_path: logs/r26_trades.jsonl       # structured trade events (one JSON per line)
   state_path: results/r26_grid_state.json
   log_rotate_daily: true
   log_retention_days: 30
+  cycle_heartbeat_compact: true             # quiet cycle when nothing changes
+  balance_snapshot_every_n_cycles: 12       # log balance every 12 cycles (= 1h at 5min poll)
 
 # API keys path (separate file)
 api_keys_path: config/api_keys.yaml

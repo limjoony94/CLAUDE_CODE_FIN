@@ -296,34 +296,35 @@ class GridManager:
             logger.error(f"TP placement failed: {e}")
 
         # Per-position STOP_MARKET (real-time SL on exchange)
+        # Audit fix (2026-05-01): match C1 production-verified pattern exactly
+        # — round stopPrice to BingX precision (0.1 for BTC perp)
+        # — remove triggerType param (C1 doesn't use it; defaults work)
+        # — use params= keyword arg
         sl_price = None
         sl_order_id = None
         if self.per_position_sl_enabled:
             if pos_side == 'long':
-                sl_price = level.price * (1 - self.per_position_sl_pct)
+                sl_price_raw = level.price * (1 - self.per_position_sl_pct)
+                sl_side = 'sell'
             else:
-                sl_price = level.price * (1 + self.per_position_sl_pct)
+                sl_price_raw = level.price * (1 + self.per_position_sl_pct)
+                sl_side = 'buy'
+            sl_price = round(sl_price_raw, 1)  # BingX BTC perp precision = 0.1
             try:
-                # BingX STOP_MARKET via reduceOnly close order with stopPrice
-                if pos_side == 'long':
-                    sl_order = self.ex.create_order(
-                        self.symbol, 'STOP_MARKET', 'sell', qty_btc, None,
-                        {'positionSide': 'BOTH', 'reduceOnly': True,
-                         'stopPrice': sl_price, 'triggerType': 'MARK_PRICE'}
-                    )
-                else:
-                    sl_order = self.ex.create_order(
-                        self.symbol, 'STOP_MARKET', 'buy', qty_btc, None,
-                        {'positionSide': 'BOTH', 'reduceOnly': True,
-                         'stopPrice': sl_price, 'triggerType': 'MARK_PRICE'}
-                    )
+                sl_order = self.ex.create_order(
+                    self.symbol, 'STOP_MARKET', sl_side, qty_btc,
+                    params={'positionSide': 'BOTH',
+                            'stopPrice': sl_price,
+                            'reduceOnly': True}
+                )
                 sl_order_id = sl_order.get('id')
                 logger.info(f"SL placed: side={pos_side}, qty={qty_btc:.6f}, "
-                             f"entry={level.price:.2f}, sl={sl_price:.2f} "
+                             f"entry={level.price:.2f}, sl={sl_price:.1f} "
                              f"({self.per_position_sl_pct*100:.2f}% adverse), "
                              f"sl_order_id={sl_order_id}")
             except Exception as e:
                 logger.error(f"SL placement failed: {e} (position open without exchange SL)")
+                sl_price = None  # Reset so OpenPosition stores None on failure
 
         pos = OpenPosition(
             side=pos_side, entry_price=level.price,  # use level.price (BT parity)

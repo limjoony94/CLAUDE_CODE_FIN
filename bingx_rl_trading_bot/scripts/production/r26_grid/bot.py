@@ -100,14 +100,27 @@ class R26GridBot:
             raise
 
     def get_account_equity(self) -> float:
-        """Fetch USDT account equity (collateral + unrealized PnL)."""
+        """Fetch USDT TRUE equity (cash + unrealized PnL, excl. reserved margin).
+
+        BingX `total` field via CCXT = `availableMargin` (cash − reservations).
+        For halt logic we need TRUE equity from raw response: info.data.balance.equity.
+        """
         try:
             balance = self.exchange.fetch_balance({'type': 'swap'})
+            # Try BingX raw equity field
+            info = balance.get('info', {})
+            data = info.get('data', {})
+            bal = data.get('balance', {})
+            equity_str = bal.get('equity')
+            if equity_str is not None:
+                return float(equity_str)
+            # Fallback to CCXT 'total' if raw not available
             usdt_total = balance.get('USDT', {}).get('total', 0.0)
+            logger.warning(f"BingX raw equity not found; falling back to CCXT total={usdt_total}")
             return float(usdt_total)
         except Exception as e:
             logger.error(f"fetch_balance failed: {e}")
-            return -1.0  # signal failure
+            return -1.0
 
     def check_halts(self) -> Optional[str]:
         """Return halt reason string if should sys.exit, else None."""

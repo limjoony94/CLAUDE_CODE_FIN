@@ -15,6 +15,7 @@ import time
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
+from typing import Optional
 
 import ccxt
 import pandas as pd
@@ -234,7 +235,3 @@ class R26GridBot:
                 logger.exception(f"Cycle error: {e}")
                 self.consecutive_api_errors += 1
             time.sleep(poll_interval)
-
-
-# Optional import shim
-from typing import Optional

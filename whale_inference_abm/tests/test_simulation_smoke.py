@@ -352,3 +352,88 @@ def test_smoke_different_seed_different_outcome() -> None:
             for i in range(len(log1.trades))
         )
         assert differs, "Different seeds produced identical trade tape — RNG isolation broken"
+
+
+# ============= Day 14-15 acceptance: scale + reproducibility =============
+
+def _hash_trade_tape(trades: list[Any]) -> str:
+    """Canonical trade-tape SHA256 for determinism check. Design Section 9.2."""
+    import hashlib
+    canonical = "\n".join(
+        f"{t.timestamp_ns}|{t.sequence_no}|{t.buyer_agent_id}|{t.seller_agent_id}"
+        f"|{t.buyer_order_id}|{t.seller_order_id}|{t.price:.10f}|{t.size:.10f}"
+        f"|{t.buyer_role.value}|{t.seller_role.value}"
+        for t in trades
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def test_smoke_1k_bars_completes() -> None:
+    """1000-bar smoke (~7-10s expected). Verifies sim scales linearly past 100 bars."""
+    sim = _build_smoke_sim(seed=42, terminal_bars=1000)
+    n_steps = sim.run()
+    assert n_steps > 0
+    assert sim.bar_counter == 1000
+
+
+@pytest.mark.skip(reason="10k bar takes >5min in v1 — perf optimization deferred to G2 (wealth concentration validity needs 10k bars). Re-enable after G2 perf work.")
+def test_smoke_10k_bars_completes() -> None:
+    """10000-bar smoke. Deferred to G2 — leaderboard computation per agent decision is
+    O(N agents × N bars), runtime grows superlinearly. 1k-bar smoke passes (24.75s),
+    confirms determinism + scale up to 1000 bars. G2 will need 10k bars for Gini
+    computation and that's the right time to optimize.
+
+    Per advisor: design Section 11.4 only requires 1000-bar smoke for G0. 10k was a
+    stretch goal. Marking skip + filing perf debt rather than blocking G0 on it.
+    """
+    sim = _build_smoke_sim(seed=42, terminal_bars=10000)
+    n_steps = sim.run()
+    assert n_steps > 0
+    assert sim.bar_counter == 10000
+
+
+def test_trade_tape_byte_identical_same_process() -> None:
+    """Design Section 9.2: same seed → 3 reruns in same process → identical hash."""
+    hashes: list[str] = []
+    for _ in range(3):
+        log = _RecordingLogger()
+        _build_smoke_sim(seed=42, terminal_bars=100, logger=log).run()
+        hashes.append(_hash_trade_tape(log.trades))
+    assert len(set(hashes)) == 1, f"Non-deterministic in same process: {hashes}"
+
+
+def test_trade_tape_byte_identical_cross_process() -> None:
+    """Design Section 9.2: same seed → fresh Python interpreter → identical hash."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    # Inline cross-process script
+    code = (
+        "import sys, hashlib;"
+        f"sys.path.insert(0, r'{Path(__file__).parent.parent}');"
+        "from tests.test_simulation_smoke import _build_smoke_sim, _RecordingLogger, _hash_trade_tape;"
+        "logger = _RecordingLogger();"
+        "_build_smoke_sim(seed=42, terminal_bars=100, logger=logger).run();"
+        "print(_hash_trade_tape(logger.trades))"
+    )
+
+    proc1 = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=120)
+    proc2 = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=120)
+
+    assert proc1.returncode == 0, f"Subprocess 1 failed: {proc1.stderr}"
+    assert proc2.returncode == 0, f"Subprocess 2 failed: {proc2.stderr}"
+
+    h1 = proc1.stdout.strip().split("\n")[-1]
+    h2 = proc2.stdout.strip().split("\n")[-1]
+    assert h1 == h2, f"Cross-process determinism broken: {h1} vs {h2}"
+
+
+def test_orderbook_state_hash_3_reruns_identical() -> None:
+    """Design Section 9.2 secondary: orderbook state_hash() identical across 3 reruns."""
+    hashes = []
+    for _ in range(3):
+        sim = _build_smoke_sim(seed=42, terminal_bars=200)
+        sim.run()
+        hashes.append(sim.orderbook.state_hash())
+    assert len(set(hashes)) == 1, f"Orderbook state_hash drift: {hashes}"

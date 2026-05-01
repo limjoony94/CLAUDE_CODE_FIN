@@ -12,6 +12,11 @@ bingx:
     api_key: "your_mainnet_api_key_here"
     secret_key: "your_mainnet_secret_key_here"
 
+# Coinglass API 키 (free tier)
+# https://www.coinglass.com/api 에서 무료 키 발급
+coinglass:
+  api_key: "your_coinglass_api_key_here"
+
 # 텔레그램 알림 (선택사항)
 telegram:
   bot_token: "your_telegram_bot_token"

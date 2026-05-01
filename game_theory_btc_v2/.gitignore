@@ -1,0 +1,59 @@
+# Data files (large, regeneratable from API)
+data/*.parquet
+data/*.feather
+data/*.csv
+data/*.h5
+data/raw/
+
+# Logs (runtime)
+logs/*.log
+logs/*.txt
+
+# Local config (API keys 등 — 절대 git에 안 들어감)
+config/local_*.yaml
+config/api_keys*.yaml
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/*-checkpoint.ipynb
+notebooks/scratch_*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Experiments scratch
+experiments/**/scratch/
+experiments/**/raw/
+
+# But keep precommit/result markdown
+!experiments/**/precommit.md
+!experiments/**/result.md

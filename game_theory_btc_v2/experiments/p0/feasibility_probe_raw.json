@@ -1,0 +1,109 @@
+{
+  "timestamp_utc": "2026-05-01T13:15:30.075124+00:00",
+  "results": {
+    "binance": {
+      "exchange": "binance",
+      "tests": {
+        "ohlcv_perp_1h": {
+          "ok": true,
+          "err": null,
+          "sample": "[[1777626000000, 77340.1, 77358.5, 77160.0, 77239.3, 3412.386], [1777629600000, 77239.3, 77408.7, 77118.1, 77268.9, 2931.392], [1777633200000, 77268.9, 77588.4, 77232.4, 77429.5, 4473.362]]"
+        },
+        "ohlcv_perp_5m": {
+          "ok": true,
+          "err": null,
+          "sample": "[[1777640100000, 77903.9, 77960.0, 77835.7, 77847.2, 941.831], [1777640400000, 77847.2, 78180.0, 77847.1, 78154.1, 2304.293], [1777640700000, 78154.1, 78180.0, 78106.3, 78159.3, 989.689]]"
+        },
+        "ohlcv_spot_1h": {
+          "ok": true,
+          "err": null,
+          "sample": "[[1777626000000, 77377.48, 77391.99, 77200.15, 77268.55, 355.16559], [1777629600000, 77268.56, 77433.72, 77146.48, 77304.34, 330.99244], [1777633200000, 77303.8, 77600.0, 77263.66, 77463.98, 584.3796]]"
+        },
+        "oi_history": {
+          "ok": true,
+          "err": null,
+          "sample": "[{'symbol': 'BTC/USDT:USDT', 'baseVolume': 97471.389, 'quoteVolume': 7538446972.3989, 'openInterestAmount': 97471.389, 'openInterestValue': 7538446972.3989, 'timestamp': 1777626000000, 'datetime': '2026-05-01T09:00:00.000Z', 'info': {'symbol': 'BTCUSDT', 'sumOpenInterest': '97471.38900000', 'sumOpenInterestValue': '7538446972.39890000', 'CMCCirculatingSupply': '20022918.00000000', 'timestamp': '1777626000000'}}, {'symbol': 'BTC/USDT:USDT', 'baseVolume': 97860.83, 'quoteVolume': 7559256677.292056, 'openInterestAmount': 97860.83, 'openInterestValue': 7559256677.292056, 'timestamp': 1777629600000"
+        },
+        "funding_history": {
+          "ok": true,
+          "err": null,
+          "sample": "[{'info': {'symbol': 'BTCUSDT', 'fundingTime': '1777507200002', 'fundingRate': '-0.00004220', 'markPrice': '75749.80000000'}, 'symbol': 'BTC/USDT:USDT', 'fundingRate': -4.22e-05, 'timestamp': 1777507200002, 'datetime': '2026-04-30T00:00:00.002Z'}, {'info': {'symbol': 'BTCUSDT', 'fundingTime': '1777536000000', 'fundingRate': '-0.00001837', 'markPrice': '76130.00000000'}, 'symbol': 'BTC/USDT:USDT', 'fundingRate': -1.837e-05, 'timestamp': 1777536000000, 'datetime': '2026-04-30T08:00:00.000Z'}, {'info': {'symbol': 'BTCUSDT', 'fundingTime': '1777564800000', 'fundingRate': '-0.00002904', 'markPrice'"
+        }
+      },
+      "loaded": true,
+      "has": {
+        "fetchOHLCV": true,
+        "fetchOpenInterestHistory": true,
+        "fetchFundingRateHistory": true
+      },
+      "perp_symbol_chosen": "BTC/USDT:USDT",
+      "spot_symbol_chosen": "BTC/USDT"
+    },
+    "bingx": {
+      "exchange": "bingx",
+      "tests": {
+        "ohlcv_perp_1h": {
+          "ok": true,
+          "err": null,
+          "sample": "[[1777626000000, 77333.5, 77348.0, 77159.7, 77237.9, 349.3444], [1777629600000, 77238.2, 77396.6, 77114.0, 77261.0, 353.7221], [1777633200000, 77260.8, 77566.6, 77215.5, 77422.2, 525.6025]]"
+        },
+        "ohlcv_perp_5m": {
+          "ok": true,
+          "err": null,
+          "sample": "[[1777640100000, 77905.9, 77962.0, 77851.9, 77853.3, 65.0874], [1777640400000, 77853.1, 78180.9, 77853.1, 78157.2, 211.9267], [1777640700000, 78157.2, 78183.3, 78118.8, 78163.1, 114.326]]"
+        },
+        "ohlcv_spot_1h": {
+          "ok": true,
+          "err": null,
+          "sample": "[[1777626000000, 77376.93, 77391.99, 77206.54, 77268.54, 89.912917], [1777629600000, 77268.54, 77427.81, 77151.69, 77303.79, 98.187063], [1777633200000, 77303.79, 77592.69, 77267.2, 77466.34, 209.861696]]"
+        },
+        "oi_history": {
+          "ok": false,
+          "err": "not_supported_by_ccxt",
+          "sample": null
+        },
+        "funding_history": {
+          "ok": true,
+          "err": null,
+          "sample": "[{'info': {'symbol': 'BTC-USDT', 'fundingRate': '-0.00004360', 'fundingTime': '1777507200000', 'markPrice': '75751.6'}, 'symbol': 'BTC/USDT:USDT', 'fundingRate': -4.36e-05, 'timestamp': 1777507200000, 'datetime': '2026-04-30T00:00:00.000Z'}, {'info': {'symbol': 'BTC-USDT', 'fundingRate': '-0.00002800', 'fundingTime': '1777536000000', 'markPrice': '76127.1'}, 'symbol': 'BTC/USDT:USDT', 'fundingRate': -2.8e-05, 'timestamp': 1777536000000, 'datetime': '2026-04-30T08:00:00.000Z'}, {'info': {'symbol': 'BTC-USDT', 'fundingRate': '-0.00008000', 'fundingTime': '1777564800000', 'markPrice': '76426.6'},"
+        }
+      },
+      "loaded": true,
+      "has": {
+        "fetchOHLCV": true,
+        "fetchOpenInterestHistory": null,
+        "fetchFundingRateHistory": true
+      },
+      "perp_symbol_chosen": "BTC/USDT:USDT",
+      "spot_symbol_chosen": "BTC/USDT"
+    },
+    "coinglass": {
+      "endpoints": [
+        {
+          "name": "v2 liquidation_history h1",
+          "url": "https://open-api.coinglass.com/public/v2/liquidation_history",
+          "status": 200,
+          "content_preview": "{\"code\":\"30001\",\"msg\":\"API key missing.\",\"success\":false}"
+        },
+        {
+          "name": "v2 liquidation",
+          "url": "https://open-api.coinglass.com/public/v2/liquidation",
+          "status": 500,
+          "content_preview": "{\"timestamp\":1777641342298,\"status\":500,\"error\":\"Internal Server Error\",\"message\":\"\",\"path\":\"/public/v2/liquidation\"}"
+        },
+        {
+          "name": "v3 liquidation aggregated history",
+          "url": "https://open-api-v3.coinglass.com/api/futures/liquidation/aggregated-history",
+          "status": 200,
+          "content_preview": "{\"code\":\"30001\",\"msg\":\"API key missing.\",\"success\":false}"
+        },
+        {
+          "name": "v3 liquidation history",
+          "url": "https://open-api-v3.coinglass.com/api/futures/liquidation/history",
+          "status": 200,
+          "content_preview": "{\"code\":\"30001\",\"msg\":\"API key missing.\",\"success\":false}"
+        }
+      ]
+    }
+  }
+}

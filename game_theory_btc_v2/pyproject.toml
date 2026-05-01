@@ -1,0 +1,25 @@
+[project]
+name = "game_theory_btc_v2"
+version = "0.0.1"
+description = "Game-theoretic force-flow BTC perpetual futures research framework (mandate v2)"
+requires-python = ">=3.10"
+authors = [{name = "임준영"}]
+readme = "README.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+
+[tool.coverage.run]
+source = ["scripts"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]

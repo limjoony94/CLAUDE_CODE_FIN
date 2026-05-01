@@ -1,0 +1,41 @@
+{
+  "timestamp_utc": "2026-05-01T13:34:20.240308+00:00",
+  "key_masked": "f8fb52...83c5",
+  "results": [
+    {
+      "name": "v3 liq aggregated-history (CG-API-KEY)",
+      "status": 200,
+      "preview": "{\"code\": \"401\", \"msg\": \"Upgrade plan\", \"success\": false}"
+    },
+    {
+      "name": "v3 liq history (CG-API-KEY)",
+      "status": 200,
+      "preview": "{\"code\": \"401\", \"msg\": \"Upgrade plan\", \"success\": false}"
+    },
+    {
+      "name": "v3 liq aggregated-coin-history",
+      "status": 500,
+      "preview": "{\"timestamp\": 1777642459138, \"status\": 500, \"error\": \"Internal Server Error\", \"message\": \"\", \"path\": \"/api/futures/liquidation/aggregated-coin-history\"}"
+    },
+    {
+      "name": "v3 funding rate history",
+      "status": 200,
+      "preview": "{\"code\": \"401\", \"msg\": \"Upgrade plan\", \"success\": false}"
+    },
+    {
+      "name": "v3 open interest aggregated history",
+      "status": 200,
+      "preview": "{\"code\": \"401\", \"msg\": \"Upgrade plan\", \"success\": false}"
+    },
+    {
+      "name": "v2 liquidation_history h1 (coinglassSecret)",
+      "status": 200,
+      "preview": "{\"code\": \"401\", \"msg\": \"Upgrade plan\", \"success\": false}"
+    },
+    {
+      "name": "v2 liquidation_history h1 (CG-API-KEY)",
+      "status": 200,
+      "preview": "{\"code\": \"30001\", \"msg\": \"API key missing.\", \"success\": false}"
+    }
+  ]
+}

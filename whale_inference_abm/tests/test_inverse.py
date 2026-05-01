@@ -258,3 +258,155 @@ def test_signature_recovers_canonical_families_above_null_baseline() -> None:
         f"Signature ARI {ari:.3f} below null+0.4 = {threshold:.3f}. "
         f"5-family canonical recovery insufficient."
     )
+
+
+# ============= Anchor C (Parametric Bayes) =============
+
+from inverse.parametric_bayes import (
+    build_feature_matrix,
+    evaluate_per_family_best_representative,
+    evaluate_posteriors,
+    loo_posteriors,
+)
+
+
+def test_parametric_bayes_recovers_canonical_families() -> None:
+    """G1 PASS CRITERION (Anchor C, advisor amendment):
+    Per-family-best-rep evaluation — at least 4/5 families have their best-trades
+    representative agent receive posterior > 50% on correct family.
+    Aggregate threshold also reported as secondary metric.
+    """
+    from tests.test_simulation_smoke import _RecordingLogger, _build_smoke_sim
+
+    logger = _RecordingLogger()
+    sim = _build_smoke_sim(seed=42, terminal_bars=1000, logger=logger)
+    sim.run()
+
+    per_agent = collect_per_agent_actions(logger.trades)
+    family_lookup = {aid: sim.registry.get(aid).family for aid in sim.registry.alive_ids()}
+
+    aids, features, families = build_feature_matrix(per_agent, family_lookup, min_trades=3)
+    posteriors = loo_posteriors(features, families, classifier="logreg")
+
+    # Aggregate evaluation
+    agg = evaluate_posteriors(families, posteriors, threshold=0.5)
+    # Per-family best-rep (advisor amendment)
+    by_family = evaluate_per_family_best_representative(
+        aids, families, posteriors, per_agent, threshold=0.5
+    )
+
+    print(f"\nParametric Bayes G1 evaluation (LogisticRegression + balanced):")
+    print(f"  Aggregate: {agg['n_correct_above_threshold']}/{agg['n_agents']} "
+          f"= {agg['fraction_above_threshold']:.1%} (lenient secondary)")
+    print(f"  Per-family (correct/total):")
+    for fam, (c, t) in agg["per_family_correct"].items():
+        print(f"    {fam}: {c}/{t}")
+
+    print(f"  Per-family-best-rep (PRIMARY criterion):")
+    for fam, info in by_family["per_family_best"].items():
+        verdict = "PASS" if info["passed"] else "FAIL"
+        print(f"    {fam}: rep={info['agent_id']} (n={info['n_trades']}) "
+              f"post={info['posterior_on_true']:.3f} → {verdict}")
+    print(f"  {by_family['families_passed']}/{by_family['families_total']} families pass; "
+          f"4/5 threshold: {'PASS' if by_family['passes_4_of_5'] else 'FAIL'}")
+
+    # PRIMARY: 4/5 families per advisor amendment
+    assert by_family["passes_4_of_5"], (
+        f"Per-family-best-rep: only {by_family['families_passed']}/{by_family['families_total']} "
+        f"families have rep agent with posterior > 50% on correct family (need >= 4/5)"
+    )
+
+
+def test_parametric_bayes_uniform_posterior_structure() -> None:
+    """LOO posteriors should sum to ~1 per agent."""
+    rng = np.random.default_rng(0)
+    features = rng.standard_normal((20, 8))
+    families = ["A", "A", "B", "B", "C"] * 4
+    posteriors = loo_posteriors(features, families)
+    sums = posteriors.sum(axis=1)
+    assert np.allclose(sums, 1.0, atol=1e-9), f"Posterior sums: {sums}"
+
+
+def test_build_feature_matrix_filters_correctly() -> None:
+    per_agent = {
+        "a1": [ActionRecord(0, "buy", "taker", 0.01, 100.0)] * 5,
+        "a2": [ActionRecord(0, "buy", "taker", 0.01, 100.0)] * 2,  # filtered (< 3)
+        "a3": [ActionRecord(0, "buy", "taker", 0.01, 100.0)] * 4,
+        "a4": [ActionRecord(0, "buy", "taker", 0.01, 100.0)] * 5,  # not in family_lookup
+    }
+    family_lookup = {"a1": "fam_x", "a3": "fam_y"}
+    aids, features, families = build_feature_matrix(per_agent, family_lookup, min_trades=3)
+    assert aids == ["a1", "a3"]
+    assert features.shape == (2, 8)
+    assert families == ["fam_x", "fam_y"]
+
+
+# ============= Anchor A (Sequential IRL) =============
+
+from inverse.irl_maxent import (
+    ACTIONS,
+    N_ACTIONS,
+    N_STATES,
+    action_from_record,
+    build_state_context,
+    compute_null_baselines,
+    discretize_state,
+    evaluate_irl_per_agent,
+)
+
+
+def test_action_from_record_4_categories() -> None:
+    assert action_from_record(ActionRecord(0, "buy", "taker", 0.01, 100.0)) == "buy_aggressive"
+    assert action_from_record(ActionRecord(0, "buy", "maker", 0.01, 100.0)) == "buy_passive"
+    assert action_from_record(ActionRecord(0, "sell", "maker", 0.01, 100.0)) == "sell_passive"
+    assert action_from_record(ActionRecord(0, "sell", "taker", 0.01, 100.0)) == "sell_aggressive"
+
+
+def test_discretize_state_corners() -> None:
+    # imb high + trend up
+    assert discretize_state(0.5, 0.001) == 2 * 3 + 0  # trend_up * 3 + imb_bid
+    # imb low + trend down
+    assert discretize_state(-0.5, -0.001) == 0 * 3 + 2
+    # balanced + flat
+    assert discretize_state(0.0, 0.0) == 1 * 3 + 1
+
+
+def test_n_states_n_actions() -> None:
+    assert N_STATES == 9
+    assert N_ACTIONS == 4
+    assert len(ACTIONS) == 4
+
+
+def test_irl_recovers_canonical_policy_above_null() -> None:
+    """G1 PASS CRITERION (Anchor A): IRL accuracy >= max(null) + 15pp on held-out trajectories."""
+    from tests.test_simulation_smoke import _RecordingLogger, _build_smoke_sim
+
+    logger = _RecordingLogger()
+    sim = _build_smoke_sim(seed=42, terminal_bars=1000, logger=logger)
+    sim.run()
+
+    per_agent = collect_per_agent_actions(logger.trades)
+    state_contexts = build_state_context(logger.bar_snapshots, trend_lookback_bars=5)
+
+    # IRL evaluation
+    irl_result = evaluate_irl_per_agent(per_agent, state_contexts, min_trades=5, train_frac=0.8, seed=42)
+    # Null baselines on SAME train/test split
+    null = compute_null_baselines(per_agent, state_contexts, min_trades=5, train_frac=0.8, seed=42)
+
+    max_null = max(null["modal_mean"], null["last_action_mean"], null["uniform_random"])
+    threshold = max_null + 0.15
+
+    print(f"\nIRL G1 evaluation (behavioral cloning baseline):")
+    print(f"  Eligible agents: {irl_result['n_eligible_agents']}")
+    print(f"  IRL mean accuracy: {irl_result['mean_accuracy']:.3f}")
+    print(f"  Null baselines:")
+    print(f"    modal-action mean: {null['modal_mean']:.3f}")
+    print(f"    last-action mean:  {null['last_action_mean']:.3f}")
+    print(f"    uniform random:    {null['uniform_random']:.3f}")
+    print(f"  max(null) + 0.15: {threshold:.3f}")
+    print(f"  Verdict: {'PASS' if irl_result['mean_accuracy'] >= threshold else 'FAIL'}")
+
+    assert irl_result["mean_accuracy"] >= threshold, (
+        f"IRL mean accuracy {irl_result['mean_accuracy']:.3f} below "
+        f"max(null)+0.15 = {threshold:.3f}"
+    )

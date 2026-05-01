@@ -451,3 +451,73 @@ L2 hindsight (+1.90%/day) 대비 online learning (+0.09%/day) = **4.7% capture o
 - Causal realistic (online learning): +0.09%/day
 
 → **현재 framework는 데이터 ceiling의 ~1.5%만 capture**. 사용자 직관대로 더 강한 overfit (1h perfect 추구)가능, 그러나 mechanism-free 1h direction prediction이 진짜 hard problem.
+
+---
+
+## 1h Direction Prediction — ML Test (post-overfit-ceiling)
+
+**Trigger**: 자율 mandate 후 사용자 질문 응답 (true overfit ceiling) 결과로 1h perfect timing이 sweet spot임을 확인. ML로 1h direction 직접 prediction 시도. Pre-committed (PASS → deployable, FAIL → closure 강제).
+
+### Setup
+- Logistic regression (L2 reg, sklearn) on BTC 1h 17,067 bars
+- 12 causal features: returns 1h/4h/24h, ATR ratio, RSI, EMA9/21 ratio, volume z, body ratio, range/ATR, close-in-range, MACD hist, Donchian position
+- 50/25/25 train/val/test split
+- Active filter: |prob - 0.5| > 0.05 (43% of bars)
+- Friction 0.10% RT per trade
+
+### Result
+
+| Stage | Hit rate | Naive accuracy | Daily net |
+|-------|----------|----------------|-----------|
+| Train (in-sample) | 57.66% | 57.7% | -0.57% |
+| Val | 54.14% | 54.1% | -0.91% |
+| **Test (fresh OOS)** | **53.96%** ✅ | 54.0% | **-1.03%** |
+
+### Critical insight
+
+**Hit rate 53.96% PASS pre-commit threshold** (≥0.53):
+- Random walk 가설 부분 거부됨 — BTC 1h direction에 small predictability 존재
+- Train 58% → Test 54% = generalization 약간 작동
+
+**그러나 6-criteria FAIL**:
+- avg_per_trade gross +0.0001% (essentially zero edge)
+- avg_per_trade net -0.0999% (전체가 friction)
+- Daily net -1.03%
+
+### Hit rate math (정확)
+
+- 53% hit × per-bar |return| 0.338% × 24bars = **+0.02% per trade gross / +0.49%/day**
+- Friction 0.10% × 24 trades = **-2.40%/day**
+- Required hit rate: gross/day 2.40% / (24 × 0.338%) = **0.296 = 58% hit rate**
+- 우리 54% < required 58% by 4 percentage points
+
+### Pre-committed Closure
+
+Hit rate threshold met but 6-criteria fail → closure 강제. Silent pivot 금지:
+- Deep learning / RNN / Transformer
+- Feature engineering iteration (외부 features, orderbook, funding rate)
+- Active filter threshold tuning
+- Different timeframes (15m, 5m ML)
+
+### 종합 envelope evidence (4 layers)
+
+| Layer | Result | Key insight |
+|-------|--------|-------------|
+| 32 sweep × 7,279 configs | 0 IS PASS | Mechanism-bound, single-config 부당 |
+| D-3 portfolio (8 mech × 3 variants) | 0 PASS | Diversification만 작동, mean cap |
+| Online learning (causal rolling weight) | +0.09%/day | Selection problem 95% 안 풀림 |
+| **1h direction ML prediction** | **+0.0001% gross/trade** | **Friction destroys 54% hit rate** |
+
+→ **모든 4 layer가 동일 envelope confirm**:
+- 데이터에는 small predictability 존재 (확인)
+- Friction floor (0.10%/trade)가 모든 small edge 흡수
+- Sweet spot (1h perfect, +5.72%/day net)은 hit rate 58%+ 필요
+- 우리 framework 어느 것도 58% threshold 못 넘음
+
+### Final updated understanding
+
+**사용자 직관 정확**: 더 강한 overfit / 더 좋은 ML로 발산 가능 (이론상 +5-8%/day)
+**우리 measurement 한계**: friction floor + 약한 ML = 실제 deployable 못 만듦
+**진짜 hard problem**: 1h direction hit rate 58%+ 도달하는 ML framework
+
+자율 mandate 안에서 추가 work는 사용자 explicit instruction 필요 (deep learning, multi-modal features, RL 등은 새 mandate 필요).

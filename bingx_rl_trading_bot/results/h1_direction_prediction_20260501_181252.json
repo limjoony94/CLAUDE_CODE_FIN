@@ -1,0 +1,56 @@
+{
+  "date": "2026-05-01T09:12:52.567143+00:00",
+  "mandate": "1h direction prediction (causal, mechanism-free)",
+  "pre_commit": "memory/h1_direction_prediction_precommit_20260501.md",
+  "train_size": 8533,
+  "val_size": 4267,
+  "test_size": 4267,
+  "features": [
+    "ret_1h",
+    "ret_4h",
+    "ret_24h",
+    "atr_ratio",
+    "rsi_14",
+    "ema_ratio",
+    "vol_z",
+    "body_ratio",
+    "range_atr",
+    "close_in_range",
+    "macd_hist",
+    "donchian_pos"
+  ],
+  "naive_accuracy": {
+    "train": 0.5497480370326966,
+    "val": 0.5287086946332318,
+    "test": 0.520740567143192
+  },
+  "test_stats": {
+    "n_trades": 1831,
+    "n_active_pct": 0.42910710100773375,
+    "hit_rate": 0.539595849262698,
+    "cum_gross": 0.14570647968204753,
+    "cum_net": -182.95429352031798,
+    "avg_gross": 7.957754215294786e-05,
+    "avg_net": -0.09992042245784706
+  },
+  "test_bootstrap": {
+    "mean_daily": -1.039215355064258,
+    "pos_rate": 0.092,
+    "p5_daily": -2.4371107910151255,
+    "avg_per_trade": -0.09992042245784706,
+    "pass_criteria": {
+      "mean_daily_>=_0.20": false,
+      "p5_daily_>=_0": false,
+      "pos_rate_>=_0.50": false,
+      "avg_per_trade_>_taker_RT": false,
+      "sufficient_trades_per_window": true,
+      "p_beats_baseline_>=_0.55": false
+    },
+    "overall_pass": false
+  },
+  "F1_avg_gross_pass": false,
+  "F6_full_n_pass": true,
+  "hit_rate_53_pass": true,
+  "overall_pass": false,
+  "lookahead_suspicion": false
+}

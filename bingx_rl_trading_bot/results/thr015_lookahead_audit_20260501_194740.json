@@ -1,0 +1,36 @@
+{
+  "date": "2026-05-01T10:47:40.472521+00:00",
+  "mandate": "thr=0.15 lookahead audit",
+  "threshold": 0.15,
+  "n_shuffles": 20,
+  "feat_cols_audit": {
+    "next_ret_pct_in_feats": false,
+    "target_only_label": true,
+    "all_indicators_causal": true,
+    "merge_asof_backward": true
+  },
+  "baseline": {
+    "naive_hit": 0.5338645418326693,
+    "active_hit": 0.6666666666666666,
+    "n_active": 249,
+    "active_pct": 0.029177408014998827
+  },
+  "shuffled": {
+    "naive_mean": 0.5000878837590813,
+    "naive_std": 0.009933094025474841,
+    "active_mean": 0.4520833333333333,
+    "active_std": 0.23909370257518517,
+    "active_pct_mean": 0.00016404968361846732,
+    "active_pct_std": 0.00030194747426119347
+  },
+  "statistical_test": {
+    "z_active": 0.8974863454040815,
+    "z_naive": 3.4004166261753803,
+    "p_active": 0.1,
+    "p_naive": 0.0
+  },
+  "verdict": {
+    "lookahead_detected": false,
+    "lookahead_free_confirmed": false
+  }
+}

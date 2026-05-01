@@ -19,7 +19,15 @@ from abm.types import OrderbookSnapshot, OrderIntent, OrderType, Side
 class MeanReversionAgent(Agent):
     family: str = field(default="mean_reversion", init=False)
     N: int = 20  # MA window
-    threshold: float = 0.005  # 0.5% deviation
+    threshold: float = 0.001  # 0.1% deviation — calibrated post-G0 diagnostic
+    """0.001 (was 0.005 in design pre-calibration). G0 acceptance diagnostic showed:
+    - At 0.5% threshold: 0 MR trades in 1k-bar smoke (12,295 decisions made, all Hold)
+    - At 0.3% threshold: 0 MR trades
+    - At 0.2% threshold: 0 MR trades
+    - At 0.1% threshold: 62 MR trades — G1 IRL training has signal to recover
+    Mid range in 1k-bar smoke is only 0.655% so MA-mid deviation rarely exceeds 0.5%.
+    Loosening to 0.1% makes MR an active participant without losing strategy character
+    (still a contrarian fade, just on smaller deviations)."""
     wealth_fraction: float = 0.05
 
     price_history: deque[float] = field(init=False)

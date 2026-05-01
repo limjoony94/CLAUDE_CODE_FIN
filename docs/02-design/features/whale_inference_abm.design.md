@@ -195,7 +195,7 @@ if |deviation| > threshold:
 ```
 **MA semantics (clarified per advisor Day 1-7 checkpoint v0.4 patch)**: MA at time t is the mean of the N prior prices, NOT including the current mid. Including current would make the price contribute to its own deviation calculation, attenuating the signal. Implementation: append current to history AFTER computing deviation.
 
-**Parameters**: `N ∈ {10, 20, 30}` bars, `threshold = 0.005` (0.5%), `wealth_fraction = 0.05`
+**Parameters (v0.6 calibration)**: `N ∈ {10, 20, 30}` bars, `threshold = 0.001` (0.1%) — calibrated post-G0 diagnostic 2026-05-01, was 0.005 in v0.4 but produced 0 trades in 1k-bar smoke. See `results/g0_smoke/meanrev_diagnostic.md`. `wealth_fraction = 0.05`
 **Decision frequency**: every bar
 
 ### 4.3 Market-Maker Agent
@@ -844,3 +844,4 @@ Per CLAUDE.md global instructions: comments only for non-obvious WHY (constraint
 | 0.2 | 2026-05-01 | Advisor review patches: B1 decision jitter, B2 piggyback cold-start, B3 v1 scope = cash-margin spot-like (user (a)), F1 structlog risk, F2 OneDrive log volume risk, F3 ABIDES tie-breaker disambiguation, N1 MI threshold calibration, N2 Section 12.0 phrasing, N3 schema diff G0 acceptance | 임준영 + advisor + Claude Opus 4.7 |
 | 0.3 | 2026-05-01 | ABIDES archived 2025-06-02 discovered → spike SKIPPED → custom build proceeds directly. Section 10 rewritten with skip rationale + custom build 15-day implementation order. Total Phase 0 unchanged at 3 weeks. | 임준영 + advisor + Claude Opus 4.7 |
 | 0.4 | 2026-05-01 | Day 1-7 advisor checkpoint: MeanReversion MA semantics clarified (excludes current price); Piggyback wealth-growth metric specified (rolling lookback ratio, bankrupt excluded, all-piggyback excluded); Simulation driver responsibilities enumerated (Section 4.6.5 NEW: cancel-and-requote, order_id+seq assignment, wealth update, bankruptcy detection, leaderboard maintenance, context construction, deterministic event ordering); Logger ABM_DATA_DIR hard-fail enforcement (Section 8). | 임준영 + advisor + Claude Opus 4.7 |
+| 0.6 | 2026-05-01 | G0 → G1 transition advisor caveat #2: MeanReversion threshold 0.005 → 0.001 (5× looser). 1k-bar diagnostic showed 0 MR trades at 0.5% threshold; 0.1% threshold produces 62 MR trade legs (G1 IRL signal sufficient). Strategy character preserved (still contrarian fade). See `results/g0_smoke/meanrev_diagnostic.md`. | 임준영 + advisor + Claude Opus 4.7 |

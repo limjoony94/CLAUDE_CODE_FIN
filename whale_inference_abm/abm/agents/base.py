@@ -37,7 +37,12 @@ class Agent(ABC):
     decision_offset_ns: int  # drawn from rng at registry add time, [0, BAR_DURATION_NS)
 
     current_wealth: float = field(init=False)
+    """Mutated EXCLUSIVELY by WealthTracker (Day 8-10 module). Agent subclass code MUST NOT
+    write to this field — only read. Single-owner invariant required for determinism."""
+
     order_counter: int = field(init=False, default=0)
+    """Mutated EXCLUSIVELY by self.next_order_id(). Used to generate deterministic per-agent
+    order IDs."""
 
     def __post_init__(self) -> None:
         self.current_wealth = self.initial_wealth

@@ -36,14 +36,20 @@ class MeanReversionAgent(Agent):
         mid = snapshot.mid_price
         if mid is None or mid <= 0:
             return []
-        self.price_history.append(mid)
+
+        # Need N PRIOR prices (excluding current). MA[t] = mean(mid[t-N : t]).
+        # Append current AFTER computing deviation so it joins history for next call.
         if len(self.price_history) < self.N:
+            self.price_history.append(mid)
             return []
 
         ma = sum(self.price_history) / self.N
         if ma <= 0:
+            self.price_history.append(mid)
             return []
         deviation = (mid - ma) / ma
+        self.price_history.append(mid)
+
         if abs(deviation) <= self.threshold:
             return []
 

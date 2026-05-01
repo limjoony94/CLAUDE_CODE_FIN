@@ -188,11 +188,13 @@ if signal != 0 AND |signal| > confirmation_threshold:
 
 **Decision**:
 ```
-ma_window = N bars, MA[t] = mean(mid_price[t-N : t])
+ma_window = N bars, MA[t] = mean(mid_price[t-N], ..., mid_price[t-1])  # N PRIOR prices, EXCLUDING current
 deviation = (mid_price[t] - MA[t]) / MA[t]
 if |deviation| > threshold:
     emit MARKET order opposite to deviation direction, size = wealth_fraction × current_wealth / mid_price
 ```
+**MA semantics (clarified per advisor Day 1-7 checkpoint v0.4 patch)**: MA at time t is the mean of the N prior prices, NOT including the current mid. Including current would make the price contribute to its own deviation calculation, attenuating the signal. Implementation: append current to history AFTER computing deviation.
+
 **Parameters**: `N ∈ {10, 20, 30}` bars, `threshold = 0.005` (0.5%), `wealth_fraction = 0.05`
 **Decision frequency**: every bar
 
@@ -234,8 +236,15 @@ if last_action.timestamp > t - delay:
 ```
 **Parameters**: `lookback = 1000 bars`, `delay = 60s` (1-bar lag), `wealth_fraction = 0.03`
 **Decision frequency**: every bar
-**Anti-self-reference**: Piggyback agent excluded from "top_performer_id" candidates (would be circular)
+**Anti-self-reference**: Piggyback agent excluded from "top_performer_id" candidates (would be circular). ALL piggyback-family agents excluded (not just self) to prevent piggyback chain artifacts.
 **Cold-start (advisor B2 patch)**: For `t < lookback × BAR_DURATION_NS` (i.e., first 1000 bars), piggyback agent emits NO trades and NO quotes (simply returns Hold from `decide()`). After cold-start window, normal piggyback logic activates. Test: assert piggyback agents have 0 trades in `bar_index < 1000` in smoke test.
+
+**Wealth-growth metric (advisor v0.4 checkpoint patch)**:
+- **Window**: rolling `lookback = 1000 bars` (matches `lookback` parameter above; sliding window of bars[t-1000:t])
+- **Metric**: ratio `wealth[t] / wealth[t-lookback]`. Higher = more growth. Avoids signed-return ambiguity for negative-equity edge cases.
+- **Bankrupt agents**: EXCLUDED from leaderboard. They cannot be "followed" — bankrupt agents have no future actions to copy.
+- **Cold-start interaction**: leaderboard only computable when ABM has run ≥ `lookback` bars. Piggyback agent's own cold-start guarantees no premature leaderboard reads.
+- **Computed by**: simulation/wealth_tracker maintains rolling wealth snapshots per agent; provides leaderboard on demand to context dict.
 
 ### 4.6 Agent Population Composition (G0 smoke test)
 
@@ -249,6 +258,24 @@ if last_action.timestamp > t - delay:
 | **Total** | **15 initial agents** | **15000 total wealth** |
 
 Open-system admissions add more agents (Section 6).
+
+### 4.6.5 Simulation Driver Responsibilities (advisor v0.4 checkpoint patch)
+
+The `Simulation` class (Day 8-10) owns dispatch + cross-cutting state that agents cannot manage themselves:
+
+| Responsibility | Detail |
+|----------------|--------|
+| **Active orders tracking** | `dict[AgentID, set[OrderID]]` — for cancel-and-requote (e.g., MarketMaker every 10s) |
+| **Cancel-and-requote (MM)** | Before submitting MM's new LIMIT intents, sim cancels all `active_orders_by_agent[mm_id]` via `orderbook.cancel()`. Agent emits intents only; sim handles cancellation. |
+| **Order ID + sequence assignment** | Agent emits `OrderIntent`; sim wraps into `Order` with `order_id = agent.next_order_id()` and `sequence_no = scheduler.next_sequence_no()`. |
+| **Wealth update on fills** | After `orderbook.submit()` returns trades, sim invokes `wealth_tracker.apply_trade(trade)` for both sides + `friction.fee()` deduction. |
+| **Bankruptcy detection + removal** | After wealth update, if `agent.current_wealth ≤ BANKRUPTCY_THRESHOLD`, sim calls `registry.remove_agent()` and emits `AGENT_REMOVED` event in tape. |
+| **Wealth snapshot for leaderboard** | Per-bar (or per-T-bars), sim calls `wealth_tracker.snapshot()` to maintain rolling wealth history needed by Piggyback context. |
+| **Context construction for `agent.decide()`** | Sim builds the `context` dict: `wealth_growth_leaderboard`, `last_actions_by_agent`, `piggyback_excluded_ids`. Agent receives read-only view. |
+| **Push next decision event** | After `agent.decide()`, sim pushes `AgentDecisionEvent` at `now() + agent.next_decision_delay_ns()` (or `next_bar_start + agent.decision_offset_ns` for bar-aligned agents — TBD in `simulation.py` design). |
+| **MarketMaker inventory update** | Sim detects fills involving MM as participant; calls `mm_agent.update_inventory(signed_size)`. |
+
+**Determinism rule**: simulation MUST push events in deterministic order. When the same scheduler tick triggers multiple downstream events (e.g., trade match → wealth update → next decision schedule), order = (1) wealth update, (2) bankruptcy check, (3) re-quote schedule, (4) tape emit. Document this ordering in `simulation.py` docstring.
 
 ### 4.7 Decision Jitter (advisor B1 patch — alphabetical-order artifact 제거)
 
@@ -427,7 +454,24 @@ class AdmissionScheduler:
 }
 ```
 
-**Storage**: `${ABM_RESULTS_DIR}/g0_smoke/{run_id}/{trade_tape,bar_snapshots,agent_decisions}.ndjson`
+**Storage**: `${ABM_DATA_DIR}/g0_smoke/{run_id}/{trade_tape,bar_snapshots,agent_decisions}.ndjson`
+
+**ABM_DATA_DIR hard-fail enforcement (advisor v0.4 checkpoint patch)**:
+Logger initialization MUST hard-fail (RuntimeError) if:
+1. `ABM_DATA_DIR` env var is unset
+2. `ABM_DATA_DIR` value contains the substring `"OneDrive"` (case-insensitive)
+
+Rationale: BUG#58 in trading bot codebase = OneDrive sync lock corrupted state.json. Same risk applies to high-frequency NDJSON writes from per-decision logger (~9M records per smoke run). Hard fail at init prevents silent corruption discovered at G0 acceptance review.
+
+```python
+# In logger init
+import os
+data_dir = os.environ.get("ABM_DATA_DIR")
+if not data_dir:
+    raise RuntimeError("ABM_DATA_DIR not set. Per design v0.2 F2 / v0.4 patch, must point to NON-OneDrive path.")
+if "onedrive" in data_dir.lower():
+    raise RuntimeError(f"ABM_DATA_DIR={data_dir} contains 'OneDrive'. Use local-only path.")
+```
 
 ---
 
@@ -799,3 +843,4 @@ Per CLAUDE.md global instructions: comments only for non-obvious WHY (constraint
 | 0.1 | 2026-05-01 | Initial G0-only design from architecture v1.1 + advisor 4 binding decisions | 임준영 + advisor + Claude Opus 4.7 |
 | 0.2 | 2026-05-01 | Advisor review patches: B1 decision jitter, B2 piggyback cold-start, B3 v1 scope = cash-margin spot-like (user (a)), F1 structlog risk, F2 OneDrive log volume risk, F3 ABIDES tie-breaker disambiguation, N1 MI threshold calibration, N2 Section 12.0 phrasing, N3 schema diff G0 acceptance | 임준영 + advisor + Claude Opus 4.7 |
 | 0.3 | 2026-05-01 | ABIDES archived 2025-06-02 discovered → spike SKIPPED → custom build proceeds directly. Section 10 rewritten with skip rationale + custom build 15-day implementation order. Total Phase 0 unchanged at 3 weeks. | 임준영 + advisor + Claude Opus 4.7 |
+| 0.4 | 2026-05-01 | Day 1-7 advisor checkpoint: MeanReversion MA semantics clarified (excludes current price); Piggyback wealth-growth metric specified (rolling lookback ratio, bankrupt excluded, all-piggyback excluded); Simulation driver responsibilities enumerated (Section 4.6.5 NEW: cancel-and-requote, order_id+seq assignment, wealth update, bankruptcy detection, leaderboard maintenance, context construction, deterministic event ordering); Logger ABM_DATA_DIR hard-fail enforcement (Section 8). | 임준영 + advisor + Claude Opus 4.7 |

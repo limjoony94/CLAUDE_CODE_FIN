@@ -109,12 +109,29 @@ def test_meanrev_warmup_no_signal() -> None:
 
 
 def test_meanrev_high_deviation_sells() -> None:
-    """Build MA = 100 then snap to 110 (10% above) -> SELL."""
+    """Build MA = 100 (5 prior prices) then snap to 110 -> deviation = +10% -> SELL.
+
+    Verifies advisor checkpoint fix: MA must be N PRIOR prices, NOT including current.
+    Old (buggy) implementation would compute MA over [100,100,100,100,100,110]/6 = 101.67,
+    yielding deviation 8.2% instead of 10%.
+    """
     a = _meanrev()
     for _ in range(5):
-        a.decide(_snap(100.0), {})
-    intents = a.decide(_snap(110.0), {})
+        a.decide(_snap(100.0), {})  # warmup builds price_history = [100,100,100,100,100]
+    intents = a.decide(_snap(110.0), {})  # MA still = 100 (current excluded), dev = +10%
     assert len(intents) == 1
+    assert intents[0].side == Side.SELL
+
+
+def test_meanrev_ma_excludes_current_price() -> None:
+    """Direct verification: with prior 5 prices = 100, current = 110, MA must be 100 not 101.67."""
+    a = _meanrev(threshold=0.09)  # 9% threshold
+    for _ in range(5):
+        a.decide(_snap(100.0), {})
+    # Old buggy MA = 101.67 -> deviation 8.2% < 9% threshold -> NO trade
+    # New correct MA = 100 -> deviation 10% > 9% threshold -> SELL
+    intents = a.decide(_snap(110.0), {})
+    assert len(intents) == 1, "MA off-by-one fix: deviation should be 10%, above 9% threshold"
     assert intents[0].side == Side.SELL
 
 

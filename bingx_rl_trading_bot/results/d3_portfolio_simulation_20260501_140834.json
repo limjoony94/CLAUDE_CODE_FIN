@@ -1,0 +1,237 @@
+{
+  "date": "2026-05-01T05:08:34.155122+00:00",
+  "pre_commit": "memory/d3_portfolio_precommit_20260501.md",
+  "mechanisms": [
+    "N8b",
+    "R2b",
+    "R1b",
+    "R8b",
+    "R37b",
+    "R40b",
+    "Range",
+    "VolSpike"
+  ],
+  "best_configs": {
+    "N8b": {
+      "corr_lookback_days": 14,
+      "risk_on_thresh": 0.3,
+      "risk_off_thresh": 0.4,
+      "usd_strong_thresh": -0.3
+    },
+    "R2b": {
+      "lookback_days": 7,
+      "long_top_n": 2,
+      "short_bottom_n": 0,
+      "rebalance_days": 1
+    },
+    "R1b": {
+      "lookback_days": 60,
+      "long_top_n": 4,
+      "short_bottom_n": 0,
+      "rebalance_days": 7
+    },
+    "R8b": {
+      "channel_lookback": 48,
+      "body_min_ratio": 0.3,
+      "sl_atr_mult": 1.5,
+      "tp_atr_mult": 5.0,
+      "max_hold_bars": 48,
+      "cooldown_bars": 4
+    },
+    "R37b": {
+      "compression_lookback": 10,
+      "bandwidth_lookback": 20,
+      "bandwidth_pctile_max": 0.1,
+      "bb_period": 20,
+      "bb_std": 1.5,
+      "body_min_ratio": 0.4,
+      "sl_atr_mult": 2.0,
+      "tp_atr_mult": 2.0,
+      "max_hold_bars": 48
+    },
+    "R40b": {
+      "vol_lookback": 20,
+      "vol_mult": 3.0,
+      "body_ratio_max": 0.3,
+      "conf_body_min": 0.3,
+      "sl_atr_mult": 2.0,
+      "tp_atr_mult": 3.0,
+      "max_hold_bars": 24
+    },
+    "Range": {
+      "range_lookback": 20,
+      "range_mult": 3.0,
+      "sl_atr_mult": 2.0,
+      "tp_atr_mult": 3.0,
+      "max_hold_bars": 12
+    },
+    "VolSpike": {
+      "vol_lookback": 50,
+      "vol_mult": 3.0,
+      "sl_atr_mult": 2.0,
+      "tp_atr_mult": 2.0,
+      "max_hold_bars": 12
+    }
+  },
+  "correlation_matrix": {
+    "R8b": {
+      "R8b": 1.0,
+      "R37b": 0.03853719202523712,
+      "R40b": 0.07465151683112642,
+      "Range": 0.2038462275731722,
+      "VolSpike": 0.2733734702056942,
+      "R1b": -0.039669116623091055,
+      "R2b": -0.010850844335941627,
+      "N8b": 0.0024523815852877076
+    },
+    "R37b": {
+      "R8b": 0.03853719202523712,
+      "R37b": 1.0,
+      "R40b": -0.026981043276575658,
+      "Range": 0.06512793544015687,
+      "VolSpike": 0.06762563725311649,
+      "R1b": -0.021322446858850347,
+      "R2b": 0.025981306522310094,
+      "N8b": -0.0021735462980233605
+    },
+    "R40b": {
+      "R8b": 0.07465151683112642,
+      "R37b": -0.026981043276575658,
+      "R40b": 1.0,
+      "Range": -0.09230087352782931,
+      "VolSpike": 0.05596019931783574,
+      "R1b": 0.06026955635984878,
+      "R2b": 0.08377874286512098,
+      "N8b": 0.00859183649463804
+    },
+    "Range": {
+      "R8b": 0.2038462275731722,
+      "R37b": 0.06512793544015687,
+      "R40b": -0.09230087352782931,
+      "Range": 1.0,
+      "VolSpike": 0.3732227445362959,
+      "R1b": -0.09697803492645587,
+      "R2b": -0.08662097749603391,
+      "N8b": 0.0015126155165239544
+    },
+    "VolSpike": {
+      "R8b": 0.2733734702056942,
+      "R37b": 0.06762563725311649,
+      "R40b": 0.05596019931783574,
+      "Range": 0.3732227445362959,
+      "VolSpike": 1.0,
+      "R1b": 0.02401708511680357,
+      "R2b": -0.044313614345638526,
+      "N8b": -0.0672305957981718
+    },
+    "R1b": {
+      "R8b": -0.039669116623091055,
+      "R37b": -0.021322446858850347,
+      "R40b": 0.06026955635984878,
+      "Range": -0.09697803492645587,
+      "VolSpike": 0.02401708511680357,
+      "R1b": 1.0,
+      "R2b": 0.29624055530681204,
+      "N8b": 0.0127174975893554
+    },
+    "R2b": {
+      "R8b": -0.010850844335941627,
+      "R37b": 0.025981306522310094,
+      "R40b": 0.08377874286512098,
+      "Range": -0.08662097749603391,
+      "VolSpike": -0.044313614345638526,
+      "R1b": 0.29624055530681204,
+      "R2b": 1.0,
+      "N8b": 0.05988188866504569
+    },
+    "N8b": {
+      "R8b": 0.0024523815852877076,
+      "R37b": -0.0021735462980233605,
+      "R40b": 0.00859183649463804,
+      "Range": 0.0015126155165239544,
+      "VolSpike": -0.0672305957981718,
+      "R1b": 0.0127174975893554,
+      "R2b": 0.05988188866504569,
+      "N8b": 1.0
+    }
+  },
+  "rho_avg": 0.04426240341849178,
+  "n_effective": 6.107631007044385,
+  "equal_weight": {
+    "name": "Equal-weight portfolio",
+    "n_active_days": 665,
+    "mean_daily_pct": 0.05780523204696907,
+    "std_daily_pct": 0.6515134967297639,
+    "sharpe_ann": 1.69507986119839,
+    "bootstrap_mean_daily": 0.043044399933880984,
+    "bootstrap_pos_rate": 0.516,
+    "bootstrap_p5_daily": -0.4426094699907026,
+    "bootstrap_avg_per_trade": 0.06267304106145068,
+    "bootstrap_pass_criteria": {
+      "mean_daily_>=_0.20": false,
+      "p5_daily_>=_0": false,
+      "pos_rate_>=_0.50": true,
+      "avg_per_trade_>_taker_RT": false,
+      "sufficient_trades_per_window": false,
+      "p_beats_baseline_>=_0.55": false
+    },
+    "bootstrap_overall_pass": false,
+    "F1_avg_gross_pass": false,
+    "F6_full_n_pass": true,
+    "portfolio_overall_pass": false
+  },
+  "risk_parity": {
+    "name": "Risk-parity portfolio",
+    "n_active_days": 665,
+    "mean_daily_pct": 0.036740763282813414,
+    "std_daily_pct": 0.4183976497437046,
+    "sharpe_ann": 1.677665487271153,
+    "bootstrap_mean_daily": 0.030005144384445615,
+    "bootstrap_pos_rate": 0.506,
+    "bootstrap_p5_daily": -0.326641038686972,
+    "bootstrap_avg_per_trade": 0.03983472229610296,
+    "bootstrap_pass_criteria": {
+      "mean_daily_>=_0.20": false,
+      "p5_daily_>=_0": false,
+      "pos_rate_>=_0.50": true,
+      "avg_per_trade_>_taker_RT": false,
+      "sufficient_trades_per_window": false,
+      "p_beats_baseline_>=_0.55": false
+    },
+    "bootstrap_overall_pass": false,
+    "F1_avg_gross_pass": false,
+    "F6_full_n_pass": true,
+    "portfolio_overall_pass": false
+  },
+  "top3_low_corr": {
+    "triple": [
+      "R40b",
+      "Range",
+      "R1b"
+    ],
+    "avg_rho": -0.04300311736481214,
+    "eval": {
+      "name": "Top-3 low-corr (R40b, Range, R1b)",
+      "n_active_days": 283,
+      "mean_daily_pct": 0.03772026632927327,
+      "std_daily_pct": 0.5129267255782478,
+      "sharpe_ann": 1.404966129508961,
+      "bootstrap_mean_daily": 0.034028160589942055,
+      "bootstrap_pos_rate": 0.442,
+      "bootstrap_p5_daily": -0.40357613616472054,
+      "bootstrap_avg_per_trade": 0.09610004248553365,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": true,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "bootstrap_overall_pass": false,
+      "F1_avg_gross_pass": true,
+      "F6_full_n_pass": true,
+      "portfolio_overall_pass": false
+    }
+  }
+}

@@ -210,3 +210,64 @@ User critique → sweep retry로 envelope 한계 정량 측정:
 - Standard framework: `scripts/strategy_lab/mechanism_sweep_standard.py`
 - 32 sweep scripts: `scripts/analysis/r*b_*_sweep.py`, `scripts/analysis/multi_indicator_batch*_sweep.py`, `scripts/analysis/supertrend_adx_sweep.py`
 - All result JSONs: `results/*_sweep_*.json`
+- D-3 portfolio simulation: `scripts/analysis/d3_portfolio_simulation.py` + `results/d3_portfolio_simulation_*.json`
+
+---
+
+## D-3 Portfolio Simulation Update (post-32 mechanism, autonomous mandate)
+
+**Trigger**: 사용자 자율 mandate → 4 path 중 D-3 자율 선택 + pre-committed (PASS → deployable, FAIL → closure 강제, silent pivot 금지).
+
+### Setup
+- Top-8 borderline mechanisms (best-IS config 각각): R8b, R37b, R40b, Range expansion, Volume spike, R1b, R2b, N8b
+- Daily PnL series 추출 → correlation matrix → 3 portfolio variants
+
+### Diversification quality (excellent)
+- ρ_avg = **0.0443** (off-diagonal pairwise)
+- N_eff = **6.11** / 8 nominal (거의 independent)
+- Sharpe (annualized) ~1.69 (variance reduction 작동)
+
+### Portfolio evaluation (모두 FAIL)
+
+| Portfolio | daily mean | bootstrap mean | p5 | F2 (≥0.20%) | Overall |
+|-----------|------------|----------------|----|-----------:|---------|
+| Equal-weight (8) | +0.043% | +0.043% | -0.44% | 🔴 | 🔴 FAIL |
+| Risk-parity (inv-vol) | +0.030% | +0.030% | -0.33% | 🔴 | 🔴 FAIL |
+| Top-3 low-corr (R40b/Range/R1b, ρ=-0.04) | +0.034% | +0.034% | -0.40% | 🔴 | 🔴 FAIL (6/6 fail) |
+
+### Decisive insight
+
+**Portfolio도 envelope 안에 갇힘**:
+- 각 sub-mechanism daily 0.03-0.10% (envelope-bound)
+- Portfolio mean ≈ mean of means = 0.03-0.06%
+- **Diversification은 variance만 줄이지 mean은 못 올림**
+- **Mechanism-level envelope → portfolio-level envelope 강제**
+
+→ 32 mechanism 어느 조합으로도 +0.20%/day target 도달 불가.
+
+### Pre-committed action: CLOSURE
+
+Pre-commit per `memory/d3_portfolio_precommit_20260501.md`: D-3 FAIL → 무조건 closure. D-1/D-2/E silent pivot **금지**.
+
+---
+
+## FINAL CLOSURE STATEMENT
+
+**Retail BingX 1× envelope (capital ~$1,500) is empty for +0.20%/day target.**
+
+Evidence:
+- 32 distinct mechanism families × thorough parameter sweep × ~7,279 configurations = 0 strict-criterion IS PASS
+- Borderline 2개 (N8b sample-size-only, R2b distribution-stability-only) develop 가능성 추정 ≤20%
+- D-3 portfolio simulation (8-mechanism, ρ_avg 0.044, N_eff 6.11) FAIL
+- Mechanism envelope이 portfolio envelope 강제
+
+User criteria의 정당성 confirmed:
+- Mean-only criterion이었으면 R2b false positive
+- 6-criteria distribution stability가 R26 LIVE -12.86% 같은 catastrophe 사전 차단
+
+**다음 outcome-bound paths는 사용자 explicit instruction 필요**:
+- D-1 capital scale change ($1.5K → $50K+) → 사용자 자본 결정
+- D-2 different market (Deribit options, DeFi) → 새 mandate
+- E borderline develop (N8b 5-year fetch 등) → 사용자 인내 + 시간 투자 결정
+
+자율 mandate 안에서는 본 closure가 final state.

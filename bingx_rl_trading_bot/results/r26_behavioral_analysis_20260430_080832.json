@@ -1,0 +1,46 @@
+{
+  "date": "2026-04-29T23:08:32.900459+00:00",
+  "analysis": {
+    "total_cycle_trades": 1509,
+    "total_forced_trades": 27,
+    "category_distribution": {
+      "long_into_dip (anti-panic)": "684",
+      "short_into_rally (anti-FOMO)": "647",
+      "long_into_rally (FOMO chase)": "84",
+      "short_into_dip (panic chase)": "94"
+    },
+    "market_making_count": 1331,
+    "fomo_panic_count": 178,
+    "market_making_pct": 88.20410868124586,
+    "fomo_panic_pct": 11.79589131875414,
+    "pnl_by_category": {
+      "long_into_dip": {
+        "count": 684,
+        "mean": 0.2799999999999888,
+        "sum": 191.51999999999236
+      },
+      "long_into_rally": {
+        "count": 84,
+        "mean": 0.27999999999998904,
+        "sum": 23.51999999999908
+      },
+      "short_into_rally": {
+        "count": 647,
+        "mean": 0.28000000000000014,
+        "sum": 181.16000000000008
+      },
+      "short_into_dip": {
+        "count": 94,
+        "mean": 0.28,
+        "sum": 26.320000000000004
+      }
+    },
+    "forced_exits": {
+      "count": 27,
+      "avg_distance_pct": -0.04239763187388271,
+      "avg_net_pnl_pct": -2.24373926958514,
+      "panic_long_count": 13,
+      "panic_short_count": 14
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "date": "2026-04-30T08:40:21.843747+00:00",
+  "analysis": "intrabar gap risk per leverage",
+  "15m_stats": {
+    "mean": 0.27499430054449786,
+    "p95": 0.7126134632043271,
+    "p99": 1.248368190639105,
+    "p999": 2.5955003480225467,
+    "max": 9.471488599720349
+  },
+  "liquidation_events_per_leverage": {
+    "L4x": {
+      "threshold_pct": 24.875,
+      "n_15m_bars_exceed": 0,
+      "per_yr": 0.0
+    },
+    "L5x": {
+      "threshold_pct": 19.9,
+      "n_15m_bars_exceed": 0,
+      "per_yr": 0.0
+    },
+    "L7x": {
+      "threshold_pct": 14.214285714285714,
+      "n_15m_bars_exceed": 0,
+      "per_yr": 0.0
+    },
+    "L10x": {
+      "threshold_pct": 9.95,
+      "n_15m_bars_exceed": 0,
+      "per_yr": 0.0
+    },
+    "L15x": {
+      "threshold_pct": 6.633333333333334,
+      "n_15m_bars_exceed": 4,
+      "per_yr": 2.0277777777777777
+    },
+    "L20x": {
+      "threshold_pct": 4.975,
+      "n_15m_bars_exceed": 9,
+      "per_yr": 4.5625
+    }
+  }
+}

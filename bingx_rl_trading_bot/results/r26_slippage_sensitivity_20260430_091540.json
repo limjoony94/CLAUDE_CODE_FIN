@@ -1,0 +1,84 @@
+{
+  "date": "2026-04-30T00:15:40.595590+00:00",
+  "locked": {
+    "capital_usd": 1500,
+    "grid_spacing_pct": 0.3,
+    "grid_levels_each_side": 5,
+    "per_level_usd": 150,
+    "atr_period": 20,
+    "atr_pct_median_lookback_bars": 720,
+    "trend_exit_distance_pct": 1.5,
+    "maker_friction_per_side_pct": 0.02,
+    "taker_friction_per_side_pct": 0.05,
+    "max_grid_lifetime_bars": 168
+  },
+  "slippage_scenarios": [
+    0.0,
+    0.02,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "results": [
+    {
+      "slippage_pct": 0.0,
+      "cum_net_pct": 36.19390397211875,
+      "cum_harvest_pct": 42.251999999998624,
+      "cum_drift_pct": -6.058096027879878,
+      "cum_friction_pct": 6.224999999999547,
+      "cum_slippage_pct": 0.0,
+      "daily_pct": 0.05245493329292572,
+      "n_cycles": 1509,
+      "n_trend_exits": 203,
+      "bs_pos_rate": 0.9424083769633508
+    },
+    {
+      "slippage_pct": 0.02,
+      "cum_net_pct": 36.13998894442364,
+      "cum_harvest_pct": 42.251999999998624,
+      "cum_drift_pct": -6.112011055574982,
+      "cum_friction_pct": 6.224999999999547,
+      "cum_slippage_pct": 0.054000000000000034,
+      "daily_pct": 0.052376795571628464,
+      "n_cycles": 1509,
+      "n_trend_exits": 203,
+      "bs_pos_rate": 0.9424083769633508
+    },
+    {
+      "slippage_pct": 0.05,
+      "cum_net_pct": 36.059116402880996,
+      "cum_harvest_pct": 42.251999999998624,
+      "cum_drift_pct": -6.192883597117631,
+      "cum_friction_pct": 6.224999999999547,
+      "cum_slippage_pct": 0.1350000000000001,
+      "daily_pct": 0.0522595889896826,
+      "n_cycles": 1509,
+      "n_trend_exits": 203,
+      "bs_pos_rate": 0.9424083769633508
+    },
+    {
+      "slippage_pct": 0.1,
+      "cum_net_pct": 35.924328833643216,
+      "cum_harvest_pct": 42.251999999998624,
+      "cum_drift_pct": -6.327671166355411,
+      "cum_friction_pct": 6.224999999999547,
+      "cum_slippage_pct": 0.2700000000000002,
+      "daily_pct": 0.05206424468643944,
+      "n_cycles": 1509,
+      "n_trend_exits": 203,
+      "bs_pos_rate": 0.9424083769633508
+    },
+    {
+      "slippage_pct": 0.2,
+      "cum_net_pct": 35.65475369516765,
+      "cum_harvest_pct": 42.251999999998624,
+      "cum_drift_pct": -6.597246304830974,
+      "cum_friction_pct": 6.224999999999547,
+      "cum_slippage_pct": 0.5400000000000004,
+      "daily_pct": 0.051673556079953116,
+      "n_cycles": 1509,
+      "n_trend_exits": 203,
+      "bs_pos_rate": 0.9424083769633508
+    }
+  ]
+}

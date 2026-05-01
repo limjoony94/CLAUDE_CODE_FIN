@@ -1,0 +1,86 @@
+{
+  "date": "2026-04-30T08:39:25.786146+00:00",
+  "leverage": 10,
+  "check_1_15m_intrabar": {
+    "cum_net_pct": 473.6019866570977,
+    "daily_pct": 0.171594922701847,
+    "n_cycles": 2679,
+    "n_trend_exits": 442,
+    "n_liquidation_events": 0,
+    "liq_per_yr": 0.0,
+    "max_dd_pct": 9.171563361695904,
+    "bs_pos_rate": 0.8736654804270463,
+    "liq_threshold_pct": 9.950000000000001,
+    "n_days": 2760.0
+  },
+  "check_1_pass": false,
+  "check_2_wf_5fold": [
+    {
+      "fold": 1,
+      "cum_net_pct": 66.97850801401354,
+      "daily_pct": 0.7442056446001505,
+      "n_cycles": 258,
+      "n_trend_exits": 34,
+      "n_liquidation_events": 0,
+      "liq_per_yr": 0.0,
+      "max_dd_pct": 0.0,
+      "bs_pos_rate": 1.0,
+      "liq_threshold_pct": 9.950000000000001,
+      "n_days": 90.0
+    },
+    {
+      "fold": 2,
+      "cum_net_pct": 58.30230800336729,
+      "daily_pct": 0.6478034222596365,
+      "n_cycles": 239,
+      "n_trend_exits": 30,
+      "n_liquidation_events": 0,
+      "liq_per_yr": 0.0,
+      "max_dd_pct": 2.6319564119257883,
+      "bs_pos_rate": 0.9333333333333333,
+      "liq_threshold_pct": 9.950000000000001,
+      "n_days": 90.0
+    },
+    {
+      "fold": 3,
+      "cum_net_pct": 46.895731462143836,
+      "daily_pct": 0.5210636829127093,
+      "n_cycles": 197,
+      "n_trend_exits": 27,
+      "n_liquidation_events": 0,
+      "liq_per_yr": 0.0,
+      "max_dd_pct": 5.3845673924853985,
+      "bs_pos_rate": 0.94,
+      "liq_threshold_pct": 9.950000000000001,
+      "n_days": 90.0
+    },
+    {
+      "fold": 4,
+      "cum_net_pct": 37.83698403567414,
+      "daily_pct": 0.42041093372971267,
+      "n_cycles": 154,
+      "n_trend_exits": 21,
+      "n_liquidation_events": 0,
+      "liq_per_yr": 0.0,
+      "max_dd_pct": 5.283015964325006,
+      "bs_pos_rate": 0.9433962264150944,
+      "liq_threshold_pct": 9.950000000000001,
+      "n_days": 90.0
+    },
+    {
+      "fold": 5,
+      "cum_net_pct": 37.59198967305335,
+      "daily_pct": 0.4176887741450372,
+      "n_cycles": 197,
+      "n_trend_exits": 28,
+      "n_liquidation_events": 0,
+      "liq_per_yr": 0.0,
+      "max_dd_pct": 7.813225926675679,
+      "bs_pos_rate": 0.8666666666666667,
+      "liq_threshold_pct": 9.950000000000001,
+      "n_days": 90.0
+    }
+  ],
+  "check_2_pass": true,
+  "overall_pass": false
+}

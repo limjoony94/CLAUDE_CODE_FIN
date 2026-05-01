@@ -1,0 +1,200 @@
+[
+  {
+    "window_idx":0,
+    "start":"2024-03-25 05:00:00+00:00",
+    "end":"2024-04-24 05:00:00+00:00",
+    "n_days":30.0,
+    "ranging_fraction":0.6629680999,
+    "mode":"legacy_no_rearm",
+    "cum_total_pct":-3.4527925365,
+    "daily_total_pct":-0.1150930845,
+    "n_trades":58,
+    "wr":0.8103448276,
+    "halt_triggered":false,
+    "halt_info":null
+  },
+  {
+    "window_idx":0,
+    "start":"2024-03-25 05:00:00+00:00",
+    "end":"2024-04-24 05:00:00+00:00",
+    "n_days":30.0,
+    "ranging_fraction":0.6629680999,
+    "mode":"live_parity_with_halt",
+    "cum_total_pct":-5.5290182783,
+    "daily_total_pct":-0.1843006093,
+    "n_trades":32,
+    "wr":0.6875,
+    "halt_triggered":true,
+    "halt_info":{
+      "idx":146,
+      "ts":"2024-03-25T17:10:00.000000000",
+      "reason":"DAILY_LOSS_4.95_PCT",
+      "nav_at_halt_pct":-4.948
+    }
+  },
+  {
+    "window_idx":1,
+    "start":"2024-07-12 20:59:10+00:00",
+    "end":"2024-08-11 20:59:10+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.3305555556,
+    "mode":"legacy_no_rearm",
+    "cum_total_pct":-2.2607792856,
+    "daily_total_pct":-0.0753680327,
+    "n_trades":106,
+    "wr":0.8018867925,
+    "halt_triggered":false,
+    "halt_info":null
+  },
+  {
+    "window_idx":1,
+    "start":"2024-07-12 20:59:10+00:00",
+    "end":"2024-08-11 20:59:10+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.3305555556,
+    "mode":"live_parity_with_halt",
+    "cum_total_pct":-3.9886830055,
+    "daily_total_pct":-0.1329714904,
+    "n_trades":16,
+    "wr":0.5,
+    "halt_triggered":true,
+    "halt_info":{
+      "idx":316,
+      "ts":"2024-07-13T23:20:00.000000000",
+      "reason":"DAILY_LOSS_3.34_PCT",
+      "nav_at_halt_pct":-3.344
+    }
+  },
+  {
+    "window_idx":2,
+    "start":"2024-10-30 12:58:20+00:00",
+    "end":"2024-11-29 12:58:20+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.3138888889,
+    "mode":"legacy_no_rearm",
+    "cum_total_pct":1.8713307306,
+    "daily_total_pct":0.0623849115,
+    "n_trades":46,
+    "wr":0.8913043478,
+    "halt_triggered":false,
+    "halt_info":null
+  },
+  {
+    "window_idx":2,
+    "start":"2024-10-30 12:58:20+00:00",
+    "end":"2024-11-29 12:58:20+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.3138888889,
+    "mode":"live_parity_with_halt",
+    "cum_total_pct":-5.4218677388,
+    "daily_total_pct":-0.1807498447,
+    "n_trades":96,
+    "wr":0.7291666667,
+    "halt_triggered":true,
+    "halt_info":{
+      "idx":3071,
+      "ts":"2024-11-10T04:55:00.000000000",
+      "reason":"DAILY_LOSS_4.59_PCT",
+      "nav_at_halt_pct":-4.7832661381
+    }
+  },
+  {
+    "window_idx":3,
+    "start":"2025-02-17 04:57:30.000000004+00:00",
+    "end":"2025-03-19 04:57:30.000000004+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.4444444444,
+    "mode":"legacy_no_rearm",
+    "cum_total_pct":1.2827472832,
+    "daily_total_pct":0.0427631922,
+    "n_trades":51,
+    "wr":0.9019607843,
+    "halt_triggered":false,
+    "halt_info":null
+  },
+  {
+    "window_idx":3,
+    "start":"2025-02-17 04:57:30.000000004+00:00",
+    "end":"2025-03-19 04:57:30.000000004+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.4444444444,
+    "mode":"live_parity_with_halt",
+    "cum_total_pct":4.9213450351,
+    "daily_total_pct":0.1640638234,
+    "n_trades":207,
+    "wr":0.8695652174,
+    "halt_triggered":true,
+    "halt_info":{
+      "idx":5890,
+      "ts":"2025-03-09T15:50:00.000000000",
+      "reason":"DAILY_LOSS_3.54_PCT",
+      "nav_at_halt_pct":6.6018262721
+    }
+  },
+  {
+    "window_idx":4,
+    "start":"2025-06-06 20:56:40+00:00",
+    "end":"2025-07-06 20:56:40+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.6652777778,
+    "mode":"legacy_no_rearm",
+    "cum_total_pct":-1.9664860153,
+    "daily_total_pct":-0.0655571215,
+    "n_trades":65,
+    "wr":0.8,
+    "halt_triggered":false,
+    "halt_info":null
+  },
+  {
+    "window_idx":4,
+    "start":"2025-06-06 20:56:40+00:00",
+    "end":"2025-07-06 20:56:40+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.6652777778,
+    "mode":"live_parity_with_halt",
+    "cum_total_pct":-3.9705445374,
+    "daily_total_pct":-0.1323668048,
+    "n_trades":17,
+    "wr":0.5294117647,
+    "halt_triggered":true,
+    "halt_info":{
+      "idx":752,
+      "ts":"2025-06-09T11:40:00.000000000",
+      "reason":"DAILY_LOSS_3.09_PCT",
+      "nav_at_halt_pct":-2.38
+    }
+  },
+  {
+    "window_idx":5,
+    "start":"2025-09-24 12:55:50.000000008+00:00",
+    "end":"2025-10-24 12:55:50.000000008+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.1763888889,
+    "mode":"legacy_no_rearm",
+    "cum_total_pct":-8.7198131096,
+    "daily_total_pct":-0.2906940821,
+    "n_trades":45,
+    "wr":0.5111111111,
+    "halt_triggered":false,
+    "halt_info":null
+  },
+  {
+    "window_idx":5,
+    "start":"2025-09-24 12:55:50.000000008+00:00",
+    "end":"2025-10-24 12:55:50.000000008+00:00",
+    "n_days":29.9965277778,
+    "ranging_fraction":0.1763888889,
+    "mode":"live_parity_with_halt",
+    "cum_total_pct":-5.4824422653,
+    "daily_total_pct":-0.1827692294,
+    "n_trades":22,
+    "wr":0.4545454545,
+    "halt_triggered":true,
+    "halt_info":{
+      "idx":1450,
+      "ts":"2025-09-29T13:50:00.000000000",
+      "reason":"DAILY_LOSS_3.21_PCT",
+      "nav_at_halt_pct":-4.5924512781
+    }
+  }
+]

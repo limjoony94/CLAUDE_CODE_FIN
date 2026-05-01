@@ -1,0 +1,445 @@
+{
+  "date": "2026-04-29T22:39:52.770936+00:00",
+  "pre_reg_commit": "7c9a4f5",
+  "grid": {
+    "entry_body_filter_pct": [
+      30,
+      50,
+      70
+    ],
+    "sl_period_range_multiple": [
+      0.5,
+      1.0,
+      1.5
+    ],
+    "tp_period_range_multiple": [
+      1.5,
+      2.5,
+      4.0
+    ]
+  },
+  "fixed": {
+    "asset": "BTC/USDT",
+    "tf": "15m",
+    "period_lookback_bars": 16,
+    "direction": "fade",
+    "max_hold_bars": 96,
+    "taker_per_side_pct": 0.05,
+    "maker_per_side_pct": 0.02,
+    "capital_usd": 1500,
+    "train_test_split": 0.6
+  },
+  "train_days": 432.0,
+  "test_days": 287.98958333333337,
+  "train_results_sorted": [
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 1.0,
+        "tp_mult": 4.0
+      },
+      "n_trades": 608,
+      "cum_net_pct": 70.57009426612275,
+      "avg_gross_per_trade_pct": 0.21288248602611512,
+      "wr": 0.3848684210526316,
+      "rr_realized": 1.8221844897435027,
+      "daily_pct": 0.1623438692219397,
+      "bs_pos_rate": 0.5407925407925408
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 1.0,
+        "tp_mult": 1.5
+      },
+      "n_trades": 751,
+      "cum_net_pct": 62.23298121278296,
+      "avg_gross_per_trade_pct": 0.1743858322511391,
+      "wr": 0.4567243675099867,
+      "rr_realized": 1.3209542439610904,
+      "daily_pct": 0.14632814819584594,
+      "bs_pos_rate": 0.5547785547785548
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 1.5,
+        "tp_mult": 2.5
+      },
+      "n_trades": 532,
+      "cum_net_pct": 27.483004373748,
+      "avg_gross_per_trade_pct": 0.16257184945537406,
+      "wr": 0.4680451127819549,
+      "rr_realized": 1.2284159263371763,
+      "daily_pct": 0.08427829608856247,
+      "bs_pos_rate": 0.49417249417249415
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 1.5,
+        "tp_mult": 4.0
+      },
+      "n_trades": 529,
+      "cum_net_pct": 5.245158828689989,
+      "avg_gross_per_trade_pct": 0.13447989637293065,
+      "wr": 0.43478260869565216,
+      "rr_realized": 1.3528109867752132,
+      "daily_pct": 0.04583302125296362,
+      "bs_pos_rate": 0.5314685314685315
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 1.5,
+        "tp_mult": 4.0
+      },
+      "n_trades": 506,
+      "cum_net_pct": 6.156916182692784,
+      "avg_gross_per_trade_pct": 0.1354303101133803,
+      "wr": 0.4426877470355731,
+      "rr_realized": 1.31246281918306,
+      "daily_pct": 0.044971613234653714,
+      "bs_pos_rate": 0.5081585081585082
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 1.5,
+        "tp_mult": 2.5
+      },
+      "n_trades": 552,
+      "cum_net_pct": 0.7636655244512403,
+      "avg_gross_per_trade_pct": 0.12092112009127651,
+      "wr": 0.4528985507246377,
+      "rr_realized": 1.24436659912831,
+      "daily_pct": 0.03423254233885326,
+      "bs_pos_rate": 0.5198135198135199
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 1.0,
+        "tp_mult": 2.5
+      },
+      "n_trades": 646,
+      "cum_net_pct": -4.302293368783272,
+      "avg_gross_per_trade_pct": 0.11012089852435525,
+      "wr": 0.39628482972136225,
+      "rr_realized": 1.5510834956453072,
+      "daily_pct": 0.022287269552623765,
+      "bs_pos_rate": 0.5034965034965035
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 1.5,
+        "tp_mult": 1.5
+      },
+      "n_trades": 635,
+      "cum_net_pct": -9.12064008227066,
+      "avg_gross_per_trade_pct": 0.09528297805578725,
+      "wr": 0.5165354330708661,
+      "rr_realized": 0.9425512625102233,
+      "daily_pct": 0.0086219700588539,
+      "bs_pos_rate": 0.5034965034965035
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 0.5,
+        "tp_mult": 2.5
+      },
+      "n_trades": 581,
+      "cum_net_pct": -19.560541469761596,
+      "avg_gross_per_trade_pct": 0.07003887201328156,
+      "wr": 0.24096385542168675,
+      "rr_realized": 3.0004938049426837,
+      "daily_pct": -0.03598938740806347,
+      "bs_pos_rate": 0.4522144522144522
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 0.5,
+        "tp_mult": 4.0
+      },
+      "n_trades": 565,
+      "cum_net_pct": -22.07988962465276,
+      "avg_gross_per_trade_pct": 0.06648072130363084,
+      "wr": 0.21946902654867256,
+      "rr_realized": 3.3558893123418114,
+      "daily_pct": -0.042172204776501375,
+      "bs_pos_rate": 0.43123543123543123
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 1.0,
+        "tp_mult": 4.0
+      },
+      "n_trades": 601,
+      "cum_net_pct": -29.44724981584127,
+      "avg_gross_per_trade_pct": 0.06321564990365765,
+      "wr": 0.3527454242928453,
+      "rr_realized": 1.7605039511890703,
+      "daily_pct": -0.04777174631458743,
+      "bs_pos_rate": 0.4731934731934732
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 1.0,
+        "tp_mult": 2.5
+      },
+      "n_trades": 463,
+      "cum_net_pct": -25.730368310373496,
+      "avg_gross_per_trade_pct": 0.04898763103095367,
+      "wr": 0.36285097192224625,
+      "rr_realized": 1.6541173853140592,
+      "daily_pct": -0.04974242322376957,
+      "bs_pos_rate": 0.44988344988344986
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 1.0,
+        "tp_mult": 2.5
+      },
+      "n_trades": 623,
+      "cum_net_pct": -29.69551691147482,
+      "avg_gross_per_trade_pct": 0.059539135693890445,
+      "wr": 0.391653290529695,
+      "rr_realized": 1.4862593960129906,
+      "daily_pct": -0.05161370014515342,
+      "bs_pos_rate": 0.47785547785547783
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 1.5,
+        "tp_mult": 4.0
+      },
+      "n_trades": 389,
+      "cum_net_pct": -31.531922614655585,
+      "avg_gross_per_trade_pct": 0.023466702384052903,
+      "wr": 0.39588688946015427,
+      "rr_realized": 1.4041835157993763,
+      "daily_pct": -0.06648484438102645,
+      "bs_pos_rate": 0.44755244755244755
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 0.5,
+        "tp_mult": 1.5
+      },
+      "n_trades": 633,
+      "cum_net_pct": -30.670287023033417,
+      "avg_gross_per_trade_pct": 0.04575819465681811,
+      "wr": 0.27014218009478674,
+      "rr_realized": 2.464972270021398,
+      "daily_pct": -0.07065986755146793,
+      "bs_pos_rate": 0.43356643356643354
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 1.5,
+        "tp_mult": 1.5
+      },
+      "n_trades": 611,
+      "cum_net_pct": -35.96836997109848,
+      "avg_gross_per_trade_pct": 0.036978491253783205,
+      "wr": 0.5073649754500819,
+      "rr_realized": 0.9107263780737105,
+      "daily_pct": -0.074690143157265,
+      "bs_pos_rate": 0.5081585081585082
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 1.0,
+        "tp_mult": 4.0
+      },
+      "n_trades": 450,
+      "cum_net_pct": -34.29393773751504,
+      "avg_gross_per_trade_pct": 0.023263194219013784,
+      "wr": 0.3377777777777778,
+      "rr_realized": 1.779694977220057,
+      "daily_pct": -0.077850839355194,
+      "bs_pos_rate": 0.43123543123543123
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 1.0,
+        "tp_mult": 1.5
+      },
+      "n_trades": 723,
+      "cum_net_pct": -38.12734262997893,
+      "avg_gross_per_trade_pct": 0.043525982001496405,
+      "wr": 0.4287690179806362,
+      "rr_realized": 1.2526692315389683,
+      "daily_pct": -0.08000165512249564,
+      "bs_pos_rate": 0.48484848484848486
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 0.5,
+        "tp_mult": 4.0
+      },
+      "n_trades": 881,
+      "cum_net_pct": -38.48592231533778,
+      "avg_gross_per_trade_pct": 0.05919067130521264,
+      "wr": 0.2292849035187287,
+      "rr_realized": 3.148677942856585,
+      "daily_pct": -0.08051624671321223,
+      "bs_pos_rate": 0.4428904428904429
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 0.5,
+        "tp_mult": 1.5
+      },
+      "n_trades": 1056,
+      "cum_net_pct": -38.30538760088259,
+      "avg_gross_per_trade_pct": 0.05944085002044992,
+      "wr": 0.29734848484848486,
+      "rr_realized": 2.2267465646524847,
+      "daily_pct": -0.08386681106112241,
+      "bs_pos_rate": 0.4662004662004662
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 1.0,
+        "tp_mult": 1.5
+      },
+      "n_trades": 510,
+      "cum_net_pct": -38.13384216681528,
+      "avg_gross_per_trade_pct": 0.013240710688767516,
+      "wr": 0.3980392156862745,
+      "rr_realized": 1.3571356218200574,
+      "daily_pct": -0.09256304988131615,
+      "bs_pos_rate": 0.40559440559440557
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 1.5,
+        "tp_mult": 2.5
+      },
+      "n_trades": 402,
+      "cum_net_pct": -41.4845605511241,
+      "avg_gross_per_trade_pct": -0.016656311807862468,
+      "wr": 0.417910447761194,
+      "rr_realized": 1.2281810494022152,
+      "daily_pct": -0.10320795682120536,
+      "bs_pos_rate": 0.4358974358974359
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 0.5,
+        "tp_mult": 2.5
+      },
+      "n_trades": 884,
+      "cum_net_pct": -47.11263918404555,
+      "avg_gross_per_trade_pct": 0.036285619874380344,
+      "wr": 0.26018099547511314,
+      "rr_realized": 2.559324279754372,
+      "daily_pct": -0.12371183340520323,
+      "bs_pos_rate": 0.4428904428904429
+    },
+    {
+      "config": {
+        "body": 70,
+        "sl_mult": 1.5,
+        "tp_mult": 1.5
+      },
+      "n_trades": 445,
+      "cum_net_pct": -47.949696208531876,
+      "avg_gross_per_trade_pct": -0.03758231944294032,
+      "wr": 0.48089887640449436,
+      "rr_realized": 0.9215956504608066,
+      "daily_pct": -0.13116697257432516,
+      "bs_pos_rate": 0.44988344988344986
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 0.5,
+        "tp_mult": 1.5
+      },
+      "n_trades": 1005,
+      "cum_net_pct": -50.44294429363199,
+      "avg_gross_per_trade_pct": 0.03416942320626938,
+      "wr": 0.2945273631840796,
+      "rr_realized": 2.1529921812708954,
+      "daily_pct": -0.13856418906874837,
+      "bs_pos_rate": 0.4195804195804196
+    },
+    {
+      "config": {
+        "body": 30,
+        "sl_mult": 0.5,
+        "tp_mult": 2.5
+      },
+      "n_trades": 922,
+      "cum_net_pct": -52.052981160172486,
+      "avg_gross_per_trade_pct": 0.03035160650569257,
+      "wr": 0.25054229934924077,
+      "rr_realized": 2.6704208775048937,
+      "daily_pct": -0.14239772870775802,
+      "bs_pos_rate": 0.4522144522144522
+    },
+    {
+      "config": {
+        "body": 50,
+        "sl_mult": 0.5,
+        "tp_mult": 4.0
+      },
+      "n_trades": 839,
+      "cum_net_pct": -53.401933563560114,
+      "avg_gross_per_trade_pct": 0.020847812746854436,
+      "wr": 0.232419547079857,
+      "rr_realized": 2.8862625929300787,
+      "daily_pct": -0.15115436366988227,
+      "bs_pos_rate": 0.43488372093023253
+    }
+  ],
+  "winner_config": {
+    "body": 30,
+    "sl_mult": 1.0,
+    "tp_mult": 4.0
+  },
+  "winner_train": {
+    "config": {
+      "body": 30,
+      "sl_mult": 1.0,
+      "tp_mult": 4.0
+    },
+    "n_trades": 608,
+    "cum_net_pct": 70.57009426612275,
+    "avg_gross_per_trade_pct": 0.21288248602611512,
+    "wr": 0.3848684210526316,
+    "rr_realized": 1.8221844897435027,
+    "daily_pct": 0.1623438692219397,
+    "bs_pos_rate": 0.5407925407925408
+  },
+  "winner_test": {
+    "n_trades": 402,
+    "cum_net_pct": -19.825014799428143,
+    "avg_gross_per_trade_pct": 0.05725879622703739,
+    "wr": 0.35074626865671643,
+    "rr_realized": 1.7357266517462877,
+    "daily_pct": -0.0568491531090597,
+    "bs_pos_rate": 0.46853146853146854
+  },
+  "train_daily_pct": 0.1623438692219397,
+  "test_daily_pct": -0.0568491531090597,
+  "verdict": "CATASTROPHIC_OVERFIT"
+}

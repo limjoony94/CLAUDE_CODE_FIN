@@ -5,23 +5,23 @@
 **Flags**: high_gap_downtime
 
 ## Depth Stream
-  - Rows: 128,596
-  - Duration: 18.17 h
-  - Effective Hz: 1.966
+  - Rows: 138,853
+  - Duration: 19.61 h
+  - Effective Hz: 1.967
   - Update interval: median 501ms, p95 516ms, p99 548ms, max 9996ms
-  - Spread (bps): median 0.04, p95 0.24
+  - Spread (bps): median 0.04, p95 0.23
   - Levels filled: bids median 20/20, asks median 20/20
-  - File size: 25.8 MB
+  - File size: 28.14 MB
 
 ## Trade Stream
-  - Rows: 454,475
-  - Duration: 18.17 h
-  - Effective Hz: 6.946
-  - Trade interval: median 173ms, p95 207ms, p99 885ms
+  - Rows: 496,918
+  - Duration: 19.61 h
+  - Effective Hz: 7.039
+  - Trade interval: median 166ms, p95 207ms, p99 852ms
   - Price range: $74902.60 → $77865.50
-  - Qty: median 0.0044, p99 0.5863
-  - Maker share: 0.513
-  - File size: 3.85 MB
+  - Qty: median 0.0045, p99 0.6052
+  - Maker share: 0.506
+  - File size: 4.19 MB
 
 ## Gaps
   - Total: 122 (81 depth, 41 trades)

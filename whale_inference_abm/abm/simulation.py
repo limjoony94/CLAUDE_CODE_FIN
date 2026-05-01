@@ -80,6 +80,17 @@ class Simulation:
         self._active_orders: dict[str, set[str]] = {}
         self._last_actions: dict[str, dict[str, Any]] = {}
         self._bar_counter: int = 0
+        # Leaderboard cache (advisor G1 → G2 binding requirement):
+        # growth_leaderboard() is O(N agents) per call; called per agent decision = O(N²)
+        # per bar. Cache invalidates on bar boundary. Single-slot (bar_idx, lookback)
+        # → leaderboard list. Small memory, large speedup for 10k+ bar runs.
+        self._leaderboard_cache_key: tuple[int, int] = (-1, -1)
+        self._leaderboard_cache_value: list[tuple[str, float]] = []
+        # Piggyback excluded set cache (per bar) — same pattern
+        self._pb_excluded_cache_bar: int = -1
+        self._pb_excluded_cache_value: set[str] = set()
+        # Track whether any piggyback agent exists (skip context build if not)
+        self._has_piggyback: bool = False
 
     # ----- Initialization -----
 
@@ -332,23 +343,41 @@ class Simulation:
         )
 
     def _build_context(self, agent: "Agent", now_ns: int) -> dict[str, Any]:
+        # Fast path: only piggyback agents read context fields. Skip all O(N) work otherwise.
+        if agent.family != "piggyback":
+            return {}
+
         snapshot = self.orderbook.snapshot(now_ns, depth=1)
         mid = snapshot.mid_price if snapshot.mid_price is not None else 0.0
 
+        # Leaderboard with per-bar cache (advisor G2 prerequisite)
         leaderboard: list[tuple[str, float]] = []
         if mid > 0:
-            leaderboard = self.wealth_tracker.growth_leaderboard(
-                self.piggyback_lookback_bars, mid
-            )
+            bar_idx = now_ns // BAR_DURATION_NS
+            cache_key = (bar_idx, self.piggyback_lookback_bars)
+            if cache_key == self._leaderboard_cache_key:
+                leaderboard = self._leaderboard_cache_value
+            else:
+                leaderboard = self.wealth_tracker.growth_leaderboard(
+                    self.piggyback_lookback_bars, mid
+                )
+                self._leaderboard_cache_key = cache_key
+                self._leaderboard_cache_value = leaderboard
 
-        # piggyback excluded: all piggyback-family agents (per design v0.4)
-        piggyback_excluded_ids = {
-            a.agent_id for a in self.registry.alive_agents() if a.family == "piggyback"
-        }
+        # Piggyback excluded with per-bar cache
+        bar_idx = now_ns // BAR_DURATION_NS
+        if bar_idx == self._pb_excluded_cache_bar:
+            piggyback_excluded_ids = self._pb_excluded_cache_value
+        else:
+            piggyback_excluded_ids = {
+                a.agent_id for a in self.registry.alive_agents() if a.family == "piggyback"
+            }
+            self._pb_excluded_cache_bar = bar_idx
+            self._pb_excluded_cache_value = piggyback_excluded_ids
 
         return {
             "wealth_growth_leaderboard": leaderboard,
-            "last_actions_by_agent": dict(self._last_actions),
+            "last_actions_by_agent": self._last_actions,  # read-only by piggyback; no copy
             "piggyback_excluded_ids": piggyback_excluded_ids,
         }
 

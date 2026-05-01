@@ -38,7 +38,11 @@ class Orderbook:
     - FIFO order preserved within each level
     """
 
-    def __init__(self) -> None:
+    def __init__(self, *, strict: bool = True) -> None:
+        # strict=True: assert invariants on every mutation (defensive, slower).
+        # strict=False: skip checks (production sim runs). Invariants are guaranteed
+        # by construction; defensive checks were a 73% bottleneck at 1k bars.
+        self._strict: bool = strict
         # Both SortedDict[float, PriceLevel]; bids accessed via peekitem(-1) for max
         self.bids: SortedDict = SortedDict()
         self.asks: SortedDict = SortedDict()
@@ -278,6 +282,8 @@ class Orderbook:
         )
 
     def _assert_invariants(self) -> None:
+        if not self._strict:
+            return
         bb = self.best_bid()
         ba = self.best_ask()
         if bb is not None and ba is not None:

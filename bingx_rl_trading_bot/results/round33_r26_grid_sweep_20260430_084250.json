@@ -1,0 +1,527 @@
+{
+  "date": "2026-04-29T23:42:50.605409+00:00",
+  "pre_reg_commit": "840b160",
+  "grid": {
+    "grid_spacing_pct": [
+      0.2,
+      0.3,
+      0.5
+    ],
+    "grid_levels_each_side": [
+      3,
+      5,
+      7
+    ],
+    "trend_exit_distance_pct": [
+      1.0,
+      1.5,
+      2.5
+    ]
+  },
+  "fixed": {
+    "asset": "BTC/USDT",
+    "capital_usd": 1500,
+    "atr_period": 20,
+    "atr_pct_median_lookback_bars": 720,
+    "maker_friction_per_side_pct": 0.02,
+    "taker_friction_per_side_pct": 0.05,
+    "max_grid_lifetime_bars": 168,
+    "train_test_split": 0.6
+  },
+  "train_days": 432.0,
+  "test_days": 287.95833333333337,
+  "train_results_sorted": [
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 35.49062960655746,
+      "cum_harvest_pct": 42.079999999999465,
+      "cum_drift_pct": -6.589370393442001,
+      "cum_friction_pct": 3.7050000000000556,
+      "daily_pct": 0.08828514827501856,
+      "n_cycles": 526,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9368932038834952
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 34.68801609845074,
+      "cum_harvest_pct": 42.71999999999945,
+      "cum_drift_pct": -8.031983901548712,
+      "cum_friction_pct": 3.816666666666724,
+      "daily_pct": 0.08628859725982771,
+      "n_cycles": 534,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9447004608294931
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 3,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 30.626717648803066,
+      "cum_harvest_pct": 34.87999999999961,
+      "cum_drift_pct": -4.253282351196544,
+      "cum_friction_pct": 2.988333333333374,
+      "daily_pct": 0.07618586479801757,
+      "n_cycles": 436,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9269662921348315
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 27.95899934860137,
+      "cum_harvest_pct": 33.31199999999958,
+      "cum_drift_pct": -5.353000651398209,
+      "cum_friction_pct": 2.9509999999999006,
+      "daily_pct": 0.06954974962338649,
+      "n_cycles": 694,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.944206008583691
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 27.6181102928902,
+      "cum_harvest_pct": 30.706666666666084,
+      "cum_drift_pct": -3.0885563737758823,
+      "cum_friction_pct": 4.5150000000000095,
+      "daily_pct": 0.06870176689773681,
+      "n_cycles": 658,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9479166666666666
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 26.949431243737376,
+      "cum_harvest_pct": 33.16799999999961,
+      "cum_drift_pct": -6.218568756262234,
+      "cum_friction_pct": 2.973999999999898,
+      "daily_pct": 0.06703838617845119,
+      "n_cycles": 691,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.8907563025210085
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 5,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 26.710729659835135,
+      "cum_harvest_pct": 30.28799999999961,
+      "cum_drift_pct": -3.577270340164476,
+      "cum_friction_pct": 2.6079999999999353,
+      "daily_pct": 0.06644460114386849,
+      "n_cycles": 631,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9481132075471698
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 25.350926984234626,
+      "cum_harvest_pct": 28.79333333333277,
+      "cum_drift_pct": -3.442406349098147,
+      "cum_friction_pct": 4.2300000000000395,
+      "daily_pct": 0.06306200742346922,
+      "n_cycles": 617,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9615384615384616
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 24.570787768136814,
+      "cum_harvest_pct": 26.683999999999315,
+      "cum_drift_pct": -2.113212231862503,
+      "cum_friction_pct": 3.9029999999997953,
+      "daily_pct": 0.06112136260730551,
+      "n_cycles": 953,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9638009049773756
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 23.54647778294346,
+      "cum_harvest_pct": 25.87199999999932,
+      "cum_drift_pct": -2.325522217055862,
+      "cum_friction_pct": 3.779999999999809,
+      "daily_pct": 0.05857332781826731,
+      "n_cycles": 924,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.976303317535545
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 22.845644231253047,
+      "cum_harvest_pct": 27.188571428571205,
+      "cum_drift_pct": -4.342927197318157,
+      "cum_friction_pct": 2.4107142857142057,
+      "daily_pct": 0.056829960774261314,
+      "n_cycles": 793,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9390243902439024
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 22.308450751187486,
+      "cum_harvest_pct": 25.405714285714073,
+      "cum_drift_pct": -3.097263534526587,
+      "cum_friction_pct": 2.1971428571427887,
+      "daily_pct": 0.0554936585850435,
+      "n_cycles": 741,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9652173913043478
+    },
+    {
+      "config": {
+        "spacing": 0.5,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 21.924037215974167,
+      "cum_harvest_pct": 26.91428571428551,
+      "cum_drift_pct": -4.9902484983113435,
+      "cum_friction_pct": 2.4078571428570634,
+      "daily_pct": 0.054537406009885984,
+      "n_cycles": 785,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9437751004016064
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 3,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 21.35262189933661,
+      "cum_harvest_pct": 22.39999999999957,
+      "cum_drift_pct": -1.0473781006629561,
+      "cum_friction_pct": 3.2233333333333802,
+      "daily_pct": 0.05311597487397167,
+      "n_cycles": 480,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 1.0
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 21.184352155375503,
+      "cum_harvest_pct": 22.95999999999955,
+      "cum_drift_pct": -1.7756478446240462,
+      "cum_friction_pct": 3.3499999999998566,
+      "daily_pct": 0.052697393421332096,
+      "n_cycles": 1148,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.978448275862069
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 20.59270216595167,
+      "cum_harvest_pct": 22.519999999999545,
+      "cum_drift_pct": -1.927297834047874,
+      "cum_friction_pct": 3.282142857142718,
+      "daily_pct": 0.05122562727848674,
+      "n_cycles": 1126,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9688888888888889
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 5,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 20.233766806207456,
+      "cum_harvest_pct": 20.999999999999535,
+      "cum_drift_pct": -0.7662331937920801,
+      "cum_friction_pct": 3.02099999999989,
+      "daily_pct": 0.05033275324927228,
+      "n_cycles": 750,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9883040935672515
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 19.08271653238293,
+      "cum_harvest_pct": 21.78000000000006,
+      "cum_drift_pct": -2.697283467617134,
+      "cum_friction_pct": 4.8983333333333015,
+      "daily_pct": 0.047469444110405296,
+      "n_cycles": 726,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.989010989010989
+    },
+    {
+      "config": {
+        "spacing": 0.3,
+        "levels": 7,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 18.686480039711604,
+      "cum_harvest_pct": 19.499999999999634,
+      "cum_drift_pct": -0.8135199602880301,
+      "cum_friction_pct": 2.8057142857141764,
+      "daily_pct": 0.04648378119331245,
+      "n_cycles": 975,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9587628865979382
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 18.049790582525322,
+      "cum_harvest_pct": 20.22000000000003,
+      "cum_drift_pct": -2.1702094174747097,
+      "cum_friction_pct": 4.528333333333343,
+      "daily_pct": 0.044899976573446077,
+      "n_cycles": 674,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9476744186046512
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 17.521795628443,
+      "cum_harvest_pct": 19.818000000000158,
+      "cum_drift_pct": -2.296204371557157,
+      "cum_friction_pct": 4.466999999999733,
+      "daily_pct": 0.043586556289659205,
+      "n_cycles": 1101,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9514563106796117
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 16.639707383414812,
+      "cum_harvest_pct": 18.66600000000012,
+      "cum_drift_pct": -2.026292616585308,
+      "cum_friction_pct": 4.196999999999762,
+      "daily_pct": 0.041392306923917446,
+      "n_cycles": 1037,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9536082474226805
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 1.0
+      },
+      "cum_net_pct": 16.186940872032995,
+      "cum_harvest_pct": 18.012857142857374,
+      "cum_drift_pct": -1.8259162708243784,
+      "cum_friction_pct": 4.057857142856971,
+      "daily_pct": 0.04026602206973382,
+      "n_cycles": 1401,
+      "n_grid_setups": 138,
+      "n_trend_exits": 135,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9683257918552036
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 1.5
+      },
+      "cum_net_pct": 15.698306411298566,
+      "cum_harvest_pct": 17.331428571428766,
+      "cum_drift_pct": -1.633122160130201,
+      "cum_friction_pct": 3.8964285714283915,
+      "daily_pct": 0.0390505134609417,
+      "n_cycles": 1348,
+      "n_grid_setups": 125,
+      "n_trend_exits": 122,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9619047619047619
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 3,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 14.714614634658036,
+      "cum_harvest_pct": 15.090000000000028,
+      "cum_drift_pct": -0.3753853653419934,
+      "cum_friction_pct": 3.3650000000000504,
+      "daily_pct": 0.03660351899168666,
+      "n_cycles": 503,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9923664122137404
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 5,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 13.743893901337323,
+      "cum_harvest_pct": 14.382000000000023,
+      "cum_drift_pct": -0.6381060986626997,
+      "cum_friction_pct": 3.209999999999869,
+      "daily_pct": 0.03418879079934657,
+      "n_cycles": 799,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 0.9675324675324676
+    },
+    {
+      "config": {
+        "spacing": 0.2,
+        "levels": 7,
+        "te_dist": 2.5
+      },
+      "cum_net_pct": 13.190062548530838,
+      "cum_harvest_pct": 13.744285714285843,
+      "cum_drift_pct": -0.5542231657550043,
+      "cum_friction_pct": 3.0692857142855874,
+      "daily_pct": 0.032811100866992134,
+      "n_cycles": 1069,
+      "n_grid_setups": 90,
+      "n_trend_exits": 80,
+      "n_days": 402.0,
+      "bs_pos_rate": 1.0
+    }
+  ],
+  "winner_config": {
+    "spacing": 0.5,
+    "levels": 3,
+    "te_dist": 1.5
+  },
+  "winner_train_daily": 0.08828514827501856,
+  "winner_test_daily": 0.050928456529969024,
+  "winner_test_full": {
+    "cum_net_pct": 14.667395480631079,
+    "cum_harvest_pct": 25.119999999999724,
+    "cum_drift_pct": -10.452604519368645,
+    "cum_friction_pct": 2.466666666666693,
+    "daily_pct": 0.050928456529969024,
+    "n_cycles": 314,
+    "n_grid_setups": 86,
+    "n_trend_exits": 82,
+    "n_days": 288.0,
+    "bs_pos_rate": 0.7837837837837838
+  },
+  "baseline_test_daily": 0.04399624834258099,
+  "baseline_test_full": {
+    "cum_net_pct": 12.670919522663326,
+    "cum_harvest_pct": 16.491999999999667,
+    "cum_drift_pct": -3.8210804773363423,
+    "cum_friction_pct": 2.4679999999999525,
+    "daily_pct": 0.04399624834258099,
+    "n_cycles": 589,
+    "n_grid_setups": 86,
+    "n_trend_exits": 82,
+    "n_days": 288.0,
+    "bs_pos_rate": 0.8192771084337349
+  },
+  "verdict": "PARETO_BOUNDARY_R26_BASELINE"
+}

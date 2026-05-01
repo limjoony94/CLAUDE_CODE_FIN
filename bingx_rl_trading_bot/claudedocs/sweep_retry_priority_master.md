@@ -70,13 +70,33 @@
 
 각 mechanism sweep 완료 시 아래 표 업데이트:
 
-| # | Mechanism | IS PASS | VAL PASS | OOS PASS | Best daily | Best avg_gross | Note |
-|---|-----------|---------|----------|----------|------------|----------------|------|
-| 10 | R42b Ehlers cycle (1h) | 0/144 | 0/5 | - | +0.060% | +1.131% | edge×freq trade-off, F1 PASS but F6 FAIL |
-| 1 | R21b Pattern reversal (5m) | 0/144 | 0/5 | - | -0.055% | +0.018% | edge < friction floor (avg_gross < 0.07%) |
-| 2 | R9b Donchian fixed exit (5m) | TBD | - | - | TBD | TBD | Phase 1 next |
-| 3 | C1 Breakout v2 (15m) | TBD | - | - | TBD | TBD | Phase 1 |
-| ... | ... | ... | ... | ... | ... | ... | ... |
+| # | Mechanism | Configs | IS PASS | Best daily | Best avg_gross | Note |
+|---|-----------|---------|---------|------------|----------------|------|
+| 10 | R42b Ehlers cycle (1h) | 144 | 0/144 | +0.060% | +1.131% | edge↑↑ × freq↓↓ (n=21), F6 FAIL |
+| 1 | R21b Pattern reversal (5m+1h) | 144 | 0/144 | -0.055% | +0.018% | edge < friction floor |
+| 4 | R8b 1h Donchian | 1296 | 0/1296 | +0.043% | +0.232% | edge>fric, daily<target |
+| 8 | R41b MACD cross (1h) | 648 | 0/648 | +0.051% | +0.232% | 동일 envelope |
+| 5 | R37b compression breakout (1h) | 864 | 0/864 | +0.067% | +0.468% | edge>fric, daily<target |
+| 6 | R39b Daily ORB (1h) | 216 | 0/216 | +0.006% | +0.146% | low edge, low daily |
+| 11 | **R1b XS momentum (10coin daily)** | 108 | 0/108 | +0.105% | +1.315% | borderline (long-only 60d/7d rebal) |
+| 16 | **N8b Macro regime BTC vs DXY/SPY/GLD** | 108 | 0/108 | **+0.312%** ✅ | **+4.077%** ✅ | **F6 FAIL n=28<50** — sample size only |
+| 9 | R36b EMA pullback (1h) | 192 | 0/192 | +0.080% | +0.218% | 동일 envelope |
+
+**Cumulative: 9 mechanisms × 3,720 configs = 0/3,720 IS PASS overall**
+
+**Pattern observed (sweep 9/32 done)**:
+- All 9 mechanisms 0 IS PASS at strict criteria
+- **N8b**: F2 ✅ daily target 통과 (first!) but F6 FAIL (n=28 < 50)
+- **R1b**: borderline (+0.105% daily, half target)
+- 다수: edge >> friction (avg_gross 0.15-1.13%) but daily +0.04-0.10%
+- "edge × frequency = constant" hypothesis 강한 evidence
+- N8b가 envelope 한계 가장 흥미로운 case — high-edge low-freq pathway
+
+**다음 priorities**:
+- Phase 1 #5 R40 volume absorption sweep
+- Phase 2 #12 Path B R2 XS reversal sweep
+- Phase 2 #15 N7 cointegration sweep (rolling window)
+- Phase 1 #3 C1 Breakout v2 — already extensive sweep done elsewhere
 
 **Pattern observed (sweep 2/32 done)**:
 - R42b: high edge per trade (+1.13%), low frequency (n=21/360d)

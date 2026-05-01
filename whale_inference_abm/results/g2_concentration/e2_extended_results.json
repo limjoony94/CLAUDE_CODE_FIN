@@ -1,0 +1,70 @@
+{
+  "result": {
+    "experiment": "E2_extended_20k_bars",
+    "seed": 42,
+    "terminal_bars": 20000,
+    "elapsed_sec": 9.5,
+    "initial_gini": 0.4389,
+    "final_gini": 0.5065,
+    "amplification_total": 0.0676,
+    "checkpoints": [
+      {
+        "bar": 5000,
+        "n_alive": 14,
+        "gini": 0.4899,
+        "top_5pct_share": 0.2054
+      },
+      {
+        "bar": 10000,
+        "n_alive": 14,
+        "gini": 0.5028,
+        "top_5pct_share": 0.231
+      },
+      {
+        "bar": 15000,
+        "n_alive": 14,
+        "gini": 0.5082,
+        "top_5pct_share": 0.2315
+      },
+      {
+        "bar": 20000,
+        "n_alive": 14,
+        "gini": 0.5065,
+        "top_5pct_share": 0.2002
+      }
+    ],
+    "trade_count": 86657
+  },
+  "trajectory_analysis": {
+    "checkpoints": [
+      {
+        "bar": 5000,
+        "n_alive": 14,
+        "gini": 0.4899,
+        "top_5pct_share": 0.2054
+      },
+      {
+        "bar": 10000,
+        "n_alive": 14,
+        "gini": 0.5028,
+        "top_5pct_share": 0.231
+      },
+      {
+        "bar": 15000,
+        "n_alive": 14,
+        "gini": 0.5082,
+        "top_5pct_share": 0.2315
+      },
+      {
+        "bar": 20000,
+        "n_alive": 14,
+        "gini": 0.5065,
+        "top_5pct_share": 0.2002
+      }
+    ],
+    "crossed_0_55": false,
+    "growth_5k_to_20k": 0.0166,
+    "verdict": "(a) abandonment CONFIRMED",
+    "details": "Gini plateaus \u2192 mechanism produces one-time burst then stalls"
+  }
+}

@@ -232,6 +232,113 @@ def run_E3(seed: int = 42, terminal_bars: int = 5000) -> dict:
     }
 
 
+def run_E2_extended(seed: int = 42, terminal_bars: int = 20000) -> dict:
+    """E2 extended: same Pareto x10 setup but 20k bars with checkpoints at 5k/10k/15k/20k.
+
+    Per advisor (c) sub-variant decision (2026-05-01): tests whether the +0.051/5k bars
+    amplification observed in E2 scales linearly (→ crosses 0.55 at ~10k more bars,
+    seeded-Pareto v2 viable) or plateaus (→ confirms (a) abandonment).
+    """
+    rng = np.random.default_rng(seed)
+    pareto_wealths = (rng.pareto(1.16, size=15) * 100 + 100) * 10
+    pareto_wealths = np.clip(pareto_wealths, 1000, 100000)
+    initial_dict = {aid: float(pareto_wealths[i]) for i, aid in enumerate(AGENT_IDS)}
+    initial_gini = gini(list(initial_dict.values()))
+
+    t0 = time.time()
+    sim = build_sim(seed=seed, terminal_bars=terminal_bars, agent_wealths=initial_dict)
+    sim.run()
+    elapsed = time.time() - t0
+
+    history = sim.wealth_tracker._history  # list[(ts_ns, dict[aid, wealth])]
+    checkpoint_bars = [5000, 10000, 15000, 20000]
+    checkpoints: list[dict] = []
+    for cb in checkpoint_bars:
+        target_ns = cb * BAR_DURATION_NS
+        snap_at = None
+        for ts, snap in history:
+            if ts <= target_ns:
+                snap_at = snap
+            else:
+                break
+        if snap_at is None:
+            snap_at = history[-1][1] if history else {}
+        wealths = list(snap_at.values())
+        checkpoints.append({
+            "bar": cb,
+            "n_alive": len(snap_at),
+            "gini": round(gini(wealths), 4),
+            "top_5pct_share": round(top_k_share(wealths, 0.05), 4),
+        })
+
+    eval_end = evaluate_at_end(sim, terminal_bars)
+    return {
+        "experiment": "E2_extended_20k_bars",
+        "seed": seed,
+        "terminal_bars": terminal_bars,
+        "elapsed_sec": round(elapsed, 1),
+        "initial_gini": round(initial_gini, 4),
+        "final_gini": eval_end["gini_at_end"],
+        "amplification_total": round(eval_end["gini_at_end"] - initial_gini, 4),
+        "checkpoints": checkpoints,
+        "trade_count": sim.orderbook._trade_counter,
+    }
+
+
+def main_extended() -> None:
+    """E2-extended only: 20k bars + checkpoints. Apply trajectory decision tree."""
+    print("Running E2-extended (Pareto x10 initial, 20000 bars, checkpoints)...")
+    result = run_E2_extended(terminal_bars=20000)
+    print(json.dumps(result, indent=2))
+    print()
+
+    # Apply trajectory decision tree
+    cps = result["checkpoints"]
+    ginis = [c["gini"] for c in cps]
+    print("Trajectory analysis:")
+    print(f"  Initial Gini:         {result['initial_gini']:.4f}")
+    for cp in cps:
+        print(f"  Bar {cp['bar']:>5d}: Gini = {cp['gini']:.4f} (n_alive={cp['n_alive']})")
+    print()
+
+    # Classification
+    crossed_055 = any(g > 0.55 for g in ginis)
+    final_gini = ginis[-1]
+    growth_5k_to_20k = ginis[-1] - ginis[0]
+
+    print("Verdict per advisor trajectory decision tree:")
+    if crossed_055 and growth_5k_to_20k > 0.05:
+        verdict = "(c) seeded-Pareto v2 VIABLE"
+        details = "Gini crosses 0.55 with monotonic growth → G2 criterion update + design v0.8 patch + T-G3 unblocks"
+    elif final_gini < 0.51 and growth_5k_to_20k < 0.02:
+        verdict = "(a) abandonment CONFIRMED"
+        details = "Gini plateaus → mechanism produces one-time burst then stalls"
+    elif 0.50 <= final_gini <= 0.55:
+        verdict = "BORDERLINE — surface to user"
+        details = f"Final Gini {final_gini:.4f} in (0.50, 0.55) range. User-level decision needed."
+    else:
+        verdict = "WEIRD — does not fit advisor decision tree"
+        details = f"final={final_gini}, growth_5k_to_20k={growth_5k_to_20k:.4f}. Call advisor."
+
+    print(f"VERDICT: {verdict}")
+    print(f"  {details}")
+
+    out_path = Path(__file__).resolve().parent.parent / "results" / "g2_concentration" / "e2_extended_results.json"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    with out_path.open("w", encoding="utf-8") as f:
+        json.dump({
+            "result": result,
+            "trajectory_analysis": {
+                "checkpoints": cps,
+                "crossed_0_55": crossed_055,
+                "growth_5k_to_20k": round(growth_5k_to_20k, 4),
+                "verdict": verdict,
+                "details": details,
+            },
+        }, f, indent=2)
+    print(f"\nResults: {out_path}")
+
+
 def main() -> None:
     print("Running E2 (Pareto initial, wealth-weighted sizing on)...")
     e2 = run_E2()

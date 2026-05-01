@@ -247,6 +247,45 @@ def test_smoke_no_orphan_explosion() -> None:
     assert len(logger.orphan_drops) < 50, f"Excessive orphans: {len(logger.orphan_drops)}"
 
 
+def test_smoke_book_has_liquidity_majority_of_bars() -> None:
+    """Post-calibration (advisor v0.5): mid should be present in ≥50% of bar snapshots.
+
+    Pre-calibration: only 21% had mid. After MM size 0.01→0.10 + Random 0.02→0.005,
+    book stays liquid more often.
+    """
+    logger = _RecordingLogger()
+    sim = _build_smoke_sim(seed=42, terminal_bars=100, logger=logger)
+    sim.run()
+    mid_present = sum(
+        1 for snap, _ in logger.bar_snapshots if snap.mid_price is not None
+    )
+    total = len(logger.bar_snapshots)
+    ratio = mid_present / total if total > 0 else 0.0
+    assert ratio >= 0.5, f"Mid present in only {mid_present}/{total} ({ratio:.1%}) bars; calibration regression?"
+
+
+def test_smoke_at_least_3_families_active_in_trades() -> None:
+    """MM-monopoly regression check: at least 3 agent families should each have ≥10 trades.
+
+    Pre-calibration: MM owned 88% of trades, directional families had ~0.
+    """
+    logger = _RecordingLogger()
+    sim = _build_smoke_sim(seed=42, terminal_bars=100, logger=logger)
+    sim.run()
+    family_trade_counts: dict[str, int] = {}
+    for trade in logger.trades:
+        for agent_id in (trade.buyer_agent_id, trade.seller_agent_id):
+            if not sim.registry.has(agent_id):
+                # bankrupt agent — try to infer family from id prefix
+                continue
+            family = sim.registry.get(agent_id).family
+            family_trade_counts[family] = family_trade_counts.get(family, 0) + 1
+    families_with_10plus = sum(1 for cnt in family_trade_counts.values() if cnt >= 10)
+    assert families_with_10plus >= 3, (
+        f"Only {families_with_10plus} families with ≥10 trades: {family_trade_counts}"
+    )
+
+
 def test_smoke_mm_quotes_both_sides() -> None:
     """MarketMaker must produce trades on both sides over the smoke (book depth visible)."""
     logger = _RecordingLogger()

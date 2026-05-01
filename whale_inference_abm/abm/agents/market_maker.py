@@ -24,7 +24,10 @@ class MarketMakerAgent(Agent):
     family: str = field(default="market_maker", init=False)
     base_spread: float = 0.001  # 10 bps
     inventory_skew: float = 0.0001  # per unit of inventory
-    base_size_fraction: float = 0.01  # of current_wealth
+    base_size_fraction: float = 0.10  # of current_wealth — calibrated post-Day-8-10 smoke
+    """0.10 (was 0.01 in design pre-calibration). MM at 0.01 was sized below random agents,
+    book got swept faster than MM could requote. Advisor calibration: 0.10 = MM provides
+    real liquidity (size 0.002 BTC at 50000 wealth), 5x random size."""
 
     current_inventory: float = field(init=False, default=0.0)
 

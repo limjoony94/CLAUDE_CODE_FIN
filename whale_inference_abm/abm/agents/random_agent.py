@@ -21,7 +21,10 @@ RANDOM_LIMIT_OFFSET_PCT = 0.01  # ±1% from mid
 @dataclass
 class RandomAgent(Agent):
     family: str = field(default="random", init=False)
-    wealth_fraction: float = 0.02
+    wealth_fraction: float = 0.005  # calibrated post-Day-8-10 smoke
+    """0.005 (was 0.02 in design pre-calibration). Random at 0.02 was sweeping MM
+    quotes in single trade, leaving book without liquidity for directional agents.
+    Advisor calibration: 0.005 = random provides flow rather than dominating sweeps."""
 
     def decide(
         self, snapshot: OrderbookSnapshot, context: dict[str, Any]

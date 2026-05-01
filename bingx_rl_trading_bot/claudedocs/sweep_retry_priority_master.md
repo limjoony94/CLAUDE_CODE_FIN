@@ -92,7 +92,26 @@
 | 15 | RSI cross reversion 1h | 216 | 0/216 | +0.017% | +0.648% (n=12) | low freq |
 | 16 | BB reversion 1h | 108 | 0/108 | -0.091% | -0.050% | negative edge |
 
-**Cumulative: 15 mechanisms × 5,107 configs = 0/5,107 IS PASS overall**
+| 17 | Stochastic %K%D cross 1h | 432 | 0/432 | +0.017% | +0.155% | low edge |
+| 18 | TOD filter (UTC hour) 1h | 144 | 0/144 | +0.034% | +0.185% | UTC 20시 LONG best |
+| 19 | Volume spike directional 1h | 108 | 0/108 | +0.096% | +0.284% | borderline |
+| 20 | Range expansion breakout 1h | 72 | 0/72 | +0.105% | +0.464% | borderline |
+| 21 | Triple EMA alignment 1h | 96 | 0/96 | -0.011% | +0.120% | daily neg |
+| 22 | Donchian+RSI combo 1h | 288 | 0/288 | -0.003% | -0.818% (n=1) | over-filter |
+| 23 | Day-of-week filter 1h | 112 | 0/112 | +0.061% | +0.574% | Friday LONG |
+| 24 | Heikin-Ashi streak 1h | 36 | 0/36 | +0.078% | +0.199% | high freq |
+| 25 | Weekly anchored VWAP cross 1h | 36 | 0/36 | +0.020% | +0.192% | low edge |
+| 26 | Volatility z-score reversion 1h | 96 | 0/96 | -0.010% | +0.117% | daily neg |
+
+**Cumulative: 25 mechanisms × ~6,527 configs = 0/6,527 IS PASS overall**
+
+**Strong envelope evidence (25/25 confirmed)**:
+- All 25 mechanisms 0 strict-criterion PASS
+- Best daily: N8b +0.312% (F6 sample fail) and R2b +0.299% (distribution fail)
+- Edge × frequency = constant 패턴 일관
+- Distribution stability (3-day random window) binding constraint
+
+남은 mechanisms (skip 또는 진행): R26 Grid (LIVE-realistic infra needed), Path B R5 carry (already done leverage), Path B R6 pairs (data limited), Path B R10/11/12, M3 R22-R28 등.
 
 **Distribution stability discovery (2026-05-01)**:
 R2b가 mean +0.299%/day PASS, n=262 ✅, avg_gross +0.532% ✅ 등 통과하나

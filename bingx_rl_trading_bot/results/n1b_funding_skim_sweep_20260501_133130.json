@@ -1,0 +1,1229 @@
+{
+  "label": "n1b_funding_skim",
+  "mechanism": "N1b \u2014 Funding Skim wider sweep",
+  "timestamp": "2026-05-01T04:31:30.240721+00:00",
+  "param_grid": {
+    "entry_threshold_pct": [
+      0.01,
+      0.02,
+      0.04,
+      0.08
+    ],
+    "exit_threshold_pct": [
+      0.005,
+      0.01,
+      0.02
+    ],
+    "max_hold_periods": [
+      9,
+      21,
+      42
+    ]
+  },
+  "n_configs": 36,
+  "split_ratio": [
+    0.5,
+    0.25,
+    0.25
+  ],
+  "is_results": [
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 56,
+      "avg_gross_pct": 0.03616625,
+      "avg_net_pct": -0.08383375,
+      "cum_net_pct": -4.69469,
+      "daily_net_pct": -0.02275294022617124,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.02375790333333333,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.09425166666666665,
+      "bootstrap_avg_per_trade": -0.08383375,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 42,
+      "avg_gross_pct": 0.06450547619047618,
+      "avg_net_pct": -0.055494523809523785,
+      "cum_net_pct": -2.330769999999999,
+      "daily_net_pct": -0.01129613893376413,
+      "wr": 0.11904761904761904,
+      "bootstrap_mean_daily": -0.01025420333333333,
+      "bootstrap_pos_rate": 0.038,
+      "bootstrap_p5_daily": -0.05023333333333333,
+      "bootstrap_avg_per_trade": -0.055494523809523785,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 37,
+      "avg_gross_pct": 0.09382540540540538,
+      "avg_net_pct": -0.02617459459459461,
+      "cum_net_pct": -0.9684600000000005,
+      "daily_net_pct": -0.004693667205169631,
+      "wr": 0.35135135135135137,
+      "bootstrap_mean_daily": -0.0037686466666666685,
+      "bootstrap_pos_rate": 0.126,
+      "bootstrap_p5_daily": -0.05023333333333333,
+      "bootstrap_avg_per_trade": -0.02617459459459461,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 74,
+      "avg_gross_pct": 0.02037581081081081,
+      "avg_net_pct": -0.09962418918918918,
+      "cum_net_pct": -7.372189999999999,
+      "daily_net_pct": -0.0357295153473344,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.03632495,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.15463333333333332,
+      "bootstrap_avg_per_trade": -0.09962418918918918,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 67,
+      "avg_gross_pct": 0.027388955223880594,
+      "avg_net_pct": -0.0926110447761194,
+      "cum_net_pct": -6.20494,
+      "daily_net_pct": -0.030072407108239094,
+      "wr": 0.04477611940298507,
+      "bootstrap_mean_daily": -0.029787116666666662,
+      "bootstrap_pos_rate": 0.016,
+      "bootstrap_p5_daily": -0.15463333333333332,
+      "bootstrap_avg_per_trade": -0.09261104477611938,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 64,
+      "avg_gross_pct": 0.032443281250000004,
+      "avg_net_pct": -0.08755671874999998,
+      "cum_net_pct": -5.603629999999999,
+      "daily_net_pct": -0.0271581421647819,
+      "wr": 0.09375,
+      "bootstrap_mean_daily": -0.026879749999999997,
+      "bootstrap_pos_rate": 0.067,
+      "bootstrap_p5_daily": -0.15463333333333332,
+      "bootstrap_avg_per_trade": -0.08755671874999998,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 101,
+      "avg_gross_pct": 0.007851584158415843,
+      "avg_net_pct": -0.11214841584158416,
+      "cum_net_pct": -11.32699,
+      "daily_net_pct": -0.054896558966074316,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.05708849333333333,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.2289,
+      "bootstrap_avg_per_trade": -0.11214841584158416,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 101,
+      "avg_gross_pct": 0.007851584158415843,
+      "avg_net_pct": -0.11214841584158416,
+      "cum_net_pct": -11.32699,
+      "daily_net_pct": -0.054896558966074316,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.05708849333333333,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.2289,
+      "bootstrap_avg_per_trade": -0.11214841584158416,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.01,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 101,
+      "avg_gross_pct": 0.007851584158415843,
+      "avg_net_pct": -0.11214841584158416,
+      "cum_net_pct": -11.32699,
+      "daily_net_pct": -0.054896558966074316,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.05708849333333333,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.2289,
+      "bootstrap_avg_per_trade": -0.11214841584158416,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": true,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 19,
+      "avg_gross_pct": 0.050637368421052625,
+      "avg_net_pct": -0.06936263157894737,
+      "cum_net_pct": -1.31789,
+      "daily_net_pct": -0.006387189014539579,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.005244639999999999,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.038683333333333327,
+      "bootstrap_avg_per_trade": -0.06936263157894737,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 15,
+      "avg_gross_pct": 0.09416533333333335,
+      "avg_net_pct": -0.02583466666666665,
+      "cum_net_pct": -0.38751999999999975,
+      "daily_net_pct": -0.001878126009693052,
+      "wr": 0.2,
+      "bootstrap_mean_daily": -0.0019448033333333318,
+      "bootstrap_pos_rate": 0.033,
+      "bootstrap_p5_daily": -0.032883333333333334,
+      "bootstrap_avg_per_trade": -0.02583466666666665,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 14,
+      "avg_gross_pct": 0.13738785714285712,
+      "avg_net_pct": 0.017387857142857108,
+      "cum_net_pct": 0.2434299999999995,
+      "daily_net_pct": 0.0011797899838449086,
+      "wr": 0.42857142857142855,
+      "bootstrap_mean_daily": 0.0013193633333333304,
+      "bootstrap_pos_rate": 0.071,
+      "bootstrap_p5_daily": -0.032883333333333334,
+      "bootstrap_avg_per_trade": 0.017387857142857104,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 20,
+      "avg_gross_pct": 0.040260500000000005,
+      "avg_net_pct": -0.0797395,
+      "cum_net_pct": -1.5947900000000002,
+      "daily_net_pct": -0.007729192245557351,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.006264666666666667,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.04241416666666666,
+      "bootstrap_avg_per_trade": -0.07973949999999999,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 18,
+      "avg_gross_pct": 0.06027833333333335,
+      "avg_net_pct": -0.059721666666666645,
+      "cum_net_pct": -1.0749899999999997,
+      "daily_net_pct": -0.005209967689822292,
+      "wr": 0.05555555555555555,
+      "bootstrap_mean_daily": -0.0036483166666666654,
+      "bootstrap_pos_rate": 0.016,
+      "bootstrap_p5_daily": -0.03506666666666667,
+      "bootstrap_avg_per_trade": -0.059721666666666645,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 17,
+      "avg_gross_pct": 0.07752705882352941,
+      "avg_net_pct": -0.042472941176470574,
+      "cum_net_pct": -0.7220399999999998,
+      "daily_net_pct": -0.003499386106623585,
+      "wr": 0.17647058823529413,
+      "bootstrap_mean_daily": -0.0018914999999999993,
+      "bootstrap_pos_rate": 0.045,
+      "bootstrap_p5_daily": -0.03506666666666667,
+      "bootstrap_avg_per_trade": -0.04247294117647058,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 22,
+      "avg_gross_pct": 0.015960454545454545,
+      "avg_net_pct": -0.10403954545454547,
+      "cum_net_pct": -2.28887,
+      "daily_net_pct": -0.011093069466882068,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0092499,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.07626666666666666,
+      "bootstrap_avg_per_trade": -0.10403954545454547,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 22,
+      "avg_gross_pct": 0.015960454545454545,
+      "avg_net_pct": -0.10403954545454547,
+      "cum_net_pct": -2.28887,
+      "daily_net_pct": -0.011093069466882068,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0092499,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.07626666666666666,
+      "bootstrap_avg_per_trade": -0.10403954545454547,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 22,
+      "avg_gross_pct": 0.015960454545454545,
+      "avg_net_pct": -0.10403954545454547,
+      "cum_net_pct": -2.28887,
+      "daily_net_pct": -0.011093069466882068,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0092499,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": -0.07626666666666666,
+      "bootstrap_avg_per_trade": -0.10403954545454547,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.05414333333333333,
+      "avg_net_pct": -0.06585666666666666,
+      "cum_net_pct": -0.39514,
+      "daily_net_pct": -0.0019150565428109852,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0007726933333333333,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.06585666666666666,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.09538,
+      "avg_net_pct": -0.02461999999999998,
+      "cum_net_pct": -0.14771999999999988,
+      "daily_net_pct": -0.0007159289176090463,
+      "wr": 0.3333333333333333,
+      "bootstrap_mean_daily": -0.0015507999999999987,
+      "bootstrap_pos_rate": 0.043,
+      "bootstrap_p5_daily": -0.0035133333333333314,
+      "bootstrap_avg_per_trade": -0.02461999999999998,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.14747166666666667,
+      "avg_net_pct": 0.02747166666666667,
+      "cum_net_pct": 0.16483,
+      "daily_net_pct": 0.0007988529886914378,
+      "wr": 0.5,
+      "bootstrap_mean_daily": 0.0012094400000000006,
+      "bootstrap_pos_rate": 0.054,
+      "bootstrap_p5_daily": -0.0035133333333333314,
+      "bootstrap_avg_per_trade": 0.027471666666666675,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.041093333333333336,
+      "avg_net_pct": -0.07890666666666667,
+      "cum_net_pct": -0.47343999999999997,
+      "daily_net_pct": -0.0022945395799676897,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0009811,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.07890666666666667,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.053335,
+      "avg_net_pct": -0.06666499999999999,
+      "cum_net_pct": -0.39998999999999996,
+      "daily_net_pct": -0.0019385621970920838,
+      "wr": 0.16666666666666666,
+      "bootstrap_mean_daily": -0.0005858999999999999,
+      "bootstrap_pos_rate": 0.024,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.06666499999999999,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.070835,
+      "avg_net_pct": -0.04916499999999999,
+      "cum_net_pct": -0.29499,
+      "daily_net_pct": -0.00142967689822294,
+      "wr": 0.16666666666666666,
+      "bootstrap_mean_daily": 0.0001478,
+      "bootstrap_pos_rate": 0.021,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.04916499999999999,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": true,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.024605000000000002,
+      "avg_net_pct": -0.09539500000000001,
+      "cum_net_pct": -0.57237,
+      "daily_net_pct": -0.002774006462035541,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0015187,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.09539500000000001,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.024605000000000002,
+      "avg_net_pct": -0.09539500000000001,
+      "cum_net_pct": -0.57237,
+      "daily_net_pct": -0.002774006462035541,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0015187,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.09539500000000001,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 6,
+      "avg_gross_pct": 0.024605000000000002,
+      "avg_net_pct": -0.09539500000000001,
+      "cum_net_pct": -0.57237,
+      "daily_net_pct": -0.002774006462035541,
+      "wr": 0.0,
+      "bootstrap_mean_daily": -0.0015187,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": -0.09539500000000001,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": true,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.056705,
+      "avg_net_pct": -0.06329499999999999,
+      "cum_net_pct": -0.12658999999999998,
+      "daily_net_pct": -0.0006135218093699514,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.056705,
+      "avg_net_pct": -0.06329499999999999,
+      "cum_net_pct": -0.12658999999999998,
+      "daily_net_pct": -0.0006135218093699514,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.056705,
+      "avg_net_pct": -0.06329499999999999,
+      "cum_net_pct": -0.12658999999999998,
+      "daily_net_pct": -0.0006135218093699514,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.056705,
+      "avg_net_pct": -0.06329499999999999,
+      "cum_net_pct": -0.12658999999999998,
+      "daily_net_pct": -0.0006135218093699514,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.056705,
+      "avg_net_pct": -0.06329499999999999,
+      "cum_net_pct": -0.12658999999999998,
+      "daily_net_pct": -0.0006135218093699514,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.01,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.056705,
+      "avg_net_pct": -0.06329499999999999,
+      "cum_net_pct": -0.12658999999999998,
+      "daily_net_pct": -0.0006135218093699514,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 9
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.051965000000000004,
+      "avg_net_pct": -0.06803499999999998,
+      "cum_net_pct": -0.13606999999999997,
+      "daily_net_pct": -0.0006594668820678512,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 21
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.051965000000000004,
+      "avg_net_pct": -0.06803499999999998,
+      "cum_net_pct": -0.13606999999999997,
+      "daily_net_pct": -0.0006594668820678512,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.02,
+        "max_hold_periods": 42
+      },
+      "stage": "IS",
+      "span_days": 206.33333333333334,
+      "n_trades": 2,
+      "avg_gross_pct": 0.051965000000000004,
+      "avg_net_pct": -0.06803499999999998,
+      "cum_net_pct": -0.13606999999999997,
+      "daily_net_pct": -0.0006594668820678512,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {
+        "span_too_short": true
+      },
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    }
+  ],
+  "val_results": [
+    {
+      "config": {
+        "entry_threshold_pct": 0.02,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "VAL",
+      "span_days": 96.33333333333333,
+      "n_trades": 0,
+      "avg_gross_pct": 0.0,
+      "avg_net_pct": 0.0,
+      "cum_net_pct": 0.0,
+      "daily_net_pct": 0.0,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {},
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.04,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "VAL",
+      "span_days": 96.33333333333333,
+      "n_trades": 0,
+      "avg_gross_pct": 0.0,
+      "avg_net_pct": 0.0,
+      "cum_net_pct": 0.0,
+      "daily_net_pct": 0.0,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {},
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 9
+      },
+      "stage": "VAL",
+      "span_days": 96.33333333333333,
+      "n_trades": 0,
+      "avg_gross_pct": 0.0,
+      "avg_net_pct": 0.0,
+      "cum_net_pct": 0.0,
+      "daily_net_pct": 0.0,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {},
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 21
+      },
+      "stage": "VAL",
+      "span_days": 96.33333333333333,
+      "n_trades": 0,
+      "avg_gross_pct": 0.0,
+      "avg_net_pct": 0.0,
+      "cum_net_pct": 0.0,
+      "daily_net_pct": 0.0,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {},
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    },
+    {
+      "config": {
+        "entry_threshold_pct": 0.08,
+        "exit_threshold_pct": 0.005,
+        "max_hold_periods": 42
+      },
+      "stage": "VAL",
+      "span_days": 96.33333333333333,
+      "n_trades": 0,
+      "avg_gross_pct": 0.0,
+      "avg_net_pct": 0.0,
+      "cum_net_pct": 0.0,
+      "daily_net_pct": 0.0,
+      "wr": 0.0,
+      "bootstrap_mean_daily": 0.0,
+      "bootstrap_pos_rate": 0.0,
+      "bootstrap_p5_daily": 0.0,
+      "bootstrap_avg_per_trade": 0.0,
+      "bootstrap_overall_pass": false,
+      "bootstrap_pass_criteria": {},
+      "f1_avg_gross_pass": false,
+      "f6_full_n_pass": false,
+      "overall_pass": false
+    }
+  ],
+  "oos_results": [],
+  "is_pass_count": 0,
+  "val_pass_count": 0,
+  "oos_pass_count": 0,
+  "deployable": false
+}

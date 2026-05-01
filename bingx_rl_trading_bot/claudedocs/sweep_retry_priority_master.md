@@ -85,7 +85,14 @@
 | 12 | **R2b XS reversal (10coin daily)** | 72 | 0/72 | **+0.299%** ✅ | +0.532% ✅ | **distribution stability FAIL** (p5=-3.08%, freq, p_beats) |
 | 7 | R40b volume absorption (1h) | 432 | 0/432 | +0.055% | +1.041% | edge↑×freq↓↓ (n=22) |
 
-**Cumulative: 11 mechanisms × 4,224 configs = 0/4,224 IS PASS overall**
+**Cumulative (autonomous batch, 자율 mandate)**:
+
+| 13 | N1b funding skim (wider) | 36 | 0/36 | +0.001% | +0.137% | near-zero edge |
+| 14 | C1b channel breakout 15m (BT only, simplified) | 243 | 0/243 | -0.559% | -0.102% | self-contained < production accuracy (skip) |
+| 15 | RSI cross reversion 1h | 216 | 0/216 | +0.017% | +0.648% (n=12) | low freq |
+| 16 | BB reversion 1h | 108 | 0/108 | -0.091% | -0.050% | negative edge |
+
+**Cumulative: 15 mechanisms × 5,107 configs = 0/5,107 IS PASS overall**
 
 **Distribution stability discovery (2026-05-01)**:
 R2b가 mean +0.299%/day PASS, n=262 ✅, avg_gross +0.532% ✅ 등 통과하나

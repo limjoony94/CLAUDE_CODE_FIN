@@ -1,0 +1,55 @@
+{
+  "date": "2026-05-01T01:01:49.166189+00:00",
+  "audit_3_long_bias": {
+    "btc_buy_hold_pct": 25.7020092186518,
+    "days_long_pct": 56.171983356449374,
+    "days_short_pct": 3.0513176144244105,
+    "net_long_exposure": 0.5312066574202496,
+    "expected_from_exposure_pct": 13.653078406024465,
+    "actual_cum_pct": 41.25329579894295,
+    "timing_edge_pct": 27.600217392918488,
+    "shuffle_mean_pct": 0.4500702812344567,
+    "shuffle_median_pct": 3.4843568304798316,
+    "shuffle_std_pct": 36.58417134306716,
+    "p_actual_beats_shuffle": 0.87
+  },
+  "audit_1_period_split": {
+    "n_pos_windows_of_4": 3,
+    "windows_summary": [
+      {
+        "name": "W1",
+        "start": "2024-05-11 00:00:00+00:00",
+        "end": "2024-11-07 00:00:00+00:00",
+        "n_trades": 5,
+        "cum_pct": 4.347557882830024
+      },
+      {
+        "name": "W2",
+        "start": "2024-11-07 00:00:00+00:00",
+        "end": "2025-05-06 00:00:00+00:00",
+        "n_trades": 5,
+        "cum_pct": 30.643983538041304
+      },
+      {
+        "name": "W3",
+        "start": "2025-05-06 00:00:00+00:00",
+        "end": "2025-11-02 00:00:00+00:00",
+        "n_trades": 8,
+        "cum_pct": 35.7891637677918
+      },
+      {
+        "name": "W4",
+        "start": "2025-11-02 00:00:00+00:00",
+        "end": "2026-05-01 00:00:00+00:00",
+        "n_trades": 5,
+        "cum_pct": -29.52740938972019
+      }
+    ]
+  },
+  "audit_2_weekend": {
+    "weekend_n": 5,
+    "weekend_mean": 3.2343220871437772,
+    "weekday_n": 18,
+    "weekday_mean": 1.3934269646235586
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "date": "2026-05-01T00:57:33.606571+00:00",
+  "locked": {
+    "capital_usd": 1000,
+    "corr_lookback_days": 30,
+    "risk_on_corr_thresh": 0.4,
+    "risk_off_corr_thresh": 0.3,
+    "usd_strong_corr_thresh": -0.4,
+    "maker_fric_pct": 0.04,
+    "slippage_pct": 0.02
+  },
+  "aggregate": {
+    "span_days": 720,
+    "n_trades": 23,
+    "cum_pct": 55.49166442950564,
+    "apy": 28.131190995513276,
+    "avg_per_trade_net": 2.4126810621524193,
+    "avg_per_trade_gross": 2.5326810621524185,
+    "wr": 0.6521739130434783
+  },
+  "bootstrap": {
+    "mean_daily": 0.10212984741658715,
+    "p5_daily": 0.0,
+    "pos_rate": 0.05,
+    "overall_pass": false,
+    "pass_criteria": {
+      "mean_daily_>=_0.20": false,
+      "p5_daily_>=_0": true,
+      "pos_rate_>=_0.50": false,
+      "avg_per_trade_>_taker_RT": true,
+      "sufficient_trades_per_window": false,
+      "p_beats_baseline_>=_0.55": false
+    }
+  },
+  "regime_distribution": {
+    "RISK_ON": 405,
+    "NEUTRAL": 294,
+    "RISK_OFF": 12,
+    "USD_STRONG": 10
+  }
+}

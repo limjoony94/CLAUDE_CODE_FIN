@@ -106,13 +106,24 @@ def build_smoke_with_rate(seed: int, terminal_bars: int, rate_lambda: float):
 
 
 def main() -> None:
+    # 1/600 already completed in previous session (Gini 0.1908, see e1_results_partial.json)
+    # Run remaining 3 rates only
     rates = [
-        ("1/600", 1.0 / 600.0),     # current G2 baseline
         ("1/3600", 1.0 / 3600.0),   # 6× lower
         ("1/36000", 1.0 / 36000.0), # 60× lower
         ("0", 0.0),                  # no admissions
     ]
-    results = []
+    # Pre-load 1/600 result from prior session
+    results = [{
+        "rate_label": "1/600",
+        "rate_lambda": 1.0 / 600.0,
+        "elapsed_sec": 355.4,
+        "n_alive_at_end": 978,
+        "n_admissions": 963,
+        "gini_at_10k": 0.1908,
+        "top_5pct_share_at_10k": 0.1738,
+        "top_5pct_overlap_5k_10k": 0.4375,
+    }]
     for label, rate in rates:
         t0 = time.time()
         sim = build_smoke_with_rate(seed=42, terminal_bars=10000, rate_lambda=rate)

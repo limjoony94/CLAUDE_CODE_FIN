@@ -1,0 +1,42 @@
+[
+  {
+    "rate_label": "1/600",
+    "rate_lambda": 0.0016666666666666668,
+    "elapsed_sec": 355.4,
+    "n_alive_at_end": 978,
+    "n_admissions": 963,
+    "gini_at_10k": 0.1908,
+    "top_5pct_share_at_10k": 0.1738,
+    "top_5pct_overlap_5k_10k": 0.4375
+  },
+  {
+    "rate_label": "1/3600",
+    "rate_lambda": 0.0002777777777777778,
+    "elapsed_sec": 56.1,
+    "n_alive_at_end": 184,
+    "n_admissions": 169,
+    "gini_at_10k": 0.4316,
+    "top_5pct_share_at_10k": 0.2985,
+    "top_5pct_overlap_5k_10k": 0.4444
+  },
+  {
+    "rate_label": "1/36000",
+    "rate_lambda": 2.777777777777778e-05,
+    "elapsed_sec": 11.1,
+    "n_alive_at_end": 29,
+    "n_admissions": 14,
+    "gini_at_10k": 0.4203,
+    "top_5pct_share_at_10k": 0.0679,
+    "top_5pct_overlap_5k_10k": 0.0
+  },
+  {
+    "rate_label": "0",
+    "rate_lambda": 0.0,
+    "elapsed_sec": 7.0,
+    "n_alive_at_end": 15,
+    "n_admissions": 0,
+    "gini_at_10k": 0.0958,
+    "top_5pct_share_at_10k": 0.0968,
+    "top_5pct_overlap_5k_10k": 1.0
+  }
+]

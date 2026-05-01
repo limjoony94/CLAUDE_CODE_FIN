@@ -1,0 +1,200 @@
+{
+  "date": "2026-05-01T10:53:45.537132+00:00",
+  "mandate": "thr=0.15 deep audit (Audit 2 timing lookahead)",
+  "threshold": 0.15,
+  "results_by_lag": {
+    "0": {
+      "lag_days": 0,
+      "avg_daily_net": 0.06270569199815983,
+      "avg_hit_rate": 0.6663295748760549,
+      "positive_folds": 5,
+      "fold_results": [
+        {
+          "fold": 1,
+          "n_trades": 164,
+          "hit_rate": 0.6463414634146342,
+          "daily_net": 0.13731293265959812
+        },
+        {
+          "fold": 2,
+          "n_trades": 116,
+          "hit_rate": 0.6206896551724138,
+          "daily_net": 0.1316601791920319
+        },
+        {
+          "fold": 3,
+          "n_trades": 33,
+          "hit_rate": 0.696969696969697,
+          "daily_net": 0.019499081576792213
+        },
+        {
+          "fold": 4,
+          "n_trades": 20,
+          "hit_rate": 0.75,
+          "daily_net": 0.018808056859746104
+        },
+        {
+          "fold": 5,
+          "n_trades": 68,
+          "hit_rate": 0.6176470588235294,
+          "daily_net": 0.0062482097026308045
+        }
+      ]
+    },
+    "1": {
+      "lag_days": 1,
+      "avg_daily_net": 0.012491758372764082,
+      "avg_hit_rate": 0.44102564102564096,
+      "positive_folds": 1,
+      "fold_results": [
+        {
+          "fold": 1,
+          "n_trades": 12,
+          "hit_rate": 0.5,
+          "daily_net": -0.00972391041914192
+        },
+        {
+          "fold": 2,
+          "n_trades": 13,
+          "hit_rate": 0.5384615384615384,
+          "daily_net": 0.08271711000550895
+        },
+        {
+          "fold": 3,
+          "n_trades": 2,
+          "hit_rate": 0.5,
+          "daily_net": -0.006238685423128116
+        },
+        {
+          "fold": 4,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 5,
+          "n_trades": 3,
+          "hit_rate": 0.6666666666666666,
+          "daily_net": -0.004295722299418511
+        }
+      ]
+    },
+    "2": {
+      "lag_days": 2,
+      "avg_daily_net": 0.015266079312283942,
+      "avg_hit_rate": 0.44333333333333336,
+      "positive_folds": 3,
+      "fold_results": [
+        {
+          "fold": 1,
+          "n_trades": 20,
+          "hit_rate": 0.55,
+          "daily_net": 0.011338720230384553
+        },
+        {
+          "fold": 2,
+          "n_trades": 9,
+          "hit_rate": 0.6666666666666666,
+          "daily_net": 0.0637514528258416
+        },
+        {
+          "fold": 3,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 4,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 5,
+          "n_trades": 1,
+          "hit_rate": 1.0,
+          "daily_net": 0.0012402235051935488
+        }
+      ]
+    },
+    "3": {
+      "lag_days": 3,
+      "avg_daily_net": 0.011374604394965775,
+      "avg_hit_rate": 0.3506410256410256,
+      "positive_folds": 1,
+      "fold_results": [
+        {
+          "fold": 1,
+          "n_trades": 13,
+          "hit_rate": 0.46153846153846156,
+          "daily_net": -0.00432140289609056
+        },
+        {
+          "fold": 2,
+          "n_trades": 8,
+          "hit_rate": 0.625,
+          "daily_net": 0.06549014717033795
+        },
+        {
+          "fold": 3,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 4,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 5,
+          "n_trades": 3,
+          "hit_rate": 0.6666666666666666,
+          "daily_net": -0.004295722299418511
+        }
+      ]
+    },
+    "7": {
+      "lag_days": 7,
+      "avg_daily_net": 0.0159551915248913,
+      "avg_hit_rate": 0.42016806722689076,
+      "positive_folds": 3,
+      "fold_results": [
+        {
+          "fold": 1,
+          "n_trades": 17,
+          "hit_rate": 0.5294117647058824,
+          "daily_net": 0.02609206746116202
+        },
+        {
+          "fold": 2,
+          "n_trades": 7,
+          "hit_rate": 0.5714285714285714,
+          "daily_net": 0.05244366665810094
+        },
+        {
+          "fold": 3,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 4,
+          "n_trades": 0,
+          "hit_rate": 0,
+          "daily_net": 0
+        },
+        {
+          "fold": 5,
+          "n_trades": 1,
+          "hit_rate": 1.0,
+          "daily_net": 0.0012402235051935488
+        }
+      ]
+    }
+  },
+  "hit_drop_lag1": 0.22530393385041397,
+  "hit_drop_lag3": 0.3156885492350293,
+  "audit2_pass": false
+}

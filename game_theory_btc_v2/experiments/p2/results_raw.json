@@ -1,0 +1,193 @@
+{
+  "timestamp_utc": "2026-05-01",
+  "free_window_days": 540.3333333333334,
+  "n_baseline_days": 541,
+  "frequency_scan": {
+    "M001": {
+      "n_signals": 217,
+      "freq_per_day": 0.402,
+      "vacuous": "True",
+      "min_freq_gate": 0.5
+    },
+    "M002": {
+      "n_signals": 268,
+      "freq_per_day": 0.496,
+      "vacuous": "True",
+      "min_freq_gate": 0.5
+    },
+    "M003": {
+      "n_signals": 217,
+      "freq_per_day": 0.402,
+      "vacuous": "True",
+      "min_freq_gate": 0.5
+    },
+    "M004": {
+      "n_signals": 811,
+      "freq_per_day": 1.501,
+      "vacuous": "False",
+      "min_freq_gate": 0.5
+    }
+  },
+  "evaluations": {
+    "M001_realistic": {
+      "status": "VACUOUS_FAIL",
+      "reason": "freq 0.402/d < gate 0.5/d",
+      "all_pass": false,
+      "n_signals": 217
+    },
+    "M001_stress": {
+      "status": "VACUOUS_FAIL",
+      "reason": "freq 0.402/d < gate 0.5/d",
+      "all_pass": false,
+      "n_signals": 217
+    },
+    "M002_realistic": {
+      "status": "VACUOUS_FAIL",
+      "reason": "freq 0.496/d < gate 0.5/d",
+      "all_pass": false,
+      "n_signals": 268
+    },
+    "M002_stress": {
+      "status": "VACUOUS_FAIL",
+      "reason": "freq 0.496/d < gate 0.5/d",
+      "all_pass": false,
+      "n_signals": 268
+    },
+    "M003_realistic": {
+      "status": "VACUOUS_FAIL",
+      "reason": "freq 0.402/d < gate 0.5/d",
+      "all_pass": false,
+      "n_signals": 217
+    },
+    "M003_stress": {
+      "status": "VACUOUS_FAIL",
+      "reason": "freq 0.402/d < gate 0.5/d",
+      "all_pass": false,
+      "n_signals": 217
+    },
+    "M004_realistic": {
+      "priority": "P2",
+      "thresholds": {
+        "target_daily": 0.001,
+        "max_dd_floor": -0.03,
+        "min_pos_rate": 0.5,
+        "min_p_beats": 0.7,
+        "min_sharpe": 1.5,
+        "baseline_required": true
+      },
+      "point_estimates": {
+        "mean": -0.0016718356793509802,
+        "p5": -0.0029925451593418003,
+        "p5_raw_daily_5pct": -0.02045624826680698,
+        "pos_rate": 0.13493530499075784,
+        "p_beats_baseline": 0.0147,
+        "max_dd": -0.9639177387811431,
+        "sharpe": -1.7595894383152668
+      },
+      "criteria": {
+        "mean_pass": false,
+        "p5_pass": false,
+        "pos_rate_pass": false,
+        "p_beats_pass": false,
+        "max_dd_pass": false,
+        "sharpe_pass": false
+      },
+      "all_pass": false,
+      "bootstrap_dist": {
+        "mean": {
+          "q05": -0.0029925451593418003,
+          "median": -0.0016526356847493585,
+          "q95": -0.00039385471101421643
+        },
+        "p5": {
+          "q05": -0.03351202521717493,
+          "median": -0.02045624826680698,
+          "q95": -0.01726971181776526
+        },
+        "pos_rate": {
+          "q05": 0.10905730129390019,
+          "median": 0.13493530499075784,
+          "q95": 0.16266173752310537
+        },
+        "max_dd": {
+          "q05": -1.687412789122201,
+          "median": -1.0127368694752736,
+          "q95": -0.46442927323510014
+        },
+        "sharpe": {
+          "q05": -3.1118970176953216,
+          "median": -1.7859221362347886,
+          "q95": -0.4305085767747165
+        }
+      },
+      "n_samples": 541,
+      "B": 10000,
+      "block_size": 3,
+      "seed": 42,
+      "status": "FAIL",
+      "n_signals_actually_evaluated": 811
+    },
+    "M004_stress": {
+      "priority": "P2",
+      "thresholds": {
+        "target_daily": 0.001,
+        "max_dd_floor": -0.03,
+        "min_pos_rate": 0.5,
+        "min_p_beats": 0.7,
+        "min_sharpe": 1.5,
+        "baseline_required": true
+      },
+      "point_estimates": {
+        "mean": -0.0022714659935838817,
+        "p5": -0.0036265577962065476,
+        "p5_raw_daily_5pct": -0.02212400384423386,
+        "pos_rate": 0.12384473197781885,
+        "p_beats_baseline": 0.0037,
+        "max_dd": -1.277450339662087,
+        "sharpe": -2.3692997016758293
+      },
+      "criteria": {
+        "mean_pass": false,
+        "p5_pass": false,
+        "pos_rate_pass": false,
+        "p_beats_pass": false,
+        "max_dd_pass": false,
+        "sharpe_pass": false
+      },
+      "all_pass": false,
+      "bootstrap_dist": {
+        "mean": {
+          "q05": -0.0036265577962065476,
+          "median": -0.002248225699717583,
+          "q95": -0.0009677233736735776
+        },
+        "p5": {
+          "q05": -0.03439524157507792,
+          "median": -0.02212400384423386,
+          "q95": -0.018469711817765258
+        },
+        "pos_rate": {
+          "q05": 0.09796672828096119,
+          "median": 0.12384473197781885,
+          "q95": 0.14972273567467653
+        },
+        "max_dd": {
+          "q05": -2.018206543077703,
+          "median": -1.2987268296684435,
+          "q95": -0.6771551213579174
+        },
+        "sharpe": {
+          "q05": -3.688384666033734,
+          "median": -2.4074557262623726,
+          "q95": -1.0729750393666697
+        }
+      },
+      "n_samples": 541,
+      "B": 10000,
+      "block_size": 3,
+      "seed": 42,
+      "status": "FAIL",
+      "n_signals_actually_evaluated": 811
+    }
+  }
+}

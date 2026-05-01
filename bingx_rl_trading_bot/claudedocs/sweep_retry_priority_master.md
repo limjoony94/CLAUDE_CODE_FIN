@@ -82,7 +82,19 @@
 | 16 | **N8b Macro regime BTC vs DXY/SPY/GLD** | 108 | 0/108 | **+0.312%** ✅ | **+4.077%** ✅ | **F6 FAIL n=28<50** — sample size only |
 | 9 | R36b EMA pullback (1h) | 192 | 0/192 | +0.080% | +0.218% | 동일 envelope |
 
-**Cumulative: 9 mechanisms × 3,720 configs = 0/3,720 IS PASS overall**
+| 12 | **R2b XS reversal (10coin daily)** | 72 | 0/72 | **+0.299%** ✅ | +0.532% ✅ | **distribution stability FAIL** (p5=-3.08%, freq, p_beats) |
+| 7 | R40b volume absorption (1h) | 432 | 0/432 | +0.055% | +1.041% | edge↑×freq↓↓ (n=22) |
+
+**Cumulative: 11 mechanisms × 4,224 configs = 0/4,224 IS PASS overall**
+
+**Distribution stability discovery (2026-05-01)**:
+R2b가 mean +0.299%/day PASS, n=262 ✅, avg_gross +0.532% ✅ 등 통과하나
+**bootstrap distribution test에서 3개 fail**: p5_daily=-3.08% (tail risk),
+sufficient_trades_per_window (0.73/day), p_beats_baseline 0.519<0.55.
+
+→ 사용자 criteria의 "3-day random window stability" 조건이 R26 LIVE -12.86% 같은
+  catastrophe 사전 차단 핵심. Mean만 보지 말고 distribution stability 보라는
+  user criterion이 정확히 이런 case 잡는 evidence.
 
 **Pattern observed (sweep 9/32 done)**:
 - All 9 mechanisms 0 IS PASS at strict criteria

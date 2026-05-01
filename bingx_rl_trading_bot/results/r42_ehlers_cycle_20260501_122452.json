@@ -1,0 +1,26 @@
+{
+  "date": "2026-05-01T03:24:52.779743+00:00",
+  "mechanism": "R42 \u2014 Ehlers Dominant Cycle Mean Reversion",
+  "params": {
+    "smooth_window": 4,
+    "detrend_window": 20,
+    "cycle_norm_window": 100,
+    "min_period_bars": 6,
+    "max_period_bars": 50,
+    "sma_trend_window": 50,
+    "cycle_threshold": 0.7,
+    "atr_window": 14,
+    "atr_stop_mult": 1.0,
+    "timeout_mult": 0.75,
+    "friction_rt_pct": 0.1
+  },
+  "data_span_days": 719,
+  "in_sample": {
+    "overall_pass": false,
+    "reason": "no_trades"
+  },
+  "fresh_oos": {
+    "skipped": true,
+    "reason": "IS failed pre-reg gates"
+  }
+}

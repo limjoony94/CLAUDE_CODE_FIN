@@ -1,0 +1,111 @@
+{
+  "date": "2026-05-01T10:20:41.730823+00:00",
+  "mandate": "thr=0.15 robustness audit (WF + regime)",
+  "pre_commit": "memory/thr015_robustness_audit_precommit_20260501.md",
+  "threshold": 0.15,
+  "wf_results": [
+    {
+      "n_trades": 164,
+      "hit_rate": 0.6463414634146342,
+      "avg_gross": 0.18330876097335377,
+      "avg_net": 0.08330876097335374,
+      "cum_net": 13.662636799630013,
+      "daily_net": 0.13731293265959812,
+      "fold": 1,
+      "train_pct": 0.3,
+      "test_pct": [
+        0.3,
+        0.44
+      ],
+      "span_days": 99.5
+    },
+    {
+      "n_trades": 116,
+      "hit_rate": 0.6206896551724138,
+      "avg_gross": 0.21293265370351017,
+      "avg_net": 0.11293265370351012,
+      "cum_net": 13.100187829607174,
+      "daily_net": 0.1316601791920319,
+      "fold": 2,
+      "train_pct": 0.44,
+      "test_pct": [
+        0.44,
+        0.5800000000000001
+      ],
+      "span_days": 99.5
+    },
+    {
+      "n_trades": 33,
+      "hit_rate": 0.696969696969697,
+      "avg_gross": 0.158817305412824,
+      "avg_net": 0.058817305412823984,
+      "cum_net": 1.9409710786231915,
+      "daily_net": 0.019499081576792213,
+      "fold": 3,
+      "train_pct": 0.5800000000000001,
+      "test_pct": [
+        0.5800000000000001,
+        0.7200000000000001
+      ],
+      "span_days": 99.54166666666667
+    },
+    {
+      "n_trades": 20,
+      "hit_rate": 0.75,
+      "avg_gross": 0.19357008287723687,
+      "avg_net": 0.09357008287723687,
+      "cum_net": 1.8714016575447374,
+      "daily_net": 0.018808056859746104,
+      "fold": 4,
+      "train_pct": 0.72,
+      "test_pct": [
+        0.72,
+        0.86
+      ],
+      "span_days": 99.5
+    },
+    {
+      "n_trades": 68,
+      "hit_rate": 0.6176470588235294,
+      "avg_gross": 0.10914642952180455,
+      "avg_net": 0.00914642952180453,
+      "cum_net": 0.621957207482708,
+      "daily_net": 0.0062482097026308045,
+      "fold": 5,
+      "train_pct": 0.8600000000000001,
+      "test_pct": [
+        0.8600000000000001,
+        1.0
+      ],
+      "span_days": 99.54166666666667
+    }
+  ],
+  "wf_positive_count": 5,
+  "wf_total": 5,
+  "wf_avg_hit": 0.6663295748760549,
+  "wf_avg_daily": 0.06270569199815983,
+  "wf_total_trades": 401,
+  "regime_high_vol": {
+    "n_trades": 150,
+    "hit_rate": 0.6733333333333333,
+    "avg_gross": 0.17360318265464955,
+    "avg_net": 0.07360318265464949,
+    "cum_net": 11.040477398197424,
+    "daily_net": 0.06603601049399727
+  },
+  "regime_low_vol": {
+    "n_trades": 99,
+    "hit_rate": 0.6565656565656566,
+    "avg_gross": 0.14628065928326836,
+    "avg_net": 0.04628065928326836,
+    "cum_net": 4.581785269043568,
+    "daily_net": 0.024325532676731793
+  },
+  "regimes_positive": 2,
+  "pre_commit_eval": {
+    "C1_wf_3of5": true,
+    "C2_2of2_regimes": true,
+    "C3_avg_hit_58": true,
+    "overall_pass": true
+  }
+}

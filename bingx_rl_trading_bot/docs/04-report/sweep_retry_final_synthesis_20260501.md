@@ -271,3 +271,66 @@ User criteria의 정당성 confirmed:
 - E borderline develop (N8b 5-year fetch 등) → 사용자 인내 + 시간 투자 결정
 
 자율 mandate 안에서는 본 closure가 final state.
+
+---
+
+## CRITICAL UPDATE — Overfit Ceiling Diagnostic (사용자 mandate 후 정정)
+
+**Trigger**: 사용자 mandate "극과적합 모델 develop으로 potential 측정". 이전 closure가 envelope-empty 결론인지 generalization-bound 결론인지 검증.
+
+### Methodology
+
+8 mechanism daily PnL DataFrame (D-3 simulation reuse) → 4 levels in-sample maximization:
+- L1: Naive sweep best
+- L2: Per-day hindsight switcher (perfect look-ahead, data-level absolute ceiling)
+- L3: Full-sample weight optimization
+- L4: Weekly best-mech hindsight
+
+### Result
+
+| Level | Daily Mean | Note |
+|-------|-----------|------|
+| L1 (sweep best) | ~+0.30% | R2b/N8b best-IS |
+| **L2 (per-day hindsight, no fric)** | **+1.8975%** | **Data-level absolute ceiling** |
+| **L2 (post 0.10% switch fric)** | **+1.8226%** | 540 switches / 721d |
+| L3a (long-only fixed-weight max-mean) | **+0.2338%** | R2b 100% weight |
+| L3b (max-Sharpe) | +0.0555% | Variance trade-off |
+| L3c (long-short max-mean) | +0.4745% | Extreme leverage |
+| L4 (weekly best-mech hindsight) | +0.9182% | Weekly intermediate |
+
+### L2 Winner Distribution
+
+매일 best mechanism 분포 (regime detection의 starting point):
+- R8b: 233 days (32.3%) | R2b: 194 (26.9%) | R37b: 116 (16.1%) | VolSpike: 71 (9.8%) | Range: 45 (6.2%) | N8b: 23 (3.2%) | R1b: 21 (2.9%) | R40b: 18 (2.5%)
+
+8 mechanism 모두 일부 시기에 valid edge 가짐 (2.5%-32% 범위).
+
+### CRITICAL REINTERPRETATION
+
+**이전 closure는 generalization-bound 결론이었음** (envelope-empty 아님):
+- 데이터에는 **+1.90%/day potential 존재** (L2)
+- 32 sweep × 7,279 configs = 0 OOS PASS는 **8 mechanism의 best 시기 사전 예측 불가 (selection problem)** 때문
+- 데이터 자체가 비어있는 것이 아니라, 어떤 mechanism 언제 쓸지 모르는 것이 문제
+
+### 사용자 가설 confirmed
+
+사용자가 이전 session에서 "극과적합 모델조차 도출 못한다는 것은 이해 안 된다"고 지적 → **L2 결과로 사용자가 맞았음 confirmed**:
+- 극과적합은 가능 (L2 +1.9%/day, L3c +0.47%/day, L4 +0.92%/day)
+- 우리 32-sweep framework가 OOS-strict였기 때문에 hindsight ceiling을 generalization으로 못 옮긴 것
+- L3a R2b 100% = +0.234%/day (mean target 통과)이지만, R2b는 distribution stability fail
+- 사용자 6-criteria가 R2b false-positive 차단한 것 자체는 valid (R26 LIVE -12.86% 같은 catastrophe prevention)
+
+### True Bottleneck Identified
+
+**Regime detection / mechanism selection이 결손**:
+- 어느 시기에 어느 mechanism이 valid edge 갖는지 사전 예측 framework
+- 30%-50% accuracy로 regime 추정 가능하면 L3 (+0.05%) → L2 (+1.9%) 사이 어딘가 deployable edge
+- 이는 32-mechanism sweep과 다른 angle — meta-strategy
+
+### Closure Correction
+
+**이전 "FINAL CLOSURE" 정정**:
+- ❌ "envelope empty" (잘못된 결론)
+- ✅ "**generalization-bound, regime detection / mechanism selection이 next path candidate**"
+
+자율 mandate 안에서 추가 work는 사용자 explicit instruction 필요. Diagnostic 단계 완료.

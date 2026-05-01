@@ -376,15 +376,22 @@ def test_smoke_1k_bars_completes() -> None:
     assert sim.bar_counter == 1000
 
 
-@pytest.mark.skip(reason="10k bar takes >5min in v1 — perf optimization deferred to G2 (wealth concentration validity needs 10k bars). Re-enable after G2 perf work.")
+@pytest.mark.skip(reason="10k bar PASSES correctness but runtime ~1h56m (6956s, 90x slower than expected ~76s). Functionality verified once during Day 14-15. Skip from default suite; re-enable after G2 leaderboard caching optimization.")
 def test_smoke_10k_bars_completes() -> None:
-    """10000-bar smoke. Deferred to G2 — leaderboard computation per agent decision is
-    O(N agents × N bars), runtime grows superlinearly. 1k-bar smoke passes (24.75s),
-    confirms determinism + scale up to 1000 bars. G2 will need 10k bars for Gini
-    computation and that's the right time to optimize.
+    """10000-bar smoke. CORRECTNESS VERIFIED but skipped from default suite due to perf.
 
-    Per advisor: design Section 11.4 only requires 1000-bar smoke for G0. 10k was a
-    stretch goal. Marking skip + filing perf debt rather than blocking G0 on it.
+    Day 14-15 background run result: 16/16 PASSED in 6956.01s (1:55:56).
+    Expected runtime ~76s based on 100-bar = 0.76s linear extrapolation. Actual = 90x slowdown.
+    Confirms advisor caveat #1: leaderboard O(N agents × N decisions per bar) is the
+    superlinear hot path. G2 (wealth concentration validity) genuinely needs 10k bars
+    for Gini computation; perf optimization is required THEN, not deferrable further.
+
+    Likely fix: cache `wealth_tracker.growth_leaderboard()` result per bar
+    (currently recomputed per agent decision = N_agents calls per bar = O(N²)).
+
+    Skip rationale: design Section 11.4 only binds at 1000-bar smoke. 10k was advisor
+    stretch goal. Functionality is verified (PASS once); skip from default test suite
+    so that contributors don't pay 2-hour cost on every pytest run.
     """
     sim = _build_smoke_sim(seed=42, terminal_bars=10000)
     n_steps = sim.run()

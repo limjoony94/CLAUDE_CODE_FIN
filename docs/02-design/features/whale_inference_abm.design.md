@@ -11,15 +11,16 @@ variables:
   - plan_ref: docs/01-plan/features/whale_inference_abm.plan.md
 ---
 
-# whale_inference_abm Design Document — G0 (ABM Build)
+# whale_inference_abm Design Document — G0 (ABM Build) v0.2
 
 > **Summary**: Implementation-ready spec for Phase 0 (G0) ABM core: continuous double auction orderbook, 5 canonical agents, friction model, wealth-weighted sizing, open-system + frozen-admission window, deterministic event loop, logging schema. Includes ABIDES-vs-custom 5-day spike framework + G1-G4 preconditions.
 >
 > **Project**: CLAUDE_CODE_FIN
 > **Phase scope**: G0 ONLY (advisor binding decision #1). G1-G4 designs deferred until G0 passes.
+> **v1 scope (advisor B3 decision)**: ABM v1 = **cash-margin spot-like dynamics**. NO funding rate, NO liquidations, NO leverage. Substrate findings will NOT cover leverage-driven / funding-driven / liquidation-cascade mechanisms (those are known classes from 28-round R5/R8/R26). Acceptance: G3 substrate hypothesis space is narrowed by construction; this is intentional to keep claim sharp.
 > **Author**: 임준영 + advisor + Claude Opus 4.7
 > **Date**: 2026-05-01
-> **Status**: Design Draft
+> **Status**: Design v0.2 (advisor-reviewed, 3 BLOCKING + 3 FLAG + 3 NOTE patches applied)
 > **Plan reference**: [`whale_inference_abm.plan.md`](../../01-plan/features/whale_inference_abm.plan.md)
 > **Architecture reference**: [`whale_inference_abm_architecture_v1.1.md`](../../../bingx_rl_trading_bot/claudedocs/whale_inference_abm_architecture_v1.1.md)
 
@@ -34,6 +35,7 @@ variables:
 3. **Implementation flexibility within ABIDES-vs-custom spike** — design specifies behavior + interfaces, NOT internal implementation
 4. **Friction model from Day 1** — no "we'll add friction later" trap (architecture v1.1 Section 6.4)
 5. **Open-system honored at ABM level + tractability honored at extraction level** — frozen-admission window for G3
+6. **Scope limit explicit (advisor B3 patch)**: v1 ABM = cash-margin spot-like dynamics. NO funding rate, NO liquidations, NO leverage in v1. Acknowledged consequence: G3 cannot discover substrates that depend on those mechanisms (already-known classes from R5/R8/R26). v1 narrows the discovery space to interaction-pattern substrate (multi-agent coordination, orderbook signature artifacts, regime-feedback) — sharper test, smaller surface.
 
 ### 1.2 Design Principles
 
@@ -233,6 +235,7 @@ if last_action.timestamp > t - delay:
 **Parameters**: `lookback = 1000 bars`, `delay = 60s` (1-bar lag), `wealth_fraction = 0.03`
 **Decision frequency**: every bar
 **Anti-self-reference**: Piggyback agent excluded from "top_performer_id" candidates (would be circular)
+**Cold-start (advisor B2 patch)**: For `t < lookback × BAR_DURATION_NS` (i.e., first 1000 bars), piggyback agent emits NO trades and NO quotes (simply returns Hold from `decide()`). After cold-start window, normal piggyback logic activates. Test: assert piggyback agents have 0 trades in `bar_index < 1000` in smoke test.
 
 ### 4.6 Agent Population Composition (G0 smoke test)
 
@@ -246,6 +249,32 @@ if last_action.timestamp > t - delay:
 | **Total** | **15 initial agents** | **15000 total wealth** |
 
 Open-system admissions add more agents (Section 6).
+
+### 4.7 Decision Jitter (advisor B1 patch — alphabetical-order artifact 제거)
+
+**Problem identified**: All directional agents (momentum/mean-rev/piggyback) decide "every bar" → same timestamp. Tie-break = `agent_id` lexicographic. Result: agents whose ID starts with 'a' always trade first within each bar across the entire run. G2 wealth concentration may then reflect alphabetical-order first-mover advantage rather than strategy.
+
+**Fix**: per-agent jitter offset drawn from agent's seeded sub-RNG at registry time:
+```python
+# in registry.add_agent(agent):
+agent.decision_offset_ns = agent.rng.uniform(0, BAR_DURATION_NS)  # [0, 60e9]
+```
+
+When agent schedules its next decision:
+```python
+# instead of: schedule_decision(timestamp = bar_start)
+schedule_decision(timestamp = bar_start + agent.decision_offset_ns)
+```
+
+**Properties**:
+- Determinism preserved (offset is from seeded RNG; same seed → same offsets)
+- Alphabetical-order artifact removed (offsets distributed within bar)
+- Decision frequency unchanged (still 1 decision per bar for directional agents)
+- Per-agent offset is fixed for the run (drawn once at registry time, NOT re-drawn each bar)
+
+**Applies to**: momentum, mean-reversion, piggyback (per-bar deciders). Market-maker decides every 10s with its own jitter `rng.uniform(0, 10e9)`. Random agent already Poisson-arrival, no jitter needed.
+
+**Test**: integration test asserts that across 1000-bar run, the FIRST trader within each bar varies (≥ 5 distinct first-traders observed across bars), not always the same agent.
 
 ---
 
@@ -293,9 +322,11 @@ new_wealth = old_wealth + realized_pnl - fees
 
 **Slippage**: emergent from book depth. MARKET orders walking the book naturally pay worse prices for larger size.
 
-**Funding rate**: NOT modeled in v1 (BTC perp specific, deferred to v2 if substrate hypothesis depends on it).
+**Funding rate**: NOT modeled in v1. **Decision finalized (advisor B3 patch + user 2026-05-01)**: this is permanent v1 scope, not "deferred if needed." v2 may add funding if v1 yields substrate findings worth extending. v1 substrate hypotheses CANNOT depend on funding by construction.
 
-**Liquidations**: NOT modeled in v1 (no leverage in ABM v1, all orders fully collateralized).
+**Liquidations**: NOT modeled in v1 (no leverage in ABM v1, all orders fully collateralized). Same decision logic as funding above.
+
+**Consequence acknowledged**: any "29th attempt" mechanism class found by this ABM cannot be a leverage-cascade or funding-skim mechanism. Those are already-explored mechanism families (R5/R8/R13/R26). v1 ABM searches the space NOT explored by 28-round retail BTC perp work: emergent multi-agent interaction patterns within spot-like dynamics. This is the deliberate narrowing for sharp G3 test.
 
 **Friction interface**:
 ```python
@@ -471,9 +502,9 @@ def test_trade_tape_differs_different_seed():
 ### 10.3 Decision Criteria (priority order)
 
 1. **Per-patch effort gate**: if ANY of D2/D3 takes > 1 day each → ABIDES extension cost too high → **custom**
-2. **Crypto-perp extension gate**: if D5 estimate > 10 person-days → **custom** (would rewrite half of ABIDES anyway)
+2. **Crypto-perp extension gate**: if D5 estimate > 10 person-days → **custom** (would rewrite half of ABIDES anyway). NOTE (advisor B3 patch): since v1 scope drops funding/liquidation/leverage, "crypto-perp extension" here means only what's needed for spot-like cash-margin parity with BingX trade tape format. D5 should re-estimate against this narrower scope.
 3. **Greenlight**: D2/D3 each ≤ 1 day AND D5 ≤ 10 days → **ABIDES**
-4. **Tie-breaker**: **custom** (smaller surface, full control, no upstream dependency risk)
+4. **Tie-breaker (advisor F3 disambiguation)**: **custom**, but fires ONLY when criteria 1-3 are inconclusive — specifically when D5 estimate range straddles the 10-day threshold (e.g., low=8, expected=10, high=14 days). The tie-breaker does NOT override a clean greenlight (criterion 3 met unambiguously); it only resolves borderline cases in favor of custom.
 
 ### 10.4 Spike Abandon Trigger
 
@@ -524,7 +555,7 @@ Both paths converge on Phase 0 = 3 weeks total.
 
 (Section 9.2 above — `test_trade_tape_byte_identical_*`)
 
-### 11.4 G0 Pass Criterion (verbatim from plan)
+### 11.4 G0 Pass Criterion (verbatim from plan + advisor N3 addition)
 
 All of:
 - ABM platform decision finalized (spike completed)
@@ -536,12 +567,21 @@ All of:
 - Logging schema producing valid NDJSON
 - Smoke test: 1000-bar run produces non-trivial price evolution + all 5 agent families active + no crashes
 - Reproducibility: SHA256 trade-tape identity verified (same-process AND cross-process)
+- **Schema diff (advisor N3)**: ABM `bar_snapshots` schema vs BingX Phase 1 L2 collector output schema diff'd; field-by-field reconciliation plan documented in `results/g0_smoke/schema_parity.md`. Mismatched fields require either (a) ABM logging schema patch or (b) G4-stage adapter layer documented now. CANNOT pass G0 without this artifact.
+- Per-agent decision jitter test (Section 4.7) passes: ≥ 5 distinct first-traders observed across 1000 bars
+- Piggyback cold-start test (Section 4.5) passes: 0 piggyback trades in `bar_index < 1000`
 
 ---
 
 ## 12. Anti-Circularity Reducibility — Algorithm Detail
 
 (Advisor binding decision #4. NOT implemented in G0, but interface owed by G0 logging schema. Full implementation is G3 work.)
+
+### 12.0 Operational Targets vs Final Calibration (advisor N2 patch)
+
+Algorithm details below are **operational targets** for G3 implementation. Final thresholds (R² boundary, MI nat threshold, AST allowed-symbols set) will be **calibrated at G3 entry (week 13)** based on actual candidate substrate characteristics — pre-specifying them in detail without seeing real candidates risks ossifying definitions in ways that don't match the substrate space we encounter.
+
+Pre-registration discipline (architecture v1.1 patch 2) covers any threshold change: each calibration produces a git-committed prereg file BEFORE substrate evaluation runs. Threshold movement after results are visible is excluded.
 
 ### 12.1 Per-Substrate Audit (3 layers, cheap-first)
 
@@ -560,8 +600,18 @@ For each candidate substrate `f_candidate(trajectory) → scalar`:
 **Layer C — Conditional mutual information**:
 - Compute `I_total = I(f_candidate; future_action_T+1)` — predictive power of candidate alone
 - Compute `I_cond = I(f_candidate; future_action_T+1 | explicit_readouts_joint)` — predictive power of candidate AFTER conditioning on explicit strategies
-- If `I_cond ≤ 0.05 nats` → mark "explicit-derived"
+- If `I_cond ≤ THRESHOLD_NATS` → mark "explicit-derived"
 - MI estimator: KSG (Kraskov-Stögbauer-Grassberger) for continuous, plug-in MLE for discrete
+
+**Calibration plan for THRESHOLD_NATS (advisor N1 patch)**:
+Initial value `0.05 nats` is a placeholder. At G3 entry (week 13):
+1. Generate K=1000 independent random feature functions (e.g., random linear combinations of orderbook columns + small noise)
+2. For each random feature, compute `I_cond` against actual ABM trajectories
+3. Set `THRESHOLD_NATS` = 95th percentile of the random-feature `I_cond` distribution
+4. Pre-register the calibrated threshold + the random-feature generator seed BEFORE any candidate substrate evaluation
+5. Document calibration result in `g3_substrate/calibration_{date}.json`
+
+Rationale: this defines "explicit-derived" as "no more predictive than what 95% of random features achieve." Defensible threshold instead of arbitrary number.
 
 ### 12.2 Pass Criteria
 
@@ -698,7 +748,10 @@ Per CLAUDE.md global instructions: comments only for non-obvious WHY (constraint
 | structlog NDJSON parquet rollup performance at scale | Open | Defer until volume hurts; pure NDJSON acceptable for G0 smoke |
 | Determinism may break if numpy minor version differs | Open | Pin requirements.txt to exact versions; CI runs versioned environment |
 | MI estimator (KSG) computational cost for Layer C | Deferred to G3 | Sample if needed; Layer C is rarest-applied of three |
-| L2 snapshot schema parity with BingX Phase 1 collector | Open | Section 13.4 makes this G0 acceptance criterion |
+| L2 snapshot schema parity with BingX Phase 1 collector | Open | Section 11.4 G0 acceptance criterion (per N3 patch) |
+| **F1 — structlog wall-clock leak**: structlog default config emits `event_time` from wall-clock → cross-process determinism hash mismatch | Flag | During implementation: configure structlog to use sim-time OR strip wall-clock fields BEFORE SHA256 in `test_trade_tape_byte_identical_*`. Test catches this if missed. |
+| **F2 — Per-decision log volume on OneDrive**: ~9M records per smoke run (60 events/bar × 15 agents × 10000 bars). BUG#58 (state.json OneDrive sync lock) precedent suggests OneDrive may sync-lock during high-frequency NDJSON writes | Flag | Write per-decision logs to `${ABM_DATA_DIR}` set to non-OneDrive path (e.g., `C:\abm_runtime\` outside OneDrive). On G0 completion, optional move to OneDrive for archival. Document path requirement in README. |
+| Cash-margin scope vs perp-realistic gap | Accepted (B3 (a)) | v1 explicitly does not cover funding/liquidation. v2 may extend if v1 G3 yields. Documented in Section 1.1 + 6 + 1 header. |
 
 ---
 
@@ -707,3 +760,4 @@ Per CLAUDE.md global instructions: comments only for non-obvious WHY (constraint
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
 | 0.1 | 2026-05-01 | Initial G0-only design from architecture v1.1 + advisor 4 binding decisions | 임준영 + advisor + Claude Opus 4.7 |
+| 0.2 | 2026-05-01 | Advisor review patches: B1 decision jitter, B2 piggyback cold-start, B3 v1 scope = cash-margin spot-like (user (a)), F1 structlog risk, F2 OneDrive log volume risk, F3 ABIDES tie-breaker disambiguation, N1 MI threshold calibration, N2 Section 12.0 phrasing, N3 schema diff G0 acceptance | 임준영 + advisor + Claude Opus 4.7 |

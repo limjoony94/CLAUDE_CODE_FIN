@@ -62,6 +62,7 @@ class Simulation:
         admission_scheduler: "AdmissionScheduler",
         logger: Optional[Any] = None,
         piggyback_lookback_bars: int = 1000,
+        shock_scheduler: Optional[Any] = None,  # v2: ShockScheduler or None
     ) -> None:
         # Logger expected methods (Day 11-13 implementation contract):
         #   logger.trade(trade: Trade) -> None
@@ -75,11 +76,14 @@ class Simulation:
         self.friction = friction
         self.wealth_tracker = wealth_tracker
         self.admission_scheduler = admission_scheduler
+        self.shock_scheduler = shock_scheduler  # v2: optional ShockScheduler
         self.logger = logger if logger is not None else NullLogger()
         self.piggyback_lookback_bars = piggyback_lookback_bars
         self._active_orders: dict[str, set[str]] = {}
         self._last_actions: dict[str, dict[str, Any]] = {}
         self._bar_counter: int = 0
+        # v2: track shocks applied for diagnostic logging
+        self._shock_log: list[dict[str, Any]] = []
         # Leaderboard cache (advisor G1 → G2 binding requirement):
         # growth_leaderboard() is O(N agents) per call; called per agent decision = O(N²)
         # per bar. Cache invalidates on bar boundary. Single-slot (bar_idx, lookback)
@@ -126,6 +130,17 @@ class Simulation:
                 )
             )
 
+        # v2: First shock event if shock scheduler enabled
+        if self.shock_scheduler is not None and self.shock_scheduler.enabled:
+            self.scheduler.push(
+                Event(
+                    timestamp_ns=self.shock_scheduler.shock_interval_ns,
+                    sequence_no=self.scheduler.next_sequence_no(),
+                    agent_id="__shock__",
+                    event_type=EventType.SHOCK,
+                )
+            )
+
     # ----- Top-level loop -----
 
     def step(self) -> bool:
@@ -146,6 +161,8 @@ class Simulation:
             self._dispatch_admission(event)
         elif event.event_type == EventType.AGENT_REMOVED:
             self._dispatch_agent_removed(event)
+        elif event.event_type == EventType.SHOCK:
+            self._dispatch_shock(event)
         else:
             raise ValueError(f"Unknown event type: {event.event_type}")
         return True
@@ -328,6 +345,53 @@ class Simulation:
         for oid in list(self._active_orders.get(event.agent_id, set())):
             self.orderbook.cancel(oid)
         self._active_orders.pop(event.agent_id, None)
+
+    def _dispatch_shock(self, event: Event) -> None:
+        """v2: External wealth shock — pick uniform random agent and multiply their wealth.
+
+        Per advisor 2026-05-01: tests whether v1 mechanism amplifies exogenous wealth
+        perturbations into emergent persistent whales (vs. just transient noise).
+        """
+        if self.shock_scheduler is None:
+            return
+        now = self.scheduler.now()
+        alive_ids = self.registry.alive_ids()
+        target_id = self.shock_scheduler.select_target_agent(self.scheduler.rng, alive_ids)
+        if target_id is None:
+            return  # no agents alive, skip shock
+
+        # Apply shock: directly modify wealth tracker's cash for the target agent
+        # (cash multiplier; inventory unchanged so MTM scales naturally)
+        state = self.wealth_tracker._ledger.get(target_id)
+        if state is None:
+            return
+        wealth_before = state.cash  # using cash as proxy; inventory * mid would be MTM
+        new_cash = self.shock_scheduler.apply_shock(state.cash)
+        state.cash = new_cash
+
+        shock_idx = self.shock_scheduler.next_shock_index()
+        agent_family = self.registry.get(target_id).family if self.registry.has(target_id) else "unknown"
+        self._shock_log.append({
+            "shock_idx": shock_idx,
+            "timestamp_ns": now,
+            "bar": now // BAR_DURATION_NS,
+            "target_agent_id": target_id,
+            "target_family": agent_family,
+            "cash_before": wealth_before,
+            "cash_after": new_cash,
+        })
+
+        # Schedule next shock if still within terminal_time
+        next_ts = now + self.shock_scheduler.shock_interval_ns
+        if next_ts < self.scheduler.terminal_time_ns:
+            self.scheduler.push(
+                Event(
+                    timestamp_ns=next_ts,
+                    sequence_no=self.scheduler.next_sequence_no(),
+                    agent_id="__shock__",
+                    event_type=EventType.SHOCK,
+                )
+            )
 
     # ----- Helpers -----
 

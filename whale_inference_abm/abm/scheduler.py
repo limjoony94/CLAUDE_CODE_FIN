@@ -26,6 +26,7 @@ class EventType(str, Enum):
     BAR_TICK = "BAR_TICK"
     ADMISSION = "ADMISSION"
     AGENT_REMOVED = "AGENT_REMOVED"
+    SHOCK = "SHOCK"  # v2 ABM external wealth perturbation event
 
 
 @dataclass(frozen=True)

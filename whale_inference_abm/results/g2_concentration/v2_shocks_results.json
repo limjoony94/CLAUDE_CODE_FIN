@@ -1,0 +1,218 @@
+{
+  "result": {
+    "experiment": "v2_external_shocks",
+    "seed": 42,
+    "terminal_bars": 10000,
+    "shock_interval_bars": 1000,
+    "shock_magnitude": 2.0,
+    "elapsed_sec": 6.3,
+    "trade_count": 55027,
+    "shock_count": 9,
+    "checkpoints": [
+      {
+        "bar": 1000,
+        "n_alive": 15,
+        "gini": 0.1609,
+        "top_5pct_share": 0.2083,
+        "top_5pct_ids": [
+          "piggy_1"
+        ]
+      },
+      {
+        "bar": 2000,
+        "n_alive": 15,
+        "gini": 0.4044,
+        "top_5pct_share": 0.3665,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 3000,
+        "n_alive": 15,
+        "gini": 0.6121,
+        "top_5pct_share": 0.608,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 4000,
+        "n_alive": 15,
+        "gini": 0.6181,
+        "top_5pct_share": 0.5949,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 5000,
+        "n_alive": 15,
+        "gini": 0.6198,
+        "top_5pct_share": 0.5925,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 6000,
+        "n_alive": 15,
+        "gini": 0.6222,
+        "top_5pct_share": 0.5934,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 7000,
+        "n_alive": 15,
+        "gini": 0.6651,
+        "top_5pct_share": 0.6184,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 8000,
+        "n_alive": 14,
+        "gini": 0.6475,
+        "top_5pct_share": 0.6193,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 9000,
+        "n_alive": 14,
+        "gini": 0.6445,
+        "top_5pct_share": 0.5794,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      },
+      {
+        "bar": 10000,
+        "n_alive": 14,
+        "gini": 0.6425,
+        "top_5pct_share": 0.5782,
+        "top_5pct_ids": [
+          "momentum_n3"
+        ]
+      }
+    ],
+    "consecutive_overlaps": [
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "avg_consecutive_overlap": 0.8889,
+    "final_gini": 0.6425,
+    "shock_log": [
+      {
+        "shock_idx": 1,
+        "timestamp_ns": 60000000000000,
+        "bar": 1000,
+        "target_agent_id": "piggy_1",
+        "target_family": "piggyback",
+        "cash_before": 2643.653083069001,
+        "cash_after": 5287.306166138002
+      },
+      {
+        "shock_idx": 2,
+        "timestamp_ns": 120000000000000,
+        "bar": 2000,
+        "target_agent_id": "momentum_n3",
+        "target_family": "momentum",
+        "cash_before": 8712.781617294473,
+        "cash_after": 17425.563234588946
+      },
+      {
+        "shock_idx": 3,
+        "timestamp_ns": 180000000000000,
+        "bar": 3000,
+        "target_agent_id": "momentum_n3",
+        "target_family": "momentum",
+        "cash_before": 16109.635576061484,
+        "cash_after": 32219.27115212297
+      },
+      {
+        "shock_idx": 4,
+        "timestamp_ns": 240000000000000,
+        "bar": 4000,
+        "target_agent_id": "random_2",
+        "target_family": "random",
+        "cash_before": 899.4581465970022,
+        "cash_after": 1798.9162931940043
+      },
+      {
+        "shock_idx": 5,
+        "timestamp_ns": 300000000000000,
+        "bar": 5000,
+        "target_agent_id": "meanrev_n20",
+        "target_family": "mean_reversion",
+        "cash_before": 232.60858608850083,
+        "cash_after": 465.21717217700166
+      },
+      {
+        "shock_idx": 6,
+        "timestamp_ns": 360000000000000,
+        "bar": 6000,
+        "target_agent_id": "random_0",
+        "target_family": "random",
+        "cash_before": 11.039249490297603,
+        "cash_after": 22.078498980595207
+      },
+      {
+        "shock_idx": 7,
+        "timestamp_ns": 420000000000000,
+        "bar": 7000,
+        "target_agent_id": "mm_a",
+        "target_family": "market_maker",
+        "cash_before": -41142.507374131616,
+        "cash_after": -82285.01474826323
+      },
+      {
+        "shock_idx": 8,
+        "timestamp_ns": 480000000000000,
+        "bar": 8000,
+        "target_agent_id": "meanrev_n20",
+        "target_family": "mean_reversion",
+        "cash_before": -140.8228910169989,
+        "cash_after": -281.6457820339978
+      },
+      {
+        "shock_idx": 9,
+        "timestamp_ns": 540000000000000,
+        "bar": 9000,
+        "target_agent_id": "piggy_0",
+        "target_family": "piggyback",
+        "cash_before": 2781.519996023507,
+        "cash_after": 5563.039992047014
+      }
+    ],
+    "shocked_agents": [
+      "meanrev_n20",
+      "mm_a",
+      "momentum_n3",
+      "piggy_0",
+      "piggy_1",
+      "random_0",
+      "random_2"
+    ],
+    "final_top_5pct_agents": [
+      "momentum_n3"
+    ],
+    "shocked_in_final_top5pct": [
+      "momentum_n3"
+    ],
+    "shock_to_top_ratio": 1.0
+  },
+  "verdict": "(c1) v2 external-shocks VIABLE",
+  "details": "Gini 0.6425 > 0.55 + stable top-5% (avg overlap 0.8889). G2 criterion update + design v0.9 + T-G3 unblocks."
+}

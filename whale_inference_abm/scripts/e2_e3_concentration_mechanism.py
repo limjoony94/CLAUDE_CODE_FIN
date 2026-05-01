@@ -126,7 +126,8 @@ def fixed_size_decorator(agent, fixed_size: float) -> None:
 
 
 def build_sim(seed: int, terminal_bars: int, agent_wealths: dict[str, float],
-              fixed_trade_size: float | None = None):
+              fixed_trade_size: float | None = None,
+              shock_scheduler=None):
     initial_price = 50000.0
     terminal_ns = terminal_bars * BAR_DURATION_NS
     scheduler = Scheduler(seed=seed, terminal_time_ns=terminal_ns)
@@ -157,7 +158,8 @@ def build_sim(seed: int, terminal_bars: int, agent_wealths: dict[str, float],
     sim = Simulation(scheduler=scheduler, orderbook=orderbook, registry=registry,
                      friction=friction, wealth_tracker=wealth,
                      admission_scheduler=admission, logger=NullLogger(),
-                     piggyback_lookback_bars=10)
+                     piggyback_lookback_bars=10,
+                     shock_scheduler=shock_scheduler)
     sim.seed_initial_events()
     return sim
 

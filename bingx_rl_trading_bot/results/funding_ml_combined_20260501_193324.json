@@ -1,0 +1,150 @@
+{
+  "date": "2026-05-01T10:33:24.296511+00:00",
+  "mandate": "Funding+ML combined portfolio (\uc790\uc728 mandate)",
+  "pre_commit": "memory/funding_ml_combined_precommit_20260501.md",
+  "correlation": -0.09162775548680828,
+  "funding_eval": {
+    "name": "Funding Arb V5",
+    "n_days": 105,
+    "n_nonzero_days": 105,
+    "daily_mean_pct": 0.009985352380952384,
+    "daily_std_pct": 0.012420334266359148,
+    "cum_pct": 1.0484620000000002,
+    "annual_return_pct": 3.64465361904762,
+    "sharpe_ann": 15.359481096507876,
+    "max_drawdown_pct": -0.10443599054477844,
+    "bootstrap": {
+      "mean_daily": 0.0032275496666666664,
+      "p5_daily": -0.00047833333333333343,
+      "pos_rate": 0.505,
+      "avg_per_trade": 0.009985352380952384,
+      "pass_count_6": 1,
+      "pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": true,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "overall_pass": false
+    }
+  },
+  "ml_eval": {
+    "name": "Strict ML thr=0.15",
+    "n_days": 105,
+    "n_nonzero_days": 105,
+    "daily_mean_pct": 0.14878345397372378,
+    "daily_std_pct": 1.079017080688865,
+    "cum_pct": 15.622262667240996,
+    "annual_return_pct": 54.30596070040918,
+    "sharpe_ann": 2.6343455982820103,
+    "max_drawdown_pct": -6.248058898790758,
+    "bootstrap": {
+      "mean_daily": 0.05085191103370141,
+      "p5_daily": -0.23904028977587877,
+      "pos_rate": 0.366,
+      "avg_per_trade": 0.14878345397372378,
+      "pass_count_6": 1,
+      "pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": true,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "overall_pass": false
+    }
+  },
+  "V1_equal_weight": {
+    "name": "V1_EqualWeight_50_50",
+    "n_days": 105,
+    "n_nonzero_days": 105,
+    "daily_mean_pct": 0.07938440317733807,
+    "daily_std_pct": 0.538974994795771,
+    "cum_pct": 8.335362333620496,
+    "annual_return_pct": 28.975307159728395,
+    "sharpe_ann": 2.8139281187892946,
+    "max_drawdown_pct": -2.8345043410279875,
+    "bootstrap": {
+      "mean_daily": 0.027039730350184043,
+      "p5_daily": -0.1189496448879394,
+      "pos_rate": 0.369,
+      "avg_per_trade": 0.07938440317733807,
+      "pass_count_6": 1,
+      "pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": false,
+        "avg_per_trade_>_taker_RT": true,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "overall_pass": false
+    }
+  },
+  "V2_risk_parity": {
+    "name": "V2_RiskParity",
+    "n_days": 105,
+    "n_nonzero_days": 105,
+    "daily_mean_pct": 0.01156484635256872,
+    "daily_std_pct": 0.016550445629335674,
+    "cum_pct": 1.2143088670197155,
+    "annual_return_pct": 4.2211689186875825,
+    "sharpe_ann": 13.349856812429717,
+    "max_drawdown_pct": -0.10758768342473018,
+    "bootstrap": {
+      "mean_daily": 0.003769505146014714,
+      "p5_daily": -0.0014749730089180894,
+      "pos_rate": 0.508,
+      "avg_per_trade": 0.01156484635256872,
+      "pass_count_6": 1,
+      "pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": true,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "overall_pass": false
+    }
+  },
+  "V2_weights": {
+    "funding": 0.9886202047903326,
+    "ml": 0.011379795209667325
+  },
+  "V3_min_variance": {
+    "name": "V3_MinVariance",
+    "n_days": 105,
+    "n_nonzero_days": 105,
+    "daily_mean_pct": 0.010149765668667873,
+    "daily_std_pct": 0.01235424518972355,
+    "cum_pct": 1.0657253952101267,
+    "annual_return_pct": 3.7046644690637733,
+    "sharpe_ann": 15.695900303896616,
+    "max_drawdown_pct": -0.10476389798209088,
+    "bootstrap": {
+      "mean_daily": 0.0032839631027140707,
+      "p5_daily": -0.000426179730444203,
+      "pos_rate": 0.507,
+      "avg_per_trade": 0.010149765668667873,
+      "pass_count_6": 1,
+      "pass_criteria": {
+        "mean_daily_>=_0.20": false,
+        "p5_daily_>=_0": false,
+        "pos_rate_>=_0.50": true,
+        "avg_per_trade_>_taker_RT": false,
+        "sufficient_trades_per_window": false,
+        "p_beats_baseline_>=_0.55": false
+      },
+      "overall_pass": false
+    }
+  },
+  "V3_weights": {
+    "funding": 0.9988154500254054,
+    "ml": 0.0011845499745945759
+  },
+  "any_pass": false
+}

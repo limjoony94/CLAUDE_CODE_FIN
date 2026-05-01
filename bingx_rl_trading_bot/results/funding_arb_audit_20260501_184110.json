@@ -1,0 +1,132 @@
+{
+  "date": "2026-05-01T09:41:10.714581+00:00",
+  "mandate": "funding rate arb precision audit (R5 vs paper)",
+  "btc_funding_stats": {
+    "n_records": 2399,
+    "mean_rate_8h_pct": 0.006468024176740308,
+    "positive_pct": 83.78491037932471,
+    "theoretical_apy_no_fric": 7.082486473530637
+  },
+  "variants": {
+    "V1_R5_baseline": {
+      "span_days": 799.6666667939816,
+      "n_entries": 5,
+      "cum_funding_usd": 115.78323000000142,
+      "cum_fric_usd": 10.5,
+      "net_pnl_pct": 7.018882000000095,
+      "net_apy_pct": 3.203699786901404,
+      "daily_mean_pct": 0.009770802896725442,
+      "sharpe_ann": 14.50429577092996
+    },
+    "V2_continuous": {
+      "span_days": 799.6666667939816,
+      "cum_funding_pct": 7.758395,
+      "net_pnl_pct": 7.618395,
+      "net_apy_pct": 3.4773416105343253,
+      "entry_fric_pct": 0.06999999999999999,
+      "exit_fric_pct": 0.06999999999999999,
+      "daily_mean_pct": 0.009685886392009988,
+      "daily_std_pct": 0.013165837317332008,
+      "sharpe_ann": 14.055209344521899,
+      "max_drawdown_pct": -0.16665150000000128,
+      "n_periods": 2399,
+      "positive_period_pct": 83.78491037932471,
+      "bootstrap": {
+        "mean_daily": 0.009258660333333333,
+        "p5_daily": -0.003614166666666666,
+        "pos_rate": 0.867,
+        "avg_per_trade": 0.009685886392009988,
+        "pass_count_6": 3,
+        "overall_pass": false
+      }
+    },
+    "V3_continuous_2025": {
+      "span_days": 363.6666665277778,
+      "cum_funding_pct": 2.5557980000000002,
+      "net_pnl_pct": 2.4157980000000006,
+      "net_apy_pct": 2.424655188827015,
+      "entry_fric_pct": 0.06999999999999999,
+      "exit_fric_pct": 0.06999999999999999,
+      "daily_mean_pct": 0.007021423076923078,
+      "daily_std_pct": 0.005106582067297509,
+      "sharpe_ann": 26.26886198320172,
+      "max_drawdown_pct": -0.028824999999999767,
+      "n_periods": 1091,
+      "positive_period_pct": 87.07607699358387,
+      "bootstrap": {
+        "mean_daily": 0.007139229833333333,
+        "p5_daily": -0.0009738333333333335,
+        "pos_rate": 0.945,
+        "avg_per_trade": 0.007021423076923078,
+        "pass_count_6": 3,
+        "overall_pass": false
+      }
+    },
+    "V4_maker_maker": {
+      "span_days": 799.6666667939816,
+      "cum_funding_pct": 7.758395,
+      "net_pnl_pct": 7.678395,
+      "net_apy_pct": 3.504728021534551,
+      "entry_fric_pct": 0.039999999999999994,
+      "exit_fric_pct": 0.039999999999999994,
+      "daily_mean_pct": 0.009685886392009988,
+      "daily_std_pct": 0.013165837317332008,
+      "sharpe_ann": 14.055209344521899,
+      "max_drawdown_pct": -0.16665150000000128,
+      "n_periods": 2399,
+      "positive_period_pct": 83.78491037932471,
+      "bootstrap": {
+        "mean_daily": 0.009258660333333333,
+        "p5_daily": -0.003614166666666666,
+        "pos_rate": 0.867,
+        "avg_per_trade": 0.009685886392009988,
+        "pass_count_6": 3,
+        "overall_pass": false
+      }
+    },
+    "V5_leverage_2x": {
+      "span_days": 799.6666667939816,
+      "cum_funding_pct": 15.51679,
+      "net_pnl_pct": 15.33679,
+      "net_apy_pct": 7.000327239402361,
+      "entry_fric_pct": 0.09000000000000001,
+      "exit_fric_pct": 0.09000000000000001,
+      "daily_mean_pct": 0.019371772784019976,
+      "daily_std_pct": 0.026331674634664015,
+      "sharpe_ann": 14.055209344521899,
+      "max_drawdown_pct": -0.33330300000000257,
+      "n_periods": 2399,
+      "positive_period_pct": 83.78491037932471,
+      "bootstrap": {
+        "mean_daily": 0.018517320666666667,
+        "p5_daily": -0.007228333333333332,
+        "pos_rate": 0.867,
+        "avg_per_trade": 0.019371772784019976,
+        "pass_count_6": 3,
+        "overall_pass": false
+      }
+    },
+    "V6_full_notional": {
+      "span_days": 799.6666667939816,
+      "cum_funding_pct": 7.758395,
+      "net_pnl_pct": 7.618395,
+      "net_apy_pct": 3.4773416105343253,
+      "entry_fric_pct": 0.06999999999999999,
+      "exit_fric_pct": 0.06999999999999999,
+      "daily_mean_pct": 0.009685886392009988,
+      "daily_std_pct": 0.013165837317332008,
+      "sharpe_ann": 14.055209344521899,
+      "max_drawdown_pct": -0.16665150000000128,
+      "n_periods": 2399,
+      "positive_period_pct": 83.78491037932471,
+      "bootstrap": {
+        "mean_daily": 0.009258660333333333,
+        "p5_daily": -0.003614166666666666,
+        "pos_rate": 0.867,
+        "avg_per_trade": 0.009685886392009988,
+        "pass_count_6": 3,
+        "overall_pass": false
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "date": "2026-05-01T09:03:31.086078+00:00",
+  "mandate": "online learning adaptive weight (causal)",
+  "pre_commit": "memory/online_learning_precommit_20260501.md",
+  "locked_params": {
+    "WINDOW": 30,
+    "CAP": 0.4,
+    "DEACTIVATE_LB": 14,
+    "MIN_ACTIVE": 3
+  },
+  "n_days": 721,
+  "n_active_days": 568,
+  "daily_mean_pct": 0.0905504684597685,
+  "daily_std_pct": 0.9898219395034955,
+  "sharpe_ann": 1.7477530067013145,
+  "cumulative_pct": 65.28688775949308,
+  "avg_weights": {
+    "R8b": 0.04917837411394714,
+    "R37b": 0.19247621105952567,
+    "R40b": 0.25729971819882774,
+    "Range": 0.12336323018005518,
+    "VolSpike": 0.06495597719611029,
+    "R1b": 0.1461125740600309,
+    "R2b": 0.029789464178956452,
+    "N8b": 0.1368244510125492
+  },
+  "bootstrap_mean_daily": 0.048953425440114114,
+  "bootstrap_pos_rate": 0.522,
+  "bootstrap_p5_daily": -0.41431061291060295,
+  "bootstrap_avg_per_trade": 0.11494170380192446,
+  "bootstrap_pass_criteria": {
+    "mean_daily_>=_0.20": false,
+    "p5_daily_>=_0": false,
+    "pos_rate_>=_0.50": true,
+    "avg_per_trade_>_taker_RT": true,
+    "sufficient_trades_per_window": false,
+    "p_beats_baseline_>=_0.55": false
+  },
+  "bootstrap_overall_pass": false,
+  "F1_avg_gross_pass": true,
+  "F6_full_n_pass": true,
+  "portfolio_overall_pass": false,
+  "lookahead_suspicion": false
+}

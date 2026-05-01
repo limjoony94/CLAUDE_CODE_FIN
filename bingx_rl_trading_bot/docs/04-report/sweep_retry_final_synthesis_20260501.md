@@ -334,3 +334,54 @@ User criteria의 정당성 confirmed:
 - ✅ "**generalization-bound, regime detection / mechanism selection이 next path candidate**"
 
 자율 mandate 안에서 추가 work는 사용자 explicit instruction 필요. Diagnostic 단계 완료.
+
+---
+
+## Online Learning Adaptive Weight (post-overfit-ceiling)
+
+**Trigger**: 사용자 자율 mandate. Overfit ceiling diagnostic이 generalization-bound 확인 후, regime detection 차원의 첫 시도. Single attempt + pre-committed (PASS → deployable, FAIL → closure 강제).
+
+### Locked design (causal, no look-ahead)
+- Window: 30d rolling
+- Weighting: inverse-variance among active mechanisms
+- Cap: 40% per mechanism (concentration 차단)
+- Deactivation: 14d cumulative PnL <0 → 0 weight
+- Min active fallback: equal-weight if <3 active
+- **CAUSAL**: weight at day t computed from PnL[t-30, t-1] only
+
+### Result
+
+| Metric | Value |
+|--------|-------|
+| Daily mean | **+0.0906%** (target 0.20%의 45%) |
+| Daily std | 0.9898% |
+| Sharpe (ann) | 1.748 |
+| avg_per_trade | +0.1149% ✅ |
+| pos_rate | 0.522 ✅ |
+| p5_daily | -0.4143% 🔴 |
+| sufficient_trades/window | 🔴 |
+| p_beats_baseline | 🔴 |
+| **OVERALL** | **🔴 FAIL** |
+
+### L2 ceiling capture rate
+
+L2 hindsight (+1.90%/day) 대비 online learning (+0.09%/day) = **4.7% capture only**.
+
+→ **Selection problem의 95%는 simple causal rolling weight로 풀리지 않음**.
+→ Regime detection이 진짜 hard problem (30d trailing performance가 next-day winner 예측에 거의 무의미).
+
+### Pre-committed closure (per memory/online_learning_precommit_20260501.md)
+
+자율 mandate 안에서 단순 online learning은 envelope 한계 capture 못 함. 다른 path silent pivot 금지:
+- Meta-strategy (market state classifier) — 새 mandate 필요
+- Drawdown monitoring — 새 mandate 필요
+- L2 ceiling 다른 framework — 새 mandate 필요
+
+### Refined understanding of envelope
+
+- **데이터 자체**: +1.9%/day potential (L2 hindsight)
+- **Causal rolling weight**: +0.09%/day (5% capture)
+- **L1 single best mechanism**: ~+0.30%/day (L1 sweep best in-sample, OOS fail)
+- **Gap = 95%**: 사전 예측 매우 어려운 selection problem
+
+자율 mandate 안에서는 본 closure가 final state. 추가 path는 사용자 explicit instruction 필요.

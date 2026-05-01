@@ -483,13 +483,50 @@ def test_trade_tape_differs_different_seed():
 
 ---
 
-## 10. ABIDES-vs-Custom Spike Framework
+## 10. ABIDES-vs-Custom Decision (SPIKE SKIPPED — 2026-05-01)
 
-(Advisor binding decision #2 — verbatim implementation)
+### 10.0 Decision: Custom Build (advisor reconcile call 2026-05-01)
 
-### 10.1 Spike Hard Cap
+**Status**: SPIKE SKIPPED. Custom build proceeds directly.
 
-**5 working days. No extensions.** If spike does not produce all 5 deliverables in 5 days, decision defaults to custom and remaining days roll into custom build.
+**Evidence triggering skip**:
+- ABIDES JPMorgan repo `jpmorganchase/abides-jpmc-public` archived 2025-06-02 (read-only)
+- Repo statement: "we do not do technical support, nor consulting"
+- Codebase composition: 81% Jupyter Notebook, 19% Python (research-shape, not production-shape)
+- No pip distribution; install via `git clone` + `install.sh` only
+- Python version compatibility unverified (no maintenance = unbumped pins likely)
+- Community fork (`abides-sim/abides`) exists but fragmented; no clear canonical path
+
+**Decision logic**:
+- Spike framework criterion 2 ("D5 estimate > 10 person-days → custom") triggered by inspection: archived + notebook-heavy + no-pip = D5 well above 10 days without running the spike
+- Spike framework tie-breaker (custom default for borderline) reinforced by archive status
+- Running D1-D5 on archived code adds zero information — outcome already determined
+
+**Additional context (CLAUDE_CODE_FIN-specific)**:
+- BUG#58 precedent (OneDrive sync lock on state.json) — ABIDES + notebook checkpoints + intermediate artifacts on OneDrive = friction risk asymmetric to custom code with controlled I/O
+- 5-day spike budget rolls into custom build → total Phase 0 unchanged at 3 weeks (15 days)
+
+**Reference orderbook implementations to READ (not depend on)**:
+- `abides-markets/orderbook.py` in archived ABIDES (reference for CDA pattern)
+- `mbtgateway` (smaller, readable matching engine)
+- `lobster-tools` (academic, well-documented limit order book)
+- **30-minute pre-build read budget**: spend ≤30 minutes reading one of the above BEFORE writing custom orderbook line one. Saves ~1 day of false starts.
+
+### 10.1 Custom Build Implementation Order (replaces 10.1-10.6 spike framework)
+
+| Days | Deliverable |
+|------|-------------|
+| 1-3 | Orderbook (CDA, state_hash, invariants) + scheduler + determinism scaffolding |
+| 4-7 | 5 canonical agents per Section 4 + unit tests |
+| 8-10 | Wealth tracker + friction + bankruptcy + admission scheduler + frozen-window |
+| 11-13 | Logger NDJSON + per-decision log + integration tests |
+| 14-15 | Smoke 1k/10k bars + reproducibility tests (same/cross-process) + schema diff vs BingX Phase 1 + G0 acceptance review |
+
+Total: 15 days = 3 weeks. No schedule slip vs original timeline.
+
+### 10.2 (DEPRECATED) Original Spike Framework
+
+The original 5-day ABIDES-vs-custom spike framework (5 deliverables D1-D5, decision criteria, tie-breaker) is preserved in git history (commit `78f802d` design v0.1, commit `adfe215` design v0.2 Section 10) for reference but no longer executes. Decision recorded as if spike completed Day 5 with criterion 2 triggered.
 
 ### 10.2 Five Required Deliverables
 
@@ -761,3 +798,4 @@ Per CLAUDE.md global instructions: comments only for non-obvious WHY (constraint
 |---------|------|---------|--------|
 | 0.1 | 2026-05-01 | Initial G0-only design from architecture v1.1 + advisor 4 binding decisions | 임준영 + advisor + Claude Opus 4.7 |
 | 0.2 | 2026-05-01 | Advisor review patches: B1 decision jitter, B2 piggyback cold-start, B3 v1 scope = cash-margin spot-like (user (a)), F1 structlog risk, F2 OneDrive log volume risk, F3 ABIDES tie-breaker disambiguation, N1 MI threshold calibration, N2 Section 12.0 phrasing, N3 schema diff G0 acceptance | 임준영 + advisor + Claude Opus 4.7 |
+| 0.3 | 2026-05-01 | ABIDES archived 2025-06-02 discovered → spike SKIPPED → custom build proceeds directly. Section 10 rewritten with skip rationale + custom build 15-day implementation order. Total Phase 0 unchanged at 3 weeks. | 임준영 + advisor + Claude Opus 4.7 |

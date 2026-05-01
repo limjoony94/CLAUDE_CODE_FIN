@@ -1,0 +1,362 @@
+{
+  "date": "2026-05-01T11:06:07.838768+00:00",
+  "mandate": "Lookahead-free ML retry (option 2)",
+  "pre_commit": "memory/lookahead_free_ml_retry_precommit_20260501.md",
+  "onchain_lag_days": 1,
+  "thresholds": [
+    0.1,
+    0.12,
+    0.15,
+    0.18
+  ],
+  "frictions": [
+    0.1,
+    0.12,
+    0.14,
+    0.16,
+    0.18
+  ],
+  "models": [
+    "LR",
+    "RF"
+  ],
+  "all_results": [
+    {
+      "model": "LR",
+      "threshold": 0.1,
+      "friction": 0.1,
+      "wf_avg_daily": -0.08016706489304834,
+      "wf_avg_hit": 0.5799538699534506,
+      "wf_positive_folds": 1
+    },
+    {
+      "model": "LR",
+      "threshold": 0.1,
+      "friction": 0.12,
+      "wf_avg_daily": -0.1108768128795274,
+      "wf_avg_hit": 0.5799538699534506,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "LR",
+      "threshold": 0.1,
+      "friction": 0.14,
+      "wf_avg_daily": -0.14158656086600646,
+      "wf_avg_hit": 0.5799538699534506,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "LR",
+      "threshold": 0.1,
+      "friction": 0.16,
+      "wf_avg_daily": -0.17229630885248554,
+      "wf_avg_hit": 0.5799538699534506,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "LR",
+      "threshold": 0.1,
+      "friction": 0.18,
+      "wf_avg_daily": -0.2030060568389646,
+      "wf_avg_hit": 0.5799538699534506,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "LR",
+      "threshold": 0.12,
+      "friction": 0.1,
+      "wf_avg_daily": -0.003593648408326254,
+      "wf_avg_hit": 0.6313333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "LR",
+      "threshold": 0.12,
+      "friction": 0.12,
+      "wf_avg_daily": -0.012798837181829597,
+      "wf_avg_hit": 0.6313333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "LR",
+      "threshold": 0.12,
+      "friction": 0.14,
+      "wf_avg_daily": -0.02200402595533295,
+      "wf_avg_hit": 0.6313333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "LR",
+      "threshold": 0.12,
+      "friction": 0.16,
+      "wf_avg_daily": -0.0312092147288363,
+      "wf_avg_hit": 0.6313333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "LR",
+      "threshold": 0.12,
+      "friction": 0.18,
+      "wf_avg_daily": -0.04041440350233964,
+      "wf_avg_hit": 0.6313333333333333,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "LR",
+      "threshold": 0.15,
+      "friction": 0.1,
+      "wf_avg_daily": 0.012491758372764082,
+      "wf_avg_hit": 0.44102564102564096,
+      "wf_positive_folds": 1
+    },
+    {
+      "model": "LR",
+      "threshold": 0.15,
+      "friction": 0.12,
+      "wf_avg_daily": 0.011285812359735355,
+      "wf_avg_hit": 0.44102564102564096,
+      "wf_positive_folds": 1
+    },
+    {
+      "model": "LR",
+      "threshold": 0.15,
+      "friction": 0.14,
+      "wf_avg_daily": 0.010079866346706627,
+      "wf_avg_hit": 0.44102564102564096,
+      "wf_positive_folds": 1
+    },
+    {
+      "model": "LR",
+      "threshold": 0.15,
+      "friction": 0.16,
+      "wf_avg_daily": 0.008873920333677902,
+      "wf_avg_hit": 0.44102564102564096,
+      "wf_positive_folds": 1
+    },
+    {
+      "model": "LR",
+      "threshold": 0.15,
+      "friction": 0.18,
+      "wf_avg_daily": 0.007667974320649173,
+      "wf_avg_hit": 0.44102564102564096,
+      "wf_positive_folds": 1
+    },
+    {
+      "model": "LR",
+      "threshold": 0.18,
+      "friction": 0.1,
+      "wf_avg_daily": 0.01287017619370053,
+      "wf_avg_hit": 0.5,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "LR",
+      "threshold": 0.18,
+      "friction": 0.12,
+      "wf_avg_daily": 0.012628986991094788,
+      "wf_avg_hit": 0.5,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "LR",
+      "threshold": 0.18,
+      "friction": 0.14,
+      "wf_avg_daily": 0.01238779778848904,
+      "wf_avg_hit": 0.5,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "LR",
+      "threshold": 0.18,
+      "friction": 0.16,
+      "wf_avg_daily": 0.012146608585883295,
+      "wf_avg_hit": 0.5,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "LR",
+      "threshold": 0.18,
+      "friction": 0.18,
+      "wf_avg_daily": 0.011905419383277549,
+      "wf_avg_hit": 0.5,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "RF",
+      "threshold": 0.1,
+      "friction": 0.1,
+      "wf_avg_daily": -0.018708725523540217,
+      "wf_avg_hit": 0.6328605479595579,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.1,
+      "friction": 0.12,
+      "wf_avg_daily": -0.029320983128012977,
+      "wf_avg_hit": 0.6328605479595579,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.1,
+      "friction": 0.14,
+      "wf_avg_daily": -0.039933240732485754,
+      "wf_avg_hit": 0.6328605479595579,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.1,
+      "friction": 0.16,
+      "wf_avg_daily": -0.0505454983369585,
+      "wf_avg_hit": 0.6328605479595579,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.1,
+      "friction": 0.18,
+      "wf_avg_daily": -0.06115775594143125,
+      "wf_avg_hit": 0.6328605479595579,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.12,
+      "friction": 0.1,
+      "wf_avg_daily": 0.011669952701602412,
+      "wf_avg_hit": 0.5892473118279569,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "RF",
+      "threshold": 0.12,
+      "friction": 0.12,
+      "wf_avg_daily": 0.008815782310088546,
+      "wf_avg_hit": 0.5892473118279569,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "RF",
+      "threshold": 0.12,
+      "friction": 0.14,
+      "wf_avg_daily": 0.005961611918574674,
+      "wf_avg_hit": 0.5892473118279569,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "RF",
+      "threshold": 0.12,
+      "friction": 0.16,
+      "wf_avg_daily": 0.003107441527060805,
+      "wf_avg_hit": 0.5892473118279569,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "RF",
+      "threshold": 0.12,
+      "friction": 0.18,
+      "wf_avg_daily": 0.0002532711355469383,
+      "wf_avg_hit": 0.5892473118279569,
+      "wf_positive_folds": 3
+    },
+    {
+      "model": "RF",
+      "threshold": 0.15,
+      "friction": 0.1,
+      "wf_avg_daily": 0.006357076419762764,
+      "wf_avg_hit": 0.3333333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.15,
+      "friction": 0.12,
+      "wf_avg_daily": 0.006156071394637136,
+      "wf_avg_hit": 0.3333333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.15,
+      "friction": 0.14,
+      "wf_avg_daily": 0.0059550663695115075,
+      "wf_avg_hit": 0.3333333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.15,
+      "friction": 0.16,
+      "wf_avg_daily": 0.0057540613443858805,
+      "wf_avg_hit": 0.3333333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.15,
+      "friction": 0.18,
+      "wf_avg_daily": 0.005553056319260253,
+      "wf_avg_hit": 0.3333333333333333,
+      "wf_positive_folds": 2
+    },
+    {
+      "model": "RF",
+      "threshold": 0.18,
+      "friction": 0.1,
+      "wf_avg_daily": 0.0,
+      "wf_avg_hit": 0.0,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "RF",
+      "threshold": 0.18,
+      "friction": 0.12,
+      "wf_avg_daily": 0.0,
+      "wf_avg_hit": 0.0,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "RF",
+      "threshold": 0.18,
+      "friction": 0.14,
+      "wf_avg_daily": 0.0,
+      "wf_avg_hit": 0.0,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "RF",
+      "threshold": 0.18,
+      "friction": 0.16,
+      "wf_avg_daily": 0.0,
+      "wf_avg_hit": 0.0,
+      "wf_positive_folds": 0
+    },
+    {
+      "model": "RF",
+      "threshold": 0.18,
+      "friction": 0.18,
+      "wf_avg_daily": 0.0,
+      "wf_avg_hit": 0.0,
+      "wf_positive_folds": 0
+    }
+  ],
+  "best_at_010": {
+    "model": "LR",
+    "threshold": 0.18,
+    "friction": 0.1,
+    "wf_avg_daily": 0.01287017619370053,
+    "wf_avg_hit": 0.5,
+    "wf_positive_folds": 3
+  },
+  "best_at_016": {
+    "model": "LR",
+    "threshold": 0.18,
+    "friction": 0.16,
+    "wf_avg_daily": 0.012146608585883295,
+    "wf_avg_hit": 0.5,
+    "wf_positive_folds": 3
+  },
+  "pass_strict": false
+}

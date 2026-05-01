@@ -94,6 +94,12 @@ R2b는 mean target 통과했음에도 사용자 6-criteria 중 3개 fail:
 
 **해석**: Cross-asset macro regime detection이 daily target 통과한 첫 mechanism. 그러나 720d 데이터에서 28 trades = 1 per ~13d frequency. Statistical confidence 부족. 더 긴 데이터 (5+ years) 필요한지 또는 mechanism 자체 limit인지 별도 검증 필요.
 
+**Develop 가능성 추정 (정직 추정)**:
+- 5-year 데이터로 n=140+ 도달 가능 → F6 통과 가능성 **40%**
+- 그러나 W4 (-29.53%) 같은 regime-dependent failure 가능성 큼 → 실용 PASS 가능성 **15-20%**
+- 나머지 60-65%는 envelope-edge artifact (특정 2024-2025 macro regime 한정)
+- Sweep retry로 base 1 config(+41%/720d)이 sweep best (+0.31%/day mean) 확인하나 stability 미입증
+
 ### R2b XS Reversal (distribution-stability-only fail)
 - mean_daily +0.299% ✅
 - avg_per_trade +0.455% ✅
@@ -102,6 +108,13 @@ R2b는 mean target 통과했음에도 사용자 6-criteria 중 3개 fail:
 - **p5_daily -3.08% FAIL**, **sufficient_trades/window FAIL**, **p_beats_baseline 0.519 FAIL**
 
 **해석**: 단기 mean reversion (lookback 7d, daily rebal)이 mean target 통과. 그러나 high variance / tail risk로 3-day random window stability 못 충족. 사용자 criteria가 catastrophe prevention 위해 정확히 이런 case 차단.
+
+**Develop 가능성 추정 (정직 추정)**:
+- p5_daily -3.08% (worst 5% 3-day windows에서 -3% 손실) — short-term mean reversion의 본질적 high variance
+- Friction 또는 position sizing 변경으로는 distribution shape 안 바뀜
+- Portfolio 조합 (다른 mechanism과 합산)으로 variance 감소 가능 → D-3 path 부분 적합
+- 단독 deployable 가능성 **5% 이하** (mean-reversion mechanism이 low Sharpe 본질)
+- 95%+ 가능성으로 envelope-edge artifact + R26 LIVE 같은 catastrophe risk 큼
 
 ---
 
@@ -184,7 +197,7 @@ User critique → sweep retry로 envelope 한계 정량 측정:
 2. **Pivot to D-1/D-2/D-3** → Capital scale, market change, or portfolio approach
 3. **Continue exploration** → Untested data sources (on-chain, DeFi, options) — but advisor 누적 evidence (32 + 7,279 configs)이 거의 결정적
 
-**Advisor recommendation** (consistent with prior synthesis):
+**Synthesis recommendation** (누적 evidence 기반):
 - 32 mechanism × 7,279 configs evidence는 retail BingX 1× envelope이 +0.20%/day target에 대해 empty임을 강하게 시사
 - 추가 mechanism 시도는 same envelope 안에서 marginal evidence 추가
 - D-1 (capital) 또는 D-3 (portfolio combining sub-target mechanisms)이 envelope 자체 변경으로 outcome-bound

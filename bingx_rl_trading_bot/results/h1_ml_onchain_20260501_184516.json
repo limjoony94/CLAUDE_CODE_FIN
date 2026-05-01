@@ -1,0 +1,49 @@
+{
+  "date": "2026-05-01T09:45:16.233380+00:00",
+  "mandate": "(C) 1h ML with on-chain features (final attempt)",
+  "features": [
+    "ret_1h",
+    "ret_4h",
+    "ret_24h",
+    "atr_ratio",
+    "rsi_14",
+    "ema_ratio",
+    "vol_z",
+    "body_ratio",
+    "range_atr",
+    "close_in_range",
+    "macd_hist",
+    "donchian_pos",
+    "fng_value",
+    "fng_z90",
+    "mvrv",
+    "mvrv_z90",
+    "adr_chg_30d",
+    "hashrate_ratio",
+    "flow_imbalance"
+  ],
+  "naive_accuracy": {
+    "train": 0.5638110863705613,
+    "val": 0.5289430513241153,
+    "test": 0.5387860323412234
+  },
+  "test_stats": {
+    "name": "Test",
+    "n_trades": 2093,
+    "hit_rate": 0.5623506927854754,
+    "avg_gross": 0.04287150338981632,
+    "avg_net": -0.05712849661018369,
+    "cum_gross": 89.73005659488557,
+    "cum_net": -119.56994340511446,
+    "daily_net": -0.6726860388473387
+  },
+  "test_bootstrap": {
+    "mean_daily": -0.6853595555738395,
+    "pos_rate": 0.193,
+    "p5_daily": -1.9386477054688047,
+    "avg_per_trade": -0.05712849661018369,
+    "pass_count_6": 1,
+    "overall_pass": false
+  },
+  "overall_pass": false
+}

@@ -1,0 +1,155 @@
+{
+  "timestamp_utc": "2026-05-01T13:45:44.762941+00:00",
+  "binance_oi_confirm": {
+    "25d_back": {
+      "count": 30,
+      "earliest_age_days": 25.0,
+      "ok": true
+    },
+    "28d_back": {
+      "count": 30,
+      "earliest_age_days": 28.0,
+      "ok": true
+    },
+    "31d_back": {
+      "error": "BadRequest: binance {\"msg\":\"parameter 'startTime' is invalid.\",\"code\":-1130}"
+    },
+    "33d_back": {
+      "error": "BadRequest: binance {\"msg\":\"parameter 'startTime' is invalid.\",\"code\":-1130}"
+    },
+    "60d_back": {
+      "error": "BadRequest: binance {\"msg\":\"parameter 'startTime' is invalid.\",\"code\":-1130}"
+    },
+    "180d_back": {
+      "error": "BadRequest: binance {\"msg\":\"parameter 'startTime' is invalid.\",\"code\":-1130}"
+    }
+  },
+  "bybit_oi": {
+    "symbol_chosen": "BTC/USDT:USDT",
+    "720d_back": {
+      "count": 200,
+      "earliest_age_days": 8.3,
+      "ok": true
+    },
+    "365d_back": {
+      "count": 200,
+      "earliest_age_days": 8.3,
+      "ok": true
+    },
+    "180d_back": {
+      "count": 200,
+      "earliest_age_days": 8.3,
+      "ok": true
+    },
+    "90d_back": {
+      "count": 200,
+      "earliest_age_days": 8.3,
+      "ok": true
+    },
+    "30d_back": {
+      "count": 200,
+      "earliest_age_days": 8.3,
+      "ok": true
+    }
+  },
+  "okx_oi": {
+    "symbol_chosen": "BTC/USDT:USDT",
+    "720d_back": {
+      "error": "ExchangeError: okx {\"code\":\"50030\",\"data\":[],\"msg\":\"Illegal time range\"}"
+    },
+    "365d_back": {
+      "error": "ExchangeError: okx {\"code\":\"50030\",\"data\":[],\"msg\":\"Illegal time range\"}"
+    },
+    "90d_back": {
+      "error": "ExchangeError: okx {\"code\":\"50030\",\"data\":[],\"msg\":\"Illegal time range\"}"
+    },
+    "30d_back": {
+      "count": 100,
+      "earliest_age_days": 30.0,
+      "ok": true
+    },
+    "7d_back": {
+      "count": 100,
+      "earliest_age_days": 7.0,
+      "ok": true
+    }
+  },
+  "binance_ls_ratio": {
+    "topLongShortAccountRatio": {
+      "60d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "31d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "30d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "28d": {
+        "status": 200,
+        "count": 500,
+        "earliest_age_days": 20.8
+      }
+    },
+    "topLongShortPositionRatio": {
+      "60d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "31d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "30d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "28d": {
+        "status": 200,
+        "count": 500,
+        "earliest_age_days": 20.8
+      }
+    },
+    "globalLongShortAccountRatio": {
+      "60d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "31d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "30d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "28d": {
+        "status": 200,
+        "count": 500,
+        "earliest_age_days": 20.8
+      }
+    },
+    "takerlongshortRatio": {
+      "60d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "31d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "30d": {
+        "status": 400,
+        "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+      },
+      "28d": {
+        "status": 200,
+        "count": 500,
+        "earliest_age_days": 20.9
+      }
+    }
+  }
+}

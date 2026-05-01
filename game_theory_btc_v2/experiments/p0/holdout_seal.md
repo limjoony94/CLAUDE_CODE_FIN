@@ -77,21 +77,74 @@ P6 (LIVE-readiness) 단계에서 단 1회 sealed window 위에서 portfolio 평�
 
 ---
 
-## Amendment Section (Post-fetch concrete values)
+## Amendment Section — P0.2 Closure Concrete Values (2026-05-01)
 
-> 다음 fields는 P0.2 fetch 완료 시 1회 추가 기록. 변경 후 신규 seal 무효.
+**Locked at**: 2026-05-01T14:00:00+00:00 UTC (P0.2 fetch closure)
+**Mutability**: IMMUTABLE post-this-section. 변경 시 새 seal 무효, 모든 P0-P5 작업 reset 필요.
 
 ```
-# Filled at P0.2 closure
-T_anchor (UTC ms):       <pending P0.2>
-T_seal_start (UTC ms):   <pending P0.2>
-seal_window:             <pending P0.2>
-
-# Sealed file slices (parquet rows >= T_seal_start)
-btc_1h_720d.parquet:     last <N1> rows sealed
-btc_5m_720d.parquet:     last <N2> rows sealed
-btc_1m_90d.parquet:      last <N3> rows sealed
-btc_oi_720d.parquet:     last <N4> rows sealed
-btc_funding_720d.parquet: last <N5> rows sealed
-... (others as fetched)
+T_anchor (UTC ms):           1777680000000
+T_anchor_iso:                2026-05-01T14:00:00+00:00
+T_seal_start (UTC ms):       1762128000000
+T_seal_start_iso:            2025-11-02T14:00:00+00:00
+T_p3_holdout_start (UTC ms): 1771336800000
+T_p3_holdout_start_iso:      2026-02-18T14:00:00+00:00
+sealed_window_days:          180  (last 25% of 720d primary)
+p3_extra_holdout_days:       72   (additional 10% for P3 final eval)
 ```
+
+### Sealed File Slices (rows where t_close_ms >= T_seal_start_ms)
+
+| File | Total rows | Sealed rows | Sealed % | Free for P0.5-P5 |
+|------|-----------|-------------|----------|------------------|
+| `btc_perp_1d_1500d.parquet` | 1,500 | 181 | 12.07% | 1,319 |
+| `btc_perp_1h_720d.parquet` | 17,280 | 4,321 | 25.01% | 12,959 |
+| `btc_perp_5m_720d.parquet` | 207,360 | 51,840 | 25.00% | 155,520 |
+| `btc_perp_1m_365d.parquet` | 525,600 | 259,199 | 49.31% | 266,401 |
+| `btc_spot_1h_720d.parquet` | 17,280 | 4,321 | 25.01% | 12,959 |
+
+### Forward Collector Files (NOT sealed — accumulating)
+
+| File | Status |
+|------|--------|
+| `oi_forward.parquet` | 28d snapshot, accumulating forward |
+| `ls_account_forward.parquet` | 20.8d, accumulating |
+| `ls_position_forward.parquet` | 20.8d, accumulating |
+| `ls_global_forward.parquet` | 20.8d, accumulating |
+| `taker_volume_forward.parquet` | 20.8d, accumulating |
+
+Phase B 활성화는 forward collector 데이터가 **60d 누적된 후**. 이 시점에 별도 sealed boundary 정의 (Phase B holdout amendment 003).
+
+### Funding Cross-Check Files
+
+| File | Note |
+|------|------|
+| `btc_funding_binance_720d.parquet` | Primary, sealed last 180d 적용 (8h grid → ~540 records sealed) |
+| `btc_funding_bybit_620d.parquet` | Cross-check 354d only (Bybit pagination cap), sealed last 180d 적용 (~540 records sealed) |
+
+### Multi-Asset File
+
+`multi_asset_1d_800d.parquet` — 5 coins × 800 rows = 4,000 rows total. Per-symbol sealed last 180d:
+- 각 symbol 별 ~180/800 = 22.5% sealed
+- ETH/SOL/BNB/XRP/DOGE 모두 동일 boundary
+
+---
+
+## Operational Rules from Now (P0.5 진입 시점부터)
+
+1. **모든 코드/notebook**은 sealed boundary filter 명시 적용:
+   ```python
+   T_SEAL_START_MS = 1762128000000  # 2025-11-02T14:00:00 UTC
+   df_free = df[df["t_close_ms"] < T_SEAL_START_MS]  # P0.5-P5 전용
+   df_sealed = df[df["t_close_ms"] >= T_SEAL_START_MS]  # P6 단 1회만
+   ```
+2. **Validator unit test 추가** (P0.3 deliverable D4 의무):
+   - sealed 데이터 위에서 fitting 실행 시 assertion fail
+3. **Plot/visualization 정책**: full-period chart 작성 시 sealed window는 별도 색 + 명시적 "DO NOT INTERPRET" 라벨
+4. **P3 진입 시**: P3 final eval window (`T_p3_holdout_start ~ T_seal_start`)는 P3 fitting 단계 이후 1회만 사용
+
+---
+
+**Pre-commit signed (P0.2 closure)**: Claude Code agent, 2026-05-01T14:00:00 UTC.
+이 amendment 변경 시 P0-P5 모든 작업 reset + 새 seal 정의.
+

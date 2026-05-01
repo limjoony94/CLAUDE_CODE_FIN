@@ -1,0 +1,321 @@
+{
+  "timestamp_utc": "2026-05-01T14:00:11.040181+00:00",
+  "files": {
+    "btc_perp_1d_1500d.parquet": {
+      "size_bytes": 77546,
+      "rows": 1500,
+      "span_open_min": "2022-03-24T00:00:00+00:00",
+      "span_open_max": "2026-05-01T00:00:00+00:00",
+      "span_close_max": "2026-05-02T00:00:00+00:00",
+      "nan_count_ohlcv": 0,
+      "gap_count": 0,
+      "gap_rate": 0.0,
+      "top_diffs_ms": {
+        "86400000.0": 1499
+      },
+      "ohlc_invalid": 0,
+      "t_close_minus_open_unique": [
+        86400000
+      ],
+      "t_close_assertion_ok": true,
+      "t_open_monotonic": true,
+      "t_open_unique": true
+    },
+    "btc_perp_1h_720d.parquet": {
+      "size_bytes": 872363,
+      "rows": 17280,
+      "span_open_min": "2024-05-11T14:00:00+00:00",
+      "span_open_max": "2026-05-01T13:00:00+00:00",
+      "span_close_max": "2026-05-01T14:00:00+00:00",
+      "nan_count_ohlcv": 0,
+      "gap_count": 0,
+      "gap_rate": 0.0,
+      "top_diffs_ms": {
+        "3600000.0": 17279
+      },
+      "ohlc_invalid": 0,
+      "t_close_minus_open_unique": [
+        3600000
+      ],
+      "t_close_assertion_ok": true,
+      "t_open_monotonic": true,
+      "t_open_unique": true
+    },
+    "btc_perp_5m_720d.parquet": {
+      "size_bytes": 9172210,
+      "rows": 207360,
+      "span_open_min": "2024-05-11T13:55:00+00:00",
+      "span_open_max": "2026-05-01T13:50:00+00:00",
+      "span_close_max": "2026-05-01T13:55:00+00:00",
+      "nan_count_ohlcv": 0,
+      "gap_count": 0,
+      "gap_rate": 0.0,
+      "top_diffs_ms": {
+        "300000.0": 207359
+      },
+      "ohlc_invalid": 0,
+      "t_close_minus_open_unique": [
+        300000
+      ],
+      "t_close_assertion_ok": true,
+      "t_open_monotonic": true,
+      "t_open_unique": true
+    },
+    "btc_perp_1m_365d.parquet": {
+      "size_bytes": 18997549,
+      "rows": 525600,
+      "span_open_min": "2025-05-01T13:58:00+00:00",
+      "span_open_max": "2026-05-01T13:57:00+00:00",
+      "span_close_max": "2026-05-01T13:58:00+00:00",
+      "nan_count_ohlcv": 0,
+      "gap_count": 0,
+      "gap_rate": 0.0,
+      "top_diffs_ms": {
+        "60000.0": 525599
+      },
+      "ohlc_invalid": 0,
+      "t_close_minus_open_unique": [
+        60000
+      ],
+      "t_close_assertion_ok": true,
+      "t_open_monotonic": true,
+      "t_open_unique": true
+    },
+    "btc_spot_1h_720d.parquet": {
+      "size_bytes": 926191,
+      "rows": 17280,
+      "span_open_min": "2024-05-11T14:00:00+00:00",
+      "span_open_max": "2026-05-01T13:00:00+00:00",
+      "span_close_max": "2026-05-01T14:00:00+00:00",
+      "nan_count_ohlcv": 0,
+      "gap_count": 0,
+      "gap_rate": 0.0,
+      "top_diffs_ms": {
+        "3600000.0": 17279
+      },
+      "ohlc_invalid": 0,
+      "t_close_minus_open_unique": [
+        3600000
+      ],
+      "t_close_assertion_ok": true,
+      "t_open_monotonic": true,
+      "t_open_unique": true
+    },
+    "btc_funding_binance_720d.parquet": {
+      "size_bytes": 51416,
+      "rows": 2160,
+      "span_min": "2024-05-11T16:00:00+00:00",
+      "span_max": "2026-05-01T08:00:00.005000+00:00",
+      "fr_min": -0.00015178,
+      "fr_max": 0.00072446,
+      "fr_mean": 4.9233490740740736e-05,
+      "fr_std": 5.9374384775164446e-05,
+      "gap_count_vs_8h": 1140,
+      "gap_rate_vs_8h": 0.528,
+      "top_diffs_ms": {
+        "28800000.0": 1019,
+        "28800001.0": 212,
+        "28799999.0": 210,
+        "28800002.0": 80,
+        "28799998.0": 71
+      }
+    },
+    "btc_funding_bybit_620d.parquet": {
+      "size_bytes": 11582,
+      "rows": 400,
+      "span_min": "2025-05-13T08:00:00+00:00",
+      "span_max": "2026-05-01T08:00:00+00:00",
+      "fr_min": -0.00016192,
+      "fr_max": 0.0001,
+      "fr_mean": 1.9698100000000004e-05,
+      "fr_std": 5.137569978317109e-05,
+      "gap_count_vs_8h": 1,
+      "gap_rate_vs_8h": 0.0025,
+      "top_diffs_ms": {
+        "28800000.0": 398,
+        "19036800000.0": 1
+      }
+    },
+    "multi_asset_1d_800d.parquet": {
+      "size_bytes": 163227,
+      "total_rows": 4000,
+      "symbols_in_file": [
+        "ETH/USDT:USDT",
+        "SOL/USDT:USDT",
+        "BNB/USDT:USDT",
+        "XRP/USDT:USDT",
+        "DOGE/USDT:USDT"
+      ],
+      "per_symbol": {
+        "BNB/USDT:USDT": {
+          "rows": 800,
+          "span_open_min": "2024-02-22T00:00:00+00:00",
+          "span_open_max": "2026-05-01T00:00:00+00:00",
+          "span_close_max": "2026-05-02T00:00:00+00:00",
+          "nan_count_ohlcv": 0,
+          "gap_count": 0,
+          "gap_rate": 0.0,
+          "top_diffs_ms": {
+            "86400000.0": 799
+          },
+          "ohlc_invalid": 0,
+          "t_close_minus_open_unique": [
+            86400000
+          ],
+          "t_close_assertion_ok": true,
+          "t_open_monotonic": true,
+          "t_open_unique": true
+        },
+        "DOGE/USDT:USDT": {
+          "rows": 800,
+          "span_open_min": "2024-02-22T00:00:00+00:00",
+          "span_open_max": "2026-05-01T00:00:00+00:00",
+          "span_close_max": "2026-05-02T00:00:00+00:00",
+          "nan_count_ohlcv": 0,
+          "gap_count": 0,
+          "gap_rate": 0.0,
+          "top_diffs_ms": {
+            "86400000.0": 799
+          },
+          "ohlc_invalid": 0,
+          "t_close_minus_open_unique": [
+            86400000
+          ],
+          "t_close_assertion_ok": true,
+          "t_open_monotonic": true,
+          "t_open_unique": true
+        },
+        "ETH/USDT:USDT": {
+          "rows": 800,
+          "span_open_min": "2024-02-22T00:00:00+00:00",
+          "span_open_max": "2026-05-01T00:00:00+00:00",
+          "span_close_max": "2026-05-02T00:00:00+00:00",
+          "nan_count_ohlcv": 0,
+          "gap_count": 0,
+          "gap_rate": 0.0,
+          "top_diffs_ms": {
+            "86400000.0": 799
+          },
+          "ohlc_invalid": 0,
+          "t_close_minus_open_unique": [
+            86400000
+          ],
+          "t_close_assertion_ok": true,
+          "t_open_monotonic": true,
+          "t_open_unique": true
+        },
+        "SOL/USDT:USDT": {
+          "rows": 800,
+          "span_open_min": "2024-02-22T00:00:00+00:00",
+          "span_open_max": "2026-05-01T00:00:00+00:00",
+          "span_close_max": "2026-05-02T00:00:00+00:00",
+          "nan_count_ohlcv": 0,
+          "gap_count": 0,
+          "gap_rate": 0.0,
+          "top_diffs_ms": {
+            "86400000.0": 799
+          },
+          "ohlc_invalid": 0,
+          "t_close_minus_open_unique": [
+            86400000
+          ],
+          "t_close_assertion_ok": true,
+          "t_open_monotonic": true,
+          "t_open_unique": true
+        },
+        "XRP/USDT:USDT": {
+          "rows": 800,
+          "span_open_min": "2024-02-22T00:00:00+00:00",
+          "span_open_max": "2026-05-01T00:00:00+00:00",
+          "span_close_max": "2026-05-02T00:00:00+00:00",
+          "nan_count_ohlcv": 0,
+          "gap_count": 0,
+          "gap_rate": 0.0,
+          "top_diffs_ms": {
+            "86400000.0": 799
+          },
+          "ohlc_invalid": 0,
+          "t_close_minus_open_unique": [
+            86400000
+          ],
+          "t_close_assertion_ok": true,
+          "t_open_monotonic": true,
+          "t_open_unique": true
+        }
+      }
+    },
+    "oi_forward.parquet": {
+      "size_bytes": 23244,
+      "rows": 652,
+      "span_min": "2026-04-03T14:00:00+00:00",
+      "span_max": "2026-05-01T13:00:00+00:00",
+      "span_days": 27.96
+    },
+    "ls_account_forward.parquet": {
+      "size_bytes": 18649,
+      "rows": 500,
+      "span_min": "2026-04-10T18:00:00+00:00",
+      "span_max": "2026-05-01T13:00:00+00:00",
+      "span_days": 20.79
+    },
+    "ls_position_forward.parquet": {
+      "size_bytes": 17871,
+      "rows": 500,
+      "span_min": "2026-04-10T18:00:00+00:00",
+      "span_max": "2026-05-01T13:00:00+00:00",
+      "span_days": 20.79
+    },
+    "ls_global_forward.parquet": {
+      "size_bytes": 19003,
+      "rows": 500,
+      "span_min": "2026-04-10T18:00:00+00:00",
+      "span_max": "2026-05-01T13:00:00+00:00",
+      "span_days": 20.79
+    },
+    "taker_volume_forward.parquet": {
+      "size_bytes": 23348,
+      "rows": 500,
+      "span_min": "2026-04-10T17:00:00+00:00",
+      "span_max": "2026-05-01T12:00:00+00:00",
+      "span_days": 20.79
+    }
+  },
+  "holdout": {
+    "T_anchor_ms": 1777644000000,
+    "T_anchor_iso": "2026-05-01T14:00:00+00:00",
+    "T_seal_start_ms": 1762092000000,
+    "T_seal_start_iso": "2025-11-02T14:00:00+00:00",
+    "T_p3_holdout_start_ms": 1771423200000,
+    "T_p3_holdout_start_iso": "2026-02-18T14:00:00+00:00",
+    "sealed_window_days": 180,
+    "p3_extra_holdout_days": 72,
+    "rule": "Anchor = max(t_close_ms) of btc_perp_1h_720d.parquet at P0.2 closure. Immutable post-fetch.",
+    "sealed_per_file": {
+      "btc_perp_1h_720d.parquet": {
+        "total": 17280,
+        "sealed_rows": 4321,
+        "sealed_pct": 25.01
+      },
+      "btc_perp_5m_720d.parquet": {
+        "total": 207360,
+        "sealed_rows": 51840,
+        "sealed_pct": 25.0
+      },
+      "btc_perp_1m_365d.parquet": {
+        "total": 525600,
+        "sealed_rows": 259199,
+        "sealed_pct": 49.31
+      },
+      "btc_spot_1h_720d.parquet": {
+        "total": 17280,
+        "sealed_rows": 4321,
+        "sealed_pct": 25.01
+      },
+      "btc_perp_1d_1500d.parquet": {
+        "total": 1500,
+        "sealed_rows": 181,
+        "sealed_pct": 12.07
+      }
+    }
+  }
+}

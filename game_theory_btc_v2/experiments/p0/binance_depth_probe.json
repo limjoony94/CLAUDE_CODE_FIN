@@ -1,0 +1,103 @@
+{
+  "timestamp_utc": "2026-05-01T13:44:06.354854+00:00",
+  "oi_ccxt": {
+    "720d": {
+      "asked_days": 720,
+      "error": "BadRequest: binance {\"msg\":\"parameter 'limit' is invalid.\",\"code\":-1130}"
+    },
+    "365d": {
+      "asked_days": 365,
+      "error": "BadRequest: binance {\"msg\":\"parameter 'limit' is invalid.\",\"code\":-1130}"
+    },
+    "60d": {
+      "asked_days": 60,
+      "error": "BadRequest: binance {\"msg\":\"parameter 'limit' is invalid.\",\"code\":-1130}"
+    },
+    "30d": {
+      "asked_days": 30,
+      "error": "BadRequest: binance {\"msg\":\"parameter 'limit' is invalid.\",\"code\":-1130}"
+    }
+  },
+  "oi_rest": [
+    {
+      "label": "720d",
+      "asked_days": 720,
+      "status": 400,
+      "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+    },
+    {
+      "label": "365d",
+      "asked_days": 365,
+      "status": 400,
+      "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+    },
+    {
+      "label": "90d",
+      "asked_days": 90,
+      "status": 400,
+      "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+    },
+    {
+      "label": "30d",
+      "asked_days": 30,
+      "status": 400,
+      "preview": "{\"msg\": \"parameter 'startTime' is invalid.\", \"code\": -1130}"
+    }
+  ],
+  "funding": {
+    "720d": {
+      "asked_days": 720,
+      "count": 1000,
+      "earliest_iso": "2024-05-11T16:00:00+00:00",
+      "actual_age_days": 719.9
+    },
+    "365d": {
+      "asked_days": 365,
+      "count": 1000,
+      "earliest_iso": "2025-05-01T16:00:00.001000+00:00",
+      "actual_age_days": 364.9
+    }
+  },
+  "force_orders": [
+    {
+      "name": "/fapi/v1/forceOrders unauth (USER-private?)",
+      "status": 401,
+      "preview": "{\"code\": -2014, \"msg\": \"API-key format invalid.\"}"
+    },
+    {
+      "name": "/fapi/v1/allForceOrders unauth",
+      "status": 400,
+      "preview": "{\"code\": 400, \"msg\": \"The endpoint has been out of maintenance\"}"
+    },
+    {
+      "name": "/fapi/v1/allForceOrdersInfo",
+      "status": 404,
+      "preview": "<!DOCTYPE html>\n<!-- saved from url=(0032)https://www.binance.com/en/error -->\n<html>\n\n<head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n\n  <meta name=\"format-detection\" content=\"telephone=no,email=no,address=no\">\n  <title>Binance</title>\n  <link rel=\"Shortcut Icon\" href=\"https://www.binance.com/en/favicon.ico\">\n  <style>\n    body {\n      margin: 0\n    }\n\n    .img {\n    "
+    },
+    {
+      "name": "/futures/data/forceOrderInfo",
+      "status": 404,
+      "preview": "<!DOCTYPE html>\n<!-- saved from url=(0032)https://www.binance.com/en/error -->\n<html>\n\n<head>\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n\n  <meta name=\"format-detection\" content=\"telephone=no,email=no,address=no\">\n  <title>Binance</title>\n  <link rel=\"Shortcut Icon\" href=\"https://www.binance.com/en/favicon.ico\">\n  <style>\n    body {\n      margin: 0\n    }\n\n    .img {\n    "
+    },
+    {
+      "name": "/futures/data/openInterestHist",
+      "status": 200,
+      "preview": "[{\"symbol\": \"BTCUSDT\", \"sumOpenInterest\": \"97471.38900000\", \"sumOpenInterestValue\": \"7538446972.39890000\", \"CMCCirculatingSupply\": \"20022918.00000000\", \"timestamp\": 1777626000000}, {\"symbol\": \"BTCUSDT\", \"sumOpenInterest\": \"97860.83000000\", \"sumOpenInterestValue\": \"7559256677.29205600\", \"CMCCirculatingSupply\": \"20022918.00000000\", \"timestamp\": 1777629600000}, {\"symbol\": \"BTCUSDT\", \"sumOpenInterest\""
+    },
+    {
+      "name": "/futures/data/topLongShortAccountRatio",
+      "status": 200,
+      "preview": "[{\"symbol\": \"BTCUSDT\", \"longAccount\": \"0.4482\", \"longShortRatio\": \"0.8123\", \"shortAccount\": \"0.5518\", \"timestamp\": 1777626000000}, {\"symbol\": \"BTCUSDT\", \"longAccount\": \"0.4450\", \"longShortRatio\": \"0.8018\", \"shortAccount\": \"0.5550\", \"timestamp\": 1777629600000}, {\"symbol\": \"BTCUSDT\", \"longAccount\": \"0.4420\", \"longShortRatio\": \"0.7921\", \"shortAccount\": \"0.5580\", \"timestamp\": 1777633200000}, {\"symbol\""
+    },
+    {
+      "name": "/futures/data/topLongShortPositionRatio",
+      "status": 200,
+      "preview": "[{\"symbol\": \"BTCUSDT\", \"longAccount\": \"0.4454\", \"longShortRatio\": \"0.8029\", \"shortAccount\": \"0.5546\", \"timestamp\": 1777626000000}, {\"symbol\": \"BTCUSDT\", \"longAccount\": \"0.4442\", \"longShortRatio\": \"0.7991\", \"shortAccount\": \"0.5558\", \"timestamp\": 1777629600000}, {\"symbol\": \"BTCUSDT\", \"longAccount\": \"0.4433\", \"longShortRatio\": \"0.7963\", \"shortAccount\": \"0.5567\", \"timestamp\": 1777633200000}, {\"symbol\""
+    },
+    {
+      "name": "/futures/data/takerlongshortRatio",
+      "status": 200,
+      "preview": "[{\"buySellRatio\": \"1.1122\", \"sellVol\": \"3340.6290\", \"buyVol\": \"3715.5500\", \"timestamp\": 1777622400000}, {\"buySellRatio\": \"0.7278\", \"sellVol\": \"1974.6800\", \"buyVol\": \"1437.1140\", \"timestamp\": 1777626000000}, {\"buySellRatio\": \"1.1469\", \"sellVol\": \"1365.3990\", \"buyVol\": \"1565.9930\", \"timestamp\": 1777629600000}, {\"buySellRatio\": \"1.4223\", \"sellVol\": \"1846.5900\", \"buyVol\": \"2626.3710\", \"timestamp\": 177"
+    }
+  ]
+}

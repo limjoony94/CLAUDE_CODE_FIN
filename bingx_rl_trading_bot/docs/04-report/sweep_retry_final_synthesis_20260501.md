@@ -385,3 +385,69 @@ L2 hindsight (+1.90%/day) 대비 online learning (+0.09%/day) = **4.7% capture o
 - **Gap = 95%**: 사전 예측 매우 어려운 selection problem
 
 자율 mandate 안에서는 본 closure가 final state. 추가 path는 사용자 explicit instruction 필요.
+
+---
+
+## True Overfit Ceiling — 사용자 질문 응답 (post-online-learning)
+
+**사용자**: "과적합인데 왜 결과 저래? 발산해서 무한대 가까운 수익 나와야"
+
+→ 정당한 지적. L2 +1.90%/day는 **약한 과적합** (8 mechanism × 1 best config × per-day hindsight). 진짜 무한 cherry-pick 측정.
+
+### Strong overfit (per-trade cherry-pick within 8 mech)
+
+| Layer | Daily |
+|-------|-------|
+| L5 per-mech winners-only sum | **+2.8726%/day** |
+| L6 per-day BEST winner across all 8 | +2.0373%/day |
+| L7 per-day SUM all winners across all 8 | +2.8726%/day |
+| L8 (gross instead of net) | +3.0243%/day |
+
+→ 진짜 cherry-pick으로 daily +2.87%까지 가능 (mechanism-bound).
+
+### Absolute ceiling (mechanism-free, per-bar perfect timing)
+
+| Timeframe | Gross daily | Net daily (-0.10% per trade) |
+|-----------|-------------|------------------------------|
+| 1d | +1.82% | +1.72% |
+| **1h** | **+8.12%** | **+5.72%** |
+| 15m | +16.45% | +6.85% |
+| **5m** | **+28.51%** | **-0.29%** (friction destroys!) |
+
+### 사용자 질문 답 — 왜 +2.87%만?
+
+1. **Mechanism-bound vs mechanism-free**:
+   - L7 +2.87% = 8 mechanism cherry-pick limit
+   - 1h perfect bar timing = +8.12%/day (mechanism free)
+   - Gap +5.25% = 우리 8 mechanism이 못 잡는 timing
+
+2. **BTC volatility 자연 ceiling**:
+   - 1h avg per-bar |return| = 0.338%
+   - 24h × 0.338% = +8.12%/day perfect timing
+   - 5m × 288bars × 0.099% = +28.51%/day
+
+3. **Friction이 짧은 timeframe 파괴**:
+   - 1d perfect: +1.82% gross → +1.72% net (5.5% decay)
+   - 1h perfect: +8.12% → +5.72% (29.6% decay)
+   - 15m perfect: +16.45% → +6.85% (58.3% decay)
+   - **5m perfect: +28.51% → -0.29% (101% decay!)** ← friction destroy
+   - 1초 perfect: theoretically infinite gross but completely destroyed by friction
+
+4. **Sweet spot identified**:
+   - **1h perfect timing net = +5.72%/day** ← friction-after deployable ceiling
+   - 더 짧은 timeframe은 friction 흡수, 더 긴 timeframe은 trade 수 부족
+   - **이론적 deployable ceiling ≈ +5-8%/day** (with perfect 1h regime detection)
+
+### Reinterpretation
+
+**사용자 직관 맞음**: overfit으로 발산 가능 — 그러나 BTC volatility + friction에 의해 cap.
+- **"발산 무한대"**는 friction-free 이론 (실용 불가)
+- **실용적 ceiling ≈ +5-8%/day** (1h perfect timing post-friction)
+- **우리 8-mech overfit (+2.87%)** = 이론 ceiling의 35%까지만 도달
+
+**Generalization gap 재정의**:
+- Theoretical absolute ceiling: +5.72%/day (1h perfect bar net)
+- Mechanism-bound ceiling (cherry-pick): +2.87%/day
+- Causal realistic (online learning): +0.09%/day
+
+→ **현재 framework는 데이터 ceiling의 ~1.5%만 capture**. 사용자 직관대로 더 강한 overfit (1h perfect 추구)가능, 그러나 mechanism-free 1h direction prediction이 진짜 hard problem.

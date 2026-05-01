@@ -1,0 +1,29 @@
+{
+  "date": "2026-05-01T02:52:36.925313+00:00",
+  "n_coins": 8,
+  "rho_avg": 0.715277072535814,
+  "rho_std": 0.07329741106017078,
+  "rho_min": 0.5121287431628241,
+  "rho_max": 0.8342518753694891,
+  "btc_mean_corr": 0.7433690444194424,
+  "btc_pairwise": {
+    "AVAX": 0.7460540075458023,
+    "BNB": 0.7075170040370166,
+    "DOGE": 0.7835468301856511,
+    "ETH": 0.8199413280897979,
+    "LINK": 0.7184472399609799,
+    "SOL": 0.7925992586806188,
+    "XRP": 0.6354776424362307
+  },
+  "N_effective": 1.3317930020233557,
+  "variance_reduction_factor": 0.4080124082095047,
+  "math_gate": {
+    "base_daily_pct": 0.057,
+    "target_daily_pct": 0.2,
+    "required_multiplier": 3.5087719298245617,
+    "echo_delivers_multiplier": 1.3317930020233557,
+    "verdict": "INSUFFICIENT"
+  },
+  "echo_decision": "ECHO_CONFIRMED_NO_8COIN_EXPANSION",
+  "next_action": "PIVOT_TO_UNCORRELATED_MACRO_SUBSTRATES"
+}

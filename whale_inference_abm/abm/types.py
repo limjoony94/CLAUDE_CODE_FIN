@@ -52,6 +52,28 @@ class Order:
 
 
 @dataclass(frozen=True)
+class OrderIntent:
+    """Agent-emitted order intent before simulation assigns order_id + sequence_no.
+
+    Agent.decide() returns list[OrderIntent]; simulation wraps each into a full Order
+    by calling scheduler.next_sequence_no() and assigning a unique order_id.
+    """
+
+    order_type: OrderType
+    side: Side
+    size: float
+    price: Optional[float] = None
+
+    def __post_init__(self) -> None:
+        if self.order_type == OrderType.LIMIT and self.price is None:
+            raise ValueError("LIMIT intent requires price")
+        if self.order_type == OrderType.MARKET and self.price is not None:
+            raise ValueError("MARKET intent must not have price")
+        if self.size <= 0:
+            raise ValueError(f"OrderIntent size must be > 0, got {self.size}")
+
+
+@dataclass(frozen=True)
 class Trade:
     """A matched trade between two orders."""
 

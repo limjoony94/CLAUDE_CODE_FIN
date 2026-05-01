@@ -1,0 +1,297 @@
+# P0.6 Mechanism Catalog — Phase A active set
+# Pre-committed (advisor 2026-05-01): SHELL ONLY. Definitions only, NO backtest code.
+# 6 families × 2-3 each = 14 Phase A mechanisms. Phase B stubs separate.
+# Definitions LOCKED for P3 sweep. Mutation requires amendment.
+
+schema_version: "1.0"
+date: "2026-05-01"
+phase_a_count: 14
+phase_b_stubs: 4
+locked_until: "P3_CELL closure"
+
+mechanisms:
+
+  # ============== Family: REVERSION (force-flow / mean reversion) ==============
+
+  M001_force_flow_long_proxy:
+    family: reversion
+    phase: A
+    status: active
+    description: "H3 force-flow reversal long via proxy v2 (sum-of-z scores)."
+    related_hypotheses: [H3]
+    entry_signal: |
+      proxy_score = z_funding_neg + z_velocity_neg + z_volume_surge ≥ threshold_high
+      AND price_quantile_30d ≤ threshold_low_q
+    exit_signal: "forward 1h close"
+    parameter_space:
+      threshold_high: [4.0, 5.5, 7.0]
+      threshold_low_q: [0.20, 0.30]
+    expected_freq: "0.5-3/day"
+    data_deps: [btc_perp_1h_720d, btc_funding_binance_720d]
+    direction: long_only
+
+  M002_force_flow_short_proxy:
+    family: reversion
+    phase: A
+    status: active
+    description: "H5 mirror — short-side cascade fade."
+    related_hypotheses: [H5]
+    entry_signal: |
+      proxy_score_short ≥ threshold_high AND price_quantile_30d ≥ threshold_high_q
+    exit_signal: "forward 1h close"
+    parameter_space:
+      threshold_high: [4.0, 5.5, 7.0]
+      threshold_high_q: [0.70, 0.80]
+    expected_freq: "0.3-2/day"
+    data_deps: [btc_perp_1h_720d, btc_funding_binance_720d]
+    direction: short_only
+
+  M003_cascade_window_5m_long:
+    family: reversion
+    phase: A
+    status: active
+    description: "H4 short-window long mean reversion (5/15/30min)."
+    related_hypotheses: [H4]
+    entry_signal: "Same proxy as M001 but evaluated on 1m bar"
+    exit_signal: "forward 5m / 15m / 30m close (sweep)"
+    parameter_space:
+      threshold_high: [4.0, 5.5]
+      forward_min: [5, 15, 30]
+    expected_freq: "0.5-2/day"
+    data_deps: [btc_perp_1m_365d, btc_funding_binance_720d]
+    direction: long_only
+
+  M004_basis_fade_perp:
+    family: reversion
+    phase: A
+    status: active
+    description: "H7-basis fade extreme spot-perp basis."
+    related_hypotheses: [H7_basis]
+    entry_signal: |
+      |basis_z_30d| > threshold → fade direction (short perp on +basis, long perp on −basis)
+    exit_signal: "forward 4h close"
+    parameter_space:
+      threshold: [1.5, 2.0, 2.5]
+      forward_h: [1, 4, 24]
+    expected_freq: "0.5-2/day"
+    data_deps: [btc_perp_1h_720d, btc_spot_1h_720d]
+    direction: bidirectional
+
+  # ============== Family: MOMENTUM ==============
+
+  M005_funding_momentum_long:
+    family: momentum
+    phase: A
+    status: active
+    description: |
+      Continuation: positive funding spike + price up + volume surge → long continuation.
+      Tests whether crowded-long state predicts further up-move (vs distribution).
+    related_hypotheses: []  # tests H6 inverse for Phase A (without OI)
+    entry_signal: |
+      funding[t-1] > rolling_mean_30d + 2σ AND price_quantile_30d ≥ 0.60 AND volume_surge
+    exit_signal: "forward 4h close"
+    parameter_space:
+      funding_z: [1.5, 2.0, 2.5]
+      forward_h: [1, 4, 24]
+    expected_freq: "0.2-1/day"
+    data_deps: [btc_perp_1h_720d, btc_funding_binance_720d]
+    direction: long_only
+
+  M006_xs_momentum_30d:
+    family: momentum
+    phase: A
+    status: active
+    description: "Cross-section momentum 30d on 5-coin universe (long top, short bottom)."
+    related_hypotheses: []
+    entry_signal: |
+      Daily: rank 5 coins by 30d return → long #1, short #5 (long-only Phase A)
+    exit_signal: "Daily rebalance"
+    parameter_space:
+      lookback_d: [14, 30, 60]
+      n_long: [1, 2]
+    expected_freq: "1/day"
+    data_deps: [multi_asset_1d_800d]
+    direction: long_only
+
+  # ============== Family: BREAKOUT ==============
+
+  M007_channel_breakout_atr:
+    family: breakout
+    phase: A
+    status: active
+    description: |
+      15m channel breakout (close > 15-bar high) with body filter. Reference mechanism
+      from R26/C1 lineage — included for catalog completeness despite friction-floor evidence.
+    related_hypotheses: []
+    entry_signal: |
+      close > rolling_max_high_15bar AND (close - open) / (high - low) > 0.40
+    exit_signal: "trailing ATR 2.5x or fractal SL"
+    parameter_space:
+      channel_lookback: [10, 15, 20]
+      body_ratio: [0.30, 0.40, 0.50]
+    expected_freq: "1-3/day"
+    data_deps: [btc_perp_15m]  # need to add or aggregate from 5m
+    notes: "WARN: prior C1 implementation showed BT-LIVE divergence catastrophe. Use as REFERENCE comparison only at P3."
+    direction: bidirectional
+
+  M008_compression_breakout:
+    family: breakout
+    phase: A
+    status: active
+    description: "Volatility compression (NR7+BB squeeze) breakout."
+    related_hypotheses: []
+    entry_signal: |
+      atr_7 < rolling_quantile_30d_30% AND BB_width < rolling_quantile_30d_20%
+      → long if break_high, short if break_low
+    exit_signal: "fixed forward 4h"
+    parameter_space:
+      compression_q: [0.20, 0.30]
+      forward_h: [1, 4]
+    expected_freq: "0.3-1/day"
+    data_deps: [btc_perp_1h_720d]
+    notes: "R37 already FAILED in legacy lineage. Phase A reference only."
+    direction: bidirectional
+
+  # ============== Family: PATTERN ==============
+
+  M009_wyckoff_spring_5m:
+    family: pattern
+    phase: A
+    status: active
+    description: |
+      Wyckoff Spring (false breakdown + recovery) on 5m. Mandate § 1.2.3 framework
+      reference. Detects "shake-out" pattern.
+    related_hypotheses: [H3]
+    entry_signal: |
+      Within 30 bars: low[t-N] = local_min, then close[t] > low[t-N] by ≥ 0.5×ATR.
+      Volume[t] > rolling_mean_30bar × 1.5.
+    exit_signal: "forward 24h or stop_below_low"
+    parameter_space:
+      lookback_bars: [20, 30, 50]
+      recovery_atr: [0.3, 0.5, 0.8]
+    expected_freq: "0.3-1/day"
+    data_deps: [btc_perp_5m_720d]
+    direction: long_only
+
+  M010_distribution_topping_15m:
+    family: pattern
+    phase: A
+    status: active
+    description: "Wyckoff distribution topping (failed high + volume + reversal)."
+    related_hypotheses: [H6]  # short-side approach without OI
+    entry_signal: |
+      high[t-N] = local_max, close[t] < high[t-N] by ≥ 0.5×ATR, volume_surge.
+    exit_signal: "forward 24h or stop_above_high"
+    parameter_space:
+      lookback_bars: [20, 30, 50]
+      reversal_atr: [0.3, 0.5, 0.8]
+    expected_freq: "0.2-0.7/day"
+    data_deps: [btc_perp_15m]  # aggregate from 5m
+    direction: short_only
+
+  # ============== Family: REGIME ==============
+
+  M011_high_vol_long_dip:
+    family: regime
+    phase: A
+    status: active
+    description: |
+      Long-only buy-the-dip restricted to high-volatility regime (atr_quantile > 70%).
+      Tests whether volatile regime amplifies force-flow reversal edge.
+    related_hypotheses: [H3]
+    entry_signal: |
+      atr_quantile_30d > 0.70 AND price < rolling_low_5d
+    exit_signal: "forward 1d close"
+    parameter_space:
+      vol_q_threshold: [0.60, 0.70, 0.80]
+      dip_lookback: [3, 5, 10]
+    expected_freq: "0.5-1/day"
+    data_deps: [btc_perp_1h_720d]
+    direction: long_only
+
+  M012_low_vol_carry:
+    family: regime
+    phase: A
+    status: active
+    description: |
+      Funding rate carry restricted to low-volatility regime (atr_quantile < 30%).
+      Long when negative funding × low vol; short when positive funding × low vol.
+    related_hypotheses: []
+    entry_signal: |
+      atr_quantile_30d < 0.30 AND |funding| > 0.005% (8h native)
+      → direction = sign(-funding) (long if negative, short if positive)
+    exit_signal: "8h cycle (next funding tick)"
+    parameter_space:
+      vol_q_threshold: [0.20, 0.30]
+      funding_threshold: [0.003, 0.005, 0.008]
+    expected_freq: "0.3-1/day"
+    data_deps: [btc_perp_1h_720d, btc_funding_binance_720d]
+    direction: bidirectional
+
+  # ============== Family: CROSS-SECTION ==============
+
+  M013_eth_btc_outperform:
+    family: cross_section
+    phase: A
+    status: active
+    description: "ETH 30d return > BTC 30d return → continue ETH outperformance."
+    related_hypotheses: []
+    entry_signal: |
+      eth_30d_ret − btc_30d_ret > 5% → long ETH (Phase A long-only)
+    exit_signal: "Daily rebalance"
+    parameter_space:
+      lookback_d: [14, 30, 60]
+      threshold_pct: [3, 5, 8]
+    expected_freq: "1/day"
+    data_deps: [multi_asset_1d_800d]
+    direction: long_only
+
+  M014_dispersion_low_diversify:
+    family: cross_section
+    phase: A
+    status: active
+    description: |
+      When 5-coin daily return dispersion < threshold (consensus regime), all-long.
+      When dispersion high, abstain.
+    related_hypotheses: []
+    entry_signal: |
+      std(5_coin_returns_30d) < threshold → equal-weight 5-coin long basket
+    exit_signal: "Daily rebalance"
+    parameter_space:
+      dispersion_threshold: [0.01, 0.015, 0.02]
+    expected_freq: "0.5-1/day (regime-conditional)"
+    data_deps: [multi_asset_1d_800d]
+    direction: long_only
+
+  # ============== Phase B Stubs (deferred — OI/L-S dependent) ==============
+
+  M015_xs_reversal_with_oi:
+    family: cross_section
+    phase: B
+    status: deferred
+    description: "XS reversal 7d + OI delta filter (Phase B). Activation: forward collector ≥30d."
+    activation_condition: "oi_forward.parquet ≥30d accumulation"
+
+  M016_long_short_ratio_extreme:
+    family: regime
+    phase: B
+    status: deferred
+    description: "L/S account ratio extreme → fade (Phase B)."
+    activation_condition: "ls_account_forward.parquet ≥30d"
+
+  M017_oi_cascade_detection:
+    family: reversion
+    phase: B
+    status: deferred
+    description: "Real OI cascade (large drop within 1-3h) for H3-H5 ground truth proxy."
+    activation_condition: "oi_forward.parquet ≥30d"
+
+  M018_taker_volume_imbalance:
+    family: momentum
+    phase: B
+    status: deferred
+    description: "Taker buy volume / sell volume extreme as direction signal."
+    activation_condition: "taker_volume_forward.parquet ≥30d"
+
+# Mechanism count: 14 active Phase A + 4 Phase B stubs = 18 total
+# Advisor note: NOT padded to 30. Phase A 10-15 quality entries preferred over filler.

@@ -29,17 +29,25 @@ import numpy as np
 import pandas as pd
 
 # Per-priority threshold table (six_criteria_thresholds.md)
+# min_p_beats raised to 0.70 for P2+ (advisor: B&H drift +0.11%/day exceeds P2 target 0.10%
+# → strategy must beat B&H clearly, not tie at 0.55).
+# baseline_pnl is MANDATORY for P2+ (None raises ValueError).
 DEFAULT_THRESHOLDS = {
     "P0_BASELINE": {"target_daily": 0.0, "max_dd_floor": -1.0, "min_pos_rate": 0.5,
-                     "min_p_beats": 0.0, "min_sharpe": 0.0},
+                     "min_p_beats": 0.0, "min_sharpe": 0.0,
+                     "baseline_required": False},
     "P2": {"target_daily": 0.001, "max_dd_floor": -0.03, "min_pos_rate": 0.5,
-            "min_p_beats": 0.55, "min_sharpe": 1.5},
+            "min_p_beats": 0.70, "min_sharpe": 1.5,
+            "baseline_required": True},
     "P3_CELL": {"target_daily": 0.001, "max_dd_floor": -0.05, "min_pos_rate": 0.5,
-                 "min_p_beats": 0.55, "min_sharpe": 1.5},
+                 "min_p_beats": 0.70, "min_sharpe": 1.5,
+                 "baseline_required": True},
     "P3_AGGREGATED": {"target_daily": 0.001, "max_dd_floor": -0.05, "min_pos_rate": 0.5,
-                       "min_p_beats": 0.55, "min_sharpe": 2.0},
+                       "min_p_beats": 0.70, "min_sharpe": 2.0,
+                       "baseline_required": True},
     "P6_PORTFOLIO": {"target_daily": 0.00073, "max_dd_floor": -0.05, "min_pos_rate": 0.5,
-                      "min_p_beats": 0.55, "min_sharpe": 2.0},
+                      "min_p_beats": 0.70, "min_sharpe": 2.0,
+                      "baseline_required": True},
 }
 
 # Sealed boundary (holdout_seal.md amendment, 2026-05-01 P0.2 closure)
@@ -149,6 +157,13 @@ def bootstrap_six_criteria(daily_pnl: Union[pd.Series, np.ndarray],
         raise ValueError(f"Unknown priority: {priority}. Valid: {list(DEFAULT_THRESHOLDS)}")
     thr = DEFAULT_THRESHOLDS[priority]
 
+    if thr.get("baseline_required", False) and baseline_pnl is None:
+        raise ValueError(
+            f"baseline_pnl is MANDATORY for priority={priority} (advisor lock 2026-05-01). "
+            "Strategy must be evaluated against a baseline (typically buy-and-hold same-window). "
+            "P0_BASELINE allows None."
+        )
+
     arr = np.asarray(pd.Series(daily_pnl).dropna().values, dtype=np.float64)
     n = len(arr)
     if n < 30:
@@ -158,12 +173,12 @@ def bootstrap_six_criteria(daily_pnl: Union[pd.Series, np.ndarray],
 
     rng = np.random.default_rng(seed)
 
-    # Point estimates
+    # Point estimates (raw, for reference)
     point_mean = float(arr.mean())
-    point_p5 = float(np.percentile(arr, 5))
     point_pos_rate = float((arr > 0).mean())
     point_max_dd = compute_max_drawdown(arr)
     point_sharpe = compute_annualized_sharpe(arr)
+    raw_p5_returns = float(np.percentile(arr, 5))  # raw daily 5-percentile (reference only)
 
     # Bootstrap (vectorized)
     samples = cbb_resample(arr, block_size=block_size, n_resamples=B, rng=rng)
@@ -172,6 +187,10 @@ def bootstrap_six_criteria(daily_pnl: Union[pd.Series, np.ndarray],
     bs_pos = (samples > 0).mean(axis=1)
     bs_max_dd = _vectorized_max_drawdown(samples)
     bs_sharpe = _vectorized_sharpe(samples)
+
+    # p5 = bootstrap 5-percentile of MEANS = 95% one-sided lower CI of mean
+    # (advisor 2026-05-01: anti-fishing intent, not raw daily tail)
+    p5_bs_lower = float(np.percentile(bs_means, 5))
 
     # p_beats_baseline (paired bootstrap of difference of means)
     if baseline_pnl is not None:
@@ -190,7 +209,7 @@ def bootstrap_six_criteria(daily_pnl: Union[pd.Series, np.ndarray],
     # Criteria
     crit = {
         "mean_pass": bool(point_mean >= thr["target_daily"]),
-        "p5_pass": bool(point_p5 >= 0),
+        "p5_pass": bool(p5_bs_lower >= 0),  # bootstrap 5-percentile of means ≥ 0
         "pos_rate_pass": bool(point_pos_rate >= thr["min_pos_rate"]),
         "p_beats_pass": bool(p_beats >= thr["min_p_beats"]),
         "max_dd_pass": bool(point_max_dd >= thr["max_dd_floor"]),
@@ -203,7 +222,8 @@ def bootstrap_six_criteria(daily_pnl: Union[pd.Series, np.ndarray],
         "thresholds": thr,
         "point_estimates": {
             "mean": point_mean,
-            "p5": point_p5,
+            "p5": p5_bs_lower,  # bootstrap 5-percentile of means (= 95% one-sided lower CI)
+            "p5_raw_daily_5pct": raw_p5_returns,  # raw daily 5-percentile (reference)
             "pos_rate": point_pos_rate,
             "p_beats_baseline": float(p_beats),
             "max_dd": point_max_dd,

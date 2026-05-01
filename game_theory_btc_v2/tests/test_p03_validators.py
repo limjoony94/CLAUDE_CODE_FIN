@@ -211,7 +211,8 @@ class TestBootstrapSixCriteria:
         """Random walk centered at 0 → P2 mean threshold (0.10%) fail."""
         rng = np.random.default_rng(1)
         pnl = pd.Series(rng.normal(0.0, 0.01, 365))
-        result = bootstrap_six_criteria(pnl, baseline_pnl=None, priority="P2",
+        zero_baseline = pd.Series([0.0] * 365)
+        result = bootstrap_six_criteria(pnl, baseline_pnl=zero_baseline, priority="P2",
                                           B=500, block_size=3, seed=42)
         # mean ≈ 0 < 0.001 (P2 target) → mean_pass False
         assert not result["criteria"]["mean_pass"], result["point_estimates"]["mean"]
@@ -219,20 +220,27 @@ class TestBootstrapSixCriteria:
 
     def test_c_high_mean_extreme_drawdown_fail_dd(self):
         """High mean but extreme one-day drawdown → MaxDD fail."""
-        # Mean +1%/day except one day at -10%, baseline P2 (max_dd_floor = -3%)
         pnl_list = [0.01] * 100 + [-0.10] + [0.01] * 100
         pnl = pd.Series(pnl_list)
-        result = bootstrap_six_criteria(pnl, baseline_pnl=None, priority="P2",
+        zero_baseline = pd.Series([0.0] * 201)
+        result = bootstrap_six_criteria(pnl, baseline_pnl=zero_baseline, priority="P2",
                                           B=500, block_size=3, seed=42)
         assert not result["criteria"]["max_dd_pass"], result["point_estimates"]["max_dd"]
 
     def test_d_high_sharpe_negative_mean_fail(self):
         """Negative mean (consistently small loss) → mean fail at P2."""
-        pnl = pd.Series([-0.0005] * 365)  # low std → high abs sharpe but negative
-        result = bootstrap_six_criteria(pnl, baseline_pnl=None, priority="P2",
+        pnl = pd.Series([-0.0005] * 365)
+        zero_baseline = pd.Series([0.0] * 365)
+        result = bootstrap_six_criteria(pnl, baseline_pnl=zero_baseline, priority="P2",
                                           B=500, block_size=3, seed=42)
         assert not result["criteria"]["mean_pass"], result["point_estimates"]["mean"]
         assert not result["all_pass"]
+
+    def test_p2_baseline_mandatory_raises(self):
+        """P2 without baseline_pnl raises ValueError (advisor lock 2026-05-01)."""
+        pnl = pd.Series([0.001] * 100)
+        with pytest.raises(ValueError, match="baseline_pnl is MANDATORY"):
+            bootstrap_six_criteria(pnl, baseline_pnl=None, priority="P2", B=100)
 
     def test_e_sealed_data_assertion_fires(self):
         """assert_no_sealed_data raises AssertionError on leak."""
@@ -249,7 +257,7 @@ class TestBootstrapSixCriteria:
     def test_insufficient_samples_raises(self):
         pnl = pd.Series([0.001] * 10)
         with pytest.raises(ValueError, match="insufficient samples"):
-            bootstrap_six_criteria(pnl, priority="P2", B=100)
+            bootstrap_six_criteria(pnl, priority="P0_BASELINE", B=100)
 
     def test_unknown_priority_raises(self):
         pnl = pd.Series([0.001] * 100)

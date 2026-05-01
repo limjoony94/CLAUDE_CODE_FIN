@@ -1,0 +1,271 @@
+# P0.5 Hypothesis Registry — Phase A active + Phase B deferred stubs
+# Pre-committed schema (advisor 2026-05-01). Locked parameter sweeps. NO post-hoc adjustment.
+# Each entry corresponds to mandate v2 § 1.2.5 + 1.5 hypotheses.
+
+schema_version: "1.0"
+date: "2026-05-01"
+authority: "P0.5 closure pre-commit. Mutation requires new amendment."
+
+hypotheses:
+
+  # ============== Phase A — testable on free 720d Binance data ==============
+
+  H2:
+    name: kyle_lambda_low_safe_entry
+    phase: A
+    status: active
+    description: |
+      Kyle's λ (price impact per unit signed volume) low (non-toxic) constituent
+      = retail entry safest. Inverse signal: λ high → likely informed-trader regime.
+    feature_inputs:
+      kyle_lambda_t: |
+        Rolling regression slope: |close[t]−close[t−1]| / signed_vol[t]
+        signed_vol via tick rule: +volume if close>prev_close else −volume.
+        Window = last 60 minutes (1m bars). Lag t-1 explicit.
+      regime_flag: "kyle_lambda < rolling_quantile_30d_30%"
+    entry_rule: "Long entry on signal day if regime_flag is True"
+    exit_rule: "Forward 1d return label (no holding logic; this is signal quality test)"
+    parameter_space:
+      lookback_minutes: [60]
+      regime_quantile: [0.20, 0.30, 0.40]
+    expected_event_freq_per_day: "20-40% of days (regime gate)"
+    expected_sample_size: "100-220 events on 540d free window"
+    min_event_freq_gate: "5/day"
+    data_deps:
+      - btc_perp_1m_365d.parquet
+      - btc_perp_1h_720d.parquet
+    baseline_for_p_beats: buy_and_hold_same_window
+    priority_for_eval: P2
+    notes: |
+      First-pass uses tick-rule signed volume (proxy). P5 may refine with trade-tape
+      websocket if Phase B activates.
+
+  H3:
+    name: force_flow_reversal_long
+    phase: A
+    status: active
+    description: |
+      Long-side force-flow reversal: cascade (forced selling) → mean reversion long edge.
+      Proxy v2 since real liquidation USD is paid-only (Coinglass). See proxy_formula_v2.md.
+    feature_inputs:
+      z_funding_neg: |
+        Negative funding strength: −(funding[t−1] − rolling_mean_30d) / rolling_std_30d.
+        Higher = more negative funding (shorts paying). 8h native ffilled to 1h.
+      z_velocity_neg: |
+        Sharp drop strength: −(close[t−1] − close[t−1−12]) / atr_14[t−1].
+        Higher = bigger 12h drop relative to ATR.
+      z_volume_surge: |
+        (volume[t−1] − rolling_mean_30d) / rolling_std_30d at 1h.
+      proxy_score: "z_funding_neg + z_velocity_neg + z_volume_surge (sum-of-z)"
+      price_quantile_30d: "rolling 30d trailing close-quantile rank of close[t−1]"
+    entry_rule: |
+      Long entry at t_close if:
+        proxy_score > threshold_high
+        AND price_quantile_30d ≤ threshold_low_quantile
+    exit_rule: |
+      Exit at t_close + N hours OR when forward_return reverts past entry price.
+      Mandate § 1.2.5 H4: 5-30분 window primary; this H3 uses 1h as default.
+    parameter_space:
+      threshold_high: [4.0, 5.5, 7.0]
+      threshold_low_quantile: [0.20, 0.30]
+      forward_window_hours: [1, 4, 12]
+    expected_event_freq_per_day: "0.5-3 events/day (depends on threshold tightness)"
+    expected_sample_size: "270-1620 events on 540d free window"
+    min_event_freq_gate: "0.5/day (R38 vacuous lesson)"
+    data_deps:
+      - btc_perp_1h_720d.parquet
+      - btc_funding_binance_720d.parquet
+    baseline_for_p_beats: buy_and_hold_same_window
+    priority_for_eval: P2
+    notes: |
+      proxy_formula_v2.md committed. Limitation: ground-truth correlation unverified
+      until forward !forceOrder@arr collector accumulates ≥30d (advisor #3).
+
+  H4:
+    name: cascade_window_short_term
+    phase: A
+    status: active
+    description: |
+      H3 narrower variant — 5-30분 window mean reversion edge after cascade trigger.
+      Tests whether shorter forward window improves edge (per mandate § 1.2.5).
+    feature_inputs:
+      z_funding_neg: "Same as H3: −(funding[t−1] − rolling_mean_30d) / rolling_std_30d"
+      z_velocity_neg: "Same as H3: −(close[t−1] − close[t−1−12]) / atr_14[t−1]"
+      z_volume_surge: "Same as H3: (volume[t−1] − rolling_mean_30d) / rolling_std_30d at 1h"
+      proxy_score: "z_funding_neg + z_velocity_neg + z_volume_surge"
+      price_quantile_30d: "rolling 30d close-quantile rank of close[t−1]"
+      forward_return_5m: "log(close[t+5min] / close[t])"
+      forward_return_15m: "log(close[t+15min] / close[t])"
+      forward_return_30m: "log(close[t+30min] / close[t])"
+    entry_rule: "Same as H3"
+    exit_rule: "Fixed-window forward 5m/15m/30m from entry; sweep window"
+    parameter_space:
+      threshold_high: [4.0, 5.5, 7.0]
+      threshold_low_quantile: [0.20, 0.30]
+      forward_window_min: [5, 15, 30]
+    expected_event_freq_per_day: "0.5-3/day"
+    expected_sample_size: "100-540 events on 365d 1m free window (185 days × 0.5-3/d)"
+    min_event_freq_gate: "0.5/day"
+    data_deps:
+      - btc_perp_1m_365d.parquet
+      - btc_perp_1h_720d.parquet
+      - btc_funding_binance_720d.parquet
+    baseline_for_p_beats: buy_and_hold_same_window
+    priority_for_eval: P2
+    notes: |
+      First 185d of 1m_365d available pre-sealed. Sample size constraint —
+      if event freq < 1/day, may hit min_event_freq_gate.
+
+  H5:
+    name: force_flow_reversal_short
+    phase: A
+    status: active
+    description: |
+      Short-side mirror of H3. Mandate § 1.2.5 noted BTC drift bias 약화 short-side.
+      Test whether mirror dynamic (high quantile + positive funding extreme + price
+      surge + volume surge) yields short edge.
+    feature_inputs:
+      z_funding_pos: "+(funding[t−1] − rolling_mean_30d) / rolling_std_30d"
+      z_velocity_pos: "+(close[t−1] − close[t−1−12]) / atr_14[t−1]"
+      z_volume_surge: "(volume[t−1] − rolling_mean_30d) / rolling_std_30d"
+      proxy_score_short: "z_funding_pos + z_velocity_pos + z_volume_surge"
+      price_quantile_30d: "rolling 30d close-quantile rank of close[t−1]"
+    entry_rule: |
+      Short entry if proxy_score_short > threshold_high AND price_quantile_30d ≥ 0.70
+    exit_rule: "Same as H4 with sign flipped"
+    parameter_space:
+      threshold_high: [4.0, 5.5, 7.0]
+      threshold_high_quantile: [0.70, 0.80]
+      forward_window_min: [5, 15, 30]
+    expected_event_freq_per_day: "0.3-2/day (less than H3 due to BTC drift bias)"
+    expected_sample_size: "55-365 events on 365d 1m free window"
+    min_event_freq_gate: "0.3/day"
+    data_deps:
+      - btc_perp_1m_365d.parquet
+      - btc_perp_1h_720d.parquet
+      - btc_funding_binance_720d.parquet
+    baseline_for_p_beats: buy_and_hold_same_window
+    priority_for_eval: P2
+    notes: |
+      Lower expected freq than H3 due to BTC drift skew. Mandate § 1.5 H5 specifically
+      flagged "BTC drift bias 약화" — expect lower PASS probability than H3.
+
+  H7_basis:
+    name: spot_perp_basis_extreme
+    phase: A
+    status: active
+    description: |
+      Phase A subset of H7 — spot-perp basis extreme as fade signal (without L/S
+      ratio component, which requires Phase B forward-collected data).
+    feature_inputs:
+      basis_pct: "(perp_close[t−1] − spot_close[t−1]) / spot_close[t−1] × 100"
+      basis_z_30d: "(basis_pct − rolling_mean_30d_basis) / rolling_std_30d_basis"
+    entry_rule: |
+      basis_z_30d > +2σ → short perp / long spot pair candidate (fade premium)
+      basis_z_30d < −2σ → long perp / short spot pair candidate (fade discount)
+    exit_rule: "Forward 1h, 4h, 1d return labels for each direction"
+    parameter_space:
+      basis_z_threshold: [1.5, 2.0, 2.5]
+      forward_window_h: [1, 4, 24]
+    expected_event_freq_per_day: "0.5-2/day"
+    expected_sample_size: "270-1080 on 540d"
+    min_event_freq_gate: "0.5/day"
+    data_deps:
+      - btc_perp_1h_720d.parquet
+      - btc_spot_1h_720d.parquet
+    baseline_for_p_beats: buy_and_hold_same_window
+    priority_for_eval: P2
+    notes: |
+      Pair trade requires both perp and spot capital. Phase A tests directional
+      signal only (entry on perp side, no spot leg). Pair trade execution
+      complexity deferred to P5.
+
+  H8:
+    name: map_elites_archive
+    phase: A
+    status: active
+    description: |
+      MAP-Elites multi-niche optimization across mechanism × regime grid.
+      Phase A subset: ~14 mechanisms × 2D regime grid (volatility × trend).
+    feature_inputs:
+      regime_volatility: "atr_14[t−1] / close[t−1] × 100, quantile_30d → low/mid/high"
+      regime_trend: "sma_50[t−1] − sma_50[t−1−24h], normalized → up/flat/down"
+    entry_rule: "Per-mechanism (see mechanism_catalog.yaml)"
+    exit_rule: "Per-mechanism"
+    parameter_space:
+      regime_grid: "3 × 3 = 9 cells"
+      mechanisms: "see mechanism_catalog.yaml Phase A"
+    expected_event_freq_per_day: "depends on cell, target ≥1/cell/day"
+    min_event_freq_gate: "0.5/day per cell"
+    data_deps:
+      - btc_perp_1h_720d.parquet
+      - btc_perp_5m_720d.parquet
+      - btc_funding_binance_720d.parquet
+    baseline_for_p_beats: buy_and_hold_same_window
+    priority_for_eval: P3_CELL
+    notes: |
+      H8 hypothesis: ≥3 cells PASS cell-conditional 6-criteria. Aggregate portfolio
+      across PASS cells evaluated at P3_AGGREGATED.
+
+  H9:
+    name: thompson_sampling_bandit
+    phase: A
+    status: active
+    description: |
+      Risk-Aware Thompson Sampling bandit with mechanisms as arms, contextual reward
+      = daily return per mechanism in current regime context.
+    feature_inputs:
+      arm_set: "mechanism_catalog Phase A active set"
+      reward_signal: "daily P&L per mechanism"
+      context: "regime_volatility + regime_trend"
+    entry_rule: "TS posterior sample → highest expected reward arm at t"
+    exit_rule: "Daily rebalance"
+    parameter_space:
+      prior_mean: [0.0]
+      prior_var: [0.01]
+      decay: [0.95, 0.99, 1.0]
+    expected_event_freq_per_day: "1/day (rebalance)"
+    expected_sample_size: "540 on free window"
+    min_event_freq_gate: "0.5/day"
+    data_deps:
+      - all H8 data
+    baseline_for_p_beats: H8_aggregated_static  # NOT B&H — vs static archive
+    priority_for_eval: P3_AGGREGATED
+    notes: |
+      H9 PASS = bandit dynamic > static MAP-Elites. Tests contextual benefit.
+
+  # ============== Phase B — deferred until forward collector accumulates ==============
+
+  H1:
+    name: long_short_imbalance_oi_delta
+    phase: B
+    status: deferred
+    description: "Long/short imbalance proxy: funding × OI delta + CVD → direction."
+    activation_condition: "Forward collector OI ≥30d accumulated. Earliest ~2026-06-01."
+    parameter_space: "deferred"
+    data_deps_pending:
+      - oi_forward.parquet (≥30d)
+      - taker_volume_forward.parquet (≥30d)
+    notes: "Mandate § 1.5 H1. Activation amendment_004 when ready."
+
+  H6:
+    name: distribution_topping
+    phase: B
+    status: deferred
+    description: "Price↑ + funding spike + OI rise → distribution candidate (short)."
+    activation_condition: "Forward collector OI ≥30d. ~2026-06-01."
+    data_deps_pending:
+      - oi_forward.parquet
+    notes: "Mandate § 1.5 H6."
+
+  H7_full:
+    name: basis_with_long_short_ratio
+    phase: B
+    status: deferred
+    description: "H7 full: spot-perp basis extreme + L/S ratio extreme → fade."
+    activation_condition: "Forward collector L/S ratio ≥30d. ~2026-06-01."
+    data_deps_pending:
+      - ls_account_forward.parquet
+      - ls_position_forward.parquet
+      - taker_volume_forward.parquet
+    notes: "H7_basis (Phase A) is partial form."

@@ -11,10 +11,12 @@
 
 | Baseline | Mean (%/d) | p5 (%) | Pos rate | p_beats vs B&H | MaxDD (%) | Sharpe | PASS count |
 |----------|-----------|--------|---------|----------------|-----------|--------|-----------|
-| Buy-and-hold (realistic) | **+0.110** ✅ | -3.60 ❌ | 0.513 ✅ | 1.000 ✅ | -33.0 ✅ | 0.89 ✅ | **5/6** |
-| 1× long + funding (realistic) | **+0.092** ✅ | -3.62 ❌ | 0.504 ✅ | 0.453 ✅ | -34.7 ✅ | 0.74 ✅ | **5/6** |
-| Random entry (realistic) | **-0.179** ❌ | -4.08 ❌ | 0.465 ❌ | 0.021 ✅ | -103.2 ❌ | -1.45 ❌ | **1/6** |
-| Random entry (stress) | **-0.219** ❌ | -4.12 ❌ | 0.450 ❌ | 0.010 ✅ | -123.9 ❌ | -1.78 ❌ | **1/6** |
+| Buy-and-hold (realistic) | **+0.110** ✅ | -0.054 ❌ | 0.513 ✅ | N/A (no baseline) | -33.0 ✅ | 0.89 ✅ | **5/6** |
+| 1× long + funding (realistic) | **+0.092** ✅ | -0.072 ❌ | 0.504 ✅ | 0.453 ✅ | -34.7 ✅ | 0.74 ✅ | **5/6** |
+| Random entry (realistic) | **-0.179** ❌ | -0.346 ❌ | 0.465 ❌ | 0.021 ✅ | -103.2 ❌ | -1.45 ❌ | **1/6** |
+| Random entry (stress) | **-0.219** ❌ | -0.386 ❌ | 0.450 ❌ | 0.010 ✅ | -123.9 ❌ | -1.78 ❌ | **1/6** |
+
+(p5 values updated 2026-05-01 advisor: bootstrap 5-percentile of MEANS = 95% one-sided lower CI of mean. Previous raw 5-percentile of returns interpretation deprecated.)
 
 (P0_BASELINE thresholds: target_daily=0%, max_dd_floor=-100%, min_sharpe=0, min_pos_rate=0.5, min_p_beats=0)
 

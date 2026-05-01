@@ -1,0 +1,50 @@
+{
+  "e2": {
+    "experiment": "E2_Pareto_initial",
+    "seed": 42,
+    "terminal_bars": 5000,
+    "elapsed_sec": 2.4,
+    "initial_wealths": {
+      "momentum_n3": 7945.4,
+      "momentum_n5": 7492.91,
+      "momentum_n10": 7813.31,
+      "meanrev_n10": 1272.78,
+      "meanrev_n20": 1077.36,
+      "meanrev_n30": 3498.36,
+      "mm_a": 3371.92,
+      "mm_b": 14781.24,
+      "random_0": 1070.75,
+      "random_1": 2465.04,
+      "random_2": 1062.6,
+      "random_3": 2556.95,
+      "random_4": 4448.31,
+      "piggy_0": 1395.89,
+      "piggy_1": 2891.32
+    },
+    "initial_gini": 0.4389,
+    "final_gini": 0.4899,
+    "amplification": 0.051,
+    "top_5pct_share": 0.2054,
+    "n_alive_at_end": 14
+  },
+  "e3": {
+    "experiment": "E3_fixed_size_no_wealth_weighting",
+    "seed": 42,
+    "terminal_bars": 5000,
+    "elapsed_sec": 0.8,
+    "initial_gini": 0.0,
+    "final_gini": 0.0007,
+    "concentration_from_skill_alone": 0.0007,
+    "top_5pct_share": 0.0668,
+    "n_alive_at_end": 15
+  },
+  "verdict": "(a) abandonment \u2014 v1 mechanisms structurally insufficient",
+  "decision_tree_inputs": {
+    "e2_final_gini": 0.4899,
+    "e2_amplifies": false,
+    "e2_preserves": true,
+    "e2_shrinks": false,
+    "e3_concentration": 0.0007,
+    "e3_concentrates": false
+  }
+}

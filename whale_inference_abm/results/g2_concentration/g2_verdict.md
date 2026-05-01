@@ -75,6 +75,37 @@ The ABM v1's "open-system + wealth-weighted sizing → whale emergence" hypothes
 
 ---
 
+## E2 + E3 results (option (b) executed per advisor 2026-05-01)
+
+| Experiment | Setup | Initial Gini | Final Gini | Δ |
+|------------|-------|--------------|------------|---|
+| E2 (Pareto initial, wealth-weighted ON) | 15 agents, Pareto x10 (1063-14781), no admissions, 5k bars, 24,236 trades | 0.4389 | 0.4899 | **+0.051** |
+| E3 (uniform initial, FIXED-SIZE trades) | 15 agents at 1000, fixed 0.001 BTC trades, no admissions, 5k bars | 0.0000 | 0.0007 | **+0.0007** |
+
+**E2 verification of advisor's prediction**:
+- Advisor predicted "~0.5" Gini outcome — actual 0.49 ≈ matches
+- Per advisor decision-tree band classification (final < 0.55): **PRESERVES** (not amplifies)
+- Mechanism does amplify weakly (+0.05 per 5k bars) but insufficient to cross 0.55 threshold
+
+**E3 verification**:
+- ZERO meaningful concentration without wealth-weighting
+- Confirms skill differential alone does NOT drive whale emergence
+- Wealth-weighted sizing is the load-bearing mechanism (such as it is)
+
+**Advisor decision tree applied** (mechanical):
+| E2 | E3 | Decision |
+|----|----|----------|
+| Preserves (final 0.49 in 0.45-0.55 band) | Doesn't concentrate (0.0007 < 0.1) | **(a) abandonment, v1 mechanisms structurally insufficient** |
+
+**Implementation note**: First E2 attempt with Pareto x_min=100 had random agents below MIN_ORDER_SIZE wealth threshold → 0 trades, sim frozen. Re-ran with x10 scale (x_min=1000) so all agents above tradeable floor. The frozen-Sim case revealed an additional architectural limitation: extreme wealth heterogeneity is incompatible with uniform MIN_ORDER_SIZE — agents below ~$200 wealth can't trade.
+
+**Caveat — (c) "seeded-Pareto v2" sub-variant remains potentially viable**:
+- Modest positive amplification (+0.051/5k bars) suggests longer-horizon evaluation with seeded heterogeneity could reach Gini > 0.5
+- Linear extrapolation: from 0.44 initial, +0.05/5k → cross 0.55 in ~10k more bars (2.5× longer than current G2 evaluation)
+- This is NOT a refutation of mechanical verdict (a) — it's an additional design parameter user could explore in v2
+
+---
+
 ## Three options (user-level decision per advisor)
 
 ### Option (a): Accept ABM v1 hypothesis falsified

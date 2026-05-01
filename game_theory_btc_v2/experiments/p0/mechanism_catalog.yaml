@@ -118,38 +118,40 @@ mechanisms:
   M007_channel_breakout_atr:
     family: breakout
     phase: A
-    status: active
+    status: control_null_expected_fail
     description: |
-      15m channel breakout (close > 15-bar high) with body filter. Reference mechanism
-      from R26/C1 lineage — included for catalog completeness despite friction-floor evidence.
+      15m channel breakout. Validator sanity check (advisor relabeling 2026-05-01):
+      이 mechanism은 prior C1 BT-LIVE divergence catastrophe로 expected FAIL.
+      P2 sweep에서 PASS 시 validator anomaly로 escalate.
     related_hypotheses: []
     entry_signal: |
       close > rolling_max_high_15bar AND (close - open) / (high - low) > 0.40
     exit_signal: "trailing ATR 2.5x or fractal SL"
-    parameter_space:
-      channel_lookback: [10, 15, 20]
-      body_ratio: [0.30, 0.40, 0.50]
+    parameter_space_locked:
+      channel_lookback: 15
+      body_ratio: 0.40
     expected_freq: "1-3/day"
-    data_deps: [btc_perp_15m]  # need to add or aggregate from 5m
-    notes: "WARN: prior C1 implementation showed BT-LIVE divergence catastrophe. Use as REFERENCE comparison only at P3."
+    data_deps: [btc_perp_15m]
+    notes: "Sanity check only. EXPECTED FAIL. PASS = validator escalation."
     direction: bidirectional
 
   M008_compression_breakout:
     family: breakout
     phase: A
-    status: active
-    description: "Volatility compression (NR7+BB squeeze) breakout."
+    status: control_null_expected_fail
+    description: |
+      Volatility compression (NR7+BB squeeze) breakout. Validator sanity check
+      (advisor relabeling 2026-05-01): R37 prior FAIL. EXPECTED FAIL on this dataset.
     related_hypotheses: []
     entry_signal: |
       atr_7 < rolling_quantile_30d_30% AND BB_width < rolling_quantile_30d_20%
-      → long if break_high, short if break_low
     exit_signal: "fixed forward 4h"
-    parameter_space:
-      compression_q: [0.20, 0.30]
-      forward_h: [1, 4]
+    parameter_space_locked:
+      compression_q: 0.30
+      forward_h: 4
     expected_freq: "0.3-1/day"
     data_deps: [btc_perp_1h_720d]
-    notes: "R37 already FAILED in legacy lineage. Phase A reference only."
+    notes: "Sanity check only. EXPECTED FAIL."
     direction: bidirectional
 
   # ============== Family: PATTERN ==============
